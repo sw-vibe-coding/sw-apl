@@ -1,0 +1,1 @@
+Planning docs written and pushed: plan.md master plan (Phase 1 reordered for an early MVP REPL), prd, architecture, design D1-D11, language, glyphs.txt, session, testing, input-methods with Espanso yml and Emacs quail el, saga log. All markdown ASCII-clean.
