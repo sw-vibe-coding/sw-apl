@@ -1,0 +1,1 @@
+Lexer complete: char literals, quote-quad, brackets/semicolon/colon/branch/del tokens, system-command lines, lookalike hints in CHARACTER ERROR, invalid UTF-8 handled in the shell; samples 19-21 baselined; horse-race target sample and parity/plan updates; 106 tests; reg-rs 12/12; gates by exit code.
