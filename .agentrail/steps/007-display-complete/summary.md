@@ -1,0 +1,1 @@
+Display complete: )DIGITS applies to integers (E form), )WIDTH wrapping for vectors/chars/matrix column blocks with six-space continuation, rank>2 planes with blank lines and cross-plane alignment, char arrays, empties as one blank line; sample 45 + baseline; parity rows updated; 94 tests; reg-rs 9/9.
