@@ -1,0 +1,1 @@
+Repo scaffold landed: COPYRIGHT/LICENSE, git and cargo config, justfile, scripts (gen-changes, run-samples, reg-rs wrappers), /mw-cp gate, CLAUDE.md project notes + AGENTS.md, README with logo, 37-file APL\360-scope samples corpus. Pushed as fa95384.

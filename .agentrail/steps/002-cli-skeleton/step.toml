@@ -1,0 +1,8 @@
+number = 2
+slug = "cli-skeleton"
+status = "pending"
+description = "components/cli workspace with the sw-apl binary (help/version per sw-checklist, -f and stdin batch with six-space echo, interactive loop, NOT IMPLEMENTED stub session), TDD via tests/cli_tests.rs; verify README build instructions"
+role = "legacy"
+context_files = []
+created_at = "2026-09-16T11:10:57"
+commits = []

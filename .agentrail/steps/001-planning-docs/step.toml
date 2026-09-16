@@ -1,0 +1,9 @@
+number = 1
+slug = "planning-docs"
+status = "pending"
+description = "Write the planning documents derived from the owner's direction: docs/plan.md..."
+role = "legacy"
+context_files = []
+created_at = "2026-09-16T11:10:57"
+task_type = "docs"
+commits = []
