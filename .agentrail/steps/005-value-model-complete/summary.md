@@ -1,0 +1,1 @@
+Value model complete: tolerant_eq and exact_int on Number, checked integer + - ×, quad-CT system variable with validation, full error vocabulary and rank/empties pinned by tests, apl-prims dispatch crate; 84 tests; reg-rs 8/8; gates green.

@@ -1,9 +1,10 @@
 number = 5
 slug = "value-model-complete"
-status = "in-progress"
+status = "completed"
 description = "Complete apl-value per docs/language.md and design D4: quad-CT tolerant equal..."
 role = "production"
 context_files = []
 created_at = "2026-09-16T11:12:40"
+completed_at = "2026-09-16T14:19:44"
 task_type = "rust-interpreter"
-commits = []
+commits = ["f0816f630fbda4623ee017a3131ceb303756b179"]
