@@ -1,0 +1,9 @@
+number = 5
+slug = "lexer-complete"
+status = "pending"
+description = "Complete apl-lex for every glyph in docs/glyphs.txt: quoted strings with doub..."
+role = "production"
+context_files = []
+created_at = "2026-09-16T11:12:40"
+task_type = "rust-interpreter"
+commits = []

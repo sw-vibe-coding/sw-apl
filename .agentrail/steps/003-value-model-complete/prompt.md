@@ -1,0 +1,1 @@
+Complete apl-value per docs/language.md and design D4: quad-CT tolerant equality and comparison helpers, promotion/demotion rules (Int on exact integral results), empty arrays of every rank, rank > 2 arrays, the full error enum (INDEX, WS FULL, DEFN, CHARACTER, DEPTH, INTERRUPT added). TDD; split modules to the gates.

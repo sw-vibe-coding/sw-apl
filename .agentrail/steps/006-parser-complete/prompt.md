@@ -1,0 +1,1 @@
+Complete apl-parse: operators reduce/scan (last and first axis) with axis brackets, inner product f.g, outer product jot-dot-f, bracket indexing with semicolons and elided axes, indexed assignment, branch (right arrow), quad and quote-quad on either side of assignment, multiple assignments in one statement, SYNTAX ERROR carets. TDD with AST snapshot tests.

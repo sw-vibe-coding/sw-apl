@@ -1,0 +1,9 @@
+number = 1
+slug = "mvp-scalar-arithmetic"
+status = "pending"
+description = "MVP step 1 of 2 (docs/plan.md Phase 1). Create component workspaces (each its..."
+role = "production"
+context_files = []
+created_at = "2026-09-16T11:12:40"
+task_type = "rust-interpreter"
+commits = []

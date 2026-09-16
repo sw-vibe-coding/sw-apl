@@ -1,0 +1,1 @@
+bootstrap complete: scaffold, planning docs, cli skeleton

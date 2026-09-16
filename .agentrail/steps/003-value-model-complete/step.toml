@@ -1,0 +1,9 @@
+number = 3
+slug = "value-model-complete"
+status = "pending"
+description = "Complete apl-value per docs/language.md and design D4: quad-CT tolerant equal..."
+role = "production"
+context_files = []
+created_at = "2026-09-16T11:12:40"
+task_type = "rust-interpreter"
+commits = []

@@ -1,23 +1,32 @@
-# bootstrap
+# core-mvp
 
-Phase 0 of docs/plan.md: stand up the repository, its process, its
-planning documents, and a runnable `sw-apl` CLI skeleton so every
-later saga starts from a green tree. Derived from docs/plan.md
-"Phase 0: bootstrap"; keep the two in sync.
+Phase 1 of docs/plan.md. Steps 1 and 2 are a thin vertical slice
+so the owner can evaluate simple APL at the six-space prompt as
+early as possible (the MVP REPL); steps 3 to 7 widen each layer to
+the full APL\360 set. Every step: TDD (unit tests first, then a
+samples/*.apl transcript where visible), sw-checklist gates as
+design constraints (<= 25 LOC/fn, <= 4 fns/module, <= 4
+modules/crate; split before adding), commit, push, report.
 
 ## Steps
 
-0. repo-scaffold (the saga init step) -- COPYRIGHT, LICENSE,
-   .gitignore, .gitattributes, .cargo/config.toml (shared target),
-   justfile, scripts (gen-changes, run-samples, reg wrappers),
-   /mw-cp checkpoint command, CLAUDE.md project notes, README with
-   logo, samples corpus copied from sw-cor24-apl filtered to
-   APL\360 scope.
-1. planning-docs -- docs/plan.md (master plan), prd, architecture,
-   design, language, session, glyphs.txt, testing, input-methods
-   (Espanso + Emacs), saga log.
-2. cli-skeleton -- components/cli workspace with the sw-apl binary:
-   -h/--help/-V/--version per sw-checklist, -f FILE and stdin batch
-   with six-space echo, interactive loop, NOT IMPLEMENTED stub
-   session; reg-rs harness scripts; README build instructions
-   verified. TDD: cli_tests.rs first.
+1. mvp-scalar-arithmetic -- new component workspaces value, lex,
+   parse, eval, display; wire sw-apl. 2+2, strands, + - x / max
+   min | * on scalars and vectors with scalar extension,
+   assignment and display, APL\360 error display with caret.
+   reg-rs baselines for samples 01-03.
+2. mvp-iota-rho-reduce -- iota, rho (shape/reshape), ravel and
+   catenate, reduce on last axis, matrix display, quad-IO. The
+   MVP: the owner can play. reg-rs baselines for samples 04-06.
+3. value-model-complete -- quad-CT tolerant equality,
+   promotion/demotion, empties, rank > 2, full error enum.
+4. display-complete -- exponential form, quad-PW wrapping,
+   character arrays, empty output, mixed columns.
+5. lexer-complete -- full glyph set, strings, quad names, delta
+   letters, system command lines, del sentinel, CHARACTER ERROR
+   for lookalikes.
+6. parser-complete -- operators with axis, bracket indexing,
+   indexed assignment, branch, quad/quote-quad both sides.
+7. scalar-functions-complete -- every scalar primitive with
+   rank/length checks, tolerance, circular, factorial/binomial,
+   roll.
