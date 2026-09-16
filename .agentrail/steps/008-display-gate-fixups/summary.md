@@ -1,0 +1,1 @@
+Cleared the clippy literal lint and the 26-line format_array warning left by 007; all gates verified by exit code.
