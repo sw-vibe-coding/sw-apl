@@ -1,0 +1,1 @@
+vhs tape docs/tapes/mvp.tape rendered to images/sw-apl-mvp.gif and embedded in README; just tape recipe; vhs left-arrow/clipboard limits recorded in plan.md.
