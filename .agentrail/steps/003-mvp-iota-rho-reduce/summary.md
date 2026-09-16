@@ -1,0 +1,1 @@
+MVP REPL shipped: iota, rho, ravel, catenate (vectors), reduce with identities, quad output, quad-IO; two new prims crates + eval dispatch; 77 tests; reg-rs baselines 01-06, 09, 22 all pass; gates green. Owner can type +/⍳10 and 2 3⍴⍳6.

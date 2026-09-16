@@ -1,0 +1,11 @@
+{
+  "task_type": "rust-interpreter",
+  "state": {
+    "number": 3,
+    "step": "mvp-iota-rho-reduce"
+  },
+  "action": "tests first; heredoc crates; ends_operand moved to lex and Parsed alias to stay inside sw-checklist gates; reg-seed per sample",
+  "result": "success",
+  "reward": 1,
+  "timestamp": "2026-09-16T13:31:17"
+}
