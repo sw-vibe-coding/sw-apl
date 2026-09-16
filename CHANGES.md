@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-16
 
+- chore(agentrail): complete 008-display-gate-fixups; advance to 009-lexer-complete
+- fix(display): clear the two gate items the 007 commit slipped past
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 007-display-complete; advance to 008-lexer-complete
 - feat(display): )DIGITS for integers, )WIDTH wrapping, planes, chars
 - chore(reg-rs): drop the retired quad-origin baseline (22-origin replaces it)
