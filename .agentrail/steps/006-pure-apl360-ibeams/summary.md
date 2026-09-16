@@ -1,0 +1,1 @@
+Pure APL\360 direction folded in: docs/plans/keymaps updated, I-beam glyph accepted, quad names removed (SYNTAX ERROR), )ORIGIN/)DIGITS/)WIDTH with WAS reply, fixed fuzz, samples pruned, docs/parity.md created as the definition of done; 86 tests; reg-rs 8/8.
