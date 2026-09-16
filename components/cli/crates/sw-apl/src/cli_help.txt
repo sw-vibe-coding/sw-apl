@@ -1,0 +1,22 @@
+MODES:
+  sw-apl                 Interactive session when stdin is a terminal.
+                         The prompt is six spaces; output starts in
+                         column one, like an APL\360 printing terminal.
+  sw-apl -f FILE         Batch: run FILE line by line, echoing each
+                         input line with the indent so the transcript
+                         reads like a session. Stops at )OFF.
+  sw-apl < FILE          Batch from stdin (same as -f).
+
+INPUT:
+  Traditional APL glyphs as Unicode. There are no keyword aliases.
+  See docs/input-methods.md for Espanso and Emacs setups and
+  docs/glyphs.txt for the accepted code points.
+
+AI CODING AGENT INSTRUCTIONS:
+  1. Run `sw-apl -f samples/NAME.apl` to see a transcript; every
+     sample ends with )OFF so the run terminates.
+  2. Pipe statements on stdin for one-off checks:
+       printf '2+2\n)OFF\n' | sw-apl
+  3. Use --no-echo when comparing raw output against another APL.
+  4. Regression baselines live in tests/reg-rs; run
+     scripts/reg.sh run -q before claiming behaviour is unchanged.

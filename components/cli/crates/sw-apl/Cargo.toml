@@ -1,0 +1,22 @@
+[package]
+name = "sw-apl"
+description = "Clean-room APL\\360 interpreter: terminal REPL and batch runner"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "sw-apl"
+path = "src/main.rs"
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+
+[lints]
+workspace = true
+
+[build-dependencies]
+hostname = "0.4"
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
