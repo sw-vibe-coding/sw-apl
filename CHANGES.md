@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-16
 
+- chore(agentrail): complete 006-pure-apl360-ibeams; advance to 007-display-complete
+- feat!: pure APL\360 -- I-beams and )ORIGIN/)DIGITS/)WIDTH, no quad names
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 005-value-model-complete; advance to 006-display-complete
 - feat(value): tolerant equality, exact integers, quad-CT
 - chore(agentrail): complete 004-readme-vhs-tape; advance to 005-value-model-complete
