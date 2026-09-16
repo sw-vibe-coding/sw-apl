@@ -1,0 +1,1 @@
+MVP scalar arithmetic shipped: 7 crates in 6 new workspaces (value, lex, parse, prims-scalar, eval, display, session) wired into sw-apl; + - × ÷ ⌈ ⌊ | * with scalar extension, assignment, variables, monadic rho, APL\360 error display with caret, CHARACTER ERROR for bad Unicode; 55 tests; reg-rs baselines 01-03; all gates green.

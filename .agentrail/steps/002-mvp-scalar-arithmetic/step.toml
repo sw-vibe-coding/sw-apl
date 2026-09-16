@@ -1,9 +1,10 @@
 number = 2
 slug = "mvp-scalar-arithmetic"
-status = "in-progress"
+status = "completed"
 description = "MVP step 1 of 2 (docs/plan.md Phase 1). Create component workspaces (each its..."
 role = "production"
 context_files = []
 created_at = "2026-09-16T11:12:40"
+completed_at = "2026-09-16T12:37:32"
 task_type = "rust-interpreter"
-commits = []
+commits = ["f5910a8c2a11a805f980d62a12aace160ad72e48"]
