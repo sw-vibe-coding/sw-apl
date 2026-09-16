@@ -210,6 +210,9 @@ Answers to the questions raised at bootstrap, now policy:
 
 1. `vhs-tapes` -- vhs tape scripts under `docs/tapes/` rendering
    CLI sessions with glyph input and output to GIF/PNG for the
-   README.
+   README. First tape (`mvp.tape`) shipped with the core-mvp saga;
+   re-record as features land. Known vhs limits: a typed left
+   arrow becomes the cursor key and the clipboard is unavailable
+   headless, so tapes avoid assignment until a workaround exists.
 2. `ob-sw-apl` -- an Org Babel language for sw-apl so literate
    Org documents can execute APL blocks and export to PDF/HTML.

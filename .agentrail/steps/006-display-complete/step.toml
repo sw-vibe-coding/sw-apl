@@ -1,7 +1,7 @@
 number = 6
-slug = "lexer-complete"
+slug = "display-complete"
 status = "pending"
-description = "Complete apl-lex for every glyph in docs/glyphs.txt: quoted strings with doub..."
+description = "Complete apl-display per docs/language.md and docs/session.md: exponential fo..."
 role = "production"
 context_files = []
 created_at = "2026-09-16T11:12:40"

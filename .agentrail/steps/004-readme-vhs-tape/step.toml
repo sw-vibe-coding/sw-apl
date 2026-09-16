@@ -1,0 +1,9 @@
+number = 4
+slug = "readme-vhs-tape"
+status = "in-progress"
+description = "Record a vhs tape (docs/tapes/mvp.tape) of the sw-apl MVP REPL with glyph inp..."
+role = "production"
+context_files = []
+created_at = "2026-09-16T13:40:07"
+task_type = "docs"
+commits = []

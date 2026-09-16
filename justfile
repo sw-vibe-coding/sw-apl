@@ -61,6 +61,10 @@ release:
 conformance:
     ./scripts/run-samples.sh
 
+# Re-render the README session recording (needs vhs, ttyd, ffmpeg).
+tape: release
+    vhs docs/tapes/mvp.tape
+
 # Regenerate CHANGES.md from git log.
 changes:
     ./scripts/gen-changes.sh

@@ -19,6 +19,15 @@ nested arrays, no each. It is also not a port. The C interpreter
 `sw-cor24-apl` and GNU APL served only as references for expected
 behaviour and for the conformance corpus in `samples/`.
 
+## A session
+
+<p align="center">
+  <img src="images/sw-apl-mvp.gif" alt="sw-apl session: scalar arithmetic, iota, reduce, reshape, and a LENGTH ERROR with caret" width="700">
+</p>
+
+Recorded with [vhs](https://github.com/charmbracelet/vhs) from
+`docs/tapes/mvp.tape` (`just tape` re-renders it).
+
 ## Status
 
 Early. The `sw-apl` binary evaluates scalar arithmetic at the

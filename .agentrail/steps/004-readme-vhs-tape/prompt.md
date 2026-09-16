@@ -1,0 +1,1 @@
+Record a vhs tape (docs/tapes/mvp.tape) of the sw-apl MVP REPL with glyph input, slow enough to read (typing speed and sleeps), render to images/sw-apl-mvp.gif, embed in README.md (ASCII text stays), add a just recipe and docs/testing.md note. Update docs/plan.md Phase 7 status.
