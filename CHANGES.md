@@ -14,6 +14,11 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-16
 
+- chore(agentrail): complete 005-value-model-complete; advance to 006-display-complete
+- feat(value): tolerant equality, exact integers, quad-CT
+- chore(agentrail): complete 004-readme-vhs-tape; advance to 005-value-model-complete
+- docs: vhs session recording in the README
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 003-mvp-iota-rho-reduce; advance to 004-value-model-complete
 - feat: MVP REPL -- iota, rho, ravel, catenate, reduce, quad-IO
 - docs(changes): refresh CHANGES.md to HEAD
