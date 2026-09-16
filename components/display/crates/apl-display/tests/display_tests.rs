@@ -47,7 +47,7 @@ fn floats_show_significant_digits_without_trailing_zeros() {
         (1.0 / 3.0, PP, "0.3333333333"),
         (2.0 / 3.0, 5, "0.66667"),
         (123_456.75, PP, "123456.75"),
-        (0.00001, PP, "0.00001"),
+        (1e-5, PP, "0.00001"),
         (99.999_999_999_99, PP, "100"),
     ];
     for (x, pp, want) in table {
@@ -61,9 +61,9 @@ fn large_and_small_floats_use_exponent_form() {
         (1e20, PP, "1E20"),
         (1.5e-7, PP, "1.5E\u{af}7"),
         (-2.5e12, PP, "\u{af}2.5E12"),
-        (0.000001, PP, "1E\u{af}6"),
+        (1e-6, PP, "1E\u{af}6"),
         (1e10, PP, "1E10"),
-        (1e10, 11, "10000000000"),
+        (1e10, 11, "10000000000"), // 11 digits fit at )DIGITS 11
         (123_456_789_012.0, 4, "1.235E11"),
     ];
     for (x, pp, want) in table {

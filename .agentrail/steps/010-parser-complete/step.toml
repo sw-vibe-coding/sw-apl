@@ -1,7 +1,7 @@
 number = 10
-slug = "scalar-functions-complete"
+slug = "parser-complete"
 status = "pending"
-description = "Complete the scalar primitive family (apl-prims-scalar): every monadic and dy..."
+description = "Complete apl-parse: operators reduce/scan (last and first axis) with axis bra..."
 role = "production"
 context_files = []
 created_at = "2026-09-16T11:12:40"

@@ -1,0 +1,9 @@
+number = 11
+slug = "scalar-functions-complete"
+status = "pending"
+description = "Complete the scalar primitive family (apl-prims-scalar): every monadic and dy..."
+role = "production"
+context_files = []
+created_at = "2026-09-16T11:12:40"
+task_type = "rust-interpreter"
+commits = []

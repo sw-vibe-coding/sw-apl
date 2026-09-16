@@ -1,0 +1,9 @@
+number = 8
+slug = "display-gate-fixups"
+status = "in-progress"
+description = "Follow-up to 007: the display commit landed with a clippy lint (float literal..."
+role = "production"
+context_files = []
+created_at = "2026-09-16T15:54:03"
+task_type = "rust-interpreter"
+commits = []

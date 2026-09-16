@@ -1,0 +1,1 @@
+Follow-up to 007: the display commit landed with a clippy lint (float literals lacking separators in the test table) and format_array at 26 lines because the gate chain swallowed exit codes. Fix both; from now on check gate exit codes, not grep output.

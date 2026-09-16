@@ -1,4 +1,4 @@
-number = 8
+number = 9
 slug = "lexer-complete"
 status = "pending"
 description = "Complete apl-lex for every glyph in docs/glyphs.txt: quoted strings with doub..."

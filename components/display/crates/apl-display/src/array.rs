@@ -17,20 +17,11 @@ pub fn format_array(a: &Array, digits: usize, width: usize) -> Vec<String> {
         return wrap_cells(&cells, sep, width);
     }
     let widths = column_widths(&cells, a.shape[a.shape.len() - 1]);
+    let blocks = column_blocks(&widths, sep.len(), width);
     let mut lines = Vec::new();
-    for (b, (lo, hi)) in column_blocks(&widths, sep.len(), width)
-        .into_iter()
-        .enumerate()
-    {
+    for (b, block) in blocks.into_iter().enumerate() {
         let indent = if b == 0 { "" } else { CONTINUE };
-        lines.extend(block_lines(
-            &cells,
-            &a.shape,
-            &widths[lo..hi],
-            (lo, hi),
-            sep,
-            indent,
-        ));
+        lines.extend(block_lines(&cells, &a.shape, &widths, block, sep, indent));
     }
     lines
 }
@@ -58,7 +49,7 @@ fn block_lines(
         lines.extend(std::iter::repeat_n(String::new(), plane_gap(r, shape)));
         let text = row[lo..hi]
             .iter()
-            .zip(widths)
+            .zip(&widths[lo..hi])
             .map(|(c, w)| format!("{c:>w$}"))
             .collect::<Vec<_>>()
             .join(sep);
