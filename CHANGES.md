@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-16
 
+- chore(agentrail): complete 009-lexer-complete; advance to 010-parser-complete
+- feat(lex): complete tokenizer -- char literals, sentinels, hints, UTF-8
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 008-display-gate-fixups; advance to 009-lexer-complete
 - fix(display): clear the two gate items the 007 commit slipped past
 - docs(changes): refresh CHANGES.md to HEAD
