@@ -48,8 +48,9 @@ bad sequence; the session continues with the next line.
   with `E`, negative with the high minus prefix. `1E6`, `2.5`,
   high-minus `3`, `1E` high-minus `13` are literals. A leading
   ASCII minus is the subtract function, not part of a literal.
-- Semantically one numeric type. Integers are exact within i64;
-  results that are not integral, or that overflow, are floats.
+- Semantically one numeric type. Integers are exact within i64
+  (plus, minus, and times use checked integer arithmetic); results
+  that are not integral, or that overflow, are floats.
 - Booleans are the numbers 0 and 1.
 - Comparison tolerance: quad-CT, default `1E` high-minus `13`,
   applies to equal, not-equal, less-or-equal, greater-or-equal,

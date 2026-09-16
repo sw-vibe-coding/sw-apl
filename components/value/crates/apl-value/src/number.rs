@@ -27,6 +27,33 @@ impl Number {
         }
     }
 
+    /// Tolerant equality (quad-CT): equal when the difference is
+    /// within `ct` times the larger magnitude. Zero has no slack.
+    #[must_use]
+    pub fn tolerant_eq(self, other: Number, ct: f64) -> bool {
+        if let (Number::Int(lhs), Number::Int(rhs)) = (self, other) {
+            return lhs == rhs;
+        }
+        let (lhs, rhs) = (self.as_f64(), other.as_f64());
+        (lhs - rhs).abs() <= ct * lhs.abs().max(rhs.abs())
+    }
+
+    /// Exact integer `+`, `-`, `×` when both operands are `Int` and
+    /// the result fits; `None` means "use the floating path".
+    #[must_use]
+    pub fn exact_int(f: char, l: Number, r: Number) -> Option<Number> {
+        let (Number::Int(lhs), Number::Int(rhs)) = (l, r) else {
+            return None;
+        };
+        match f {
+            '+' => lhs.checked_add(rhs),
+            '-' => lhs.checked_sub(rhs),
+            '×' => lhs.checked_mul(rhs),
+            _ => None,
+        }
+        .map(Number::Int)
+    }
+
     /// The value as a double (lossless for `Int` below 2^53).
     #[must_use]
     pub fn as_f64(self) -> f64 {

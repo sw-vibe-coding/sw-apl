@@ -10,6 +10,9 @@ use crate::monadic::finite;
 /// DOMAIN ERROR for division by zero, a fractional power of a
 /// negative, or overflow; NOT IMPLEMENTED for other glyphs.
 pub fn apply_dyadic(glyph: char, left: Number, right: Number) -> AplResult<Number> {
+    if let Some(exact) = Number::exact_int(glyph, left, right) {
+        return Ok(exact);
+    }
     let (a, b) = (left.as_f64(), right.as_f64());
     let result = match glyph {
         '+' => a + b,

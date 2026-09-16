@@ -1,6 +1,6 @@
 number = 5
 slug = "value-model-complete"
-status = "pending"
+status = "in-progress"
 description = "Complete apl-value per docs/language.md and design D4: quad-CT tolerant equal..."
 role = "production"
 context_files = []

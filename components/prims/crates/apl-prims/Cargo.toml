@@ -1,0 +1,17 @@
+[package]
+name = "apl-prims"
+description = "sw-apl primitive dispatch: glyph to scalar, mixed, or operator implementation"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-value = { path = "../../../value/crates/apl-value" }
+apl-prims-scalar = { path = "../apl-prims-scalar" }
+apl-prims-mixed = { path = "../apl-prims-mixed" }
+apl-prims-ops = { path = "../apl-prims-ops" }
+
+[lints]
+workspace = true

@@ -161,3 +161,21 @@ fn unknown_glyph_is_not_implemented() {
         ErrorKind::NotImplemented
     );
 }
+
+#[test]
+fn integer_results_stay_exact_beyond_2_to_53() {
+    let big = Array::scalar(Number::Int(9_007_199_254_740_993));
+    assert_eq!(
+        nums(&dyadic('+', &big, &s(0.0)).unwrap()),
+        [Number::Int(9_007_199_254_740_993)]
+    );
+    assert_eq!(
+        nums(&dyadic('\u{d7}', &big, &s(2.0)).unwrap()),
+        [Number::Int(18_014_398_509_481_986)]
+    );
+    let max = Array::scalar(Number::Int(i64::MAX));
+    assert!(matches!(
+        nums(&dyadic('+', &max, &s(1.0)).unwrap())[0],
+        Number::Float(_)
+    ));
+}

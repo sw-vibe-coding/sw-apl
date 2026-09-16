@@ -73,9 +73,7 @@ name = "apl-eval"
 version = "0.1.0"
 dependencies = [
  "apl-parse",
- "apl-prims-mixed",
- "apl-prims-ops",
- "apl-prims-scalar",
+ "apl-prims",
  "apl-value",
 ]
 
@@ -91,6 +89,16 @@ name = "apl-parse"
 version = "0.1.0"
 dependencies = [
  "apl-lex",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-prims"
+version = "0.1.0"
+dependencies = [
+ "apl-prims-mixed",
+ "apl-prims-ops",
+ "apl-prims-scalar",
  "apl-value",
 ]
 

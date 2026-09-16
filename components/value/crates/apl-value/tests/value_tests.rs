@@ -61,3 +61,72 @@ fn error_caret_is_optional_and_settable() {
     assert_eq!(e.caret, Some(4));
     assert_eq!(e.at(9).caret, Some(4), "first caret wins");
 }
+
+#[test]
+fn tolerant_equality_uses_relative_tolerance() {
+    let ct = 1e-13;
+    assert!(Number::Float(0.1 + 0.2).tolerant_eq(Number::Float(0.3), ct));
+    assert!(Number::Int(3).tolerant_eq(Number::Float(3.0 + 1e-14), ct));
+    assert!(!Number::Int(3).tolerant_eq(Number::Float(3.001), ct));
+    assert!(
+        !Number::Float(1e-20).tolerant_eq(Number::Int(0), ct),
+        "zero has no relative slack"
+    );
+    assert!(Number::Float(1e20).tolerant_eq(Number::Float(1e20 + 1e6), ct));
+    assert!(!Number::Int(1).tolerant_eq(Number::Int(2), 0.0));
+}
+
+#[test]
+fn exact_integer_arithmetic_beyond_2_to_53() {
+    let big = Number::Int(9_007_199_254_740_993); // 2^53 + 1
+    assert_eq!(Number::exact_int('+', big, Number::Int(0)), Some(big));
+    assert_eq!(
+        Number::exact_int('-', big, Number::Int(1)),
+        Some(Number::Int(9_007_199_254_740_992))
+    );
+    assert_eq!(
+        Number::exact_int('\u{d7}', Number::Int(3), Number::Int(4)),
+        Some(Number::Int(12))
+    );
+    assert_eq!(
+        Number::exact_int('+', Number::Int(i64::MAX), Number::Int(1)),
+        None,
+        "overflow falls back"
+    );
+    assert_eq!(
+        Number::exact_int('+', Number::Float(1.5), Number::Int(1)),
+        None
+    );
+    assert_eq!(
+        Number::exact_int('\u{f7}', Number::Int(4), Number::Int(2)),
+        None,
+        "divide is not exact-int"
+    );
+}
+
+#[test]
+fn every_error_kind_has_its_apl360_text() {
+    let cases = [
+        (ErrorKind::Index, "INDEX ERROR"),
+        (ErrorKind::WsFull, "WS FULL"),
+        (ErrorKind::Defn, "DEFN ERROR"),
+        (ErrorKind::Depth, "DEPTH ERROR"),
+        (ErrorKind::Interrupt, "INTERRUPT"),
+    ];
+    for (kind, text) in cases {
+        assert_eq!(kind.to_string(), text);
+    }
+}
+
+#[test]
+fn arrays_of_any_rank_including_empties() {
+    let cube = Array::new(vec![2, 3, 4], Data::Num(vec![Number::Int(0); 24])).unwrap();
+    assert_eq!(cube.shape.len(), 3);
+    for shape in [vec![0], vec![2, 0], vec![0, 3], vec![0, 0, 5]] {
+        let a = Array::new(shape.clone(), Data::Num(vec![])).unwrap();
+        assert_eq!(a.shape, shape);
+        assert_eq!(a.data.count(), 0);
+    }
+    let chars = Array::new(vec![2], Data::Char(vec!['A', 'B'])).unwrap();
+    assert_eq!(chars.data.count(), 2);
+}

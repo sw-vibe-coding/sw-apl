@@ -109,3 +109,33 @@ fn quad_output_is_buffered_and_silent_at_top_level() {
         ErrorKind::NotImplemented
     );
 }
+
+#[test]
+fn quad_ct_is_a_system_variable() {
+    let mut ws = Workspace::default();
+    assert_eq!(nums(&mut ws, "\u{2395}CT"), [Number::Float(1e-13)]);
+    assert_eq!(
+        eval_line(&mut ws, "\u{2395}CT\u{2190}1E\u{af}10").unwrap(),
+        None
+    );
+    assert_eq!(nums(&mut ws, "\u{2395}CT"), [Number::Float(1e-10)]);
+    assert_eq!(eval_line(&mut ws, "\u{2395}CT\u{2190}0").unwrap(), None);
+    assert_eq!(
+        eval_line(&mut ws, "\u{2395}CT\u{2190}\u{af}1")
+            .unwrap_err()
+            .kind,
+        ErrorKind::Domain
+    );
+    assert_eq!(
+        eval_line(&mut ws, "\u{2395}CT\u{2190}1 2")
+            .unwrap_err()
+            .kind,
+        ErrorKind::Domain
+    );
+    assert_eq!(
+        eval_line(&mut ws, "\u{2395}IO\u{2190}1 1")
+            .unwrap_err()
+            .kind,
+        ErrorKind::Domain
+    );
+}

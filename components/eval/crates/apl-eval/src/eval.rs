@@ -1,10 +1,10 @@
 //! Expression evaluation.
 
 use apl_parse::{Expr, parse};
-use apl_prims_ops::reduce;
-use apl_value::{AplError, AplResult, Array, ErrorKind, Number};
+use apl_prims::{apply_dyadic, apply_monadic, reduce};
+use apl_value::{AplError, AplResult, Array, ErrorKind};
 
-use crate::dispatch::{apply_dyadic, apply_monadic};
+use crate::system::{get_system, set_system};
 use crate::workspace::Workspace;
 
 /// Parse and evaluate one line. `Ok(None)` when there is nothing to
@@ -76,13 +76,10 @@ fn eval_apply(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
 /// Quad forms: system variables and quad output/input.
 fn eval_system(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
     match expr {
-        Expr::SysName(name, pos) => match name.as_str() {
-            "IO" => Ok(Array::scalar(Number::Int(ws.io))),
-            _ => Err(AplError::new(ErrorKind::Value).at(*pos)),
-        },
+        Expr::SysName(name, pos) => get_system(ws, name).map_err(|e| e.at(*pos)),
         Expr::SysAssign { name, pos, value } => {
             let v = eval_expr(ws, value)?;
-            ws.set_system(name, &v).map_err(|e| e.at(*pos))?;
+            set_system(ws, name, &v).map_err(|e| e.at(*pos))?;
             Ok(v)
         }
         Expr::QuadOut { value, .. } => {

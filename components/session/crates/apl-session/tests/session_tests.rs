@@ -75,3 +75,9 @@ fn quad_output_before_an_error_still_prints() {
     assert_eq!(lines[0], "5");
     assert_eq!(lines[1], "VALUE ERROR");
 }
+
+#[test]
+fn quad_ct_displays_in_exponent_form() {
+    let mut s = Session::default();
+    assert_eq!(out(&mut s, "\u{2395}CT"), vec!["1E\u{af}13"]);
+}
