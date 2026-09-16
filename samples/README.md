@@ -12,6 +12,12 @@ were left out, as were files that used APLSV features (execute,
 format, a quad-named random seed). The index-origin sample uses
 `)ORIGIN` rather than a quad variable.
 
+`50-horse-race.apl` is a target program written in pure APL\360
+(character matrix for names, mixed output, the branch idiom); it
+runs once defined functions, branching, indexing, comparisons, and
+roll land, and its transcript is reproducible because the random
+link starts from a fixed value.
+
 Run the corpus against the release binary:
 
 ```bash

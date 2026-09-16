@@ -119,7 +119,8 @@ widen each layer to the full APL\360 set.
 6. `parser-complete` -- operators reduce/scan/inner/outer with
    axis brackets, bracket indexing, indexed assignment, branch,
    quad and quote-quad on both sides of assignment, first-axis
-   glyphs.
+   glyphs, mixed output (`'TEXT';X` semicolon lists, the APL\360
+   feature that stands in for the later format primitive).
 7. `scalar-functions-complete` -- every monadic and dyadic scalar
    primitive with rank and length checking, boolean results,
    residue and floor with tolerance, circular, factorial and
@@ -132,7 +133,9 @@ widen each layer to the full APL\360 set.
 2. `take-drop-reverse-rotate-transpose` (monadic and dyadic
    transpose, first-axis variants).
 3. `compress-expand-membership-indexof`.
-4. `grade-encode-decode-deal-roll` (workspace random link).
+4. `grade-encode-decode-deal-roll` (workspace random link, which
+   starts from the APL\360 initial value 16807 in a clear
+   workspace, so transcripts that use `?` are reproducible).
 5. `reduce-scan` first-axis forms, axis brackets, scan, identity
    elements for empty reductions.
 6. `inner-outer-product`.
