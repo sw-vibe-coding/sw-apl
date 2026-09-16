@@ -14,6 +14,11 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-16
 
+- chore(agentrail): complete 002-mvp-scalar-arithmetic; advance to 003-mvp-iota-rho-reduce
+- feat: MVP scalar arithmetic at the six-space prompt
+- chore(agentrail): complete 001-fold-owner-answers; advance to 002-mvp-scalar-arithmetic
+- docs: fold owner decisions on Unicode, APLSV, libraries, markdown
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): archive bootstrap saga; init core-mvp saga with 7 steps
 - chore(agentrail): complete 002-cli-skeleton; bootstrap saga done
 - feat(cli): sw-apl binary skeleton (components/cli workspace)
