@@ -12,6 +12,7 @@ name = "sw-apl"
 path = "src/main.rs"
 
 [dependencies]
+apl-session = { path = "../../../session/crates/apl-session" }
 clap = { version = "4", features = ["derive"] }
 
 [lints]

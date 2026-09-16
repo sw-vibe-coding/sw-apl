@@ -1,0 +1,11 @@
+[package]
+name = "apl-value"
+description = "sw-apl value model: numbers, arrays, errors"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true

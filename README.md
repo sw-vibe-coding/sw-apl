@@ -21,14 +21,18 @@ behaviour and for the conformance corpus in `samples/`.
 
 ## Status
 
-The repository is bootstrapped and the `sw-apl` binary builds,
-runs, and passes its tests, but the interpreter is not written
-yet: every APL statement currently answers `NOT IMPLEMENTED`.
-Batch mode, the six-space echo, `)OFF`, help, and the version
-block work. Implementation proceeds phase by phase per
-`docs/plan.md`: value model and display, lexer and parser, scalar
-functions, mixed functions and operators, defined functions and
-the session, workspaces, numerics, then the web demo.
+Early. The `sw-apl` binary evaluates scalar arithmetic at the
+six-space prompt: numeric literals with the high minus, strands,
+plus, minus, times, divide, maximum, minimum, residue, power
+(monadic and dyadic, with scalar extension), parentheses,
+assignment, variables, monadic rho, and APL\360 error display
+with the caret. Anything else answers `NOT IMPLEMENTED` or a
+CHARACTER ERROR naming the code point. Batch mode, `)OFF`, help,
+and the version block work. Implementation proceeds phase by
+phase per `docs/plan.md`: iota, reshape, and reduce next, then
+the full value, display, lexer, parser, and scalar-function
+layers, mixed functions and operators, defined functions and the
+session, workspaces, numerics, then the web demo.
 
 ## Summary
 

@@ -1,0 +1,68 @@
+//! Evaluator over the AST with a workspace of variables.
+
+use apl_eval::{Workspace, eval_line};
+use apl_value::{Data, ErrorKind, Number};
+
+fn nums(ws: &mut Workspace, line: &str) -> Vec<Number> {
+    match eval_line(ws, line).unwrap().unwrap().data {
+        Data::Num(v) => v,
+        Data::Char(_) => panic!("chars"),
+    }
+}
+
+#[test]
+fn arithmetic_right_to_left() {
+    let mut ws = Workspace::default();
+    assert_eq!(nums(&mut ws, "2+3\u{d7}4"), [Number::Int(14)]);
+    assert_eq!(nums(&mut ws, "(2+3)\u{d7}4"), [Number::Int(20)]);
+    assert_eq!(nums(&mut ws, "\u{af}3+10"), [Number::Int(7)]);
+    assert_eq!(nums(&mut ws, "-3+10"), [Number::Int(-13)]);
+}
+
+#[test]
+fn assignment_is_silent_and_variables_persist() {
+    let mut ws = Workspace::default();
+    assert_eq!(eval_line(&mut ws, "A\u{2190}5").unwrap(), None);
+    assert_eq!(nums(&mut ws, "A+3"), [Number::Int(8)]);
+    assert_eq!(eval_line(&mut ws, "B\u{2190}A\u{d7}2").unwrap(), None);
+    assert_eq!(nums(&mut ws, "A+B"), [Number::Int(15)]);
+}
+
+#[test]
+fn assignment_inside_an_expression_yields_its_value() {
+    let mut ws = Workspace::default();
+    assert_eq!(nums(&mut ws, "1+A\u{2190}5"), [Number::Int(6)]);
+}
+
+#[test]
+fn value_error_carries_the_name_position() {
+    let mut ws = Workspace::default();
+    let e = eval_line(&mut ws, "1+XYZ").unwrap_err();
+    assert_eq!(e.kind, ErrorKind::Value);
+    assert_eq!(e.caret, Some(2));
+}
+
+#[test]
+fn primitive_errors_point_at_the_glyph() {
+    let mut ws = Workspace::default();
+    let e = eval_line(&mut ws, "1 2+3 4 5").unwrap_err();
+    assert_eq!(e.kind, ErrorKind::Length);
+    assert_eq!(e.caret, Some(3));
+    let e = eval_line(&mut ws, "5\u{f7}0").unwrap_err();
+    assert_eq!(e.kind, ErrorKind::Domain);
+    assert_eq!(e.caret, Some(1));
+}
+
+#[test]
+fn monadic_rho_gives_the_shape() {
+    let mut ws = Workspace::default();
+    assert_eq!(nums(&mut ws, "\u{2374}1 2 3 4 5"), [Number::Int(5)]);
+    let a = eval_line(&mut ws, "\u{2374}7").unwrap().unwrap();
+    assert_eq!(a.shape, vec![0]);
+}
+
+#[test]
+fn empty_line_evaluates_to_nothing() {
+    let mut ws = Workspace::default();
+    assert_eq!(eval_line(&mut ws, "").unwrap(), None);
+}

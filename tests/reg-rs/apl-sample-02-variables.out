@@ -1,0 +1,10 @@
+      ⍝ Variables and assignment
+      A ← 5
+      A + 3
+8
+      B ← A × 2
+      B
+10
+      A + B
+15
+      )OFF

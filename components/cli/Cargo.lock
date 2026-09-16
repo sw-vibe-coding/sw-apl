@@ -62,6 +62,59 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-display"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+]
+
+[[package]]
+name = "apl-eval"
+version = "0.1.0"
+dependencies = [
+ "apl-parse",
+ "apl-prims-scalar",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-lex"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+]
+
+[[package]]
+name = "apl-parse"
+version = "0.1.0"
+dependencies = [
+ "apl-lex",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-prims-scalar"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+]
+
+[[package]]
+name = "apl-session"
+version = "0.1.0"
+dependencies = [
+ "apl-display",
+ "apl-eval",
+ "apl-lex",
+ "apl-parse",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-value"
+version = "0.1.0"
+
+[[package]]
 name = "autocfg"
 version = "1.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -325,6 +378,7 @@ checksum = "7da8b5736845d9f2fcb837ea5d9e2628564b3b043a70948a3f0b778838c5fb4f"
 name = "sw-apl"
 version = "0.1.0"
 dependencies = [
+ "apl-session",
  "chrono",
  "clap",
  "hostname",

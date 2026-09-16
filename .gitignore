@@ -26,3 +26,8 @@
 # Saved APL workspaces written by )SAVE during local sessions.
 /ws/
 *.apl.ws
+
+# reg-rs keeps the .rgt spec and .out baseline under version control;
+# the SQLite run database and its lock are per-machine state.
+tests/reg-rs/*.tdb
+tests/reg-rs/*.tdb.lock

@@ -60,13 +60,13 @@ fn help_describes_apl_and_flags() {
 fn stdin_batch_echoes_with_indent_and_stops_at_off() {
     let (text, code) = run_stdin(&[], "2+2\n)OFF\n3+3\n");
     assert_eq!(code, 0);
-    assert_eq!(text, "      2+2\nNOT IMPLEMENTED\n      )OFF\n");
+    assert_eq!(text, "      2+2\n4\n      )OFF\n");
 }
 
 #[test]
 fn no_echo_suppresses_the_input_lines() {
     let (text, _) = run_stdin(&["--no-echo"], "2+2\n");
-    assert_eq!(text, "NOT IMPLEMENTED\n");
+    assert_eq!(text, "4\n");
 }
 
 #[test]
@@ -79,7 +79,7 @@ fn file_batch_runs_a_sample() {
     let text = String::from_utf8_lossy(&out.stdout);
     assert_eq!(
         text,
-        "      \u{235D} comment\n      1 2 3\nNOT IMPLEMENTED\n      )OFF\n"
+        "      \u{235D} comment\n      1 2 3\n1 2 3\n      )OFF\n"
     );
     let _ = std::fs::remove_dir_all(dir);
 }

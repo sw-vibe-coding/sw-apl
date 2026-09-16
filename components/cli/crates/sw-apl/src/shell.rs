@@ -5,7 +5,7 @@ use std::fs;
 use std::io::{self, BufRead, Write};
 use std::path::Path;
 
-use crate::session::{self, INDENT, Reply};
+use apl_session::{INDENT, Reply, Session};
 
 /// Run every line of `path` in batch mode.
 pub fn run_file(path: &Path, echo: bool) -> io::Result<()> {
@@ -21,11 +21,12 @@ pub fn run_stdin(echo: bool) -> io::Result<()> {
 
 fn run_lines(lines: impl Iterator<Item = String>, echo: bool) -> io::Result<()> {
     let mut out = io::stdout().lock();
+    let mut session = Session::default();
     for line in lines {
         if echo {
             writeln!(out, "{INDENT}{line}")?;
         }
-        match session::respond(&line) {
+        match session.respond(&line) {
             Reply::Off => break,
             Reply::Output(output) => {
                 for text in output {
@@ -42,6 +43,7 @@ fn run_lines(lines: impl Iterator<Item = String>, echo: bool) -> io::Result<()> 
 pub fn run_interactive() -> io::Result<()> {
     let mut input = io::stdin().lock();
     let mut out = io::stdout().lock();
+    let mut session = Session::default();
     let mut line = String::new();
     loop {
         write!(out, "{INDENT}")?;
@@ -51,7 +53,7 @@ pub fn run_interactive() -> io::Result<()> {
             writeln!(out)?;
             return Ok(());
         }
-        match session::respond(line.trim_end_matches(['\n', '\r'])) {
+        match session.respond(line.trim_end_matches(['\n', '\r'])) {
             Reply::Off => return Ok(()),
             Reply::Output(output) => {
                 for text in output {
