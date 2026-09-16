@@ -43,9 +43,14 @@ fmt-check component="":
         (cd "components/$c" && cargo fmt --all -- --check)
     done
 
-# Repo-wide standards gates.
+# Repo-wide standards gates. README and other top-level markdown
+# are ASCII-only; docs/*.md may contain APL glyphs and is not gated.
+# CLAUDE.md/AGENTS.md carry an agentrail-managed block with em dashes
+# (upstream), so they are checked only outside that block by eye.
 gates:
-    sw-markdown-checker -f "**/*.md"
+    sw-markdown-checker -f README.md
+    sw-markdown-checker -f CHANGES.md
+    sw-markdown-checker -f "samples/*.md"
     sw-checklist
 
 # Build the release CLI binary into target/release/sw-apl.

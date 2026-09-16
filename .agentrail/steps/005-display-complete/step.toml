@@ -1,4 +1,4 @@
-number = 4
+number = 5
 slug = "display-complete"
 status = "pending"
 description = "Complete apl-display per docs/language.md and docs/session.md: exponential fo..."

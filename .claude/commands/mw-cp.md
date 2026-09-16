@@ -39,8 +39,9 @@ Zero warnings. Fix, never `#[allow]` or suppress.
 
 ## 4. Repo-wide checks
 
-- `sw-markdown-checker -f "**/*.md"` when any `.md` changed. ASCII
-  only; glyph material goes in `.txt`/`.apl`/config files. Known
+- `sw-markdown-checker` on README.md and every other `.md` outside
+  `docs/` when they changed (`just gates` runs the right set).
+  `docs/*.md` may contain glyphs and is not gated. Known
   non-blocking failure: the agentrail-managed block in CLAUDE.md
   and AGENTS.md contains em dashes emitted by `agentrail
   instructions apply` (fix belongs upstream); everything you

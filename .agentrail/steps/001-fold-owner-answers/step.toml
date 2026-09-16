@@ -1,0 +1,9 @@
+number = 1
+slug = "fold-owner-answers"
+status = "in-progress"
+description = "Fold the owner's answers to the four open questions into docs/plan.md and the..."
+role = "production"
+context_files = []
+created_at = "2026-09-16T11:19:49"
+task_type = "docs"
+commits = []

@@ -1,4 +1,4 @@
-number = 1
+number = 2
 slug = "mvp-scalar-arithmetic"
 status = "pending"
 description = "MVP step 1 of 2 (docs/plan.md Phase 1). Create component workspaces (each its..."

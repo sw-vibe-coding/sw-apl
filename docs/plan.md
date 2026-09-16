@@ -47,9 +47,12 @@ Two delivery surfaces, in order:
 - TDD (red, green, refactor) on every step. Unit tests live next
   to the crate; end-to-end transcripts are `reg-rs` regression
   tests driven by the `samples/` corpus.
-- Markdown is ASCII-only (`sw-markdown-checker`). Glyph-bearing
-  reference material lives in `.txt`, `.apl`, `.yml`, and `.el`
-  files that the markdown links to.
+- `README.md` and every other top-level `.md` (CLAUDE.md,
+  CHANGES.md, samples/README.md) are ASCII-only so GitHub renders
+  them predictably; `sw-markdown-checker` gates them. `docs/*.md`
+  may contain APL glyphs (UTF-8); README links to those docs
+  rather than showing glyphs itself. `docs/glyphs.txt` stays the
+  machine-readable source for the lexer's glyph table.
 - Floating point is first-class: numbers are one semantic type
   with an integer fast path and tolerant comparison (quad-CT).
 
@@ -179,20 +182,34 @@ widen each layer to the full APL\360 set.
    keyboard and Espanso-style expansions.
 3. `pages-deploy` -- GitHub Pages build and deploy scripts.
 
-## Open questions for the owner
+## Owner decisions (2026-09-16)
 
-Recorded here so answers can be folded into the plan:
+Answers to the questions raised at bootstrap, now policy:
 
-1. Glyph lookalikes: accept Greek rho/iota/alpha/omega code points
-   as their APL counterparts (lenient input), or reject them with
-   CHARACTER ERROR (strict)? Default in this plan: strict, with a
-   clear error naming the intended glyph.
-2. APLSV additions beyond system functions: execute and the
-   format primitive are planned in Phase 5. Confirm they belong.
-3. Workspace library numbering: keep the APL\360 `)LOAD 1 NAME`
-   form with a configurable library directory map, or use plain
-   file paths only? Default: both, with numbered libraries mapped
-   in a small config file.
-4. Markdown ASCII gate versus APL documentation: keep glyphs out
-   of `.md` (current policy) or exempt `docs/`? Default: keep the
-   gate; glyph tables live in `docs/glyphs.txt`.
+1. Unicode acceptance is strict and documented exactly in
+   `language.md` ("Accepted Unicode"): outside quotes and comments
+   only the code points in `glyphs.txt` plus printable ASCII and
+   space are valid; anything else, including Greek lookalikes and
+   control characters, is CHARACTER ERROR naming the code point.
+   Invalid UTF-8 in a file or on stdin is reported as CHARACTER
+   ERROR with the byte offset, never a crash.
+2. Execute and format (APLSV) stay in Phase 5. Pro: they are
+   small, widely expected, and make the horse-race samples run.
+   Con: they are not APL\360 proper; the docs label them APLSV.
+3. Workspace libraries: numbered libraries map to directories via
+   a config file (APL\360 `)LOAD 1 NAME` form) and plain paths
+   also work.
+4. Markdown: README.md and other top-level markdown stay ASCII;
+   `docs/*.md` may use glyphs; README links to docs. If GitHub
+   turns out not to render APL glyphs in `docs/*.md`, switch those
+   files to Org. Later tooling (not scheduled yet): `ob-sw-apl`
+   for literate Org/PDF/HTML with glyphs, and vhs tapes of the
+   CLI to embed as images and animations in the ASCII README.
+
+### Phase 7: literate and recorded docs (saga `doc-tooling`, unscheduled)
+
+1. `vhs-tapes` -- vhs tape scripts under `docs/tapes/` rendering
+   CLI sessions with glyph input and output to GIF/PNG for the
+   README.
+2. `ob-sw-apl` -- an Org Babel language for sw-apl so literate
+   Org documents can execute APL blocks and export to PDF/HTML.

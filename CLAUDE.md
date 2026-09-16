@@ -329,12 +329,14 @@ and `main.rs` are facades. Never `#[allow]`, never suppress; fix.
 Zero failures and zero warnings is the standing target. The one
 expected warning is "Binary Freshness" (see sw-install rule).
 
-## Markdown is ASCII-only
+## README and top-level markdown are ASCII-only; docs/ may use glyphs
 
-`sw-markdown-checker -f "**/*.md"` must pass. APL glyphs therefore
-never appear in `.md` files: refer to them by name (rho, iota,
-quad) and put glyph-bearing material in `docs/glyphs.txt`,
-`samples/*.apl`, `docs/espanso/*.yml`, `docs/emacs/*.el`.
+`README.md`, `CLAUDE.md`, `CHANGES.md`, `samples/README.md` and
+any other markdown outside `docs/` must pass `sw-markdown-checker`
+(GitHub renders them predictably). `docs/*.md` may contain APL
+glyphs; the README links to docs instead of showing glyphs.
+`docs/glyphs.txt` stays the machine-readable glyph table that
+lexer tests read. Gate: `just gates`.
 
 ## reg-rs transcripts
 

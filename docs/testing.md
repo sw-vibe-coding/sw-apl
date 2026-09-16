@@ -58,7 +58,9 @@ when the feature lands.
 - `cargo test` in the changed workspaces.
 - `cargo clippy --workspace --all-targets -- -D warnings` there.
 - `cargo fmt --all -- --check` there.
-- `sw-markdown-checker -f "**/*.md"` when markdown changed.
+- `sw-markdown-checker` on README.md and the other top-level
+  markdown when they changed (`just gates`); `docs/*.md` may hold
+  glyphs and is not ASCII-gated.
 - `sw-checklist` always; zero failures, warnings kept at zero.
 - `scripts/reg.sh run -q` when interpreter behaviour changed.
 

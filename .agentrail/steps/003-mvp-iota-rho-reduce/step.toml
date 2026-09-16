@@ -1,7 +1,7 @@
-number = 5
-slug = "lexer-complete"
+number = 3
+slug = "mvp-iota-rho-reduce"
 status = "pending"
-description = "Complete apl-lex for every glyph in docs/glyphs.txt: quoted strings with doub..."
+description = "MVP step 2 of 2 (docs/plan.md Phase 1). Add iota (monadic, quad-IO aware), rh..."
 role = "production"
 context_files = []
 created_at = "2026-09-16T11:12:40"

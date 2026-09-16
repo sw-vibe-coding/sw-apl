@@ -1,17 +1,39 @@
 # sw-apl Language Reference (APL\360 subset)
 
-This describes the language sw-apl implements. Glyphs are named
-here; the actual characters and code points are in `glyphs.txt`
-(this file is ASCII-only by project policy). Behaviour follows
+This describes the language sw-apl implements. Glyphs are mostly
+named in prose; `glyphs.txt` is the machine-readable table of
+characters and code points, and the "Accepted Unicode" section
+below shows them. Behaviour follows
 the IBM APL\360 User's Manual and the APLSV additions named
 below. Where the two references differ, APL\360 wins for
 primitives and APLSV wins for the quad system interface.
 
+## Accepted Unicode
+
+Source is UTF-8. Outside quoted literals and lamp comments,
+exactly these characters are valid:
+
+- Space (U+0020) and printable ASCII U+0021 to U+007E. Of these,
+  letters, digits, and the ASCII glyphs in the table below have
+  meaning; the rest (for example `#`, `$`, `&`, backtick, `{`,
+  `}`) are CHARACTER ERROR.
+- The APL glyphs: × ÷ ⌈ ⌊ ⍟ ○ ∧ ∨ ⍲ ⍱ ≤ ≥ ≠ ⍳ ⍴ ⌽ ⊖ ⍉ ↑ ↓ ⌿ ⍀
+  ⊥ ⊤ ∊ ⍋ ⍒ ⌹ ⍎ ⍕ ∘ ← → ∇ ⍫ ⍝ ¯ ⎕ ⍞ ∆ ⍙ ⍺ ⍵ (code points in
+  `glyphs.txt`).
+- Newline ends a line; carriage return before a newline is
+  ignored so CRLF files load.
+
+Everything else is CHARACTER ERROR, and the message names the
+code point, for example `CHARACTER ERROR: U+03C1 (use ⍴ U+2374)`
+for the Greek rho lookalike. Tabs, other control characters, and
+non-APL Unicode are errors outside quotes. Inside quoted
+literals and after a lamp, any Unicode scalar value is accepted
+as data or comment text. Input that is not valid UTF-8 is
+reported as CHARACTER ERROR with the byte offset of the first
+bad sequence; the session continues with the next line.
+
 ## Characters and names
 
-- Source is UTF-8. Only the code points in `glyphs.txt` are
-  meaningful; any other non-ASCII character is a CHARACTER ERROR
-  with the offending code point named in the message.
 - Names start with a letter, delta, or delta-underbar and
   continue with letters, digits, delta, delta-underbar. Case is
   significant. Traditional programs use upper case.

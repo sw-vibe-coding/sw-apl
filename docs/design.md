@@ -92,8 +92,21 @@ baseline is the interpreter's transcript. Baselines are rebased
 only with a stated reason in the commit message. See
 `testing.md`.
 
-## D11. ASCII-only markdown
+## D11. ASCII-only README, Unicode allowed in docs/
 
-The markdown gate stays. Glyph tables and examples live in
-`glyphs.txt`, `samples/*.apl`, and configuration files. Markdown
-refers to glyphs by name and code point.
+`README.md` and other top-level markdown stay ASCII so GitHub
+renders them predictably and `sw-markdown-checker` gates them.
+`docs/*.md` may contain glyphs; the README links to those docs.
+`glyphs.txt` remains the machine-readable glyph table. Rules out:
+glyph transcripts in the README (future vhs recordings supply
+images instead).
+
+## D12. Strict Unicode acceptance
+
+Outside quoted literals and comments, only printable ASCII, space,
+and the code points in `glyphs.txt` are valid source; anything
+else is CHARACTER ERROR naming the code point. Inside quotes and
+comments any Unicode scalar value is data. Invalid UTF-8 input is
+reported as CHARACTER ERROR with a byte offset. Rules out: silent
+acceptance of Greek lookalikes and of tabs or other control
+characters in source.

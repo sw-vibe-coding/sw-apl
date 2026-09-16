@@ -42,8 +42,19 @@ the session, workspaces, numerics, then the web demo.
 | Session | Six-space indent prompt, APL\360 error display with caret, batch transcripts |
 | Input | Espanso and Emacs keymaps for typing glyphs (`docs/input-methods.md`) |
 
-Documentation lives in `docs/`: start with `plan.md`, then
-`language.md`, `session.md`, and `input-methods.md`.
+This README is plain ASCII so it renders the same everywhere; the
+documents below show real APL glyphs:
+
+- [Master plan](docs/plan.md) -- phases, decisions, what comes next
+- [Language reference](docs/language.md) -- the APL\360 subset and
+  exactly which Unicode is accepted
+- [Glyph table](docs/glyphs.txt) -- every glyph with its code point
+- [Session](docs/session.md) -- prompt, error display, system
+  commands, the DESCRIBE convention
+- [Typing glyphs](docs/input-methods.md) -- Espanso and Emacs
+  keymaps, OS layouts
+- [Testing](docs/testing.md), [Architecture](docs/architecture.md),
+  [Design decisions](docs/design.md), [Requirements](docs/prd.md)
 
 ## Building
 

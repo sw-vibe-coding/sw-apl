@@ -1,7 +1,7 @@
 number = 6
-slug = "parser-complete"
+slug = "lexer-complete"
 status = "pending"
-description = "Complete apl-parse: operators reduce/scan (last and first axis) with axis bra..."
+description = "Complete apl-lex for every glyph in docs/glyphs.txt: quoted strings with doub..."
 role = "production"
 context_files = []
 created_at = "2026-09-16T11:12:40"
