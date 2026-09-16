@@ -1,0 +1,98 @@
+sw-apl glyph table
+==================
+
+Canonical code points accepted by the lexer. Column 1 is the glyph,
+column 2 the Unicode code point, column 3 the traditional name,
+columns 4 and 5 the monadic and dyadic meanings (blank = none).
+This file is UTF-8 and is the source of truth; docs/language.md
+refers to it by name.
+
+Scalar functions
+----------------
++   U+002B  plus            conjugate (identity)   add
+-   U+002D  minus           negative               subtract
+×   U+00D7  times           signum                 multiply
+÷   U+00F7  divide          reciprocal             divide
+⌈   U+2308  upstile         ceiling                maximum
+⌊   U+230A  downstile       floor                  minimum
+*   U+002A  star            exponential            power
+⍟   U+235F  log             natural log            logarithm
+|   U+007C  stile           magnitude              residue
+!   U+0021  shriek          factorial              binomial
+○   U+25CB  circle          pi times               circular
+~   U+007E  tilde           not
+∧   U+2227  and                                    and
+∨   U+2228  or                                     or
+⍲   U+2372  nand                                   nand
+⍱   U+2371  nor                                    nor
+<   U+003C  less                                   less than
+≤   U+2264  less-or-equal                          less or equal
+=   U+003D  equal                                  equal
+≥   U+2265  greater-or-eq                          greater or equal
+>   U+003E  greater                                greater than
+≠   U+2260  not-equal                              not equal
+?   U+003F  query           roll                   deal
+
+Mixed functions
+---------------
+⍳   U+2373  iota            index generator        index of
+⍴   U+2374  rho             shape                  reshape
+,   U+002C  comma           ravel                  catenate / laminate
+⌽   U+233D  circle-stile    reverse                rotate
+⊖   U+2296  circle-bar      reverse first          rotate first
+⍉   U+2349  circle-backslash transpose             dyadic transpose
+↑   U+2191  up-arrow                               take
+↓   U+2193  down-arrow                             drop
+/   U+002F  slash                                  compress (also reduce)
+⌿   U+233F  slash-bar                              compress first
+\   U+005C  backslash                              expand (also scan)
+⍀   U+2340  backslash-bar                          expand first
+⊥   U+22A5  up-tack (base)                         decode
+⊤   U+22A4  down-tack (rep)                        encode
+∊   U+220A  epsilon                                membership
+⍋   U+234B  grade-up        grade up
+⍒   U+2352  grade-down      grade down
+⌹   U+2339  domino          matrix inverse         matrix divide
+⍎   U+234E  execute         execute                (APLSV)
+⍕   U+2355  format          format                 format by spec (APLSV)
+
+Operators
+---------
+/   U+002F  reduce          f/  (last axis)
+⌿   U+233F  reduce first    f⌿
+\   U+005C  scan            f\  (last axis)
+⍀   U+2340  scan first      f⍀
+.   U+002E  inner product   f.g
+∘.  U+2218  outer product   ∘.f  (jot then dot)
+[ ] U+005B U+005D  axis     f[k]  and indexing A[i;j]
+
+Syntax
+------
+←   U+2190  left arrow      assignment
+→   U+2192  right arrow     branch
+∇   U+2207  del             open/close function definition
+⍫   U+236B  del-tilde       lock a function (close definition locked)
+⍝   U+235D  lamp            comment to end of line
+¯   U+00AF  high minus      negative sign in numeric literals
+'   U+0027  quote           character literal ('' inside for a quote)
+;   U+003B  semicolon       index separator, local name separator
+:   U+003A  colon           label terminator
+( ) U+0028 U+0029           grouping
+⎕   U+2395  quad            evaluated input/output; prefix of system names
+⍞   U+235E  quote-quad      character input/output
+∆   U+2206  delta           letter usable in names
+⍙   U+2359  delta-underbar  letter usable in names
+⍺   U+237A  alpha           (reserved; not used in APL\360)
+⍵   U+2375  omega           (reserved; not used in APL\360)
+)   U+0029  right paren     system command when first non-blank char
+
+Lookalikes NOT accepted (CHARACTER ERROR)
+-----------------------------------------
+ρ   U+03C1  greek rho       use ⍴ U+2374
+ι   U+03B9  greek iota      use ⍳ U+2373
+α   U+03B1  greek alpha     use ⍺ U+237A
+ω   U+03C9  greek omega     use ⍵ U+2375
+∈   U+2208  element of      use ∊ U+220A
+Δ   U+0394  greek delta     use ∆ U+2206
+-   U+2212  minus sign      use - U+002D
+x   U+0078  latin x         use × U+00D7

@@ -1,6 +1,6 @@
 number = 1
 slug = "planning-docs"
-status = "pending"
+status = "in-progress"
 description = "Write the planning documents derived from the owner's direction: docs/plan.md..."
 role = "legacy"
 context_files = []
