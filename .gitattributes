@@ -1,0 +1,41 @@
+# Line-ending discipline: pin every text format to LF regardless of
+# the contributor's OS, and mark known binaries so Git never converts
+# them. APL source files are UTF-8 with traditional glyphs; CRLF in
+# them would surface as stray carriage returns in the lexer.
+
+* text=auto eol=lf
+
+# Source code.
+*.rs text eol=lf
+*.toml text eol=lf
+*.apl text eol=lf
+
+# Web frontend (future Yew/WASM demo).
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.svg text eol=lf
+
+# Docs / config / scripts.
+*.md text eol=lf
+*.txt text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.sh text eol=lf
+*.lock text eol=lf
+*.expected text eol=lf
+
+# Hidden config files (no extension).
+.gitattributes text eol=lf
+.gitignore text eol=lf
+.editorconfig text eol=lf
+
+# Binary formats -- never touch.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.wasm binary
+*.pdf binary

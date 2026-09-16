@@ -1,0 +1,28 @@
+/target/
+/dist/
+# Each components/<name>/ is its own cargo workspace; .cargo/config.toml
+# points them all at the shared /target/ above, but guard the local
+# trees anyway.
+/components/*/target/
+# trunk dev build output for the future web app.
+/components/web/dist/
+
+# Claude Code local state: per-machine settings + runtime locks.
+# EXCEPTION: .claude/commands/ holds shared slash commands (e.g.
+# /mw-cp) that must travel with the repo.
+.claude/*
+!.claude/commands/
+
+# macOS Finder metadata
+.DS_Store
+**/.DS_Store
+
+# agentrail raw session transcripts: huge append-only event logs.
+# NOT part of the durable saga handoff (steps/, trajectories/,
+# plan.md, saga.toml stay tracked). Kept locally, never committed.
+.agentrail/sessions/
+.agentrail-archive/*/sessions/
+
+# Saved APL workspaces written by )SAVE during local sessions.
+/ws/
+*.apl.ws
