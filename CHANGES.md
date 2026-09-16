@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-16
 
+- chore(agentrail): complete 003-mvp-iota-rho-reduce; advance to 004-value-model-complete
+- feat: MVP REPL -- iota, rho, ravel, catenate, reduce, quad-IO
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 002-mvp-scalar-arithmetic; advance to 003-mvp-iota-rho-reduce
 - feat: MVP scalar arithmetic at the six-space prompt
 - chore(agentrail): complete 001-fold-owner-answers; advance to 002-mvp-scalar-arithmetic
