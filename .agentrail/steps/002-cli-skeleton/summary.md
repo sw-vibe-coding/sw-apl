@@ -1,0 +1,1 @@
+sw-apl CLI skeleton pushed: components/cli workspace, 4-module binary (main/cli/shell/session), help+version per sw-checklist, batch echo + )OFF, interactive loop, NOT IMPLEMENTED stub; 9 tests; all gates green. Bootstrap saga done.
