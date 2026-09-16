@@ -1,6 +1,6 @@
 number = 9
 slug = "lexer-complete"
-status = "pending"
+status = "in-progress"
 description = "Complete apl-lex for every glyph in docs/glyphs.txt: quoted strings with doub..."
 role = "production"
 context_files = []

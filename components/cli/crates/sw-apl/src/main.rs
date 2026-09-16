@@ -4,6 +4,7 @@
 //! batch mode and hands each input line to the session.
 
 mod cli;
+mod decode;
 mod shell;
 
 use std::io::IsTerminal;

@@ -11,6 +11,10 @@ pub enum Expr {
     Name(String, usize),
     /// Bare quad on the right: evaluated input.
     QuadIn(usize),
+    /// Quote-quad on the right: character input.
+    QuoteQuadIn(usize),
+    /// `⍞ ← value`: character output without a newline.
+    QuoteQuadOut { pos: usize, value: Box<Expr> },
     /// `f right`.
     Monadic {
         f: char,

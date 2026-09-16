@@ -21,6 +21,8 @@ pub fn parse_operand(tokens: &[Token], end: usize) -> Parsed {
             Ok((inner, open))
         }
         TokenKind::Number(_) => Ok(parse_strand(tokens, end)),
+        TokenKind::Chars(a) => Ok((Expr::Literal(a.clone()), end - 1)),
+        TokenKind::QuoteQuad => Ok((Expr::QuoteQuadIn(last.pos), end - 1)),
         TokenKind::Name(n) => Ok((Expr::Name(n.clone(), last.pos), end - 1)),
         TokenKind::Quad => Ok((Expr::QuadIn(last.pos), end - 1)),
         _ => Err(AplError::new(ErrorKind::Syntax).at(last.pos)),
@@ -77,6 +79,7 @@ pub fn apply_assign(tokens: &[Token], at: usize, value: Expr) -> Parsed {
             value,
         },
         Some((TokenKind::Quad, pos)) => Expr::QuadOut { pos, value },
+        Some((TokenKind::QuoteQuad, pos)) => Expr::QuoteQuadOut { pos, value },
         _ => return Err(AplError::new(ErrorKind::Syntax).at(tokens[at].pos)),
     };
     Ok((expr, at - 1))

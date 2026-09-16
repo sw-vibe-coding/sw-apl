@@ -115,3 +115,90 @@ fn glyphs_from_later_apls_are_character_errors() {
         assert_eq!(err.kind, ErrorKind::Character(bad), "{bad}");
     }
 }
+
+fn chars_of(kind: &TokenKind) -> String {
+    match kind {
+        TokenKind::Chars(a) => match &a.data {
+            apl_value::Data::Char(v) => v.iter().collect(),
+            apl_value::Data::Num(_) => panic!("numeric"),
+        },
+        other => panic!("{other:?}"),
+    }
+}
+
+#[test]
+fn quoted_literals_with_doubled_quotes_and_any_unicode_inside() {
+    let k = kinds("'HELLO' 'it''s' '' 'A' '\u{3c1}\u{235d}x'");
+    assert_eq!(chars_of(&k[0]), "HELLO");
+    assert_eq!(chars_of(&k[1]), "it's");
+    assert_eq!(chars_of(&k[2]), "");
+    assert_eq!(chars_of(&k[3]), "A");
+    assert_eq!(chars_of(&k[4]), "\u{3c1}\u{235d}x");
+    let TokenKind::Chars(one) = &k[3] else {
+        panic!()
+    };
+    assert_eq!(one.shape, Vec::<usize>::new(), "one character is a scalar");
+    let TokenKind::Chars(five) = &k[0] else {
+        panic!()
+    };
+    assert_eq!(five.shape, vec![5]);
+    let TokenKind::Chars(none) = &k[2] else {
+        panic!()
+    };
+    assert_eq!(none.shape, vec![0]);
+}
+
+#[test]
+fn unterminated_quote_is_a_syntax_error_at_the_quote() {
+    let err = tokenize("1 2 'abc").unwrap_err();
+    assert_eq!(err.kind, ErrorKind::Syntax);
+    assert_eq!(err.caret, Some(4));
+}
+
+#[test]
+fn punctuation_and_sentinel_tokens() {
+    assert_eq!(
+        kinds("A[1;2] \u{2192}L L: \u{2207}R\u{2190}F X \u{236b} \u{235e}"),
+        vec![
+            TokenKind::Name("A".into()),
+            TokenKind::LBracket,
+            TokenKind::Number(Number::Int(1)),
+            TokenKind::Semicolon,
+            TokenKind::Number(Number::Int(2)),
+            TokenKind::RBracket,
+            TokenKind::Branch,
+            TokenKind::Name("L".into()),
+            TokenKind::Name("L".into()),
+            TokenKind::Colon,
+            TokenKind::Del,
+            TokenKind::Name("R".into()),
+            TokenKind::Assign,
+            TokenKind::Name("F".into()),
+            TokenKind::Name("X".into()),
+            TokenKind::DelTilde,
+            TokenKind::QuoteQuad,
+        ]
+    );
+}
+
+#[test]
+fn a_line_starting_with_a_right_paren_is_a_system_command() {
+    assert_eq!(
+        kinds("  )VARS A  "),
+        vec![TokenKind::SystemCommand("VARS A".to_string())]
+    );
+    assert_eq!(tokenize(")OFF").unwrap()[0].pos, 0);
+}
+
+#[test]
+fn names_may_hold_delta_letters_and_digits() {
+    assert_eq!(
+        kinds("\u{2206}X1 \u{2359}Y \u{2206}"),
+        vec![
+            TokenKind::Name("\u{2206}X1".into()),
+            TokenKind::Name("\u{2359}Y".into()),
+            TokenKind::Name("\u{2206}".into()),
+        ]
+    );
+    assert_eq!(tokenize("1X").unwrap_err().kind, ErrorKind::Syntax);
+}

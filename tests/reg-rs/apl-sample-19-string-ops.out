@@ -1,0 +1,19 @@
+      5⍴'#'
+#####
+      3⍴'ab'
+aba
+      1⍴'xyz'
+x
+      ⍴5⍴'#'
+5
+      'hi',' world'
+hi world
+      'a','b'
+ab
+      ⍴'hi',' world'
+8
+      '','x'
+x
+      'x',''
+x
+      )OFF

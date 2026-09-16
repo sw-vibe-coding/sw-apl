@@ -159,3 +159,35 @@ fn quad_names_are_not_a_thing_in_apl360() {
     assert_eq!(e.kind, ErrorKind::Syntax);
     assert_eq!(parse("\u{2395}IO").unwrap_err().kind, ErrorKind::Syntax);
 }
+
+#[test]
+fn character_literals_are_arrays() {
+    let Expr::Literal(a) = parse("'AB'").unwrap().unwrap() else {
+        panic!()
+    };
+    assert_eq!(a.shape, vec![2]);
+    assert!(matches!(a.data, apl_value::Data::Char(_)));
+    let Expr::Literal(a) = parse("'A'").unwrap().unwrap() else {
+        panic!()
+    };
+    assert_eq!(a.shape, Vec::<usize>::new());
+    let e = parse("1 'A' 2").unwrap_err();
+    assert_eq!(e.kind, ErrorKind::Syntax, "no mixed strands");
+}
+
+#[test]
+fn quote_quad_both_sides() {
+    assert!(matches!(
+        parse("\u{235e}").unwrap().unwrap(),
+        Expr::QuoteQuadIn(0)
+    ));
+    let e = parse("\u{235e}\u{2190}'X'").unwrap().unwrap();
+    assert!(matches!(e, Expr::QuoteQuadOut { .. }));
+}
+
+#[test]
+fn editor_and_control_tokens_are_syntax_errors_for_now() {
+    for line in ["A[1]", "\u{2192}3", "L:1", "\u{2207}F", "\u{236b}", "1;2"] {
+        assert_eq!(parse(line).unwrap_err().kind, ErrorKind::Syntax, "{line}");
+    }
+}

@@ -32,12 +32,38 @@ impl fmt::Display for ErrorKind {
             ErrorKind::Index => write!(f, "INDEX ERROR"),
             ErrorKind::WsFull => write!(f, "WS FULL"),
             ErrorKind::Defn => write!(f, "DEFN ERROR"),
-            ErrorKind::Character(c) => write!(f, "CHARACTER ERROR: U+{:04X}", u32::from(*c)),
+            ErrorKind::Character(c) => {
+                write!(f, "CHARACTER ERROR: U+{:04X}", u32::from(*c))?;
+                match lookalike(*c) {
+                    Some(g) => write!(f, " (use {g} U+{:04X})", u32::from(g)),
+                    None => Ok(()),
+                }
+            }
             ErrorKind::Depth => write!(f, "DEPTH ERROR"),
             ErrorKind::Interrupt => write!(f, "INTERRUPT"),
             ErrorKind::NotImplemented => write!(f, "NOT IMPLEMENTED"),
         }
     }
+}
+
+/// The APL glyph a common lookalike character was probably meant
+/// to be: Greek letters, mathematical operators, dashes, quotes.
+#[must_use]
+pub fn lookalike(c: char) -> Option<char> {
+    Some(match c {
+        'ρ' => '⍴',
+        'ι' => '⍳',
+        '∈' | 'ε' => '∊',
+        'Δ' => '∆',
+        '−' | '–' | '—' => '-',
+        '∣' => '|',
+        '∗' | '⋆' => '*',
+        '∼' | '¬' => '~',
+        '·' => '.',
+        '‾' | '⁻' => '¯',
+        '‘' | '’' => '\'',
+        _ => return None,
+    })
 }
 
 /// An error with the character offset (into the statement) where it

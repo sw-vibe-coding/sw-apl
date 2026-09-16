@@ -41,7 +41,7 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | Quad output `⎕←` | done | session tests, sample 20 |
 | Quad input `⎕` | todo | |
 | Quote-quad `⍞` input and output | todo | |
-| Character literals `'...'`, doubled quote | todo | |
+| Character literals `'...'`, doubled quote, any Unicode inside | done | lex tests, samples 19, 20 |
 | Bracket indexing `A[I;J]`, elided axes | todo | |
 | Indexed assignment | todo | |
 | Branch `→`, labels, `→0`, empty branch | todo | |
@@ -52,8 +52,10 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | Error display inside functions (`FN[n]`), `)SI` | todo | |
 | `)WIDTH` wrapping with six-space continuation | done | display tests, sample 45 |
 | `)DIGITS` precision, `)ORIGIN`, `WAS n` reply | done | session tests, sample 22 |
-| Strict Unicode acceptance, CHARACTER ERROR | done | lex tests |
-| Invalid UTF-8 reported with byte offset | todo | |
+| Strict Unicode acceptance, CHARACTER ERROR with lookalike hint | done | lex, value, session tests |
+| Lexer: brackets, semicolon, colon, branch arrow, del, del-tilde, quote-quad, system command lines | done | lex tests (parser rejects them until 010) |
+| Mixed output `'TEXT';X;'MORE'` (semicolon list) | todo | needed by sample 50 |
+| Invalid UTF-8 reported with byte offset, run continues | done | cli tests |
 
 ## Scalar functions
 

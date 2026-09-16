@@ -1,22 +1,39 @@
 //! Token vocabulary and the accepted glyph set.
 
-use apl_value::Number;
+use apl_value::{Array, Number};
 
 /// One lexical unit.
 #[derive(Debug, Clone, PartialEq)]
 pub enum TokenKind {
     /// A numeric literal (strands are joined by the parser).
     Number(Number),
+    /// A quoted character literal, already an array (scalar for one
+    /// character, vector otherwise).
+    Chars(Array),
     /// A user name.
     Name(String),
     /// A primitive function or operator glyph.
     Prim(char),
     /// Left arrow: assignment.
     Assign,
+    /// Right arrow: branch.
+    Branch,
     /// Quad: evaluated input/output.
     Quad,
+    /// Quote-quad: character input/output.
+    QuoteQuad,
     LParen,
     RParen,
+    LBracket,
+    RBracket,
+    Semicolon,
+    Colon,
+    /// Del: open or close a function definition.
+    Del,
+    /// Del-tilde: close a definition locked.
+    DelTilde,
+    /// A whole line starting with a right parenthesis (text after it).
+    SystemCommand(String),
 }
 
 /// A token with its character offset in the line.
@@ -37,8 +54,34 @@ impl TokenKind {
     pub fn ends_operand(&self) -> bool {
         matches!(
             self,
-            TokenKind::Number(_) | TokenKind::Name(_) | TokenKind::RParen | TokenKind::Quad
+            TokenKind::Number(_)
+                | TokenKind::Chars(_)
+                | TokenKind::Name(_)
+                | TokenKind::RParen
+                | TokenKind::RBracket
+                | TokenKind::Quad
+                | TokenKind::QuoteQuad
         )
+    }
+
+    /// The single-character punctuation and sentinel tokens.
+    #[must_use]
+    pub fn punctuation(c: char) -> Option<TokenKind> {
+        Some(match c {
+            '(' => TokenKind::LParen,
+            ')' => TokenKind::RParen,
+            '[' => TokenKind::LBracket,
+            ']' => TokenKind::RBracket,
+            ';' => TokenKind::Semicolon,
+            ':' => TokenKind::Colon,
+            '←' => TokenKind::Assign,
+            '→' => TokenKind::Branch,
+            '⎕' => TokenKind::Quad,
+            '⍞' => TokenKind::QuoteQuad,
+            '∇' => TokenKind::Del,
+            '⍫' => TokenKind::DelTilde,
+            _ => return None,
+        })
     }
 }
 

@@ -94,3 +94,22 @@ fn missing_file_fails_with_message() {
     assert!(!out.status.success());
     assert!(String::from_utf8_lossy(&out.stderr).starts_with("sw-apl: "));
 }
+
+#[test]
+fn invalid_utf8_lines_report_a_character_error_and_continue() {
+    let dir = std::env::temp_dir().join(format!("sw-apl-utf8-{}", std::process::id()));
+    std::fs::create_dir_all(&dir).expect("mkdir");
+    let path = dir.join("bad.apl");
+    let mut bytes = b"1 2\n".to_vec();
+    bytes.extend_from_slice(b"3 \xff\xfe 4\n");
+    bytes.extend_from_slice(b"5\n)OFF\n");
+    std::fs::write(&path, bytes).expect("write");
+    let out = sw_apl().arg("-f").arg(&path).output().expect("run");
+    assert!(out.status.success());
+    let text = String::from_utf8_lossy(&out.stdout);
+    assert_eq!(
+        text,
+        "      1 2\n1 2\n      3 \u{fffd}\u{fffd} 4\nCHARACTER ERROR: invalid UTF-8 at byte 2\n      5\n5\n      )OFF\n"
+    );
+    let _ = std::fs::remove_dir_all(dir);
+}

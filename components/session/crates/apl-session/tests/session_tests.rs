@@ -44,7 +44,11 @@ fn errors_print_name_statement_and_caret() {
     );
     assert_eq!(
         out(&mut s, "\u{3c1}5"),
-        vec!["CHARACTER ERROR: U+03C1", "      \u{3c1}5", "      ^"]
+        vec![
+            "CHARACTER ERROR: U+03C1 (use \u{2374} U+2374)",
+            "      \u{3c1}5",
+            "      ^"
+        ]
     );
 }
 
@@ -102,5 +106,28 @@ fn quad_names_are_syntax_errors() {
     assert_eq!(
         out(&mut s, "\u{2395}IO\u{2190}0"),
         vec!["SYNTAX ERROR", "      \u{2395}IO\u{2190}0", "      ^"]
+    );
+}
+
+#[test]
+fn character_data_end_to_end() {
+    let mut s = Session::default();
+    assert_eq!(out(&mut s, "'HELLO'"), vec!["HELLO"]);
+    assert_eq!(out(&mut s, "'it''s'"), vec!["it's"]);
+    assert_eq!(out(&mut s, "\u{2374}'HELLO'"), vec!["5"]);
+    assert_eq!(out(&mut s, "'AB','CD'"), vec!["ABCD"]);
+    assert_eq!(out(&mut s, "3\u{2374}'ab'"), vec!["aba"]);
+    assert_eq!(out(&mut s, "''"), vec![""]);
+    assert_eq!(out(&mut s, "'A'+1")[0], "DOMAIN ERROR");
+    assert_eq!(out(&mut s, "'AB',1")[0], "DOMAIN ERROR");
+    assert_eq!(out(&mut s, "\u{2395}\u{2190}'hi'"), vec!["hi"]);
+}
+
+#[test]
+fn lookalike_glyph_error_carries_the_hint() {
+    let mut s = Session::default();
+    assert_eq!(
+        out(&mut s, "\u{3c1}1 2")[0],
+        "CHARACTER ERROR: U+03C1 (use \u{2374} U+2374)"
     );
 }

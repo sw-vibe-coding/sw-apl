@@ -2,31 +2,33 @@
 //! echoed input) and the interactive six-space-indent loop.
 
 use std::fs;
-use std::io::{self, BufRead, Write};
+use std::io::{self, Write};
 use std::path::Path;
 
 use apl_session::{INDENT, Reply, Session};
 
+use crate::decode::{Line, lines, read_line};
+
 /// Run every line of `path` in batch mode.
 pub fn run_file(path: &Path, echo: bool) -> io::Result<()> {
-    let text = fs::read_to_string(path)?;
-    run_lines(text.lines().map(str::to_string), echo)
+    run_lines(&lines(&fs::read(path)?), echo)
 }
 
 /// Run every line read from stdin in batch mode.
 pub fn run_stdin(echo: bool) -> io::Result<()> {
-    let lines: Vec<String> = io::stdin().lock().lines().collect::<io::Result<_>>()?;
-    run_lines(lines.into_iter(), echo)
+    let mut bytes = Vec::new();
+    io::Read::read_to_end(&mut io::stdin().lock(), &mut bytes)?;
+    run_lines(&lines(&bytes), echo)
 }
 
-fn run_lines(lines: impl Iterator<Item = String>, echo: bool) -> io::Result<()> {
+fn run_lines(lines: &[Line], echo: bool) -> io::Result<()> {
     let mut out = io::stdout().lock();
     let mut session = Session::default();
     for line in lines {
         if echo {
-            writeln!(out, "{INDENT}{line}")?;
+            writeln!(out, "{INDENT}{}", line.text)?;
         }
-        match session.respond(&line) {
+        match line.respond(&mut session) {
             Reply::Off => break,
             Reply::Output(output) => {
                 for text in output {
@@ -44,16 +46,14 @@ pub fn run_interactive() -> io::Result<()> {
     let mut input = io::stdin().lock();
     let mut out = io::stdout().lock();
     let mut session = Session::default();
-    let mut line = String::new();
     loop {
         write!(out, "{INDENT}")?;
         out.flush()?;
-        line.clear();
-        if input.read_line(&mut line)? == 0 {
+        let Some(line) = read_line(&mut input)? else {
             writeln!(out)?;
             return Ok(());
-        }
-        match session.respond(line.trim_end_matches(['\n', '\r'])) {
+        };
+        match line.respond(&mut session) {
             Reply::Off => return Ok(()),
             Reply::Output(output) => {
                 for text in output {

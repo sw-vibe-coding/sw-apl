@@ -39,7 +39,10 @@ pub fn eval_expr(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
             Ok(v)
         }
         Expr::Monadic { .. } | Expr::Dyadic { .. } | Expr::Reduce { .. } => eval_apply(ws, expr),
-        Expr::QuadOut { .. } | Expr::QuadIn(_) => eval_quad(ws, expr),
+        Expr::QuadOut { .. }
+        | Expr::QuadIn(_)
+        | Expr::QuoteQuadOut { .. }
+        | Expr::QuoteQuadIn(_) => eval_quad(ws, expr),
     }
 }
 
@@ -77,7 +80,9 @@ fn eval_quad(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
             ws.output.push(v.clone());
             Ok(v)
         }
-        Expr::QuadIn(pos) => Err(AplError::new(ErrorKind::NotImplemented).at(*pos)),
+        Expr::QuadIn(pos) | Expr::QuoteQuadIn(pos) | Expr::QuoteQuadOut { pos, .. } => {
+            Err(AplError::new(ErrorKind::NotImplemented).at(*pos))
+        }
         _ => unreachable!("eval_quad only receives quad forms"),
     }
 }

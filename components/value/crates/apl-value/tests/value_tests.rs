@@ -48,7 +48,7 @@ fn error_kind_names_match_apl360() {
     assert_eq!(ErrorKind::Length.to_string(), "LENGTH ERROR");
     assert_eq!(
         ErrorKind::Character('\u{3c1}').to_string(),
-        "CHARACTER ERROR: U+03C1"
+        "CHARACTER ERROR: U+03C1 (use \u{2374} U+2374)"
     );
     assert_eq!(ErrorKind::NotImplemented.to_string(), "NOT IMPLEMENTED");
 }
@@ -129,4 +129,20 @@ fn arrays_of_any_rank_including_empties() {
     }
     let chars = Array::new(vec![2], Data::Char(vec!['A', 'B'])).unwrap();
     assert_eq!(chars.data.count(), 2);
+}
+
+#[test]
+fn character_error_names_the_intended_glyph_for_lookalikes() {
+    assert_eq!(
+        ErrorKind::Character('\u{3c1}').to_string(),
+        "CHARACTER ERROR: U+03C1 (use \u{2374} U+2374)"
+    );
+    assert_eq!(
+        ErrorKind::Character('\u{2212}').to_string(),
+        "CHARACTER ERROR: U+2212 (use - U+002D)"
+    );
+    assert_eq!(
+        ErrorKind::Character('#').to_string(),
+        "CHARACTER ERROR: U+0023"
+    );
 }
