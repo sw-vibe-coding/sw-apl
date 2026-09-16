@@ -66,7 +66,7 @@ eval -> session -> web
 4. `apl-eval` evaluates the AST against the workspace, producing
    a value or an error with a caret position.
 5. `apl-display` formats the value (or the error transcript)
-   with quad-PP and quad-PW.
+   with the `)DIGITS` and `)WIDTH` settings.
 6. The shell prints the lines and shows the next prompt.
 
 ## Value model
@@ -75,7 +75,7 @@ eval -> session -> web
 `Num(Vec<Number>)` or `Char(Vec<char>)`. `Number` is `Int(i64)` or
 `Float(f64)`; arithmetic promotes to `Float` on overflow or
 non-integral results and demotes back to `Int` when a result is
-exactly integral within quad-CT. Scalars are rank-0 arrays.
+exactly integral within the fixed fuzz. Scalars are rank-0 arrays.
 
 There is no nested `Data` variant. That is deliberate: this is
 APL\360, not APL2.

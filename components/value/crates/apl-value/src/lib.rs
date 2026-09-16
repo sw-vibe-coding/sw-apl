@@ -9,7 +9,7 @@ mod number;
 
 pub use array::{Array, Data};
 pub use error::{AplError, ErrorKind};
-pub use number::Number;
+pub use number::{FUZZ, Number};
 
 /// Result type used throughout the interpreter.
 pub type AplResult<T> = Result<T, AplError>;

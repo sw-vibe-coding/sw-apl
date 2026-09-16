@@ -36,7 +36,7 @@ fn classify(chars: &[char], i: usize, c: char) -> AplResult<(TokenKind, usize)> 
         '(' => (TokenKind::LParen, i + 1),
         ')' => (TokenKind::RParen, i + 1),
         '←' => (TokenKind::Assign, i + 1),
-        '⎕' => lex_sysname(chars, i),
+        '⎕' => (TokenKind::Quad, i + 1),
         _ if c.is_ascii_digit() || c == '¯' => {
             let (n, end) = lex_number(chars, i)?;
             (TokenKind::Number(n), end)
@@ -45,21 +45,6 @@ fn classify(chars: &[char], i: usize, c: char) -> AplResult<(TokenKind, usize)> 
         _ if PRIMITIVES.contains(c) => (TokenKind::Prim(c), i + 1),
         _ => return Err(AplError::new(ErrorKind::Character(c)).at(i)),
     })
-}
-
-/// A quad name (`⎕IO`) when letters follow the quad, else the bare quad.
-fn lex_sysname(chars: &[char], start: usize) -> (TokenKind, usize) {
-    let mut end = start + 1;
-    while end < chars.len() && chars[end].is_ascii_alphabetic() {
-        end += 1;
-    }
-    if end == start + 1 {
-        return (TokenKind::Quad, end);
-    }
-    (
-        TokenKind::SysName(chars[start + 1..end].iter().collect()),
-        end,
-    )
 }
 
 /// A name: a name-start letter followed by letters and digits.

@@ -20,20 +20,22 @@ Prefix is the backtick. Lowercase keys, then shifted keys.
 ```
 `2 high minus   `3 <   `4 <=   `5 =   `6 >=   `7 >   `8 /=
 `9 or   `0 and   `- times   `= divide
-`q query   `w omega   `e epsilon   `r rho   `t tilde   `y take
+`q query   `e epsilon   `r rho   `t tilde   `y take
 `u drop   `i iota   `o circle   `p star   `[ left arrow
 `] right arrow
-`a alpha   `s upstile   `d downstile   `f underbar   `g del
-`h delta   `j jot   `k quote   `l quad   `; execute   `' format
+`s upstile   `d downstile   `f underbar   `g del
+`h delta   `j jot   `k quote   `l quad
 `b decode   `n encode   `m stile   `, lamp   `. scan-first
 `/ reduce-first
 `@ del-tilde   `# grade-down   `$ grade-up   `% reverse
 `^ transpose   `& reverse-first   `* log   `( nor   `) nand
 `_ shriek   `+ domino   `{ quote-quad   `H delta-underbar
+`! i-beam
 ```
 
-Keys for APL2 glyphs (enclose, disclose, union, intersection,
-zilde, I-beam) are intentionally absent. `H` for delta-underbar
+Keys for glyphs outside APL\360 (alpha, omega, execute, format,
+enclose, disclose, union, intersection, zilde) are intentionally
+absent. `H` for delta-underbar
 is an sw-apl choice; the other positions are the classic ones.
 
 ## Espanso

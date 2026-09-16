@@ -1,0 +1,12 @@
+      ⍝ Index origin
+      ⍳5
+1 2 3 4 5
+      )ORIGIN 0
+WAS 1
+      ⍳5
+0 1 2 3 4
+      )ORIGIN 1
+WAS 0
+      ⍳5
+1 2 3 4 5
+      )OFF

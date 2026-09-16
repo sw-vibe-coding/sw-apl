@@ -12,7 +12,7 @@ observable behaviour the reg-rs transcripts pin down.
 - Blank input lines are accepted silently.
 - Function definition mode prompts with the bracketed line number
   followed by spaces, for example `[1]   `.
-- Output wider than quad-PW wraps; continuation lines are indented
+- Output wider than `)WIDTH` wraps; continuation lines are indented
   six spaces.
 - Batch mode (`-f FILE` or stdin) echoes each input line with the
   six-space indent before its output so the transcript matches an
@@ -72,9 +72,9 @@ Inquiry and settings:
 | `)GRPS`, `)GRP name`, `)GROUP name members` | Groups |
 | `)ERASE names` | Remove objects |
 | `)SI`, `)SIV` | State indicator |
-| `)ORIGIN n` | Set index origin (also quad-IO) |
-| `)DIGITS n` | Set print precision (also quad-PP) |
-| `)WIDTH n` | Set print width (also quad-PW) |
+| `)ORIGIN n` | Set index origin (0 or 1); replies `WAS n` |
+| `)DIGITS n` | Set print precision (1 to 16); replies `WAS n` |
+| `)WIDTH n` | Set print width (30 to 254); replies `WAS n` |
 | `)SYMBOLS [n]` | Report or set symbol table size |
 
 Library form: `)LOAD 1 CLASS` loads workspace CLASS from library

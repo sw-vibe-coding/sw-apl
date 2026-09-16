@@ -5,8 +5,9 @@ Newest at the bottom.
 
 ## D1. Clean room, from scratch
 
-The interpreter is written from the APL\360 and APLSV language
-descriptions and from observed terminal behaviour, not by
+The interpreter is written from the APL\360 language description
+(the 1968 User's Manual and the 1970 additions) and from observed
+terminal behaviour, not by
 translating `sw-cor24-apl` (C) or GNU APL. Those projects are
 consulted for test expectations only. Rules out: copying parser
 or evaluator structure from either.
@@ -23,22 +24,26 @@ Canonical code points are listed in `glyphs.txt`. Lookalike Greek
 letters (rho, iota, alpha, omega) are rejected with CHARACTER
 ERROR by default; see the open question in `plan.md`.
 
-## D3. APL\360 scope, APLSV system interface
+## D3. Pure APL\360, I-beams for the system interface
 
 Primitives and session behaviour follow APL\360 (flat arrays, the
 1968 to 1970 primitive set including take, drop, and domino).
-System variables and functions follow APLSV (quad-IO, quad-EX,
-...) instead of I-beams. The APL\360 settings commands )ORIGIN,
-)DIGITS, )WIDTH remain available as aliases for the quad
-variables. Rules out: APL2 nested arrays and operators, Dyalog
-extensions.
+The system interface is APL\360's too: I-beam functions for time,
+date, workspace space, and the state indicator; `)ORIGIN`,
+`)DIGITS`, `)WIDTH` for settings (replying `WAS n`); `)ERASE`,
+`)FNS`, `)VARS` for name management. Quad and quote-quad are the
+I/O forms. Rules out: every APLSV quad system variable and
+function (quad-IO, quad-CT, quad-EX, quad-NL, quad-FX, ...),
+execute, format, and APL2 or Dyalog extensions. (Owner decision
+2026-09-16, replacing the earlier APLSV-interface choice.)
 
 ## D4. Floating point first-class, one semantic number type
 
 Numbers are one type to the user. Internally `Int(i64)` and
 `Float(f64)` with promotion on overflow or fractional results and
-tolerant comparison via quad-CT (default 1E-13). Integers display
-without a decimal point; floats display with up to quad-PP
+tolerant comparison with the fixed APL\360 fuzz (1E-13 relative).
+Integers display without a decimal point; floats display with up
+to `)DIGITS`
 significant digits. Rules out: separate integer and float types
 visible to programs, arbitrary precision.
 

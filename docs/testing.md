@@ -41,6 +41,12 @@ samples/NAME.apl`; `scripts/reg-seed.sh` builds the release
 binary first. The transcript includes the echoed input line so
 the baseline reads like a terminal session.
 
+## Parity checklist
+
+`docs/parity.md` lists every APL\360 feature with its status and
+the test that pins it. A step that changes a row updates the
+file in the same commit.
+
 ## Conformance corpus
 
 `samples/*.apl` are glyph-form programs adapted from the
@@ -49,9 +55,9 @@ Each ends with `)OFF`. Add a sample whenever a step adds a
 primitive or a session behaviour; the sample is the executable
 spec for that feature.
 
-Samples using APLSV features (execute, format) are kept and are
-expected to fail until Phase 5; their reg-rs tests are created
-when the feature lands.
+Samples from the original corpus that used features outside
+APL\360 (execute, format, a quad-named random seed) were removed;
+the index-origin sample uses `)ORIGIN`.
 
 ## Gates before every commit
 

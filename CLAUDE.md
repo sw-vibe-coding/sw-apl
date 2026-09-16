@@ -282,13 +282,17 @@ This file gives Claude Code (and other agentrail-aware agents) the rules for thi
 
 ## Project Overview
 
-sw-apl is a clean-room APL\360 interpreter written in Rust from
-scratch: traditional glyphs only (Unicode input, no keyword
-aliases), flat arrays, floating point, the del editor, and the
-APL\360 system commands. CLI first (macOS + Linux), Yew/WASM live
-demo later. Not APL2, not a port of sw-cor24-apl or GNU APL.
+sw-apl is a clean-room, pure APL\360 interpreter written in Rust
+from scratch: traditional glyphs only (Unicode input, no keyword
+aliases), flat arrays, floating point, the del editor, I-beam
+system functions, and the APL\360 system commands ()ORIGIN,
+)DIGITS, )WIDTH, workspaces). Quad and quote-quad I/O only; NO
+quad-named system variables or functions (those are APLSV), no
+execute, no format. CLI first (macOS + Linux), Yew/WASM live demo
+later. Not APLSV, not APL2, not a port of sw-cor24-apl or GNU APL.
 
-`docs/plan.md` is the master plan. Every owner instruction lands
+`docs/parity.md` is the definition of done (update the row you
+change, same commit). `docs/plan.md` is the master plan. Every owner instruction lands
 there first; sagas and steps are derived from its phases. Other
 docs: `docs/prd.md`, `docs/architecture.md`, `docs/design.md`,
 `docs/language.md`, `docs/session.md`, `docs/glyphs.txt`,

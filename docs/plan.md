@@ -6,19 +6,22 @@ sagas and steps are derived from the phases below, never invented
 ad hoc. When direction changes, edit this file, then re-plan the
 saga (`agentrail plan --update`, `agentrail insert`).
 
-Companion docs: `prd.md` (what and why), `language.md` (the APL
+Companion docs: `parity.md` (the definition of done: every
+APL\360 feature with its status), `prd.md` (what and why), `language.md` (the APL
 subset), `session.md` (terminal look and feel, system commands),
 `architecture.md` (crate layout), `design.md` (decisions),
 `testing.md` (TDD + reg-rs), `input-methods.md` (typing glyphs).
 
 ## Goal
 
-A clean-room, from-scratch implementation in Rust of classic IBM
-APL as it looked on a terminal: APL\360 semantics and session
-conventions, extended with the APLSV-era system functions and
-variables (quad-EX, quad-IO, quad-NL, ...). Traditional glyphs are
-the only surface syntax: Unicode input, no Latin keyword aliases,
-no name-to-glyph translation layer.
+A clean-room, from-scratch implementation in Rust of pure IBM
+APL\360 as it looked on a terminal: its primitives, its session
+conventions, its I-beam system functions, and its `)ORIGIN`,
+`)DIGITS`, `)WIDTH` settings commands. Quad and quote-quad are the
+I/O forms; there are no quad-named system variables or functions
+(those came with APLSV). Traditional glyphs are the only surface
+syntax: Unicode input, no Latin keyword aliases, no name-to-glyph
+translation layer.
 
 Two delivery surfaces, in order:
 
@@ -33,8 +36,11 @@ Two delivery surfaces, in order:
   tilde ("without"), no diamond statement separator.
 - Not a port of `sw-cor24-apl` (C) or of GNU APL. Those are
   references for behaviour and for the conformance corpus only.
-- No embedded targets, no shared variables for hardware I/O
-  (quad-SVO), no I-beam functions.
+- Not APLSV either: no quad system variables or functions
+  (quad-IO, quad-CT, quad-EX, quad-NL, ...), no execute, no
+  format. Their APL\360 counterparts are I-beams, `)ORIGIN`,
+  `)DIGITS`, `)WIDTH`, `)ERASE`, `)FNS`, `)VARS`.
+- No embedded targets, no shared variables for hardware I/O.
 - No file system primitives beyond workspace save/load.
 
 ## Guiding constraints
@@ -54,7 +60,8 @@ Two delivery surfaces, in order:
   rather than showing glyphs itself. `docs/glyphs.txt` stays the
   machine-readable source for the lexer's glyph table.
 - Floating point is first-class: numbers are one semantic type
-  with an integer fast path and tolerant comparison (quad-CT).
+  with an integer fast path and tolerant comparison using the
+  fixed APL\360 fuzz (1E-13 relative).
 
 ## Phases
 
@@ -97,17 +104,17 @@ widen each layer to the full APL\360 set.
    `samples/01` to `03`.
 2. `mvp-iota-rho-reduce` -- iota, rho (shape and reshape), ravel
    and catenate, reduce over the last axis, matrix display with
-   aligned columns, quad-IO. `plus reduce iota 10` and
+   aligned columns, the index origin. `plus reduce iota 10` and
    `2 3 rho iota 6` work. reg-rs baselines for `samples/04` to
    `06`. This is the MVP: the owner can play.
-3. `value-model-complete` -- tolerant equality (quad-CT),
+3. `value-model-complete` -- tolerant equality (fixed fuzz),
    promotion and demotion rules, empty arrays, rank > 2, full
    error enum.
-4. `display-complete` -- exponential form, quad-PW wrapping with
+4. `display-complete` -- exponential form, `)WIDTH` wrapping with
    six-space continuation, character arrays, empty output, mixed
    int/float columns.
 5. `lexer-complete` -- every glyph in `glyphs.txt`, quoted
-   strings with doubled quotes, quad names, delta letters, system
+   strings with doubled quotes, delta letters, system
    command lines, del sentinel, CHARACTER ERROR for lookalikes.
 6. `parser-complete` -- operators reduce/scan/inner/outer with
    axis brackets, bracket indexing, indexed assignment, branch,
@@ -125,11 +132,11 @@ widen each layer to the full APL\360 set.
 2. `take-drop-reverse-rotate-transpose` (monadic and dyadic
    transpose, first-axis variants).
 3. `compress-expand-membership-indexof`.
-4. `grade-encode-decode-deal-roll` (quad-RL seeding).
+4. `grade-encode-decode-deal-roll` (workspace random link).
 5. `reduce-scan` first-axis forms, axis brackets, scan, identity
    elements for empty reductions.
 6. `inner-outer-product`.
-7. `indexing-and-indexed-assignment` with quad-IO.
+7. `indexing-and-indexed-assignment` honouring the index origin.
 8. `axis-operator` for the structural functions that take one.
 
 ### Phase 3: functions, control, and the session (saga `core-session`)
@@ -145,10 +152,13 @@ widen each layer to the full APL\360 set.
 4. `error-display` -- APL\360 error text, statement echo, caret
    line, function name and line prefix inside functions, state
    indicator accumulation and clearing with right arrow.
-5. `quad-io` -- quad and quote-quad input and output, quad-IO,
-   quad-PP, quad-PW, quad-CT, quad-RL, quad-LX.
-6. `system-functions` -- quad-EX, quad-NL, quad-NC, quad-FX,
-   quad-CR, quad-TS, quad-AI, quad-WA, quad-DL, quad-LC.
+5. `quad-io` -- quad and quote-quad input and output, including
+   quad input inside defined functions.
+6. `i-beams` -- the I-beam system functions: 20 time of day, 21
+   CPU time, 22 workspace available, 23 terminals connected, 24
+   sign-on time, 25 date, 26 current line, 27 state indicator
+   lines (all in sixtieths of a second where APL\360 used them);
+   `)ORIGIN`, `)DIGITS`, `)WIDTH` with the `WAS n` reply.
 7. `terminal-feel` -- six-space indent prompt, printer-style
    scrollback, interrupt handling, line editing with Unicode
    input, history file.
@@ -170,10 +180,8 @@ widen each layer to the full APL\360 set.
 ### Phase 5: numerics (saga `numerics`)
 
 1. `domino` -- matrix inverse and least-squares divide.
-2. `format-execute` -- monadic and dyadic quad-FMT style format
-   (APLSV format primitive) and execute.
-3. `numeric-edge-cases` -- overflow, tolerance, large iota,
-   exponent notation round trips, quad-PP extremes.
+2. `numeric-edge-cases` -- overflow, tolerance, large iota,
+   exponent notation round trips, `)DIGITS` extremes.
 
 ### Phase 6: web demo (saga `web-demo`)
 
@@ -193,9 +201,7 @@ Answers to the questions raised at bootstrap, now policy:
    control characters, is CHARACTER ERROR naming the code point.
    Invalid UTF-8 in a file or on stdin is reported as CHARACTER
    ERROR with the byte offset, never a crash.
-2. Execute and format (APLSV) stay in Phase 5. Pro: they are
-   small, widely expected, and make the horse-race samples run.
-   Con: they are not APL\360 proper; the docs label them APLSV.
+2. (Superseded by 5.) Execute and format were to stay in Phase 5.
 3. Workspace libraries: numbered libraries map to directories via
    a config file (APL\360 `)LOAD 1 NAME` form) and plain paths
    also work.
@@ -205,6 +211,13 @@ Answers to the questions raised at bootstrap, now policy:
    files to Org. Later tooling (not scheduled yet): `ob-sw-apl`
    for literate Org/PDF/HTML with glyphs, and vhs tapes of the
    CLI to embed as images and animations in the ASCII README.
+5. Pure APL\360 (2026-09-16, later the same day): the APLSV quad
+   system variables and functions are out. I-beam functions
+   provide the system interface; `)ORIGIN`, `)DIGITS`, `)WIDTH`
+   are the settings and reply `WAS n`; the comparison fuzz is
+   fixed; the random link is workspace state saved with the
+   workspace; execute and format are gone. Quad and quote-quad
+   input/output stay, as in APL\360.
 
 ### Phase 7: literate and recorded docs (saga `doc-tooling`, unscheduled)
 

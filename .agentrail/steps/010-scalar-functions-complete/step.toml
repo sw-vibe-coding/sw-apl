@@ -1,4 +1,4 @@
-number = 9
+number = 10
 slug = "scalar-functions-complete"
 status = "pending"
 description = "Complete the scalar primitive family (apl-prims-scalar): every monadic and dy..."

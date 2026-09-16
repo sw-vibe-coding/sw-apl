@@ -1,7 +1,7 @@
-number = 8
-slug = "parser-complete"
+number = 7
+slug = "display-complete"
 status = "pending"
-description = "Complete apl-parse: operators reduce/scan (last and first axis) with axis bra..."
+description = "Complete apl-display per docs/language.md and docs/session.md: exponential fo..."
 role = "production"
 context_files = []
 created_at = "2026-09-16T11:12:40"

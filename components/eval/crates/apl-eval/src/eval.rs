@@ -4,7 +4,6 @@ use apl_parse::{Expr, parse};
 use apl_prims::{apply_dyadic, apply_monadic, reduce};
 use apl_value::{AplError, AplResult, Array, ErrorKind};
 
-use crate::system::{get_system, set_system};
 use crate::workspace::Workspace;
 
 /// Parse and evaluate one line. `Ok(None)` when there is nothing to
@@ -17,10 +16,7 @@ pub fn eval_line(ws: &mut Workspace, line: &str) -> AplResult<Option<Array>> {
     let Some(expr) = parse(line)? else {
         return Ok(None);
     };
-    let silent = matches!(
-        expr,
-        Expr::Assign { .. } | Expr::SysAssign { .. } | Expr::QuadOut { .. }
-    );
+    let silent = matches!(expr, Expr::Assign { .. } | Expr::QuadOut { .. });
     let value = eval_expr(ws, &expr)?;
     Ok(if silent { None } else { Some(value) })
 }
@@ -43,7 +39,7 @@ pub fn eval_expr(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
             Ok(v)
         }
         Expr::Monadic { .. } | Expr::Dyadic { .. } | Expr::Reduce { .. } => eval_apply(ws, expr),
-        _ => eval_system(ws, expr),
+        Expr::QuadOut { .. } | Expr::QuadIn(_) => eval_quad(ws, expr),
     }
 }
 
@@ -73,21 +69,15 @@ fn eval_apply(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
     }
 }
 
-/// Quad forms: system variables and quad output/input.
-fn eval_system(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
+/// Quad forms: quad output and quad input.
+fn eval_quad(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
     match expr {
-        Expr::SysName(name, pos) => get_system(ws, name).map_err(|e| e.at(*pos)),
-        Expr::SysAssign { name, pos, value } => {
-            let v = eval_expr(ws, value)?;
-            set_system(ws, name, &v).map_err(|e| e.at(*pos))?;
-            Ok(v)
-        }
         Expr::QuadOut { value, .. } => {
             let v = eval_expr(ws, value)?;
             ws.output.push(v.clone());
             Ok(v)
         }
         Expr::QuadIn(pos) => Err(AplError::new(ErrorKind::NotImplemented).at(*pos)),
-        _ => unreachable!("eval_system only receives quad forms"),
+        _ => unreachable!("eval_quad only receives quad forms"),
     }
 }

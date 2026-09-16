@@ -9,8 +9,6 @@ pub enum Expr {
     Literal(Array),
     /// A variable reference and its position.
     Name(String, usize),
-    /// A system variable such as `⎕IO` (name without the quad).
-    SysName(String, usize),
     /// Bare quad on the right: evaluated input.
     QuadIn(usize),
     /// `f right`.
@@ -34,12 +32,6 @@ pub enum Expr {
     },
     /// `name ← value`; yields the value.
     Assign {
-        name: String,
-        pos: usize,
-        value: Box<Expr>,
-    },
-    /// `⎕NAME ← value`; yields the value.
-    SysAssign {
         name: String,
         pos: usize,
         value: Box<Expr>,

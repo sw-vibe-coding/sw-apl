@@ -19,5 +19,5 @@ workspaces (value, lex, parse, prims, eval, display, session),
 each sized to the sw-checklist gates, wired into the CLI. Step
 002 delivered scalar arithmetic with APL\360 error display; step
 003 added iota, rho, ravel, catenate, reduce, quad output, and
-quad-IO (two more prims crates, an eval dispatch module): the MVP
+the index origin (two more prims crates, an eval dispatch module): the MVP
 REPL. Steps 004 to 008 complete each layer.

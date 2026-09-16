@@ -69,7 +69,7 @@ fn lamp_comment_ends_the_line() {
 
 #[test]
 fn every_glyph_in_the_table_is_a_primitive_token() {
-    for g in "×÷⌈⌊⍟○∧∨⍲⍱≤≥≠⍳⍴⌽⊖⍉↑↓⌿⍀⊥⊤∊⍋⍒⌹⍎⍕∘+-*|!~<=>?,./\\".chars()
+    for g in "×÷⌈⌊⍟○∧∨⍲⍱≤≥≠⍳⍴⌽⊖⍉↑↓⌿⍀⊥⊤∊⍋⍒⌹⌶∘+-*|!~<=>?,./\\".chars()
     {
         assert_eq!(kinds(&g.to_string()), vec![TokenKind::Prim(g)], "{g}");
     }
@@ -94,15 +94,24 @@ fn bad_number_is_a_syntax_error() {
 }
 
 #[test]
-fn quad_and_quad_names() {
+fn quad_is_always_a_bare_token() {
     assert_eq!(
         kinds("\u{2395}\u{2190}\u{2395}IO"),
         vec![
             TokenKind::Quad,
             TokenKind::Assign,
-            TokenKind::SysName("IO".to_string()),
+            TokenKind::Quad,
+            TokenKind::Name("IO".to_string()),
         ]
     );
-    let toks = tokenize("1 \u{2395}IO").unwrap();
-    assert_eq!(toks[1].pos, 2);
+}
+
+#[test]
+fn glyphs_from_later_apls_are_character_errors() {
+    for bad in [
+        '\u{234e}', '\u{2355}', '\u{237a}', '\u{2375}', '\u{2282}', '\u{a8}',
+    ] {
+        let err = tokenize(&bad.to_string()).unwrap_err();
+        assert_eq!(err.kind, ErrorKind::Character(bad), "{bad}");
+    }
 }

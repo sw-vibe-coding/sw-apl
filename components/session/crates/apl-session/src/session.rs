@@ -4,6 +4,8 @@ use apl_display::format_array;
 use apl_eval::{Workspace, eval_line};
 use apl_value::AplError;
 
+use crate::commands::system_command;
+
 /// The six-space indent that precedes every input line.
 pub const INDENT: &str = "      ";
 
@@ -19,16 +21,19 @@ pub enum Reply {
 /// An interactive APL session.
 #[derive(Debug)]
 pub struct Session {
-    ws: Workspace,
-    /// Print precision (quad-PP).
-    pp: usize,
+    pub(crate) ws: Workspace,
+    /// Print precision (`)DIGITS`).
+    pub(crate) digits: usize,
+    /// Print width (`)WIDTH`); wrapping arrives with the display step.
+    pub(crate) width: usize,
 }
 
 impl Default for Session {
     fn default() -> Self {
         Session {
             ws: Workspace::default(),
-            pp: 10,
+            digits: 10,
+            width: 120,
         }
     }
 }
@@ -36,19 +41,18 @@ impl Default for Session {
 impl Session {
     /// Respond to one input line.
     pub fn respond(&mut self, line: &str) -> Reply {
-        let text = line.trim();
-        if let Some(command) = text.strip_prefix(')') {
-            return system_command(command);
+        if let Some(command) = line.trim().strip_prefix(')') {
+            return system_command(self, command);
         }
         let result = eval_line(&mut self.ws, line);
         let mut lines: Vec<String> = self
             .ws
             .output
             .drain(..)
-            .flat_map(|v| format_array(&v, self.pp))
+            .flat_map(|v| format_array(&v, self.digits))
             .collect();
         lines.extend(match result {
-            Ok(Some(value)) => format_array(&value, self.pp),
+            Ok(Some(value)) => format_array(&value, self.digits),
             Ok(None) => Vec::new(),
             Err(err) => error_lines(&err, line),
         });
@@ -64,13 +68,4 @@ fn error_lines(err: &AplError, line: &str) -> Vec<String> {
         format!("{INDENT}{line}"),
         format!("{INDENT}{}^", " ".repeat(caret)),
     ]
-}
-
-/// System commands: only `)OFF` so far.
-fn system_command(command: &str) -> Reply {
-    if command.trim().eq_ignore_ascii_case("OFF") {
-        Reply::Off
-    } else {
-        Reply::Output(vec!["INCORRECT COMMAND".to_string()])
-    }
 }

@@ -1,5 +1,5 @@
-//! The active workspace: variables, system variables, pending
-//! quad output.
+//! The active workspace: variables, the index origin, pending quad
+//! output.
 
 use std::collections::HashMap;
 
@@ -9,10 +9,8 @@ use apl_value::Array;
 #[derive(Debug)]
 pub struct Workspace {
     vars: HashMap<String, Array>,
-    /// Index origin (`⎕IO`), 0 or 1.
+    /// Index origin (`)ORIGIN`), 0 or 1.
     pub io: i64,
-    /// Comparison tolerance (`⎕CT`), non-negative.
-    pub ct: f64,
     /// Values written with `⎕←`, in order, not yet displayed.
     pub output: Vec<Array>,
 }
@@ -22,7 +20,6 @@ impl Default for Workspace {
         Workspace {
             vars: HashMap::new(),
             io: 1,
-            ct: 1e-13,
             output: Vec::new(),
         }
     }

@@ -2,6 +2,9 @@
 //! `Float`. Arithmetic in other crates computes in `f64` and demotes
 //! with [`Number::from_f64`].
 
+/// The APL\360 comparison tolerance (fuzz), relative, not settable.
+pub const FUZZ: f64 = 1e-13;
+
 /// Largest magnitude that `f64` represents exactly as an integer.
 const EXACT_INT_LIMIT: f64 = 9_007_199_254_740_992.0; // 2^53
 

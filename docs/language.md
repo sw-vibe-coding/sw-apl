@@ -3,10 +3,10 @@
 This describes the language sw-apl implements. Glyphs are mostly
 named in prose; `glyphs.txt` is the machine-readable table of
 characters and code points, and the "Accepted Unicode" section
-below shows them. Behaviour follows
-the IBM APL\360 User's Manual and the APLSV additions named
-below. Where the two references differ, APL\360 wins for
-primitives and APLSV wins for the quad system interface.
+below shows them. Behaviour follows the IBM APL\360 User's Manual
+(1968) with the 1970 additions (take, drop, domino). Nothing from
+APLSV or later is included: no quad-named system variables or
+functions, no execute, no format.
 
 ## Accepted Unicode
 
@@ -18,8 +18,9 @@ exactly these characters are valid:
   meaning; the rest (for example `#`, `$`, `&`, backtick, `{`,
   `}`) are CHARACTER ERROR.
 - The APL glyphs: × ÷ ⌈ ⌊ ⍟ ○ ∧ ∨ ⍲ ⍱ ≤ ≥ ≠ ⍳ ⍴ ⌽ ⊖ ⍉ ↑ ↓ ⌿ ⍀
-  ⊥ ⊤ ∊ ⍋ ⍒ ⌹ ⍎ ⍕ ∘ ← → ∇ ⍫ ⍝ ¯ ⎕ ⍞ ∆ ⍙ ⍺ ⍵ (code points in
-  `glyphs.txt`).
+  ⊥ ⊤ ∊ ⍋ ⍒ ⌹ ⌶ ∘ ← → ∇ ⍫ ⍝ ¯ ⎕ ⍞ ∆ ⍙ (code points in
+  `glyphs.txt`). Glyphs from later APLs (⍎ ⍕ ⍺ ⍵ ⊂ ⊃ ¨ ⋄ ...) are
+  CHARACTER ERROR.
 - Newline ends a line; carriage return before a newline is
   ignored so CRLF files load.
 
@@ -37,9 +38,10 @@ bad sequence; the session continues with the next line.
 - Names start with a letter, delta, or delta-underbar and
   continue with letters, digits, delta, delta-underbar. Case is
   significant. Traditional programs use upper case.
-- Quad names (quad followed by letters) are system variables or
-  system functions and cannot be assigned unless documented as
-  variables.
+- A quad followed by letters is quad input followed by a name;
+  there are no quad-named system variables in APL\360. System
+  information comes from the I-beam functions below and settings
+  from `)ORIGIN`, `)DIGITS`, `)WIDTH`.
 - A lamp starts a comment that runs to end of line.
 
 ## Numbers
@@ -52,10 +54,10 @@ bad sequence; the session continues with the next line.
   (plus, minus, and times use checked integer arithmetic); results
   that are not integral, or that overflow, are floats.
 - Booleans are the numbers 0 and 1.
-- Comparison tolerance: quad-CT, default `1E` high-minus `13`,
-  applies to equal, not-equal, less-or-equal, greater-or-equal,
+- Comparison tolerance (fuzz) is fixed at `1E` high-minus `13`
+  relative and applies to equal, not-equal, less-or-equal, greater-or-equal,
   floor, ceiling, residue, membership, and index-of.
-- Display: up to quad-PP significant digits (default 10),
+- Display: up to `)DIGITS` significant digits (default 10),
   exponential form when the magnitude needs it, high minus for
   negatives, no trailing zeros.
 
@@ -73,7 +75,7 @@ bad sequence; the session continues with the next line.
 - Numeric literals written side by side form a vector (strand).
 - Empty arrays: `iota 0`, `0 rho X`, `''`. An empty numeric
   vector displays as a blank line.
-- Index origin quad-IO is 1 by default and applies to iota,
+- The index origin (`)ORIGIN`, default 1) applies to iota,
   indexing, grade, index-of, deal, roll, and axis specification.
 
 ## Scalar functions
@@ -97,7 +99,9 @@ Notes:
 - Shriek on non-integers is the gamma function shifted by one.
 - Roll: `query N` is a random integer in the index range of N.
   Deal: `M query N` is M distinct random integers from the index
-  range of N. Both use quad-RL.
+  range of N. Both advance the workspace random link, which is
+  saved with the workspace, so a loaded workspace continues its
+  sequence.
 
 ## Mixed functions
 
@@ -119,7 +123,6 @@ Notes:
 - epsilon: membership.
 - grade-up and grade-down: permutation vectors, stable.
 - domino: matrix inverse and least-squares divide (Phase 5).
-- execute and format: APLSV additions (Phase 5).
 
 ## Operators
 
@@ -176,20 +179,30 @@ Notes:
 - Recursion is allowed; depth is bounded by memory (DEPTH ERROR
   as a guard).
 
-## System variables (APLSV names)
+## I-beam functions
 
-quad-IO (index origin), quad-PP (print precision), quad-PW (print
-width), quad-CT (comparison tolerance), quad-RL (random link),
-quad-LX (latent expression run after load), quad-TS (time stamp),
-quad-AI (account information), quad-WA (workspace available),
-quad-LC (line counter).
+The I-beam (U+2336) is a monadic function whose integer argument
+selects a system value, as in APL\360:
 
-## System functions (APLSV names)
+| Call | Result |
+|---|---|
+| `⌶20` | time of day, in sixtieths of a second since midnight |
+| `⌶21` | CPU time used this session, in sixtieths of a second |
+| `⌶22` | workspace space available, in bytes (nominal) |
+| `⌶23` | number of terminals connected (always 1) |
+| `⌶24` | time of sign-on, in sixtieths of a second since midnight |
+| `⌶25` | today's date as the integer MMDDYY |
+| `⌶26` | line number of the statement now executing (first of the state indicator) |
+| `⌶27` | vector of line numbers in the state indicator |
 
-quad-EX (expunge names), quad-NL (name list by class), quad-NC
-(name class), quad-FX (fix a function from a character matrix),
-quad-CR (canonical representation of a function), quad-DL (delay
-seconds).
+Any other argument is DOMAIN ERROR. There is no dyadic I-beam.
+
+## Settings commands
+
+`)ORIGIN n` (0 or 1), `)DIGITS n` (1 to 16), and `)WIDTH n` (30 to
+254) change the index origin, print precision, and print width
+and reply with the previous value as `WAS n`. They are saved with
+the workspace.
 
 ## Errors
 

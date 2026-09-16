@@ -63,8 +63,9 @@ fn mvp_transcript() {
     assert_eq!(out(&mut s, "2 3\u{2374}\u{2373}6"), vec!["1 2 3", "4 5 6"]);
     assert_eq!(out(&mut s, "\u{2374}42"), vec![""]);
     assert_eq!(out(&mut s, "\u{2395}\u{2190}\u{2373}3"), vec!["1 2 3"]);
-    assert_eq!(out(&mut s, "\u{2395}IO\u{2190}0"), Vec::<String>::new());
+    assert_eq!(out(&mut s, ")ORIGIN 0"), vec!["WAS 1"]);
     assert_eq!(out(&mut s, "\u{2373}3"), vec!["0 1 2"]);
+    assert_eq!(out(&mut s, ")origin 1"), vec!["WAS 0"]);
     assert_eq!(out(&mut s, "1+\u{2395}\u{2190}5"), vec!["5", "6"]);
 }
 
@@ -77,7 +78,29 @@ fn quad_output_before_an_error_still_prints() {
 }
 
 #[test]
-fn quad_ct_displays_in_exponent_form() {
+fn settings_commands_reply_was_and_validate() {
     let mut s = Session::default();
-    assert_eq!(out(&mut s, "\u{2395}CT"), vec!["1E\u{af}13"]);
+    assert_eq!(out(&mut s, ")DIGITS 3"), vec!["WAS 10"]);
+    assert_eq!(out(&mut s, "\u{f7}3"), vec!["0.333"]);
+    assert_eq!(out(&mut s, ")DIGITS 10"), vec!["WAS 3"]);
+    assert_eq!(out(&mut s, ")WIDTH 80"), vec!["WAS 120"]);
+    for bad in [
+        ")ORIGIN 2",
+        ")ORIGIN",
+        ")DIGITS 0",
+        ")DIGITS 17",
+        ")WIDTH 10",
+        ")OFF NOW",
+    ] {
+        assert_eq!(out(&mut s, bad), vec!["INCORRECT COMMAND"], "{bad}");
+    }
+}
+
+#[test]
+fn quad_names_are_syntax_errors() {
+    let mut s = Session::default();
+    assert_eq!(
+        out(&mut s, "\u{2395}IO\u{2190}0"),
+        vec!["SYNTAX ERROR", "      \u{2395}IO\u{2190}0", "      ^"]
+    );
 }

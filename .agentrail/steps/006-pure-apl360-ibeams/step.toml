@@ -1,0 +1,9 @@
+number = 6
+slug = "pure-apl360-ibeams"
+status = "in-progress"
+description = 'Owner direction: pure APL\360. Replace the APLSV quad system variables/functi...'
+role = "production"
+context_files = []
+created_at = "2026-09-16T14:21:01"
+task_type = "docs"
+commits = []

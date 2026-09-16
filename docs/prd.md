@@ -34,11 +34,11 @@ interpreter crates.
 - User-defined functions via the del editor: niladic, monadic,
   dyadic, with or without explicit result, local names, labels,
   branching, dynamic scoping, recursion.
-- APLSV-era system variables and functions: quad-IO, quad-PP,
-  quad-PW, quad-CT, quad-RL, quad-LX, quad-EX, quad-NL, quad-NC,
-  quad-FX, quad-CR, quad-TS, quad-AI, quad-WA, quad-DL, quad-LC.
-- Execute and format (APLSV) in a later phase; domino (matrix
-  divide) in a later phase.
+- The APL\360 system interface: I-beam functions (time, date,
+  workspace space, state indicator), `)ORIGIN`, `)DIGITS`, and
+  `)WIDTH` settings, quad and quote-quad I/O. No APLSV quad
+  system variables or functions, no execute, no format.
+- Domino (matrix divide) in a later phase.
 
 ### Session
 

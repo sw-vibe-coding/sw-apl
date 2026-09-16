@@ -29,8 +29,6 @@ matches:
   # top row
   - trigger: "`q"
     replace: "?"
-  - trigger: "`w"
-    replace: "⍵"
   - trigger: "`e"
     replace: "∊"
   - trigger: "`r"
@@ -52,8 +50,6 @@ matches:
   - trigger: "`]"
     replace: "→"
   # home row
-  - trigger: "`a"
-    replace: "⍺"
   - trigger: "`s"
     replace: "⌈"
   - trigger: "`d"
@@ -70,10 +66,6 @@ matches:
     replace: "'"
   - trigger: "`l"
     replace: "⎕"
-  - trigger: "`;"
-    replace: "⍎"
-  - trigger: "`'"
-    replace: "⍕"
   # bottom row
   - trigger: "`b"
     replace: "⊥"
@@ -114,3 +106,5 @@ matches:
     replace: "⍞"
   - trigger: "`H"
     replace: "⍙"
+  - trigger: "`!"
+    replace: "⌶"

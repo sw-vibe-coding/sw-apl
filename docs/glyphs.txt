@@ -53,8 +53,7 @@ Mixed functions
 ⍋   U+234B  grade-up        grade up
 ⍒   U+2352  grade-down      grade down
 ⌹   U+2339  domino          matrix inverse         matrix divide
-⍎   U+234E  execute         execute                (APLSV)
-⍕   U+2355  format          format                 format by spec (APLSV)
+⌶   U+2336  i-beam          system function (⌶20 .. ⌶27)
 
 Operators
 ---------
@@ -82,12 +81,15 @@ Syntax
 ⍞   U+235E  quote-quad      character input/output
 ∆   U+2206  delta           letter usable in names
 ⍙   U+2359  delta-underbar  letter usable in names
-⍺   U+237A  alpha           (reserved; not used in APL\360)
-⍵   U+2375  omega           (reserved; not used in APL\360)
 )   U+0029  right paren     system command when first non-blank char
 
-Lookalikes NOT accepted (CHARACTER ERROR)
------------------------------------------
+Lookalikes and later-APL glyphs NOT accepted (CHARACTER ERROR)
+--------------------------------------------------------------
+⍎   U+234E  execute         APLSV, not APL\360
+⍕   U+2355  format          APLSV, not APL\360
+⍺   U+237A  alpha           on the typeball, but no meaning in APL\360
+⍵   U+2375  omega           on the typeball, but no meaning in APL\360
+⊂ ⊃ ¨ ⋄ ⍬ ⍤   APL2 and later
 ρ   U+03C1  greek rho       use ⍴ U+2374
 ι   U+03B9  greek iota      use ⍳ U+2373
 α   U+03B1  greek alpha     use ⍺ U+237A

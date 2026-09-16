@@ -2,7 +2,6 @@
 //! and dispatches primitives.
 
 mod eval;
-mod system;
 mod workspace;
 
 pub use eval::{eval_expr, eval_line};

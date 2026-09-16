@@ -8,11 +8,9 @@ and the source of the reg-rs transcript baselines (see
 Origin: adapted from the GNU APL comparison set in
 `sw-cor24-apl`, filtered to APL\360 scope. Files that used APL2
 features (enclose, pick, each, union, intersection, dyadic tilde)
-were left out. Two files use APLSV features and stay pending
-until Phase 5:
-
-- `25-horse-race-simple.apl` (format)
-- `42-execute.apl` (execute)
+were left out, as were files that used APLSV features (execute,
+format, a quad-named random seed). The index-origin sample uses
+`)ORIGIN` rather than a quad variable.
 
 Run the corpus against the release binary:
 

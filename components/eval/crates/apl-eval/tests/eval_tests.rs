@@ -81,19 +81,15 @@ fn iota_rho_reduce_end_to_end() {
 }
 
 #[test]
-fn quad_io_is_a_system_variable() {
+fn the_index_origin_is_workspace_state_not_a_quad_name() {
     let mut ws = Workspace::default();
-    assert_eq!(nums(&mut ws, "\u{2395}IO"), [Number::Int(1)]);
-    assert_eq!(eval_line(&mut ws, "\u{2395}IO\u{2190}0").unwrap(), None);
+    ws.io = 0;
     assert_eq!(
         nums(&mut ws, "\u{2373}3"),
         [Number::Int(0), Number::Int(1), Number::Int(2)]
     );
-    let e = eval_line(&mut ws, "\u{2395}IO\u{2190}2").unwrap_err();
-    assert_eq!(e.kind, ErrorKind::Domain);
-    assert_eq!(e.caret, Some(0));
-    let e = eval_line(&mut ws, "\u{2395}XYZ").unwrap_err();
-    assert_eq!(e.kind, ErrorKind::Value);
+    let e = eval_line(&mut ws, "\u{2395}IO\u{2190}1").unwrap_err();
+    assert_eq!(e.kind, ErrorKind::Syntax);
 }
 
 #[test]
@@ -107,35 +103,5 @@ fn quad_output_is_buffered_and_silent_at_top_level() {
     assert_eq!(
         eval_line(&mut ws, "\u{2395}").unwrap_err().kind,
         ErrorKind::NotImplemented
-    );
-}
-
-#[test]
-fn quad_ct_is_a_system_variable() {
-    let mut ws = Workspace::default();
-    assert_eq!(nums(&mut ws, "\u{2395}CT"), [Number::Float(1e-13)]);
-    assert_eq!(
-        eval_line(&mut ws, "\u{2395}CT\u{2190}1E\u{af}10").unwrap(),
-        None
-    );
-    assert_eq!(nums(&mut ws, "\u{2395}CT"), [Number::Float(1e-10)]);
-    assert_eq!(eval_line(&mut ws, "\u{2395}CT\u{2190}0").unwrap(), None);
-    assert_eq!(
-        eval_line(&mut ws, "\u{2395}CT\u{2190}\u{af}1")
-            .unwrap_err()
-            .kind,
-        ErrorKind::Domain
-    );
-    assert_eq!(
-        eval_line(&mut ws, "\u{2395}CT\u{2190}1 2")
-            .unwrap_err()
-            .kind,
-        ErrorKind::Domain
-    );
-    assert_eq!(
-        eval_line(&mut ws, "\u{2395}IO\u{2190}1 1")
-            .unwrap_err()
-            .kind,
-        ErrorKind::Domain
     );
 }

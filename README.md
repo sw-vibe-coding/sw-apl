@@ -14,8 +14,10 @@ workspaces (`)CLEAR`, `)WSID`, `)SAVE`, `)LOAD`, `)FNS`,
 `)VARS`, ...). It is a command-line program for macOS and Linux;
 a browser version built with Yew and WebAssembly follows.
 
-It is deliberately not APL2 and not Dyalog: flat arrays only, no
-nested arrays, no each. It is also not a port. The C interpreter
+It is deliberately pure APL\360: not APLSV (no quad-named system
+variables, no execute or format; I-beams instead), not APL2, not
+Dyalog (flat arrays only, no nested arrays, no each). It is also
+not a port. The C interpreter
 `sw-cor24-apl` and GNU APL served only as references for expected
 behaviour and for the conformance corpus in `samples/`.
 
@@ -36,7 +38,7 @@ plus, minus, times, divide, maximum, minimum, residue, power
 (monadic and dyadic, with scalar extension), parentheses,
 assignment, variables, iota, rho (shape and reshape), ravel and
 catenate of vectors, reduce along the last axis, quad output,
-quad-IO, matrix display, and APL\360 error display with the
+`)ORIGIN` and `)DIGITS`, matrix display, and APL\360 error display with the
 caret. Anything else answers `NOT IMPLEMENTED` or a CHARACTER
 ERROR naming the code point. Batch mode, `)OFF`, help, and the
 version block work. Implementation proceeds phase by phase per
@@ -53,13 +55,15 @@ web demo.
 | Data | Flat arrays of any rank; one numeric type with integer fast path and floating point; characters |
 | Primitives | The APL\360 scalar and mixed functions; reduce, scan, inner and outer product; indexing |
 | Functions | Del editor, niladic/monadic/dyadic headers, locals, labels, branching, recursion |
-| System | Quad system variables and functions (APLSV names), APL\360 system commands, workspaces on disk, the DESCRIBE convention |
+| System | I-beam system functions, quad and quote-quad I/O, the APL\360 system commands (`)ORIGIN`, `)DIGITS`, `)WIDTH`, workspaces on disk), the DESCRIBE convention |
 | Session | Six-space indent prompt, APL\360 error display with caret, batch transcripts |
 | Input | Espanso and Emacs keymaps for typing glyphs (`docs/input-methods.md`) |
 
 This README is plain ASCII so it renders the same everywhere; the
 documents below show real APL glyphs:
 
+- [Parity checklist](docs/parity.md) -- what works, what does not,
+  and how we will know we have APL\360 parity
 - [Master plan](docs/plan.md) -- phases, decisions, what comes next
 - [Language reference](docs/language.md) -- the APL\360 subset and
   exactly which Unicode is accepted
