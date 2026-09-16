@@ -1,0 +1,1 @@
+Owner decisions folded into plan/design/language/testing/CLAUDE/mw-cp/justfile/README: strict Unicode set documented, APLSV execute/format kept in Phase 5, numbered libraries + paths, README ASCII-only with docs/*.md allowed glyphs, Phase 7 doc tooling noted.
