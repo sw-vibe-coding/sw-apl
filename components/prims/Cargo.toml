@@ -1,5 +1,5 @@
 [workspace]
-members = ["crates/apl-prims-scalar"]
+members = ["crates/apl-prims-scalar", "crates/apl-prims-mixed", "crates/apl-prims-ops"]
 resolver = "2"
 
 [workspace.package]

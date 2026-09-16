@@ -66,3 +66,46 @@ fn empty_line_evaluates_to_nothing() {
     let mut ws = Workspace::default();
     assert_eq!(eval_line(&mut ws, "").unwrap(), None);
 }
+
+#[test]
+fn iota_rho_reduce_end_to_end() {
+    let mut ws = Workspace::default();
+    assert_eq!(nums(&mut ws, "+/\u{2373}10"), [Number::Int(55)]);
+    let m = eval_line(&mut ws, "2 3\u{2374}\u{2373}6").unwrap().unwrap();
+    assert_eq!(m.shape, vec![2, 3]);
+    assert_eq!(nums(&mut ws, ",2 2\u{2374}7"), [Number::Int(7); 4]);
+    assert_eq!(
+        nums(&mut ws, "1 2,3"),
+        [Number::Int(1), Number::Int(2), Number::Int(3)]
+    );
+}
+
+#[test]
+fn quad_io_is_a_system_variable() {
+    let mut ws = Workspace::default();
+    assert_eq!(nums(&mut ws, "\u{2395}IO"), [Number::Int(1)]);
+    assert_eq!(eval_line(&mut ws, "\u{2395}IO\u{2190}0").unwrap(), None);
+    assert_eq!(
+        nums(&mut ws, "\u{2373}3"),
+        [Number::Int(0), Number::Int(1), Number::Int(2)]
+    );
+    let e = eval_line(&mut ws, "\u{2395}IO\u{2190}2").unwrap_err();
+    assert_eq!(e.kind, ErrorKind::Domain);
+    assert_eq!(e.caret, Some(0));
+    let e = eval_line(&mut ws, "\u{2395}XYZ").unwrap_err();
+    assert_eq!(e.kind, ErrorKind::Value);
+}
+
+#[test]
+fn quad_output_is_buffered_and_silent_at_top_level() {
+    let mut ws = Workspace::default();
+    assert_eq!(eval_line(&mut ws, "\u{2395}\u{2190}1 2").unwrap(), None);
+    assert_eq!(ws.output.len(), 1);
+    ws.output.clear();
+    assert_eq!(nums(&mut ws, "1+\u{2395}\u{2190}5"), [Number::Int(6)]);
+    assert_eq!(ws.output.len(), 1);
+    assert_eq!(
+        eval_line(&mut ws, "\u{2395}").unwrap_err().kind,
+        ErrorKind::NotImplemented
+    );
+}

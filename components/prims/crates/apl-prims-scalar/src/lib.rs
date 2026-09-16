@@ -6,4 +6,5 @@ mod dyadic;
 mod extend;
 mod monadic;
 
-pub use extend::{dyadic, monadic};
+pub use dyadic::apply_dyadic;
+pub use extend::{dyadic, monadic, numbers};

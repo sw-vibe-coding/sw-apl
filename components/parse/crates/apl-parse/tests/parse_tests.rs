@@ -105,3 +105,55 @@ fn syntax_errors_carry_carets() {
     let e = parse("3\u{2190}4").unwrap_err();
     assert_eq!(e.kind, ErrorKind::Syntax);
 }
+
+#[test]
+fn reduce_is_a_derived_monadic_function() {
+    let e = parse("+/1 2 3").unwrap().unwrap();
+    let Expr::Reduce {
+        f: '+',
+        pos: 0,
+        right,
+    } = e
+    else {
+        panic!("{e:?}")
+    };
+    assert!(matches!(*right, Expr::Literal(_)));
+    // 2×+/1 2 3 : reduce binds first, then × is dyadic
+    let e = parse("2\u{d7}+/1 2 3").unwrap().unwrap();
+    let Expr::Dyadic {
+        f: '\u{d7}', right, ..
+    } = e
+    else {
+        panic!("{e:?}")
+    };
+    assert!(matches!(*right, Expr::Reduce { f: '+', .. }));
+}
+
+#[test]
+fn slash_with_a_left_operand_is_dyadic_compress() {
+    let e = parse("1 0 1/1 2 3").unwrap().unwrap();
+    assert!(matches!(e, Expr::Dyadic { f: '/', .. }));
+}
+
+#[test]
+fn quad_output_and_system_names() {
+    let e = parse("\u{2395}\u{2190}1+2").unwrap().unwrap();
+    let Expr::QuadOut { value, .. } = e else {
+        panic!("{e:?}")
+    };
+    assert!(matches!(*value, Expr::Dyadic { .. }));
+    let e = parse("\u{2395}IO\u{2190}0").unwrap().unwrap();
+    let Expr::SysAssign { name, pos: 0, .. } = e else {
+        panic!("{e:?}")
+    };
+    assert_eq!(name, "IO");
+    let e = parse("1+\u{2395}IO").unwrap().unwrap();
+    let Expr::Dyadic { right, .. } = e else {
+        panic!()
+    };
+    assert!(matches!(*right, Expr::SysName(ref n, 2) if n == "IO"));
+    assert!(matches!(
+        parse("\u{2395}").unwrap().unwrap(),
+        Expr::QuadIn(0)
+    ));
+}

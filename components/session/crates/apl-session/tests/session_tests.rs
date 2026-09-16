@@ -55,3 +55,23 @@ fn system_commands() {
     assert_eq!(s.respond("  )off"), Reply::Off);
     assert_eq!(out(&mut s, ")FOO"), vec!["INCORRECT COMMAND"]);
 }
+
+#[test]
+fn mvp_transcript() {
+    let mut s = Session::default();
+    assert_eq!(out(&mut s, "+/\u{2373}10"), vec!["55"]);
+    assert_eq!(out(&mut s, "2 3\u{2374}\u{2373}6"), vec!["1 2 3", "4 5 6"]);
+    assert_eq!(out(&mut s, "\u{2374}42"), vec![""]);
+    assert_eq!(out(&mut s, "\u{2395}\u{2190}\u{2373}3"), vec!["1 2 3"]);
+    assert_eq!(out(&mut s, "\u{2395}IO\u{2190}0"), Vec::<String>::new());
+    assert_eq!(out(&mut s, "\u{2373}3"), vec!["0 1 2"]);
+    assert_eq!(out(&mut s, "1+\u{2395}\u{2190}5"), vec!["5", "6"]);
+}
+
+#[test]
+fn quad_output_before_an_error_still_prints() {
+    let mut s = Session::default();
+    let lines = out(&mut s, "XYZ+\u{2395}\u{2190}5");
+    assert_eq!(lines[0], "5");
+    assert_eq!(lines[1], "VALUE ERROR");
+}

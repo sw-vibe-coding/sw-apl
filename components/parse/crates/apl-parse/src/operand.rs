@@ -5,11 +5,11 @@ use apl_lex::{Token, TokenKind};
 use apl_value::{AplError, AplResult, Array, ErrorKind, Number};
 
 use crate::ast::Expr;
-use crate::expr::parse_expr;
+use crate::expr::{Parsed, parse_expr};
 
 /// Parse the operand ending just before `end`: a parenthesised
-/// expression, a strand of numbers, or a name.
-pub fn parse_operand(tokens: &[Token], end: usize) -> AplResult<(Expr, usize)> {
+/// expression, a strand of numbers, a name, or a quad form.
+pub fn parse_operand(tokens: &[Token], end: usize) -> Parsed {
     let last = &tokens[end - 1];
     match &last.kind {
         TokenKind::RParen => {
@@ -22,6 +22,8 @@ pub fn parse_operand(tokens: &[Token], end: usize) -> AplResult<(Expr, usize)> {
         }
         TokenKind::Number(_) => Ok(parse_strand(tokens, end)),
         TokenKind::Name(n) => Ok((Expr::Name(n.clone(), last.pos), end - 1)),
+        TokenKind::SysName(n) => Ok((Expr::SysName(n.clone(), last.pos), end - 1)),
+        TokenKind::Quad => Ok((Expr::QuadIn(last.pos), end - 1)),
         _ => Err(AplError::new(ErrorKind::Syntax).at(last.pos)),
     }
 }
@@ -64,11 +66,24 @@ fn matching_paren(tokens: &[Token], close: usize) -> AplResult<usize> {
     Err(AplError::new(ErrorKind::Syntax).at(tokens[close].pos))
 }
 
-/// True when the token can end an operand (so a glyph left of an
-/// operand with this to its left is dyadic).
-pub fn ends_operand(kind: &TokenKind) -> bool {
-    matches!(
-        kind,
-        TokenKind::Number(_) | TokenKind::Name(_) | TokenKind::RParen
-    )
+/// The arrow at `at` assigns `value` to the name, quad name, or quad
+/// immediately to its left.
+pub fn apply_assign(tokens: &[Token], at: usize, value: Expr) -> Parsed {
+    let value = Box::new(value);
+    let target = at.checked_sub(1).map(|i| &tokens[i]);
+    let expr = match target.map(|t| (&t.kind, t.pos)) {
+        Some((TokenKind::Name(name), pos)) => Expr::Assign {
+            name: name.clone(),
+            pos,
+            value,
+        },
+        Some((TokenKind::SysName(name), pos)) => Expr::SysAssign {
+            name: name.clone(),
+            pos,
+            value,
+        },
+        Some((TokenKind::Quad, pos)) => Expr::QuadOut { pos, value },
+        _ => return Err(AplError::new(ErrorKind::Syntax).at(tokens[at].pos)),
+    };
+    Ok((expr, at - 1))
 }

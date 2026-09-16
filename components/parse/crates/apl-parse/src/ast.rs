@@ -9,6 +9,10 @@ pub enum Expr {
     Literal(Array),
     /// A variable reference and its position.
     Name(String, usize),
+    /// A system variable such as `⎕IO` (name without the quad).
+    SysName(String, usize),
+    /// Bare quad on the right: evaluated input.
+    QuadIn(usize),
     /// `f right`.
     Monadic {
         f: char,
@@ -22,10 +26,24 @@ pub enum Expr {
         left: Box<Expr>,
         right: Box<Expr>,
     },
+    /// `f/right`: reduce along the last axis.
+    Reduce {
+        f: char,
+        pos: usize,
+        right: Box<Expr>,
+    },
     /// `name ← value`; yields the value.
     Assign {
         name: String,
         pos: usize,
         value: Box<Expr>,
     },
+    /// `⎕NAME ← value`; yields the value.
+    SysAssign {
+        name: String,
+        pos: usize,
+        value: Box<Expr>,
+    },
+    /// `⎕ ← value`: display now; yields the value.
+    QuadOut { pos: usize, value: Box<Expr> },
 }

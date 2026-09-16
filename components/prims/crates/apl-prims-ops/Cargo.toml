@@ -1,0 +1,18 @@
+[package]
+name = "apl-prims-ops"
+description = "sw-apl operators: reduce"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-value = { path = "../../../value/crates/apl-value" }
+apl-prims-scalar = { path = "../apl-prims-scalar" }
+
+[lints]
+workspace = true
+
+[dev-dependencies]
+apl-prims-mixed = { path = "../apl-prims-mixed" }

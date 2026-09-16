@@ -40,11 +40,19 @@ impl Session {
         if let Some(command) = text.strip_prefix(')') {
             return system_command(command);
         }
-        Reply::Output(match eval_line(&mut self.ws, line) {
+        let result = eval_line(&mut self.ws, line);
+        let mut lines: Vec<String> = self
+            .ws
+            .output
+            .drain(..)
+            .flat_map(|v| format_array(&v, self.pp))
+            .collect();
+        lines.extend(match result {
             Ok(Some(value)) => format_array(&value, self.pp),
             Ok(None) => Vec::new(),
             Err(err) => error_lines(&err, line),
-        })
+        });
+        Reply::Output(lines)
     }
 }
 

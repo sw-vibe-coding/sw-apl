@@ -58,7 +58,11 @@ fn agree(l: &Array, r: &Array) -> AplResult<Vec<usize>> {
     Ok(l.shape.clone())
 }
 
-fn numbers(a: &Array) -> AplResult<&[Number]> {
+/// The numeric elements of `a`.
+///
+/// # Errors
+/// DOMAIN ERROR for character data.
+pub fn numbers(a: &Array) -> AplResult<&[Number]> {
     match &a.data {
         Data::Num(v) => Ok(v),
         Data::Char(_) => Err(AplError::new(ErrorKind::Domain)),

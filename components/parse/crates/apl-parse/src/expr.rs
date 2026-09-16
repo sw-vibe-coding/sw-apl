@@ -4,7 +4,10 @@ use apl_lex::{Token, TokenKind, tokenize};
 use apl_value::{AplError, AplResult, ErrorKind};
 
 use crate::ast::Expr;
-use crate::operand::{ends_operand, parse_operand};
+use crate::operand::{apply_assign, parse_operand};
+
+/// An expression and the token index where it starts.
+pub type Parsed = AplResult<(Expr, usize)>;
 
 /// Parse one statement line. `None` for a blank or comment-only line.
 ///
@@ -25,7 +28,7 @@ pub fn parse(line: &str) -> AplResult<Option<Expr>> {
 /// Parse the expression in `tokens[lo..end]`, consuming leftwards from
 /// `end` as far as the grammar allows. Returns the expression and the
 /// index where it starts (`lo` when everything was consumed).
-pub fn parse_expr(tokens: &[Token], lo: usize, end: usize) -> AplResult<(Expr, usize)> {
+pub fn parse_expr(tokens: &[Token], lo: usize, end: usize) -> Parsed {
     if end <= lo {
         let pos = tokens.get(end).map_or(0, |t| t.pos);
         return Err(AplError::new(ErrorKind::Syntax).at(pos));
@@ -43,17 +46,16 @@ pub fn parse_expr(tokens: &[Token], lo: usize, end: usize) -> AplResult<(Expr, u
     Ok((right, start))
 }
 
-/// The glyph at `at` applies to `right`; dyadic when an operand ends
-/// immediately to its left, monadic otherwise.
-fn apply_function(
-    tokens: &[Token],
-    lo: usize,
-    at: usize,
-    f: char,
-    right: Expr,
-) -> AplResult<(Expr, usize)> {
+/// The glyph at `at` applies to `right`: a reduce when it is a slash
+/// with a function to its left, dyadic when an operand ends there,
+/// monadic otherwise.
+fn apply_function(tokens: &[Token], lo: usize, at: usize, f: char, right: Expr) -> Parsed {
     let (pos, right) = (tokens[at].pos, Box::new(right));
-    if !(at > lo && ends_operand(&tokens[at - 1].kind)) {
+    let left = (at > lo).then(|| &tokens[at - 1]);
+    if let Some(reduce) = apply_reduce(left, f, right.clone()) {
+        return Ok((reduce, at - 1));
+    }
+    if !left.is_some_and(|t| t.kind.ends_operand()) {
         return Ok((Expr::Monadic { f, pos, right }, at));
     }
     let (left, start) = parse_operand(tokens, at)?;
@@ -69,20 +71,21 @@ fn apply_function(
     ))
 }
 
-/// The arrow at `at` must have a name to its left.
-fn apply_assign(tokens: &[Token], at: usize, value: Expr) -> AplResult<(Expr, usize)> {
-    match at.checked_sub(1).map(|i| &tokens[i]) {
-        Some(Token {
-            kind: TokenKind::Name(name),
-            pos,
-        }) => Ok((
-            Expr::Assign {
-                name: name.clone(),
-                pos: *pos,
-                value: Box::new(value),
-            },
-            at - 1,
-        )),
-        _ => Err(AplError::new(ErrorKind::Syntax).at(tokens[at].pos)),
+/// `g/right` when `f` is the slash and the token to its left is a
+/// function glyph `g`.
+fn apply_reduce(left: Option<&Token>, f: char, right: Box<Expr>) -> Option<Expr> {
+    match (f, left) {
+        (
+            '/',
+            Some(Token {
+                kind: TokenKind::Prim(g),
+                pos,
+            }),
+        ) => Some(Expr::Reduce {
+            f: *g,
+            pos: *pos,
+            right,
+        }),
+        _ => None,
     }
 }

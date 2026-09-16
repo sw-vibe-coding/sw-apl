@@ -17,5 +17,7 @@ with glyph material in `.txt`/`.apl`/config files.
 Thin vertical slice first: seven crates in six new component
 workspaces (value, lex, parse, prims, eval, display, session),
 each sized to the sw-checklist gates, wired into the CLI. Step
-002 delivers scalar arithmetic with APL\360 error display; step
-003 adds iota, rho, catenate, and reduce for the MVP REPL.
+002 delivered scalar arithmetic with APL\360 error display; step
+003 added iota, rho, ravel, catenate, reduce, quad output, and
+quad-IO (two more prims crates, an eval dispatch module): the MVP
+REPL. Steps 004 to 008 complete each layer.

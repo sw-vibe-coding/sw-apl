@@ -3,6 +3,23 @@
 version = 4
 
 [[package]]
+name = "apl-prims-mixed"
+version = "0.1.0"
+dependencies = [
+ "apl-prims-scalar",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-prims-ops"
+version = "0.1.0"
+dependencies = [
+ "apl-prims-mixed",
+ "apl-prims-scalar",
+ "apl-value",
+]
+
+[[package]]
 name = "apl-prims-scalar"
 version = "0.1.0"
 dependencies = [

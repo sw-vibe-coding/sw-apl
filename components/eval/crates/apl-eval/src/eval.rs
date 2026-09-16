@@ -1,13 +1,15 @@
 //! Expression evaluation.
 
 use apl_parse::{Expr, parse};
-use apl_prims_scalar::{dyadic, monadic};
+use apl_prims_ops::reduce;
 use apl_value::{AplError, AplResult, Array, ErrorKind, Number};
 
+use crate::dispatch::{apply_dyadic, apply_monadic};
 use crate::workspace::Workspace;
 
 /// Parse and evaluate one line. `Ok(None)` when there is nothing to
-/// display: a blank line, a comment, or a top-level assignment.
+/// display: a blank line, a comment, or a top-level assignment
+/// (including `⎕←`, which displays through the output buffer).
 ///
 /// # Errors
 /// Any lexical, syntax, or evaluation error, with a caret.
@@ -15,7 +17,10 @@ pub fn eval_line(ws: &mut Workspace, line: &str) -> AplResult<Option<Array>> {
     let Some(expr) = parse(line)? else {
         return Ok(None);
     };
-    let silent = matches!(expr, Expr::Assign { .. });
+    let silent = matches!(
+        expr,
+        Expr::Assign { .. } | Expr::SysAssign { .. } | Expr::QuadOut { .. }
+    );
     let value = eval_expr(ws, &expr)?;
     Ok(if silent { None } else { Some(value) })
 }
@@ -37,7 +42,8 @@ pub fn eval_expr(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
             ws.set(name, v.clone());
             Ok(v)
         }
-        Expr::Monadic { .. } | Expr::Dyadic { .. } => eval_apply(ws, expr),
+        Expr::Monadic { .. } | Expr::Dyadic { .. } | Expr::Reduce { .. } => eval_apply(ws, expr),
+        _ => eval_system(ws, expr),
     }
 }
 
@@ -47,7 +53,7 @@ fn eval_apply(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
     match expr {
         Expr::Monadic { f, pos, right } => {
             let r = eval_expr(ws, right)?;
-            apply_monadic(*f, &r).map_err(|e| e.at(*pos))
+            apply_monadic(*f, &r, ws.io).map_err(|e| e.at(*pos))
         }
         Expr::Dyadic {
             f,
@@ -57,22 +63,34 @@ fn eval_apply(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
         } => {
             let r = eval_expr(ws, right)?;
             let l = eval_expr(ws, left)?;
-            dyadic(*f, &l, &r).map_err(|e| e.at(*pos))
+            apply_dyadic(*f, &l, &r).map_err(|e| e.at(*pos))
+        }
+        Expr::Reduce { f, pos, right } => {
+            let r = eval_expr(ws, right)?;
+            reduce(*f, &r).map_err(|e| e.at(*pos))
         }
         _ => unreachable!("eval_apply only receives applications"),
     }
 }
 
-/// Monadic dispatch: the mixed functions handled here, the rest are
-/// scalar.
-fn apply_monadic(f: char, r: &Array) -> AplResult<Array> {
-    match f {
-        '⍴' => Ok(Array::vector(
-            r.shape
-                .iter()
-                .map(|&n| Number::Int(i64::try_from(n).unwrap_or(i64::MAX)))
-                .collect(),
-        )),
-        _ => monadic(f, r),
+/// Quad forms: system variables and quad output/input.
+fn eval_system(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
+    match expr {
+        Expr::SysName(name, pos) => match name.as_str() {
+            "IO" => Ok(Array::scalar(Number::Int(ws.io))),
+            _ => Err(AplError::new(ErrorKind::Value).at(*pos)),
+        },
+        Expr::SysAssign { name, pos, value } => {
+            let v = eval_expr(ws, value)?;
+            ws.set_system(name, &v).map_err(|e| e.at(*pos))?;
+            Ok(v)
+        }
+        Expr::QuadOut { value, .. } => {
+            let v = eval_expr(ws, value)?;
+            ws.output.push(v.clone());
+            Ok(v)
+        }
+        Expr::QuadIn(pos) => Err(AplError::new(ErrorKind::NotImplemented).at(*pos)),
+        _ => unreachable!("eval_system only receives quad forms"),
     }
 }

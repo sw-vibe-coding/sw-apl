@@ -1,6 +1,6 @@
 number = 3
 slug = "mvp-iota-rho-reduce"
-status = "pending"
+status = "in-progress"
 description = "MVP step 2 of 2 (docs/plan.md Phase 1). Add iota (monadic, quad-IO aware), rh..."
 role = "production"
 context_files = []

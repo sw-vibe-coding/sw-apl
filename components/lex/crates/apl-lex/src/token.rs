@@ -13,6 +13,10 @@ pub enum TokenKind {
     Prim(char),
     /// Left arrow: assignment.
     Assign,
+    /// Bare quad: evaluated input/output.
+    Quad,
+    /// Quad followed by letters: a system variable or function.
+    SysName(String),
     LParen,
     RParen,
 }
@@ -27,6 +31,22 @@ pub struct Token {
 /// Every primitive glyph in `docs/glyphs.txt` that stands alone as a
 /// function or operator token.
 pub const PRIMITIVES: &str = "+-×÷⌈⌊*⍟|!○~∧∨⍲⍱<≤=≥>≠?⍳⍴,⌽⊖⍉↑↓/⌿\\⍀⊥⊤∊⍋⍒⌹⍎⍕.∘";
+
+impl TokenKind {
+    /// True when the token can end an operand: a glyph immediately
+    /// to its right has an array on its left and is dyadic.
+    #[must_use]
+    pub fn ends_operand(&self) -> bool {
+        matches!(
+            self,
+            TokenKind::Number(_)
+                | TokenKind::Name(_)
+                | TokenKind::RParen
+                | TokenKind::Quad
+                | TokenKind::SysName(_)
+        )
+    }
+}
 
 /// Letters allowed in names: ASCII letters plus delta and delta-underbar.
 #[must_use]

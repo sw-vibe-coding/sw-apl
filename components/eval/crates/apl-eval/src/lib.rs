@@ -1,6 +1,7 @@
 //! sw-apl evaluator: walks the AST against a workspace of variables
 //! and dispatches primitives.
 
+mod dispatch;
 mod eval;
 mod workspace;
 

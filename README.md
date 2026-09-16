@@ -25,14 +25,16 @@ Early. The `sw-apl` binary evaluates scalar arithmetic at the
 six-space prompt: numeric literals with the high minus, strands,
 plus, minus, times, divide, maximum, minimum, residue, power
 (monadic and dyadic, with scalar extension), parentheses,
-assignment, variables, monadic rho, and APL\360 error display
-with the caret. Anything else answers `NOT IMPLEMENTED` or a
-CHARACTER ERROR naming the code point. Batch mode, `)OFF`, help,
-and the version block work. Implementation proceeds phase by
-phase per `docs/plan.md`: iota, reshape, and reduce next, then
-the full value, display, lexer, parser, and scalar-function
-layers, mixed functions and operators, defined functions and the
-session, workspaces, numerics, then the web demo.
+assignment, variables, iota, rho (shape and reshape), ravel and
+catenate of vectors, reduce along the last axis, quad output,
+quad-IO, matrix display, and APL\360 error display with the
+caret. Anything else answers `NOT IMPLEMENTED` or a CHARACTER
+ERROR naming the code point. Batch mode, `)OFF`, help, and the
+version block work. Implementation proceeds phase by phase per
+`docs/plan.md`: the full value, display, lexer, parser, and
+scalar-function layers next, then mixed functions and operators,
+defined functions and the session, workspaces, numerics, then the
+web demo.
 
 ## Summary
 

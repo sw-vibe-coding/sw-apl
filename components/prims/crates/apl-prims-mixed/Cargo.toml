@@ -1,0 +1,15 @@
+[package]
+name = "apl-prims-mixed"
+description = "sw-apl mixed (structural) primitive functions"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-value = { path = "../../../value/crates/apl-value" }
+apl-prims-scalar = { path = "../apl-prims-scalar" }
+
+[lints]
+workspace = true

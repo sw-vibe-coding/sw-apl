@@ -92,3 +92,17 @@ fn bad_number_is_a_syntax_error() {
     let err = tokenize("1.2.3").unwrap_err();
     assert_eq!(err.kind, ErrorKind::Syntax);
 }
+
+#[test]
+fn quad_and_quad_names() {
+    assert_eq!(
+        kinds("\u{2395}\u{2190}\u{2395}IO"),
+        vec![
+            TokenKind::Quad,
+            TokenKind::Assign,
+            TokenKind::SysName("IO".to_string()),
+        ]
+    );
+    let toks = tokenize("1 \u{2395}IO").unwrap();
+    assert_eq!(toks[1].pos, 2);
+}
