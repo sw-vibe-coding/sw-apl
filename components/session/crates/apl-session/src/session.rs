@@ -24,7 +24,7 @@ pub struct Session {
     pub(crate) ws: Workspace,
     /// Print precision (`)DIGITS`).
     pub(crate) digits: usize,
-    /// Print width (`)WIDTH`); wrapping arrives with the display step.
+    /// Print width (`)WIDTH`).
     pub(crate) width: usize,
 }
 
@@ -49,10 +49,10 @@ impl Session {
             .ws
             .output
             .drain(..)
-            .flat_map(|v| format_array(&v, self.digits))
+            .flat_map(|v| format_array(&v, self.digits, self.width))
             .collect();
         lines.extend(match result {
-            Ok(Some(value)) => format_array(&value, self.digits),
+            Ok(Some(value)) => format_array(&value, self.digits, self.width),
             Ok(None) => Vec::new(),
             Err(err) => error_lines(&err, line),
         });

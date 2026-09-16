@@ -50,7 +50,7 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | Six-space prompt, batch echo, `)OFF` | done | cli tests |
 | Error display: name, statement, caret | done | session tests |
 | Error display inside functions (`FN[n]`), `)SI` | todo | |
-| `)WIDTH` wrapping with six-space continuation | todo | width stored, not applied |
+| `)WIDTH` wrapping with six-space continuation | done | display tests, sample 45 |
 | `)DIGITS` precision, `)ORIGIN`, `WAS n` reply | done | session tests, sample 22 |
 | Strict Unicode acceptance, CHARACTER ERROR | done | lex tests |
 | Invalid UTF-8 reported with byte offset | todo | |
@@ -110,13 +110,13 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | Feature | Status |
 |---|---|
 | Integers, high minus, single-space vectors | done |
-| Floats to `)DIGITS` significant digits, E form | done |
+| Numbers to `)DIGITS` significant digits, E form (integers too) | done |
 | Matrix columns right-aligned | done |
 | Empty vector prints a blank line | done |
-| Rank 3 and higher (blank lines between planes) | todo |
-| Character arrays without quotes | todo |
-| `)WIDTH` wrapping | todo |
-| Mixed integer and float columns per APL\360 rules | todo |
+| Rank 3 and higher (blank lines between planes) | done |
+| Character arrays without quotes | done (no literals yet) |
+| `)WIDTH` wrapping (vectors between elements, matrices in column blocks) | done |
+| Mixed integer and float columns (each element formatted, right-aligned) | done |
 
 ## System commands
 

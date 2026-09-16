@@ -1,6 +1,6 @@
 number = 7
 slug = "display-complete"
-status = "pending"
+status = "in-progress"
 description = "Complete apl-display per docs/language.md and docs/session.md: exponential fo..."
 role = "production"
 context_files = []
