@@ -476,3 +476,56 @@ fn runaway_recursion_reports_depth_error() {
     );
     assert_eq!(out(&mut s, "2+2"), vec!["4"]);
 }
+
+#[test]
+fn a_loop_runs_and_prints_each_round() {
+    let mut s = Session::default();
+    define(
+        &mut s,
+        "\u{2207}COUNT N;I",
+        &[
+            "I\u{2190}0",
+            "LOOP:I\u{2190}I+1",
+            "'ROUND ';I",
+            "\u{2192}LOOP\u{d7}\u{2373}I<N",
+            "'DONE'",
+        ],
+    );
+    assert_eq!(
+        out(&mut s, "COUNT 3"),
+        vec!["ROUND 1", "ROUND 2", "ROUND 3", "DONE"]
+    );
+}
+
+#[test]
+fn recursion_with_a_branch_terminates() {
+    let mut s = Session::default();
+    define(
+        &mut s,
+        "\u{2207}R\u{2190}FAC N",
+        &[
+            "R\u{2190}1",
+            "\u{2192}0\u{d7}\u{2373}N\u{2264}1",
+            "R\u{2190}N\u{d7}FAC N-1",
+        ],
+    );
+    assert_eq!(out(&mut s, "FAC 6"), vec!["720"]);
+    assert_eq!(out(&mut s, "FAC \u{af}1"), vec!["1"]);
+}
+
+#[test]
+fn a_label_in_immediate_execution_is_a_syntax_error() {
+    let mut s = Session::default();
+    assert_eq!(
+        out(&mut s, "L:2+2"),
+        vec!["SYNTAX ERROR", "      L:2+2", "       ^"]
+    );
+}
+
+#[test]
+fn a_branch_in_immediate_execution_displays_nothing() {
+    let mut s = Session::default();
+    assert_eq!(out(&mut s, "\u{2192}3"), Vec::<String>::new());
+    assert_eq!(out(&mut s, "\u{2192}"), Vec::<String>::new());
+    assert_eq!(out(&mut s, "2+2"), vec!["4"]);
+}

@@ -42,8 +42,7 @@ inner and outer products), bracket indexing and indexed
 assignment, character data, mixed output, and quad output. Display
 follows the APL\360 rules, including `)WIDTH` wrapping and
 higher-rank planes, and errors print with the caret. `)ORIGIN`,
-`)DIGITS`, and `)WIDTH` reply `WAS n`. Conway's Life runs; see
-`samples/51-life.apl`.
+`)DIGITS`, and `)WIDTH` reply `WAS n`.
 
 Functions are defined the APL\360 way: an opening del and a header
 (`NAME`, `NAME B`, `A NAME B`, each with or without `R left-arrow`),
@@ -52,9 +51,17 @@ semicolons are local for the length of the call, arguments bind into
 a fresh frame, and the result is whatever the header's result
 variable holds at exit.
 
-Not there yet: the del editor commands, branching and labels, quad
-input, workspaces (`)SAVE`, `)LOAD`), the I-beam system functions,
-and domino. A
+Labels are local constants holding their line number, and the right
+arrow branches: the first element of its value selects the next line,
+an empty vector falls through, and zero or a line the function does
+not have exits. That is the whole of APL\360 control flow, and it is
+enough for the conditional branch (label times iota of the condition,
+which is empty when the condition is false). The horse race in
+`samples/50-horse-race.apl` runs, and Conway's Life runs as a pair of
+functions in `samples/54-life-function.apl`.
+
+Not there yet: the del editor commands, quad input, workspaces
+(`)SAVE`, `)LOAD`), the I-beam system functions, and domino. A
 glyph from a later APL is a CHARACTER ERROR that names it, so the
 Dyalog Life one-liner answers "dfn brace, not APL\360". See the
 parity checklist for the row-by-row picture. Batch mode, `)OFF`, help, and the

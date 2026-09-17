@@ -35,15 +35,19 @@ impl Workspace {
     }
 }
 
-/// What a statement produces for the terminal.
+/// What a statement produced: what to display, and where to go next.
 #[derive(Debug, Clone, PartialEq)]
 pub enum Output {
-    /// Nothing to display (blank line, comment, assignment).
+    /// Nothing to display (blank line, comment, assignment), and the
+    /// next line follows this one.
     Nothing,
     /// One array to display.
     Value(Array),
     /// Mixed output: the parts are displayed side by side.
     Mixed(Vec<Array>),
+    /// A branch: the line to run next. Nothing is displayed, and a
+    /// number that is not one of the function's lines returns.
+    Branch(i64),
 }
 
 impl Output {

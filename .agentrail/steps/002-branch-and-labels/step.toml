@@ -1,6 +1,6 @@
 number = 2
 slug = "branch-and-labels"
-status = "pending"
+status = "in-progress"
 description = "Phase 3 step 2. Labels (NAME: at the start of a body line) are local constant..."
 role = "production"
 context_files = []

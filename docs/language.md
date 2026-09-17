@@ -173,8 +173,12 @@ Notes:
 - Labels are names followed by a colon at the start of a line;
   they are local constants holding the line number.
 - Branch: right arrow followed by an expression. The first
-  element selects the line; an empty vector continues; zero or
-  a number outside the function exits; a bare right arrow in
+  element selects the line; an empty vector continues with the
+  next line; zero or a number outside the function exits,
+  returning the result variable's value if the header has one.
+  Running off the last line exits the same way. `→LABEL×⍳COND`
+  is the conditional branch: when COND is 0 the product is
+  empty and execution falls through. A bare right arrow in
   immediate execution clears the top of the state indicator.
 - Dynamic scoping: locals shadow globals for the duration of the
   call, including in called functions.

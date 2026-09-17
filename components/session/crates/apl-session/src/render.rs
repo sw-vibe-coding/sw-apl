@@ -9,7 +9,7 @@ use crate::session::INDENT;
 /// One statement's output as transcript lines.
 pub fn render(out: &Output, digits: usize, width: usize) -> Vec<String> {
     match out {
-        Output::Nothing => Vec::new(),
+        Output::Nothing | Output::Branch(_) => Vec::new(),
         Output::Value(value) => format_array(value, digits, width),
         Output::Mixed(parts) => mixed_lines(parts, digits, width),
     }

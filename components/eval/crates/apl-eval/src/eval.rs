@@ -1,7 +1,7 @@
 //! Expression evaluation.
 
 use apl_ast::Expr;
-use apl_call::value;
+use apl_call::{branch_target, value};
 use apl_parse::parse;
 use apl_value::{AplError, AplResult, Array, ErrorKind};
 use apl_workspace::{Output, Workspace};
@@ -39,9 +39,9 @@ pub fn eval_line(ws: &mut Workspace, line: &str) -> AplResult<Output> {
 }
 
 /// The statement shapes that do not evaluate to one value: mixed
-/// output, and a bare call to a defined function, which displays
-/// nothing when the header declares no result. `None` when the
-/// statement is an ordinary expression.
+/// output, a branch, and a bare call to a defined function, which
+/// displays nothing when the header declares no result. `None` when
+/// the statement is an ordinary expression.
 fn statement(ws: &mut Workspace, expr: &Expr) -> AplResult<Option<Output>> {
     if let Expr::Mixed(parts) = expr {
         let parts = parts
@@ -49,6 +49,11 @@ fn statement(ws: &mut Workspace, expr: &Expr) -> AplResult<Option<Output>> {
             .map(|p| eval_expr(ws, p))
             .collect::<AplResult<_>>()?;
         return Ok(Some(Output::Mixed(parts)));
+    }
+    if let Expr::Branch { target, .. } = expr {
+        let value = target.as_deref().map(|e| eval_expr(ws, e)).transpose()?;
+        let line = value.as_ref().map(branch_target).transpose()?.flatten();
+        return Ok(Some(line.map_or(Output::Nothing, Output::Branch)));
     }
     let Some((name, pos, left, right)) = expr.defined_call().filter(|c| ws.is_function(c.0)) else {
         return Ok(None);
@@ -79,7 +84,7 @@ pub fn eval_expr(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
         }
         Expr::Monadic { .. } => apply::eval_monadic(ws, expr),
         Expr::Dyadic { .. } => apply::eval_dyadic(ws, expr),
-        Expr::Branch { pos, .. } => Err(AplError::new(ErrorKind::NotImplemented).at(*pos)),
+        Expr::Branch { pos, .. } => Err(AplError::new(ErrorKind::Syntax).at(*pos)),
         Expr::Mixed(_) => Err(AplError::new(ErrorKind::Syntax)),
         _ => eval_form(ws, expr),
     }

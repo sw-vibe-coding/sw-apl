@@ -127,11 +127,31 @@ fn mixed_output_yields_every_part() {
 }
 
 #[test]
-fn branch_is_not_implemented_yet() {
+fn a_branch_names_the_line_to_run_next() {
     let mut ws = Workspace::default();
-    let e = eval_line(&mut ws, "\u{2192}3").unwrap_err();
-    assert_eq!(e.kind, ErrorKind::NotImplemented);
-    assert_eq!(e.caret, Some(0));
+    assert_eq!(eval_line(&mut ws, "\u{2192}3").unwrap(), Output::Branch(3));
+    assert_eq!(eval_line(&mut ws, "\u{2192}0").unwrap(), Output::Branch(0));
+    // An empty vector, and a bare arrow, fall through to the next line.
+    assert_eq!(
+        eval_line(&mut ws, "\u{2192}9\u{d7}\u{2373}0").unwrap(),
+        Output::Nothing
+    );
+    assert_eq!(eval_line(&mut ws, "\u{2192}").unwrap(), Output::Nothing);
+    // The first element selects; the rest are ignored.
+    assert_eq!(
+        eval_line(&mut ws, "\u{2192}2 7 7").unwrap(),
+        Output::Branch(2)
+    );
+    assert_eq!(
+        eval_line(&mut ws, "\u{2192}'A'").unwrap_err().kind,
+        ErrorKind::Domain
+    );
+    assert_eq!(
+        eval_line(&mut ws, "\u{2192}2 2\u{2374}1 2 3 4")
+            .unwrap_err()
+            .kind,
+        ErrorKind::Rank
+    );
 }
 
 #[test]
@@ -265,4 +285,93 @@ fn an_error_inside_a_body_points_at_the_call() {
     define(&mut ws, "R\u{2190}BAD N", &["R\u{2190}2 3+4 5 6"]);
     let e = eval_line(&mut ws, "1+BAD 0").unwrap_err();
     assert_eq!((e.kind, e.caret), (ErrorKind::Length, Some(2)));
+}
+
+#[test]
+fn a_label_is_a_local_constant_holding_its_line_number() {
+    let mut ws = Workspace::default();
+    define(
+        &mut ws,
+        "R\u{2190}WHERE",
+        &[
+            "R\u{2190}0",
+            "TOP:R\u{2190}R+1",
+            "R\u{2190}R,TOP,BOT",
+            "BOT:R\u{2190}R",
+        ],
+    );
+    assert_eq!(
+        nums(&mut ws, "WHERE"),
+        [Number::Int(1), Number::Int(2), Number::Int(4)]
+    );
+    // The label is gone once the call returns.
+    assert_eq!(
+        eval_line(&mut ws, "TOP").unwrap_err().kind,
+        ErrorKind::Value
+    );
+}
+
+#[test]
+fn a_branch_moves_the_line_counter_and_a_loop_terminates() {
+    let mut ws = Workspace::default();
+    define(
+        &mut ws,
+        "R\u{2190}SUMTO N;I",
+        &[
+            "R\u{2190}0",
+            "I\u{2190}0",
+            "LOOP:I\u{2190}I+1",
+            "R\u{2190}R+I",
+            "\u{2192}LOOP\u{d7}\u{2373}I<N",
+        ],
+    );
+    assert_eq!(nums(&mut ws, "SUMTO 4"), [Number::Int(10)]);
+    assert_eq!(nums(&mut ws, "SUMTO 1"), [Number::Int(1)]);
+    assert_eq!(nums(&mut ws, "SUMTO 100"), [Number::Int(5050)]);
+}
+
+#[test]
+fn a_branch_out_of_the_function_returns_the_result_so_far() {
+    let mut ws = Workspace::default();
+    define(
+        &mut ws,
+        "R\u{2190}EARLY N",
+        &["R\u{2190}N", "\u{2192}0", "R\u{2190}999"],
+    );
+    assert_eq!(nums(&mut ws, "EARLY 7"), [Number::Int(7)]);
+    // Any line number the function does not have leaves it too.
+    define(
+        &mut ws,
+        "R\u{2190}OFFEND N",
+        &["R\u{2190}N", "\u{2192}99", "R\u{2190}999"],
+    );
+    assert_eq!(nums(&mut ws, "OFFEND 7"), [Number::Int(7)]);
+    // Running off the last line leaves it as well.
+    define(&mut ws, "R\u{2190}FALLOFF N", &["R\u{2190}N"]);
+    assert_eq!(nums(&mut ws, "FALLOFF 7"), [Number::Int(7)]);
+}
+
+#[test]
+fn recursion_terminates_when_a_branch_stops_it() {
+    let mut ws = Workspace::default();
+    define(
+        &mut ws,
+        "R\u{2190}FAC N",
+        &[
+            "R\u{2190}1",
+            "\u{2192}0\u{d7}\u{2373}N\u{2264}1",
+            "R\u{2190}N\u{d7}FAC N-1",
+        ],
+    );
+    assert_eq!(nums(&mut ws, "FAC 5"), [Number::Int(120)]);
+    assert_eq!(nums(&mut ws, "FAC 1"), [Number::Int(1)]);
+    assert_eq!(nums(&mut ws, "FAC 10"), [Number::Int(3_628_800)]);
+}
+
+#[test]
+fn a_label_does_not_change_what_its_line_does() {
+    let mut ws = Workspace::default();
+    define(&mut ws, "R\u{2190}SHOUT", &["L:'HI'", "R\u{2190}L"]);
+    assert_eq!(nums(&mut ws, "SHOUT"), [Number::Int(1)]);
+    assert_eq!(ws.output.len(), 1, "the labelled line still displays");
 }

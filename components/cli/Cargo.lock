@@ -73,6 +73,7 @@ name = "apl-call"
 version = "0.1.0"
 dependencies = [
  "apl-ast",
+ "apl-scan",
  "apl-value",
  "apl-workspace",
 ]

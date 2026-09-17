@@ -1,0 +1,68 @@
+      ⍝ Conway's Life as defined functions: a glider on a 6 by 6 torus.
+      ⍝ GEN counts the eight neighbours and applies the birth and survival
+      ⍝ rules; RUN steps N generations, displaying each. Still pure APL\360:
+      ⍝ eight explicit rotations, a label, and the →LABEL×⍳COND idiom.
+      ∇R←GEN B;N
+[1]   N←(¯1⊖¯1⌽B)+(¯1⊖B)+(¯1⊖1⌽B)+(¯1⌽B)+(1⌽B)+(1⊖¯1⌽B)+(1⊖B)+(1⊖1⌽B)
+[2]   R←(3=N)∨B∧2=N
+[3]   ∇
+      ∇RUN N;G
+[1]   G←0
+[2]   LOOP:'GENERATION ';G
+[3]   BOARD
+[4]   →0×⍳G≥N
+[5]   BOARD←GEN BOARD
+[6]   G←G+1
+[7]   →LOOP
+[8]   ∇
+      BOARD←6 6⍴0
+      BOARD[1;2]←1
+      BOARD[2;3]←1
+      BOARD[3;1 2 3]←1
+      RUN 4
+GENERATION 0
+0 1 0 0 0 0
+0 0 1 0 0 0
+1 1 1 0 0 0
+0 0 0 0 0 0
+0 0 0 0 0 0
+0 0 0 0 0 0
+GENERATION 1
+0 0 0 0 0 0
+1 0 1 0 0 0
+0 1 1 0 0 0
+0 1 0 0 0 0
+0 0 0 0 0 0
+0 0 0 0 0 0
+GENERATION 2
+0 0 0 0 0 0
+0 0 1 0 0 0
+1 0 1 0 0 0
+0 1 1 0 0 0
+0 0 0 0 0 0
+0 0 0 0 0 0
+GENERATION 3
+0 0 0 0 0 0
+0 1 0 0 0 0
+0 0 1 1 0 0
+0 1 1 0 0 0
+0 0 0 0 0 0
+0 0 0 0 0 0
+GENERATION 4
+0 0 0 0 0 0
+0 0 1 0 0 0
+0 0 0 1 0 0
+0 1 1 1 0 0
+0 0 0 0 0 0
+0 0 0 0 0 0
+      ⍝ After four generations the glider has moved one cell down and right.
+      ⍝ GEN is a function now, so one generation is one call.
+      BOARD←GEN BOARD
+      BOARD
+0 0 0 0 0 0
+0 0 0 0 0 0
+0 1 0 1 0 0
+0 0 1 1 0 0
+0 0 1 0 0 0
+0 0 0 0 0 0
+      )OFF

@@ -17,11 +17,14 @@ scoping, and what a function with no result may and may not be used
 for. It has no branches, so every body runs from line 1 to the last
 line.
 
-`50-horse-race.apl` is a target program written in pure APL\360
-(character matrix for names, mixed output, the branch idiom); it
-runs once defined functions, branching, indexing, comparisons, and
-roll land, and its transcript is reproducible because the random
-link starts from a fixed value.
+`50-horse-race.apl` is a target program written in pure APL\360: a
+character matrix for the names, mixed output, and the conditional
+branch idiom driving two functions. Its transcript is reproducible
+because the random link starts from a fixed value.
+
+`54-life-function.apl` is Conway's Life rewritten as functions --
+GEN for one generation, RUN for a labelled loop over several --
+beside the straight-line form in `51-life.apl`.
 
 Run the corpus against the release binary:
 

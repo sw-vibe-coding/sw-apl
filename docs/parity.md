@@ -44,11 +44,11 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | Character literals `'...'`, doubled quote, any Unicode inside | done | lex tests, samples 19, 20 |
 | Bracket indexing `A[I;J]`, elided axes, index arrays of any rank | done | index tests, sample 48 |
 | Indexed assignment with scalar extension | done | index tests, sample 48 |
-| Branch `→`, labels, `→0`, empty branch | part | `→` parsed (statement start only); semantics in Phase 3 |
+| Branch `→`, labels as local constants, `→0`, branch off the end, empty branch, the `→LABEL×⍳COND` idiom | done | scan/eval/session tests, samples 50, 54 |
 | Defined functions: del headers (`NAME`, `NAME B`, `A NAME B`, each with or without `R←`), locals, calls, the result at exit | done | eval/session tests, sample 53 |
 | Definition mode: an opening `∇` collects body lines behind the `[n]` prompt until a closing `∇` | done | session/cli tests, sample 53 |
 | Del editor: `[n]`, `[⎕]`, `[n⎕]`, `[∆n]`, fractional insert, header edit `[0]`, reopen `∇NAME`, `⍫` | todo | |
-| Dynamic scoping, recursion | done | eval tests, sample 53. Recursion is bounded by DEPTH ERROR; a terminating recursion needs the branch step |
+| Dynamic scoping, recursion | done | eval tests, samples 53, 54. A recursion with no branch to stop it reaches DEPTH ERROR |
 | State indicator, suspended functions | todo | |
 | Six-space prompt, batch echo, `)OFF` | done | cli tests |
 | Line editing with history (up arrow), Ctrl-C cancels, Ctrl-D ends | done | manual (rustyline); tape |

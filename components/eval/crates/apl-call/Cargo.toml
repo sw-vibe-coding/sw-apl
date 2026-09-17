@@ -1,6 +1,6 @@
 [package]
 name = "apl-call"
-description = "sw-apl defined-function calls: valence, frame, body, result"
+description = "sw-apl defined-function calls: valence, frame, body, branch"
 edition.workspace = true
 license.workspace = true
 version.workspace = true
@@ -9,6 +9,7 @@ repository.workspace = true
 
 [dependencies]
 apl-ast = { path = "../../../parse/crates/apl-ast" }
+apl-scan = { path = "../../../parse/crates/apl-scan" }
 apl-value = { path = "../../../value/crates/apl-value" }
 apl-workspace = { path = "../apl-workspace" }
 

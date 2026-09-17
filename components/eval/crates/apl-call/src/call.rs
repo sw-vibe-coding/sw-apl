@@ -1,8 +1,9 @@
 //! The call itself.
 
 use apl_ast::Defn;
-use apl_value::{AplError, AplResult, Array, ErrorKind};
-use apl_workspace::{Output, Workspace};
+use apl_scan::{labels, without_label};
+use apl_value::{AplError, AplResult, Array, ErrorKind, Number};
+use apl_workspace::{Frame, Output, Workspace};
 
 /// How to evaluate one body line. The evaluator passes its own
 /// `eval_line`; nothing here needs to know what that does.
@@ -28,12 +29,7 @@ pub fn call(
     if left.is_some() != defn.left.is_some() || right.is_some() != defn.right.is_some() {
         return Err(AplError::new(ErrorKind::Syntax));
     }
-    let frame = ws.enter(&defn.names())?;
-    for (n, v) in [(&defn.left, left), (&defn.right, right)] {
-        if let (Some(n), Some(v)) = (n, v) {
-            ws.set(n, v);
-        }
-    }
+    let frame = bind(ws, &defn, (left, right))?;
     let ran = run_body(ws, &defn, run).map_err(|e| AplError::new(e.kind));
     let result = defn.result.as_ref().and_then(|r| ws.get(r).cloned());
     ws.leave(frame);
@@ -57,13 +53,46 @@ pub fn value(
         .ok_or_else(|| AplError::new(ErrorKind::Value).at(pos))
 }
 
-/// Run the body lines in order. Anything a line displays joins the
-/// pending output, so it reaches the terminal ahead of the result.
+/// Shadow everything the call makes local -- result, arguments,
+/// locals, labels -- then give the arguments and the labels their
+/// values. A label holds the number of the line it names.
+///
+/// # Errors
+/// DEPTH ERROR when calls nest too deeply.
+fn bind(ws: &mut Workspace, defn: &Defn, args: (Option<Array>, Option<Array>)) -> AplResult<Frame> {
+    let labels = labels(&defn.body);
+    let mut names = defn.names();
+    names.extend(labels.iter().map(|(n, _)| n.clone()));
+    let frame = ws.enter(&names)?;
+    for (n, v) in [(&defn.left, args.0), (&defn.right, args.1)] {
+        if let (Some(n), Some(v)) = (n, v) {
+            ws.set(n, v);
+        }
+    }
+    for (n, line) in labels {
+        let line = i64::try_from(line).unwrap_or_default();
+        ws.set(&n, Array::scalar(Number::Int(line)));
+    }
+    Ok(frame)
+}
+
+/// Run the body from line 1, following branches. A branch to a line
+/// the function does not have -- 0, by convention -- returns. What a
+/// line displays joins the pending output, so it reaches the terminal
+/// ahead of the result.
 fn run_body(ws: &mut Workspace, defn: &Defn, run: Run) -> AplResult<()> {
-    for line in &defn.body {
-        let shown = run(ws, line)?;
-        if shown != Output::Nothing {
-            ws.output.push(shown);
+    let mut line = 1usize;
+    while let Some(text) = defn.body.get(line - 1) {
+        match run(ws, &without_label(text))? {
+            Output::Branch(to) => match usize::try_from(to) {
+                Ok(n) if (1..=defn.body.len()).contains(&n) => line = n,
+                _ => return Ok(()),
+            },
+            Output::Nothing => line += 1,
+            shown => {
+                ws.output.push(shown);
+                line += 1;
+            }
         }
     }
     Ok(())
