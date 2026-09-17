@@ -1,0 +1,9 @@
+number = 7
+slug = "session-polish"
+status = "pending"
+description = "Phase 3 step 7. The )OFF sign-off line with connect time and CPU time per doc..."
+role = "production"
+context_files = []
+created_at = "2026-09-16T23:15:43"
+task_type = "rust-interpreter"
+commits = []

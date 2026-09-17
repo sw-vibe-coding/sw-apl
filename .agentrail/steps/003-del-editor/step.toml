@@ -1,0 +1,9 @@
+number = 3
+slug = "del-editor"
+status = "pending"
+description = "Phase 3 step 3. Definition mode editing per docs/session.md: prompt [n] for t..."
+role = "production"
+context_files = []
+created_at = "2026-09-16T23:15:43"
+task_type = "rust-interpreter"
+commits = []

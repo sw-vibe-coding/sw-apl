@@ -1,40 +1,46 @@
-# core-mixed
+# core-session
 
-Phase 2 of docs/plan.md: the mixed (structural) functions and the
-operators, giving meaning to every form the parser already accepts.
-Pure APL\360: flat arrays, index origin from )ORIGIN, the random
-link for deal, no APL2 extensions (compress takes booleans only, no
-replicate; no nested results). Every step: TDD, sw-checklist gates
-as design constraints (4 modules/crate incl. lib.rs, 4 fns/module,
-25 LOC/fn; split crates freely), update docs/parity.md rows in the
-same commit, commit, push, report. Seed reg-rs baselines for every
-sample that becomes fully runnable.
+Phase 3 of docs/plan.md: defined functions, branching, the del
+editor, the state indicator, quad input, and the I-beam system
+functions. This is the phase that turns sw-apl from a calculator
+into APL\360: after step 2 the horse race and Life run as functions.
+
+Pure APL\360 throughout: del editor (no line editor for function
+bodies), dynamic scoping, I-beams for system information, no quad
+names. Every step: format first, then tests, clippy, and gates
+(see /mw-cp); TDD; update docs/parity.md rows in the same commit;
+commit, push, report.
 
 ## Steps
 
-1. ravel-catenate-laminate -- catenate along the last axis for
-   matrices and higher rank, first-axis and axis forms A,[k]B,
-   laminate with a fractional axis, scalar extension of a scalar
-   argument. Samples 08, 44 as applicable.
-2. take-drop-reverse-rotate-transpose -- ↑ ↓ per axis with
-   negative counts and overtake fill; ⌽ ⊖ reverse and rotate
-   (vector left argument rotates rows); ⍉ monadic and dyadic.
-   Samples 07, 10, 13, 34, 35, 44.
-3. compress-expand-membership-indexof -- boolean compress and
-   expand on either axis (/ ⌿ \ ⍀ with an array left), ∊, dyadic
-   ⍳ (index of, one past the end when absent). Samples 17, 30,
-   41 (compress part).
-4. grade-encode-decode-deal -- ⍋ ⍒ stable, ⊥ ⊤ mixed radix, deal
-   M?N via the random link. Samples 32, 36, 41.
-5. reduce-scan -- reduce on the first axis and with an axis
-   bracket, scan f\ f⍀ on either axis, identity elements for
-   every scalar dyadic function. Samples 06 (rest), 33, 24-or-and.
-6. inner-outer-product -- f.g for matrices and vectors (+.× as
-   the model), ∘.f with scalar extension. Samples 38, 39.
-7. indexing-and-indexed-assignment -- A[I], M[I;J], elided axes,
-   INDEX ERROR, index origin, results shaped by the index arrays;
-   A[I]←V with scalar extension. Samples 20-bracket-index (add).
-8. axis-forms-and-rank-checks -- every structural function with
-   its axis bracket where APL\360 allows it, RANK and LENGTH
-   errors audited against the manual, sample 09 and the horse-race
-   pieces that do not need functions yet.
+1. user-functions -- the del definition form and the function call.
+   Headers: NAME, NAME B, A NAME B, each with or without R←;
+   locals after semicolons; the symbol table holds functions beside
+   variables; calls bind arguments, shadow locals, restore on exit;
+   recursion; VALUE ERROR for a result-less function used for its
+   value; SYNTAX ERROR for wrong valence. Multi-line definition in
+   immediate execution ends at the closing del.
+2. branch-and-labels -- labels as local constants holding line
+   numbers, → with an expression (first element selects the line,
+   empty vector falls through, 0 or out-of-range exits), the
+   →LABEL×⍳COND idiom, execution order and the line counter. After
+   this step samples 50 (horse race) and a function form of Life
+   run; seed their baselines.
+3. del-editor -- definition mode prompt [n], display [⎕] and [n⎕],
+   replace [n], insert at fractional line numbers, delete [∆n],
+   header edit [0], close with del or del-tilde (locked), reopen an
+   existing function with ∇NAME, DEFN ERROR cases.
+4. error-display-and-state-indicator -- FN[n] prefixes on errors
+   inside functions, suspended functions, )SI and )SIV, a bare →
+   clearing the top entry, resumption, DEPTH ERROR guard.
+5. quad-input -- ⎕ on the right evaluates a typed line (in the
+   session and inside functions), ⍞ character input and output
+   without a newline, interrupt handling.
+6. i-beams -- ⌶20 through ⌶27 (time of day, CPU time, workspace
+   available, terminals, sign-on time, date, current line, state
+   indicator lines) in sixtieths of a second where APL\360 used
+   them; DOMAIN ERROR elsewhere. A STIR idiom sample showing how to
+   advance the random link from the clock.
+7. session-polish -- the )OFF sign-off line with connect and CPU
+   time, interrupt during a running statement, and a pass over the
+   session transcript against docs/session.md.

@@ -1,0 +1,9 @@
+number = 5
+slug = "quad-input"
+status = "pending"
+description = 'Phase 3 step 5. ⎕ on the right of an expression prompts (the APL\\360 way) ...'
+role = "production"
+context_files = []
+created_at = "2026-09-16T23:15:43"
+task_type = "rust-interpreter"
+commits = []

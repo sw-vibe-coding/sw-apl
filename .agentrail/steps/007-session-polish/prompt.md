@@ -1,0 +1,1 @@
+Phase 3 step 7. The )OFF sign-off line with connect time and CPU time per docs/session.md; interrupt (Ctrl-C) during a running statement reports INTERRUPT and suspends; a pass over the whole session transcript against docs/session.md fixing any divergence; make sure every sample still runs and every parity row in the session section is accurate. Final step: --done.

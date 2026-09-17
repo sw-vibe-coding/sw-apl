@@ -1,0 +1,9 @@
+number = 4
+slug = "error-display-and-state-indicator"
+status = "pending"
+description = "Phase 3 step 4. Errors inside a defined function print FN[n] before the error..."
+role = "production"
+context_files = []
+created_at = "2026-09-16T23:15:43"
+task_type = "rust-interpreter"
+commits = []

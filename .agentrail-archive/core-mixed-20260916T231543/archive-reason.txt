@@ -1,0 +1,1 @@
+core-mixed complete: every APL\360 primitive and operator works
