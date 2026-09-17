@@ -32,21 +32,25 @@ Recorded with [vhs](https://github.com/charmbracelet/vhs) from
 
 ## Status
 
-Early. The `sw-apl` binary evaluates scalar arithmetic at the
-six-space prompt: numeric literals with the high minus, strands,
-plus, minus, times, divide, maximum, minimum, residue, power
-(monadic and dyadic, with scalar extension), parentheses,
-assignment, variables, character literals, iota, rho (shape and
-reshape), ravel and catenate of vectors, reduce along the last
-axis, the complete scalar function family (arithmetic, comparison,
-boolean, circular, factorial and binomial, roll), mixed output with
-semicolons, quad output, `)ORIGIN` `)DIGITS` `)WIDTH`, matrix and
-higher-rank display with width wrapping, and APL\360 error display
-with the caret. The rest of the grammar (indexing, branch, axis,
-scan, inner and outer products) parses but answers `NOT
-IMPLEMENTED` until its step; unknown glyphs are a CHARACTER ERROR
-naming the code point. See the parity checklist for the full
-picture. Batch mode, `)OFF`, help, and the
+Every APL\360 primitive and operator now works on arrays of any
+rank: the scalar functions (arithmetic, comparison, boolean,
+circular, factorial and binomial, roll), the mixed functions
+(iota, rho, ravel, catenate and laminate, take, drop, reverse,
+rotate, transpose, compress, expand, membership, index-of, grade,
+encode, decode, deal), the operators (reduce and scan on any axis,
+inner and outer products), bracket indexing and indexed
+assignment, character data, mixed output, and quad output. Display
+follows the APL\360 rules, including `)WIDTH` wrapping and
+higher-rank planes, and errors print with the caret. `)ORIGIN`,
+`)DIGITS`, and `)WIDTH` reply `WAS n`. Conway's Life runs; see
+`samples/51-life.apl`.
+
+Not there yet: defined functions and the del editor, branching and
+labels, quad input, workspaces (`)SAVE`, `)LOAD`), the I-beam
+system functions, and domino. Those are the next two phases. A
+glyph from a later APL is a CHARACTER ERROR that names it, so the
+Dyalog Life one-liner answers "dfn brace, not APL\360". See the
+parity checklist for the row-by-row picture. Batch mode, `)OFF`, help, and the
 version block work. Implementation proceeds phase by phase per
 `docs/plan.md`: the full value, display, lexer, parser, and
 scalar-function layers next, then mixed functions and operators,
