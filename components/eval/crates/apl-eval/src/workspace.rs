@@ -3,26 +3,17 @@
 
 use std::collections::HashMap;
 
+use apl_prims::Env;
 use apl_value::Array;
 
 /// State of the active workspace.
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Workspace {
     vars: HashMap<String, Array>,
-    /// Index origin (`)ORIGIN`), 0 or 1.
-    pub io: i64,
+    /// Index origin and random link.
+    pub env: Env,
     /// Values written with `⎕←`, in order, not yet displayed.
     pub output: Vec<Array>,
-}
-
-impl Default for Workspace {
-    fn default() -> Self {
-        Workspace {
-            vars: HashMap::new(),
-            io: 1,
-            output: Vec::new(),
-        }
-    }
 }
 
 impl Workspace {

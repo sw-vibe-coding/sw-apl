@@ -1,0 +1,14 @@
+[package]
+name = "apl-scalar-arith"
+description = "sw-apl scalar arithmetic: plus, minus, times, divide, maximum, minimum, residue, power, log, exponential"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-value = { path = "../../../value/crates/apl-value" }
+
+[lints]
+workspace = true

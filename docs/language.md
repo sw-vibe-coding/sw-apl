@@ -99,9 +99,11 @@ Notes:
 - Shriek on non-integers is the gamma function shifted by one.
 - Roll: `query N` is a random integer in the index range of N.
   Deal: `M query N` is M distinct random integers from the index
-  range of N. Both advance the workspace random link, which is
-  saved with the workspace, so a loaded workspace continues its
-  sequence.
+  range of N. Both advance the workspace random link, a Lehmer
+  generator (multiplier 16807, modulus 2^31 - 1) that starts at
+  16807 in a clear workspace and is saved with the workspace, so a
+  loaded workspace continues its sequence and transcripts that use
+  `?` reproduce.
 
 ## Mixed functions
 

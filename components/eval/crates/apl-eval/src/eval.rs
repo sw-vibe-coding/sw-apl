@@ -79,7 +79,7 @@ fn eval_apply(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
             right,
         } => {
             let r = eval_expr(ws, right)?;
-            apply::monadic(func, axis.is_some(), &r, ws.io).map_err(|e| e.at(*pos))
+            apply::monadic(func, axis.is_some(), &r, &mut ws.env).map_err(|e| e.at(*pos))
         }
         Expr::Dyadic {
             func,

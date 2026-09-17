@@ -18,6 +18,9 @@ pub fn iota(r: &Array, io: i64) -> AplResult<Array> {
 
 /// A number that must be a non-negative integer (floats that are
 /// integral are accepted).
+///
+/// # Errors
+/// DOMAIN ERROR for negatives and fractions.
 pub fn non_negative_int(n: Number) -> AplResult<i64> {
     let x = n.as_f64();
     if x < 0.0 || x.fract() != 0.0 {

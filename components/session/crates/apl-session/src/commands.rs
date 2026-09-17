@@ -16,7 +16,7 @@ pub fn system_command(session: &mut Session, command: &str) -> Reply {
         ("OFF", None) if rest.is_empty() => return Reply::Off,
         ("ORIGIN", Some(n @ (0 | 1))) => {
             let new = i64::try_from(n).unwrap_or(1);
-            was_line(std::mem::replace(&mut session.ws.io, new))
+            was_line(std::mem::replace(&mut session.ws.env.io, new))
         }
         ("DIGITS", Some(n @ 1..=16)) => was_line(std::mem::replace(&mut session.digits, n)),
         ("WIDTH", Some(n @ 30..=254)) => was_line(std::mem::replace(&mut session.width, n)),

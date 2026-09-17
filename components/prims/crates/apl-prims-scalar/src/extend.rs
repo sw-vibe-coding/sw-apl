@@ -2,14 +2,16 @@
 
 use apl_value::{AplError, AplResult, Array, Data, ErrorKind, Number};
 
-use crate::dyadic::apply_dyadic;
-use crate::monadic::apply_monadic;
+use crate::dispatch::{DYADIC, MONADIC, apply_dyadic, apply_monadic};
 
 /// Apply monadic scalar function `f` to every element of `r`.
 ///
 /// # Errors
 /// DOMAIN ERROR from the function; NOT IMPLEMENTED for other glyphs.
 pub fn monadic(f: char, r: &Array) -> AplResult<Array> {
+    if !MONADIC.contains(f) {
+        return Err(AplError::new(ErrorKind::NotImplemented));
+    }
     let out = numbers(r)?
         .iter()
         .map(|&x| apply_monadic(f, x))
@@ -26,6 +28,9 @@ pub fn monadic(f: char, r: &Array) -> AplResult<Array> {
 /// RANK ERROR when ranks differ (and neither is a scalar), LENGTH
 /// ERROR when shapes differ, DOMAIN ERROR from the function.
 pub fn dyadic(f: char, l: &Array, r: &Array) -> AplResult<Array> {
+    if !DYADIC.contains(f) {
+        return Err(AplError::new(ErrorKind::NotImplemented));
+    }
     let (ln, rn) = (numbers(l)?, numbers(r)?);
     let shape = agree(l, r)?;
     let n = shape.iter().product::<usize>();

@@ -131,6 +131,30 @@ dependencies = [
 name = "apl-prims-scalar"
 version = "0.1.0"
 dependencies = [
+ "apl-scalar-arith",
+ "apl-scalar-circ",
+ "apl-scalar-logic",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-scalar-arith"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+]
+
+[[package]]
+name = "apl-scalar-circ"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+]
+
+[[package]]
+name = "apl-scalar-logic"
+version = "0.1.0"
+dependencies = [
  "apl-value",
 ]
 

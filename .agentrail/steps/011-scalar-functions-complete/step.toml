@@ -1,6 +1,6 @@
 number = 11
 slug = "scalar-functions-complete"
-status = "pending"
+status = "in-progress"
 description = "Complete the scalar primitive family (apl-prims-scalar): every monadic and dy..."
 role = "production"
 context_files = []

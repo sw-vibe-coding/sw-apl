@@ -36,11 +36,17 @@ Early. The `sw-apl` binary evaluates scalar arithmetic at the
 six-space prompt: numeric literals with the high minus, strands,
 plus, minus, times, divide, maximum, minimum, residue, power
 (monadic and dyadic, with scalar extension), parentheses,
-assignment, variables, iota, rho (shape and reshape), ravel and
-catenate of vectors, reduce along the last axis, quad output,
-`)ORIGIN` and `)DIGITS`, matrix display, and APL\360 error display with the
-caret. Anything else answers `NOT IMPLEMENTED` or a CHARACTER
-ERROR naming the code point. Batch mode, `)OFF`, help, and the
+assignment, variables, character literals, iota, rho (shape and
+reshape), ravel and catenate of vectors, reduce along the last
+axis, the complete scalar function family (arithmetic, comparison,
+boolean, circular, factorial and binomial, roll), mixed output with
+semicolons, quad output, `)ORIGIN` `)DIGITS` `)WIDTH`, matrix and
+higher-rank display with width wrapping, and APL\360 error display
+with the caret. The rest of the grammar (indexing, branch, axis,
+scan, inner and outer products) parses but answers `NOT
+IMPLEMENTED` until its step; unknown glyphs are a CHARACTER ERROR
+naming the code point. See the parity checklist for the full
+picture. Batch mode, `)OFF`, help, and the
 version block work. Implementation proceeds phase by phase per
 `docs/plan.md`: the full value, display, lexer, parser, and
 scalar-function layers next, then mixed functions and operators,

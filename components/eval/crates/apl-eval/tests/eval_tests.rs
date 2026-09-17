@@ -89,7 +89,7 @@ fn iota_rho_reduce_end_to_end() {
 #[test]
 fn the_index_origin_is_workspace_state_not_a_quad_name() {
     let mut ws = Workspace::default();
-    ws.io = 0;
+    ws.env.io = 0;
     assert_eq!(
         nums(&mut ws, "\u{2373}3"),
         [Number::Int(0), Number::Int(1), Number::Int(2)]

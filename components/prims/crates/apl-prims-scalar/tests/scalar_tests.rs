@@ -157,7 +157,7 @@ fn unknown_glyph_is_not_implemented() {
         ErrorKind::NotImplemented
     );
     assert_eq!(
-        monadic('\u{25cb}', &s(1.0)).unwrap_err().kind,
+        monadic('\u{2374}', &s(1.0)).unwrap_err().kind,
         ErrorKind::NotImplemented
     );
 }
@@ -178,4 +178,64 @@ fn integer_results_stay_exact_beyond_2_to_53() {
         nums(&dyadic('+', &max, &s(1.0)).unwrap())[0],
         Number::Float(_)
     ));
+}
+
+#[test]
+fn the_complete_scalar_family_dispatches() {
+    let b = |x: f64| Number::from_f64(x);
+    assert_eq!(
+        nums(&monadic('~', &v(&[0.0, 1.0])).unwrap()),
+        [b(1.0), b(0.0)]
+    );
+    assert_eq!(nums(&monadic('!', &s(5.0)).unwrap()), [b(120.0)]);
+    assert_eq!(nums(&monadic('\u{235f}', &s(1.0)).unwrap()), [b(0.0)]);
+    assert!(
+        matches!(nums(&monadic('\u{25cb}', &s(1.0)).unwrap())[0], Number::Float(x) if (x - std::f64::consts::PI).abs() < 1e-12)
+    );
+    assert_eq!(
+        nums(&dyadic('=', &v(&[1.0, 2.0, 3.0]), &v(&[1.0, 0.0, 3.0])).unwrap()),
+        [b(1.0), b(0.0), b(1.0)]
+    );
+    assert_eq!(
+        nums(&dyadic('\u{2265}', &v(&[1.0, 2.0, 3.0]), &s(2.0)).unwrap()),
+        [b(0.0), b(1.0), b(1.0)]
+    );
+    assert_eq!(
+        nums(&dyadic('\u{2227}', &v(&[0.0, 1.0]), &s(1.0)).unwrap()),
+        [b(0.0), b(1.0)]
+    );
+    assert_eq!(
+        nums(&dyadic('!', &s(2.0), &v(&[3.0, 4.0, 5.0, 6.0])).unwrap()),
+        [b(3.0), b(6.0), b(10.0), b(15.0)]
+    );
+    assert_eq!(
+        nums(&dyadic('\u{235f}', &s(2.0), &s(8.0)).unwrap()),
+        [b(3.0)]
+    );
+    assert_eq!(
+        nums(&dyadic('\u{25cb}', &s(2.0), &s(0.0)).unwrap()),
+        [b(1.0)]
+    );
+    assert_eq!(
+        dyadic('\u{2227}', &s(2.0), &s(1.0)).unwrap_err().kind,
+        ErrorKind::Domain
+    );
+    assert_eq!(monadic('~', &s(2.0)).unwrap_err().kind, ErrorKind::Domain);
+}
+
+#[test]
+fn unknown_glyphs_are_not_implemented_even_on_empty_arguments() {
+    assert_eq!(
+        monadic('\u{233d}', &v(&[])).unwrap_err().kind,
+        ErrorKind::NotImplemented
+    );
+    assert_eq!(
+        dyadic('\u{2373}', &v(&[]), &v(&[])).unwrap_err().kind,
+        ErrorKind::NotImplemented
+    );
+    assert_eq!(
+        monadic('?', &v(&[])).unwrap_err().kind,
+        ErrorKind::NotImplemented,
+        "roll needs the random link; dispatched above the scalar family"
+    );
 }

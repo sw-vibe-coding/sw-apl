@@ -66,17 +66,17 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | `-` | done | done | |
 | `×` | done | done | |
 | `÷` | done | done | 0÷0 is 1 |
-| `⌈` | done | done | tolerance todo |
-| `⌊` | done | done | tolerance todo |
-| `\|` | done | done | tolerance todo |
+| `⌈` | done | done | tolerant |
+| `⌊` | done | done | tolerant |
+| `\|` | done | done | tolerant residue |
 | `*` | done | done | |
-| `⍟` | todo | todo | |
-| `○` | todo | todo | circular table |
-| `!` | todo | todo | gamma extension |
-| `~` | todo | | |
-| `∧ ∨ ⍲ ⍱` | | todo | |
-| `< ≤ = ≥ > ≠` | | todo | with fuzz |
-| `?` | todo | todo | roll, deal; random link |
+| `⍟` | done | done | sample 47 |
+| `○` | done | done | pi times; k from ¯7 to 7 |
+| `!` | done | done | exact to 20, gamma beyond |
+| `~` | done | | 0 and 1 only |
+| `∧ ∨ ⍲ ⍱` | | done | 0 and 1 only |
+| `< ≤ = ≥ > ≠` | | done | with fuzz; samples 15, 47 |
+| `?` | done | todo | roll via the random link (starts at 16807); deal in Phase 2 |
 | Scalar extension, RANK and LENGTH agreement | done | done | prims tests |
 | Exact integers, float promotion, fuzz | done | | value tests |
 

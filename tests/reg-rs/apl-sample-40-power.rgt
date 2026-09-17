@@ -1,0 +1,4 @@
+command = "target/release/sw-apl -f samples/40-power.apl"
+timeout = 60
+exit_code = 0
+desc = "Transcript of samples/40-power.apl"

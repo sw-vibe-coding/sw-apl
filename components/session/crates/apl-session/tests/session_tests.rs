@@ -143,3 +143,12 @@ fn mixed_output_prints_parts_side_by_side() {
         vec!["M", "1 2", "3 4"]
     );
 }
+
+#[test]
+fn roll_is_reproducible_from_a_clear_workspace() {
+    let mut a = Session::default();
+    let mut b = Session::default();
+    let x = out(&mut a, "?6 6 6 6 6 6 6 6");
+    assert_eq!(x, out(&mut b, "?6 6 6 6 6 6 6 6"));
+    assert_ne!(x, out(&mut a, "?6 6 6 6 6 6 6 6"), "the link advances");
+}

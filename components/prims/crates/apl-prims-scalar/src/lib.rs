@@ -1,10 +1,9 @@
-//! Scalar primitive functions (plus, minus, times, divide, upstile,
-//! downstile, stile, star) applied element by element with scalar
-//! extension.
+//! The scalar primitive family applied element by element with
+//! scalar extension. The families themselves live in the
+//! `apl-scalar-*` crates; this crate dispatches and extends.
 
-mod dyadic;
+mod dispatch;
 mod extend;
-mod monadic;
 
-pub use dyadic::apply_dyadic;
+pub use dispatch::{DYADIC, MONADIC, apply_dyadic, apply_monadic};
 pub use extend::{dyadic, monadic, numbers};
