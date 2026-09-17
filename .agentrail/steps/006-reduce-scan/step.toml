@@ -1,9 +1,10 @@
 number = 6
 slug = "reduce-scan"
-status = "in-progress"
+status = "completed"
 description = "Phase 2 step 5. Reduce on the first axis (f⌿) and with an axis bracket f/[k..."
 role = "production"
 context_files = []
 created_at = "2026-09-16T20:25:12"
+completed_at = "2026-09-16T22:19:50"
 task_type = "rust-interpreter"
-commits = []
+commits = ["88a0d4e4a9c1ca742d39ab74d5024b431120cb9c"]

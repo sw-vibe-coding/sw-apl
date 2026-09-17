@@ -1,0 +1,11 @@
+{
+  "task_type": "rust-interpreter",
+  "state": {
+    "number": 6,
+    "step": "reduce-scan"
+  },
+  "action": "tests first; base_index/fold shared between reduce and scan; eval apply resolves the axis for derived functions",
+  "result": "success",
+  "reward": 1,
+  "timestamp": "2026-09-16T22:19:50"
+}

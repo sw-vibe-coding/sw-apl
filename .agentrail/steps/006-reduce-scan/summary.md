@@ -1,0 +1,1 @@
+Reduce on any axis (first-axis and bracket forms), scan on any axis as prefix reductions, full identity table with DOMAIN ERROR where none exists; samples 33 and 52 baselined; 158 tests; reg-rs 34/34; gates green.
