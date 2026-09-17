@@ -1,0 +1,11 @@
+{
+  "task_type": "rust-interpreter",
+  "state": {
+    "number": 2,
+    "step": "branch-and-labels"
+  },
+  "action": "TDD: new apl-scan test crate for labels, then eval and session tests for branch semantics, then the implementation; replaced the obsolete branch_is_not_implemented_yet test; just fmt -> just test -> just clippy -> just gates in order; verified sample 50 by running it before seeding; backed out three baselines the unpatterned reg-seed.sh swept in that were out of this step's scope.",
+  "result": "success",
+  "reward": 1,
+  "timestamp": "2026-09-16T23:58:33"
+}
