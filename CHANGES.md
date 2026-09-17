@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-16
 
+- chore(agentrail): complete 007-inner-outer-product; advance to 008-indexing-and-indexed-assignment
+- feat(ops): inner and outer products
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 006-reduce-scan; advance to 007-inner-outer-product
 - feat(ops): reduce and scan on any axis, identity elements
 - docs(changes): refresh CHANGES.md to HEAD
