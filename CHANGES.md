@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-16
 
+- chore(agentrail): complete 006-reduce-scan; advance to 007-inner-outer-product
+- feat(ops): reduce and scan on any axis, identity elements
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 005-grade-encode-decode-deal; advance to 006-reduce-scan
 - feat(prims): grade, encode, decode, deal
 - docs(changes): refresh CHANGES.md to HEAD
