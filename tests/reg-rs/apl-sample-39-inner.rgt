@@ -1,0 +1,4 @@
+command = "target/release/sw-apl -f samples/39-inner.apl"
+timeout = 60
+exit_code = 0
+desc = "Transcript of samples/39-inner.apl"

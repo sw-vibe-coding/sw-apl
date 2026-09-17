@@ -106,8 +106,8 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | Reduce `f/` last axis | done | scalar dyadic f; identity table for empties |
 | Reduce first axis `f⌿`, axis `f/[k]` | done | ops tests, sample 52 |
 | Scan `f\`, `f⍀` | done | prefix reductions on either axis; samples 33, 52 |
-| Inner product `f.g` | part | parsed (dyadic only); evaluation in Phase 2 |
-| Outer product `∘.f` | part | parsed (dyadic only); evaluation in Phase 2 |
+| Inner product `f.g` | done | any ranks, scalar extension; sample 39 |
+| Outer product `∘.f` | done | result shape is both shapes catenated; sample 38 |
 
 ## Display
 

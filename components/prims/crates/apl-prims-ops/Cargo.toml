@@ -11,6 +11,7 @@ repository.workspace = true
 apl-value = { path = "../../../value/crates/apl-value" }
 apl-prims-scalar = { path = "../apl-prims-scalar" }
 apl-prims-select = { path = "../apl-prims-select" }
+apl-prims-mixed = { path = "../apl-prims-mixed" }
 
 [lints]
 workspace = true

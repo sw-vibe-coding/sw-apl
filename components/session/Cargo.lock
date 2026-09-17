@@ -85,6 +85,7 @@ dependencies = [
 name = "apl-prims-ops"
 version = "0.1.0"
 dependencies = [
+ "apl-prims-mixed",
  "apl-prims-scalar",
  "apl-prims-select",
  "apl-value",

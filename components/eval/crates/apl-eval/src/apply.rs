@@ -1,7 +1,7 @@
 //! Function application: primitive and derived functions.
 
 use apl_ast::{Expr, Function};
-use apl_prims::{Env, apply_dyadic, apply_monadic, axis_index, reduce, scan};
+use apl_prims::{Env, apply_dyadic, apply_monadic, axis_index, inner, outer, reduce, scan};
 use apl_value::{AplError, AplResult, Array, ErrorKind};
 
 use crate::eval::eval_expr;
@@ -29,8 +29,8 @@ pub fn monadic(
     }
 }
 
-/// `left func right`, with the evaluated axis. Inner and outer
-/// products are not implemented yet.
+/// `left func right`, with the evaluated axis: a primitive, an inner
+/// product, or an outer product (the products take no axis).
 pub fn dyadic(
     func: &Function,
     axis: Option<&Array>,
@@ -40,6 +40,8 @@ pub fn dyadic(
 ) -> AplResult<Array> {
     match func {
         Function::Prim(f) => apply_dyadic(*f, l, r, axis, env),
+        Function::Inner { f, g } if axis.is_none() => inner(*f, *g, l, r),
+        Function::Outer { f } if axis.is_none() => outer(*f, l, r),
         _ => Err(AplError::new(ErrorKind::NotImplemented)),
     }
 }

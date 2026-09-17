@@ -112,3 +112,93 @@ fn scan_gives_running_reductions() {
         ErrorKind::NotImplemented
     );
 }
+
+#[test]
+fn outer_product_pairs_every_element() {
+    use apl_prims_ops::outer;
+    assert_eq!(
+        outer('+', &v(&[1, 2, 3]), &v(&[10, 20])).unwrap(),
+        m(3, 2, &[11, 21, 12, 22, 13, 23])
+    );
+    assert_eq!(
+        outer('×', &v(&[1, 2]), &v(&[1, 2, 3])).unwrap(),
+        m(2, 3, &[1, 2, 3, 2, 4, 6])
+    );
+    assert_eq!(
+        outer('=', &v(&[1, 2, 3]), &v(&[1, 2, 3])).unwrap(),
+        reshape(&v(&[3, 3]), &v(&[1, 0, 0, 0, 1, 0, 0, 0, 1])).unwrap()
+    );
+    assert_eq!(outer('+', &s(1), &v(&[1, 2])).unwrap(), v(&[2, 3]));
+    assert_eq!(outer('+', &s(1), &s(2)).unwrap(), s(3));
+    let cube = outer('+', &m(2, 2, &[0, 0, 0, 0]), &v(&[1, 2, 3])).unwrap();
+    assert_eq!(cube.shape, vec![2, 2, 3]);
+    assert_eq!(outer('+', &v(&[]), &v(&[1, 2])).unwrap().shape, vec![0, 2]);
+    assert_eq!(
+        outer('⍳', &v(&[1]), &v(&[1])).unwrap_err().kind,
+        ErrorKind::NotImplemented
+    );
+}
+
+#[test]
+fn inner_product_reduces_over_the_shared_axis() {
+    use apl_prims_ops::inner;
+    assert_eq!(
+        inner('+', '×', &v(&[1, 2, 3]), &v(&[4, 5, 6])).unwrap(),
+        s(32)
+    );
+    let a = m(2, 2, &[1, 2, 3, 4]);
+    let b = m(2, 2, &[5, 6, 7, 8]);
+    assert_eq!(inner('+', '×', &a, &b).unwrap(), m(2, 2, &[19, 22, 43, 50]));
+    assert_eq!(
+        inner('+', '×', &m(2, 3, &[1, 2, 3, 4, 5, 6]), &v(&[1, 2, 3])).unwrap(),
+        v(&[14, 32])
+    );
+    assert_eq!(
+        inner('+', '×', &v(&[1, 2]), &m(2, 3, &[1, 2, 3, 4, 5, 6])).unwrap(),
+        v(&[9, 12, 15])
+    );
+    assert_eq!(
+        inner('∨', '=', &v(&[1, 2, 3, 4, 5]), &v(&[3, 3, 3, 3, 3])).unwrap(),
+        s(1)
+    );
+    assert_eq!(
+        inner('∧', '=', &v(&[1, 2, 3]), &v(&[1, 2, 4])).unwrap(),
+        s(0)
+    );
+    assert_eq!(
+        inner('+', '×', &s(2), &v(&[1, 2, 3])).unwrap(),
+        s(12),
+        "a scalar extends"
+    );
+    assert_eq!(inner('+', '×', &v(&[1, 2, 3]), &s(2)).unwrap(), s(12));
+    assert_eq!(inner('+', '×', &s(2), &s(3)).unwrap(), s(6));
+    assert_eq!(
+        inner('-', '×', &v(&[1, 2, 3]), &v(&[1, 1, 1])).unwrap(),
+        s(2),
+        "reduces from the right"
+    );
+    assert_eq!(
+        inner('+', '×', &v(&[1, 2]), &v(&[1, 2, 3]))
+            .unwrap_err()
+            .kind,
+        ErrorKind::Length
+    );
+    assert_eq!(
+        inner('+', '×', &a, &v(&[1, 2, 3])).unwrap_err().kind,
+        ErrorKind::Length
+    );
+    assert_eq!(
+        inner('+', '×', &v(&[]), &v(&[])).unwrap(),
+        s(0),
+        "empty shared axis gives the identity"
+    );
+    let cube = reshape(&v(&[2, 2, 2]), &v(&[1, 2, 3, 4, 5, 6, 7, 8])).unwrap();
+    assert_eq!(
+        inner('+', '×', &cube, &v(&[1, 1])).unwrap(),
+        m(2, 2, &[3, 7, 11, 15])
+    );
+    assert_eq!(
+        inner('⍳', '×', &v(&[1]), &v(&[1])).unwrap_err().kind,
+        ErrorKind::NotImplemented
+    );
+}

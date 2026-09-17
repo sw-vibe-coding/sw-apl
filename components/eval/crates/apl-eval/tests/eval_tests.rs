@@ -129,13 +129,7 @@ fn mixed_output_yields_every_part() {
 fn indexing_branch_and_derived_forms_are_not_implemented_yet() {
     let mut ws = Workspace::default();
     ws.set("A", apl_value::Array::vector(vec![Number::Int(1)]));
-    for line in [
-        "A[1]",
-        "A[1]\u{2190}2",
-        "\u{2192}3",
-        "A+.\u{d7}A",
-        "A\u{2218}.\u{d7}A",
-    ] {
+    for line in ["A[1]", "A[1]\u{2190}2", "\u{2192}3"] {
         let e = eval_line(&mut ws, line).unwrap_err();
         assert_eq!(e.kind, ErrorKind::NotImplemented, "{line}");
         assert!(e.caret.is_some(), "{line}");

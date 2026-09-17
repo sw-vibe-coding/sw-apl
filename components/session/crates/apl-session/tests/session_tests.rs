@@ -255,3 +255,25 @@ fn reduce_and_scan_on_either_axis_end_to_end() {
     assert_eq!(out(&mut s, "\u{25cb}/\u{2373}0")[0], "DOMAIN ERROR");
     assert_eq!(out(&mut s, "+/[3]M")[0], "INDEX ERROR");
 }
+
+#[test]
+fn inner_and_outer_products_end_to_end() {
+    let mut s = Session::default();
+    assert_eq!(out(&mut s, "1 2 3+.\u{d7}4 5 6"), vec!["32"]);
+    assert_eq!(
+        out(&mut s, "(2 2\u{2374}1 2 3 4)+.\u{d7}2 2\u{2374}5 6 7 8"),
+        vec!["19 22", "43 50"]
+    );
+    assert_eq!(
+        out(&mut s, "1 2 3\u{2218}.+10 20"),
+        vec!["11 21", "12 22", "13 23"]
+    );
+    assert_eq!(
+        out(&mut s, "1 2 3\u{2218}.=1 2 3"),
+        vec!["1 0 0", "0 1 0", "0 0 1"]
+    );
+    assert_eq!(
+        out(&mut s, "1 2\u{2218}.\u{d7}[1]1 2")[0],
+        "NOT IMPLEMENTED"
+    );
+}
