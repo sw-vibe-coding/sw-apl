@@ -1,0 +1,11 @@
+{
+  "task_type": "rust-interpreter",
+  "state": {
+    "number": 8,
+    "step": "indexing-and-indexed-assignment"
+  },
+  "action": "tests first; forms module for non-function forms; const hint tables; Life verified by glider displacement",
+  "result": "success",
+  "reward": 1,
+  "timestamp": "2026-09-16T22:58:15"
+}

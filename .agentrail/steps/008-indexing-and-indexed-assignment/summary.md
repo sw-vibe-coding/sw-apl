@@ -1,0 +1,1 @@
+Bracket indexing and indexed assignment in a new apl-prims-index crate (any-rank index arrays, elided axes, origin-aware, INDEX/RANK/DOMAIN errors at the bracket); workspace split into apl-workspace; CHARACTER ERROR now names later-APL glyphs; samples 48 and 51 (Conway's Life, APL\360 style) baselined; 163 tests; reg-rs 38/38.
