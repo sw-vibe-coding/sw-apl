@@ -14,6 +14,10 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-16
 
+- chore(agentrail): archive core-mvp; init core-mixed saga with 8 steps
+- chore(agentrail): complete 011-scalar-functions-complete; core-mvp saga done
+- feat(prims): complete scalar family -- circular, gamma, logic, roll
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 010-parser-complete; advance to 011-scalar-functions-complete
 - feat(parse): complete parser -- derived functions, axis, indexing, branch, mixed output
 - docs(plan): mixed output in the parser step; reproducible random link; horse-race sample note
