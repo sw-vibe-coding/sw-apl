@@ -1,0 +1,1 @@
+Take/drop/reverse/rotate/transpose in a new apl-prims-select crate on a generic gather; axis brackets for monadic functions; samples 07 08 10 13 34 35 44 baselined; 140 tests; reg-rs 27/27; gates green.

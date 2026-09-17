@@ -1,9 +1,10 @@
 number = 2
 slug = "take-drop-reverse-rotate-transpose"
-status = "in-progress"
+status = "completed"
 description = "Phase 2 step 2. ↑ ↓ per axis with negative counts and overtake fill (0 or..."
 role = "production"
 context_files = []
 created_at = "2026-09-16T20:25:11"
+completed_at = "2026-09-16T21:54:06"
 task_type = "rust-interpreter"
-commits = []
+commits = ["928979bece3b4f5f9986e78dde364c48e5a54f9c"]
