@@ -1,0 +1,1 @@
+Parser complete: apl-ast crate, derived functions (reduce/scan both axes, inner, outer), axis brackets, bracket indexing with elided axes, indexed assignment, branch, quad forms, mixed output; strands and balance moved into the lexer; eval Output enum; session prints mixed output; 108 tests; reg-rs 13/13; gates green by exit code.

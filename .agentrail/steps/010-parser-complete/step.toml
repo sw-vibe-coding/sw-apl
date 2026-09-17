@@ -1,9 +1,10 @@
 number = 10
 slug = "parser-complete"
-status = "in-progress"
+status = "completed"
 description = "Complete apl-parse: operators reduce/scan (last and first axis) with axis bra..."
 role = "production"
 context_files = []
 created_at = "2026-09-16T11:12:40"
+completed_at = "2026-09-16T19:28:47"
 task_type = "rust-interpreter"
-commits = []
+commits = ["a0d02ea9f2a598a5e22dae4da06a0bd753d319ef"]
