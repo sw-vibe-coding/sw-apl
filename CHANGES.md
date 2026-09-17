@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-16
 
+- chore(agentrail): complete 004-compress-expand-membership-indexof; advance to 005-grade-encode-decode-deal
+- feat(prims): compress, expand, membership, index-of
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 003-repl-line-editing; advance to 004-compress-expand-membership-indexof
 - feat(cli): line editing with history in the interactive session
 - docs(changes): refresh CHANGES.md to HEAD
