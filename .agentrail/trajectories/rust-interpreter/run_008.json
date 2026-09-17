@@ -1,0 +1,11 @@
+{
+  "task_type": "rust-interpreter",
+  "state": {
+    "number": 9,
+    "step": "glyph-table-codegen"
+  },
+  "action": "TOML source of truth; build.rs codegen into OUT_DIR; moved tables out of apl-value into their own crate to stay in the module gate; owner correction on gate order",
+  "result": "success",
+  "reward": 1,
+  "timestamp": "2026-09-16T23:07:09"
+}
