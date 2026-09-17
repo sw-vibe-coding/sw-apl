@@ -1,0 +1,11 @@
+{
+  "task_type": "rust-interpreter",
+  "state": {
+    "number": 4,
+    "step": "compress-expand-membership-indexof"
+  },
+  "action": "tests first; bool_vector moved to mixed to keep the mask module at four fns; axis_dyadic helper in dispatch",
+  "result": "success",
+  "reward": 1,
+  "timestamp": "2026-09-16T22:02:13"
+}
