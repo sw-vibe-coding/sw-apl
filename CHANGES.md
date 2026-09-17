@@ -14,6 +14,11 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-16
 
+- chore(agentrail): complete 009-glyph-table-codegen; advance to 010-axis-forms-and-rank-checks
+- refactor: generate the glyph tables from data/glyphs.toml
+- chore(agentrail): complete 008-indexing-and-indexed-assignment; advance to 009-axis-forms-and-rank-checks
+- feat(eval): bracket indexing and indexed assignment
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 007-inner-outer-product; advance to 008-indexing-and-indexed-assignment
 - feat(ops): inner and outer products
 - docs(changes): refresh CHANGES.md to HEAD
