@@ -1,6 +1,6 @@
 //! iota, rho, ravel, catenate.
 
-use apl_prims_mixed::{catenate, iota, ravel, reshape, shape};
+use apl_prims_mixed::{iota, ravel, reshape, shape};
 use apl_value::{Array, Data, ErrorKind, Number};
 
 fn ints(xs: &[i64]) -> Vec<Number> {
@@ -75,22 +75,4 @@ fn ravel_flattens() {
     let m = reshape(&v(&[2, 2]), &v(&[1, 2, 3, 4])).unwrap();
     assert_eq!(ravel(&m), v(&[1, 2, 3, 4]));
     assert_eq!(ravel(&s(9)), v(&[9]));
-}
-
-#[test]
-fn catenate_vectors_and_scalars() {
-    assert_eq!(catenate(&v(&[1, 2]), &v(&[3])).unwrap(), v(&[1, 2, 3]));
-    assert_eq!(catenate(&s(0), &v(&[1, 2])).unwrap(), v(&[0, 1, 2]));
-    assert_eq!(catenate(&v(&[1, 2]), &s(3)).unwrap(), v(&[1, 2, 3]));
-    assert_eq!(catenate(&s(1), &s(2)).unwrap(), v(&[1, 2]));
-    assert_eq!(catenate(&v(&[]), &v(&[1, 2, 3])).unwrap(), v(&[1, 2, 3]));
-}
-
-#[test]
-fn catenate_of_matrices_is_not_implemented_yet() {
-    let m = reshape(&v(&[2, 2]), &v(&[1, 2, 3, 4])).unwrap();
-    assert_eq!(
-        catenate(&m, &m).unwrap_err().kind,
-        ErrorKind::NotImplemented
-    );
 }

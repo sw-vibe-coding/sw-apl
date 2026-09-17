@@ -1,5 +1,5 @@
 [workspace]
-members = ["crates/apl-prims-scalar", "crates/apl-prims-mixed", "crates/apl-prims-ops", "crates/apl-prims", "crates/apl-scalar-arith", "crates/apl-scalar-circ", "crates/apl-scalar-logic"]
+members = ["crates/apl-prims-scalar", "crates/apl-prims-mixed", "crates/apl-prims-ops", "crates/apl-prims-join", "crates/apl-prims", "crates/apl-scalar-arith", "crates/apl-scalar-circ", "crates/apl-scalar-logic"]
 resolver = "2"
 
 [workspace.package]

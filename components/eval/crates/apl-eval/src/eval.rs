@@ -56,11 +56,12 @@ pub fn eval_expr(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
             ws.set(name, v.clone());
             Ok(v)
         }
-        Expr::Monadic { .. } | Expr::Dyadic { .. } => eval_apply(ws, expr),
+        Expr::Monadic { .. } => eval_monadic(ws, expr),
+        Expr::Dyadic { .. } => eval_dyadic(ws, expr),
         Expr::QuadOut { .. }
         | Expr::QuadIn(_)
         | Expr::QuoteQuadOut { .. }
-        | Expr::QuoteQuadIn(_) => eval_quad(ws, expr),
+        | Expr::QuoteQuadIn(_) => apply::quad(ws, expr),
         Expr::Index { pos, .. } | Expr::IndexedAssign { pos, .. } | Expr::Branch { pos, .. } => {
             Err(AplError::new(ErrorKind::NotImplemented).at(*pos))
         }
@@ -68,45 +69,37 @@ pub fn eval_expr(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
     }
 }
 
-/// Function application: the right argument is evaluated first, as
-/// on a terminal reading right to left.
-fn eval_apply(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
-    match expr {
-        Expr::Monadic {
-            func,
-            pos,
-            axis,
-            right,
-        } => {
-            let r = eval_expr(ws, right)?;
-            apply::monadic(func, axis.is_some(), &r, &mut ws.env).map_err(|e| e.at(*pos))
-        }
-        Expr::Dyadic {
-            func,
-            pos,
-            axis,
-            left,
-            right,
-        } => {
-            let r = eval_expr(ws, right)?;
-            let l = eval_expr(ws, left)?;
-            apply::dyadic(func, axis.is_some(), &l, &r).map_err(|e| e.at(*pos))
-        }
-        _ => unreachable!("eval_apply only receives applications"),
-    }
+/// `f right`: the right argument is evaluated first, as on a terminal
+/// reading right to left; then the axis.
+fn eval_monadic(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
+    let Expr::Monadic {
+        func,
+        pos,
+        axis,
+        right,
+    } = expr
+    else {
+        unreachable!("eval_monadic only receives monadic applications")
+    };
+    let r = eval_expr(ws, right)?;
+    let axis = apply::eval_axis(ws, axis.as_deref())?;
+    apply::monadic(func, axis.as_ref(), &r, &mut ws.env).map_err(|e| e.at(*pos))
 }
 
-/// Quad forms: quad output and quad input.
-fn eval_quad(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
-    match expr {
-        Expr::QuadOut { value, .. } => {
-            let v = eval_expr(ws, value)?;
-            ws.output.push(v.clone());
-            Ok(v)
-        }
-        Expr::QuadIn(pos) | Expr::QuoteQuadIn(pos) | Expr::QuoteQuadOut { pos, .. } => {
-            Err(AplError::new(ErrorKind::NotImplemented).at(*pos))
-        }
-        _ => unreachable!("eval_quad only receives quad forms"),
-    }
+/// `left f right`: right, then left, then the axis.
+fn eval_dyadic(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
+    let Expr::Dyadic {
+        func,
+        pos,
+        axis,
+        left,
+        right,
+    } = expr
+    else {
+        unreachable!("eval_dyadic only receives dyadic applications")
+    };
+    let r = eval_expr(ws, right)?;
+    let l = eval_expr(ws, left)?;
+    let axis = apply::eval_axis(ws, axis.as_deref())?;
+    apply::dyadic(func, axis.as_ref(), &l, &r, &ws.env).map_err(|e| e.at(*pos))
 }

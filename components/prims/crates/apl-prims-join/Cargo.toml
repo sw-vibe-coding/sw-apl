@@ -1,0 +1,14 @@
+[package]
+name = "apl-prims-join"
+description = "sw-apl catenate and laminate along an axis"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-value = { path = "../../../value/crates/apl-value" }
+
+[lints]
+workspace = true

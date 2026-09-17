@@ -1,4 +1,4 @@
-//! Shape and reshape.
+//! Shape, reshape, ravel.
 
 use apl_prims_scalar::numbers;
 use apl_value::{AplError, AplResult, Array, Data, ErrorKind, Number};
@@ -14,6 +14,15 @@ pub fn shape(r: &Array) -> Array {
             .map(|&n| Number::Int(i64::try_from(n).unwrap_or(i64::MAX)))
             .collect(),
     )
+}
+
+/// `,r`: all elements as a vector.
+#[must_use]
+pub fn ravel(r: &Array) -> Array {
+    Array {
+        shape: vec![r.data.count()],
+        data: r.data.clone(),
+    }
 }
 
 /// `l⍴r`: the elements of `r` cycled into shape `l`. An empty `r`

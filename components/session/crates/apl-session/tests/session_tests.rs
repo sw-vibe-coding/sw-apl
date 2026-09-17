@@ -152,3 +152,21 @@ fn roll_is_reproducible_from_a_clear_workspace() {
     assert_eq!(x, out(&mut b, "?6 6 6 6 6 6 6 6"));
     assert_ne!(x, out(&mut a, "?6 6 6 6 6 6 6 6"), "the link advances");
 }
+
+#[test]
+fn catenate_with_axis_and_laminate_end_to_end() {
+    let mut s = Session::default();
+    assert_eq!(
+        out(&mut s, "A\u{2190}2 2\u{2374}\u{2373}4"),
+        Vec::<String>::new()
+    );
+    assert_eq!(out(&mut s, "A,A"), vec!["1 2 1 2", "3 4 3 4"]);
+    assert_eq!(out(&mut s, "A,[1]A"), vec!["1 2", "3 4", "1 2", "3 4"]);
+    assert_eq!(out(&mut s, "A,9 8"), vec!["1 2 9", "3 4 8"]);
+    assert_eq!(out(&mut s, "1 2 3,[0.5]4 5 6"), vec!["1 2 3", "4 5 6"]);
+    assert_eq!(out(&mut s, "1 2 3,[1.5]4 5 6"), vec!["1 4", "2 5", "3 6"]);
+    assert_eq!(out(&mut s, ")ORIGIN 0"), vec!["WAS 1"]);
+    assert_eq!(out(&mut s, "A,[0]A"), vec!["1 2", "3 4", "1 2", "3 4"]);
+    assert_eq!(out(&mut s, "A,[2]A")[0], "INDEX ERROR");
+    assert_eq!(out(&mut s, "\u{233d}[1]A")[0], "NOT IMPLEMENTED");
+}

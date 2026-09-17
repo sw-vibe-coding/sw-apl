@@ -1,6 +1,6 @@
 number = 1
 slug = "ravel-catenate-laminate"
-status = "pending"
+status = "in-progress"
 description = "Phase 2 step 1 (docs/plan.md). In apl-prims-mixed (split a new crate if the m..."
 role = "production"
 context_files = []

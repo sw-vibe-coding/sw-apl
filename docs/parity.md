@@ -86,7 +86,7 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 |---|---|---|---|
 | `⍳` | done | todo | index of |
 | `⍴` | done | done | |
-| `,` | done | part | vectors only; matrices, axis, laminate todo |
+| `,` | done | done | any rank, axis bracket, laminate, scalar and rank-1 conformance; sample 49 |
 | `⌽ ⊖` | todo | todo | |
 | `⍉` | todo | todo | |
 | `↑ ↓` | | todo | |
