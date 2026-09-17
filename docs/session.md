@@ -96,8 +96,10 @@ function per documented function.
 
 - Unicode glyph input is expected; see `input-methods.md` for
   Espanso and Emacs setups.
-- Line editing with history is provided by the CLI; history is
-  kept in a per-user file.
+- Line editing with history: up and down arrows recall earlier
+  input for editing or re-submission (so `+/?6 6` can be rolled
+  again with up arrow and enter); the history persists in
+  `~/.sw-apl_history` across sessions.
 - Interrupt (Ctrl-C) during a running statement reports INTERRUPT
   and returns to the prompt with the state indicator preserved.
 - Ctrl-D at the prompt behaves like `)OFF`.

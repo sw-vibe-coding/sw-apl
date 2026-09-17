@@ -1,0 +1,9 @@
+number = 3
+slug = "repl-line-editing"
+status = "in-progress"
+description = "Owner request: in the interactive session, up arrow recalls prior input for e..."
+role = "production"
+context_files = []
+created_at = "2026-09-16T21:54:46"
+task_type = "rust-cli"
+commits = []

@@ -1,65 +1,77 @@
-//! The two shells around the session: batch (file or stdin, with
-//! echoed input) and the interactive six-space-indent loop.
+//! Batch mode: run a file or stdin, echoing each input line with the
+//! indent so the transcript reads like a session. Invalid UTF-8 on a
+//! line is reported as a CHARACTER ERROR and the run continues.
 
 use std::fs;
-use std::io::{self, Write};
+use std::io::{self, Read, Write};
 use std::path::Path;
 
 use apl_session::{INDENT, Reply, Session};
 
-use crate::decode::{Line, lines, read_line};
-
-/// Run every line of `path` in batch mode.
-pub fn run_file(path: &Path, echo: bool) -> io::Result<()> {
-    run_lines(&lines(&fs::read(path)?), echo)
+/// One input line: its text (lossy when invalid) and, when the bytes
+/// were not valid UTF-8, the offset of the first bad sequence.
+#[derive(Debug, PartialEq, Eq)]
+pub struct Line {
+    pub text: String,
+    pub bad_at: Option<usize>,
 }
 
-/// Run every line read from stdin in batch mode.
-pub fn run_stdin(echo: bool) -> io::Result<()> {
+impl Line {
+    /// Decode one line's bytes (without the newline).
+    #[must_use]
+    pub fn decode(bytes: &[u8]) -> Line {
+        let bad_at = std::str::from_utf8(bytes).err().map(|e| e.valid_up_to());
+        Line {
+            text: String::from_utf8_lossy(bytes).into_owned(),
+            bad_at,
+        }
+    }
+
+    /// Hand the line to the session, or report the bad bytes.
+    pub fn respond(&self, session: &mut Session) -> Reply {
+        match self.bad_at {
+            None => session.respond(&self.text),
+            Some(offset) => Reply::Output(vec![format!(
+                "CHARACTER ERROR: invalid UTF-8 at byte {offset}"
+            )]),
+        }
+    }
+}
+
+/// Split a byte stream into lines (LF or CRLF), decoding each. A
+/// final newline does not start an extra empty line.
+#[must_use]
+pub fn lines(bytes: &[u8]) -> Vec<Line> {
+    if bytes.is_empty() {
+        return Vec::new();
+    }
+    let body = bytes.strip_suffix(b"\n").unwrap_or(bytes);
+    body.split(|&b| b == b'\n')
+        .map(|l| Line::decode(l.strip_suffix(b"\r").unwrap_or(l)))
+        .collect()
+}
+
+/// Run every line of `path` (or of stdin when `None`) in batch mode.
+///
+/// # Errors
+/// I/O errors reading the input or writing the transcript.
+pub fn run_batch(path: Option<&Path>, echo: bool) -> io::Result<()> {
     let mut bytes = Vec::new();
-    io::Read::read_to_end(&mut io::stdin().lock(), &mut bytes)?;
-    run_lines(&lines(&bytes), echo)
-}
-
-fn run_lines(lines: &[Line], echo: bool) -> io::Result<()> {
+    if let Some(p) = path {
+        bytes = fs::read(p)?;
+    } else {
+        io::stdin().lock().read_to_end(&mut bytes)?;
+    }
     let mut out = io::stdout().lock();
     let mut session = Session::default();
-    for line in lines {
+    for line in &lines(&bytes) {
         if echo {
             writeln!(out, "{INDENT}{}", line.text)?;
         }
         match line.respond(&mut session) {
             Reply::Off => break,
-            Reply::Output(output) => {
-                for text in output {
-                    writeln!(out, "{text}")?;
-                }
-            }
+            Reply::Output(output) => output.iter().try_for_each(|t| writeln!(out, "{t}"))?,
         }
     }
     out.flush()
-}
-
-/// Interactive loop: print the indent, read a line, print the
-/// reply in column one. Ends at `)OFF` or end of input.
-pub fn run_interactive() -> io::Result<()> {
-    let mut input = io::stdin().lock();
-    let mut out = io::stdout().lock();
-    let mut session = Session::default();
-    loop {
-        write!(out, "{INDENT}")?;
-        out.flush()?;
-        let Some(line) = read_line(&mut input)? else {
-            writeln!(out)?;
-            return Ok(());
-        };
-        match line.respond(&mut session) {
-            Reply::Off => return Ok(()),
-            Reply::Output(output) => {
-                for text in output {
-                    writeln!(out, "{text}")?;
-                }
-            }
-        }
-    }
 }

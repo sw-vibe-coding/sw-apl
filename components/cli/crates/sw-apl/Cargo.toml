@@ -14,6 +14,7 @@ path = "src/main.rs"
 [dependencies]
 apl-session = { path = "../../../session/crates/apl-session" }
 clap = { version = "4", features = ["derive"] }
+rustyline = "18"
 
 [lints]
 workspace = true

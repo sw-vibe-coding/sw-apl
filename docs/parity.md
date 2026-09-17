@@ -48,6 +48,7 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | Del editor: headers, locals, `[n]`, `[⎕]`, `[∆n]`, fractional insert, `⍫` | todo | |
 | Dynamic scoping, recursion, state indicator | todo | |
 | Six-space prompt, batch echo, `)OFF` | done | cli tests |
+| Line editing with history (up arrow), Ctrl-C cancels, Ctrl-D ends | done | manual (rustyline); tape |
 | Error display: name, statement, caret | done | session tests |
 | Error display inside functions (`FN[n]`), `)SI` | todo | |
 | `)WIDTH` wrapping with six-space continuation | done | display tests, sample 45 |

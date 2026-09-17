@@ -1,4 +1,4 @@
-number = 3
+number = 4
 slug = "compress-expand-membership-indexof"
 status = "pending"
 description = "Phase 2 step 3. Boolean compress and expand along the last or first axis (Fun..."

@@ -1,7 +1,7 @@
 number = 7
-slug = "indexing-and-indexed-assignment"
+slug = "inner-outer-product"
 status = "pending"
-description = "Phase 2 step 7. Evaluate Expr::Index: A[I] for vectors with index arrays of a..."
+description = "Phase 2 step 6. Inner product f.g: vector·vector to scalar, matrix·matrix w..."
 role = "production"
 context_files = []
 created_at = "2026-09-16T20:25:12"

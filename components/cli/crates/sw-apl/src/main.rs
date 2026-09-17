@@ -4,7 +4,7 @@
 //! batch mode and hands each input line to the session.
 
 mod cli;
-mod decode;
+mod repl;
 mod shell;
 
 use std::io::IsTerminal;
@@ -16,9 +16,9 @@ fn main() -> ExitCode {
     let args = cli::Args::parse();
     let echo = !args.no_echo;
     let outcome = match args.file {
-        Some(path) => shell::run_file(&path, echo),
-        None if std::io::stdin().is_terminal() => shell::run_interactive(),
-        None => shell::run_stdin(echo),
+        Some(path) => shell::run_batch(Some(&path), echo),
+        None if std::io::stdin().is_terminal() => repl::run_interactive(),
+        None => shell::run_batch(None, echo),
     };
     match outcome {
         Ok(()) => ExitCode::SUCCESS,

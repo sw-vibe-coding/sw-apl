@@ -2,6 +2,9 @@ MODES:
   sw-apl                 Interactive session when stdin is a terminal.
                          The prompt is six spaces; output starts in
                          column one, like an APL\360 printing terminal.
+                         Up arrow recalls earlier lines for editing or
+                         re-submission (history in ~/.sw-apl_history);
+                         Ctrl-C cancels a line, Ctrl-D ends like )OFF.
   sw-apl -f FILE         Batch: run FILE line by line, echoing each
                          input line with the indent so the transcript
                          reads like a session. Stops at )OFF.
