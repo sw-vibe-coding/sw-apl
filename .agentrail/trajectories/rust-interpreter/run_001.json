@@ -1,0 +1,11 @@
+{
+  "task_type": "rust-interpreter",
+  "state": {
+    "number": 1,
+    "step": "user-functions"
+  },
+  "action": "TDD: wrote failing parse/eval/session/CLI tests first, then the implementation; just fmt -> just test -> just clippy -> just gates in order; sw-checklist drove the crate split (measured, then split before adding); scripts/reg-seed.sh 53 and scripts/reg.sh run for the transcript baseline.",
+  "result": "success",
+  "reward": 1,
+  "timestamp": "2026-09-16T23:47:30"
+}

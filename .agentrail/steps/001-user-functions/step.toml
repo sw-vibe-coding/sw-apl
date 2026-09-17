@@ -1,9 +1,10 @@
 number = 1
 slug = "user-functions"
-status = "in-progress"
+status = "completed"
 description = 'Phase 3 step 1 (docs/plan.md). Defined functions in pure APL\360. Lexer alrea...'
 role = "production"
 context_files = []
 created_at = "2026-09-16T23:15:43"
+completed_at = "2026-09-16T23:47:30"
 task_type = "rust-interpreter"
-commits = []
+commits = ["f5a8d8af21fd8874e5323546d19ac18cfad206c7"]
