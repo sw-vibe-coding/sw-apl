@@ -45,8 +45,11 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | Bracket indexing `A[I;J]`, elided axes, index arrays of any rank | done | index tests, sample 48 |
 | Indexed assignment with scalar extension | done | index tests, sample 48 |
 | Branch `→`, labels, `→0`, empty branch | part | `→` parsed (statement start only); semantics in Phase 3 |
-| Del editor: headers, locals, `[n]`, `[⎕]`, `[∆n]`, fractional insert, `⍫` | todo | |
-| Dynamic scoping, recursion, state indicator | todo | |
+| Defined functions: del headers (`NAME`, `NAME B`, `A NAME B`, each with or without `R←`), locals, calls, the result at exit | done | eval/session tests, sample 53 |
+| Definition mode: an opening `∇` collects body lines behind the `[n]` prompt until a closing `∇` | done | session/cli tests, sample 53 |
+| Del editor: `[n]`, `[⎕]`, `[n⎕]`, `[∆n]`, fractional insert, header edit `[0]`, reopen `∇NAME`, `⍫` | todo | |
+| Dynamic scoping, recursion | done | eval tests, sample 53. Recursion is bounded by DEPTH ERROR; a terminating recursion needs the branch step |
+| State indicator, suspended functions | todo | |
 | Six-space prompt, batch echo, `)OFF` | done | cli tests |
 | Line editing with history (up arrow), Ctrl-C cancels, Ctrl-D ends | done | manual (rustyline); tape |
 | Error display: name, statement, caret | done | session tests |
@@ -144,5 +147,6 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 |---|---|---|
 | SYNTAX, VALUE, DOMAIN, RANK, LENGTH | done | done |
 | CHARACTER (with code point) | done | done |
-| INDEX, DEFN, DEPTH, WS FULL, INTERRUPT | todo | done |
+| INDEX, DEFN, DEPTH | done | done |
+| WS FULL, INTERRUPT | todo | done |
 | NOT IMPLEMENTED (temporary, must reach zero) | in use | done |

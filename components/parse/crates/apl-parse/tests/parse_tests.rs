@@ -2,16 +2,25 @@
 //! indexing, assignment forms, branch, and mixed output.
 
 use apl_ast::{Expr, Function};
-use apl_parse::parse;
+use apl_parse::{parse, parse_header};
 use apl_value::{Data, ErrorKind, Number};
 
+/// No name holds a function unless a test says so.
+fn none(_: &str) -> bool {
+    false
+}
 fn one(line: &str) -> Expr {
-    parse(line)
+    parse(line, &none)
+        .unwrap()
+        .unwrap_or_else(|| panic!("nothing parsed for {line}"))
+}
+fn called(line: &str, names: &[&str]) -> Expr {
+    parse(line, &|n: &str| names.contains(&n))
         .unwrap()
         .unwrap_or_else(|| panic!("nothing parsed for {line}"))
 }
 fn syntax_at(line: &str, caret: usize) {
-    let e = parse(line).unwrap_err();
+    let e = parse(line, &none).unwrap_err();
     assert_eq!(e.kind, ErrorKind::Syntax, "{line}");
     assert_eq!(e.caret, Some(caret), "{line}");
 }
@@ -30,8 +39,8 @@ fn lit_ints(e: &Expr) -> Vec<i64> {
 
 #[test]
 fn empty_line_parses_to_nothing() {
-    assert_eq!(parse("").unwrap(), None);
-    assert_eq!(parse("  \u{235d} c").unwrap(), None);
+    assert_eq!(parse("", &none).unwrap(), None);
+    assert_eq!(parse("  \u{235d} c", &none).unwrap(), None);
 }
 
 #[test]
@@ -381,4 +390,79 @@ fn syntax_error_carets() {
     syntax_at("L:1", 1);
     syntax_at("\u{2207}F", 0);
     syntax_at("1 2 3 4+", 7);
+}
+
+#[test]
+fn del_headers_take_the_six_forms() {
+    let niladic = parse_header("RACE").unwrap();
+    assert_eq!(niladic.name, "RACE");
+    assert_eq!(
+        (niladic.result, niladic.left, niladic.right),
+        (None, None, None)
+    );
+    let monadic = parse_header("FAC N").unwrap();
+    assert_eq!(
+        (monadic.name.as_str(), monadic.right.as_deref()),
+        ("FAC", Some("N"))
+    );
+    let dyadic = parse_header("A PLUS B").unwrap();
+    assert_eq!(dyadic.left.as_deref(), Some("A"));
+    let with_result = parse_header("R\u{2190}A HYP B;T;U").unwrap();
+    assert_eq!(with_result.result.as_deref(), Some("R"));
+    assert_eq!(with_result.name, "HYP");
+    assert_eq!(with_result.locals, ["T", "U"]);
+    assert_eq!(with_result.names(), ["R", "A", "B", "T", "U"]);
+}
+
+#[test]
+fn a_malformed_header_is_defn_error() {
+    for bad in ["", "A B C D", "R\u{2190}", "1 F", "F B;", "F B;1"] {
+        assert_eq!(
+            parse_header(bad).unwrap_err().kind,
+            ErrorKind::Defn,
+            "{bad}"
+        );
+    }
+}
+
+#[test]
+fn a_name_that_holds_a_function_is_called() {
+    let Expr::Monadic { func, right, .. } = called("FAC 5", &["FAC"]) else {
+        panic!()
+    };
+    assert_eq!(func, Function::Defined("FAC".to_string()));
+    assert_eq!(lit_ints(&right), [5]);
+    let Expr::Dyadic { func, left, .. } = called("3 HYP 4", &["HYP"]) else {
+        panic!()
+    };
+    assert_eq!(func, Function::Defined("HYP".to_string()));
+    assert_eq!(lit_ints(&left), [3]);
+    // A bare name stays a reference; the evaluator calls it niladically.
+    assert!(matches!(called("RACE", &["RACE"]), Expr::Name(_, 0)));
+}
+
+#[test]
+fn a_function_name_is_not_an_operand() {
+    // `FAC FAC 5` is two monadic calls, not a dyadic one.
+    let Expr::Monadic { right, .. } = called("FAC FAC 5", &["FAC"]) else {
+        panic!()
+    };
+    assert!(matches!(*right, Expr::Monadic { .. }));
+    // `FAC \u{2373}3` is a call on iota 3, not dyadic index-of.
+    let Expr::Monadic { right, .. } = called("FAC \u{2373}3", &["FAC"]) else {
+        panic!()
+    };
+    assert!(matches!(*right, Expr::Monadic { .. }));
+    // Long right scope still reaches across the call.
+    let Expr::Dyadic { func, right, .. } = called("2\u{d7}FAC 3+1", &["FAC"]) else {
+        panic!()
+    };
+    assert_eq!(func, Function::Prim('\u{d7}'));
+    assert!(matches!(*right, Expr::Monadic { .. }));
+}
+
+#[test]
+fn a_defined_function_takes_no_axis() {
+    let e = parse("FAC[1] 5", &|n: &str| n == "FAC").unwrap_err();
+    assert_eq!(e.kind, ErrorKind::Syntax);
 }

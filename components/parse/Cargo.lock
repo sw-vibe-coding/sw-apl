@@ -30,6 +30,16 @@ version = "0.1.0"
 dependencies = [
  "apl-ast",
  "apl-lex",
+ "apl-scan",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-scan"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-lex",
  "apl-value",
 ]
 

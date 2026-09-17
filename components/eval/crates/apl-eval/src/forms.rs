@@ -4,7 +4,7 @@
 use apl_ast::{Expr, Indexes};
 use apl_prims::{index, indexed_assign};
 use apl_value::{AplError, AplResult, Array, ErrorKind};
-use apl_workspace::Workspace;
+use apl_workspace::{Output, Workspace};
 
 use crate::eval::eval_expr;
 
@@ -16,7 +16,7 @@ pub fn quad(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
     match expr {
         Expr::QuadOut { value, .. } => {
             let v = eval_expr(ws, value)?;
-            ws.output.push(v.clone());
+            ws.output.push(Output::Value(v.clone()));
             Ok(v)
         }
         Expr::QuadIn(pos) | Expr::QuoteQuadIn(pos) | Expr::QuoteQuadOut { pos, .. } => {

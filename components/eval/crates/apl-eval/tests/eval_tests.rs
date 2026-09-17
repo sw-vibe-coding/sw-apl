@@ -1,7 +1,8 @@
 //! Evaluator over the AST with a workspace of variables.
 
 use apl_eval::{Output, Workspace, eval_line};
-use apl_value::{Data, ErrorKind, Number};
+use apl_parse::parse_header;
+use apl_value::{Array, Data, ErrorKind, Number};
 
 fn nums(ws: &mut Workspace, line: &str) -> Vec<Number> {
     match eval_line(ws, line).unwrap().value().unwrap().data {
@@ -165,4 +166,103 @@ fn indexing_and_indexed_assignment_evaluate() {
         nums(&mut ws, "(2 2\u{2374}\u{2373}4)[2;1]"),
         [Number::Int(3)]
     );
+}
+
+/// Define a function from a del header and its body lines.
+fn define(ws: &mut Workspace, header: &str, body: &[&str]) {
+    let mut defn = parse_header(header).unwrap();
+    defn.body = body.iter().map(|&l| l.to_string()).collect();
+    ws.define(defn);
+}
+
+#[test]
+fn a_defined_function_binds_its_arguments_and_yields_its_result() {
+    let mut ws = Workspace::default();
+    define(&mut ws, "R\u{2190}DOUBLE N", &["R\u{2190}N+N"]);
+    define(&mut ws, "R\u{2190}A HYP B", &["R\u{2190}((A*2)+B*2)*0.5"]);
+    define(&mut ws, "R\u{2190}TEN", &["R\u{2190}10"]);
+    assert_eq!(nums(&mut ws, "DOUBLE 21"), [Number::Int(42)]);
+    assert_eq!(nums(&mut ws, "3 HYP 4"), [Number::Int(5)]);
+    assert_eq!(nums(&mut ws, "TEN"), [Number::Int(10)]);
+    assert_eq!(nums(&mut ws, "1+TEN"), [Number::Int(11)]);
+    assert_eq!(nums(&mut ws, "DOUBLE DOUBLE 1+2"), [Number::Int(12)]);
+}
+
+#[test]
+fn locals_shadow_globals_and_are_restored() {
+    let mut ws = Workspace::default();
+    eval_line(&mut ws, "T\u{2190}99").unwrap();
+    eval_line(&mut ws, "G\u{2190}7").unwrap();
+    define(
+        &mut ws,
+        "R\u{2190}F N;T",
+        &["T\u{2190}N\u{d7}2", "R\u{2190}T+G"],
+    );
+    assert_eq!(nums(&mut ws, "F 5"), [Number::Int(17)]);
+    assert_eq!(nums(&mut ws, "T"), [Number::Int(99)], "T is restored");
+    // A name the header localizes starts the call undefined.
+    define(&mut ws, "R\u{2190}H;T", &["R\u{2190}T"]);
+    assert_eq!(eval_line(&mut ws, "H").unwrap_err().kind, ErrorKind::Value);
+    assert_eq!(nums(&mut ws, "T"), [Number::Int(99)]);
+}
+
+#[test]
+fn a_function_with_no_result_displays_nothing_but_has_no_value() {
+    let mut ws = Workspace::default();
+    define(&mut ws, "SETUP", &["Z\u{2190}5"]);
+    assert_eq!(eval_line(&mut ws, "SETUP").unwrap(), Output::Nothing);
+    assert_eq!(nums(&mut ws, "Z"), [Number::Int(5)]);
+    let e = eval_line(&mut ws, "1+SETUP").unwrap_err();
+    assert_eq!((e.kind, e.caret), (ErrorKind::Value, Some(2)));
+    // A header with a result that is never assigned has none either.
+    define(&mut ws, "R\u{2190}EMPTY", &["Z\u{2190}1"]);
+    assert_eq!(eval_line(&mut ws, "EMPTY").unwrap(), Output::Nothing);
+    assert_eq!(
+        eval_line(&mut ws, "1+EMPTY").unwrap_err().kind,
+        ErrorKind::Value
+    );
+}
+
+#[test]
+fn the_valence_written_must_be_the_valence_declared() {
+    let mut ws = Workspace::default();
+    define(&mut ws, "R\u{2190}DOUBLE N", &["R\u{2190}N+N"]);
+    define(&mut ws, "R\u{2190}TEN", &["R\u{2190}10"]);
+    let e = eval_line(&mut ws, "2 DOUBLE 3").unwrap_err();
+    assert_eq!((e.kind, e.caret), (ErrorKind::Syntax, Some(2)));
+    assert_eq!(
+        eval_line(&mut ws, "DOUBLE").unwrap_err().kind,
+        ErrorKind::Syntax
+    );
+    assert_eq!(
+        eval_line(&mut ws, "TEN 1").unwrap_err().kind,
+        ErrorKind::Syntax
+    );
+}
+
+#[test]
+fn a_body_line_that_displays_reaches_the_pending_output() {
+    let mut ws = Workspace::default();
+    define(&mut ws, "R\u{2190}NOISY N", &["N+1", "'HI'", "R\u{2190}N"]);
+    assert_eq!(nums(&mut ws, "NOISY 4"), [Number::Int(4)]);
+    assert_eq!(ws.output.len(), 2);
+    assert_eq!(ws.output[0], Output::Value(Array::scalar(Number::Int(5))));
+}
+
+#[test]
+fn recursion_is_bounded_by_depth_error() {
+    let mut ws = Workspace::default();
+    define(&mut ws, "R\u{2190}DOWN N", &["R\u{2190}DOWN N-1"]);
+    let e = eval_line(&mut ws, "DOWN 3").unwrap_err();
+    assert_eq!((e.kind, e.caret), (ErrorKind::Depth, Some(0)));
+    // The frames all unwound: nothing of the call is left behind.
+    assert_eq!(eval_line(&mut ws, "N").unwrap_err().kind, ErrorKind::Value);
+}
+
+#[test]
+fn an_error_inside_a_body_points_at_the_call() {
+    let mut ws = Workspace::default();
+    define(&mut ws, "R\u{2190}BAD N", &["R\u{2190}2 3+4 5 6"]);
+    let e = eval_line(&mut ws, "1+BAD 0").unwrap_err();
+    assert_eq!((e.kind, e.caret), (ErrorKind::Length, Some(2)));
 }

@@ -1,0 +1,72 @@
+      ⍝ Defined functions: the del header forms, locals, dynamic scoping.
+      ⍝ Branching is not part of this file, so every body runs straight
+      ⍝ through from line 1 to the last line.
+      ∇R←DOUBLE N
+[1]   R←N+N
+[2]   ∇
+      DOUBLE 21
+42
+      DOUBLE DOUBLE 3
+12
+      2×DOUBLE 1+2
+12
+      ∇R←A HYP B
+[1]   R←((A*2)+B*2)*0.5
+[2]   ∇
+      3 HYP 4
+5
+      5 HYP 12
+13
+      ∇R←TEN
+[1]   R←10
+[2]   ∇
+      TEN
+10
+      TEN+TEN
+20
+      ⍝ A function with no result is a statement, never a value.
+      ∇GREET
+[1]   'HELLO FROM APL'
+[2]   ∇
+      GREET
+HELLO FROM APL
+      1+GREET
+HELLO FROM APL
+VALUE ERROR
+      1+GREET
+        ^
+      ⍝ Locals named after the semicolons shadow globals while the call
+      ⍝ runs, and the globals come back when it returns.
+      T←99
+      G←7
+      ∇R←SUMTO N;T
+[1]   T←⍳N
+[2]   R←G++/T
+[3]   ∇
+      SUMTO 4
+17
+      T
+99
+      ⍝ The valence written must be the valence the header declared.
+      2 DOUBLE 3
+SYNTAX ERROR
+      2 DOUBLE 3
+        ^
+      DOUBLE
+SYNTAX ERROR
+      DOUBLE
+      ^
+      ⍝ Arguments and locals are gone once the call returns.
+      N
+VALUE ERROR
+      N
+      ^
+      ⍝ Recursion is allowed; without a branch to stop it, the guard does.
+      ∇R←DOWN N
+[1]   R←DOWN N-1
+[2]   ∇
+      DOWN 1
+DEPTH ERROR
+      DOWN 1
+      ^
+      )OFF

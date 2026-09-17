@@ -1,6 +1,6 @@
 number = 1
 slug = "user-functions"
-status = "pending"
+status = "in-progress"
 description = 'Phase 3 step 1 (docs/plan.md). Defined functions in pure APL\360. Lexer alrea...'
 role = "production"
 context_files = []

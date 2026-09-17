@@ -13,11 +13,15 @@ sw-apl/
     value/     apl-value, apl-error        element and array model
     display/   apl-display                 APL\360 output formatting
     lex/       apl-lex                     Unicode tokenizer
-    parse/     apl-parse                   right-to-left parser, AST
+    parse/     apl-ast                     AST and Defn types
+               apl-scan                    brackets, segments, del header
+               apl-parse                   right-to-left parser
     prims/     apl-prims-scalar            scalar primitives
                apl-prims-mixed             structural primitives
                apl-prims-ops               reduce/scan/inner/outer
-    eval/      apl-eval                    interpreter, symbol table
+    eval/      apl-workspace               symbol table, frames, env
+               apl-call                    defined-function calls
+               apl-eval                    interpreter
     session/   apl-session                 system commands, del editor,
                                            workspace files, libraries
     cli/       sw-apl                      terminal REPL and batch
@@ -37,18 +41,28 @@ directory exists today.
 
 ```
 value -> display
-value -> lex -> parse
+value -> lex -> scan -> parse
 value -> prims (scalar, mixed, ops)
-parse + prims + display -> eval
+prims -> workspace -> call
+parse + prims + display + call -> eval
 eval -> session -> cli
 eval -> session -> web
 ```
 
 - `apl-value` has no dependencies inside the repo.
-- `apl-lex` and `apl-parse` never depend on `apl-prims` or
-  `apl-eval`; the parser produces an AST, it does not evaluate.
-- `apl-eval` owns the symbol table, the state indicator, and
-  dispatch from AST to primitives.
+- `apl-lex`, `apl-scan`, and `apl-parse` never depend on
+  `apl-prims` or `apl-eval`; the parser produces an AST, it does
+  not evaluate.
+- `apl-scan` holds what the parser reads straight off the token
+  stream before it recurses: matching brackets, top-level
+  semicolon segments, what ends an operand, and the del header.
+- `apl-workspace` owns the symbol table (variables and defined
+  functions) and the call frames that make scoping dynamic.
+- `apl-call` applies a defined function: valence, frame, body,
+  result. It takes "evaluate one line" as a function pointer, so
+  it sits below the evaluator rather than inside it.
+- `apl-eval` owns the state indicator and dispatch from AST to
+  primitives.
 - `apl-session` owns everything that begins with a right
   parenthesis, the del editor, workspace files, and the library
   directory map. It exposes a line-oriented `Session` API: feed a
@@ -57,12 +71,14 @@ eval -> session -> web
 
 ## Pipeline for one input line
 
-1. `apl-session` classifies the line: system command, del editor
-   line (when in definition mode), or immediate-execution
-   statement.
+1. `apl-session` classifies the line: system command, del header,
+   del editor line (when in definition mode), or
+   immediate-execution statement.
 2. `apl-lex` turns a statement into tokens (glyphs, numbers,
    strings, names, quad names).
-3. `apl-parse` builds the AST right to left.
+3. `apl-parse` builds the AST right to left. It is told which
+   names hold functions, because `F B` is a call only when `F`
+   is one.
 4. `apl-eval` evaluates the AST against the workspace, producing
    a value or an error with a caret position.
 5. `apl-display` formats the value (or the error transcript)

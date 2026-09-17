@@ -1,11 +1,11 @@
 //! The interactive session: a line editor with history behind the
-//! six-space prompt. Up arrow recalls earlier input for editing or
+//! six-space prompt (the bracketed line number in definition mode). Up arrow recalls earlier input for editing or
 //! re-submission; Ctrl-C cancels the line; Ctrl-D ends like `)OFF`.
 
 use std::io;
 use std::path::PathBuf;
 
-use apl_session::{INDENT, Reply, Session};
+use apl_session::{Reply, Session};
 use rustyline::error::ReadlineError;
 use rustyline::{DefaultEditor, Result as LineResult};
 
@@ -21,7 +21,7 @@ pub fn run_interactive() -> io::Result<()> {
     }
     let mut session = Session::default();
     loop {
-        match read_line(&mut editor) {
+        match read_line(&mut editor, &session.prompt()) {
             Ok(Some(line)) => match session.respond(&line) {
                 Reply::Off => break,
                 Reply::Output(output) => output.iter().for_each(|t| println!("{t}")),
@@ -38,9 +38,9 @@ pub fn run_interactive() -> io::Result<()> {
 
 /// One edited line; `None` at end of input. A cancelled line (Ctrl-C)
 /// is skipped and the prompt shown again.
-fn read_line(editor: &mut DefaultEditor) -> LineResult<Option<String>> {
+fn read_line(editor: &mut DefaultEditor, prompt: &str) -> LineResult<Option<String>> {
     loop {
-        match editor.readline(INDENT) {
+        match editor.readline(prompt) {
             Ok(line) => {
                 let _ = editor.add_history_entry(&line);
                 return Ok(Some(line));

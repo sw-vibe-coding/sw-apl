@@ -1,10 +1,9 @@
-//! The session state machine (immediate execution only, so far).
+//! The session state machine: immediate execution and definition mode.
 
-use apl_display::format_array;
-use apl_eval::{Output, Workspace, eval_line};
-use apl_value::{AplError, Array};
+use apl_eval::{Defn, Workspace, eval_line};
 
-use crate::commands::system_command;
+use crate::commands::{definition_line, open_definition, system_command};
+use crate::render::{error_lines, render};
 
 /// The six-space indent that precedes every input line.
 pub const INDENT: &str = "      ";
@@ -22,6 +21,8 @@ pub enum Reply {
 #[derive(Debug)]
 pub struct Session {
     pub(crate) ws: Workspace,
+    /// The function being defined, while definition mode is open.
+    pub(crate) defining: Option<Defn>,
     /// Print precision (`)DIGITS`).
     pub(crate) digits: usize,
     /// Print width (`)WIDTH`).
@@ -32,6 +33,7 @@ impl Default for Session {
     fn default() -> Self {
         Session {
             ws: Workspace::default(),
+            defining: None,
             digits: 10,
             width: 120,
         }
@@ -39,47 +41,38 @@ impl Default for Session {
 }
 
 impl Session {
+    /// The prompt for the next input line: six spaces in immediate
+    /// execution, the bracketed line number in definition mode.
+    #[must_use]
+    pub fn prompt(&self) -> String {
+        match &self.defining {
+            None => INDENT.to_string(),
+            Some(defn) => format!("{:<6}", format!("[{}]", defn.body.len() + 1)),
+        }
+    }
+
     /// Respond to one input line.
     pub fn respond(&mut self, line: &str) -> Reply {
-        if let Some(command) = line.trim().strip_prefix(')') {
+        if self.defining.is_some() {
+            return definition_line(self, line);
+        }
+        let trimmed = line.trim();
+        if let Some(command) = trimmed.strip_prefix(')') {
             return system_command(self, command);
         }
+        if let Some(header) = trimmed.strip_prefix('∇') {
+            return open_definition(self, header);
+        }
         let result = eval_line(&mut self.ws, line);
-        let mut lines: Vec<String> = self
-            .ws
-            .output
-            .drain(..)
-            .flat_map(|v| format_array(&v, self.digits, self.width))
+        let shown: Vec<_> = self.ws.output.drain(..).collect();
+        let mut lines: Vec<String> = shown
+            .iter()
+            .flat_map(|o| render(o, self.digits, self.width))
             .collect();
         lines.extend(match result {
-            Ok(Output::Value(value)) => format_array(&value, self.digits, self.width),
-            Ok(Output::Mixed(parts)) => mixed_lines(&parts, self.digits, self.width),
-            Ok(Output::Nothing) => Vec::new(),
+            Ok(out) => render(&out, self.digits, self.width),
             Err(err) => error_lines(&err, line),
         });
         Reply::Output(lines)
     }
-}
-
-/// APL\360 error display: name, echoed statement, caret line.
-fn error_lines(err: &AplError, line: &str) -> Vec<String> {
-    let caret = err.caret.unwrap_or(0);
-    vec![
-        err.kind.to_string(),
-        format!("{INDENT}{line}"),
-        format!("{INDENT}{}^", " ".repeat(caret)),
-    ]
-}
-
-/// Mixed output: single-line parts are printed side by side with no
-/// separator; when any part spans lines, the parts follow each other.
-fn mixed_lines(parts: &[Array], digits: usize, width: usize) -> Vec<String> {
-    let blocks: Vec<Vec<String>> = parts
-        .iter()
-        .map(|p| format_array(p, digits, width))
-        .collect();
-    if blocks.iter().all(|b| b.len() == 1) {
-        return vec![blocks.iter().map(|b| b[0].as_str()).collect()];
-    }
-    blocks.concat()
 }

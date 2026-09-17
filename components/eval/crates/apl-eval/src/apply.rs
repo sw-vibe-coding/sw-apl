@@ -2,11 +2,12 @@
 //! dispatching a primitive or derived function.
 
 use apl_ast::{Expr, Function};
+use apl_call::value;
 use apl_prims::{Env, apply_dyadic, apply_monadic, axis_index, inner, outer, reduce, scan};
 use apl_value::{AplError, AplResult, Array, ErrorKind};
 use apl_workspace::Workspace;
 
-use crate::eval::eval_expr;
+use crate::eval::{eval_expr, eval_line};
 
 /// `f right`: the right argument is evaluated first, as on a terminal
 /// reading right to left; then the axis.
@@ -24,6 +25,9 @@ pub fn eval_monadic(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
         unreachable!("eval_monadic only receives monadic applications")
     };
     let r = eval_expr(ws, right)?;
+    if let Function::Defined(name) = func {
+        return value(ws, name, *pos, (None, Some(r)), eval_line);
+    }
     let axis = axis.as_deref().map(|a| eval_expr(ws, a)).transpose()?;
     monadic(func, axis.as_ref(), &r, &mut ws.env).map_err(|e| e.at(*pos))
 }
@@ -45,6 +49,9 @@ pub fn eval_dyadic(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
     };
     let r = eval_expr(ws, right)?;
     let l = eval_expr(ws, left)?;
+    if let Function::Defined(name) = func {
+        return value(ws, name, *pos, (Some(l), Some(r)), eval_line);
+    }
     let axis = axis.as_deref().map(|a| eval_expr(ws, a)).transpose()?;
     dyadic(func, axis.as_ref(), &l, &r, &mut ws.env).map_err(|e| e.at(*pos))
 }

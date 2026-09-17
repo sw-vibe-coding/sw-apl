@@ -1,5 +1,5 @@
 [workspace]
-members = ["crates/apl-workspace", "crates/apl-eval"]
+members = ["crates/apl-workspace", "crates/apl-call", "crates/apl-eval"]
 resolver = "2"
 
 [workspace.package]

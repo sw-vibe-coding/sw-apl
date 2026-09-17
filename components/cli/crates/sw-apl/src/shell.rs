@@ -1,12 +1,13 @@
-//! Batch mode: run a file or stdin, echoing each input line with the
-//! indent so the transcript reads like a session. Invalid UTF-8 on a
+//! Batch mode: run a file or stdin, echoing each input line behind the
+//! prompt it would have been typed at so the transcript reads like a
+//! session. Invalid UTF-8 on a
 //! line is reported as a CHARACTER ERROR and the run continues.
 
 use std::fs;
 use std::io::{self, Read, Write};
 use std::path::Path;
 
-use apl_session::{INDENT, Reply, Session};
+use apl_session::{Reply, Session};
 
 /// One input line: its text (lossy when invalid) and, when the bytes
 /// were not valid UTF-8, the offset of the first bad sequence.
@@ -66,7 +67,7 @@ pub fn run_batch(path: Option<&Path>, echo: bool) -> io::Result<()> {
     let mut session = Session::default();
     for line in &lines(&bytes) {
         if echo {
-            writeln!(out, "{INDENT}{}", line.text)?;
+            writeln!(out, "{}{}", session.prompt(), line.text)?;
         }
         match line.respond(&mut session) {
             Reply::Off => break,

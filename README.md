@@ -45,9 +45,16 @@ higher-rank planes, and errors print with the caret. `)ORIGIN`,
 `)DIGITS`, and `)WIDTH` reply `WAS n`. Conway's Life runs; see
 `samples/51-life.apl`.
 
-Not there yet: defined functions and the del editor, branching and
-labels, quad input, workspaces (`)SAVE`, `)LOAD`), the I-beam
-system functions, and domino. Those are the next two phases. A
+Functions are defined the APL\360 way: an opening del and a header
+(`NAME`, `NAME B`, `A NAME B`, each with or without `R left-arrow`),
+body lines typed behind the `[n]` prompt, a closing del. Names after
+semicolons are local for the length of the call, arguments bind into
+a fresh frame, and the result is whatever the header's result
+variable holds at exit.
+
+Not there yet: the del editor commands, branching and labels, quad
+input, workspaces (`)SAVE`, `)LOAD`), the I-beam system functions,
+and domino. A
 glyph from a later APL is a CHARACTER ERROR that names it, so the
 Dyalog Life one-liner answers "dfn brace, not APL\360". See the
 parity checklist for the row-by-row picture. Batch mode, `)OFF`, help, and the

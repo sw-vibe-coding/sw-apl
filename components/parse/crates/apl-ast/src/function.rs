@@ -13,4 +13,6 @@ pub enum Function {
     Inner { f: char, g: char },
     /// `∘.f` outer product.
     Outer { f: char },
+    /// A function defined with the del form, by name.
+    Defined(String),
 }

@@ -1,6 +1,6 @@
 [package]
 name = "apl-workspace"
-description = "sw-apl active workspace: variables, environment, pending output"
+description = "sw-apl active workspace: variables, functions, environment, output"
 edition.workspace = true
 license.workspace = true
 version.workspace = true
@@ -8,6 +8,7 @@ authors.workspace = true
 repository.workspace = true
 
 [dependencies]
+apl-ast = { path = "../../../parse/crates/apl-ast" }
 apl-value = { path = "../../../value/crates/apl-value" }
 apl-prims = { path = "../../../prims/crates/apl-prims" }
 

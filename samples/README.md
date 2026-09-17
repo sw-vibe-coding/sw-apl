@@ -12,6 +12,11 @@ were left out, as were files that used APLSV features (execute,
 format, a quad-named random seed). The index-origin sample uses
 `)ORIGIN` rather than a quad variable.
 
+`53-functions.apl` shows the del header forms, locals and dynamic
+scoping, and what a function with no result may and may not be used
+for. It has no branches, so every body runs from line 1 to the last
+line.
+
 `50-horse-race.apl` is a target program written in pure APL\360
 (character matrix for names, mixed output, the branch idiom); it
 runs once defined functions, branching, indexing, comparisons, and

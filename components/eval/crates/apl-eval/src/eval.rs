@@ -1,6 +1,7 @@
 //! Expression evaluation.
 
 use apl_ast::Expr;
+use apl_call::value;
 use apl_parse::parse;
 use apl_value::{AplError, AplResult, Array, ErrorKind};
 use apl_workspace::{Output, Workspace};
@@ -9,20 +10,18 @@ use crate::{apply, forms};
 
 /// Parse and evaluate one line. `Output::Nothing` when there is
 /// nothing to display: a blank line, a comment, an assignment
-/// (including `⎕←`, which displays through the output buffer).
+/// (including `⎕←`, which displays through the output buffer), or a
+/// call to a defined function that declares no result.
 ///
 /// # Errors
 /// Any lexical, syntax, or evaluation error, with a caret.
 pub fn eval_line(ws: &mut Workspace, line: &str) -> AplResult<Output> {
-    let Some(expr) = parse(line)? else {
+    let takes_argument = |n: &str| ws.function(n).is_some_and(|d| d.right.is_some());
+    let Some(expr) = parse(line, &takes_argument)? else {
         return Ok(Output::Nothing);
     };
-    if let Expr::Mixed(parts) = &expr {
-        let values = parts
-            .iter()
-            .map(|p| eval_expr(ws, p))
-            .collect::<AplResult<_>>()?;
-        return Ok(Output::Mixed(values));
+    if let Some(shown) = statement(ws, &expr)? {
+        return Ok(shown);
     }
     let silent = matches!(
         expr,
@@ -39,6 +38,27 @@ pub fn eval_line(ws: &mut Workspace, line: &str) -> AplResult<Output> {
     })
 }
 
+/// The statement shapes that do not evaluate to one value: mixed
+/// output, and a bare call to a defined function, which displays
+/// nothing when the header declares no result. `None` when the
+/// statement is an ordinary expression.
+fn statement(ws: &mut Workspace, expr: &Expr) -> AplResult<Option<Output>> {
+    if let Expr::Mixed(parts) = expr {
+        let parts = parts
+            .iter()
+            .map(|p| eval_expr(ws, p))
+            .collect::<AplResult<_>>()?;
+        return Ok(Some(Output::Mixed(parts)));
+    }
+    let Some((name, pos, left, right)) = expr.defined_call().filter(|c| ws.is_function(c.0)) else {
+        return Ok(None);
+    };
+    let right = right.map(|e| eval_expr(ws, e)).transpose()?;
+    let left = left.map(|e| eval_expr(ws, e)).transpose()?;
+    let got = apl_call::call(ws, name, left, right, eval_line).map_err(|e| e.at(pos))?;
+    Ok(Some(got.map_or(Output::Nothing, Output::Value)))
+}
+
 /// Evaluate an expression tree.
 ///
 /// # Errors
@@ -47,6 +67,7 @@ pub fn eval_line(ws: &mut Workspace, line: &str) -> AplResult<Output> {
 pub fn eval_expr(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
     match expr {
         Expr::Literal(a) => Ok(a.clone()),
+        Expr::Name(n, pos) if ws.is_function(n) => value(ws, n, *pos, (None, None), eval_line),
         Expr::Name(n, pos) => ws
             .get(n)
             .cloned()
@@ -64,7 +85,7 @@ pub fn eval_expr(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
     }
 }
 
-/// The quad and bracket forms.
+/// The bracket forms, and the quad forms behind them.
 fn eval_form(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
     match expr {
         Expr::Index {

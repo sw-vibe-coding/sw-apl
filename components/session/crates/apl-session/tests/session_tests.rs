@@ -382,3 +382,97 @@ fn structural_functions_on_scalars_and_empties() {
         "index-of needs a vector left"
     );
 }
+
+/// Type a del header, the body lines, and the closing del.
+fn define(s: &mut Session, header: &str, body: &[&str]) {
+    assert_eq!(out(s, header), Vec::<String>::new());
+    for line in body {
+        assert_eq!(out(s, line), Vec::<String>::new());
+    }
+    assert_eq!(out(s, "\u{2207}"), Vec::<String>::new());
+}
+
+#[test]
+fn definition_mode_prompts_with_the_line_number() {
+    let mut s = Session::default();
+    assert_eq!(s.prompt(), "      ");
+    out(&mut s, "\u{2207}R\u{2190}DOUBLE N");
+    assert_eq!(s.prompt(), "[1]   ");
+    out(&mut s, "R\u{2190}N+N");
+    assert_eq!(s.prompt(), "[2]   ");
+    out(&mut s, "\u{2207}");
+    assert_eq!(s.prompt(), "      ");
+    assert_eq!(out(&mut s, "DOUBLE 4"), vec!["8"]);
+}
+
+#[test]
+fn a_bad_header_is_defn_error_and_leaves_immediate_execution() {
+    let mut s = Session::default();
+    assert_eq!(
+        out(&mut s, "\u{2207}A B C D"),
+        vec!["DEFN ERROR", "      \u{2207}A B C D", "      ^"]
+    );
+    assert_eq!(s.prompt(), "      ");
+    assert_eq!(out(&mut s, "2+2"), vec!["4"]);
+}
+
+#[test]
+fn a_function_prints_what_its_lines_display_then_its_result() {
+    let mut s = Session::default();
+    define(
+        &mut s,
+        "\u{2207}R\u{2190}REPORT N;T",
+        &[
+            "'COUNTING TO ';N",
+            "T\u{2190}\u{2373}N",
+            "T",
+            "R\u{2190}+/T",
+        ],
+    );
+    assert_eq!(
+        out(&mut s, "REPORT 4"),
+        vec!["COUNTING TO 4", "1 2 3 4", "10"]
+    );
+}
+
+#[test]
+fn a_function_with_no_result_is_a_statement_not_a_value() {
+    let mut s = Session::default();
+    define(&mut s, "\u{2207}GREET", &["'HELLO'"]);
+    assert_eq!(out(&mut s, "GREET"), vec!["HELLO"]);
+    assert_eq!(
+        out(&mut s, "1+GREET"),
+        vec!["HELLO", "VALUE ERROR", "      1+GREET", "        ^"]
+    );
+}
+
+#[test]
+fn the_wrong_valence_is_syntax_error() {
+    let mut s = Session::default();
+    define(&mut s, "\u{2207}R\u{2190}DOUBLE N", &["R\u{2190}N+N"]);
+    assert_eq!(
+        out(&mut s, "2 DOUBLE 3"),
+        vec!["SYNTAX ERROR", "      2 DOUBLE 3", "        ^"]
+    );
+}
+
+#[test]
+fn a_function_name_is_not_a_variable() {
+    let mut s = Session::default();
+    define(&mut s, "\u{2207}R\u{2190}TEN", &["R\u{2190}10"]);
+    assert_eq!(out(&mut s, "TEN+TEN"), vec!["20"]);
+    define(&mut s, "\u{2207}R\u{2190}F B", &["R\u{2190}B"]);
+    assert_eq!(out(&mut s, "F F 3"), vec!["3"]);
+    assert_eq!(out(&mut s, "F \u{2373}3"), vec!["1 2 3"]);
+}
+
+#[test]
+fn runaway_recursion_reports_depth_error() {
+    let mut s = Session::default();
+    define(&mut s, "\u{2207}R\u{2190}DOWN N", &["R\u{2190}DOWN N-1"]);
+    assert_eq!(
+        out(&mut s, "DOWN 1"),
+        vec!["DEPTH ERROR", "      DOWN 1", "      ^"]
+    );
+    assert_eq!(out(&mut s, "2+2"), vec!["4"]);
+}

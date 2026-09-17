@@ -2,10 +2,11 @@
 
 use apl_ast::{Expr, Function};
 use apl_lex::{Token, TokenKind, tokenize};
+use apl_scan::{Funcs, ends_operand, segments};
 use apl_value::{AplError, AplResult, ErrorKind};
 
-use crate::bracket::segments;
-use crate::operand::{apply_assign, parse_axis, parse_operand, resolve_function};
+use crate::index::apply_assign;
+use crate::operand::{apply_defined, parse_axis, parse_operand, resolve_function};
 
 /// An expression and the token index where it starts.
 pub type Parsed = AplResult<(Expr, usize)>;
@@ -15,7 +16,7 @@ pub type Parsed = AplResult<(Expr, usize)>;
 ///
 /// # Errors
 /// Lexical errors and SYNTAX ERROR, each with a caret.
-pub fn parse(line: &str) -> AplResult<Option<Expr>> {
+pub fn parse(line: &str, funcs: Funcs) -> AplResult<Option<Expr>> {
     let tokens = tokenize(line)?;
     if let [
         Token {
@@ -31,22 +32,22 @@ pub fn parse(line: &str) -> AplResult<Option<Expr>> {
     }
     let ranges = segments(&tokens, 0, tokens.len());
     if ranges.len() == 1 {
-        return parse_all(&tokens, 0, tokens.len()).map(Some);
+        return parse_all(&tokens, 0, tokens.len(), funcs).map(Some);
     }
     let parts = ranges
         .into_iter()
-        .map(|(lo, hi)| parse_all(&tokens, lo, hi))
+        .map(|(lo, hi)| parse_all(&tokens, lo, hi, funcs))
         .collect::<AplResult<Vec<_>>>()?;
     Ok(Some(Expr::Mixed(parts)))
 }
 
 /// The expression that fills `tokens[lo..hi]` exactly.
-pub fn parse_all(tokens: &[Token], lo: usize, hi: usize) -> AplResult<Expr> {
+pub fn parse_all(tokens: &[Token], lo: usize, hi: usize, funcs: Funcs) -> AplResult<Expr> {
     if lo >= hi {
         let near = tokens.get(lo).or_else(|| tokens.get(lo.wrapping_sub(1)));
         return Err(AplError::new(ErrorKind::Syntax).at(near.map_or(0, |t| t.pos)));
     }
-    let (expr, start) = parse_expr(tokens, lo, hi)?;
+    let (expr, start) = parse_expr(tokens, lo, hi, funcs)?;
     if start != lo {
         return Err(AplError::new(ErrorKind::Syntax).at(tokens[start - 1].pos));
     }
@@ -56,21 +57,22 @@ pub fn parse_all(tokens: &[Token], lo: usize, hi: usize) -> AplResult<Expr> {
 /// Parse the expression in `tokens[lo..end]`, consuming leftwards from
 /// `end` as far as the grammar allows. Returns the expression and the
 /// index where it starts (`lo` when everything was consumed).
-pub fn parse_expr(tokens: &[Token], lo: usize, end: usize) -> Parsed {
+pub fn parse_expr(tokens: &[Token], lo: usize, end: usize, funcs: Funcs) -> Parsed {
     if end <= lo {
         let pos = tokens.get(end).map_or(0, |t| t.pos);
         return Err(AplError::new(ErrorKind::Syntax).at(pos));
     }
-    let (mut right, mut start) = parse_operand(tokens, end)?;
+    let (mut right, mut start) = parse_operand(tokens, end, funcs)?;
     while start > lo {
         let tok = &tokens[start - 1];
         (right, start) = match &tok.kind {
-            TokenKind::Prim(_) => apply_function(tokens, lo, start - 1, None, right)?,
+            TokenKind::Prim(_) => apply_function(tokens, lo, start - 1, None, right, funcs)?,
+            TokenKind::Name(n) if funcs(n) => apply_defined(tokens, lo, start - 1, right, funcs)?,
             TokenKind::RBracket => {
-                let (axis, at) = parse_axis(tokens, lo, start - 1)?;
-                apply_function(tokens, lo, at, Some(axis), right)?
+                let (axis, at) = parse_axis(tokens, lo, start - 1, funcs)?;
+                apply_function(tokens, lo, at, Some(axis), right, funcs)?
             }
-            TokenKind::Assign => apply_assign(tokens, start - 1, right)?,
+            TokenKind::Assign => apply_assign(tokens, start - 1, right, funcs)?,
             TokenKind::Branch if start - 1 == lo => (Expr::branch(tok.pos, Some(right)), lo),
             TokenKind::LParen => break,
             _ => return Err(AplError::new(ErrorKind::Syntax).at(tok.pos)),
@@ -89,14 +91,15 @@ fn apply_function(
     at: usize,
     axis: Option<Box<Expr>>,
     right: Expr,
+    funcs: Funcs,
 ) -> Parsed {
     let (func, start, pos) = resolve_function(tokens, lo, at);
-    let has_left = start > lo && tokens[start - 1].kind.ends_operand();
+    let has_left = start > lo && ends_operand(tokens, start - 1, funcs);
     let bad = match func {
         Function::Prim('.' | '∘') => true,
         Function::Reduce { .. } | Function::Scan { .. } => has_left,
         Function::Inner { .. } | Function::Outer { .. } => !has_left,
-        Function::Prim(_) => false,
+        _ => false,
     };
     if bad {
         return Err(AplError::new(ErrorKind::Syntax).at(pos));
@@ -104,6 +107,6 @@ fn apply_function(
     if !has_left {
         return Ok((Expr::monadic(func, pos, axis, right), start));
     }
-    let (left, start) = parse_operand(tokens, start)?;
+    let (left, start) = parse_operand(tokens, start, funcs)?;
     Ok((Expr::dyadic(func, pos, axis, left, right), start))
 }

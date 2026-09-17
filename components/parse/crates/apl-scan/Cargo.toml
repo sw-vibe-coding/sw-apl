@@ -1,6 +1,6 @@
 [package]
-name = "apl-parse"
-description = "sw-apl right-to-left parser and AST"
+name = "apl-scan"
+description = "sw-apl token-level scanning: brackets, segments, del headers"
 edition.workspace = true
 license.workspace = true
 version.workspace = true
@@ -11,7 +11,6 @@ repository.workspace = true
 apl-ast = { path = "../apl-ast" }
 apl-value = { path = "../../../value/crates/apl-value" }
 apl-lex = { path = "../../../lex/crates/apl-lex" }
-apl-scan = { path = "../apl-scan" }
 
 [lints]
 workspace = true

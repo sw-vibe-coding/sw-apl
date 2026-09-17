@@ -10,10 +10,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-call"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-value",
+ "apl-workspace",
+]
+
+[[package]]
 name = "apl-eval"
 version = "0.1.0"
 dependencies = [
  "apl-ast",
+ "apl-call",
  "apl-parse",
  "apl-prims",
  "apl-value",
@@ -41,6 +51,7 @@ version = "0.1.0"
 dependencies = [
  "apl-ast",
  "apl-lex",
+ "apl-scan",
  "apl-value",
 ]
 
@@ -159,6 +170,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-scan"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-lex",
+ "apl-value",
+]
+
+[[package]]
 name = "apl-value"
 version = "0.1.0"
 dependencies = [
@@ -169,6 +189,7 @@ dependencies = [
 name = "apl-workspace"
 version = "0.1.0"
 dependencies = [
+ "apl-ast",
  "apl-prims",
  "apl-value",
 ]

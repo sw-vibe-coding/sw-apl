@@ -113,3 +113,20 @@ fn invalid_utf8_lines_report_a_character_error_and_continue() {
     );
     let _ = std::fs::remove_dir_all(dir);
 }
+
+#[test]
+fn batch_echoes_definition_lines_behind_the_bracketed_prompt() {
+    let input = "\u{2207}R\u{2190}DOUBLE N\nR\u{2190}N+N\n\u{2207}\nDOUBLE 4\n)OFF\n";
+    let (text, code) = run_stdin(&[], input);
+    assert_eq!(code, 0);
+    let want = [
+        "      \u{2207}R\u{2190}DOUBLE N",
+        "[1]   R\u{2190}N+N",
+        "[2]   \u{2207}",
+        "      DOUBLE 4",
+        "8",
+        "      )OFF",
+        "",
+    ];
+    assert_eq!(text, want.join("\n"));
+}

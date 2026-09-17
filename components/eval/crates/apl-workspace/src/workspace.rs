@@ -1,19 +1,25 @@
-//! The active workspace: variables, the index origin, pending quad
-//! output.
+//! The active workspace: variables, defined functions, the index
+//! origin, pending output.
 
 use std::collections::HashMap;
+use std::rc::Rc;
 
+use apl_ast::Defn;
 use apl_prims::Env;
 use apl_value::Array;
 
 /// State of the active workspace.
 #[derive(Debug, Default)]
 pub struct Workspace {
-    vars: HashMap<String, Array>,
+    pub(crate) vars: HashMap<String, Array>,
+    pub(crate) funcs: HashMap<String, Rc<Defn>>,
+    /// How many defined functions are running.
+    pub(crate) depth: usize,
     /// Index origin and random link.
     pub env: Env,
-    /// Values written with `⎕←`, in order, not yet displayed.
-    pub output: Vec<Array>,
+    /// Statements displayed while the current line runs, in order,
+    /// not yet sent to the terminal.
+    pub output: Vec<Output>,
 }
 
 impl Workspace {
