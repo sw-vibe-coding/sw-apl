@@ -126,12 +126,43 @@ fn mixed_output_yields_every_part() {
 }
 
 #[test]
-fn indexing_branch_and_derived_forms_are_not_implemented_yet() {
+fn branch_is_not_implemented_yet() {
     let mut ws = Workspace::default();
-    ws.set("A", apl_value::Array::vector(vec![Number::Int(1)]));
-    for line in ["A[1]", "A[1]\u{2190}2", "\u{2192}3"] {
-        let e = eval_line(&mut ws, line).unwrap_err();
-        assert_eq!(e.kind, ErrorKind::NotImplemented, "{line}");
-        assert!(e.caret.is_some(), "{line}");
-    }
+    let e = eval_line(&mut ws, "\u{2192}3").unwrap_err();
+    assert_eq!(e.kind, ErrorKind::NotImplemented);
+    assert_eq!(e.caret, Some(0));
+}
+
+#[test]
+fn indexing_and_indexed_assignment_evaluate() {
+    let mut ws = Workspace::default();
+    assert_eq!(
+        eval_line(&mut ws, "V\u{2190}10 20 30").unwrap(),
+        Output::Nothing
+    );
+    assert_eq!(nums(&mut ws, "V[2]"), [Number::Int(20)]);
+    assert_eq!(nums(&mut ws, "V[3 1]"), [Number::Int(30), Number::Int(10)]);
+    assert_eq!(
+        eval_line(&mut ws, "V[2]\u{2190}99").unwrap(),
+        Output::Nothing
+    );
+    assert_eq!(
+        nums(&mut ws, "V"),
+        [Number::Int(10), Number::Int(99), Number::Int(30)]
+    );
+    assert_eq!(
+        nums(&mut ws, "1+V[1]\u{2190}5"),
+        [Number::Int(6)],
+        "indexed assignment yields the value"
+    );
+    let e = eval_line(&mut ws, "V[4]").unwrap_err();
+    assert_eq!((e.kind, e.caret), (ErrorKind::Index, Some(1)));
+    let e = eval_line(&mut ws, "V[1;1]").unwrap_err();
+    assert_eq!((e.kind, e.caret), (ErrorKind::Rank, Some(1)));
+    let e = eval_line(&mut ws, "W[1]\u{2190}1").unwrap_err();
+    assert_eq!((e.kind, e.caret), (ErrorKind::Value, Some(0)));
+    assert_eq!(
+        nums(&mut ws, "(2 2\u{2374}\u{2373}4)[2;1]"),
+        [Number::Int(3)]
+    );
 }

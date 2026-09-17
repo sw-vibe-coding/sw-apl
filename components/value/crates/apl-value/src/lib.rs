@@ -8,7 +8,7 @@ mod error;
 mod number;
 
 pub use array::{Array, Data};
-pub use error::{AplError, ErrorKind, lookalike};
+pub use error::{AplError, ErrorKind};
 pub use number::{FUZZ, Number};
 
 /// Result type used throughout the interpreter.

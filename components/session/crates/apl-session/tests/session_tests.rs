@@ -277,3 +277,22 @@ fn inner_and_outer_products_end_to_end() {
         "NOT IMPLEMENTED"
     );
 }
+
+#[test]
+fn indexing_end_to_end() {
+    let mut s = Session::default();
+    assert_eq!(
+        out(&mut s, "M\u{2190}3 3\u{2374}\u{2373}9"),
+        Vec::<String>::new()
+    );
+    assert_eq!(out(&mut s, "M[2;3]"), vec!["6"]);
+    assert_eq!(out(&mut s, "M[1 3;]"), vec!["1 2 3", "7 8 9"]);
+    assert_eq!(out(&mut s, "M[;2]"), vec!["2 5 8"]);
+    assert_eq!(out(&mut s, "'ABCDE'[3 1]"), vec!["CA"]);
+    assert_eq!(out(&mut s, "M[2;]\u{2190}0"), Vec::<String>::new());
+    assert_eq!(out(&mut s, "M"), vec!["1 2 3", "0 0 0", "7 8 9"]);
+    assert_eq!(
+        out(&mut s, "M[4;1]"),
+        vec!["INDEX ERROR", "      M[4;1]", "       ^"]
+    );
+}

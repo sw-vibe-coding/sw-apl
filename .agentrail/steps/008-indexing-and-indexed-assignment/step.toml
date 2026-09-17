@@ -1,6 +1,6 @@
 number = 8
 slug = "indexing-and-indexed-assignment"
-status = "pending"
+status = "in-progress"
 description = "Phase 2 step 7. Evaluate Expr::Index: A[I] for vectors with index arrays of a..."
 role = "production"
 context_files = []

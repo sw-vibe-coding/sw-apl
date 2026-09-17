@@ -1,0 +1,4 @@
+command = "target/release/sw-apl -f samples/48-indexing.apl"
+timeout = 60
+exit_code = 0
+desc = "Transcript of samples/48-indexing.apl"

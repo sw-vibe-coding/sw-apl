@@ -1,6 +1,6 @@
 [package]
-name = "apl-eval"
-description = "sw-apl evaluator and workspace"
+name = "apl-workspace"
+description = "sw-apl active workspace: variables, environment, pending output"
 edition.workspace = true
 license.workspace = true
 version.workspace = true
@@ -8,11 +8,8 @@ authors.workspace = true
 repository.workspace = true
 
 [dependencies]
-apl-ast = { path = "../../../parse/crates/apl-ast" }
 apl-value = { path = "../../../value/crates/apl-value" }
-apl-parse = { path = "../../../parse/crates/apl-parse" }
 apl-prims = { path = "../../../prims/crates/apl-prims" }
-apl-workspace = { path = "../apl-workspace" }
 
 [lints]
 workspace = true

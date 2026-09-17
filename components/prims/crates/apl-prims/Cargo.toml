@@ -17,6 +17,7 @@ apl-prims-select = { path = "../apl-prims-select" }
 apl-prims-mask = { path = "../apl-prims-mask" }
 apl-prims-search = { path = "../apl-prims-search" }
 apl-prims-radix = { path = "../apl-prims-radix" }
+apl-prims-index = { path = "../apl-prims-index" }
 
 [lints]
 workspace = true

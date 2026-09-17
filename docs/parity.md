@@ -42,8 +42,8 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | Quad input `⎕` | todo | |
 | Quote-quad `⍞` input and output | todo | |
 | Character literals `'...'`, doubled quote, any Unicode inside | done | lex tests, samples 19, 20 |
-| Bracket indexing `A[I;J]`, elided axes | part | parsed (parse tests); evaluation in Phase 2 |
-| Indexed assignment | part | parsed; evaluation in Phase 2 |
+| Bracket indexing `A[I;J]`, elided axes, index arrays of any rank | done | index tests, sample 48 |
+| Indexed assignment with scalar extension | done | index tests, sample 48 |
 | Branch `→`, labels, `→0`, empty branch | part | `→` parsed (statement start only); semantics in Phase 3 |
 | Del editor: headers, locals, `[n]`, `[⎕]`, `[∆n]`, fractional insert, `⍫` | todo | |
 | Dynamic scoping, recursion, state indicator | todo | |

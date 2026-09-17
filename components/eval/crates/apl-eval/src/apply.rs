@@ -1,25 +1,57 @@
-//! Function application: primitive and derived functions.
+//! Function application: evaluating the arguments and the axis, then
+//! dispatching a primitive or derived function.
 
 use apl_ast::{Expr, Function};
 use apl_prims::{Env, apply_dyadic, apply_monadic, axis_index, inner, outer, reduce, scan};
 use apl_value::{AplError, AplResult, Array, ErrorKind};
+use apl_workspace::Workspace;
 
 use crate::eval::eval_expr;
-use crate::workspace::Workspace;
 
-/// The value of an axis bracket, when one was written.
-pub fn eval_axis(ws: &mut Workspace, axis: Option<&Expr>) -> AplResult<Option<Array>> {
-    axis.map(|a| eval_expr(ws, a)).transpose()
+/// `f right`: the right argument is evaluated first, as on a terminal
+/// reading right to left; then the axis.
+///
+/// # Errors
+/// Evaluation errors, with the glyph's position as the caret.
+pub fn eval_monadic(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
+    let Expr::Monadic {
+        func,
+        pos,
+        axis,
+        right,
+    } = expr
+    else {
+        unreachable!("eval_monadic only receives monadic applications")
+    };
+    let r = eval_expr(ws, right)?;
+    let axis = axis.as_deref().map(|a| eval_expr(ws, a)).transpose()?;
+    monadic(func, axis.as_ref(), &r, &mut ws.env).map_err(|e| e.at(*pos))
+}
+
+/// `left f right`: right, then left, then the axis.
+///
+/// # Errors
+/// Evaluation errors, with the glyph's position as the caret.
+pub fn eval_dyadic(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
+    let Expr::Dyadic {
+        func,
+        pos,
+        axis,
+        left,
+        right,
+    } = expr
+    else {
+        unreachable!("eval_dyadic only receives dyadic applications")
+    };
+    let r = eval_expr(ws, right)?;
+    let l = eval_expr(ws, left)?;
+    let axis = axis.as_deref().map(|a| eval_expr(ws, a)).transpose()?;
+    dyadic(func, axis.as_ref(), &l, &r, &mut ws.env).map_err(|e| e.at(*pos))
 }
 
 /// `func right`, with the evaluated axis: a primitive, or a reduce
 /// or scan along the last axis, the first axis, or the bracket.
-pub fn monadic(
-    func: &Function,
-    axis: Option<&Array>,
-    r: &Array,
-    env: &mut Env,
-) -> AplResult<Array> {
+fn monadic(func: &Function, axis: Option<&Array>, r: &Array, env: &mut Env) -> AplResult<Array> {
     let rank = r.shape.len();
     match func {
         Function::Prim(f) => apply_monadic(*f, r, axis, env),
@@ -31,7 +63,7 @@ pub fn monadic(
 
 /// `left func right`, with the evaluated axis: a primitive, an inner
 /// product, or an outer product (the products take no axis).
-pub fn dyadic(
+fn dyadic(
     func: &Function,
     axis: Option<&Array>,
     l: &Array,
@@ -43,23 +75,5 @@ pub fn dyadic(
         Function::Inner { f, g } if axis.is_none() => inner(*f, *g, l, r),
         Function::Outer { f } if axis.is_none() => outer(*f, l, r),
         _ => Err(AplError::new(ErrorKind::NotImplemented)),
-    }
-}
-
-/// Quad forms: quad output and quad input.
-///
-/// # Errors
-/// NOT IMPLEMENTED for input and quote-quad output, for now.
-pub fn quad(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
-    match expr {
-        Expr::QuadOut { value, .. } => {
-            let v = eval_expr(ws, value)?;
-            ws.output.push(v.clone());
-            Ok(v)
-        }
-        Expr::QuadIn(pos) | Expr::QuoteQuadIn(pos) | Expr::QuoteQuadOut { pos, .. } => {
-            Err(AplError::new(ErrorKind::NotImplemented).at(*pos))
-        }
-        _ => unreachable!("quad only receives quad forms"),
     }
 }

@@ -32,13 +32,7 @@ impl fmt::Display for ErrorKind {
             ErrorKind::Index => write!(f, "INDEX ERROR"),
             ErrorKind::WsFull => write!(f, "WS FULL"),
             ErrorKind::Defn => write!(f, "DEFN ERROR"),
-            ErrorKind::Character(c) => {
-                write!(f, "CHARACTER ERROR: U+{:04X}", u32::from(*c))?;
-                match lookalike(*c) {
-                    Some(g) => write!(f, " (use {g} U+{:04X})", u32::from(g)),
-                    None => Ok(()),
-                }
-            }
+            ErrorKind::Character(c) => write_character(f, *c),
             ErrorKind::Depth => write!(f, "DEPTH ERROR"),
             ErrorKind::Interrupt => write!(f, "INTERRUPT"),
             ErrorKind::NotImplemented => write!(f, "NOT IMPLEMENTED"),
@@ -46,24 +40,64 @@ impl fmt::Display for ErrorKind {
     }
 }
 
-/// The APL glyph a common lookalike character was probably meant
-/// to be: Greek letters, mathematical operators, dashes, quotes.
-#[must_use]
-pub fn lookalike(c: char) -> Option<char> {
-    Some(match c {
-        'ρ' => '⍴',
-        'ι' => '⍳',
-        '∈' | 'ε' => '∊',
-        'Δ' => '∆',
-        '−' | '–' | '—' => '-',
-        '∣' => '|',
-        '∗' | '⋆' => '*',
-        '∼' | '¬' => '~',
-        '·' => '.',
-        '‾' | '⁻' => '¯',
-        '‘' | '’' => '\'',
-        _ => return None,
-    })
+/// Characters commonly typed in place of an APL glyph, and the
+/// glyph meant: Greek letters, mathematical operators, dashes,
+/// quotes.
+const LOOKALIKE: [(char, char); 16] = [
+    ('ρ', '⍴'),
+    ('ι', '⍳'),
+    ('∈', '∊'),
+    ('ε', '∊'),
+    ('Δ', '∆'),
+    ('−', '-'),
+    ('–', '-'),
+    ('—', '-'),
+    ('∣', '|'),
+    ('∗', '*'),
+    ('⋆', '*'),
+    ('∼', '~'),
+    ('¬', '~'),
+    ('·', '.'),
+    ('‾', '¯'),
+    ('’', '\''),
+];
+
+/// Glyphs introduced by APLs after APL\360, with the name they go
+/// by there. sw-apl implements APL\360 only, so they are never
+/// valid, and saying what they are is more use than a code point.
+const LATER: [(char, &str); 20] = [
+    ('{', "dfn brace"),
+    ('}', "dfn brace"),
+    ('⍺', "alpha"),
+    ('⍵', "omega"),
+    ('⊂', "enclose"),
+    ('⊃', "disclose"),
+    ('¨', "each"),
+    ('⋄', "diamond"),
+    ('⍬', "zilde"),
+    ('⍎', "execute"),
+    ('⍕', "format"),
+    ('⍨', "commute"),
+    ('⍣', "power operator"),
+    ('∪', "union"),
+    ('∩', "intersection"),
+    ('⊆', "partition"),
+    ('⊇', "partition"),
+    ('⌸', "later operator"),
+    ('⌺', "later operator"),
+    ('⍤', "later operator"),
+];
+
+/// `CHARACTER ERROR: U+XXXX` with a hint when there is one.
+fn write_character(f: &mut fmt::Formatter<'_>, c: char) -> fmt::Result {
+    write!(f, "CHARACTER ERROR: U+{:04X}", u32::from(c))?;
+    if let Some((_, glyph)) = LOOKALIKE.iter().find(|(bad, _)| *bad == c) {
+        return write!(f, " (use {glyph} U+{:04X})", u32::from(*glyph));
+    }
+    match LATER.iter().find(|(bad, _)| *bad == c) {
+        Some((_, what)) => write!(f, " ({what}, not APL\\360)"),
+        None => Ok(()),
+    }
 }
 
 /// An error with the character offset (into the statement) where it

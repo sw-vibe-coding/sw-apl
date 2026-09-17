@@ -3,8 +3,7 @@
 
 mod apply;
 mod eval;
-mod workspace;
+mod forms;
 
-pub use apl_prims::Env;
+pub use apl_workspace::{Env, Output, Workspace};
 pub use eval::{eval_expr, eval_line};
-pub use workspace::{Output, Workspace};

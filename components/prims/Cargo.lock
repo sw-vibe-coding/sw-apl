@@ -6,6 +6,7 @@ version = 4
 name = "apl-prims"
 version = "0.1.0"
 dependencies = [
+ "apl-prims-index",
  "apl-prims-join",
  "apl-prims-mask",
  "apl-prims-mixed",
@@ -13,6 +14,14 @@ dependencies = [
  "apl-prims-radix",
  "apl-prims-scalar",
  "apl-prims-search",
+ "apl-prims-select",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-prims-index"
+version = "0.1.0"
+dependencies = [
  "apl-prims-select",
  "apl-value",
 ]

@@ -1,0 +1,15 @@
+[package]
+name = "apl-prims-index"
+description = "sw-apl bracket indexing and indexed assignment"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-value = { path = "../../../value/crates/apl-value" }
+apl-prims-select = { path = "../apl-prims-select" }
+
+[lints]
+workspace = true

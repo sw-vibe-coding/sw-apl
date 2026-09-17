@@ -3,9 +3,9 @@
 use apl_ast::Expr;
 use apl_parse::parse;
 use apl_value::{AplError, AplResult, Array, ErrorKind};
+use apl_workspace::{Output, Workspace};
 
-use crate::apply;
-use crate::workspace::{Output, Workspace};
+use crate::{apply, forms};
 
 /// Parse and evaluate one line. `Output::Nothing` when there is
 /// nothing to display: a blank line, a comment, an assignment
@@ -43,7 +43,7 @@ pub fn eval_line(ws: &mut Workspace, line: &str) -> AplResult<Output> {
 ///
 /// # Errors
 /// VALUE ERROR for unknown names; primitive errors carry the glyph's
-/// position as the caret; NOT IMPLEMENTED for indexing and branch.
+/// position as the caret; NOT IMPLEMENTED for branch.
 pub fn eval_expr(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
     match expr {
         Expr::Literal(a) => Ok(a.clone()),
@@ -56,50 +56,28 @@ pub fn eval_expr(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
             ws.set(name, v.clone());
             Ok(v)
         }
-        Expr::Monadic { .. } => eval_monadic(ws, expr),
-        Expr::Dyadic { .. } => eval_dyadic(ws, expr),
-        Expr::QuadOut { .. }
-        | Expr::QuadIn(_)
-        | Expr::QuoteQuadOut { .. }
-        | Expr::QuoteQuadIn(_) => apply::quad(ws, expr),
-        Expr::Index { pos, .. } | Expr::IndexedAssign { pos, .. } | Expr::Branch { pos, .. } => {
-            Err(AplError::new(ErrorKind::NotImplemented).at(*pos))
-        }
+        Expr::Monadic { .. } => apply::eval_monadic(ws, expr),
+        Expr::Dyadic { .. } => apply::eval_dyadic(ws, expr),
+        Expr::Branch { pos, .. } => Err(AplError::new(ErrorKind::NotImplemented).at(*pos)),
         Expr::Mixed(_) => Err(AplError::new(ErrorKind::Syntax)),
+        _ => eval_form(ws, expr),
     }
 }
 
-/// `f right`: the right argument is evaluated first, as on a terminal
-/// reading right to left; then the axis.
-fn eval_monadic(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
-    let Expr::Monadic {
-        func,
-        pos,
-        axis,
-        right,
-    } = expr
-    else {
-        unreachable!("eval_monadic only receives monadic applications")
-    };
-    let r = eval_expr(ws, right)?;
-    let axis = apply::eval_axis(ws, axis.as_deref())?;
-    apply::monadic(func, axis.as_ref(), &r, &mut ws.env).map_err(|e| e.at(*pos))
-}
-
-/// `left f right`: right, then left, then the axis.
-fn eval_dyadic(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
-    let Expr::Dyadic {
-        func,
-        pos,
-        axis,
-        left,
-        right,
-    } = expr
-    else {
-        unreachable!("eval_dyadic only receives dyadic applications")
-    };
-    let r = eval_expr(ws, right)?;
-    let l = eval_expr(ws, left)?;
-    let axis = apply::eval_axis(ws, axis.as_deref())?;
-    apply::dyadic(func, axis.as_ref(), &l, &r, &mut ws.env).map_err(|e| e.at(*pos))
+/// The quad and bracket forms.
+fn eval_form(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
+    match expr {
+        Expr::Index {
+            array,
+            pos,
+            indexes,
+        } => forms::indexed(ws, array, indexes, *pos),
+        Expr::IndexedAssign {
+            name,
+            pos,
+            indexes,
+            value,
+        } => forms::assign_indexed(ws, name, indexes, value, *pos),
+        _ => forms::quad(ws, expr),
+    }
 }
