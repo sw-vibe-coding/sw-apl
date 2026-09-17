@@ -14,6 +14,10 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-16
 
+- chore(agentrail): complete 001-user-functions; advance to 002-branch-and-labels
+- feat(eval): defined functions, the del form, and dynamic scoping
+- chore(agentrail): archive core-mixed; init core-session saga with 7 steps
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 010-axis-forms-and-rank-checks; core-mixed saga done
 - docs: saga log and README status for the end of Phase 2
 - fix(prims): accept an axis bracket only where APL\360 allows one
