@@ -1,0 +1,1 @@
+Inner and outer products for any ranks with scalar extension and LENGTH checks; samples 38 and 39 baselined; 156 tests; reg-rs 36/36; gates green.
