@@ -8,8 +8,9 @@ use apl_prims_radix::{decode, encode};
 use apl_prims_scalar::{dyadic, monadic};
 use apl_prims_search::{grade, index_of, membership};
 use apl_prims_select::{axis_index, drop, reverse, rotate, take, transpose};
-use apl_value::{AplError, AplResult, Array, ErrorKind};
+use apl_value::{AplResult, Array};
 
+use crate::axis::no_axis;
 use crate::random::{Env, deal, roll};
 
 /// `f r`, with the evaluated axis bracket when one was written.
@@ -22,7 +23,7 @@ pub fn apply_monadic(f: char, r: &Array, axis: Option<&Array>, env: &mut Env) ->
     match f {
         '⌽' => Ok(reverse(r, axis_index(axis, false, rank, env.io)?)),
         '⊖' => Ok(reverse(r, axis_index(axis, true, rank, env.io)?)),
-        _ if axis.is_some() => Err(AplError::new(ErrorKind::NotImplemented)),
+        _ if axis.is_some() => Err(no_axis(f)),
         '⍳' => iota(r, env.io),
         '⍴' => Ok(shape(r)),
         ',' => Ok(ravel(r)),
@@ -52,7 +53,7 @@ pub fn apply_dyadic(
             let first = matches!(f, '⊖' | '⌿' | '⍀');
             axis_dyadic(f, l, r, axis_index(axis, first, rank, env.io)?)
         }
-        _ if axis.is_some() => Err(AplError::new(ErrorKind::NotImplemented)),
+        _ if axis.is_some() => Err(no_axis(f)),
         _ => mixed_dyadic(f, l, r, env).unwrap_or_else(|| dyadic(f, l, r)),
     }
 }

@@ -21,6 +21,9 @@ struct Primitive {
     name: String,
     monadic: String,
     dyadic: String,
+    /// True when APL\360 lets the glyph take an axis bracket.
+    #[serde(default)]
+    axis: bool,
 }
 
 #[derive(Deserialize)]
@@ -105,6 +108,11 @@ fn render(tables: &Tables) -> String {
             "Glyphs with a dyadic meaning.",
             "DYADIC: &str",
             &text(&glyphs(|p| !p.dyadic.is_empty())),
+        ),
+        konst(
+            "Glyphs that accept an axis bracket. A glyph outside this\n             /// set followed by one is a SYNTAX ERROR: APL\\360 has no\n             /// such form.",
+            "AXIS: &str",
+            &text(&glyphs(|p| p.axis)),
         ),
         table(
             "Each primitive: glyph, name, monadic and dyadic meanings.",

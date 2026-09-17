@@ -192,7 +192,11 @@ fn select_functions_end_to_end() {
     assert_eq!(out(&mut s, "\u{2349}M"), vec!["1 4 7", "2 5 8", "3 6 9"]);
     assert_eq!(out(&mut s, "1 1\u{2349}M"), vec!["1 5 9"]);
     assert_eq!(out(&mut s, "\u{233d}[3]M")[0], "INDEX ERROR");
-    assert_eq!(out(&mut s, "\u{2349}[1]M")[0], "NOT IMPLEMENTED");
+    assert_eq!(
+        out(&mut s, "\u{2349}[1]M")[0],
+        "SYNTAX ERROR",
+        "transpose takes no axis"
+    );
 }
 
 #[test]
@@ -274,7 +278,8 @@ fn inner_and_outer_products_end_to_end() {
     );
     assert_eq!(
         out(&mut s, "1 2\u{2218}.\u{d7}[1]1 2")[0],
-        "NOT IMPLEMENTED"
+        "SYNTAX ERROR",
+        "products take no axis"
     );
 }
 
@@ -294,5 +299,86 @@ fn indexing_end_to_end() {
     assert_eq!(
         out(&mut s, "M[4;1]"),
         vec!["INDEX ERROR", "      M[4;1]", "       ^"]
+    );
+}
+
+#[test]
+fn only_the_axis_taking_glyphs_accept_a_bracket() {
+    let mut s = Session::default();
+    assert_eq!(
+        out(&mut s, "M\u{2190}2 3\u{2374}\u{2373}6"),
+        Vec::<String>::new()
+    );
+    // The seven APL\360 forms that take an axis.
+    for line in [
+        "\u{233d}[1]M",
+        "\u{2296}[2]M",
+        "1 1/[1]M",
+        "1 1 1\u{233f}[2]M",
+        "1 1 1\\[2]M",
+        "1 1\u{2340}[1]M",
+        "M,[1]M",
+        "+/[1]M",
+        "+\\[2]M",
+    ] {
+        assert_ne!(out(&mut s, line)[0], "SYNTAX ERROR", "{line} takes an axis");
+    }
+    // Everything else: APL\360 has no axis form, so it is a syntax error.
+    for line in [
+        "2 2\u{2191}[1]M",
+        "1 1\u{2193}[1]M",
+        "\u{2349}[1]M",
+        "2\u{2374}[1]M",
+        "M\u{220a}[1]M",
+        "1 2 3\u{2373}[1]1",
+        "2\u{22a5}[1]M",
+        "2\u{22a4}[1]5",
+        "\u{2373}[1]3",
+        "\u{234b}[1]1 2",
+        "M+[1]M",
+        "M+.\u{d7}[1]M",
+    ] {
+        assert_eq!(out(&mut s, line)[0], "SYNTAX ERROR", "{line} takes no axis");
+    }
+    // Monadic ravel with an axis is APL2, not APL\360 syntax we reject
+    // outright: the glyph does take an axis, dyadically.
+    assert_eq!(out(&mut s, ",[1]M")[0], "NOT IMPLEMENTED");
+}
+
+#[test]
+fn structural_functions_on_scalars_and_empties() {
+    let mut s = Session::default();
+    let cases = [
+        ("\u{2374}5", vec![""]),
+        (",5", vec!["5"]),
+        ("\u{233d}5", vec!["5"]),
+        ("\u{2296}5", vec!["5"]),
+        ("\u{2349}5", vec!["5"]),
+        ("1\u{2191}5", vec!["5"]),
+        ("1\u{2193}5", vec![""]),
+        ("1/5", vec!["5"]),
+        ("5\u{220a}5", vec!["1"]),
+        ("2\u{22a4}5", vec!["1"]),
+        ("\u{2374}\u{2373}0", vec!["0"]),
+        (",\u{2373}0", vec![""]),
+        ("\u{233d}\u{2373}0", vec![""]),
+        ("\u{234b}\u{2373}0", vec![""]),
+        ("\u{2374}0 0\u{2374}0", vec!["0 0"]),
+        ("+/0 3\u{2374}0", vec![""]),
+        ("+\u{233f}0 3\u{2374}0", vec!["0 0 0"]),
+        ("\u{2374}\u{2349}2 3\u{2374}\u{2373}6", vec!["3 2"]),
+    ];
+    for (line, want) in cases {
+        assert_eq!(out(&mut s, line), want, "{line}");
+    }
+    assert_eq!(
+        out(&mut s, "\u{234b}5")[0],
+        "RANK ERROR",
+        "grade needs a vector"
+    );
+    assert_eq!(
+        out(&mut s, "5\u{2373}5")[0],
+        "RANK ERROR",
+        "index-of needs a vector left"
     );
 }

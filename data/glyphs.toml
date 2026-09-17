@@ -165,18 +165,21 @@ glyph = ","
 name = "comma"
 monadic = "ravel"
 dyadic = "catenate"
+axis = true
 
 [[primitive]]
 glyph = "⌽"
 name = "circle-stile"
 monadic = "reverse"
 dyadic = "rotate"
+axis = true
 
 [[primitive]]
 glyph = "⊖"
 name = "circle-bar"
 monadic = "reverse first"
 dyadic = "rotate first"
+axis = true
 
 [[primitive]]
 glyph = "⍉"
@@ -201,24 +204,28 @@ glyph = "/"
 name = "slash"
 monadic = ""
 dyadic = "compress"
+axis = true
 
 [[primitive]]
 glyph = "⌿"
 name = "slash-bar"
 monadic = ""
 dyadic = "compress first"
+axis = true
 
 [[primitive]]
 glyph = "\\"
 name = "backslash"
 monadic = ""
 dyadic = "expand"
+axis = true
 
 [[primitive]]
 glyph = "⍀"
 name = "backslash-bar"
 monadic = ""
 dyadic = "expand first"
+axis = true
 
 [[primitive]]
 glyph = "⊥"

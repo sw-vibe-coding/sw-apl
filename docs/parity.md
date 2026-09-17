@@ -56,6 +56,8 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | Strict Unicode acceptance, CHARACTER ERROR with lookalike hint | done | lex, value, session tests |
 | Lexer: brackets, semicolon, colon, branch arrow, del, del-tilde, quote-quad, system command lines, strands, bracket balance | done | lex tests |
 | Parser: axis brackets `f[k]`, compress vs reduce by context, SYNTAX ERROR carets, multiple assignments | done | parse tests |
+| Axis brackets accepted only where APL\360 allows them (the seven forms); anywhere else a SYNTAX ERROR | done | session audit test; the set is generated from `data/glyphs.toml` |
+| Structural functions on scalars and empty arrays | done | session audit test |
 | Mixed output `'TEXT';X;'MORE'` (semicolon list) | done | session tests, sample 46 |
 | Invalid UTF-8 reported with byte offset, run continues | done | cli tests |
 
@@ -87,7 +89,7 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 |---|---|---|---|
 | `⍳` | done | done | index of, one past the end when absent; sample 30 |
 | `⍴` | done | done | |
-| `,` | done | done | any rank, axis bracket, laminate, scalar and rank-1 conformance; sample 49 |
+| `,` | done | done | any rank, axis bracket, laminate, scalar and rank-1 conformance; sample 49. Monadic ravel with an axis is APL2, not implemented |
 | `⌽ ⊖` | done | done | axis bracket; vector shifts; samples 08, 34 |
 | `⍉` | done | done | dyadic permutes and takes diagonals; sample 35 |
 | `↑ ↓` | | done | per axis, negatives, overtake fill; samples 07, 10, 44 |

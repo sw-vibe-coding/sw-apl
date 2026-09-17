@@ -74,6 +74,6 @@ fn dyadic(
         Function::Prim(f) => apply_dyadic(*f, l, r, axis, env),
         Function::Inner { f, g } if axis.is_none() => inner(*f, *g, l, r),
         Function::Outer { f } if axis.is_none() => outer(*f, l, r),
-        _ => Err(AplError::new(ErrorKind::NotImplemented)),
+        _ => Err(AplError::new(ErrorKind::Syntax)),
     }
 }

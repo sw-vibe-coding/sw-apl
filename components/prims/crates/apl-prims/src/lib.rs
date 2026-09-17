@@ -2,6 +2,7 @@
 //! mixed, or operator implementation, plus the evaluation
 //! environment the primitives need (index origin, random link).
 
+mod axis;
 mod dispatch;
 mod random;
 

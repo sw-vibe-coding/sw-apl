@@ -1,6 +1,6 @@
 number = 10
 slug = "axis-forms-and-rank-checks"
-status = "pending"
+status = "in-progress"
 description = 'Phase 2 step 8. Audit every structural function against the APL\\360 manual: ...'
 role = "production"
 context_files = []
