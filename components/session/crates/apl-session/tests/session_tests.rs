@@ -194,3 +194,25 @@ fn select_functions_end_to_end() {
     assert_eq!(out(&mut s, "\u{233d}[3]M")[0], "INDEX ERROR");
     assert_eq!(out(&mut s, "\u{2349}[1]M")[0], "NOT IMPLEMENTED");
 }
+
+#[test]
+fn compress_expand_membership_indexof_end_to_end() {
+    let mut s = Session::default();
+    assert_eq!(out(&mut s, "1 0 1/10 20 30"), vec!["10 30"]);
+    assert_eq!(out(&mut s, "(3=\u{2373}5)/\u{2373}5"), vec!["3"]);
+    assert_eq!(
+        out(&mut s, "M\u{2190}3 3\u{2374}\u{2373}9"),
+        Vec::<String>::new()
+    );
+    assert_eq!(out(&mut s, "1 0 1/M"), vec!["1 3", "4 6", "7 9"]);
+    assert_eq!(out(&mut s, "1 0 1\u{233f}M"), vec!["1 2 3", "7 8 9"]);
+    assert_eq!(out(&mut s, "0 1 1/[1]M"), vec!["4 5 6", "7 8 9"]);
+    assert_eq!(out(&mut s, "1 0 1\\1 2"), vec!["1 0 2"]);
+    assert_eq!(
+        out(&mut s, "1 0 1\u{2340}2 2\u{2374}\u{2373}4"),
+        vec!["1 2", "0 0", "3 4"]
+    );
+    assert_eq!(out(&mut s, "1 2 3 4\u{220a}2 4 6"), vec!["0 1 0 1"]);
+    assert_eq!(out(&mut s, "10 20 30\u{2373}20 40"), vec!["2 4"]);
+    assert_eq!(out(&mut s, "'hello'\u{220a}'aeiou'"), vec!["0 1 0 0 1"]);
+}

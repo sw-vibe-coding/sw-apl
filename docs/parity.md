@@ -85,16 +85,16 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 
 | Glyph | Monadic | Dyadic | Notes |
 |---|---|---|---|
-| `⍳` | done | todo | index of |
+| `⍳` | done | done | index of, one past the end when absent; sample 30 |
 | `⍴` | done | done | |
 | `,` | done | done | any rank, axis bracket, laminate, scalar and rank-1 conformance; sample 49 |
 | `⌽ ⊖` | done | done | axis bracket; vector shifts; samples 08, 34 |
 | `⍉` | done | done | dyadic permutes and takes diagonals; sample 35 |
 | `↑ ↓` | | done | per axis, negatives, overtake fill; samples 07, 10, 44 |
-| `/ ⌿` compress | | todo | |
-| `\ ⍀` expand | | todo | |
+| `/ ⌿` compress | | done | boolean left, either axis, axis bracket; sample 17 |
+| `\ ⍀` expand | | done | boolean left, either axis, axis bracket |
 | `⊥ ⊤` | | todo | |
-| `∊` | | todo | |
+| `∊` | | done | with the fuzz; sample 30 |
 | `⍋ ⍒` | todo | | |
 | `⌹` | todo | todo | Phase 5 |
 | `⌶` I-beams 20 to 27 | todo | | Phase 3 |

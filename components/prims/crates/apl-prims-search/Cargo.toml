@@ -1,0 +1,15 @@
+[package]
+name = "apl-prims-search"
+description = "sw-apl membership and index-of"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-value = { path = "../../../value/crates/apl-value" }
+
+
+[lints]
+workspace = true

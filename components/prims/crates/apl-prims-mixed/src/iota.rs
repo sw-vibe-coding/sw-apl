@@ -50,3 +50,23 @@ pub fn int_vector(l: &Array) -> AplResult<Vec<i64>> {
         })
         .collect()
 }
+
+/// A scalar or vector of 0s and 1s as booleans.
+///
+/// # Errors
+/// RANK ERROR above rank 1; DOMAIN ERROR for anything but 0 and 1.
+pub fn bool_vector(l: &Array) -> AplResult<Vec<bool>> {
+    if l.shape.len() > 1 {
+        return Err(AplError::new(ErrorKind::Rank));
+    }
+    let Data::Num(v) = &l.data else {
+        return Err(AplError::new(ErrorKind::Domain));
+    };
+    v.iter()
+        .map(|&n| match n {
+            Number::Int(0) => Ok(false),
+            Number::Int(1) => Ok(true),
+            _ => Err(AplError::new(ErrorKind::Domain)),
+        })
+        .collect()
+}

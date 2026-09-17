@@ -6,6 +6,6 @@ mod gather;
 mod rotate;
 mod take_drop;
 
-pub use gather::axis_index;
+pub use gather::{axis_index, gather, strides};
 pub use rotate::{reverse, rotate, transpose};
 pub use take_drop::{drop, take};

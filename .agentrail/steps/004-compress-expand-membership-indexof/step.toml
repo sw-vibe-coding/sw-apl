@@ -1,6 +1,6 @@
 number = 4
 slug = "compress-expand-membership-indexof"
-status = "pending"
+status = "in-progress"
 description = "Phase 2 step 3. Boolean compress and expand along the last or first axis (Fun..."
 role = "production"
 context_files = []

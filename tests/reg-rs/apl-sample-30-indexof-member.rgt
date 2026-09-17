@@ -1,0 +1,4 @@
+command = "target/release/sw-apl -f samples/30-indexof-member.apl"
+timeout = 60
+exit_code = 0
+desc = "Transcript of samples/30-indexof-member.apl"

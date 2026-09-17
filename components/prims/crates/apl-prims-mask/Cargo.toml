@@ -1,0 +1,16 @@
+[package]
+name = "apl-prims-mask"
+description = "sw-apl compress and expand along an axis"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-value = { path = "../../../value/crates/apl-value" }
+apl-prims-select = { path = "../apl-prims-select" }
+apl-prims-mixed = { path = "../apl-prims-mixed" }
+
+[lints]
+workspace = true
