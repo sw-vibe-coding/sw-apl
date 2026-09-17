@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-16
 
+- chore(agentrail): complete 001-ravel-catenate-laminate; advance to 002-take-drop-reverse-rotate-transpose
+- feat(prims): catenate along any axis, laminate, axis brackets evaluated
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): archive core-mvp; init core-mixed saga with 8 steps
 - chore(agentrail): complete 011-scalar-functions-complete; core-mvp saga done
 - feat(prims): complete scalar family -- circular, gamma, logic, roll
