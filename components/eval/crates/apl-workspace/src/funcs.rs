@@ -26,4 +26,11 @@ impl Workspace {
         self.vars.remove(&defn.name);
         self.funcs.insert(defn.name.clone(), Rc::new(defn));
     }
+
+    /// Forget whatever a name holds. Nothing happens if it holds
+    /// nothing, which is what the editor wants after a rename.
+    pub fn erase(&mut self, name: &str) {
+        self.vars.remove(name);
+        self.funcs.remove(name);
+    }
 }

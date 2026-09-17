@@ -7,6 +7,6 @@ mod header;
 mod label;
 mod scan;
 
-pub use header::parse_header;
+pub use header::{header_text, parse_header};
 pub use label::{labels, without_label};
 pub use scan::{Funcs, ends_operand, matching, segments};

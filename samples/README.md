@@ -22,6 +22,11 @@ character matrix for the names, mixed output, and the conditional
 branch idiom driving two functions. Its transcript is reproducible
 because the random link starts from a fixed value.
 
+`55-del-editor.apl` is an edit session: reopening a function,
+inserting at a fractional line number, replacing and deleting lines,
+displaying with the bracketed quad, editing and renaming through the
+header, and locking with del-tilde.
+
 `54-life-function.apl` is Conway's Life rewritten as functions --
 GEN for one generation, RUN for a labelled loop over several --
 beside the straight-line form in `51-life.apl`.

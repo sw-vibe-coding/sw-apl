@@ -296,7 +296,8 @@ change, same commit). `docs/plan.md` is the master plan. Every owner instruction
 there first; sagas and steps are derived from its phases. Other
 docs: `docs/prd.md`, `docs/architecture.md`, `docs/design.md`,
 `docs/language.md`, `docs/session.md`, `docs/glyphs.txt`,
-`docs/testing.md`, `docs/input-methods.md`, `docs/saga.md`.
+`docs/testing.md`, `docs/input-methods.md`, `docs/saga.md`,
+`docs/del-editor-guide.md`.
 
 ## Build / Test
 

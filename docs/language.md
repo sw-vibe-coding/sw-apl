@@ -167,9 +167,12 @@ Notes:
   `A NAME B`, or any of those with `R left-arrow` in front.
   Locals follow the header after semicolons.
 - Lines are numbered from 1. The editor accepts `[n]` to
-  reposition, `[n quad]` to display, `[delta n]` to delete,
-  fractional numbers to insert, and `[0]` to edit the header.
-  A closing del ends definition; del-tilde locks the function.
+  reposition, `[quad]` and `[n quad]` to display, `[delta n]` to
+  delete, fractional numbers to insert, and `[0]` to edit the
+  header. A closing del ends definition and renumbers the lines
+  from 1; del-tilde ends it and locks the function, which can then
+  be neither reopened nor displayed. `session.md` has the full
+  table.
 - Labels are names followed by a colon at the start of a line;
   they are local constants holding the line number.
 - Branch: right arrow followed by an expression. The first

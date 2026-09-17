@@ -1,0 +1,16 @@
+[package]
+name = "apl-editor"
+description = "sw-apl del editor: definition mode, line editing, display"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-ast = { path = "../../../parse/crates/apl-ast" }
+apl-scan = { path = "../../../parse/crates/apl-scan" }
+apl-value = { path = "../../../value/crates/apl-value" }
+
+[lints]
+workspace = true

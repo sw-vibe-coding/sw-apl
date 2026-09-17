@@ -86,6 +86,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-editor"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-scan",
+ "apl-value",
+]
+
+[[package]]
 name = "apl-eval"
 version = "0.1.0"
 dependencies = [
@@ -250,6 +259,7 @@ name = "apl-session"
 version = "0.1.0"
 dependencies = [
  "apl-display",
+ "apl-editor",
  "apl-eval",
  "apl-lex",
  "apl-parse",

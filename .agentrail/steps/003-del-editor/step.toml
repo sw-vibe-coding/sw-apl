@@ -1,6 +1,6 @@
 number = 3
 slug = "del-editor"
-status = "pending"
+status = "in-progress"
 description = "Phase 3 step 3. Definition mode editing per docs/session.md: prompt [n] for t..."
 role = "production"
 context_files = []

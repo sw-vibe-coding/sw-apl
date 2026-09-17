@@ -11,7 +11,8 @@ observable behaviour the reg-rs transcripts pin down.
   flush-left output.
 - Blank input lines are accepted silently.
 - Function definition mode prompts with the bracketed line number
-  followed by spaces, for example `[1]   `.
+  followed by spaces, for example `[1]   `. A fractional number
+  fills the same six columns, for example `[1.5] `.
 - Output wider than `)WIDTH` wraps; continuation lines are indented
   six spaces.
 - Batch mode (`-f FILE` or stdin) echoes each input line with the
@@ -82,6 +83,47 @@ Library form: `)LOAD 1 CLASS` loads workspace CLASS from library
 file; library 0 (the default) is the current working directory
 or `--lib DIR`. Workspace names follow APL rules and the file on
 disk is `NAME.apl.ws` (UTF-8 text, see `design.md` D7).
+
+## The del editor
+
+`del-editor-guide.md` is the walkthrough; this is the table.
+
+A del opens definition mode. The text after it is either the
+header of a new function or the name of one to reopen; the lines
+that follow are the body, typed behind the number each will hold.
+
+| Typed | Meaning |
+|---|---|
+| `∇HEADER` | Open a new function. DEFN ERROR if the name is taken |
+| `∇NAME` | Reopen NAME, positioned after its last line |
+| `∇NAME[cmd]` | Reopen and run one editor command at once |
+| `TEXT` | Put TEXT at the line the prompt offers, then move on |
+| `[n]` | The next line typed becomes line n |
+| `[n] TEXT` | Put TEXT at line n |
+| `[⎕]` | Display the whole function, header and dels included |
+| `[n⎕]` | Display from line n on, without the header |
+| `[∆n]` | Delete line n. DEFN ERROR if there is no such line |
+| `[0]` | The next line typed becomes the header |
+| `[0] HEADER` | Replace the header now |
+| `∇` | Close, renumbering the lines from 1 |
+| `⍫` | Close locked |
+
+Line numbers may carry up to three decimal places, which is how a
+line is inserted between two that are already there: `[1.5]` goes
+between 1 and 2, `[1.55]` between 1.5 and 1.6. The prompt then
+steps at the grain the number itself uses, so `[1.5]` is followed
+by `[1.6]`. Closing the definition renumbers every line from 1,
+which is why a branch should name a label rather than a number.
+
+A display leaves the prompt where it was, so `∇NAME[⎕]∇` shows a
+function and returns to immediate execution without changing it.
+
+`[0]` may rename the function as well as change its arguments and
+locals; the old name is erased rather than left holding a copy.
+The line after a header edit is line 1.
+
+A function closed with del-tilde is locked: reopening or
+displaying it is DEFN ERROR. Nothing unlocks it.
 
 ## DESCRIBE convention
 

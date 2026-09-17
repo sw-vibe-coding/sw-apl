@@ -60,8 +60,14 @@ which is empty when the condition is false). The horse race in
 `samples/50-horse-race.apl` runs, and Conway's Life runs as a pair of
 functions in `samples/54-life-function.apl`.
 
-Not there yet: the del editor commands, quad input, workspaces
-(`)SAVE`, `)LOAD`), the I-beam system functions, and domino. A
+Functions are edited the APL\360 way, in definition mode: a bracketed
+number moves to a line or replaces it, a bracketed quad displays,
+delta deletes, a fractional number inserts between two existing lines
+(the close renumbers from 1), and `[0]` edits the header. Del-tilde
+closes a definition locked.
+
+Not there yet: quad input, workspaces (`)SAVE`, `)LOAD`), the I-beam
+system functions, and domino. A
 glyph from a later APL is a CHARACTER ERROR that names it, so the
 Dyalog Life one-liner answers "dfn brace, not APL\360". See the
 parity checklist for the row-by-row picture. Batch mode, `)OFF`, help, and the
@@ -94,6 +100,8 @@ documents below show real APL glyphs:
 - [Glyph table](docs/glyphs.txt) -- every glyph with its code point
 - [Session](docs/session.md) -- prompt, error display, system
   commands, the DESCRIBE convention
+- [Using the del editor](docs/del-editor-guide.md) -- writing and
+  changing a function, line by line
 - [Typing glyphs](docs/input-methods.md) -- Espanso and Emacs
   keymaps, OS layouts
 - [Testing](docs/testing.md), [Architecture](docs/architecture.md),

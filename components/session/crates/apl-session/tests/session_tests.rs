@@ -529,3 +529,205 @@ fn a_branch_in_immediate_execution_displays_nothing() {
     assert_eq!(out(&mut s, "\u{2192}"), Vec::<String>::new());
     assert_eq!(out(&mut s, "2+2"), vec!["4"]);
 }
+
+#[test]
+fn a_bracketed_number_repositions_and_replaces() {
+    let mut s = Session::default();
+    out(&mut s, "\u{2207}R\u{2190}AREA H");
+    assert_eq!(s.prompt(), "[1]   ");
+    out(&mut s, "[1] R\u{2190}H");
+    assert_eq!(s.prompt(), "[2]   ");
+    // Retyping a line replaces it; the prompt walks on as before.
+    out(&mut s, "[1] R\u{2190}H\u{d7}H");
+    assert_eq!(s.prompt(), "[2]   ");
+    out(&mut s, "\u{2207}");
+    assert_eq!(out(&mut s, "AREA 3"), vec!["9"]);
+}
+
+#[test]
+fn a_bracketed_quad_displays_the_function() {
+    let mut s = Session::default();
+    define(
+        &mut s,
+        "\u{2207}R\u{2190}F N;T",
+        &["T\u{2190}N", "R\u{2190}T+1"],
+    );
+    assert_eq!(
+        out(&mut s, "\u{2207}F[\u{2395}]\u{2207}"),
+        vec![
+            "      \u{2207}R\u{2190}F N;T",
+            "[1]   T\u{2190}N",
+            "[2]   R\u{2190}T+1",
+            "      \u{2207}"
+        ]
+    );
+    // Showing it left the session in immediate execution, unchanged.
+    assert_eq!(s.prompt(), "      ");
+    assert_eq!(out(&mut s, "F 1"), vec!["2"]);
+    // [n⎕] shows from line n, without the header or the closing del.
+    out(&mut s, "\u{2207}F");
+    assert_eq!(out(&mut s, "[2\u{2395}]"), vec!["[2]   R\u{2190}T+1"]);
+    out(&mut s, "\u{2207}");
+}
+
+#[test]
+fn a_fractional_line_inserts_and_the_close_renumbers() {
+    let mut s = Session::default();
+    define(
+        &mut s,
+        "\u{2207}R\u{2190}G",
+        &["R\u{2190}1", "R\u{2190}R+10"],
+    );
+    out(&mut s, "\u{2207}G");
+    out(&mut s, "[1.1] R\u{2190}R+100");
+    // The prompt steps at the grain the number uses.
+    assert_eq!(s.prompt(), "[1.2] ");
+    out(&mut s, "[1.15] R\u{2190}R+1000");
+    assert_eq!(s.prompt(), "[1.16]");
+    assert_eq!(
+        out(&mut s, "[\u{2395}]"),
+        vec![
+            "      \u{2207}R\u{2190}G",
+            "[1]   R\u{2190}1",
+            "[1.1] R\u{2190}R+100",
+            "[1.15]R\u{2190}R+1000",
+            "[2]   R\u{2190}R+10",
+            "      \u{2207}"
+        ]
+    );
+    out(&mut s, "\u{2207}");
+    assert_eq!(out(&mut s, "G"), vec!["1111"]);
+    // Closing renumbered them from 1.
+    assert_eq!(
+        out(&mut s, "\u{2207}G[\u{2395}]\u{2207}"),
+        vec![
+            "      \u{2207}R\u{2190}G",
+            "[1]   R\u{2190}1",
+            "[2]   R\u{2190}R+100",
+            "[3]   R\u{2190}R+1000",
+            "[4]   R\u{2190}R+10",
+            "      \u{2207}"
+        ]
+    );
+}
+
+#[test]
+fn delta_deletes_a_line() {
+    let mut s = Session::default();
+    define(
+        &mut s,
+        "\u{2207}R\u{2190}H",
+        &["R\u{2190}1", "R\u{2190}R+10", "R\u{2190}R+100"],
+    );
+    out(&mut s, "\u{2207}H");
+    out(&mut s, "[\u{2206}2]");
+    out(&mut s, "\u{2207}");
+    assert_eq!(out(&mut s, "H"), vec!["101"]);
+    // Deleting a line that is not there is DEFN ERROR.
+    out(&mut s, "\u{2207}H");
+    assert_eq!(
+        out(&mut s, "[\u{2206}9]"),
+        vec!["DEFN ERROR", "      [\u{2206}9]", "      ^"]
+    );
+    out(&mut s, "\u{2207}");
+    assert_eq!(out(&mut s, "H"), vec!["101"]);
+}
+
+#[test]
+fn bracket_zero_edits_the_header() {
+    let mut s = Session::default();
+    define(&mut s, "\u{2207}R\u{2190}K", &["R\u{2190}N+1"]);
+    assert_eq!(out(&mut s, "K").len(), 3, "N is undefined");
+    out(&mut s, "\u{2207}K");
+    out(&mut s, "[0] R\u{2190}K N");
+    out(&mut s, "\u{2207}");
+    assert_eq!(out(&mut s, "K 4"), vec!["5"]);
+    // Renaming through the header leaves nothing behind.
+    out(&mut s, "\u{2207}K");
+    out(&mut s, "[0] R\u{2190}BUMP N");
+    out(&mut s, "\u{2207}");
+    assert_eq!(out(&mut s, "BUMP 4"), vec!["5"]);
+    assert_eq!(out(&mut s, "K"), vec!["VALUE ERROR", "      K", "      ^"]);
+}
+
+#[test]
+fn del_tilde_locks_a_function_against_reopening() {
+    let mut s = Session::default();
+    out(&mut s, "\u{2207}R\u{2190}SECRET");
+    out(&mut s, "R\u{2190}42");
+    out(&mut s, "\u{236b}");
+    assert_eq!(out(&mut s, "SECRET"), vec!["42"]);
+    for line in ["\u{2207}SECRET", "\u{2207}SECRET[\u{2395}]\u{2207}"] {
+        assert_eq!(out(&mut s, line)[0], "DEFN ERROR", "{line}");
+        assert_eq!(s.prompt(), "      ", "{line}");
+    }
+    assert_eq!(out(&mut s, "SECRET"), vec!["42"]);
+}
+
+#[test]
+fn defn_errors_in_and_around_definition_mode() {
+    let mut s = Session::default();
+    define(&mut s, "\u{2207}R\u{2190}F", &["R\u{2190}1"]);
+    // A header naming something the workspace already holds.
+    assert_eq!(out(&mut s, "\u{2207}R\u{2190}F N")[0], "DEFN ERROR");
+    out(&mut s, "V\u{2190}1");
+    assert_eq!(out(&mut s, "\u{2207}V")[0], "DEFN ERROR");
+    // A bracket after a header rather than a name.
+    assert_eq!(out(&mut s, "\u{2207}R\u{2190}NEW N[1]")[0], "DEFN ERROR");
+    // Malformed brackets inside definition mode.
+    out(&mut s, "\u{2207}F");
+    for bad in ["[1", "[X]", "[1.2345]", "[\u{2206}]", "[\u{2206}X]"] {
+        assert_eq!(out(&mut s, bad)[0], "DEFN ERROR", "{bad}");
+    }
+    out(&mut s, "\u{2207}");
+    assert_eq!(out(&mut s, "F"), vec!["1"]);
+}
+
+#[test]
+fn reopening_positions_after_the_last_line() {
+    let mut s = Session::default();
+    define(
+        &mut s,
+        "\u{2207}R\u{2190}P",
+        &["R\u{2190}1", "R\u{2190}R+1"],
+    );
+    out(&mut s, "\u{2207}P");
+    assert_eq!(s.prompt(), "[3]   ");
+    out(&mut s, "R\u{2190}R\u{d7}10");
+    out(&mut s, "\u{2207}");
+    assert_eq!(out(&mut s, "P"), vec!["20"]);
+    // ∇NAME[n] reopens positioned at n.
+    out(&mut s, "\u{2207}P[2]");
+    assert_eq!(s.prompt(), "[2]   ");
+    out(&mut s, "R\u{2190}R+5");
+    out(&mut s, "\u{2207}");
+    assert_eq!(out(&mut s, "P"), vec!["60"]);
+}
+
+#[test]
+fn a_label_still_resolves_after_an_insert() {
+    let mut s = Session::default();
+    define(
+        &mut s,
+        "\u{2207}R\u{2190}Q;I",
+        &[
+            "R\u{2190}0",
+            "I\u{2190}0",
+            "TOP:I\u{2190}I+1",
+            "\u{2192}TOP\u{d7}\u{2373}I<3",
+            "R\u{2190}I",
+        ],
+    );
+    assert_eq!(out(&mut s, "Q"), vec!["3"]);
+    // An inserted line shifts TOP's number; the label follows it.
+    out(&mut s, "\u{2207}Q");
+    out(&mut s, "[0.5] R\u{2190}0");
+    out(&mut s, "\u{2207}");
+    assert_eq!(out(&mut s, "Q"), vec!["3"]);
+    // The insert shifted every later line down one, so TOP is line 4
+    // now -- and the label followed it, which is the whole point.
+    assert_eq!(
+        out(&mut s, "\u{2207}Q[4\u{2395}]\u{2207}")[0],
+        "[4]   TOP:I\u{2190}I+1"
+    );
+}

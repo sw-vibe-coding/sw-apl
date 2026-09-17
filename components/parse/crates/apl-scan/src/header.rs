@@ -1,4 +1,5 @@
-//! The del header: the line that opens a function definition.
+//! The del header: the line that opens a function definition, read
+//! from text and written back out again.
 
 use apl_ast::Defn;
 use apl_lex::{Token, TokenKind, tokenize};
@@ -27,15 +28,40 @@ pub fn parse_header(text: &str) -> AplResult<Defn> {
     let locals = ranges
         .map(|(lo, hi)| Ok(header_names(&tokens[lo..hi])?.0))
         .collect::<AplResult<Vec<_>>>()?;
-    let body = Vec::new();
     Ok(Defn {
         name,
         result,
         left,
         right,
         locals,
-        body,
+        body: Vec::new(),
+        locked: false,
     })
+}
+
+/// The header as it would be typed: the inverse of `parse_header`,
+/// so a function can be shown or written out in del form.
+#[must_use]
+pub fn header_text(defn: &Defn) -> String {
+    let mut out = String::new();
+    if let Some(result) = &defn.result {
+        out.push_str(result);
+        out.push('←');
+    }
+    if let Some(left) = &defn.left {
+        out.push_str(left);
+        out.push(' ');
+    }
+    out.push_str(&defn.name);
+    if let Some(right) = &defn.right {
+        out.push(' ');
+        out.push_str(right);
+    }
+    for local in &defn.locals {
+        out.push(';');
+        out.push_str(local);
+    }
+    out
 }
 
 /// The names in a header segment, as `(name, left, right)`: one name

@@ -1,6 +1,7 @@
 //! The session state machine: immediate execution and definition mode.
 
-use apl_eval::{Defn, Workspace, eval_line};
+use apl_editor::Definition;
+use apl_eval::{Workspace, eval_line};
 
 use crate::commands::{definition_line, open_definition, system_command};
 use crate::render::{error_lines, render};
@@ -21,8 +22,9 @@ pub enum Reply {
 #[derive(Debug)]
 pub struct Session {
     pub(crate) ws: Workspace,
-    /// The function being defined, while definition mode is open.
-    pub(crate) defining: Option<Defn>,
+    /// The function open in the del editor, while definition mode
+    /// is open.
+    pub(crate) defining: Option<Definition>,
     /// Print precision (`)DIGITS`).
     pub(crate) digits: usize,
     /// Print width (`)WIDTH`).
@@ -45,10 +47,9 @@ impl Session {
     /// execution, the bracketed line number in definition mode.
     #[must_use]
     pub fn prompt(&self) -> String {
-        match &self.defining {
-            None => INDENT.to_string(),
-            Some(defn) => format!("{:<6}", format!("[{}]", defn.body.len() + 1)),
-        }
+        self.defining
+            .as_ref()
+            .map_or_else(|| INDENT.to_string(), Definition::prompt)
     }
 
     /// Respond to one input line.

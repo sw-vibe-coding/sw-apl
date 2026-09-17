@@ -1,8 +1,9 @@
 //! The input lines the session answers itself instead of evaluating:
-//! system commands, and the del lines that open and close a function
-//! definition.
+//! system commands, and the lines that drive the del editor.
 
+use apl_editor::Definition;
 use apl_parse::parse_header;
+use apl_value::{AplError, ErrorKind};
 
 use crate::render::error_lines;
 use crate::session::{Reply, Session};
@@ -35,28 +36,51 @@ fn was_line<T: std::fmt::Display>(was: T) -> String {
     format!("WAS {was}")
 }
 
-/// An opening del: read the header and start collecting body lines.
-pub fn open_definition(session: &mut Session, header: &str) -> Reply {
-    match parse_header(header) {
-        Ok(defn) => {
-            session.defining = Some(defn);
-            Reply::Output(Vec::new())
-        }
-        Err(err) => Reply::Output(error_lines(&err, &format!("∇{header}"))),
-    }
-}
-
-/// One line typed in definition mode. A line that is nothing but a
-/// del closes the definition and stores the function.
-pub fn definition_line(session: &mut Session, line: &str) -> Reply {
-    let Some(defn) = &mut session.defining else {
-        unreachable!("definition_line only runs while a definition is open")
+/// An opening del: start a new function, or reopen one for editing.
+/// A command written on the same line takes effect at once, so
+/// `∇NAME[⎕]∇` shows a function and leaves definition mode again.
+pub fn open_definition(session: &mut Session, text: &str) -> Reply {
+    let at = text.find('[').unwrap_or(text.len());
+    let (head, rest) = (text[..at].trim(), text[at..].to_string());
+    let opening = match session.ws.function(head) {
+        Some(defn) if defn.locked => Err(AplError::new(ErrorKind::Defn)),
+        Some(defn) => Ok((*defn).clone()),
+        None => parse_header(head).and_then(|defn| {
+            let exists = session.ws.is_function(&defn.name) || session.ws.get(&defn.name).is_some();
+            if rest.is_empty() && !exists {
+                Ok(defn)
+            } else {
+                Err(AplError::new(ErrorKind::Defn))
+            }
+        }),
     };
-    if line.trim() == "∇" {
-        let defn = session.defining.take().expect("a definition is open");
-        session.ws.define(defn);
+    match opening {
+        Err(err) => return Reply::Output(error_lines(&err, &format!("∇{text}"))),
+        Ok(defn) => session.defining = Some(Definition::start(defn)),
+    }
+    if rest.is_empty() {
         return Reply::Output(Vec::new());
     }
-    defn.body.push(line.trim_end().to_string());
-    Reply::Output(Vec::new())
+    definition_line(session, &rest)
+}
+
+/// One line typed in definition mode. Closing the definition stores
+/// the function, under its new name when `[0]` renamed it.
+pub fn definition_line(session: &mut Session, line: &str) -> Reply {
+    let Some(definition) = &mut session.defining else {
+        unreachable!("definition_line only runs while a definition is open")
+    };
+    let step = match definition.line(line) {
+        Ok(step) => step,
+        Err(err) => return Reply::Output(error_lines(&err, line)),
+    };
+    if let Some(locked) = step.closed {
+        let open = session.defining.take().expect("a definition is open");
+        let (defn, renamed) = open.close(locked);
+        if let Some(was) = renamed {
+            session.ws.erase(&was);
+        }
+        session.ws.define(defn);
+    }
+    Reply::Output(step.lines)
 }

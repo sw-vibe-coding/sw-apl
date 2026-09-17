@@ -21,6 +21,8 @@ pub struct Defn {
     pub locals: Vec<String>,
     /// Body lines, numbered from 1.
     pub body: Vec<String>,
+    /// Closed with del-tilde: it can no longer be reopened or shown.
+    pub locked: bool,
 }
 
 impl Defn {
