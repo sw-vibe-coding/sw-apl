@@ -14,6 +14,10 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-16
 
+- chore(agentrail): complete 010-parser-complete; advance to 011-scalar-functions-complete
+- feat(parse): complete parser -- derived functions, axis, indexing, branch, mixed output
+- docs(plan): mixed output in the parser step; reproducible random link; horse-race sample note
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 009-lexer-complete; advance to 010-parser-complete
 - feat(lex): complete tokenizer -- char literals, sentinels, hints, UTF-8
 - docs(changes): refresh CHANGES.md to HEAD
