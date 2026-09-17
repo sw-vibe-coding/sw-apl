@@ -1,0 +1,1 @@
+Phase 2 step 8. Audit every structural function against the APL\\360 manual: which take an axis bracket, RANK and LENGTH error conditions, behaviour on scalars and empties. Fix gaps, make sample 09 and the function-free parts of 50 run, and mark parity rows done. Final step: --done.

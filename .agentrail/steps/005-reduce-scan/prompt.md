@@ -1,0 +1,1 @@
+Phase 2 step 5. Reduce on the first axis (f⌿) and with an axis bracket f/[k]; scan f\\ and f⍀ on either axis producing running reductions; identity elements for every scalar dyadic function on empty reductions (max/min the extreme numbers, comparisons per the manual). TDD; parity; seed 33 and 24-or-and-reduce.

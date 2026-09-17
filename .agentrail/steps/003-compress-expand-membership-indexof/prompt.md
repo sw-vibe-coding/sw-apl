@@ -1,0 +1,1 @@
+Phase 2 step 3. Boolean compress and expand along the last or first axis (Function::Prim('/') etc. dyadic; DOMAIN ERROR for non-boolean left, LENGTH ERROR on mismatch; scalar left extends), membership ∊ with the fuzz, dyadic ⍳ index-of returning one past the last index (origin-aware) for absent items. TDD; parity; seed 17, 30, and 41 once deal also lands (or split 41).

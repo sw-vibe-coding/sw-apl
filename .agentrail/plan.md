@@ -1,35 +1,40 @@
-# core-mvp
+# core-mixed
 
-DIRECTION CHANGE 2026-09-16 (owner): pure APL\360. There are NO
-quad-named system variables or functions (no ⎕IO, ⎕CT, ⎕PP, ⎕RL,
-⎕EX ...): read docs/plan.md "Owner decisions" item 5. Wherever a
-step prompt below or in its step file says quad-PP / quad-PW /
-quad-IO / quad-CT / quad-RL, read )DIGITS / )WIDTH / )ORIGIN / the
-fixed fuzz / the workspace random link. Execute and format are out.
-System information comes from I-beam functions (Phase 3).
-
-Phase 1 of docs/plan.md. Steps 2 and 3 were the thin vertical slice
-(the MVP REPL); the remaining steps widen each layer to the full
-APL\360 set. Every step: TDD, sw-checklist gates as design
-constraints, commit, push, report.
+Phase 2 of docs/plan.md: the mixed (structural) functions and the
+operators, giving meaning to every form the parser already accepts.
+Pure APL\360: flat arrays, index origin from )ORIGIN, the random
+link for deal, no APL2 extensions (compress takes booleans only, no
+replicate; no nested results). Every step: TDD, sw-checklist gates
+as design constraints (4 modules/crate incl. lib.rs, 4 fns/module,
+25 LOC/fn; split crates freely), update docs/parity.md rows in the
+same commit, commit, push, report. Seed reg-rs baselines for every
+sample that becomes fully runnable.
 
 ## Steps
 
-1. fold-owner-answers -- done.
-2. mvp-scalar-arithmetic -- done.
-3. mvp-iota-rho-reduce -- done.
-4. readme-vhs-tape -- done.
-5. value-model-complete -- done.
-6. pure-apl360-ibeams -- this direction change: docs, keymaps,
-   lexer/parser/eval without quad names, )ORIGIN and )DIGITS with
-   the WAS reply, I-beam glyph accepted.
-7. display-complete -- exponential form, )WIDTH wrapping with
-   six-space continuation, character arrays, empty output, mixed
-   columns, rank > 2.
-8. lexer-complete -- full glyph set, strings, delta letters, system
-   command lines, del sentinel, CHARACTER ERROR for lookalikes.
-9. parser-complete -- operators with axis, bracket indexing,
-   indexed assignment, branch, quad/quote-quad both sides.
-10. scalar-functions-complete -- every scalar primitive with
-    rank/length checks, fixed-fuzz tolerance, circular,
-    factorial/binomial, roll via the workspace random link.
+1. ravel-catenate-laminate -- catenate along the last axis for
+   matrices and higher rank, first-axis and axis forms A,[k]B,
+   laminate with a fractional axis, scalar extension of a scalar
+   argument. Samples 08, 44 as applicable.
+2. take-drop-reverse-rotate-transpose -- ↑ ↓ per axis with
+   negative counts and overtake fill; ⌽ ⊖ reverse and rotate
+   (vector left argument rotates rows); ⍉ monadic and dyadic.
+   Samples 07, 10, 13, 34, 35, 44.
+3. compress-expand-membership-indexof -- boolean compress and
+   expand on either axis (/ ⌿ \ ⍀ with an array left), ∊, dyadic
+   ⍳ (index of, one past the end when absent). Samples 17, 30,
+   41 (compress part).
+4. grade-encode-decode-deal -- ⍋ ⍒ stable, ⊥ ⊤ mixed radix, deal
+   M?N via the random link. Samples 32, 36, 41.
+5. reduce-scan -- reduce on the first axis and with an axis
+   bracket, scan f\ f⍀ on either axis, identity elements for
+   every scalar dyadic function. Samples 06 (rest), 33, 24-or-and.
+6. inner-outer-product -- f.g for matrices and vectors (+.× as
+   the model), ∘.f with scalar extension. Samples 38, 39.
+7. indexing-and-indexed-assignment -- A[I], M[I;J], elided axes,
+   INDEX ERROR, index origin, results shaped by the index arrays;
+   A[I]←V with scalar extension. Samples 20-bracket-index (add).
+8. axis-forms-and-rank-checks -- every structural function with
+   its axis bracket where APL\360 allows it, RANK and LENGTH
+   errors audited against the manual, sample 09 and the horse-race
+   pieces that do not need functions yet.

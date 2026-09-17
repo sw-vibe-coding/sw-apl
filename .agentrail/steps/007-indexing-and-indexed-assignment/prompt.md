@@ -1,0 +1,1 @@
+Phase 2 step 7. Evaluate Expr::Index: A[I] for vectors with index arrays of any rank (result shape = index shape), M[I;J] and elided axes, index origin, INDEX ERROR (with caret at the bracket), RANK ERROR on wrong count; Expr::IndexedAssign with scalar extension and shape checks; both for character data. Add a samples/48-indexing.apl. TDD; parity; seed it.

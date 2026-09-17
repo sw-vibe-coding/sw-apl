@@ -1,0 +1,1 @@
+Phase 2 step 6. Inner product f.g: vector·vector to scalar, matrix·matrix with LENGTH ERROR on the inner dimension, mixed ranks per the manual; outer product ∘.f with the result shape as the catenation of shapes. Implement in apl-prims-ops (split if needed). TDD; parity; seed 38, 39.

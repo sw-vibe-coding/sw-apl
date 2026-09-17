@@ -1,0 +1,1 @@
+Phase 2 step 4. ⍋ ⍒ stable grade of vectors (origin-aware), ⊥ decode and ⊤ encode in mixed radix with scalar extension of the radix, deal M?N (M distinct from ⍳N) driven by the Env random link so transcripts reproduce. TDD; parity; seed 32, 36, 41.

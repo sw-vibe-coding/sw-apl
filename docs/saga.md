@@ -12,7 +12,7 @@ skeleton. Established the process: agentrail sagas derived from
 sw-checklist gates as design constraints, ASCII-only markdown
 with glyph material in `.txt`/`.apl`/config files.
 
-## core-mvp (2026-09-16, in progress)
+## core-mvp (2026-09-16, complete)
 
 Thin vertical slice first: seven crates in six new component
 workspaces (value, lex, parse, prims, eval, display, session),
