@@ -1,0 +1,1 @@
+Scalar family complete: three family crates (arith, circ, logic), tolerant floor/ceiling/residue, circular table, gamma factorial/binomial, comparisons with fuzz, boolean functions, roll via the APL\360 random link in a new Env; samples 15/16/28/29/40/47 baselined; parity rows done; 125 tests; reg-rs 19/19. core-mvp saga complete.

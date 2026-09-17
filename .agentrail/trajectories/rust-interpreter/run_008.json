@@ -1,0 +1,11 @@
+{
+  "task_type": "rust-interpreter",
+  "state": {
+    "number": 11,
+    "step": "scalar-functions-complete"
+  },
+  "action": "tests first per family crate; Env struct in apl-prims; clippy pedantic sweep (casts via Number::from_f64, f64::from products, error docs); samples fixed for APL\\360",
+  "result": "success",
+  "reward": 1,
+  "timestamp": "2026-09-16T20:23:08"
+}

@@ -1,9 +1,10 @@
 number = 11
 slug = "scalar-functions-complete"
-status = "in-progress"
+status = "completed"
 description = "Complete the scalar primitive family (apl-prims-scalar): every monadic and dy..."
 role = "production"
 context_files = []
 created_at = "2026-09-16T11:12:40"
+completed_at = "2026-09-16T20:23:08"
 task_type = "rust-interpreter"
-commits = []
+commits = ["b3a6ca2743cf717aa5c4561bb5f9ea29972a9acc"]
