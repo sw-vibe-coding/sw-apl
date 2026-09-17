@@ -1,0 +1,11 @@
+{
+  "task_type": "rust-interpreter",
+  "state": {
+    "number": 5,
+    "step": "grade-encode-decode-deal"
+  },
+  "action": "tests first; radix split into place/radix modules; dispatch rewritten whole after an edit clobbered the monadic tail; mixed_dyadic helper",
+  "result": "success",
+  "reward": 1,
+  "timestamp": "2026-09-16T22:07:42"
+}
