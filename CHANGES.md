@@ -12,8 +12,13 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-09-17
+
+- docs(plan): add Phase 3 step 8 script-files, and queue it in the saga
+
 ## 2026-09-16
 
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 002-branch-and-labels; advance to 003-del-editor
 - feat(eval): branch, labels, and the line counter
 - docs(changes): refresh CHANGES.md to HEAD
