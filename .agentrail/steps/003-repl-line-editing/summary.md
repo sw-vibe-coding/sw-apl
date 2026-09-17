@@ -1,0 +1,1 @@
+Interactive session on rustyline: up-arrow history (persisted in ~/.sw-apl_history), Ctrl-C cancels, Ctrl-D ends; cli crate restructured to four modules; tape re-rendered; docs updated; all gates green.
