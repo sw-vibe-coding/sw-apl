@@ -1,0 +1,1 @@
+Catenate along any axis with scalar/rank-1 conformance, laminate, origin-aware axis resolution in a new apl-prims-join crate; axis expressions evaluated end to end; sample 49 baselined; 131 tests; reg-rs 20/20; gates green.
