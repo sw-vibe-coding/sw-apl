@@ -1,0 +1,1 @@
+Axis audit: an axis bracket is now a SYNTAX ERROR wherever APL\360 has no such form, with the accepting set generated from data/glyphs.toml; audit tests over the whole axis matrix and over scalars and empties; parity, saga log, and README updated. core-mixed saga complete: every APL\360 primitive and operator works.
