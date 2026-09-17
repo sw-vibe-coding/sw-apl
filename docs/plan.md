@@ -165,6 +165,10 @@ widen each layer to the full APL\360 set.
 7. `terminal-feel` -- six-space indent prompt, printer-style
    scrollback, interrupt handling, line editing with Unicode
    input, history file.
+8. `script-files` -- an executable `.apl` file: skip a leading
+   `#!` line so a shebang script runs without a CHARACTER ERROR,
+   and document running a workspace file from the shell.
+   (Owner direction 2026-09-17.)
 
 ### Phase 4: workspaces (saga `workspaces`)
 
