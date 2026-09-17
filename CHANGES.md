@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-17
 
+- chore(agentrail): complete 003-del-editor; advance to 004-error-display-and-state-indicator
+- feat(session): the del editor
+- docs(changes): refresh CHANGES.md to HEAD
 - docs(plan): add Phase 3 step 8 script-files, and queue it in the saga
 
 ## 2026-09-16
