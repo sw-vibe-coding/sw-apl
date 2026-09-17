@@ -1,0 +1,16 @@
+[package]
+name = "apl-prims-select"
+description = "sw-apl take, drop, reverse, rotate, transpose"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-value = { path = "../../../value/crates/apl-value" }
+apl-prims-join = { path = "../apl-prims-join" }
+apl-prims-mixed = { path = "../apl-prims-mixed" }
+
+[lints]
+workspace = true

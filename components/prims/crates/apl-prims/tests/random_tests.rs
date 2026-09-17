@@ -59,6 +59,6 @@ fn roll_honours_the_origin_and_rejects_bad_arguments() {
 #[test]
 fn query_dispatches_to_roll_through_the_env() {
     let mut env = Env::default();
-    let r = apply_monadic('?', &Array::scalar(Number::Int(100)), &mut env).unwrap();
+    let r = apply_monadic('?', &Array::scalar(Number::Int(100)), None, &mut env).unwrap();
     assert!(matches!(nums(&r)[0], 1..=100));
 }

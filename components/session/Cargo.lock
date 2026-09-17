@@ -50,6 +50,7 @@ dependencies = [
  "apl-prims-mixed",
  "apl-prims-ops",
  "apl-prims-scalar",
+ "apl-prims-select",
  "apl-value",
 ]
 
@@ -83,6 +84,15 @@ dependencies = [
  "apl-scalar-arith",
  "apl-scalar-circ",
  "apl-scalar-logic",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-prims-select"
+version = "0.1.0"
+dependencies = [
+ "apl-prims-join",
+ "apl-prims-mixed",
  "apl-value",
 ]
 

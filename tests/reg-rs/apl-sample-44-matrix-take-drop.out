@@ -1,0 +1,26 @@
+      ⍝ Multi-axis take and drop on matrices
+      M←3 3⍴⍳9
+      ⎕←M
+1 2 3
+4 5 6
+7 8 9
+      ⎕←2 3↑M
+1 2 3
+4 5 6
+      ⎕←1 2↑M
+1 2
+      ⎕←¯2 ¯2↑M
+5 6
+8 9
+      ⎕←1 1↓M
+5 6
+8 9
+      ⎕←¯1 ¯2↓M
+1
+4
+      ⍝ one count per axis in APL\360: a single count on a matrix is a LENGTH ERROR
+      ⎕←2↑M
+LENGTH ERROR
+      ⎕←2↑M
+         ^
+      )OFF

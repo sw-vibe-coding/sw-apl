@@ -1,0 +1,4 @@
+command = "target/release/sw-apl -f samples/07-take-drop.apl"
+timeout = 60
+exit_code = 0
+desc = "Transcript of samples/07-take-drop.apl"

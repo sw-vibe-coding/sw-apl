@@ -1,6 +1,6 @@
 number = 2
 slug = "take-drop-reverse-rotate-transpose"
-status = "pending"
+status = "in-progress"
 description = "Phase 2 step 2. ↑ ↓ per axis with negative counts and overtake fill (0 or..."
 role = "production"
 context_files = []

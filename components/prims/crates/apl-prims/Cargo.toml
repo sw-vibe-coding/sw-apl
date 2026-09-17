@@ -13,6 +13,7 @@ apl-prims-scalar = { path = "../apl-prims-scalar" }
 apl-prims-mixed = { path = "../apl-prims-mixed" }
 apl-prims-ops = { path = "../apl-prims-ops" }
 apl-prims-join = { path = "../apl-prims-join" }
+apl-prims-select = { path = "../apl-prims-select" }
 
 [lints]
 workspace = true

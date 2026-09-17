@@ -12,7 +12,8 @@ pub fn eval_axis(ws: &mut Workspace, axis: Option<&Expr>) -> AplResult<Option<Ar
     axis.map(|a| eval_expr(ws, a)).transpose()
 }
 
-/// `func right`. An axis is not implemented yet for monadic forms.
+/// `func right`, with the evaluated axis. Reduce with an axis, scan,
+/// and first-axis reduce are not implemented yet.
 pub fn monadic(
     func: &Function,
     axis: Option<&Array>,
@@ -20,9 +21,8 @@ pub fn monadic(
     env: &mut Env,
 ) -> AplResult<Array> {
     match func {
-        _ if axis.is_some() => Err(AplError::new(ErrorKind::NotImplemented)),
-        Function::Prim(f) => apply_monadic(*f, r, env),
-        Function::Reduce { f, first: false } => reduce(*f, r),
+        Function::Prim(f) => apply_monadic(*f, r, axis, env),
+        Function::Reduce { f, first: false } if axis.is_none() => reduce(*f, r),
         _ => Err(AplError::new(ErrorKind::NotImplemented)),
     }
 }

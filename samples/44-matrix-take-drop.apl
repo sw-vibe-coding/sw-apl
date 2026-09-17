@@ -6,5 +6,6 @@ M←3 3⍴⍳9
 ⎕←¯2 ¯2↑M
 ⎕←1 1↓M
 ⎕←¯1 ¯2↓M
+⍝ one count per axis in APL\360: a single count on a matrix is a LENGTH ERROR
 ⎕←2↑M
 )OFF

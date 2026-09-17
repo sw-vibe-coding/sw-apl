@@ -168,5 +168,29 @@ fn catenate_with_axis_and_laminate_end_to_end() {
     assert_eq!(out(&mut s, ")ORIGIN 0"), vec!["WAS 1"]);
     assert_eq!(out(&mut s, "A,[0]A"), vec!["1 2", "3 4", "1 2", "3 4"]);
     assert_eq!(out(&mut s, "A,[2]A")[0], "INDEX ERROR");
-    assert_eq!(out(&mut s, "\u{233d}[1]A")[0], "NOT IMPLEMENTED");
+    assert_eq!(out(&mut s, "\u{233d}[1]A"), vec!["2 1", "4 3"]);
+}
+
+#[test]
+fn select_functions_end_to_end() {
+    let mut s = Session::default();
+    assert_eq!(
+        out(&mut s, "M\u{2190}3 3\u{2374}\u{2373}9"),
+        Vec::<String>::new()
+    );
+    assert_eq!(out(&mut s, "2 2\u{2191}M"), vec!["1 2", "4 5"]);
+    assert_eq!(out(&mut s, "\u{af}1 \u{af}2\u{2193}M"), vec!["1", "4"]);
+    assert_eq!(out(&mut s, "3\u{2191}5"), vec!["5 0 0"]);
+    assert_eq!(out(&mut s, "\u{233d}M"), vec!["3 2 1", "6 5 4", "9 8 7"]);
+    assert_eq!(out(&mut s, "\u{2296}M"), vec!["7 8 9", "4 5 6", "1 2 3"]);
+    assert_eq!(out(&mut s, "\u{233d}[1]M"), vec!["7 8 9", "4 5 6", "1 2 3"]);
+    assert_eq!(out(&mut s, "1\u{2296}M"), vec!["4 5 6", "7 8 9", "1 2 3"]);
+    assert_eq!(
+        out(&mut s, "0 1 2\u{233d}M"),
+        vec!["1 2 3", "5 6 4", "9 7 8"]
+    );
+    assert_eq!(out(&mut s, "\u{2349}M"), vec!["1 4 7", "2 5 8", "3 6 9"]);
+    assert_eq!(out(&mut s, "1 1\u{2349}M"), vec!["1 5 9"]);
+    assert_eq!(out(&mut s, "\u{233d}[3]M")[0], "INDEX ERROR");
+    assert_eq!(out(&mut s, "\u{2349}[1]M")[0], "NOT IMPLEMENTED");
 }

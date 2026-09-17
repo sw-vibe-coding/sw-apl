@@ -1,0 +1,4 @@
+command = "target/release/sw-apl -f samples/34-rotate.apl"
+timeout = 60
+exit_code = 0
+desc = "Transcript of samples/34-rotate.apl"
