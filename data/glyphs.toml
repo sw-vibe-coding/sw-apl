@@ -1,0 +1,514 @@
+# The sw-apl glyph tables: the single source of truth.
+#
+# build.rs in apl-value reads this file and emits Rust consts;
+# scripts/gen-glyphs.sh regenerates docs/glyphs.txt from it. Nothing
+# else may hold a copy of this data.
+#
+# APL\360 only. A glyph that a later APL introduced belongs in
+# [[later]], not here.
+
+# Primitive functions and operators: the glyphs the lexer accepts as
+# a Prim token. `monadic` and `dyadic` are the traditional names;
+# an empty string means the glyph has no meaning in that position.
+[[primitive]]
+glyph = "+"
+name = "plus"
+monadic = "conjugate"
+dyadic = "add"
+
+[[primitive]]
+glyph = "-"
+name = "minus"
+monadic = "negative"
+dyadic = "subtract"
+
+[[primitive]]
+glyph = "×"
+name = "times"
+monadic = "signum"
+dyadic = "multiply"
+
+[[primitive]]
+glyph = "÷"
+name = "divide"
+monadic = "reciprocal"
+dyadic = "divide"
+
+[[primitive]]
+glyph = "⌈"
+name = "upstile"
+monadic = "ceiling"
+dyadic = "maximum"
+
+[[primitive]]
+glyph = "⌊"
+name = "downstile"
+monadic = "floor"
+dyadic = "minimum"
+
+[[primitive]]
+glyph = "*"
+name = "star"
+monadic = "exponential"
+dyadic = "power"
+
+[[primitive]]
+glyph = "⍟"
+name = "log"
+monadic = "natural log"
+dyadic = "logarithm"
+
+[[primitive]]
+glyph = "|"
+name = "stile"
+monadic = "magnitude"
+dyadic = "residue"
+
+[[primitive]]
+glyph = "!"
+name = "shriek"
+monadic = "factorial"
+dyadic = "binomial"
+
+[[primitive]]
+glyph = "○"
+name = "circle"
+monadic = "pi times"
+dyadic = "circular"
+
+[[primitive]]
+glyph = "~"
+name = "tilde"
+monadic = "not"
+dyadic = ""
+
+[[primitive]]
+glyph = "∧"
+name = "and"
+monadic = ""
+dyadic = "and"
+
+[[primitive]]
+glyph = "∨"
+name = "or"
+monadic = ""
+dyadic = "or"
+
+[[primitive]]
+glyph = "⍲"
+name = "nand"
+monadic = ""
+dyadic = "nand"
+
+[[primitive]]
+glyph = "⍱"
+name = "nor"
+monadic = ""
+dyadic = "nor"
+
+[[primitive]]
+glyph = "<"
+name = "less"
+monadic = ""
+dyadic = "less than"
+
+[[primitive]]
+glyph = "≤"
+name = "less-or-equal"
+monadic = ""
+dyadic = "less or equal"
+
+[[primitive]]
+glyph = "="
+name = "equal"
+monadic = ""
+dyadic = "equal"
+
+[[primitive]]
+glyph = "≥"
+name = "greater-or-equal"
+monadic = ""
+dyadic = "greater or equal"
+
+[[primitive]]
+glyph = ">"
+name = "greater"
+monadic = ""
+dyadic = "greater than"
+
+[[primitive]]
+glyph = "≠"
+name = "not-equal"
+monadic = ""
+dyadic = "not equal"
+
+[[primitive]]
+glyph = "?"
+name = "query"
+monadic = "roll"
+dyadic = "deal"
+
+[[primitive]]
+glyph = "⍳"
+name = "iota"
+monadic = "index generator"
+dyadic = "index of"
+
+[[primitive]]
+glyph = "⍴"
+name = "rho"
+monadic = "shape"
+dyadic = "reshape"
+
+[[primitive]]
+glyph = ","
+name = "comma"
+monadic = "ravel"
+dyadic = "catenate"
+
+[[primitive]]
+glyph = "⌽"
+name = "circle-stile"
+monadic = "reverse"
+dyadic = "rotate"
+
+[[primitive]]
+glyph = "⊖"
+name = "circle-bar"
+monadic = "reverse first"
+dyadic = "rotate first"
+
+[[primitive]]
+glyph = "⍉"
+name = "circle-backslash"
+monadic = "transpose"
+dyadic = "dyadic transpose"
+
+[[primitive]]
+glyph = "↑"
+name = "up-arrow"
+monadic = ""
+dyadic = "take"
+
+[[primitive]]
+glyph = "↓"
+name = "down-arrow"
+monadic = ""
+dyadic = "drop"
+
+[[primitive]]
+glyph = "/"
+name = "slash"
+monadic = ""
+dyadic = "compress"
+
+[[primitive]]
+glyph = "⌿"
+name = "slash-bar"
+monadic = ""
+dyadic = "compress first"
+
+[[primitive]]
+glyph = "\\"
+name = "backslash"
+monadic = ""
+dyadic = "expand"
+
+[[primitive]]
+glyph = "⍀"
+name = "backslash-bar"
+monadic = ""
+dyadic = "expand first"
+
+[[primitive]]
+glyph = "⊥"
+name = "up-tack"
+monadic = ""
+dyadic = "decode"
+
+[[primitive]]
+glyph = "⊤"
+name = "down-tack"
+monadic = ""
+dyadic = "encode"
+
+[[primitive]]
+glyph = "∊"
+name = "epsilon"
+monadic = ""
+dyadic = "membership"
+
+[[primitive]]
+glyph = "⍋"
+name = "grade-up"
+monadic = "grade up"
+dyadic = ""
+
+[[primitive]]
+glyph = "⍒"
+name = "grade-down"
+monadic = "grade down"
+dyadic = ""
+
+[[primitive]]
+glyph = "⌹"
+name = "domino"
+monadic = "matrix inverse"
+dyadic = "matrix divide"
+
+[[primitive]]
+glyph = "⌶"
+name = "i-beam"
+monadic = "system function"
+dyadic = ""
+
+[[primitive]]
+glyph = "."
+name = "dot"
+monadic = ""
+dyadic = "inner product"
+
+[[primitive]]
+glyph = "∘"
+name = "jot"
+monadic = ""
+dyadic = "outer product"
+
+# Syntax: punctuation and sentinels the lexer gives their own token.
+[[syntax]]
+glyph = "←"
+name = "left arrow"
+meaning = "assignment"
+
+[[syntax]]
+glyph = "→"
+name = "right arrow"
+meaning = "branch"
+
+[[syntax]]
+glyph = "∇"
+name = "del"
+meaning = "open or close a function definition"
+
+[[syntax]]
+glyph = "⍫"
+name = "del-tilde"
+meaning = "close a definition locked"
+
+[[syntax]]
+glyph = "⍝"
+name = "lamp"
+meaning = "comment to end of line"
+
+[[syntax]]
+glyph = "¯"
+name = "high minus"
+meaning = "negative sign in numeric literals"
+
+[[syntax]]
+glyph = "'"
+name = "quote"
+meaning = "character literal (doubled inside for a quote)"
+
+[[syntax]]
+glyph = ";"
+name = "semicolon"
+meaning = "index separator, local names, mixed output"
+
+[[syntax]]
+glyph = ":"
+name = "colon"
+meaning = "label terminator"
+
+[[syntax]]
+glyph = "("
+name = "left paren"
+meaning = "grouping"
+
+[[syntax]]
+glyph = ")"
+name = "right paren"
+meaning = "grouping; system command when first on the line"
+
+[[syntax]]
+glyph = "["
+name = "left bracket"
+meaning = "index or axis"
+
+[[syntax]]
+glyph = "]"
+name = "right bracket"
+meaning = "index or axis"
+
+[[syntax]]
+glyph = "⎕"
+name = "quad"
+meaning = "evaluated input and output"
+
+[[syntax]]
+glyph = "⍞"
+name = "quote-quad"
+meaning = "character input and output"
+
+[[syntax]]
+glyph = "∆"
+name = "delta"
+meaning = "letter usable in names"
+
+[[syntax]]
+glyph = "⍙"
+name = "delta-underbar"
+meaning = "letter usable in names"
+
+# Characters often typed in place of an APL glyph, and the glyph
+# meant. CHARACTER ERROR names the intended glyph.
+[[lookalike]]
+typed = "ρ"
+meant = "⍴"
+
+[[lookalike]]
+typed = "ι"
+meant = "⍳"
+
+[[lookalike]]
+typed = "∈"
+meant = "∊"
+
+[[lookalike]]
+typed = "ε"
+meant = "∊"
+
+[[lookalike]]
+typed = "Δ"
+meant = "∆"
+
+[[lookalike]]
+typed = "−"
+meant = "-"
+
+[[lookalike]]
+typed = "–"
+meant = "-"
+
+[[lookalike]]
+typed = "—"
+meant = "-"
+
+[[lookalike]]
+typed = "∣"
+meant = "|"
+
+[[lookalike]]
+typed = "∗"
+meant = "*"
+
+[[lookalike]]
+typed = "⋆"
+meant = "*"
+
+[[lookalike]]
+typed = "∼"
+meant = "~"
+
+[[lookalike]]
+typed = "¬"
+meant = "~"
+
+[[lookalike]]
+typed = "·"
+meant = "."
+
+[[lookalike]]
+typed = "‾"
+meant = "¯"
+
+[[lookalike]]
+typed = "’"
+meant = "'"
+
+# Glyphs introduced by APLs after APL\360, with the name they go by
+# there. sw-apl implements APL\360 only, so these are never valid;
+# CHARACTER ERROR says what they are.
+[[later]]
+glyph = "{"
+name = "dfn brace"
+
+[[later]]
+glyph = "}"
+name = "dfn brace"
+
+[[later]]
+glyph = "⍺"
+name = "alpha"
+
+[[later]]
+glyph = "⍵"
+name = "omega"
+
+[[later]]
+glyph = "⊂"
+name = "enclose"
+
+[[later]]
+glyph = "⊃"
+name = "disclose"
+
+[[later]]
+glyph = "¨"
+name = "each"
+
+[[later]]
+glyph = "⋄"
+name = "diamond"
+
+[[later]]
+glyph = "⍬"
+name = "zilde"
+
+[[later]]
+glyph = "⍎"
+name = "execute"
+
+[[later]]
+glyph = "⍕"
+name = "format"
+
+[[later]]
+glyph = "⍨"
+name = "commute"
+
+[[later]]
+glyph = "⍣"
+name = "power operator"
+
+[[later]]
+glyph = "∪"
+name = "union"
+
+[[later]]
+glyph = "∩"
+name = "intersection"
+
+[[later]]
+glyph = "⊆"
+name = "partition"
+
+[[later]]
+glyph = "⊇"
+name = "partition"
+
+[[later]]
+glyph = "⌸"
+name = "key operator"
+
+[[later]]
+glyph = "⌺"
+name = "stencil operator"
+
+[[later]]
+glyph = "⍤"
+name = "rank operator"
+
+[[later]]
+glyph = "⍥"
+name = "over operator"

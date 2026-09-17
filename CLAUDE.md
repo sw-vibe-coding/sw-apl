@@ -324,6 +324,17 @@ transcript, the sample in `samples/`) first. GREEN: least code to
 pass. REFACTOR: split to the sw-checklist gates. See
 `docs/testing.md`.
 
+## Gate order: format, then everything else
+
+`cargo fmt` (or `just fmt`) runs FIRST, before tests, clippy, and
+sw-checklist, and always before a commit. rustfmt reflows code, so
+function line counts and module shapes only mean something after it
+has run; measuring first wastes a cycle chasing warnings that move.
+Check each gate's exit code rather than grepping its output.
+
+Order: `just fmt` -> `just test` -> `just clippy` -> `just gates`
+(markdown + sw-checklist) -> commit -> push.
+
 ## sw-checklist gates are design constraints
 
 Design new code to <= 25 LOC per function, <= 4 functions per

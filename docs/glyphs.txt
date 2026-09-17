@@ -1,15 +1,17 @@
 sw-apl glyph table
 ==================
 
-Canonical code points accepted by the lexer. Column 1 is the glyph,
-column 2 the Unicode code point, column 3 the traditional name,
-columns 4 and 5 the monadic and dyadic meanings (blank = none).
-This file is UTF-8 and is the source of truth; docs/language.md
-refers to it by name.
+Generated from data/glyphs.toml by scripts/gen-glyphs.sh. Do not edit
+this file; edit the TOML and regenerate. The interpreter's tables come
+from the same source, so the two cannot disagree.
 
-Scalar functions
-----------------
-+   U+002B  plus            conjugate (identity)   add
+Column 1 is the glyph, column 2 its Unicode code point, column 3 the
+traditional name, columns 4 and 5 the monadic and dyadic meanings
+(blank means the glyph has no meaning in that position).
+
+Primitive functions and operators
+---------------------------------
++   U+002B  plus            conjugate              add
 -   U+002D  minus           negative               subtract
 ×   U+00D7  times           signum                 multiply
 ÷   U+00F7  divide          reciprocal             divide
@@ -28,73 +30,91 @@ Scalar functions
 <   U+003C  less                                   less than
 ≤   U+2264  less-or-equal                          less or equal
 =   U+003D  equal                                  equal
-≥   U+2265  greater-or-eq                          greater or equal
+≥   U+2265  greater-or-equal                       greater or equal
 >   U+003E  greater                                greater than
 ≠   U+2260  not-equal                              not equal
 ?   U+003F  query           roll                   deal
-
-Mixed functions
----------------
 ⍳   U+2373  iota            index generator        index of
 ⍴   U+2374  rho             shape                  reshape
-,   U+002C  comma           ravel                  catenate / laminate
+,   U+002C  comma           ravel                  catenate
 ⌽   U+233D  circle-stile    reverse                rotate
 ⊖   U+2296  circle-bar      reverse first          rotate first
-⍉   U+2349  circle-backslash transpose             dyadic transpose
+⍉   U+2349  circle-backslashtranspose              dyadic transpose
 ↑   U+2191  up-arrow                               take
 ↓   U+2193  down-arrow                             drop
-/   U+002F  slash                                  compress (also reduce)
+/   U+002F  slash                                  compress
 ⌿   U+233F  slash-bar                              compress first
-\   U+005C  backslash                              expand (also scan)
+\   U+005C  backslash                              expand
 ⍀   U+2340  backslash-bar                          expand first
-⊥   U+22A5  up-tack (base)                         decode
-⊤   U+22A4  down-tack (rep)                        encode
+⊥   U+22A5  up-tack                                decode
+⊤   U+22A4  down-tack                              encode
 ∊   U+220A  epsilon                                membership
 ⍋   U+234B  grade-up        grade up
 ⍒   U+2352  grade-down      grade down
 ⌹   U+2339  domino          matrix inverse         matrix divide
-⌶   U+2336  i-beam          system function (⌶20 .. ⌶27)
-
-Operators
----------
-/   U+002F  reduce          f/  (last axis)
-⌿   U+233F  reduce first    f⌿
-\   U+005C  scan            f\  (last axis)
-⍀   U+2340  scan first      f⍀
-.   U+002E  inner product   f.g
-∘.  U+2218  outer product   ∘.f  (jot then dot)
-[ ] U+005B U+005D  axis     f[k]  and indexing A[i;j]
+⌶   U+2336  i-beam          system function
+.   U+002E  dot                                    inner product
+∘   U+2218  jot                                    outer product
 
 Syntax
 ------
 ←   U+2190  left arrow      assignment
 →   U+2192  right arrow     branch
-∇   U+2207  del             open/close function definition
-⍫   U+236B  del-tilde       lock a function (close definition locked)
+∇   U+2207  del             open or close a function definition
+⍫   U+236B  del-tilde       close a definition locked
 ⍝   U+235D  lamp            comment to end of line
 ¯   U+00AF  high minus      negative sign in numeric literals
-'   U+0027  quote           character literal ('' inside for a quote)
-;   U+003B  semicolon       index separator, local name separator
+'   U+0027  quote           character literal (doubled inside for a quote)
+;   U+003B  semicolon       index separator, local names, mixed output
 :   U+003A  colon           label terminator
-( ) U+0028 U+0029           grouping
-⎕   U+2395  quad            evaluated input/output; prefix of system names
-⍞   U+235E  quote-quad      character input/output
+(   U+0028  left paren      grouping
+)   U+0029  right paren     grouping; system command when first on the line
+[   U+005B  left bracket    index or axis
+]   U+005D  right bracket   index or axis
+⎕   U+2395  quad            evaluated input and output
+⍞   U+235E  quote-quad      character input and output
 ∆   U+2206  delta           letter usable in names
 ⍙   U+2359  delta-underbar  letter usable in names
-)   U+0029  right paren     system command when first non-blank char
 
-Lookalikes and later-APL glyphs NOT accepted (CHARACTER ERROR)
+Lookalikes NOT accepted (CHARACTER ERROR names the glyph meant)
 --------------------------------------------------------------
-⍎   U+234E  execute         APLSV, not APL\360
-⍕   U+2355  format          APLSV, not APL\360
-⍺   U+237A  alpha           on the typeball, but no meaning in APL\360
-⍵   U+2375  omega           on the typeball, but no meaning in APL\360
-⊂ ⊃ ¨ ⋄ ⍬ ⍤   APL2 and later
-ρ   U+03C1  greek rho       use ⍴ U+2374
-ι   U+03B9  greek iota      use ⍳ U+2373
-α   U+03B1  greek alpha     use ⍺ U+237A
-ω   U+03C9  greek omega     use ⍵ U+2375
-∈   U+2208  element of      use ∊ U+220A
-Δ   U+0394  greek delta     use ∆ U+2206
--   U+2212  minus sign      use - U+002D
-x   U+0078  latin x         use × U+00D7
+ρ   U+03C1                  use ⍴ U+2374
+ι   U+03B9                  use ⍳ U+2373
+∈   U+2208                  use ∊ U+220A
+ε   U+03B5                  use ∊ U+220A
+Δ   U+0394                  use ∆ U+2206
+−   U+2212                  use - U+002D
+–   U+2013                  use - U+002D
+—   U+2014                  use - U+002D
+∣   U+2223                  use | U+007C
+∗   U+2217                  use * U+002A
+⋆   U+22C6                  use * U+002A
+∼   U+223C                  use ~ U+007E
+¬   U+00AC                  use ~ U+007E
+·   U+00B7                  use . U+002E
+‾   U+203E                  use ¯ U+00AF
+’   U+2019                  use ' U+0027
+
+Later-APL glyphs NOT accepted (APL\360 only)
+--------------------------------------------
+{   U+007B                  dfn brace
+}   U+007D                  dfn brace
+⍺   U+237A                  alpha
+⍵   U+2375                  omega
+⊂   U+2282                  enclose
+⊃   U+2283                  disclose
+¨   U+00A8                  each
+⋄   U+22C4                  diamond
+⍬   U+236C                  zilde
+⍎   U+234E                  execute
+⍕   U+2355                  format
+⍨   U+2368                  commute
+⍣   U+2363                  power operator
+∪   U+222A                  union
+∩   U+2229                  intersection
+⊆   U+2286                  partition
+⊇   U+2287                  partition
+⌸   U+2338                  key operator
+⌺   U+233A                  stencil operator
+⍤   U+2364                  rank operator
+⍥   U+2365                  over operator

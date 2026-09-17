@@ -5,8 +5,9 @@ use apl_scalar_circ::{binomial, circular, factorial};
 use apl_scalar_logic::{boolean, compare, not};
 use apl_value::{AplError, AplResult, ErrorKind, Number};
 
-/// Glyphs with a monadic scalar meaning (roll is dispatched above,
-/// since it needs the random link).
+/// Glyphs with a monadic scalar meaning. The mixed functions are
+/// dispatched above this crate, so the scalar family is what
+/// remains of the generated monadic set.
 pub const MONADIC: &str = "+-×÷⌈⌊|*⍟○!~";
 /// Glyphs with a dyadic scalar meaning.
 pub const DYADIC: &str = "+-×÷⌈⌊|*⍟○!∧∨⍲⍱<≤=≥>≠";

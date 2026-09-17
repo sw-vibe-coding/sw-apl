@@ -162,3 +162,56 @@ fn character_error_names_later_apl_glyphs() {
         "CHARACTER ERROR: U+2282 (enclose, not APL\\360)"
     );
 }
+
+#[test]
+fn the_generated_glyph_tables_match_the_toml_source() {
+    use apl_value::{DYADIC, LATER, LOOKALIKE, MONADIC, PRIMITIVE_NAMES, PRIMITIVES, SYNTAX};
+    assert_eq!(PRIMITIVES.chars().count(), PRIMITIVE_NAMES.len());
+    for (glyph, name, monadic, dyadic) in PRIMITIVE_NAMES {
+        assert!(!name.is_empty(), "{glyph} has no name");
+        assert!(
+            PRIMITIVES.contains(glyph),
+            "{glyph} missing from PRIMITIVES"
+        );
+        assert_eq!(
+            MONADIC.contains(glyph),
+            !monadic.is_empty(),
+            "{glyph} monadic"
+        );
+        assert_eq!(DYADIC.contains(glyph), !dyadic.is_empty(), "{glyph} dyadic");
+    }
+    assert_eq!(
+        PRIMITIVE_NAMES
+            .iter()
+            .find(|(g, ..)| *g == '\u{2374}')
+            .map(|(_, n, m, d)| (*n, *m, *d)),
+        Some(("rho", "shape", "reshape"))
+    );
+    assert!(
+        SYNTAX
+            .iter()
+            .any(|(g, name, _)| *g == '\u{2190}' && *name == "left arrow")
+    );
+    assert!(
+        LOOKALIKE
+            .iter()
+            .any(|(bad, good)| *bad == '\u{3c1}' && *good == '\u{2374}')
+    );
+    assert!(
+        LATER
+            .iter()
+            .any(|(g, name)| *g == '{' && *name == "dfn brace")
+    );
+    for (bad, _) in LOOKALIKE {
+        assert!(
+            !PRIMITIVES.contains(bad),
+            "{bad} is both a lookalike and a primitive"
+        );
+    }
+    for (glyph, _) in LATER {
+        assert!(
+            !PRIMITIVES.contains(glyph),
+            "{glyph} is both later-APL and a primitive"
+        );
+    }
+}

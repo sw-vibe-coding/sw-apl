@@ -11,13 +11,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "apl-value"
-version = "0.1.0"
-dependencies = [
- "apl-glyphs",
-]
-
-[[package]]
 name = "equivalent"
 version = "1.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"

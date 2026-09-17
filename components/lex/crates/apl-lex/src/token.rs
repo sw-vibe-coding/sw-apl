@@ -44,9 +44,7 @@ pub struct Token {
     pub pos: usize,
 }
 
-/// Every primitive glyph in `docs/glyphs.txt` that stands alone as a
-/// function or operator token.
-pub const PRIMITIVES: &str = "+-×÷⌈⌊*⍟|!○~∧∨⍲⍱<≤=≥>≠?⍳⍴,⌽⊖⍉↑↓/⌿\\⍀⊥⊤∊⍋⍒⌹⌶.∘";
+pub use apl_value::PRIMITIVES;
 
 impl TokenKind {
     /// True when the token can end an operand: a glyph immediately

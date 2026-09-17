@@ -43,8 +43,9 @@ fmt-check component="":
         (cd "components/$c" && cargo fmt --all -- --check)
     done
 
-# Repo-wide standards gates. README and other top-level markdown
-# are ASCII-only; docs/*.md may contain APL glyphs and is not gated.
+# Repo-wide standards gates: run AFTER `just fmt`, since sw-checklist
+# measures LOC and function counts on formatted code. README and other
+# top-level markdown are ASCII-only; docs/*.md may contain glyphs.
 # CLAUDE.md/AGENTS.md carry an agentrail-managed block with em dashes
 # (upstream), so they are checked only outside that block by eye.
 gates:
@@ -52,6 +53,9 @@ gates:
     sw-markdown-checker -f CHANGES.md
     sw-markdown-checker -f "samples/*.md"
     sw-checklist
+
+# The full pre-commit gate, in order: format, test, lint, standards.
+precommit: fmt test clippy fmt-check gates
 
 # Build the release CLI binary into target/release/sw-apl.
 release:
@@ -64,6 +68,10 @@ conformance:
 # Re-render the README session recording (needs vhs, ttyd, ffmpeg).
 tape: release
     vhs docs/tapes/mvp.tape
+
+# Regenerate docs/glyphs.txt from data/glyphs.toml.
+glyphs:
+    ./scripts/gen-glyphs.sh
 
 # Regenerate CHANGES.md from git log.
 changes:

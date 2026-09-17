@@ -88,6 +88,22 @@ CHARACTER, DEPTH, and INTERRUPT. The caret is a character offset
 into the source line so the session can print the APL\360 caret
 line. Each crate maps its own failures into `AplError`.
 
+## Generated tables
+
+`data/glyphs.toml` is the single source of truth for every glyph:
+the primitives with their monadic and dyadic names, the punctuation
+and sentinels, the lookalikes a CHARACTER ERROR should redirect, and
+the later-APL glyphs it should name. Two consumers read it, and
+nothing else may hold a copy:
+
+- `components/value/.../build.rs` emits Rust consts into `OUT_DIR`,
+  which `apl-value`'s `glyphs` module includes. The lexer takes its
+  accepted set from there, and the error display its hint tables.
+- `scripts/gen-glyphs.sh` regenerates `docs/glyphs.txt`.
+
+Adding a glyph is therefore one edit plus `scripts/gen-glyphs.sh`,
+and a test asserts the generated tables agree with each other.
+
 ## Metrics as architecture
 
 `sw-checklist` gates shape the crate boundaries: at most a few

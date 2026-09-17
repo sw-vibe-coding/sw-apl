@@ -1,0 +1,9 @@
+number = 9
+slug = "glyph-table-codegen"
+status = "in-progress"
+description = "Owner request: generate the glyph tables from one serialized source instead o..."
+role = "production"
+context_files = []
+created_at = "2026-09-16T22:58:17"
+task_type = "rust-interpreter"
+commits = []

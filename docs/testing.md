@@ -59,6 +59,13 @@ Samples from the original corpus that used features outside
 APL\360 (execute, format, a quad-named random seed) were removed;
 the index-origin sample uses `)ORIGIN`.
 
+## Generated files
+
+`docs/glyphs.txt` and the Rust glyph tables are generated from
+`data/glyphs.toml` (see `architecture.md`). After editing the TOML,
+run `scripts/gen-glyphs.sh` and commit both files; a unit test checks
+that the generated tables are consistent.
+
 ## Gates before every commit
 
 - `cargo test` in the changed workspaces.

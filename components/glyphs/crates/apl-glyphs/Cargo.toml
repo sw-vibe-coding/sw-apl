@@ -1,0 +1,15 @@
+[package]
+name = "apl-glyphs"
+description = "sw-apl glyph tables, generated from data/glyphs.toml"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[build-dependencies]
+toml = "0.9"
+serde = { version = "1", features = ["derive"] }
+
+[lints]
+workspace = true

@@ -2,6 +2,8 @@
 
 use std::fmt;
 
+use apl_glyphs::{LATER, LOOKALIKE};
+
 /// The APL\360 error vocabulary (plus a temporary `NotImplemented`).
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ErrorKind {
@@ -39,54 +41,6 @@ impl fmt::Display for ErrorKind {
         }
     }
 }
-
-/// Characters commonly typed in place of an APL glyph, and the
-/// glyph meant: Greek letters, mathematical operators, dashes,
-/// quotes.
-const LOOKALIKE: [(char, char); 16] = [
-    ('ρ', '⍴'),
-    ('ι', '⍳'),
-    ('∈', '∊'),
-    ('ε', '∊'),
-    ('Δ', '∆'),
-    ('−', '-'),
-    ('–', '-'),
-    ('—', '-'),
-    ('∣', '|'),
-    ('∗', '*'),
-    ('⋆', '*'),
-    ('∼', '~'),
-    ('¬', '~'),
-    ('·', '.'),
-    ('‾', '¯'),
-    ('’', '\''),
-];
-
-/// Glyphs introduced by APLs after APL\360, with the name they go
-/// by there. sw-apl implements APL\360 only, so they are never
-/// valid, and saying what they are is more use than a code point.
-const LATER: [(char, &str); 20] = [
-    ('{', "dfn brace"),
-    ('}', "dfn brace"),
-    ('⍺', "alpha"),
-    ('⍵', "omega"),
-    ('⊂', "enclose"),
-    ('⊃', "disclose"),
-    ('¨', "each"),
-    ('⋄', "diamond"),
-    ('⍬', "zilde"),
-    ('⍎', "execute"),
-    ('⍕', "format"),
-    ('⍨', "commute"),
-    ('⍣', "power operator"),
-    ('∪', "union"),
-    ('∩', "intersection"),
-    ('⊆', "partition"),
-    ('⊇', "partition"),
-    ('⌸', "later operator"),
-    ('⌺', "later operator"),
-    ('⍤', "later operator"),
-];
 
 /// `CHARACTER ERROR: U+XXXX` with a hint when there is one.
 fn write_character(f: &mut fmt::Formatter<'_>, c: char) -> fmt::Result {
