@@ -5,6 +5,7 @@
 mod dispatch;
 mod random;
 
-pub use apl_prims_ops::reduce;
+pub use apl_prims_ops::{reduce, scan};
+pub use apl_prims_select::axis_index;
 pub use dispatch::{apply_dyadic, apply_monadic};
 pub use random::{Env, deal, roll};

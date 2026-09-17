@@ -1,6 +1,6 @@
 number = 6
 slug = "reduce-scan"
-status = "pending"
+status = "in-progress"
 description = "Phase 2 step 5. Reduce on the first axis (f⌿) and with an axis bracket f/[k..."
 role = "production"
 context_files = []

@@ -233,3 +233,25 @@ fn grade_radix_and_deal_end_to_end() {
     assert_eq!(a, out(&mut b, "5?5"));
     assert_eq!(out(&mut s, "6?5")[0], "DOMAIN ERROR");
 }
+
+#[test]
+fn reduce_and_scan_on_either_axis_end_to_end() {
+    let mut s = Session::default();
+    assert_eq!(
+        out(&mut s, "M\u{2190}2 3\u{2374}\u{2373}6"),
+        Vec::<String>::new()
+    );
+    assert_eq!(out(&mut s, "+/M"), vec!["6 15"]);
+    assert_eq!(out(&mut s, "+\u{233f}M"), vec!["5 7 9"]);
+    assert_eq!(out(&mut s, "+/[1]M"), vec!["5 7 9"]);
+    assert_eq!(out(&mut s, "+\\1 2 3 4"), vec!["1 3 6 10"]);
+    assert_eq!(out(&mut s, "+\u{2340}M"), vec!["1 2 3", "5 7 9"]);
+    assert_eq!(out(&mut s, "+\\[1]M"), vec!["1 2 3", "5 7 9"]);
+    assert_eq!(out(&mut s, "\u{2228}/0 0 1"), vec!["1"]);
+    assert_eq!(
+        out(&mut s, "\u{2308}/\u{2373}0"),
+        vec!["\u{af}1.797693135E308"]
+    );
+    assert_eq!(out(&mut s, "\u{25cb}/\u{2373}0")[0], "DOMAIN ERROR");
+    assert_eq!(out(&mut s, "+/[3]M")[0], "INDEX ERROR");
+}

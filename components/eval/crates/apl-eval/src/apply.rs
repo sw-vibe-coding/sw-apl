@@ -1,7 +1,7 @@
 //! Function application: primitive and derived functions.
 
 use apl_ast::{Expr, Function};
-use apl_prims::{Env, apply_dyadic, apply_monadic, reduce};
+use apl_prims::{Env, apply_dyadic, apply_monadic, axis_index, reduce, scan};
 use apl_value::{AplError, AplResult, Array, ErrorKind};
 
 use crate::eval::eval_expr;
@@ -12,17 +12,19 @@ pub fn eval_axis(ws: &mut Workspace, axis: Option<&Expr>) -> AplResult<Option<Ar
     axis.map(|a| eval_expr(ws, a)).transpose()
 }
 
-/// `func right`, with the evaluated axis. Reduce with an axis, scan,
-/// and first-axis reduce are not implemented yet.
+/// `func right`, with the evaluated axis: a primitive, or a reduce
+/// or scan along the last axis, the first axis, or the bracket.
 pub fn monadic(
     func: &Function,
     axis: Option<&Array>,
     r: &Array,
     env: &mut Env,
 ) -> AplResult<Array> {
+    let rank = r.shape.len();
     match func {
         Function::Prim(f) => apply_monadic(*f, r, axis, env),
-        Function::Reduce { f, first: false } if axis.is_none() => reduce(*f, r),
+        Function::Reduce { f, first } => reduce(*f, r, axis_index(axis, *first, rank, env.io)?),
+        Function::Scan { f, first } => scan(*f, r, axis_index(axis, *first, rank, env.io)?),
         _ => Err(AplError::new(ErrorKind::NotImplemented)),
     }
 }

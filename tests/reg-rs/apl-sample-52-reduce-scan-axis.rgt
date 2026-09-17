@@ -1,0 +1,4 @@
+command = "target/release/sw-apl -f samples/52-reduce-scan-axis.apl"
+timeout = 60
+exit_code = 0
+desc = "Transcript of samples/52-reduce-scan-axis.apl"

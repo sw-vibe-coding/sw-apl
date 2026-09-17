@@ -103,9 +103,9 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 
 | Form | Status | Notes |
 |---|---|---|
-| Reduce `f/` last axis | done | scalar dyadic f only |
-| Reduce first axis `f⌿`, axis `f/[k]` | part | parsed; evaluation in Phase 2 |
-| Scan `f\`, `f⍀` | part | parsed; evaluation in Phase 2 |
+| Reduce `f/` last axis | done | scalar dyadic f; identity table for empties |
+| Reduce first axis `f⌿`, axis `f/[k]` | done | ops tests, sample 52 |
+| Scan `f\`, `f⍀` | done | prefix reductions on either axis; samples 33, 52 |
 | Inner product `f.g` | part | parsed (dyadic only); evaluation in Phase 2 |
 | Outer product `∘.f` | part | parsed (dyadic only); evaluation in Phase 2 |
 

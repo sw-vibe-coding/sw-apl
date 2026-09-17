@@ -133,8 +133,6 @@ fn indexing_branch_and_derived_forms_are_not_implemented_yet() {
         "A[1]",
         "A[1]\u{2190}2",
         "\u{2192}3",
-        "+/[1]A",
-        "+\\A",
         "A+.\u{d7}A",
         "A\u{2218}.\u{d7}A",
     ] {
