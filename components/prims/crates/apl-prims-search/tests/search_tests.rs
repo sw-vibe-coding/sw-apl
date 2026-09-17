@@ -67,3 +67,40 @@ fn index_of_returns_the_first_position_or_one_past_the_end() {
     assert_eq!(index_of(&m, &s(1), 1).unwrap_err().kind, ErrorKind::Rank);
     assert_eq!(index_of(&s(1), &s(1), 1).unwrap_err().kind, ErrorKind::Rank);
 }
+
+#[test]
+fn grade_up_and_down_are_stable_and_origin_aware() {
+    use apl_prims_search::grade;
+    assert_eq!(grade(&v(&[30, 10, 20]), false, 1).unwrap(), v(&[2, 3, 1]));
+    assert_eq!(grade(&v(&[30, 10, 20]), true, 1).unwrap(), v(&[1, 3, 2]));
+    assert_eq!(
+        grade(&v(&[5, 3, 1, 4, 2]), false, 1).unwrap(),
+        v(&[3, 5, 2, 4, 1])
+    );
+    assert_eq!(grade(&v(&[30, 10, 20]), false, 0).unwrap(), v(&[1, 2, 0]));
+    assert_eq!(
+        grade(&v(&[2, 1, 2, 1]), false, 1).unwrap(),
+        v(&[2, 4, 1, 3]),
+        "ties keep their order"
+    );
+    assert_eq!(
+        grade(&v(&[2, 1, 2, 1]), true, 1).unwrap(),
+        v(&[1, 3, 2, 4]),
+        "ties keep their order going down too"
+    );
+    assert_eq!(grade(&v(&[]), false, 1).unwrap(), v(&[]));
+    assert_eq!(
+        grade(
+            &Array::vector(vec![Number::Float(1.5), Number::Int(1)]),
+            false,
+            1
+        )
+        .unwrap(),
+        v(&[2, 1])
+    );
+    assert_eq!(grade(&s(1), false, 1).unwrap_err().kind, ErrorKind::Rank);
+    assert_eq!(
+        grade(&chars(&[2], "ab"), false, 1).unwrap_err().kind,
+        ErrorKind::Domain
+    );
+}

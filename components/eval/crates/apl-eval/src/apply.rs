@@ -34,7 +34,7 @@ pub fn dyadic(
     axis: Option<&Array>,
     l: &Array,
     r: &Array,
-    env: &Env,
+    env: &mut Env,
 ) -> AplResult<Array> {
     match func {
         Function::Prim(f) => apply_dyadic(*f, l, r, axis, env),

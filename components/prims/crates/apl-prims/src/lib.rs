@@ -7,4 +7,4 @@ mod random;
 
 pub use apl_prims_ops::reduce;
 pub use dispatch::{apply_dyadic, apply_monadic};
-pub use random::{Env, roll};
+pub use random::{Env, deal, roll};

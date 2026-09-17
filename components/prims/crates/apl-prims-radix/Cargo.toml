@@ -1,6 +1,6 @@
 [package]
-name = "apl-prims-search"
-description = "sw-apl membership and index-of"
+name = "apl-prims-radix"
+description = "sw-apl encode and decode in mixed radix"
 edition.workspace = true
 license.workspace = true
 version.workspace = true
@@ -10,7 +10,6 @@ repository.workspace = true
 [dependencies]
 apl-value = { path = "../../../value/crates/apl-value" }
 apl-prims-scalar = { path = "../apl-prims-scalar" }
-
 
 [lints]
 workspace = true

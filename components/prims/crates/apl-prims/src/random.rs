@@ -53,3 +53,31 @@ pub fn roll(r: &Array, env: &mut Env) -> AplResult<Array> {
         .collect::<AplResult<Vec<_>>>()?;
     Array::new(r.shape.clone(), Data::Num(out))
 }
+
+/// `l?r`: `l` distinct random indexes from the first `r`, in the
+/// index origin, driven by the link (a partial Fisher-Yates shuffle).
+///
+/// # Errors
+/// RANK ERROR unless both are scalars; DOMAIN ERROR unless both are
+/// non-negative integers with `l` at most `r`.
+pub fn deal(l: &Array, r: &Array, env: &mut Env) -> AplResult<Array> {
+    if !l.shape.is_empty() || !r.shape.is_empty() {
+        return Err(AplError::new(ErrorKind::Rank));
+    }
+    let count = usize::try_from(non_negative_int(numbers(l)?[0])?).unwrap_or(usize::MAX);
+    let total = usize::try_from(non_negative_int(numbers(r)?[0])?).unwrap_or(usize::MAX);
+    if count > total {
+        return Err(AplError::new(ErrorKind::Domain));
+    }
+    let mut pool: Vec<usize> = (0..total).collect();
+    for i in 0..count {
+        let span = u64::try_from(total - i).unwrap_or(1);
+        let j = i + usize::try_from(span * (next(env) - 1) / (MODULUS - 1)).unwrap_or(0);
+        pool.swap(i, j);
+    }
+    let picks = pool[..count]
+        .iter()
+        .map(|&i| Number::Int(env.io + i64::try_from(i).unwrap_or(0)))
+        .collect();
+    Ok(Array::vector(picks))
+}

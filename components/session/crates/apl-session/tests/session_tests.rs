@@ -216,3 +216,20 @@ fn compress_expand_membership_indexof_end_to_end() {
     assert_eq!(out(&mut s, "10 20 30\u{2373}20 40"), vec!["2 4"]);
     assert_eq!(out(&mut s, "'hello'\u{220a}'aeiou'"), vec!["0 1 0 0 1"]);
 }
+
+#[test]
+fn grade_radix_and_deal_end_to_end() {
+    let mut s = Session::default();
+    assert_eq!(out(&mut s, "\u{234b}30 10 20"), vec!["2 3 1"]);
+    assert_eq!(out(&mut s, "\u{2352}30 10 20"), vec!["1 3 2"]);
+    assert_eq!(out(&mut s, "2 2 2\u{22a4}5"), vec!["1 0 1"]);
+    assert_eq!(out(&mut s, "2 2 2\u{22a5}1 0 1"), vec!["5"]);
+    assert_eq!(
+        out(&mut s, "24 60 60\u{22a5}24 60 60\u{22a4}3661"),
+        vec!["3661"]
+    );
+    let a = out(&mut s, "5?5");
+    let mut b = Session::default();
+    assert_eq!(a, out(&mut b, "5?5"));
+    assert_eq!(out(&mut s, "6?5")[0], "DOMAIN ERROR");
+}

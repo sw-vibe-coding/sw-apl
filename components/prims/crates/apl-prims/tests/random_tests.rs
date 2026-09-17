@@ -62,3 +62,84 @@ fn query_dispatches_to_roll_through_the_env() {
     let r = apply_monadic('?', &Array::scalar(Number::Int(100)), None, &mut env).unwrap();
     assert!(matches!(nums(&r)[0], 1..=100));
 }
+
+#[test]
+fn deal_picks_distinct_indexes_reproducibly() {
+    use apl_prims::deal;
+    let mut env = Env::default();
+    let hand = nums(
+        &deal(
+            &Array::scalar(Number::Int(5)),
+            &Array::scalar(Number::Int(52)),
+            &mut env,
+        )
+        .unwrap(),
+    );
+    assert_eq!(hand.len(), 5);
+    let mut sorted = hand.clone();
+    sorted.sort_unstable();
+    sorted.dedup();
+    assert_eq!(sorted.len(), 5, "distinct");
+    assert!(hand.iter().all(|&x| (1..=52).contains(&x)));
+    let again = nums(
+        &deal(
+            &Array::scalar(Number::Int(5)),
+            &Array::scalar(Number::Int(52)),
+            &mut Env::default(),
+        )
+        .unwrap(),
+    );
+    assert_eq!(hand, again);
+    let mut all = nums(
+        &deal(
+            &Array::scalar(Number::Int(5)),
+            &Array::scalar(Number::Int(5)),
+            &mut env,
+        )
+        .unwrap(),
+    );
+    all.sort_unstable();
+    assert_eq!(all, [1, 2, 3, 4, 5]);
+    let mut env = Env { io: 0, link: 16807 };
+    let mut all = nums(
+        &deal(
+            &Array::scalar(Number::Int(3)),
+            &Array::scalar(Number::Int(3)),
+            &mut env,
+        )
+        .unwrap(),
+    );
+    all.sort_unstable();
+    assert_eq!(all, [0, 1, 2]);
+    assert_eq!(
+        nums(
+            &deal(
+                &Array::scalar(Number::Int(0)),
+                &Array::scalar(Number::Int(3)),
+                &mut env
+            )
+            .unwrap()
+        ),
+        []
+    );
+    assert_eq!(
+        deal(
+            &Array::scalar(Number::Int(4)),
+            &Array::scalar(Number::Int(3)),
+            &mut env
+        )
+        .unwrap_err()
+        .kind,
+        ErrorKind::Domain
+    );
+    assert_eq!(
+        deal(
+            &Array::vector(vec![Number::Int(1)]),
+            &Array::scalar(Number::Int(3)),
+            &mut env
+        )
+        .unwrap_err()
+        .kind,
+        ErrorKind::Rank
+    );
+}

@@ -1,6 +1,6 @@
 number = 5
 slug = "grade-encode-decode-deal"
-status = "pending"
+status = "in-progress"
 description = "Phase 2 step 4. ⍋ ⍒ stable grade of vectors (origin-aware), ⊥ decode an..."
 role = "production"
 context_files = []

@@ -1,15 +1,16 @@
-//! Glyph to primitive: mixed functions and roll here, scalar
-//! functions as the fallback.
+//! Glyph to primitive: mixed functions and the random functions
+//! here, scalar functions as the fallback.
 
 use apl_prims_join::{catenate, resolve_axis};
 use apl_prims_mask::{compress, expand};
 use apl_prims_mixed::{iota, ravel, reshape, shape};
+use apl_prims_radix::{decode, encode};
 use apl_prims_scalar::{dyadic, monadic};
-use apl_prims_search::{index_of, membership};
+use apl_prims_search::{grade, index_of, membership};
 use apl_prims_select::{axis_index, drop, reverse, rotate, take, transpose};
 use apl_value::{AplError, AplResult, Array, ErrorKind};
 
-use crate::random::{Env, roll};
+use crate::random::{Env, deal, roll};
 
 /// `f r`, with the evaluated axis bracket when one was written.
 ///
@@ -27,6 +28,8 @@ pub fn apply_monadic(f: char, r: &Array, axis: Option<&Array>, env: &mut Env) ->
         ',' => Ok(ravel(r)),
         '⍉' => transpose(None, r, env.io),
         '?' => roll(r, env),
+        '⍋' => grade(r, false, env.io),
+        '⍒' => grade(r, true, env.io),
         _ => monadic(f, r),
     }
 }
@@ -40,7 +43,7 @@ pub fn apply_dyadic(
     l: &Array,
     r: &Array,
     axis: Option<&Array>,
-    env: &Env,
+    env: &mut Env,
 ) -> AplResult<Array> {
     let rank = r.shape.len();
     match f {
@@ -50,13 +53,7 @@ pub fn apply_dyadic(
             axis_dyadic(f, l, r, axis_index(axis, first, rank, env.io)?)
         }
         _ if axis.is_some() => Err(AplError::new(ErrorKind::NotImplemented)),
-        '⍴' => reshape(l, r),
-        '↑' => take(l, r),
-        '↓' => drop(l, r),
-        '⍉' => transpose(Some(l), r, env.io),
-        '∊' => Ok(membership(l, r)),
-        '⍳' => index_of(l, r, env.io),
-        _ => dyadic(f, l, r),
+        _ => mixed_dyadic(f, l, r, env).unwrap_or_else(|| dyadic(f, l, r)),
     }
 }
 
@@ -67,4 +64,21 @@ fn axis_dyadic(f: char, l: &Array, r: &Array, k: usize) -> AplResult<Array> {
         '/' | '⌿' => compress(l, r, k),
         _ => expand(l, r, k),
     }
+}
+
+/// The dyadic mixed functions that take no axis; `None` for a
+/// scalar function glyph.
+fn mixed_dyadic(f: char, l: &Array, r: &Array, env: &mut Env) -> Option<AplResult<Array>> {
+    Some(match f {
+        '⍴' => reshape(l, r),
+        '↑' => take(l, r),
+        '↓' => drop(l, r),
+        '⍉' => transpose(Some(l), r, env.io),
+        '∊' => Ok(membership(l, r)),
+        '⍳' => index_of(l, r, env.io),
+        '⊥' => decode(l, r),
+        '⊤' => encode(l, r),
+        '?' => deal(l, r, env),
+        _ => return None,
+    })
 }

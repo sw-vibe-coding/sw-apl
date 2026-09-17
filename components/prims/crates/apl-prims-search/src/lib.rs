@@ -1,5 +1,5 @@
-//! Membership (`l∊r`) and index-of (`l⍳r`).
+//! Membership (`l∊r`), index-of (`l⍳r`), and grade (`⍋r`, `⍒r`).
 
 mod search;
 
-pub use search::{index_of, membership};
+pub use search::{grade, index_of, membership};

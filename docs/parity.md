@@ -77,7 +77,7 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | `~` | done | | 0 and 1 only |
 | `∧ ∨ ⍲ ⍱` | | done | 0 and 1 only |
 | `< ≤ = ≥ > ≠` | | done | with fuzz; samples 15, 47 |
-| `?` | done | todo | roll via the random link (starts at 16807); deal in Phase 2 |
+| `?` | done | done | roll and deal via the random link (starts at 16807); samples 41, 47 |
 | Scalar extension, RANK and LENGTH agreement | done | done | prims tests |
 | Exact integers, float promotion, fuzz | done | | value tests |
 
@@ -93,9 +93,9 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | `↑ ↓` | | done | per axis, negatives, overtake fill; samples 07, 10, 44 |
 | `/ ⌿` compress | | done | boolean left, either axis, axis bracket; sample 17 |
 | `\ ⍀` expand | | done | boolean left, either axis, axis bracket |
-| `⊥ ⊤` | | todo | |
+| `⊥ ⊤` | | done | mixed radix, scalar extension, matrix columns; sample 36 |
 | `∊` | | done | with the fuzz; sample 30 |
-| `⍋ ⍒` | todo | | |
+| `⍋ ⍒` | done | | vectors, stable, origin-aware; sample 32 |
 | `⌹` | todo | todo | Phase 5 |
 | `⌶` I-beams 20 to 27 | todo | | Phase 3 |
 

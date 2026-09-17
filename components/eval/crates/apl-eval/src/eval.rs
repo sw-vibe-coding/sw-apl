@@ -101,5 +101,5 @@ fn eval_dyadic(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
     let r = eval_expr(ws, right)?;
     let l = eval_expr(ws, left)?;
     let axis = apply::eval_axis(ws, axis.as_deref())?;
-    apply::dyadic(func, axis.as_ref(), &l, &r, &ws.env).map_err(|e| e.at(*pos))
+    apply::dyadic(func, axis.as_ref(), &l, &r, &mut ws.env).map_err(|e| e.at(*pos))
 }

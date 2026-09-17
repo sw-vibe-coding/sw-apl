@@ -10,6 +10,7 @@ dependencies = [
  "apl-prims-mask",
  "apl-prims-mixed",
  "apl-prims-ops",
+ "apl-prims-radix",
  "apl-prims-scalar",
  "apl-prims-search",
  "apl-prims-select",
@@ -50,6 +51,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-prims-radix"
+version = "0.1.0"
+dependencies = [
+ "apl-prims-scalar",
+ "apl-value",
+]
+
+[[package]]
 name = "apl-prims-scalar"
 version = "0.1.0"
 dependencies = [
@@ -63,6 +72,7 @@ dependencies = [
 name = "apl-prims-search"
 version = "0.1.0"
 dependencies = [
+ "apl-prims-scalar",
  "apl-value",
 ]
 

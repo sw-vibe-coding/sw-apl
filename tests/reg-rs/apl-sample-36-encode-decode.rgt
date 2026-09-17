@@ -1,0 +1,4 @@
+command = "target/release/sw-apl -f samples/36-encode-decode.apl"
+timeout = 60
+exit_code = 0
+desc = "Transcript of samples/36-encode-decode.apl"

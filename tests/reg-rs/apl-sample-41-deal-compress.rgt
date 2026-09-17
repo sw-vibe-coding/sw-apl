@@ -1,0 +1,4 @@
+command = "target/release/sw-apl -f samples/41-deal-compress.apl"
+timeout = 60
+exit_code = 0
+desc = "Transcript of samples/41-deal-compress.apl"
