@@ -37,3 +37,25 @@ impl Workspace {
         self.vars.insert(name.to_string(), value);
     }
 }
+
+/// What a statement produces for the terminal.
+#[derive(Debug, Clone, PartialEq)]
+pub enum Output {
+    /// Nothing to display (blank line, comment, assignment).
+    Nothing,
+    /// One array to display.
+    Value(Array),
+    /// Mixed output: the parts are displayed side by side.
+    Mixed(Vec<Array>),
+}
+
+impl Output {
+    /// The single displayed array, if that is what this is.
+    #[must_use]
+    pub fn value(self) -> Option<Array> {
+        match self {
+            Output::Value(a) => Some(a),
+            _ => None,
+        }
+    }
+}

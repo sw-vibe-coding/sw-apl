@@ -2,7 +2,7 @@
 //! high minus, names, comments. Positions are character indexes so
 //! the session can print an APL\360 caret line.
 
-mod number;
+mod literal;
 mod scan;
 mod token;
 

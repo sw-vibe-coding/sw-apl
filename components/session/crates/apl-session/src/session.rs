@@ -1,8 +1,8 @@
 //! The session state machine (immediate execution only, so far).
 
 use apl_display::format_array;
-use apl_eval::{Workspace, eval_line};
-use apl_value::AplError;
+use apl_eval::{Output, Workspace, eval_line};
+use apl_value::{AplError, Array};
 
 use crate::commands::system_command;
 
@@ -52,8 +52,9 @@ impl Session {
             .flat_map(|v| format_array(&v, self.digits, self.width))
             .collect();
         lines.extend(match result {
-            Ok(Some(value)) => format_array(&value, self.digits, self.width),
-            Ok(None) => Vec::new(),
+            Ok(Output::Value(value)) => format_array(&value, self.digits, self.width),
+            Ok(Output::Mixed(parts)) => mixed_lines(&parts, self.digits, self.width),
+            Ok(Output::Nothing) => Vec::new(),
             Err(err) => error_lines(&err, line),
         });
         Reply::Output(lines)
@@ -68,4 +69,17 @@ fn error_lines(err: &AplError, line: &str) -> Vec<String> {
         format!("{INDENT}{line}"),
         format!("{INDENT}{}^", " ".repeat(caret)),
     ]
+}
+
+/// Mixed output: single-line parts are printed side by side with no
+/// separator; when any part spans lines, the parts follow each other.
+fn mixed_lines(parts: &[Array], digits: usize, width: usize) -> Vec<String> {
+    let blocks: Vec<Vec<String>> = parts
+        .iter()
+        .map(|p| format_array(p, digits, width))
+        .collect();
+    if blocks.iter().all(|b| b.len() == 1) {
+        return vec![blocks.iter().map(|b| b[0].as_str()).collect()];
+    }
+    blocks.concat()
 }

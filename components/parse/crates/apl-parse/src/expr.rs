@@ -1,28 +1,56 @@
 //! Statement and expression parsing, right to left.
 
+use apl_ast::{Expr, Function};
 use apl_lex::{Token, TokenKind, tokenize};
 use apl_value::{AplError, AplResult, ErrorKind};
 
-use crate::ast::Expr;
-use crate::operand::{apply_assign, parse_operand};
+use crate::bracket::segments;
+use crate::operand::{apply_assign, parse_axis, parse_operand, resolve_function};
 
 /// An expression and the token index where it starts.
 pub type Parsed = AplResult<(Expr, usize)>;
 
 /// Parse one statement line. `None` for a blank or comment-only line.
+/// Top-level semicolons make a mixed-output statement.
 ///
 /// # Errors
 /// Lexical errors and SYNTAX ERROR, each with a caret.
 pub fn parse(line: &str) -> AplResult<Option<Expr>> {
     let tokens = tokenize(line)?;
+    if let [
+        Token {
+            kind: TokenKind::Branch,
+            pos,
+        },
+    ] = tokens.as_slice()
+    {
+        return Ok(Some(Expr::branch(*pos, None)));
+    }
     if tokens.is_empty() {
         return Ok(None);
     }
-    let (expr, start) = parse_expr(&tokens, 0, tokens.len())?;
-    if start != 0 {
+    let ranges = segments(&tokens, 0, tokens.len());
+    if ranges.len() == 1 {
+        return parse_all(&tokens, 0, tokens.len()).map(Some);
+    }
+    let parts = ranges
+        .into_iter()
+        .map(|(lo, hi)| parse_all(&tokens, lo, hi))
+        .collect::<AplResult<Vec<_>>>()?;
+    Ok(Some(Expr::Mixed(parts)))
+}
+
+/// The expression that fills `tokens[lo..hi]` exactly.
+pub fn parse_all(tokens: &[Token], lo: usize, hi: usize) -> AplResult<Expr> {
+    if lo >= hi {
+        let near = tokens.get(lo).or_else(|| tokens.get(lo.wrapping_sub(1)));
+        return Err(AplError::new(ErrorKind::Syntax).at(near.map_or(0, |t| t.pos)));
+    }
+    let (expr, start) = parse_expr(tokens, lo, hi)?;
+    if start != lo {
         return Err(AplError::new(ErrorKind::Syntax).at(tokens[start - 1].pos));
     }
-    Ok(Some(expr))
+    Ok(expr)
 }
 
 /// Parse the expression in `tokens[lo..end]`, consuming leftwards from
@@ -37,8 +65,13 @@ pub fn parse_expr(tokens: &[Token], lo: usize, end: usize) -> Parsed {
     while start > lo {
         let tok = &tokens[start - 1];
         (right, start) = match &tok.kind {
-            TokenKind::Prim(f) => apply_function(tokens, lo, start - 1, *f, right)?,
+            TokenKind::Prim(_) => apply_function(tokens, lo, start - 1, None, right)?,
+            TokenKind::RBracket => {
+                let (axis, at) = parse_axis(tokens, lo, start - 1)?;
+                apply_function(tokens, lo, at, Some(axis), right)?
+            }
             TokenKind::Assign => apply_assign(tokens, start - 1, right)?,
+            TokenKind::Branch if start - 1 == lo => (Expr::branch(tok.pos, Some(right)), lo),
             TokenKind::LParen => break,
             _ => return Err(AplError::new(ErrorKind::Syntax).at(tok.pos)),
         };
@@ -46,46 +79,31 @@ pub fn parse_expr(tokens: &[Token], lo: usize, end: usize) -> Parsed {
     Ok((right, start))
 }
 
-/// The glyph at `at` applies to `right`: a reduce when it is a slash
-/// with a function to its left, dyadic when an operand ends there,
-/// monadic otherwise.
-fn apply_function(tokens: &[Token], lo: usize, at: usize, f: char, right: Expr) -> Parsed {
-    let (pos, right) = (tokens[at].pos, Box::new(right));
-    let left = (at > lo).then(|| &tokens[at - 1]);
-    if let Some(reduce) = apply_reduce(left, f, right.clone()) {
-        return Ok((reduce, at - 1));
+/// The function whose rightmost glyph is at `at` applies to `right`:
+/// dyadic when an operand ends immediately to its left, monadic
+/// otherwise. Reduce and scan take no left argument; inner and outer
+/// products need one; a lone dot or jot is not a function.
+fn apply_function(
+    tokens: &[Token],
+    lo: usize,
+    at: usize,
+    axis: Option<Box<Expr>>,
+    right: Expr,
+) -> Parsed {
+    let (func, start, pos) = resolve_function(tokens, lo, at);
+    let has_left = start > lo && tokens[start - 1].kind.ends_operand();
+    let bad = match func {
+        Function::Prim('.' | '∘') => true,
+        Function::Reduce { .. } | Function::Scan { .. } => has_left,
+        Function::Inner { .. } | Function::Outer { .. } => !has_left,
+        Function::Prim(_) => false,
+    };
+    if bad {
+        return Err(AplError::new(ErrorKind::Syntax).at(pos));
     }
-    if !left.is_some_and(|t| t.kind.ends_operand()) {
-        return Ok((Expr::Monadic { f, pos, right }, at));
+    if !has_left {
+        return Ok((Expr::monadic(func, pos, axis, right), start));
     }
-    let (left, start) = parse_operand(tokens, at)?;
-    let left = Box::new(left);
-    Ok((
-        Expr::Dyadic {
-            f,
-            pos,
-            left,
-            right,
-        },
-        start,
-    ))
-}
-
-/// `g/right` when `f` is the slash and the token to its left is a
-/// function glyph `g`.
-fn apply_reduce(left: Option<&Token>, f: char, right: Box<Expr>) -> Option<Expr> {
-    match (f, left) {
-        (
-            '/',
-            Some(Token {
-                kind: TokenKind::Prim(g),
-                pos,
-            }),
-        ) => Some(Expr::Reduce {
-            f: *g,
-            pos: *pos,
-            right,
-        }),
-        _ => None,
-    }
+    let (left, start) = parse_operand(tokens, start)?;
+    Ok((Expr::dyadic(func, pos, axis, left, right), start))
 }

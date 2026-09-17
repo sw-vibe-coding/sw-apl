@@ -42,9 +42,9 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | Quad input `⎕` | todo | |
 | Quote-quad `⍞` input and output | todo | |
 | Character literals `'...'`, doubled quote, any Unicode inside | done | lex tests, samples 19, 20 |
-| Bracket indexing `A[I;J]`, elided axes | todo | |
-| Indexed assignment | todo | |
-| Branch `→`, labels, `→0`, empty branch | todo | |
+| Bracket indexing `A[I;J]`, elided axes | part | parsed (parse tests); evaluation in Phase 2 |
+| Indexed assignment | part | parsed; evaluation in Phase 2 |
+| Branch `→`, labels, `→0`, empty branch | part | `→` parsed (statement start only); semantics in Phase 3 |
 | Del editor: headers, locals, `[n]`, `[⎕]`, `[∆n]`, fractional insert, `⍫` | todo | |
 | Dynamic scoping, recursion, state indicator | todo | |
 | Six-space prompt, batch echo, `)OFF` | done | cli tests |
@@ -53,8 +53,9 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | `)WIDTH` wrapping with six-space continuation | done | display tests, sample 45 |
 | `)DIGITS` precision, `)ORIGIN`, `WAS n` reply | done | session tests, sample 22 |
 | Strict Unicode acceptance, CHARACTER ERROR with lookalike hint | done | lex, value, session tests |
-| Lexer: brackets, semicolon, colon, branch arrow, del, del-tilde, quote-quad, system command lines | done | lex tests (parser rejects them until 010) |
-| Mixed output `'TEXT';X;'MORE'` (semicolon list) | todo | needed by sample 50 |
+| Lexer: brackets, semicolon, colon, branch arrow, del, del-tilde, quote-quad, system command lines, strands, bracket balance | done | lex tests |
+| Parser: axis brackets `f[k]`, compress vs reduce by context, SYNTAX ERROR carets, multiple assignments | done | parse tests |
+| Mixed output `'TEXT';X;'MORE'` (semicolon list) | done | session tests, sample 46 |
 | Invalid UTF-8 reported with byte offset, run continues | done | cli tests |
 
 ## Scalar functions
@@ -102,10 +103,10 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | Form | Status | Notes |
 |---|---|---|
 | Reduce `f/` last axis | done | scalar dyadic f only |
-| Reduce first axis `f⌿`, axis `f/[k]` | todo | |
-| Scan `f\`, `f⍀` | todo | |
-| Inner product `f.g` | todo | |
-| Outer product `∘.f` | todo | |
+| Reduce first axis `f⌿`, axis `f/[k]` | part | parsed; evaluation in Phase 2 |
+| Scan `f\`, `f⍀` | part | parsed; evaluation in Phase 2 |
+| Inner product `f.g` | part | parsed (dyadic only); evaluation in Phase 2 |
+| Outer product `∘.f` | part | parsed (dyadic only); evaluation in Phase 2 |
 
 ## Display
 

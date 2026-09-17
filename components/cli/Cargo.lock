@@ -62,6 +62,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-ast"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+]
+
+[[package]]
 name = "apl-display"
 version = "0.1.0"
 dependencies = [
@@ -72,6 +79,7 @@ dependencies = [
 name = "apl-eval"
 version = "0.1.0"
 dependencies = [
+ "apl-ast",
  "apl-parse",
  "apl-prims",
  "apl-value",
@@ -88,6 +96,7 @@ dependencies = [
 name = "apl-parse"
 version = "0.1.0"
 dependencies = [
+ "apl-ast",
  "apl-lex",
  "apl-value",
 ]

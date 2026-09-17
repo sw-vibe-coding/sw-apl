@@ -3,6 +3,13 @@
 version = 4
 
 [[package]]
+name = "apl-ast"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+]
+
+[[package]]
 name = "apl-lex"
 version = "0.1.0"
 dependencies = [
@@ -13,6 +20,7 @@ dependencies = [
 name = "apl-parse"
 version = "0.1.0"
 dependencies = [
+ "apl-ast",
  "apl-lex",
  "apl-value",
 ]

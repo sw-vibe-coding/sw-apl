@@ -131,3 +131,15 @@ fn lookalike_glyph_error_carries_the_hint() {
         "CHARACTER ERROR: U+03C1 (use \u{2374} U+2374)"
     );
 }
+
+#[test]
+fn mixed_output_prints_parts_side_by_side() {
+    let mut s = Session::default();
+    assert_eq!(out(&mut s, "'X IS ';2+3"), vec!["X IS 5"]);
+    assert_eq!(out(&mut s, "'A';1 2 3;'B'"), vec!["A1 2 3B"]);
+    assert_eq!(out(&mut s, "'ROUND ';3;' ---'"), vec!["ROUND 3 ---"]);
+    assert_eq!(
+        out(&mut s, "'M';2 2\u{2374}\u{2373}4"),
+        vec!["M", "1 2", "3 4"]
+    );
+}

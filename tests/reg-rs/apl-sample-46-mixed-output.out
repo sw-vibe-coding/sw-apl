@@ -1,0 +1,13 @@
+      ⍝ Mixed output: expressions separated by semicolons print side by side
+      X←5
+      'X IS ';X
+X IS 5
+      'THE SUM OF ';⍳4;' IS ';+/⍳4
+THE SUM OF 1 2 3 4 IS 10
+      '--- ROUND ';3;' ---'
+--- ROUND 3 ---
+      'M';2 2⍴⍳4
+M
+1 2
+3 4
+      )OFF

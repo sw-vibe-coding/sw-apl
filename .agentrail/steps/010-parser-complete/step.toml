@@ -1,6 +1,6 @@
 number = 10
 slug = "parser-complete"
-status = "pending"
+status = "in-progress"
 description = "Complete apl-parse: operators reduce/scan (last and first axis) with axis bra..."
 role = "production"
 context_files = []

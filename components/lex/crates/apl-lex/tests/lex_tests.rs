@@ -2,7 +2,14 @@
 //! comments, and CHARACTER ERROR for anything outside the table.
 
 use apl_lex::{Token, TokenKind, tokenize};
-use apl_value::{ErrorKind, Number};
+use apl_value::{Array, ErrorKind, Number};
+
+fn num(v: i64) -> TokenKind {
+    TokenKind::Numbers(Array::scalar(Number::Int(v)))
+}
+fn strand(v: &[Number]) -> TokenKind {
+    TokenKind::Numbers(Array::vector(v.to_vec()))
+}
 
 fn kinds(line: &str) -> Vec<TokenKind> {
     tokenize(line)
@@ -16,13 +23,13 @@ fn kinds(line: &str) -> Vec<TokenKind> {
 fn numbers_including_high_minus_float_and_exponent() {
     assert_eq!(
         kinds("3 \u{af}4 2.5 1E3 \u{af}1.5E\u{af}2"),
-        vec![
-            TokenKind::Number(Number::Int(3)),
-            TokenKind::Number(Number::Int(-4)),
-            TokenKind::Number(Number::Float(2.5)),
-            TokenKind::Number(Number::Int(1000)),
-            TokenKind::Number(Number::Float(-0.015)),
-        ]
+        vec![strand(&[
+            Number::Int(3),
+            Number::Int(-4),
+            Number::Float(2.5),
+            Number::Int(1000),
+            Number::Float(-0.015),
+        ])]
     );
 }
 
@@ -34,7 +41,7 @@ fn names_glyphs_parens_and_assignment() {
             TokenKind::Name("AB\u{2206}1".to_string()),
             TokenKind::Assign,
             TokenKind::LParen,
-            TokenKind::Number(Number::Int(2)),
+            num(2),
             TokenKind::Prim('\u{d7}'),
             TokenKind::Name("B".to_string()),
             TokenKind::RParen,
@@ -44,26 +51,21 @@ fn names_glyphs_parens_and_assignment() {
 
 #[test]
 fn ascii_minus_is_a_function_not_a_sign() {
-    assert_eq!(
-        kinds("-3"),
-        vec![TokenKind::Prim('-'), TokenKind::Number(Number::Int(3))]
-    );
+    assert_eq!(kinds("-3"), vec![TokenKind::Prim('-'), num(3)]);
 }
 
 #[test]
 fn positions_are_char_indexes() {
-    let toks: Vec<Token> = tokenize("\u{2374} 1 2").unwrap();
+    let toks: Vec<Token> = tokenize("\u{2374} 1 2 +3").unwrap();
     assert_eq!(toks[0].pos, 0);
-    assert_eq!(toks[1].pos, 2);
-    assert_eq!(toks[2].pos, 4);
+    assert_eq!(toks[1].pos, 2, "a strand sits at its first number");
+    assert_eq!(toks[2].pos, 6);
+    assert_eq!(toks[3].pos, 7);
 }
 
 #[test]
 fn lamp_comment_ends_the_line() {
-    assert_eq!(
-        kinds("1 \u{235d} 2 + anything \u{3c1}"),
-        vec![TokenKind::Number(Number::Int(1))]
-    );
+    assert_eq!(kinds("1 \u{235d} 2 + anything \u{3c1}"), vec![num(1)]);
     assert_eq!(kinds("\u{235d} only"), vec![]);
 }
 
@@ -162,9 +164,9 @@ fn punctuation_and_sentinel_tokens() {
         vec![
             TokenKind::Name("A".into()),
             TokenKind::LBracket,
-            TokenKind::Number(Number::Int(1)),
+            num(1),
             TokenKind::Semicolon,
-            TokenKind::Number(Number::Int(2)),
+            num(2),
             TokenKind::RBracket,
             TokenKind::Branch,
             TokenKind::Name("L".into()),
@@ -201,4 +203,19 @@ fn names_may_hold_delta_letters_and_digits() {
         ]
     );
     assert_eq!(tokenize("1X").unwrap_err().kind, ErrorKind::Syntax);
+}
+
+#[test]
+fn unbalanced_brackets_are_syntax_errors_at_the_offender() {
+    for (line, caret) in [
+        ("(1+2", 0),
+        ("1+2)", 3),
+        ("A[1;2", 1),
+        ("A[1)]", 3),
+        ("(A[1)]", 4),
+    ] {
+        let err = tokenize(line).unwrap_err();
+        assert_eq!(err.kind, ErrorKind::Syntax, "{line}");
+        assert_eq!(err.caret, Some(caret), "{line}");
+    }
 }

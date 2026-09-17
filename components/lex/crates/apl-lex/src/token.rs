@@ -1,12 +1,13 @@
 //! Token vocabulary and the accepted glyph set.
 
-use apl_value::{Array, Number};
+use apl_value::{AplError, AplResult, Array, ErrorKind};
 
 /// One lexical unit.
 #[derive(Debug, Clone, PartialEq)]
 pub enum TokenKind {
-    /// A numeric literal (strands are joined by the parser).
-    Number(Number),
+    /// A numeric literal or strand, already an array (scalar for one
+    /// number, vector otherwise).
+    Numbers(Array),
     /// A quoted character literal, already an array (scalar for one
     /// character, vector otherwise).
     Chars(Array),
@@ -54,7 +55,7 @@ impl TokenKind {
     pub fn ends_operand(&self) -> bool {
         matches!(
             self,
-            TokenKind::Number(_)
+            TokenKind::Numbers(_)
                 | TokenKind::Chars(_)
                 | TokenKind::Name(_)
                 | TokenKind::RParen
@@ -82,6 +83,29 @@ impl TokenKind {
             '⍫' => TokenKind::DelTilde,
             _ => return None,
         })
+    }
+}
+
+/// SYNTAX ERROR at the first unmatched opener or closer.
+pub fn check_balance(tokens: &[Token]) -> AplResult<()> {
+    let mut stack: Vec<&Token> = Vec::new();
+    for tok in tokens {
+        let want = match tok.kind {
+            TokenKind::LParen | TokenKind::LBracket => {
+                stack.push(tok);
+                continue;
+            }
+            TokenKind::RParen => TokenKind::LParen,
+            TokenKind::RBracket => TokenKind::LBracket,
+            _ => continue,
+        };
+        if stack.pop().is_none_or(|open| open.kind != want) {
+            return Err(AplError::new(ErrorKind::Syntax).at(tok.pos));
+        }
+    }
+    match stack.last() {
+        Some(open) => Err(AplError::new(ErrorKind::Syntax).at(open.pos)),
+        None => Ok(()),
     }
 }
 

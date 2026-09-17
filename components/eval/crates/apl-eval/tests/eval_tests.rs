@@ -1,10 +1,10 @@
 //! Evaluator over the AST with a workspace of variables.
 
-use apl_eval::{Workspace, eval_line};
+use apl_eval::{Output, Workspace, eval_line};
 use apl_value::{Data, ErrorKind, Number};
 
 fn nums(ws: &mut Workspace, line: &str) -> Vec<Number> {
-    match eval_line(ws, line).unwrap().unwrap().data {
+    match eval_line(ws, line).unwrap().value().unwrap().data {
         Data::Num(v) => v,
         Data::Char(_) => panic!("chars"),
     }
@@ -22,9 +22,12 @@ fn arithmetic_right_to_left() {
 #[test]
 fn assignment_is_silent_and_variables_persist() {
     let mut ws = Workspace::default();
-    assert_eq!(eval_line(&mut ws, "A\u{2190}5").unwrap(), None);
+    assert_eq!(eval_line(&mut ws, "A\u{2190}5").unwrap(), Output::Nothing);
     assert_eq!(nums(&mut ws, "A+3"), [Number::Int(8)]);
-    assert_eq!(eval_line(&mut ws, "B\u{2190}A\u{d7}2").unwrap(), None);
+    assert_eq!(
+        eval_line(&mut ws, "B\u{2190}A\u{d7}2").unwrap(),
+        Output::Nothing
+    );
     assert_eq!(nums(&mut ws, "A+B"), [Number::Int(15)]);
 }
 
@@ -57,21 +60,24 @@ fn primitive_errors_point_at_the_glyph() {
 fn monadic_rho_gives_the_shape() {
     let mut ws = Workspace::default();
     assert_eq!(nums(&mut ws, "\u{2374}1 2 3 4 5"), [Number::Int(5)]);
-    let a = eval_line(&mut ws, "\u{2374}7").unwrap().unwrap();
+    let a = eval_line(&mut ws, "\u{2374}7").unwrap().value().unwrap();
     assert_eq!(a.shape, vec![0]);
 }
 
 #[test]
 fn empty_line_evaluates_to_nothing() {
     let mut ws = Workspace::default();
-    assert_eq!(eval_line(&mut ws, "").unwrap(), None);
+    assert_eq!(eval_line(&mut ws, "").unwrap(), Output::Nothing);
 }
 
 #[test]
 fn iota_rho_reduce_end_to_end() {
     let mut ws = Workspace::default();
     assert_eq!(nums(&mut ws, "+/\u{2373}10"), [Number::Int(55)]);
-    let m = eval_line(&mut ws, "2 3\u{2374}\u{2373}6").unwrap().unwrap();
+    let m = eval_line(&mut ws, "2 3\u{2374}\u{2373}6")
+        .unwrap()
+        .value()
+        .unwrap();
     assert_eq!(m.shape, vec![2, 3]);
     assert_eq!(nums(&mut ws, ",2 2\u{2374}7"), [Number::Int(7); 4]);
     assert_eq!(
@@ -95,7 +101,10 @@ fn the_index_origin_is_workspace_state_not_a_quad_name() {
 #[test]
 fn quad_output_is_buffered_and_silent_at_top_level() {
     let mut ws = Workspace::default();
-    assert_eq!(eval_line(&mut ws, "\u{2395}\u{2190}1 2").unwrap(), None);
+    assert_eq!(
+        eval_line(&mut ws, "\u{2395}\u{2190}1 2").unwrap(),
+        Output::Nothing
+    );
     assert_eq!(ws.output.len(), 1);
     ws.output.clear();
     assert_eq!(nums(&mut ws, "1+\u{2395}\u{2190}5"), [Number::Int(6)]);
@@ -104,4 +113,33 @@ fn quad_output_is_buffered_and_silent_at_top_level() {
         eval_line(&mut ws, "\u{2395}").unwrap_err().kind,
         ErrorKind::NotImplemented
     );
+}
+
+#[test]
+fn mixed_output_yields_every_part() {
+    let mut ws = Workspace::default();
+    let Output::Mixed(parts) = eval_line(&mut ws, "'X IS ';2+3").unwrap() else {
+        panic!()
+    };
+    assert_eq!(parts.len(), 2);
+    assert_eq!(parts[1], apl_value::Array::scalar(Number::Int(5)));
+}
+
+#[test]
+fn indexing_branch_and_derived_forms_are_not_implemented_yet() {
+    let mut ws = Workspace::default();
+    ws.set("A", apl_value::Array::vector(vec![Number::Int(1)]));
+    for line in [
+        "A[1]",
+        "A[1]\u{2190}2",
+        "\u{2192}3",
+        "+/[1]A",
+        "+\\A",
+        "A+.\u{d7}A",
+        "A\u{2218}.\u{d7}A",
+    ] {
+        let e = eval_line(&mut ws, line).unwrap_err();
+        assert_eq!(e.kind, ErrorKind::NotImplemented, "{line}");
+        assert!(e.caret.is_some(), "{line}");
+    }
 }
