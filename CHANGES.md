@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-16
 
+- chore(agentrail): complete 002-branch-and-labels; advance to 003-del-editor
+- feat(eval): branch, labels, and the line counter
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 001-user-functions; advance to 002-branch-and-labels
 - feat(eval): defined functions, the del form, and dynamic scoping
 - chore(agentrail): archive core-mixed; init core-session saga with 7 steps
