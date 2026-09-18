@@ -1,6 +1,6 @@
 number = 1
 slug = "domino"
-status = "pending"
+status = "in-progress"
 description = """
 Phase 5 step 1 (docs/plan.md). Matrix divide and matrix inverse.
 

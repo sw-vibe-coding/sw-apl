@@ -106,7 +106,7 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | `⊥ ⊤` | | done | mixed radix, scalar extension, matrix columns; sample 36 |
 | `∊` | | done | with the fuzz; sample 30 |
 | `⍋ ⍒` | done | | vectors, stable, origin-aware; sample 32 |
-| `⌹` | todo | todo | Phase 5 |
+| `⌹` | done | done | inverse, left inverse, least-squares divide by Householder QR; vectors are one column and scalars one by one; singular, wider than tall, and characters are DOMAIN ERROR; rank 3 is RANK ERROR; sample 66. Not in the Aug 1968 manual: domino was added to APL\360 in 1970, and the rules followed are the APLX Language Manual's for the same lineage |
 | `⌶` I-beams 20 to 27 | done | | time, processor time, space still free, terminals, sign-on, date, the line now executing, the state indicator; a left argument is DOMAIN ERROR; samples 58 and 62 |
 
 ## Operators

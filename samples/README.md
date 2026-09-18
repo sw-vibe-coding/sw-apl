@@ -22,6 +22,11 @@ character matrix for the names, mixed output, and the conditional
 branch idiom driving two functions. Its transcript is reproducible
 because the random link starts from a fixed value.
 
+`66-domino.apl` inverts a matrix, checks the inverse by matrix
+product, solves a system, and fits a line to four points by least
+squares. Its examples are chosen so that every answer is exact in
+binary floating point, since a transcript prints what it is given.
+
 `65-trouble-reports.apl` walks what a system command says when it
 cannot do what was asked, and what separates the replies: INCORRECT
 COMMAND is about the command, while WS NOT FOUND, OBJECT NOT FOUND

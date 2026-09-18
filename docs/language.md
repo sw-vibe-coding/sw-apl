@@ -124,7 +124,13 @@ Notes:
 - up-tack and down-tack: decode and encode in mixed radix.
 - epsilon: membership.
 - grade-up and grade-down: permutation vectors, stable.
-- domino: matrix inverse and least-squares divide (Phase 5).
+- domino: matrix inverse, and matrix divide, which is the least
+  squares solution when the right argument has more rows than
+  columns. Both arguments are rank 2 or less: a vector is one
+  column and a scalar is one by one, so two vectors divide to the
+  one coefficient that fits them. A singular right argument, one
+  with more columns than rows, and character data are all DOMAIN
+  ERROR; rank 3 is RANK ERROR.
 
 ## Operators
 

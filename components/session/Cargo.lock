@@ -135,6 +135,7 @@ dependencies = [
  "apl-prims-index",
  "apl-prims-join",
  "apl-prims-mask",
+ "apl-prims-matrix",
  "apl-prims-mixed",
  "apl-prims-ops",
  "apl-prims-radix",
@@ -165,6 +166,13 @@ version = "0.1.0"
 dependencies = [
  "apl-prims-mixed",
  "apl-prims-select",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-prims-matrix"
+version = "0.1.0"
+dependencies = [
  "apl-value",
 ]
 

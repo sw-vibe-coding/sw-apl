@@ -37,7 +37,8 @@ rank: the scalar functions (arithmetic, comparison, boolean,
 circular, factorial and binomial, roll), the mixed functions
 (iota, rho, ravel, catenate and laminate, take, drop, reverse,
 rotate, transpose, compress, expand, membership, index-of, grade,
-encode, decode, deal), the operators (reduce and scan on any axis,
+encode, decode, deal, matrix inverse and least-squares matrix
+divide), the operators (reduce and scan on any axis,
 inner and outer products), bracket indexing and indexed
 assignment, character data, mixed output, and quad output. Display
 follows the APL\360 rules, including `)WIDTH` wrapping and
@@ -125,7 +126,7 @@ collection of names so they can be copied or erased together:
 name takes its members with it. `)SYMBOLS` says how many names are
 held and how many would fit.
 
-Not there yet: domino. A
+Every primitive in the checklist is implemented. A
 glyph from a later APL is a CHARACTER ERROR that names it, so the
 Dyalog Life one-liner answers "dfn brace, not APL\360". See the
 parity checklist for the row-by-row picture. Batch mode, `)OFF`, help, and the

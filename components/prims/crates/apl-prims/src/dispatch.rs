@@ -3,6 +3,7 @@
 
 use apl_prims_join::{catenate, resolve_axis};
 use apl_prims_mask::{compress, expand};
+use apl_prims_matrix::{matrix_divide, matrix_inverse};
 use apl_prims_mixed::{iota, ravel, reshape, shape};
 use apl_prims_radix::{decode, encode};
 use apl_prims_scalar::{dyadic, monadic};
@@ -29,6 +30,7 @@ pub fn apply_monadic(f: char, r: &Array, axis: Option<&Array>, env: &mut Env) ->
         ',' => Ok(ravel(r)),
         '⍉' => transpose(None, r, env.io),
         '?' => roll(r, env),
+        '⌹' => matrix_inverse(r),
         '⍋' => grade(r, false, env.io),
         '⍒' => grade(r, true, env.io),
         _ => monadic(f, r),
@@ -83,6 +85,7 @@ fn mixed_dyadic(f: char, l: &Array, r: &Array, env: &mut Env) -> Option<AplResul
         '⊥' => decode(l, r),
         '⊤' => encode(l, r),
         '?' => deal(l, r, env),
+        '⌹' => matrix_divide(l, r),
         _ => return None,
     })
 }
