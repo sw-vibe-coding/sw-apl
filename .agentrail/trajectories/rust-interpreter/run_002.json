@@ -1,0 +1,11 @@
+{
+  "task_type": "rust-interpreter",
+  "state": {
+    "number": 2,
+    "step": "numeric-edge-cases"
+  },
+  "action": "Grepped the manual for the fuzz before touching anything, and let its sentence decide which behaviour was a bug and which was merely undocumented; wrote tests that failed for the right reason and then read each failure rather than adjusting expectations to match the code -- four of them were my errors, one (the i64 assumption) was a wrong mental model worth correcting in the test's comment; flagged the )DIGITS integer display as surprising but did not change it, since the only primary source supports the current behaviour; recorded provenance per boundary in a table column rather than in prose, so a later reader can tell parity from choice",
+  "result": "success",
+  "reward": 1,
+  "timestamp": "2026-09-18T14:26:01"
+}
