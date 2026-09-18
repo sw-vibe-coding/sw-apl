@@ -1,0 +1,12 @@
+number = 1
+slug = "domino"
+status = "pending"
+description = """
+Phase 5 step 1 (docs/plan.md). Matrix divide and matrix inverse.
+
+`⌹` is th..."""
+role = "production"
+context_files = []
+created_at = "2026-09-18T11:34:53"
+task_type = "rust-interpreter"
+commits = []

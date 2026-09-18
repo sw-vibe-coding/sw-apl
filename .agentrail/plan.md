@@ -1,43 +1,41 @@
-# workspaces
+# numerics
 
-Phase 4 of docs/plan.md: the workspace as a thing you can name,
-clear, save, load and look inside. Phase 3 left a Workspace that
-holds the symbol table, the settings, the state indicator, a
-console and a clock; the last two are the terminal's and must not
-be saved. Separating them is the first step, and the file format
-follows from it.
+Phase 5 of docs/plan.md: the last unimplemented primitive, and the
+numeric edges everything else has been avoiding.
 
-The workspace file is plain UTF-8 that a person can read and APL
-can re-execute: del form for functions, assignment for variables,
-settings commands for the environment. That makes a saved
-workspace a sample, and a sample a saved workspace.
+`⌹` is the only `todo` left in the primitives table of
+docs/parity.md. Monadic it is matrix inverse; dyadic it is matrix
+divide, which for a non-square left argument is the least-squares
+solution -- that is the whole point of the glyph, and a version that
+only inverts square matrices would be a stub wearing its name.
 
-Pure APL\360 throughout: numbered public libraries, the DESCRIBE
-convention, no quad names. Every step: format first, then tests,
-clippy, and gates (see /mw-cp); TDD; reg-rs for anything run
-through the binary, Rust tests for the libraries; update
-docs/parity.md rows in the same commit; commit, push, report.
+The edges are the other half. Floating point, a comparison
+tolerance, `)DIGITS` from 1 to 16, exponent notation on the way in
+and on the way out: each of those has a boundary, and none of them
+has a test that sits on it. APL\360 was specific about several --
+integer overflow becoming floating point, the fuzz used for
+comparison and for `⌊`, what `⍳` does with a number too large --
+and where the manual is specific, follow it and say where it says
+so.
+
+Pure APL\360 throughout: no `⎕CT`, no `⎕FC`, no system variables of
+any kind. Every step: format first, then tests, clippy, and gates
+(see /mw-cp); TDD; reg-rs for anything run through the binary, Rust
+tests for the libraries; update docs/parity.md rows in the same
+commit; commit, push, report.
 
 ## Steps
 
-1. ws-model -- the workspace as a value: what is saved with it
-   (symbol table, index origin, print precision and width, the
-   random link, the workspace identifier) and what belongs to the
-   session it runs in (the console, the clock, the sign-on time).
-   )CLEAR gives a fresh one and prints CLEAR WS; )WSID shows or
-   sets the identifier. Say what clearing does to a suspended
-   function.
-2. ws-file-format -- a plain-text UTF-8 workspace file that is
-   both human readable and re-executable: del form for functions,
-   assignment for variables, settings commands for the
-   environment. Round-trip it in a test, and pin the file itself
-   as a fixture so its shape is a baseline.
-3. system-commands-ws -- )SAVE )LOAD )DROP )LIB )COPY )PCOPY
-   )CONTINUE, with the timestamps and replies docs/session.md
-   describes. )CONTINUE saves and signs off.
-4. system-commands-inquiry -- )FNS )VARS )GRPS )GRP )GROUP )ERASE
-   )SYMBOLS, in the order and column layout APL\360 used.
-5. library-workspaces -- numbered public libraries mapped to
-   directories, the library form )LOAD 1 CLASS, and starter
-   workspaces in ws/lib1/ each carrying a DESCRIBE function that
-   the session points at after a load.
+1. domino -- `⌹B` matrix inverse and `A⌹B` matrix divide, including
+   the least-squares case where B has more rows than columns.
+   Householder QR rather than a normal-equations shortcut, because
+   the normal equations square the condition number and the whole
+   reason to have this glyph is the overdetermined fit. Vectors and
+   scalars are the rank cases to get right; a singular matrix is
+   DOMAIN ERROR.
+2. numeric-edge-cases -- overflow from integer to floating point,
+   the comparison tolerance and what it does to `=`, `⌊`, `⌈` and
+   `⍳` of a computed length, large `⍳`, exponent notation round
+   trips, and `)DIGITS` at 1 and at 16. Find the boundaries, pin
+   them, and record in parity.md which are APL\360's and which are
+   ours.
