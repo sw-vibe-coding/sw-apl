@@ -230,6 +230,10 @@ selects a system value, as in APL\360:
 | `⌶26` | line number of the statement now executing (first of the state indicator) |
 | `⌶27` | vector of line numbers in the state indicator |
 
+`i-beam-reference.md` is the long version: the units spelled out,
+worked examples of reading a clock and a date, what each reports
+when there is nothing to report, and the errors.
+
 Any other argument is DOMAIN ERROR, as is an argument that is not
 one whole number. There is no dyadic I-beam: a left argument is
 DOMAIN ERROR too, and there is no axis form.

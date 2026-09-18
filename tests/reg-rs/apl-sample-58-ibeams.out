@@ -11,18 +11,18 @@
       ⍝ Time of day and sign-on time, in sixtieths of a second since
       ⍝ midnight; processor time used so far, in the same units.
       'TIME OF DAY (VARIES): ';⌶20
-TIME OF DAY (VARIES): 4340465
+TIME OF DAY (VARIES): 3609818
       'CPU TIME (VARIES): ';⌶21
 CPU TIME (VARIES): 0
       'SIGNED ON (VARIES): ';⌶24
-SIGNED ON (VARIES): 4340465
+SIGNED ON (VARIES): 3609818
       ⍝ Today's date as MMDDYY.
       'DATE (VARIES): ';⌶25
-DATE (VARIES): 91726
+DATE (VARIES): 91826
       ⍝ Sixtieths divide into seconds, and seconds into hours, like any
       ⍝ other number: an I-beam is a function, not a special form.
       'HOUR (VARIES): ';⌊(⌶20)÷60×60×60
-HOUR (VARIES): 20
+HOUR (VARIES): 16
       ⍝ 26 is the line now executing and 27 is every line in the state
       ⍝ indicator, innermost first. Neither moves with the clock, so both
       ⍝ are shown outright. In immediate execution there is no line.
@@ -54,13 +54,46 @@ HOUR (VARIES): 20
       STIR
       X←?5⍴10
       'DEAL (VARIES): ';X
-DEAL (VARIES): 7 7 10 4 6
+DEAL (VARIES): 3 10 8 8 7
       ⍝ Whatever X holds, it is five numbers between 1 and 10.
       ⍴X
 5
       ∧/(X≥1)∧X≤10
 1
+      ⍝ The I-beam is monadic and takes no axis, and its argument is one
+      ⍝ whole number between 20 and 27. Everything else is refused. These
+      ⍝ are the claims docs/i-beam-reference.md makes, pinned here.
+      1⌶20
+DOMAIN ERROR
+      1⌶20
+       ^
+      ⌶19
+DOMAIN ERROR
+      ⌶19
+      ^
+      ⌶28
+DOMAIN ERROR
+      ⌶28
+      ^
+      ⌶20.5
+DOMAIN ERROR
+      ⌶20.5
+      ^
+      ⌶20 21
+DOMAIN ERROR
+      ⌶20 21
+      ^
+      ⌶[1]20
+SYNTAX ERROR
+      ⌶[1]20
+      ^
+      ⍝ A bracket after the argument is an index, not an axis, and a
+      ⍝ scalar has nothing to index.
+      ⌶20[1]
+RANK ERROR
+      ⌶20[1]
+         ^
       )OFF
-20.05.41 09/17/26
+16.42.43 09/18/26
 CONNECTED 0.00.00
 CPU TIME 0.00.00

@@ -1,6 +1,6 @@
 number = 3
 slug = "ibeam-reference"
-status = "pending"
+status = "in-progress"
 description = """
 Phase 5 step 3 (docs/plan.md, owner request 2026-09-18). Write
 docs/i-beam-re..."""

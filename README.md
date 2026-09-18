@@ -161,6 +161,8 @@ documents below show real APL glyphs:
   commands, the DESCRIBE convention
 - [Using the del editor](docs/del-editor-guide.md) -- writing and
   changing a function, line by line
+- [I-beam reference](docs/i-beam-reference.md) -- the eight system
+  values, their units, and how to read them
 - [Workspaces](docs/workspaces.md) -- what one holds, the libraries,
   saving and loading, DESCRIBE, and locking
 - [Index origin considerations](docs/index-origin-considerations.md)

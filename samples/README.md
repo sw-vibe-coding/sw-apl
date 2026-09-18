@@ -68,7 +68,10 @@ and a suspended function -- and what a clear one starts with.
 come from the clock, so the reg-rs filter keeps their shape and masks
 what they say.
 
-`58-ibeams.apl` shows the I-beam system functions, including the four
+`58-ibeams.apl` shows the I-beam system functions and what they
+refuse -- a left argument, an argument out of range or not whole, an
+axis bracket -- which pins the claims `docs/i-beam-reference.md`
+makes. It includes the four
 that read the clock: it prints their values behind a `(VARIES)` label
 that the reg-rs preprocess filter masks, so the transcript shows what
 an I-beam returns without pinning a number that cannot come back. See

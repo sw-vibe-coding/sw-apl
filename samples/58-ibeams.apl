@@ -46,4 +46,16 @@ X←?5⍴10
 ⍝ Whatever X holds, it is five numbers between 1 and 10.
 ⍴X
 ∧/(X≥1)∧X≤10
+⍝ The I-beam is monadic and takes no axis, and its argument is one
+⍝ whole number between 20 and 27. Everything else is refused. These
+⍝ are the claims docs/i-beam-reference.md makes, pinned here.
+1⌶20
+⌶19
+⌶28
+⌶20.5
+⌶20 21
+⌶[1]20
+⍝ A bracket after the argument is an index, not an axis, and a
+⍝ scalar has nothing to index.
+⌶20[1]
 )OFF

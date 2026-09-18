@@ -126,7 +126,7 @@ the session numeric tests, and sample 67.
 | `∊` | | done | with the fuzz; sample 30 |
 | `⍋ ⍒` | done | | vectors, stable, origin-aware; sample 32 |
 | `⌹` | done | done | inverse, left inverse, least-squares divide by Householder QR; vectors are one column and scalars one by one; singular, wider than tall, and characters are DOMAIN ERROR; rank 3 is RANK ERROR; sample 66. Not in the Aug 1968 manual: domino was added to APL\360 in 1970, and the rules followed are the APLX Language Manual's for the same lineage |
-| `⌶` I-beams 20 to 27 | done | | time, processor time, space still free, terminals, sign-on, date, the line now executing, the state indicator; a left argument is DOMAIN ERROR; samples 58 and 62 |
+| `⌶` I-beams 20 to 27 | done | | time, processor time, space still free, terminals, sign-on, date, the line now executing, the state indicator; a left argument is DOMAIN ERROR; samples 58 and 62; `i-beam-reference.md` |
 
 ## Operators
 
@@ -179,7 +179,7 @@ the session numeric tests, and sample 67.
 | `)LOAD` prints only the SAVED line, as APL\360 did, and nothing runs on load | done | command tests, sample 61 |
 | Trouble reports: WS NOT FOUND, OBJECT NOT FOUND, IMPROPER LIBRARY REFERENCE, NOT SAVED THIS WS IS | done; INCORRECT COMMAND is kept for a command given an argument it does not take, as the manual's table has it; report tests, sample 65 |
 | WS LOCKED, NOT SAVED WS QUOTA USED UP, NOT WITH OPEN DEFINITION | todo | sw-apl has no accounts, no keys and no disk quota, so the first two cannot arise; the third is a real gap, since a `)COPY` typed in definition mode should be refused |
-| `)MSG` `)OPR` `)PORTS` | stub |
+| `)MSG` `)OPR` `)PORTS` | not implemented; they answer INCORRECT COMMAND. They talked to other users of a shared machine, and sw-apl has no accounts and no other users |
 
 ## Errors
 
