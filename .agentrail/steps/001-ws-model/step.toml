@@ -1,6 +1,6 @@
 number = 1
 slug = "ws-model"
-status = "in-progress"
+status = "completed"
 description = """
 Phase 4 step 1 (docs/plan.md). The workspace as a value.
 
@@ -8,5 +8,6 @@ Today Workspace hol..."""
 role = "production"
 context_files = []
 created_at = "2026-09-17T20:38:57"
+completed_at = "2026-09-17T20:53:43"
 task_type = "rust-interpreter"
-commits = []
+commits = ["4c9237752f8b851b3f39002470ebeccf66e39843"]
