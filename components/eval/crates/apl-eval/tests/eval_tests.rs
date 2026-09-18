@@ -129,18 +129,28 @@ fn mixed_output_yields_every_part() {
 #[test]
 fn a_branch_names_the_line_to_run_next() {
     let mut ws = Workspace::default();
-    assert_eq!(eval_line(&mut ws, "\u{2192}3").unwrap(), Output::Branch(3));
-    assert_eq!(eval_line(&mut ws, "\u{2192}0").unwrap(), Output::Branch(0));
+    assert_eq!(
+        eval_line(&mut ws, "\u{2192}3").unwrap(),
+        Output::Branch(Some(3))
+    );
+    assert_eq!(
+        eval_line(&mut ws, "\u{2192}0").unwrap(),
+        Output::Branch(Some(0))
+    );
     // An empty vector, and a bare arrow, fall through to the next line.
     assert_eq!(
         eval_line(&mut ws, "\u{2192}9\u{d7}\u{2373}0").unwrap(),
         Output::Nothing
     );
-    assert_eq!(eval_line(&mut ws, "\u{2192}").unwrap(), Output::Nothing);
+    assert_eq!(
+        eval_line(&mut ws, "\u{2192}").unwrap(),
+        Output::Branch(None),
+        "a bare arrow is not a blank line: it clears the state indicator"
+    );
     // The first element selects; the rest are ignored.
     assert_eq!(
         eval_line(&mut ws, "\u{2192}2 7 7").unwrap(),
-        Output::Branch(2)
+        Output::Branch(Some(2))
     );
     assert_eq!(
         eval_line(&mut ws, "\u{2192}'A'").unwrap_err().kind,
@@ -220,9 +230,17 @@ fn locals_shadow_globals_and_are_restored() {
     );
     assert_eq!(nums(&mut ws, "F 5"), [Number::Int(17)]);
     assert_eq!(nums(&mut ws, "T"), [Number::Int(99)], "T is restored");
-    // A name the header localizes starts the call undefined.
+    // A name the header localizes starts the call undefined. The
+    // failure suspends H, so T stays shadowed until the state
+    // indicator is cleared with a bare branch.
     define(&mut ws, "R\u{2190}H;T", &["R\u{2190}T"]);
     assert_eq!(eval_line(&mut ws, "H").unwrap_err().kind, ErrorKind::Value);
+    assert_eq!(eval_line(&mut ws, "T").unwrap_err().kind, ErrorKind::Value);
+    assert_eq!(
+        eval_line(&mut ws, "\u{2192}").unwrap(),
+        Output::Branch(None)
+    );
+    apl_call::clear(&mut ws);
     assert_eq!(nums(&mut ws, "T"), [Number::Int(99)]);
 }
 
@@ -269,22 +287,44 @@ fn a_body_line_that_displays_reaches_the_pending_output() {
     assert_eq!(ws.output[0], Output::Value(Array::scalar(Number::Int(5))));
 }
 
+/// Also a guard on `MAX_DEPTH` itself: the limit has to fire before
+/// the machine stack runs out, so if a change makes each level cost
+/// more, this overflows rather than reporting DEPTH ERROR.
 #[test]
 fn recursion_is_bounded_by_depth_error() {
     let mut ws = Workspace::default();
     define(&mut ws, "R\u{2190}DOWN N", &["R\u{2190}DOWN N-1"]);
     let e = eval_line(&mut ws, "DOWN 3").unwrap_err();
-    assert_eq!((e.kind, e.caret), (ErrorKind::Depth, Some(0)));
-    // The frames all unwound: nothing of the call is left behind.
+    assert_eq!(e.kind, ErrorKind::Depth);
+    // Only the call written as a whole statement suspends. The
+    // recursive ones sit inside an expression, which sw-apl cannot
+    // take up again, so they unwound on the way out.
+    assert_eq!(ws.si().len(), 1);
+    assert_eq!(ws.si()[0].name, "DOWN");
+    // Which activation is starred is settled where the error reaches
+    // the terminal, which is the session's job, not the evaluator's.
+    apl_call::suspend(&mut ws);
+    assert!(ws.si()[0].suspended);
+    apl_call::clear(&mut ws);
     assert_eq!(eval_line(&mut ws, "N").unwrap_err().kind, ErrorKind::Value);
 }
 
 #[test]
-fn an_error_inside_a_body_points_at_the_call() {
+fn an_error_inside_a_body_names_the_function_and_the_line() {
     let mut ws = Workspace::default();
-    define(&mut ws, "R\u{2190}BAD N", &["R\u{2190}2 3+4 5 6"]);
-    let e = eval_line(&mut ws, "1+BAD 0").unwrap_err();
-    assert_eq!((e.kind, e.caret), (ErrorKind::Length, Some(2)));
+    define(
+        &mut ws,
+        "R\u{2190}BAD N",
+        &["R\u{2190}1", "R\u{2190}2 3+4 5 6"],
+    );
+    let e = eval_line(&mut ws, "BAD 0").unwrap_err();
+    assert_eq!(e.kind, ErrorKind::Length);
+    let context = e.context.expect("the failing line travels with the error");
+    assert_eq!(context.function, "BAD");
+    assert_eq!(context.line, 2);
+    assert_eq!(context.statement, "R\u{2190}2 3+4 5 6");
+    // The caret points into that line, not into the calling statement.
+    assert_eq!(e.caret, Some(5));
 }
 
 #[test]

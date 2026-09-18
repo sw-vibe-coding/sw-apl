@@ -32,16 +32,51 @@ LENGTH ERROR
 ```
 
 Inside a defined function the second line carries the function
-name and line number, and the state indicator gains an entry:
+name and the line number in place of the six-space indent, and the
+caret moves with it:
 
 ```
-RACE[4]  LENGTH ERROR
-      POS+?NH 3
-         ^
+LENGTH ERROR
+RACE[4]  POS+?NH 3
+            ^
 ```
 
-`)SI` lists suspended functions; a bare right arrow clears the
-top entry; `)SIV` adds the local names.
+## Suspension and the state indicator
+
+A function whose line fails does not unwind. It stays on the stack
+suspended: its arguments and locals are still there to look at, and
+the state indicator gains an entry. A function that called it is
+pendent -- stopped, but waiting on a call rather than on the error.
+
+```
+      )SI
+INNER[2]*
+OUTER[2]
+```
+
+Innermost first. The star marks the suspended function, the one
+the error came from and the one that can be taken up again;
+entries without it are pendent. `)SIV` adds the names each call
+made local, in a column:
+
+```
+      )SIV
+INNER[2]*  Q
+OUTER[2]   P
+```
+
+A bare right arrow clears the top entry, and takes the pendent
+callers with it, since they have nowhere to return to. A second
+suspension underneath is left alone. A right arrow with a line
+number takes the suspended function up again there; when it
+returns, a caller waiting on it carries on at its next line.
+
+sw-apl suspends a function that was called as a whole statement.
+A call written inside a larger expression unwinds instead: the
+error still names the function and the line, but there is no
+half-evaluated expression to come back to, so there is nothing to
+resume. Calls may nest 128 deep before DEPTH ERROR, and the state
+indicator may grow no longer.
 
 ## System commands
 
@@ -72,7 +107,7 @@ Inquiry and settings:
 | `)VARS [letter]` | List variables (from a letter) |
 | `)GRPS`, `)GRP name`, `)GROUP name members` | Groups |
 | `)ERASE names` | Remove objects |
-| `)SI`, `)SIV` | State indicator |
+| `)SI`, `)SIV` | State indicator; `)SIV` adds local names |
 | `)ORIGIN n` | Set index origin (0 or 1); replies `WAS n` |
 | `)DIGITS n` | Set print precision (1 to 16); replies `WAS n` |
 | `)WIDTH n` | Set print width (30 to 254); replies `WAS n` |

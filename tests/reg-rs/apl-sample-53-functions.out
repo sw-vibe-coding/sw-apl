@@ -67,6 +67,6 @@ VALUE ERROR
 [2]   ∇
       DOWN 1
 DEPTH ERROR
-      DOWN 1
-      ^
+DOWN[1]  R←DOWN N-1
+           ^
       )OFF

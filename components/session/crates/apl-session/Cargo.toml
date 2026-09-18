@@ -11,6 +11,7 @@ repository.workspace = true
 apl-value = { path = "../../../value/crates/apl-value" }
 apl-lex = { path = "../../../lex/crates/apl-lex" }
 apl-parse = { path = "../../../parse/crates/apl-parse" }
+apl-call = { path = "../../../eval/crates/apl-call" }
 apl-editor = { path = "../apl-editor" }
 apl-eval = { path = "../../../eval/crates/apl-eval" }
 apl-display = { path = "../../../display/crates/apl-display" }

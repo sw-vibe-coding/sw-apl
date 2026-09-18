@@ -258,6 +258,7 @@ dependencies = [
 name = "apl-session"
 version = "0.1.0"
 dependencies = [
+ "apl-call",
  "apl-display",
  "apl-editor",
  "apl-eval",

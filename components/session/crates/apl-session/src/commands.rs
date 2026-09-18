@@ -5,7 +5,7 @@ use apl_editor::Definition;
 use apl_parse::parse_header;
 use apl_value::{AplError, ErrorKind};
 
-use crate::render::error_lines;
+use crate::render::{error_lines, si_lines};
 use crate::session::{Reply, Session};
 
 /// Run one system command (the text after the parenthesis).
@@ -20,6 +20,9 @@ pub fn system_command(session: &mut Session, command: &str) -> Reply {
     };
     let reply = match (name.as_str(), number) {
         ("OFF", None) if rest.is_empty() => return Reply::Off,
+        ("SI" | "SIV", None) if rest.is_empty() => {
+            return Reply::Output(si_lines(session.ws.si(), name == "SIV"));
+        }
         ("ORIGIN", Some(n @ (0 | 1))) => {
             let new = i64::try_from(n).unwrap_or(1);
             was_line(std::mem::replace(&mut session.ws.env.io, new))

@@ -15,5 +15,8 @@ apl-parse = { path = "../../../parse/crates/apl-parse" }
 apl-prims = { path = "../../../prims/crates/apl-prims" }
 apl-workspace = { path = "../apl-workspace" }
 
+[dev-dependencies]
+apl-call = { path = "../apl-call" }
+
 [lints]
 workspace = true

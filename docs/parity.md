@@ -49,11 +49,12 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | Definition mode: an opening `∇` collects body lines behind the `[n]` prompt until a closing `∇` | done | session/cli tests, sample 53 |
 | Del editor: `[n]`, `[⎕]`, `[n⎕]`, `[∆n]`, fractional insert and renumber on close, header edit and rename `[0]`, reopen `∇NAME`, lock `⍫` | done | session tests, sample 55 |
 | Dynamic scoping, recursion | done | eval tests, samples 53, 54. A recursion with no branch to stop it reaches DEPTH ERROR |
-| State indicator, suspended functions | todo | |
+| State indicator: suspension, pendent callers, resumption with `→`n, clearing with a bare `→` | done | call/session tests, sample 56 |
+| Suspending a call written inside a larger expression | todo | sw-apl unwinds it instead, since it cannot take up a half-evaluated expression; the error still names the function and line |
 | Six-space prompt, batch echo, `)OFF` | done | cli tests |
 | Line editing with history (up arrow), Ctrl-C cancels, Ctrl-D ends | done | manual (rustyline); tape |
 | Error display: name, statement, caret | done | session tests |
-| Error display inside functions (`FN[n]`), `)SI` | todo | |
+| Error display inside functions: `FN[n]` heading the statement, caret aligned under it | done | session tests, sample 56 |
 | `)WIDTH` wrapping with six-space continuation | done | display tests, sample 45 |
 | `)DIGITS` precision, `)ORIGIN`, `WAS n` reply | done | session tests, sample 22 |
 | Strict Unicode acceptance, CHARACTER ERROR with lookalike hint | done | lex, value, session tests |
@@ -136,7 +137,7 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | `)CLEAR` | todo |
 | `)WSID` `)SAVE` `)LOAD` `)DROP` `)LIB` `)COPY` `)PCOPY` `)CONTINUE` | todo |
 | `)FNS` `)VARS` `)GRPS` `)GRP` `)GROUP` `)ERASE` | todo |
-| `)SI` `)SIV` | todo |
+| `)SI` `)SIV` | done |
 | `)SYMBOLS` | todo |
 | Library form `)LOAD 1 NAME`, DESCRIBE convention | todo |
 | `)MSG` `)OPR` `)PORTS` | stub |

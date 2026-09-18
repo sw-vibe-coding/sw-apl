@@ -11,7 +11,7 @@ pub use apl_glyphs::{
     AXIS, DYADIC, LATER, LOOKALIKE, MONADIC, PRIMITIVE_NAMES, PRIMITIVES, SYNTAX,
 };
 pub use array::{Array, Data};
-pub use error::{AplError, ErrorKind};
+pub use error::{AplError, Context, ErrorKind};
 pub use number::{FUZZ, Number};
 
 /// Result type used throughout the interpreter.

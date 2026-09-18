@@ -185,8 +185,12 @@ Notes:
   immediate execution clears the top of the state indicator.
 - Dynamic scoping: locals shadow globals for the duration of the
   call, including in called functions.
-- Recursion is allowed; depth is bounded by memory (DEPTH ERROR
-  as a guard).
+- Recursion is allowed; calls may nest 128 deep before DEPTH
+  ERROR, which also bounds the state indicator.
+- A line that fails suspends the function rather than unwinding
+  it: the locals stay visible and the state indicator records
+  where it stopped. `session.md` has the display and the
+  commands.
 
 ## I-beam functions
 

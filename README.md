@@ -66,6 +66,12 @@ delta deletes, a fractional number inserts between two existing lines
 (the close renumbers from 1), and `[0]` edits the header. Del-tilde
 closes a definition locked.
 
+A line that fails inside a function suspends it rather than unwinding
+it: the error names the function and the line, the locals stay there
+to look at, `)SI` and `)SIV` show where everything stopped, a bare
+right arrow clears the top entry, and a right arrow with a line number
+takes the function up again.
+
 Not there yet: quad input, workspaces (`)SAVE`, `)LOAD`), the I-beam
 system functions, and domino. A
 glyph from a later APL is a CHARACTER ERROR that names it, so the

@@ -51,9 +51,13 @@ fn statement(ws: &mut Workspace, expr: &Expr) -> AplResult<Option<Output>> {
         return Ok(Some(Output::Mixed(parts)));
     }
     if let Expr::Branch { target, .. } = expr {
-        let value = target.as_deref().map(|e| eval_expr(ws, e)).transpose()?;
-        let line = value.as_ref().map(branch_target).transpose()?.flatten();
-        return Ok(Some(line.map_or(Output::Nothing, Output::Branch)));
+        let Some(target) = target else {
+            return Ok(Some(Output::Branch(None)));
+        };
+        let line = branch_target(&eval_expr(ws, target)?)?;
+        return Ok(Some(
+            line.map_or(Output::Nothing, |n| Output::Branch(Some(n))),
+        ));
     }
     let Some((name, pos, left, right)) = expr.defined_call().filter(|c| ws.is_function(c.0)) else {
         return Ok(None);

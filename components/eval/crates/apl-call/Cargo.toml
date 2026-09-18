@@ -13,5 +13,8 @@ apl-scan = { path = "../../../parse/crates/apl-scan" }
 apl-value = { path = "../../../value/crates/apl-value" }
 apl-workspace = { path = "../apl-workspace" }
 
+[dev-dependencies]
+apl-workspace = { path = "../apl-workspace" }
+
 [lints]
 workspace = true

@@ -1,0 +1,57 @@
+      ⍝ A line inside a function that fails does not unwind it. The error
+      ⍝ names the function and the line, the function stays suspended with
+      ⍝ its locals intact, and )SI shows where everything stopped. A bare →
+      ⍝ clears the top entry; → with a line number takes it up again.
+      ∇R←SCALE N;F
+[1]   F←N×FACTOR
+[2]   R←F+1
+[3]   ∇
+      ⍝ FACTOR is not defined, so SCALE stops on line 1.
+      SCALE 5
+VALUE ERROR
+SCALE[1]  F←N×FACTOR
+              ^
+      )SI
+SCALE[1]*
+      ⍝ The argument and the locals are still there to look at.
+      N
+5
+      )SIV
+SCALE[1]*  R N F
+      ⍝ Supply what was missing and take it up at the line that failed.
+      FACTOR←10
+      →1
+51
+      )SI
+      ⍝ A caller waiting on a function that stopped is pendent, not
+      ⍝ suspended: only the innermost carries the star.
+      ∇INNER;Q
+[1]   Q←1
+[2]   Q←Q÷0
+[3]   ∇
+      ∇OUTER;P
+[1]   P←2
+[2]   INNER
+[3]   'NEVER REACHED'
+[4]   ∇
+      OUTER
+DOMAIN ERROR
+INNER[2]  Q←Q÷0
+             ^
+      )SI
+INNER[2]*
+OUTER[2]
+      )SIV
+INNER[2]*  Q
+OUTER[2]   P
+      P
+2
+      ⍝ Clearing the top takes the pendent caller with it, since it has
+      ⍝ nowhere to go back to.
+      →
+      )SI
+      P
+VALUE ERROR
+      P
+      ^
+      )OFF

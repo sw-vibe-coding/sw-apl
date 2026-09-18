@@ -1,6 +1,6 @@
 number = 4
 slug = "error-display-and-state-indicator"
-status = "pending"
+status = "in-progress"
 description = "Phase 3 step 4. Errors inside a defined function print FN[n] before the error..."
 role = "production"
 context_files = []

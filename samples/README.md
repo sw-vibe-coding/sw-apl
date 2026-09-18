@@ -22,6 +22,11 @@ character matrix for the names, mixed output, and the conditional
 branch idiom driving two functions. Its transcript is reproducible
 because the random link starts from a fixed value.
 
+`56-suspension.apl` shows what a failure inside a function leaves
+behind: the error naming the function and line, the locals still
+readable, `)SI` and `)SIV`, taking the function up again, and
+clearing the state indicator.
+
 `55-del-editor.apl` is an edit session: reopening a function,
 inserting at a fractional line number, replacing and deleting lines,
 displaying with the bracketed quad, editing and renaming through the

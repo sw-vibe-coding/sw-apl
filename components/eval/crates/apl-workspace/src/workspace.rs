@@ -8,13 +8,16 @@ use apl_ast::Defn;
 use apl_prims::Env;
 use apl_value::Array;
 
+use crate::frame::Activation;
+
 /// State of the active workspace.
 #[derive(Debug, Default)]
 pub struct Workspace {
     pub(crate) vars: HashMap<String, Array>,
     pub(crate) funcs: HashMap<String, Rc<Defn>>,
-    /// How many defined functions are running.
-    pub(crate) depth: usize,
+    /// The activation stack: running and stopped calls, outermost
+    /// first. It is the state indicator.
+    pub(crate) stack: Vec<Activation>,
     /// Index origin and random link.
     pub env: Env,
     /// Statements displayed while the current line runs, in order,
@@ -45,9 +48,11 @@ pub enum Output {
     Value(Array),
     /// Mixed output: the parts are displayed side by side.
     Mixed(Vec<Array>),
-    /// A branch: the line to run next. Nothing is displayed, and a
-    /// number that is not one of the function's lines returns.
-    Branch(i64),
+    /// A branch. Nothing is displayed. `Some(n)` runs line n next, or
+    /// returns when the function has no line n; `None` is a bare
+    /// arrow, which falls through in a body and clears the top of the
+    /// state indicator in immediate execution.
+    Branch(Option<i64>),
 }
 
 impl Output {

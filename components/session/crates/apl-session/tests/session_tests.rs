@@ -472,8 +472,9 @@ fn runaway_recursion_reports_depth_error() {
     define(&mut s, "\u{2207}R\u{2190}DOWN N", &["R\u{2190}DOWN N-1"]);
     assert_eq!(
         out(&mut s, "DOWN 1"),
-        vec!["DEPTH ERROR", "      DOWN 1", "      ^"]
+        vec!["DEPTH ERROR", "DOWN[1]  R\u{2190}DOWN N-1", "           ^"]
     );
+    assert_eq!(out(&mut s, "\u{2192}"), Vec::<String>::new());
     assert_eq!(out(&mut s, "2+2"), vec!["4"]);
 }
 
@@ -730,4 +731,130 @@ fn a_label_still_resolves_after_an_insert() {
         out(&mut s, "\u{2207}Q[4\u{2395}]\u{2207}")[0],
         "[4]   TOP:I\u{2190}I+1"
     );
+}
+
+#[test]
+fn an_error_inside_a_function_names_it_and_suspends() {
+    let mut s = Session::default();
+    define(
+        &mut s,
+        "\u{2207}R\u{2190}BAD N;T",
+        &["T\u{2190}N+1", "R\u{2190}2 3+4 5 6", "R\u{2190}0"],
+    );
+    assert_eq!(
+        out(&mut s, "BAD 7"),
+        vec![
+            "LENGTH ERROR",
+            "BAD[2]  R\u{2190}2 3+4 5 6",
+            "             ^"
+        ]
+    );
+    // It is suspended, so its locals are still there to look at.
+    assert_eq!(out(&mut s, "T"), vec!["8"]);
+    assert_eq!(out(&mut s, "N"), vec!["7"]);
+    assert_eq!(out(&mut s, ")SI"), vec!["BAD[2]*"]);
+    assert_eq!(out(&mut s, ")SIV"), vec!["BAD[2]*  R N T"]);
+    // A bare arrow clears it and the locals go away again.
+    assert_eq!(out(&mut s, "\u{2192}"), Vec::<String>::new());
+    assert_eq!(out(&mut s, ")SI"), Vec::<String>::new());
+    assert_eq!(out(&mut s, "T")[0], "VALUE ERROR");
+}
+
+#[test]
+fn a_caller_is_pendent_and_the_innermost_is_starred() {
+    let mut s = Session::default();
+    define(
+        &mut s,
+        "\u{2207}INNER;Q",
+        &["Q\u{2190}1", "Q\u{2190}\u{f7}0"],
+    );
+    define(
+        &mut s,
+        "\u{2207}OUTER;P",
+        &["P\u{2190}5", "INNER", "P\u{2190}6"],
+    );
+    assert_eq!(
+        out(&mut s, "OUTER"),
+        vec![
+            "DOMAIN ERROR",
+            "INNER[2]  Q\u{2190}\u{f7}0",
+            "            ^"
+        ]
+    );
+    assert_eq!(out(&mut s, ")SI"), vec!["INNER[2]*", "OUTER[2]"]);
+    // The local names line up in a column, as APL\360 printed them.
+    assert_eq!(out(&mut s, ")SIV"), vec!["INNER[2]*  Q", "OUTER[2]   P"]);
+    // Both are visible: dynamic scoping reaches through the stack.
+    assert_eq!(out(&mut s, "P"), vec!["5"]);
+    // Clearing takes the caller with it: it has nothing to go back to.
+    out(&mut s, "\u{2192}");
+    assert_eq!(out(&mut s, ")SI"), Vec::<String>::new());
+    assert_eq!(out(&mut s, "P")[0], "VALUE ERROR");
+}
+
+#[test]
+fn a_branch_takes_a_suspended_function_up_again() {
+    let mut s = Session::default();
+    define(
+        &mut s,
+        "\u{2207}R\u{2190}STEP N",
+        &["R\u{2190}N+OOPS", "R\u{2190}R\u{d7}2", "R\u{2190}R+1"],
+    );
+    assert_eq!(out(&mut s, "STEP 5")[0], "VALUE ERROR");
+    assert_eq!(out(&mut s, ")SI"), vec!["STEP[1]*"]);
+    // Supply what was missing, then take it up at the line that failed.
+    out(&mut s, "OOPS\u{2190}10");
+    assert_eq!(out(&mut s, "\u{2192}1"), vec!["31"]);
+    assert_eq!(out(&mut s, ")SI"), Vec::<String>::new());
+}
+
+#[test]
+fn resuming_returns_through_the_pendent_callers() {
+    let mut s = Session::default();
+    define(&mut s, "\u{2207}R\u{2190}TWICE N", &["R\u{2190}N+MISSING"]);
+    define(
+        &mut s,
+        "\u{2207}RUN;A",
+        &["A\u{2190}1", "'BEFORE'", "TWICE 4", "'AFTER'"],
+    );
+    assert_eq!(
+        out(&mut s, "RUN"),
+        vec![
+            "BEFORE",
+            "VALUE ERROR",
+            "TWICE[1]  R\u{2190}N+MISSING",
+            "              ^"
+        ]
+    );
+    assert_eq!(out(&mut s, ")SI"), vec!["TWICE[1]*", "RUN[3]"]);
+    out(&mut s, "MISSING\u{2190}100");
+    // TWICE finishes, its value is displayed where the call stood,
+    // and RUN carries on at line 4.
+    assert_eq!(out(&mut s, "\u{2192}1"), vec!["104", "AFTER"]);
+    assert_eq!(out(&mut s, ")SI"), Vec::<String>::new());
+}
+
+#[test]
+fn nested_suspensions_stack() {
+    let mut s = Session::default();
+    define(&mut s, "\u{2207}A;X", &["X\u{2190}1", "X\u{2190}\u{f7}0"]);
+    define(&mut s, "\u{2207}B;Y", &["Y\u{2190}2", "Y\u{2190}\u{f7}0"]);
+    out(&mut s, "A");
+    out(&mut s, "B");
+    assert_eq!(out(&mut s, ")SI"), vec!["B[2]*", "A[2]*"]);
+    // A bare arrow clears only the top suspension.
+    out(&mut s, "\u{2192}");
+    assert_eq!(out(&mut s, ")SI"), vec!["A[2]*"]);
+    assert_eq!(out(&mut s, "X"), vec!["1"]);
+    out(&mut s, "\u{2192}");
+    assert_eq!(out(&mut s, ")SI"), Vec::<String>::new());
+}
+
+#[test]
+fn a_branch_with_nothing_suspended_does_nothing() {
+    let mut s = Session::default();
+    assert_eq!(out(&mut s, "\u{2192}"), Vec::<String>::new());
+    assert_eq!(out(&mut s, "\u{2192}3"), Vec::<String>::new());
+    assert_eq!(out(&mut s, ")SI"), Vec::<String>::new());
+    assert_eq!(out(&mut s, "2+2"), vec!["4"]);
 }

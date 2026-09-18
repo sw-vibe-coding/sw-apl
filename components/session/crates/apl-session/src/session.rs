@@ -1,7 +1,9 @@
 //! The session state machine: immediate execution and definition mode.
 
+use apl_call::{clear, resume, suspend};
 use apl_editor::Definition;
-use apl_eval::{Workspace, eval_line};
+use apl_eval::{Output, Workspace, eval_line};
+use apl_value::AplResult;
 
 use crate::commands::{definition_line, open_definition, system_command};
 use crate::render::{error_lines, render};
@@ -52,6 +54,29 @@ impl Session {
             .map_or_else(|| INDENT.to_string(), Definition::prompt)
     }
 
+    /// Evaluate one statement. A branch typed here is not a branch at
+    /// all: a bare arrow clears the top of the state indicator, and a
+    /// line number takes the suspended function up again there. An
+    /// error that reaches this far settles which function it left
+    /// suspended.
+    fn run(&mut self, line: &str) -> AplResult<Output> {
+        // Every path comes back through this match rather than using
+        // `?`: an error has to reach `suspend` below, which is what
+        // settles the starred entry in the state indicator.
+        let shown = match eval_line(&mut self.ws, line) {
+            Ok(Output::Branch(Some(n))) if !self.ws.si().is_empty() => {
+                resume(&mut self.ws, n, eval_line)
+            }
+            Ok(Output::Branch(None)) => {
+                clear(&mut self.ws);
+                Ok(Output::Nothing)
+            }
+            Ok(Output::Branch(Some(_))) => Ok(Output::Nothing),
+            other => other,
+        };
+        shown.inspect_err(|_| suspend(&mut self.ws))
+    }
+
     /// Respond to one input line.
     pub fn respond(&mut self, line: &str) -> Reply {
         if self.defining.is_some() {
@@ -64,7 +89,7 @@ impl Session {
         if let Some(header) = trimmed.strip_prefix('∇') {
             return open_definition(self, header);
         }
-        let result = eval_line(&mut self.ws, line);
+        let result = self.run(line);
         let shown: Vec<_> = self.ws.output.drain(..).collect();
         let mut lines: Vec<String> = shown
             .iter()

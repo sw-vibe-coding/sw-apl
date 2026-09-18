@@ -54,19 +54,37 @@ fn write_character(f: &mut fmt::Formatter<'_>, c: char) -> fmt::Result {
     }
 }
 
+/// Where an error was raised, when it was inside a defined function.
+/// The statement travels with it, so the session can echo the body
+/// line that failed without looking the function up again.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Context {
+    /// The function's name.
+    pub function: String,
+    /// The line that failed, counting from 1.
+    pub line: usize,
+    /// That line, as the function holds it.
+    pub statement: String,
+}
+
 /// An error with the character offset (into the statement) where it
-/// was detected, when known.
+/// was detected, when known, and the function line it came from.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct AplError {
     pub kind: ErrorKind,
     pub caret: Option<usize>,
+    pub context: Option<Context>,
 }
 
 impl AplError {
-    /// An error with no caret yet.
+    /// An error with no caret and no function yet.
     #[must_use]
     pub fn new(kind: ErrorKind) -> Self {
-        AplError { kind, caret: None }
+        AplError {
+            kind,
+            caret: None,
+            context: None,
+        }
     }
 
     /// Attach a caret position unless one is already set (the

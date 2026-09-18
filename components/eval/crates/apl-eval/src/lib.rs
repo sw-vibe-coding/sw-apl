@@ -5,5 +5,5 @@ mod apply;
 mod eval;
 mod forms;
 
-pub use apl_workspace::{Defn, Env, Output, Workspace};
+pub use apl_workspace::{Activation, Defn, Env, Output, Workspace};
 pub use eval::{eval_expr, eval_line};
