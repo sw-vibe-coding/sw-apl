@@ -12,8 +12,14 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-09-18
+
+- chore(agentrail): complete 007-locked-workspace-file; advance to 008-command-error-messages
+- feat(wsfile): obscure a workspace that holds a locked function
+
 ## 2026-09-17
 
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 006-library-workspaces; advance to 007-locked-workspace-file
 - feat(library): ship library 1, and a --library option to find it
 - docs(changes): refresh CHANGES.md to HEAD
