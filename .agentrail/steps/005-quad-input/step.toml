@@ -1,6 +1,6 @@
 number = 5
 slug = "quad-input"
-status = "pending"
+status = "in-progress"
 description = 'Phase 3 step 5. ⎕ on the right of an expression prompts (the APL\\360 way) ...'
 role = "production"
 context_files = []

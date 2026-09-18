@@ -6,8 +6,9 @@ use apl_ast::Defn;
 use apl_value::{AplError, AplResult, Array, ErrorKind, Number};
 use apl_workspace::{Output, Workspace};
 
-use crate::call::{Run, run_body};
+use crate::call::run_body;
 use apl_scan::labels;
+use apl_workspace::Run;
 
 /// Shadow everything the call makes local -- result, arguments,
 /// locals, labels -- then give the arguments and the labels their

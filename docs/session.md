@@ -78,6 +78,33 @@ half-evaluated expression to come back to, so there is nothing to
 resume. Calls may nest 128 deep before DEPTH ERROR, and the state
 indicator may grow no longer.
 
+## Reading a line part way through a statement
+
+Quad on the right of an expression prompts with `⎕:` on a line of
+its own and reads the next line, which is evaluated as a whole
+statement where it was asked for. Quote-quad on the right reads
+the characters as typed, with no prompt. Quote-quad on the left
+writes with no line ending, so this pair share a line:
+
+```
+      ∇R←GREET;WHO
+[1]   ⍞←'NAME: '
+[2]   WHO←⍞
+[3]   R←'HELLO ',WHO
+[4]   ∇
+      GREET
+NAME: MIKE
+HELLO MIKE
+```
+
+The line stays open within a statement. Two statements typed in
+immediate execution do not share a line: the first one ends it.
+
+In batch mode the line a statement reads is the next line of the
+script, taken from the same place the run takes its own, so the
+run carries on after whatever the read consumed. A read with no
+more input to take is INTERRUPT.
+
 ## System commands
 
 Recognised when the first non-blank character is a right

@@ -13,30 +13,35 @@ pub fn system_command(session: &mut Session, command: &str) -> Reply {
     let mut words = command.split_whitespace();
     let name = words.next().unwrap_or("").to_ascii_uppercase();
     let rest: Vec<&str> = words.collect();
-    let number = match rest.as_slice() {
-        [] => None,
-        [one] => one.parse::<usize>().ok(),
-        _ => Some(usize::MAX),
-    };
-    let reply = match (name.as_str(), number) {
-        ("OFF", None) if rest.is_empty() => return Reply::Off,
-        ("SI" | "SIV", None) if rest.is_empty() => {
+    match (name.as_str(), rest.as_slice()) {
+        ("OFF", []) => return Reply::Off,
+        ("SI" | "SIV", []) => {
             return Reply::Output(si_lines(session.ws.si(), name == "SIV"));
         }
-        ("ORIGIN", Some(n @ (0 | 1))) => {
-            let new = i64::try_from(n).unwrap_or(1);
-            was_line(std::mem::replace(&mut session.ws.env.io, new))
+        (name, [value]) => {
+            let reply = value.parse().ok().and_then(|n| setting(session, name, n));
+            if let Some(reply) = reply {
+                return Reply::Output(vec![reply]);
+            }
         }
-        ("DIGITS", Some(n @ 1..=16)) => was_line(std::mem::replace(&mut session.digits, n)),
-        ("WIDTH", Some(n @ 30..=254)) => was_line(std::mem::replace(&mut session.width, n)),
-        _ => "INCORRECT COMMAND".to_string(),
-    };
-    Reply::Output(vec![reply])
+        _ => {}
+    }
+    Reply::Output(vec!["INCORRECT COMMAND".to_string()])
 }
 
-/// The APL\360 reply to a settings command: the previous value.
-fn was_line<T: std::fmt::Display>(was: T) -> String {
-    format!("WAS {was}")
+/// A settings command: the new value takes effect and the reply names
+/// the old one. `None` when the name or the value is not one of them.
+fn setting(session: &mut Session, name: &str, n: usize) -> Option<String> {
+    let was = match (name, n) {
+        ("ORIGIN", 0 | 1) => {
+            let new = i64::try_from(n).unwrap_or(1);
+            std::mem::replace(&mut session.ws.env.io, new).to_string()
+        }
+        ("DIGITS", 1..=16) => std::mem::replace(&mut session.ws.print.digits, n).to_string(),
+        ("WIDTH", 30..=254) => std::mem::replace(&mut session.ws.print.width, n).to_string(),
+        _ => return None,
+    };
+    Some(format!("WAS {was}"))
 }
 
 /// An opening del: start a new function, or reopen one for editing.

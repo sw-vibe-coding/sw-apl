@@ -130,3 +130,59 @@ fn batch_echoes_definition_lines_behind_the_bracketed_prompt() {
     ];
     assert_eq!(text, want.join("\n"));
 }
+
+#[test]
+fn batch_feeds_a_read_from_the_script_and_carries_on_after_it() {
+    // The line the statement reads is consumed by the read, not run
+    // again by the loop: the queue is shared between the two.
+    let input = "X\u{2190}\u{2395}\n2 3 4\nX\u{d7}2\n)OFF\n";
+    let (text, code) = run_stdin(&[], input);
+    assert_eq!(code, 0);
+    let want = [
+        "      X\u{2190}\u{2395}",
+        "\u{2395}:",
+        "      2 3 4",
+        "      X\u{d7}2",
+        "4 6 8",
+        "      )OFF",
+        "",
+    ];
+    assert_eq!(text, want.join("\n"));
+}
+
+#[test]
+fn a_quote_quad_prompt_and_its_answer_share_a_line() {
+    // The prompt and the read are two lines of one function, so they
+    // are one statement and the answer lands on the prompt's line.
+    let input = concat!(
+        "\u{2207}R\u{2190}GREET;WHO\n",
+        "\u{235e}\u{2190}'NAME: '\n",
+        "WHO\u{2190}\u{235e}\n",
+        "R\u{2190}'HELLO ',WHO\n",
+        "\u{2207}\n",
+        "GREET\n",
+        "MIKE\n",
+        ")OFF\n"
+    );
+    let (text, code) = run_stdin(&[], input);
+    assert_eq!(code, 0);
+    assert!(text.contains("NAME: MIKE\n"), "got: {text}");
+    assert!(text.contains("HELLO MIKE\n"), "got: {text}");
+}
+
+#[test]
+fn a_statement_ends_the_line_quote_quad_left_open() {
+    // Two statements in immediate execution, so the first one's line
+    // is finished before the second reads. See docs/parity.md.
+    let input = "\u{235e}\u{2190}'NAME: '\nWHO\u{2190}\u{235e}\nMIKE\nWHO\n)OFF\n";
+    let (text, _) = run_stdin(&[], input);
+    assert!(text.contains("NAME: \n"), "got: {text}");
+    assert!(text.contains("\nMIKE\n"), "got: {text}");
+}
+
+#[test]
+fn a_read_with_nothing_left_in_the_script_is_an_interrupt() {
+    let (text, code) = run_stdin(&[], "1+\u{2395}\n");
+    assert_eq!(code, 0);
+    assert!(text.contains("INTERRUPT"), "got: {text}");
+}

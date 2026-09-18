@@ -1,6 +1,6 @@
 //! Evaluator over the AST with a workspace of variables.
 
-use apl_eval::{Output, Workspace, eval_line};
+use apl_eval::{Output, Transcript, Workspace, eval_line};
 use apl_parse::parse_header;
 use apl_value::{Array, Data, ErrorKind, Number};
 
@@ -110,9 +110,10 @@ fn quad_output_is_buffered_and_silent_at_top_level() {
     ws.output.clear();
     assert_eq!(nums(&mut ws, "1+\u{2395}\u{2190}5"), [Number::Int(6)]);
     assert_eq!(ws.output.len(), 1);
+    // With nothing to read, a quad on the right is an INTERRUPT.
     assert_eq!(
         eval_line(&mut ws, "\u{2395}").unwrap_err().kind,
-        ErrorKind::NotImplemented
+        ErrorKind::Interrupt
     );
 }
 
@@ -414,4 +415,88 @@ fn a_label_does_not_change_what_its_line_does() {
     define(&mut ws, "R\u{2190}SHOUT", &["L:'HI'", "R\u{2190}L"]);
     assert_eq!(nums(&mut ws, "SHOUT"), [Number::Int(1)]);
     assert_eq!(ws.output.len(), 1, "the labelled line still displays");
+}
+
+/// A workspace whose console will answer reads with these lines.
+fn typing(lines: &[&str]) -> Workspace {
+    let typed = lines.iter().map(|l| (*l).to_string()).collect();
+    let mut ws = Workspace::default();
+    ws.console = Box::new(Transcript {
+        shown: Vec::new(),
+        typed,
+    });
+    ws
+}
+
+#[test]
+fn quad_on_the_right_evaluates_what_is_typed() {
+    let mut ws = typing(&["2+3", "\u{2373}3"]);
+    assert_eq!(nums(&mut ws, "1+\u{2395}"), [Number::Int(6)]);
+    assert_eq!(
+        nums(&mut ws, "\u{2395}"),
+        [Number::Int(1), Number::Int(2), Number::Int(3)]
+    );
+}
+
+#[test]
+fn a_reply_sees_the_locals_of_what_is_running() {
+    let mut ws = typing(&["N\u{d7}2"]);
+    define(&mut ws, "R\u{2190}ASK N", &["R\u{2190}\u{2395}"]);
+    assert_eq!(nums(&mut ws, "ASK 21"), [Number::Int(42)]);
+}
+
+#[test]
+fn a_reply_with_no_value_prompts_again() {
+    let mut ws = typing(&["", "\u{235d} a comment", "X\u{2190}9", "X"]);
+    assert_eq!(nums(&mut ws, "\u{2395}"), [Number::Int(9)]);
+    // The assignment on the way past still happened.
+    assert_eq!(nums(&mut ws, "X"), [Number::Int(9)]);
+}
+
+#[test]
+fn a_branch_typed_at_the_prompt_abandons_the_read() {
+    let mut ws = typing(&["\u{2192}"]);
+    assert_eq!(
+        eval_line(&mut ws, "1+\u{2395}").unwrap_err().kind,
+        ErrorKind::Interrupt
+    );
+}
+
+#[test]
+fn quote_quad_reads_characters_without_evaluating_them() {
+    let mut ws = typing(&["2+3", ""]);
+    let read = eval_line(&mut ws, "\u{235e}").unwrap().value().unwrap();
+    assert_eq!(read.shape, [3]);
+    assert_eq!(read.data, Data::Char(vec!['2', '+', '3']));
+    // An empty line is an empty character vector, not a re-prompt.
+    let empty = eval_line(&mut ws, "\u{235e}").unwrap().value().unwrap();
+    assert_eq!(empty.shape, [0]);
+}
+
+#[test]
+fn quote_quad_output_leaves_the_line_open() {
+    let mut ws = Workspace::default();
+    assert_eq!(
+        eval_line(&mut ws, "\u{235e}\u{2190}'NAME: '").unwrap(),
+        Output::Nothing
+    );
+    assert_eq!(ws.output, [Output::Bare("NAME: ".to_string())]);
+    let shown = ws.flush();
+    assert_eq!(shown.lines, ["NAME: "]);
+    assert!(shown.open, "the line waits for what comes next");
+}
+
+#[test]
+fn a_prompt_written_with_quote_quad_is_shown_before_the_read() {
+    let mut ws = typing(&["MIKE"]);
+    define(
+        &mut ws,
+        "R\u{2190}GREET",
+        &["\u{235e}\u{2190}'NAME: '", "R\u{2190}\u{235e}"],
+    );
+    let read = eval_line(&mut ws, "GREET").unwrap().value().unwrap();
+    assert_eq!(read.data, Data::Char("MIKE".chars().collect()));
+    // The prompt reached the console before the line was read, and
+    // the answer carries on the very same line, as APL\360 prints it.
+    assert_eq!(ws.console.take(), ["NAME: MIKE"]);
 }

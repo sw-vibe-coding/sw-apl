@@ -1,0 +1,15 @@
+[package]
+name = "apl-quad"
+description = "sw-apl quad and quote-quad input: prompting and reading a line"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-value = { path = "../../../value/crates/apl-value" }
+apl-workspace = { path = "../apl-workspace" }
+
+[lints]
+workspace = true

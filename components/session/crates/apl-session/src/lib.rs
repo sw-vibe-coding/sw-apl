@@ -6,4 +6,5 @@ mod commands;
 mod render;
 mod session;
 
-pub use session::{INDENT, Reply, Session};
+pub use apl_eval::{Console, INDENT, Shown};
+pub use session::{Reply, Session};

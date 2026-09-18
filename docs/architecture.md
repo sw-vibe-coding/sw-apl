@@ -19,8 +19,10 @@ sw-apl/
     prims/     apl-prims-scalar            scalar primitives
                apl-prims-mixed             structural primitives
                apl-prims-ops               reduce/scan/inner/outer
-    eval/      apl-workspace               symbol table, frames, env
+    eval/      apl-console                 output, rendering, the terminal
+               apl-workspace               symbol table, frames, env
                apl-call                    defined-function calls
+               apl-quad                    reading a line mid-statement
                apl-eval                    interpreter
     session/   apl-session                 system commands, del editor,
                                            workspace files, libraries
@@ -40,11 +42,11 @@ directory exists today.
 ## Dependency flow
 
 ```
-value -> display
+value -> display -> console
 value -> lex -> scan -> parse
 value -> prims (scalar, mixed, ops)
-prims -> workspace -> call
-parse + prims + display + call -> eval
+prims + console -> workspace -> call, quad
+parse + prims + call + quad -> eval
 eval -> session -> cli
 eval -> session -> web
 ```
@@ -61,6 +63,16 @@ eval -> session -> web
 - `apl-call` applies a defined function: valence, frame, body,
   result. It takes "evaluate one line" as a function pointer, so
   it sits below the evaluator rather than inside it.
+- `apl-console` owns what a statement produced, how that reads as
+  transcript lines, and the `Console` trait: where a statement gets
+  a line when it reads one. It sits below the evaluator because a
+  read happens part way through a statement, after whatever the
+  statement has already shown, so the prompt has to land after that
+  and not before it. The workspace holds a `Console`, which is the
+  seam the web build replaces.
+- `apl-quad` reads that line: quad evaluates the reply, quote-quad
+  takes it as characters. Like `apl-call` it is handed `Run` rather
+  than depending on the evaluator.
 - `apl-eval` owns the state indicator and dispatch from AST to
   primitives.
 - `apl-session` owns everything that begins with a right

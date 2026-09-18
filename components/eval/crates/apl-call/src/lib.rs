@@ -12,6 +12,7 @@ mod branch;
 mod call;
 mod stack;
 
+pub use apl_workspace::Run;
 pub use branch::target as branch_target;
-pub use call::{Run, call, value};
+pub use call::{call, value};
 pub use stack::{clear, resume, suspend};

@@ -2,14 +2,11 @@
 
 use apl_call::{clear, resume, suspend};
 use apl_editor::Definition;
-use apl_eval::{Output, Workspace, eval_line};
+use apl_eval::{INDENT, Output, Workspace, eval_line, render_all};
 use apl_value::AplResult;
 
 use crate::commands::{definition_line, open_definition, system_command};
-use crate::render::{error_lines, render};
-
-/// The six-space indent that precedes every input line.
-pub const INDENT: &str = "      ";
+use crate::render::error_lines;
 
 /// What the shell should do after handing a line to the session.
 #[derive(Debug, PartialEq, Eq)]
@@ -21,27 +18,14 @@ pub enum Reply {
 }
 
 /// An interactive APL session.
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Session {
-    pub(crate) ws: Workspace,
+    /// The workspace this session owns: its variables, functions,
+    /// print settings, and the console it reads a line through.
+    pub ws: Workspace,
     /// The function open in the del editor, while definition mode
     /// is open.
     pub(crate) defining: Option<Definition>,
-    /// Print precision (`)DIGITS`).
-    pub(crate) digits: usize,
-    /// Print width (`)WIDTH`).
-    pub(crate) width: usize,
-}
-
-impl Default for Session {
-    fn default() -> Self {
-        Session {
-            ws: Workspace::default(),
-            defining: None,
-            digits: 10,
-            width: 120,
-        }
-    }
 }
 
 impl Session {
@@ -90,13 +74,12 @@ impl Session {
             return open_definition(self, header);
         }
         let result = self.run(line);
-        let shown: Vec<_> = self.ws.output.drain(..).collect();
-        let mut lines: Vec<String> = shown
-            .iter()
-            .flat_map(|o| render(o, self.digits, self.width))
-            .collect();
+        // Anything a read showed already comes first, then whatever
+        // the statement produced after it.
+        let mut lines = self.ws.console.take();
+        lines.extend(self.ws.flush().lines);
         lines.extend(match result {
-            Ok(out) => render(&out, self.digits, self.width),
+            Ok(out) => render_all(&[out], self.ws.print).lines,
             Err(err) => error_lines(&err, line),
         });
         Reply::Output(lines)

@@ -158,8 +158,15 @@ Notes:
   left.
 - A statement whose value is not assigned is displayed.
 - Quad on the left of assignment displays; quad on the right
-  reads and evaluates a line. Quote-quad reads or writes raw
-  characters without a trailing newline on output.
+  prompts with `⎕:` and reads a line, which is evaluated as a
+  whole statement in the current environment, so it sees the
+  locals of whatever is running. A reply with no value -- blank,
+  a comment, an assignment -- prompts again; a branch abandons
+  the read. Quote-quad on the right reads the characters as they
+  were typed, with no prompt and no evaluation; on the left it
+  writes them with no line ending, so a prompt and the answer
+  typed after it share a line. A read with no more input to take
+  is INTERRUPT.
 
 ## Defined functions
 

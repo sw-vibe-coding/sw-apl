@@ -39,8 +39,9 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | Right-to-left evaluation, long right scope | done | parse/eval tests, sample 01 |
 | Assignment, variables | done | sample 02 |
 | Quad output `⎕←` | done | session tests, sample 20 |
-| Quad input `⎕` | todo | |
-| Quote-quad `⍞` input and output | todo | |
+| Quad input `⎕`: prompts `⎕:`, evaluates the reply in the current environment, prompts again for a reply with no value | done | eval/cli tests, sample 57 |
+| Quote-quad `⍞`: reads characters without evaluating, and on the left writes with no line ending so a prompt and its answer share a line | done | eval/cli tests, sample 57 |
+| A line `⍞←` left open carries across a statement boundary | todo | it carries within a statement, so a prompt and read written on two lines of one function share a line; in immediate execution the statement ends the line first |
 | Character literals `'...'`, doubled quote, any Unicode inside | done | lex tests, samples 19, 20 |
 | Bracket indexing `A[I;J]`, elided axes, index arrays of any rank | done | index tests, sample 48 |
 | Indexed assignment with scalar extension | done | index tests, sample 48 |
@@ -149,5 +150,6 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | SYNTAX, VALUE, DOMAIN, RANK, LENGTH | done | done |
 | CHARACTER (with code point) | done | done |
 | INDEX, DEFN, DEPTH | done | done |
-| WS FULL, INTERRUPT | todo | done |
+| INTERRUPT when a read finds no more input | done | eval/cli tests |
+| WS FULL, INTERRUPT from the keyboard | todo | done |
 | NOT IMPLEMENTED (temporary, must reach zero) | in use | done |

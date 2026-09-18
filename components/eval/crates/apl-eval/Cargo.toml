@@ -12,6 +12,7 @@ apl-ast = { path = "../../../parse/crates/apl-ast" }
 apl-call = { path = "../apl-call" }
 apl-value = { path = "../../../value/crates/apl-value" }
 apl-parse = { path = "../../../parse/crates/apl-parse" }
+apl-quad = { path = "../apl-quad" }
 apl-prims = { path = "../../../prims/crates/apl-prims" }
 apl-workspace = { path = "../apl-workspace" }
 

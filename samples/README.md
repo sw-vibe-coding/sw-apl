@@ -22,6 +22,10 @@ character matrix for the names, mixed output, and the conditional
 branch idiom driving two functions. Its transcript is reproducible
 because the random link starts from a fixed value.
 
+`57-quad-input.apl` reads from its own script: quad evaluating a
+typed reply, quote-quad taking characters, and a prompt written with
+quote-quad that shares a line with its answer.
+
 `56-suspension.apl` shows what a failure inside a function leaves
 behind: the error naming the function and line, the locals still
 readable, `)SI` and `)SIV`, taking the function up again, and
