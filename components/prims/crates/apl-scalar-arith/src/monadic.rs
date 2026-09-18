@@ -26,6 +26,7 @@ pub fn monadic_arith(f: char, a: f64) -> Option<AplResult<f64>> {
 }
 
 /// The nearest integer when `a` is within the fuzz of it.
+#[must_use]
 pub fn tolerant_round(a: f64) -> Option<f64> {
     let r = a.round();
     ((a - r).abs() <= FUZZ * a.abs().max(1.0)).then_some(r)

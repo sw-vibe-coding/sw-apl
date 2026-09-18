@@ -1,6 +1,6 @@
 number = 2
 slug = "numeric-edge-cases"
-status = "pending"
+status = "in-progress"
 description = """
 Phase 5 step 2 (docs/plan.md). The numeric edges.
 

@@ -91,6 +91,25 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | Scalar extension, RANK and LENGTH agreement | done | done | prims tests |
 | Exact integers, float promotion, fuzz | done | | value tests |
 
+## Numeric boundaries
+
+Where the manual is specific, it is followed and quoted; where it is
+not, the choice is ours and is marked so. Pinned by the value tests,
+the session numeric tests, and sample 67.
+
+| Boundary | Whose | |
+|---|---|---|
+| The fuzz is about 1E¯13 | manual | "For operations such as floor and ceiling, and in comparisons, a 'fuzz' of about 1E¯13 is applied in order to avoid anomalous results that might otherwise be engendered by doing decimal arithmetic on a binary machine." |
+| The fuzz is relative, not absolute | ours | The manual says "about 1E¯13" and not against what. Relative, so the same significant digits agree at any magnitude |
+| Zero has no slack | ours | The tolerance is a fraction of the larger magnitude, so nothing but zero equals zero. Otherwise every small number would be zero |
+| Two integers compare exactly | ours | They hold their value exactly, so a tolerance could only make two different ones equal |
+| The fuzz applies to a count as well: `⍳(0.1+0.2)×10` is `1 2 3` | ours | The manual's list is "operations such as", and counting to a length that prints as 3, floors to 3 and compares equal to 3 is exactly the anomaly the sentence is about |
+| A number is exact up to 2*53 | manual | `)DIGITS` "has no effect on the precision of internal calculations, which is approximately 16 decimal digits". Everything is a double, so the last exact integer is 2*53, not the width of a machine integer |
+| Arithmetic past the end of i64 falls to the floating path rather than wrapping | ours | An implementation detail below what the manual describes; it must not produce a negative from two positives |
+| `)DIGITS` caps integers too, so a wider one prints in exponential form | manual | "Subsequent output of numbers will show no greater number of significant digits than indicated." Later APLs print integers in full regardless; this follows the sentence |
+| Exponential form only where it is needed | ours | The manual defines the form without saying when it is chosen |
+| `⍳` of something too large to keep is WS FULL only on assignment | ours | The workspace bounds what it holds, not what an expression builds; see `workspaces.md` |
+
 ## Mixed functions
 
 | Glyph | Monadic | Dyadic | Notes |

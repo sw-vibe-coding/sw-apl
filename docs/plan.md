@@ -241,6 +241,13 @@ widen each layer to the full APL\360 set.
 1. `domino` -- matrix inverse and least-squares divide.
 2. `numeric-edge-cases` -- overflow, tolerance, large iota,
    exponent notation round trips, `)DIGITS` extremes.
+3. `ibeam-reference` -- `docs/i-beam-reference.md`: what each
+   I-beam reports, in what units, what it does on a machine with
+   no such thing to report, and what a left argument does. The
+   eight-row table in `language.md` says what they are and not
+   how to use them, and the units (sixtieths of a second, MMDDYY)
+   are the sort of thing a reader needs spelled out with worked
+   examples. (Owner request 2026-09-18.)
 
 ### Phase 6: web demo (saga `web-demo`)
 

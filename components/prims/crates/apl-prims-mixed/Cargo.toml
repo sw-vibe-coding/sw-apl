@@ -10,6 +10,7 @@ repository.workspace = true
 [dependencies]
 apl-value = { path = "../../../value/crates/apl-value" }
 apl-prims-scalar = { path = "../apl-prims-scalar" }
+apl-scalar-arith = { path = "../apl-scalar-arith" }
 
 [lints]
 workspace = true

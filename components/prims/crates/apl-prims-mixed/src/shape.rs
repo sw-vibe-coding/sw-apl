@@ -3,7 +3,7 @@
 use apl_prims_scalar::numbers;
 use apl_value::{AplError, AplResult, Array, Data, ErrorKind, Number};
 
-use crate::iota::non_negative_int;
+use crate::counts::non_negative_int;
 
 /// `⍴r`: the shape as a vector.
 #[must_use]

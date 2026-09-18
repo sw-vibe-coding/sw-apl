@@ -50,16 +50,25 @@ bad sequence; the session continues with the next line.
   with `E`, negative with the high minus prefix. `1E6`, `2.5`,
   high-minus `3`, `1E` high-minus `13` are literals. A leading
   ASCII minus is the subtract function, not part of a literal.
-- Semantically one numeric type. Integers are exact within i64
-  (plus, minus, and times use checked integer arithmetic); results
-  that are not integral, or that overflow, are floats.
+- Semantically one numeric type, and it is a double: precision is
+  about sixteen decimal digits, so the last integer held exactly is
+  `2*53`. Beyond that, consecutive integers are the same number.
+  Plus, minus and times take an exact path while both arguments are
+  integers and the answer fits; past that they fall to the floating
+  path rather than wrapping round.
 - Booleans are the numbers 0 and 1.
 - Comparison tolerance (fuzz) is fixed at `1E` high-minus `13`
   relative and applies to equal, not-equal, less-or-equal, greater-or-equal,
-  floor, ceiling, residue, membership, and index-of.
+  floor, ceiling, residue, membership, index-of, and to an argument
+  that has to be a count: `⍳(0.1+0.2)×10` is `1 2 3`, because that
+  value prints as 3, floors to 3 and compares equal to 3. Zero has
+  no slack: nothing but zero equals zero.
 - Display: up to `)DIGITS` significant digits (default 10),
   exponential form when the magnitude needs it, high minus for
-  negatives, no trailing zeros.
+  negatives, no trailing zeros. `)DIGITS` caps every number and not
+  only the fractions, so an exact integer wider than the setting is
+  shown in exponential form. It bounds what is shown and never what
+  is held: `3×1÷3` is 1 at `)DIGITS 1`.
 
 ## Characters
 

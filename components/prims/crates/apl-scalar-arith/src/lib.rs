@@ -7,4 +7,4 @@ mod expo;
 mod monadic;
 
 pub use dyadic::dyadic_arith;
-pub use monadic::monadic_arith;
+pub use monadic::{monadic_arith, tolerant_round};

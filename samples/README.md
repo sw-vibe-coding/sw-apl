@@ -22,6 +22,13 @@ character matrix for the names, mixed output, and the conditional
 branch idiom driving two functions. Its transcript is reproducible
 because the random link starts from a fixed value.
 
+`67-numeric-edges.apl` walks the boundaries: the fuzz and what it
+does to comparison, floor and counting; where a number stops being
+exact; what `)DIGITS` bounds and what it does not; exponential form
+in and out; and the point where a value is too large to keep.
+`docs/parity.md` records which of these are the manual's and which
+are ours.
+
 `66-domino.apl` inverts a matrix, checks the inverse by matrix
 product, solves a system, and fits a line to four points by least
 squares. Its examples are chosen so that every answer is exact in
