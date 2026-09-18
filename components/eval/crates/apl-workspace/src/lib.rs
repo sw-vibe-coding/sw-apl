@@ -9,6 +9,7 @@ mod workspace;
 
 pub use apl_ast::Defn;
 pub use apl_console::{Console, INDENT, Output, Print, Shown, Transcript, render, render_all};
+pub use apl_ibeam::{Clock, Time, ibeam, stopped, system};
 pub use apl_prims::Env;
 pub use frame::Activation;
 pub use workspace::{Run, Workspace};

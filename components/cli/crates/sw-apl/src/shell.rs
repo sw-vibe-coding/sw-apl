@@ -86,8 +86,7 @@ pub fn run_batch(path: Option<&Path>, echo: bool) -> io::Result<()> {
         io::stdin().lock().read_to_end(&mut bytes)?;
     }
     let pending: Pending = Rc::new(RefCell::new(lines(&bytes).into()));
-    let mut session = Session::default();
-    session.ws.console = Box::new(Script(Rc::clone(&pending), echo));
+    let mut session = Session::attached(Box::new(Script(Rc::clone(&pending), echo)));
     run_lines(&mut session, &pending, echo);
     io::stdout().flush()
 }

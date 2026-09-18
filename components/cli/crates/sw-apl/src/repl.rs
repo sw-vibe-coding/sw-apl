@@ -49,8 +49,7 @@ pub fn run_interactive() -> io::Result<()> {
     if let Some(path) = &history {
         let _ = editor.borrow_mut().load_history(path);
     }
-    let mut session = Session::default();
-    session.ws.console = Box::new(Terminal(Rc::clone(&editor)));
+    let mut session = Session::attached(Box::new(Terminal(Rc::clone(&editor))));
     loop {
         let prompt = session.prompt();
         match read_line(&mut editor.borrow_mut(), &prompt) {

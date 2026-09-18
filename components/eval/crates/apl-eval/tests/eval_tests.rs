@@ -500,3 +500,93 @@ fn a_prompt_written_with_quote_quad_is_shown_before_the_read() {
     // the answer carries on the very same line, as APL\360 prints it.
     assert_eq!(ws.console.take(), ["NAME: MIKE"]);
 }
+
+/// A workspace whose clock does not move, so what the I-beams report
+/// is the same on every run.
+fn at_noon() -> Workspace {
+    let mut ws = Workspace::default();
+    ws.clock = || apl_eval::Time {
+        now: 12 * 60 * 60 * 60,
+        cpu: 300,
+        date: 91_726,
+    };
+    ws.signed_on = 9 * 60 * 60 * 60;
+    ws
+}
+
+#[test]
+fn the_i_beams_read_the_workspace_clock() {
+    let mut ws = at_noon();
+    assert_eq!(nums(&mut ws, "\u{2336}20"), [Number::Int(2_592_000)]);
+    assert_eq!(nums(&mut ws, "\u{2336}21"), [Number::Int(300)]);
+    assert_eq!(nums(&mut ws, "\u{2336}23"), [Number::Int(1)]);
+    assert_eq!(nums(&mut ws, "\u{2336}24"), [Number::Int(1_944_000)]);
+    assert_eq!(nums(&mut ws, "\u{2336}25"), [Number::Int(91_726)]);
+    // Space available is a number, and the same one each time.
+    assert_eq!(nums(&mut ws, "\u{2336}22"), nums(&mut ws, "\u{2336}22"));
+    // It is a function like any other: it composes.
+    assert_eq!(nums(&mut ws, "(\u{2336}20)\u{f7}60"), [Number::Int(43200)]);
+}
+
+#[test]
+fn the_line_i_beams_report_where_execution_is() {
+    let mut ws = at_noon();
+    // Nothing is running in immediate execution.
+    assert_eq!(nums(&mut ws, "\u{2336}26"), [Number::Int(0)]);
+    assert_eq!(
+        eval_line(&mut ws, "\u{2336}27")
+            .unwrap()
+            .value()
+            .unwrap()
+            .shape,
+        [0]
+    );
+    define(
+        &mut ws,
+        "R\u{2190}WHERE",
+        &["R\u{2190}0", "R\u{2190}\u{2336}26"],
+    );
+    assert_eq!(nums(&mut ws, "WHERE"), [Number::Int(2)]);
+    // A called function sits innermost, its caller behind it.
+    define(
+        &mut ws,
+        "R\u{2190}OUTER",
+        &["R\u{2190}0", "R\u{2190}0", "R\u{2190}WHERE"],
+    );
+    assert_eq!(nums(&mut ws, "OUTER"), [Number::Int(2)]);
+    define(&mut ws, "R\u{2190}STACK", &["R\u{2190}\u{2336}27"]);
+    define(
+        &mut ws,
+        "R\u{2190}CALLER",
+        &["R\u{2190}0", "R\u{2190}STACK"],
+    );
+    assert_eq!(nums(&mut ws, "CALLER"), [Number::Int(1), Number::Int(2)]);
+}
+
+#[test]
+fn an_i_beam_outside_the_eight_is_domain_error() {
+    let mut ws = at_noon();
+    for bad in [
+        "\u{2336}19",
+        "\u{2336}28",
+        "\u{2336}0",
+        "\u{2336}2 3",
+        "\u{2336}'A'",
+    ] {
+        assert_eq!(
+            eval_line(&mut ws, bad).unwrap_err().kind,
+            ErrorKind::Domain,
+            "{bad}"
+        );
+    }
+    // There is no dyadic I-beam.
+    assert_eq!(
+        eval_line(&mut ws, "1\u{2336}20").unwrap_err().kind,
+        ErrorKind::Domain
+    );
+    // And no axis form.
+    assert_eq!(
+        eval_line(&mut ws, "\u{2336}[1]20").unwrap_err().kind,
+        ErrorKind::Syntax
+    );
+}

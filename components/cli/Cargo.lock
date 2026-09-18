@@ -108,6 +108,7 @@ version = "0.1.0"
 dependencies = [
  "apl-ast",
  "apl-call",
+ "apl-ibeam",
  "apl-parse",
  "apl-prims",
  "apl-quad",
@@ -121,6 +122,15 @@ version = "0.1.0"
 dependencies = [
  "serde",
  "toml",
+]
+
+[[package]]
+name = "apl-ibeam"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+ "chrono",
+ "libc",
 ]
 
 [[package]]
@@ -297,6 +307,7 @@ version = "0.1.0"
 dependencies = [
  "apl-ast",
  "apl-console",
+ "apl-ibeam",
  "apl-prims",
  "apl-value",
 ]

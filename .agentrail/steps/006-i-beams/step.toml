@@ -1,6 +1,6 @@
 number = 6
 slug = "i-beams"
-status = "pending"
+status = "in-progress"
 description = "Phase 3 step 6. The I-beam system functions ⌶20 through ⌶27 per docs/lang..."
 role = "production"
 context_files = []

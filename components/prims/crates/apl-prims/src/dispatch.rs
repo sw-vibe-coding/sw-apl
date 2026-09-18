@@ -8,7 +8,7 @@ use apl_prims_radix::{decode, encode};
 use apl_prims_scalar::{dyadic, monadic};
 use apl_prims_search::{grade, index_of, membership};
 use apl_prims_select::{axis_index, drop, reverse, rotate, take, transpose};
-use apl_value::{AplResult, Array};
+use apl_value::{AplError, AplResult, Array, ErrorKind};
 
 use crate::axis::no_axis;
 use crate::random::{Env, deal, roll};
@@ -54,6 +54,9 @@ pub fn apply_dyadic(
             axis_dyadic(f, l, r, axis_index(axis, first, rank, env.io)?)
         }
         _ if axis.is_some() => Err(no_axis(f)),
+        // The I-beam is monadic: its argument selects a system value,
+        // and there is nothing for a left one to mean.
+        '⌶' => Err(AplError::new(ErrorKind::Domain)),
         _ => mixed_dyadic(f, l, r, env).unwrap_or_else(|| dyadic(f, l, r)),
     }
 }

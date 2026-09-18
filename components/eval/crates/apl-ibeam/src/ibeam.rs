@@ -1,0 +1,53 @@
+//! The eight system values.
+
+use apl_value::{AplError, AplResult, Array, Data, ErrorKind, Number};
+
+use crate::clock::Time;
+
+/// Bytes a clear workspace reports as available. APL\360 sized a
+/// workspace when you signed on; sw-apl has no such limit, so this is
+/// the nominal figure the row in `language.md` promises.
+const AVAILABLE: i64 = 1_048_576;
+
+/// The system value `n` selects: 20 the time of day, 21 the processor
+/// time used, 22 the space available, 23 the terminals connected, 24
+/// the time of sign-on, 25 today's date, 26 the line now executing,
+/// 27 the lines in the state indicator. Times are in sixtieths of a
+/// second since midnight, as APL\360 gave them.
+///
+/// `lines` is the state indicator, innermost first.
+///
+/// # Errors
+/// DOMAIN ERROR for any other argument.
+pub fn ibeam(n: i64, time: Time, signed_on: i64, lines: &[i64]) -> AplResult<Array> {
+    let one = |v: i64| Ok(Array::scalar(Number::Int(v)));
+    match n {
+        20 => one(time.now),
+        21 => one(time.cpu),
+        22 => one(AVAILABLE),
+        23 => one(1),
+        24 => one(signed_on),
+        25 => one(time.date),
+        26 => one(lines.first().copied().unwrap_or(0)),
+        27 => Ok(Array::vector(
+            lines.iter().map(|l| Number::Int(*l)).collect(),
+        )),
+        _ => Err(AplError::new(ErrorKind::Domain)),
+    }
+}
+
+/// The whole-number argument an I-beam was given.
+///
+/// # Errors
+/// DOMAIN ERROR for characters, for anything but a single number, and
+/// for a number that is not whole.
+pub fn argument(r: &Array) -> AplResult<i64> {
+    let domain = || AplError::new(ErrorKind::Domain);
+    let Data::Num(v) = &r.data else {
+        return Err(domain());
+    };
+    match v.as_slice() {
+        [Number::Int(n)] => Ok(*n),
+        _ => Err(domain()),
+    }
+}

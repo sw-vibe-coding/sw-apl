@@ -6,6 +6,7 @@ use std::rc::Rc;
 
 use apl_ast::Defn;
 use apl_console::{Console, Output, Print, Shown, Transcript, render_all};
+use apl_ibeam::{Clock, stopped};
 use apl_prims::Env;
 use apl_value::{AplResult, Array};
 
@@ -34,6 +35,13 @@ pub struct Workspace {
     pub print: Print,
     /// The terminal: where a statement reads a line when it reads one.
     pub console: Box<dyn Console>,
+    /// Where the I-beams read the time. A clear workspace has a clock
+    /// that does not move, so nothing reads the real world until a
+    /// host installs one that does.
+    pub clock: Clock,
+    /// Sixtieths of a second since midnight when the session began,
+    /// which `⌶24` reports. The host sets it with the clock.
+    pub signed_on: i64,
 }
 
 impl Default for Workspace {
@@ -46,6 +54,8 @@ impl Default for Workspace {
             output: Vec::new(),
             print: Print::default(),
             console: Box::new(Transcript::default()),
+            clock: stopped,
+            signed_on: 0,
         }
     }
 }

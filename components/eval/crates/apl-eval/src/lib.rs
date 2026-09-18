@@ -6,7 +6,7 @@ mod eval;
 mod forms;
 
 pub use apl_workspace::{
-    Activation, Console, Defn, Env, INDENT, Output, Print, Run, Shown, Transcript, Workspace,
-    render, render_all,
+    Activation, Clock, Console, Defn, Env, INDENT, Output, Print, Run, Shown, Time, Transcript,
+    Workspace, render, render_all, system,
 };
 pub use eval::{eval_expr, eval_line};

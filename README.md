@@ -77,8 +77,11 @@ what is typed, quote-quad takes the characters as they are, and a
 prompt written with quote-quad shares a line with its answer. In
 batch the lines come from the script.
 
-Not there yet: workspaces (`)SAVE`, `)LOAD`), the I-beam system
-functions, and domino. A
+The I-beam system functions report the time of day, the processor
+time used, the space available, the terminals connected, the sign-on
+time, the date, the line now executing, and the state indicator.
+
+Not there yet: workspaces (`)SAVE`, `)LOAD`) and domino. A
 glyph from a later APL is a CHARACTER ERROR that names it, so the
 Dyalog Life one-liner answers "dfn brace, not APL\360". See the
 parity checklist for the row-by-row picture. Batch mode, `)OFF`, help, and the

@@ -104,7 +104,7 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | `∊` | | done | with the fuzz; sample 30 |
 | `⍋ ⍒` | done | | vectors, stable, origin-aware; sample 32 |
 | `⌹` | todo | todo | Phase 5 |
-| `⌶` I-beams 20 to 27 | todo | | Phase 3 |
+| `⌶` I-beams 20 to 27 | done | | time, processor time, space, terminals, sign-on, date, the line now executing, the state indicator; a left argument is DOMAIN ERROR; sample 58 |
 
 ## Operators
 
@@ -152,4 +152,5 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | INDEX, DEFN, DEPTH | done | done |
 | INTERRUPT when a read finds no more input | done | eval/cli tests |
 | WS FULL, INTERRUPT from the keyboard | todo | done |
+| A monadic-only primitive used dyadically (`1~0`, `1⍋2`) | todo | answers NOT IMPLEMENTED; APL\360 has no such form, so it should be a SYNTAX ERROR |
 | NOT IMPLEMENTED (temporary, must reach zero) | in use | done |

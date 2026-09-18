@@ -215,7 +215,17 @@ selects a system value, as in APL\360:
 | `⌶26` | line number of the statement now executing (first of the state indicator) |
 | `⌶27` | vector of line numbers in the state indicator |
 
-Any other argument is DOMAIN ERROR. There is no dyadic I-beam.
+Any other argument is DOMAIN ERROR, as is an argument that is not
+one whole number. There is no dyadic I-beam: a left argument is
+DOMAIN ERROR too, and there is no axis form.
+
+The time of day, the processor time, and the date are read from a
+clock the workspace holds. A clear workspace has one that does not
+move, so a transcript made without a terminal reproduces; the
+terminal installs the real one when a session starts. A program
+that wants to differ from run to run stirs the random link from
+the clock -- `?(1+60|⌶20)⍴2` throws away a clock-dependent number
+of rolls -- which is what `samples/58-ibeams.apl` shows.
 
 ## Settings commands
 

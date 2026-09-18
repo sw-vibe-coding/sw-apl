@@ -3,6 +3,7 @@
 
 use apl_ast::{Expr, Function};
 use apl_call::value;
+use apl_ibeam::{argument, ibeam};
 use apl_prims::{Env, apply_dyadic, apply_monadic, axis_index, inner, outer, reduce, scan};
 use apl_value::{AplError, AplResult, Array, ErrorKind};
 use apl_workspace::Workspace;
@@ -11,6 +12,12 @@ use crate::eval::{eval_expr, eval_line};
 
 /// `f right`: the right argument is evaluated first, as on a terminal
 /// reading right to left; then the axis.
+///
+/// The I-beam is answered here rather than in `apl-prims`, because
+/// what it reports is the workspace's: its clock and its state
+/// indicator, innermost first, which is what `⌶26` and `⌶27` read.
+/// It is answered only when no bracket was written, since an axis on
+/// a glyph that takes none is a SYNTAX ERROR the dispatch reports.
 ///
 /// # Errors
 /// Evaluation errors, with the glyph's position as the caret.
@@ -27,6 +34,11 @@ pub fn eval_monadic(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
     let r = eval_expr(ws, right)?;
     if let Function::Defined(name) = func {
         return value(ws, name, *pos, (None, Some(r)), eval_line);
+    }
+    if *func == Function::Prim('⌶') && axis.is_none() {
+        let si = ws.si().iter().rev();
+        let lines: Vec<i64> = si.filter_map(|a| a.line.try_into().ok()).collect();
+        return ibeam(argument(&r)?, (ws.clock)(), ws.signed_on, &lines).map_err(|e| e.at(*pos));
     }
     let axis = axis.as_deref().map(|a| eval_expr(ws, a)).transpose()?;
     monadic(func, axis.as_ref(), &r, &mut ws.env).map_err(|e| e.at(*pos))

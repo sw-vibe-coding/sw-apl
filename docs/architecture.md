@@ -23,6 +23,7 @@ sw-apl/
                apl-workspace               symbol table, frames, env
                apl-call                    defined-function calls
                apl-quad                    reading a line mid-statement
+               apl-ibeam                   I-beam values and the clock
                apl-eval                    interpreter
     session/   apl-session                 system commands, del editor,
                                            workspace files, libraries
@@ -70,6 +71,10 @@ eval -> session -> web
   statement has already shown, so the prompt has to land after that
   and not before it. The workspace holds a `Console`, which is the
   seam the web build replaces.
+- `apl-ibeam` answers the I-beams, and owns the `Clock` the
+  workspace holds. A clear workspace has a clock that does not
+  move, so nothing reads the real world until a host installs one
+  that does, and a transcript made without a terminal reproduces.
 - `apl-quad` reads that line: quad evaluates the reply, quote-quad
   takes it as characters. Like `apl-call` it is handed `Run` rather
   than depending on the evaluator.

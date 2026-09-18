@@ -67,7 +67,9 @@ pub fn value(
 }
 
 /// Run the body of `defn` from line `from`, following its branches,
-/// for the activation at `at` on the stack. What a line displays joins
+/// for the activation at `at` on the stack. The line is recorded as
+/// it runs, not only when it fails: it is what `)SI` reports and what
+/// `⌶26` and `⌶27` read. What a line displays joins
 /// the pending output, so it reaches the terminal ahead of the result.
 ///
 /// # Errors
@@ -81,6 +83,7 @@ pub fn run_body(
 ) -> AplResult<()> {
     let mut line = from;
     while let Some(text) = defn.body.get(line - 1) {
+        ws.stop(at, line, false);
         let shown = run(ws, &without_label(text)).map_err(|e| halt(ws, e, defn, at, line))?;
         match shown {
             Output::Branch(Some(to)) => match usize::try_from(to) {

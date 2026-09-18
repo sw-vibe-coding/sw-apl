@@ -22,6 +22,11 @@ character matrix for the names, mixed output, and the conditional
 branch idiom driving two functions. Its transcript is reproducible
 because the random link starts from a fixed value.
 
+`58-ibeams.apl` shows the I-beam system functions. Three of them read
+the clock, so the transcript proves their values are sensible rather
+than printing them, and the STIR idiom at the end advances the random
+link from the clock without revealing what it rolled.
+
 `57-quad-input.apl` reads from its own script: quad evaluating a
 typed reply, quote-quad taking characters, and a prompt written with
 quote-quad that shares a line with its answer.

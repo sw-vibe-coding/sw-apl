@@ -2,7 +2,7 @@
 
 use apl_call::{clear, resume, suspend};
 use apl_editor::Definition;
-use apl_eval::{INDENT, Output, Workspace, eval_line, render_all};
+use apl_eval::{Console, INDENT, Output, Workspace, eval_line, render_all, system};
 use apl_value::AplResult;
 
 use crate::commands::{definition_line, open_definition, system_command};
@@ -29,6 +29,19 @@ pub struct Session {
 }
 
 impl Session {
+    /// A session attached to a terminal: statements read through
+    /// `console`, and the I-beams read the real clock rather than the
+    /// stopped one a bare workspace starts with. Sign-on is the
+    /// moment this is called, which is what `⌶24` reports.
+    #[must_use]
+    pub fn attached(console: Box<dyn Console>) -> Session {
+        let mut session = Session::default();
+        session.ws.console = console;
+        session.ws.clock = system;
+        session.ws.signed_on = system().now;
+        session
+    }
+
     /// The prompt for the next input line: six spaces in immediate
     /// execution, the bracketed line number in definition mode.
     #[must_use]
