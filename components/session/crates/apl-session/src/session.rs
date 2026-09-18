@@ -2,20 +2,11 @@
 
 use apl_call::{clear, resume, suspend};
 use apl_editor::Definition;
-use apl_eval::{Console, INDENT, Output, Workspace, eval_line, render_all, system};
+use apl_eval::{Console, INDENT, Output, Workspace, error_lines, eval_line, render_all, system};
 use apl_value::AplResult;
 
 use crate::commands::{definition_line, open_definition, system_command};
-use crate::render::error_lines;
-
-/// What the shell should do after handing a line to the session.
-#[derive(Debug, PartialEq, Eq)]
-pub enum Reply {
-    /// Print these lines (may be empty) and prompt again.
-    Output(Vec<String>),
-    /// End the session.
-    Off,
-}
+use crate::reply::Reply;
 
 /// An interactive APL session.
 #[derive(Debug, Default)]
@@ -95,6 +86,6 @@ impl Session {
             Ok(out) => render_all(&[out], self.ws.print).lines,
             Err(err) => error_lines(&err, line),
         });
-        Reply::Output(lines)
+        Reply::from(lines)
     }
 }

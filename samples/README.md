@@ -22,6 +22,10 @@ character matrix for the names, mixed output, and the conditional
 branch idiom driving two functions. Its transcript is reproducible
 because the random link starts from a fixed value.
 
+`59-sign-off.apl` is the sign-off `)OFF` prints. Its three values
+come from the clock, so the reg-rs filter keeps their shape and masks
+what they say.
+
 `58-ibeams.apl` shows the I-beam system functions, including the four
 that read the clock: it prints their values behind a `(VARIES)` label
 that the reg-rs preprocess filter masks, so the transcript shows what

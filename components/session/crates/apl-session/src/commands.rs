@@ -2,11 +2,12 @@
 //! system commands, and the lines that drive the del editor.
 
 use apl_editor::Definition;
+use apl_eval::error_lines;
 use apl_parse::parse_header;
 use apl_value::{AplError, ErrorKind};
 
-use crate::render::{error_lines, si_lines};
-use crate::session::{Reply, Session};
+use crate::reply::{Reply, si_lines, sign_off};
+use crate::session::Session;
 
 /// Run one system command (the text after the parenthesis).
 pub fn system_command(session: &mut Session, command: &str) -> Reply {
@@ -14,19 +15,19 @@ pub fn system_command(session: &mut Session, command: &str) -> Reply {
     let name = words.next().unwrap_or("").to_ascii_uppercase();
     let rest: Vec<&str> = words.collect();
     match (name.as_str(), rest.as_slice()) {
-        ("OFF", []) => return Reply::Off,
+        ("OFF", []) => return Reply::off(sign_off(&session.ws)),
         ("SI" | "SIV", []) => {
-            return Reply::Output(si_lines(session.ws.si(), name == "SIV"));
+            return Reply::from(si_lines(session.ws.si(), name == "SIV"));
         }
         (name, [value]) => {
             let reply = value.parse().ok().and_then(|n| setting(session, name, n));
             if let Some(reply) = reply {
-                return Reply::Output(vec![reply]);
+                return Reply::from(vec![reply]);
             }
         }
         _ => {}
     }
-    Reply::Output(vec!["INCORRECT COMMAND".to_string()])
+    Reply::from(vec!["INCORRECT COMMAND".to_string()])
 }
 
 /// A settings command: the new value takes effect and the reply names
@@ -63,11 +64,11 @@ pub fn open_definition(session: &mut Session, text: &str) -> Reply {
         }),
     };
     match opening {
-        Err(err) => return Reply::Output(error_lines(&err, &format!("∇{text}"))),
+        Err(err) => return Reply::from(error_lines(&err, &format!("∇{text}"))),
         Ok(defn) => session.defining = Some(Definition::start(defn)),
     }
     if rest.is_empty() {
-        return Reply::Output(Vec::new());
+        return Reply::default();
     }
     definition_line(session, &rest)
 }
@@ -80,7 +81,7 @@ pub fn definition_line(session: &mut Session, line: &str) -> Reply {
     };
     let step = match definition.line(line) {
         Ok(step) => step,
-        Err(err) => return Reply::Output(error_lines(&err, line)),
+        Err(err) => return Reply::from(error_lines(&err, line)),
     };
     if let Some(locked) = step.closed {
         let open = session.defining.take().expect("a definition is open");
@@ -90,5 +91,5 @@ pub fn definition_line(session: &mut Session, line: &str) -> Reply {
         }
         session.ws.define(defn);
     }
-    Reply::Output(step.lines)
+    Reply::from(step.lines)
 }

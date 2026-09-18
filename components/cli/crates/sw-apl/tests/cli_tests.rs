@@ -7,6 +7,16 @@ fn sw_apl() -> Command {
     Command::new(env!("CARGO_BIN_EXE_sw-apl"))
 }
 
+/// The transcript up to the sign-off `)OFF` prints, which carries the
+/// clock and so cannot be compared. `samples/59-sign-off.apl` pins
+/// the sign-off itself, through the reg-rs filter.
+fn before_sign_off(text: &str) -> String {
+    match text.find(")OFF\n") {
+        Some(at) => text[..at + 5].to_string(),
+        None => text.to_string(),
+    }
+}
+
 fn run_stdin(args: &[&str], input: &str) -> (String, i32) {
     let mut child = sw_apl()
         .args(args)
@@ -60,7 +70,8 @@ fn help_describes_apl_and_flags() {
 fn stdin_batch_echoes_with_indent_and_stops_at_off() {
     let (text, code) = run_stdin(&[], "2+2\n)OFF\n3+3\n");
     assert_eq!(code, 0);
-    assert_eq!(text, "      2+2\n4\n      )OFF\n");
+    assert_eq!(before_sign_off(&text), "      2+2\n4\n      )OFF\n");
+    assert!(!text.contains("3+3"), ")OFF stopped the run: {text}");
 }
 
 #[test]
@@ -78,7 +89,7 @@ fn file_batch_runs_a_sample() {
     let out = sw_apl().arg("-f").arg(&path).output().expect("run");
     let text = String::from_utf8_lossy(&out.stdout);
     assert_eq!(
-        text,
+        before_sign_off(&text),
         "      \u{235D} comment\n      1 2 3\n1 2 3\n      )OFF\n"
     );
     let _ = std::fs::remove_dir_all(dir);
@@ -108,7 +119,7 @@ fn invalid_utf8_lines_report_a_character_error_and_continue() {
     assert!(out.status.success());
     let text = String::from_utf8_lossy(&out.stdout);
     assert_eq!(
-        text,
+        before_sign_off(&text),
         "      1 2\n1 2\n      3 \u{fffd}\u{fffd} 4\nCHARACTER ERROR: invalid UTF-8 at byte 2\n      5\n5\n      )OFF\n"
     );
     let _ = std::fs::remove_dir_all(dir);
@@ -128,7 +139,7 @@ fn batch_echoes_definition_lines_behind_the_bracketed_prompt() {
         "      )OFF",
         "",
     ];
-    assert_eq!(text, want.join("\n"));
+    assert_eq!(before_sign_off(&text), want.join("\n"));
 }
 
 #[test]
@@ -147,7 +158,7 @@ fn batch_feeds_a_read_from_the_script_and_carries_on_after_it() {
         "      )OFF",
         "",
     ];
-    assert_eq!(text, want.join("\n"));
+    assert_eq!(before_sign_off(&text), want.join("\n"));
 }
 
 #[test]

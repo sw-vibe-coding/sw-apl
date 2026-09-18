@@ -81,6 +81,11 @@ The I-beam system functions report the time of day, the processor
 time used, the space available, the terminals connected, the sign-on
 time, the date, the line now executing, and the state indicator.
 
+`)OFF` signs off the APL\360 way, with the time, the connect time and
+the processor time. Ctrl-C stops a running function: it reports
+INTERRUPT, names the line it stopped on, and leaves the function
+suspended for `)SI` to show and a branch to take up again.
+
 Not there yet: workspaces (`)SAVE`, `)LOAD`) and domino. A
 glyph from a later APL is a CHARACTER ERROR that names it, so the
 Dyalog Life one-liner answers "dfn brace, not APL\360". See the

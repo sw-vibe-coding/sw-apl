@@ -108,8 +108,10 @@ more input to take is INTERRUPT.
 ## System commands
 
 Recognised when the first non-blank character is a right
-parenthesis. Names are case-insensitive. Unknown commands report
-INCORRECT COMMAND.
+parenthesis. Names are case-insensitive. Unknown commands, and
+known ones given an argument they do not take, report INCORRECT
+COMMAND. The tables below say what each command means in
+APL\360; `parity.md` says which of them sw-apl answers yet.
 
 Workspace control:
 
@@ -205,10 +207,41 @@ function per documented function.
   again with up arrow and enter); the history persists in
   `~/.sw-apl_history` across sessions.
 - Interrupt (Ctrl-C) during a running statement reports INTERRUPT
-  and returns to the prompt with the state indicator preserved.
-- Ctrl-D at the prompt behaves like `)OFF`.
+  and returns to the prompt. The function it stopped is suspended
+  like any other failure, so `)SI` shows where it stopped and a
+  branch takes it up again:
+
+```
+      SPIN
+INTERRUPT
+SPIN[4]  R←R+I
+         ^
+      )SI
+SPIN[4]*
+```
+
+  A body is read between its lines, so a statement that has not
+  finished a line of its own -- a long reduction over a large
+  array -- cannot yet be stopped. At a prompt Ctrl-C cancels the
+  line, as it always did: the line editor holds the terminal then,
+  and no interrupt is sent.
+- Ctrl-D at the prompt signs off, as `)OFF` does.
 
 ## Sign-off
 
-`)OFF` prints the APL\360 style sign-off line with connect time
-and CPU time, then exits with status 0.
+`)OFF` signs off and exits with status 0: the time and date the
+session ended, then how long it was connected and how much
+processor time it used.
+
+```
+      )OFF
+20.11.38 09/17/26
+CONNECTED 0.05.12
+CPU TIME 0.00.03
+```
+
+Durations read as hours, minutes and seconds. APL\360 also named
+the port and the user and carried totals to date; sw-apl has no
+accounts and keeps no such records, so it does not.
+
+Ctrl-D at the prompt signs off the same way.

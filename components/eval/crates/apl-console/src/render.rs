@@ -1,8 +1,9 @@
 //! Turning what a statement produced into transcript lines.
 
 use apl_display::format_array;
-use apl_value::Array;
+use apl_value::{AplError, Array};
 
+use crate::console::INDENT;
 use crate::output::{Output, Print, Shown};
 
 /// One statement's output as transcript lines.
@@ -54,4 +55,26 @@ fn mixed_lines(parts: &[Array], print: Print) -> Vec<String> {
         return vec![blocks.iter().map(|b| b[0].as_str()).collect()];
     }
     blocks.concat()
+}
+
+/// APL\360 error display: the error's name, the statement it came
+/// from, and a caret under the point of detection. A statement inside
+/// a defined function is headed by the function and the line instead
+/// of the six-space indent.
+#[must_use]
+pub fn error_lines(err: &AplError, line: &str) -> Vec<String> {
+    let caret = err.caret.unwrap_or(0);
+    let (head, statement) = match &err.context {
+        Some(context) => (
+            format!("{}[{}]  ", context.function, context.line),
+            context.statement.as_str(),
+        ),
+        None => (INDENT.to_string(), line),
+    };
+    let indent = " ".repeat(head.chars().count() + caret);
+    vec![
+        err.kind.to_string(),
+        format!("{head}{statement}"),
+        format!("{indent}^"),
+    ]
 }

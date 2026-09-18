@@ -32,6 +32,18 @@
 #   reg-rs create -t apl-sample-NAME -c '...' \
 #                 -P 'bash scripts/normalize-apl-output.sh'
 
+# The sign-off `)OFF` prints is the one varying output a sample cannot
+# label, because the session writes it rather than the program. Its
+# shape is kept and its values are masked, so a change to the format
+# still fails while the clock moving does not.
+#
+#     20.01.12 09/17/26   ->   H.MM.SS MM/DD/YY
+#     CONNECTED 0.00.07   ->   CONNECTED H.MM.SS
+#     CPU TIME 0.00.01    ->   CPU TIME H.MM.SS
+
 set -euo pipefail
 
-sed -E -e 's/^([A-Z][A-Z0-9 ,.-]*\(VARIES\): ).*/\1.../'
+sed -E \
+    -e 's/^([A-Z][A-Z0-9 ,.-]*\(VARIES\): ).*/\1.../' \
+    -e 's/^[0-9]+\.[0-9]{2}\.[0-9]{2} [0-9]{2}\/[0-9]{2}\/[0-9]{2}$/H.MM.SS MM\/DD\/YY/' \
+    -e 's/^(CONNECTED|CPU TIME) [0-9]+\.[0-9]{2}\.[0-9]{2}$/\1 H.MM.SS/'

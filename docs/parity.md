@@ -52,8 +52,10 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | Dynamic scoping, recursion | done | eval tests, samples 53, 54. A recursion with no branch to stop it reaches DEPTH ERROR |
 | State indicator: suspension, pendent callers, resumption with `→`n, clearing with a bare `→` | done | call/session tests, sample 56 |
 | Suspending a call written inside a larger expression | todo | sw-apl unwinds it instead, since it cannot take up a half-evaluated expression; the error still names the function and line |
-| Six-space prompt, batch echo, `)OFF` | done | cli tests |
-| Line editing with history (up arrow), Ctrl-C cancels, Ctrl-D ends | done | manual (rustyline); tape |
+| Six-space prompt, batch echo | done | cli tests |
+| `)OFF` sign-off: time and date, connect time, processor time | done | session tests, sample 59 |
+| Line editing with history (up arrow), Ctrl-C cancels a line, Ctrl-D signs off | done | manual (rustyline); tape |
+| Interrupt a running statement: INTERRUPT, suspended, state indicator kept | done | call tests; a body is read between its lines, so one long line cannot yet be stopped |
 | Error display: name, statement, caret | done | session tests |
 | Error display inside functions: `FN[n]` heading the statement, caret aligned under it | done | session tests, sample 56 |
 | `)WIDTH` wrapping with six-space continuation | done | display tests, sample 45 |
@@ -150,7 +152,7 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | SYNTAX, VALUE, DOMAIN, RANK, LENGTH | done | done |
 | CHARACTER (with code point) | done | done |
 | INDEX, DEFN, DEPTH | done | done |
-| INTERRUPT when a read finds no more input | done | eval/cli tests |
-| WS FULL, INTERRUPT from the keyboard | todo | done |
+| INTERRUPT when a read finds no more input, and from the keyboard | done | eval/cli/call tests |
+| WS FULL | todo | done |
 | A monadic-only primitive used dyadically (`1~0`, `1⍋2`) | todo | answers NOT IMPLEMENTED; APL\360 has no such form, so it should be a SYNTAX ERROR |
 | NOT IMPLEMENTED (temporary, must reach zero) | in use | done |

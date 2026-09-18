@@ -9,4 +9,4 @@ mod clock;
 mod ibeam;
 
 pub use clock::{Clock, Time, stopped, system};
-pub use ibeam::{argument, ibeam};
+pub use ibeam::{argument, hms, ibeam};

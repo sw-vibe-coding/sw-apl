@@ -13,4 +13,4 @@ mod render;
 
 pub use console::{Console, INDENT, Transcript};
 pub use output::{Output, Print, Shown};
-pub use render::{render, render_all};
+pub use render::{error_lines, render, render_all};

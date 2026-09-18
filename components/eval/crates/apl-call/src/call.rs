@@ -2,9 +2,10 @@
 
 use apl_ast::Defn;
 use apl_scan::without_label;
-use apl_value::{AplError, AplResult, Array, Context, ErrorKind};
+use apl_value::{AplError, AplResult, Array, ErrorKind};
 use apl_workspace::{Output, Workspace};
 
+use crate::branch::{halt, interrupted};
 use crate::stack::bind;
 
 /// How to evaluate one body line. The evaluator passes its own
@@ -73,7 +74,8 @@ pub fn value(
 /// the pending output, so it reaches the terminal ahead of the result.
 ///
 /// # Errors
-/// Whatever a line raises, after stopping the activation on it.
+/// Whatever a line raises, after stopping the activation on it, and
+/// INTERRUPT when a stop was asked for between two of them.
 pub fn run_body(
     ws: &mut Workspace,
     defn: &Defn,
@@ -84,35 +86,31 @@ pub fn run_body(
     let mut line = from;
     while let Some(text) = defn.body.get(line - 1) {
         ws.stop(at, line, false);
-        let shown = run(ws, &without_label(text)).map_err(|e| halt(ws, e, defn, at, line))?;
-        match shown {
-            Output::Branch(Some(to)) => match usize::try_from(to) {
-                Ok(n) if (1..=defn.body.len()).contains(&n) => line = n,
-                _ => return Ok(()),
-            },
-            Output::Nothing | Output::Branch(None) => line += 1,
-            shown => {
-                ws.output.push(shown);
-                line += 1;
-            }
-        }
+        let stopped = interrupted().then(|| AplError::new(ErrorKind::Interrupt));
+        let shown = stopped.map_or_else(|| run(ws, &without_label(text)), Err);
+        let shown = shown.map_err(|e| halt(ws, e, defn, at, line))?;
+        let Some(next) = advance(ws, shown, line, defn.body.len()) else {
+            return Ok(());
+        };
+        line = next;
     }
     Ok(())
 }
 
-/// Stop activation `at` on the line that failed, and, for the
-/// function the error came from, record that line as the error's own.
-/// Which activation is the suspended one is settled when the error
-/// reaches the terminal, since a call inside an expression unwinds on
-/// the way out and may take the innermost one with it.
-fn halt(ws: &mut Workspace, mut err: AplError, defn: &Defn, at: usize, line: usize) -> AplError {
-    if err.context.is_none() {
-        err.context = Some(Context {
-            function: defn.name.clone(),
-            line,
-            statement: defn.body[line - 1].clone(),
-        });
+/// Where the line counter goes after a line has run: a branch moves
+/// it, and anything else is shown and followed by the next line.
+/// `None` returns from the body, which is what a branch to a line the
+/// function does not have means.
+fn advance(ws: &mut Workspace, shown: Output, line: usize, last: usize) -> Option<usize> {
+    match shown {
+        Output::Branch(Some(to)) => match usize::try_from(to) {
+            Ok(n) if (1..=last).contains(&n) => Some(n),
+            _ => None,
+        },
+        Output::Nothing | Output::Branch(None) => Some(line + 1),
+        shown => {
+            ws.output.push(shown);
+            Some(line + 1)
+        }
     }
-    ws.stop(at, line, false);
-    err
 }

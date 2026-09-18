@@ -93,3 +93,18 @@ fn the_system_clock_reports_a_plausible_day() {
     // The same day, read twice, is the same day.
     assert_eq!(system().date, time.date);
 }
+
+#[test]
+fn a_duration_prints_as_hours_minutes_and_seconds() {
+    assert_eq!(apl_ibeam::hms(0), "0.00.00");
+    assert_eq!(apl_ibeam::hms(60), "0.00.01");
+    assert_eq!(apl_ibeam::hms(60 * 59), "0.00.59");
+    assert_eq!(apl_ibeam::hms(60 * 60), "0.01.00");
+    assert_eq!(apl_ibeam::hms(60 * 3600), "1.00.00");
+    assert_eq!(
+        apl_ibeam::hms(60 * ((12 * 3600) + (34 * 60) + 56)),
+        "12.34.56"
+    );
+    // A clock that has not been set cannot make a negative duration.
+    assert_eq!(apl_ibeam::hms(-1), "0.00.00");
+}

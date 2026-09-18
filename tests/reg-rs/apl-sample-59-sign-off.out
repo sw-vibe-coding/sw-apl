@@ -1,0 +1,14 @@
+      ⍝ Signing off. )OFF prints the APL\360 sign-off: the time and date the
+      ⍝ session ended, then how long it was connected and how much processor
+      ⍝ time it used. All three come from the clock, so the reg-rs filter
+      ⍝ masks their values and keeps their shape; see docs/testing.md.
+      ⍝ APL\360 also named the port and the user and carried totals to date.
+      ⍝ sw-apl has no accounts and keeps no such records, so it does not.
+      'THE SESSION DID SOME WORK'
+THE SESSION DID SOME WORK
+      +/⍳100
+5050
+      )OFF
+20.05.41 09/17/26
+CONNECTED 0.00.00
+CPU TIME 0.00.00

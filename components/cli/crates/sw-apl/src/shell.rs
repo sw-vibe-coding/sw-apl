@@ -8,13 +8,14 @@
 //! after whatever it consumed.
 
 use std::cell::RefCell;
-use std::collections::VecDeque;
 use std::fs;
 use std::io::{self, Read, Write};
 use std::path::Path;
 use std::rc::Rc;
 
-use apl_session::{Console, INDENT, Reply, Session, Shown};
+use crate::host::{Pending, Script, catch_interrupt};
+
+use apl_session::{Reply, Session};
 
 /// One input line: its text (lossy when invalid) and, when the bytes
 /// were not valid UTF-8, the offset of the first bad sequence.
@@ -22,39 +23,6 @@ use apl_session::{Console, INDENT, Reply, Session, Shown};
 pub struct Line {
     pub text: String,
     pub bad_at: Option<usize>,
-}
-
-/// The lines not yet run, shared between the run and the console so a
-/// read and the loop draw from the same place.
-type Pending = Rc<RefCell<VecDeque<Line>>>;
-
-/// The console a batch run reads through: it prints as it goes and
-/// takes a line from the script when a statement asks for one, with
-/// the flag saying whether input lines are echoed.
-#[derive(Debug)]
-struct Script(Pending, bool);
-
-impl Console for Script {
-    fn read(&mut self, shown: &Shown, prompt: &str) -> Option<String> {
-        let (lines, open) = shown.split();
-        for line in lines {
-            println!("{line}");
-        }
-        if let Some(open) = open {
-            print!("{open}");
-        }
-        if !prompt.is_empty() {
-            println!("{prompt}");
-        }
-        let typed = self.0.borrow_mut().pop_front()?.text;
-        match (self.1, open.is_some() && prompt.is_empty()) {
-            (true, true) => println!("{typed}"),
-            (true, false) => println!("{INDENT}{typed}"),
-            (false, true) => println!(),
-            (false, false) => {}
-        }
-        Some(typed)
-    }
 }
 
 /// Split a byte stream into lines (LF or CRLF), decoding each. A
@@ -87,6 +55,7 @@ pub fn run_batch(path: Option<&Path>, echo: bool) -> io::Result<()> {
     }
     let pending: Pending = Rc::new(RefCell::new(lines(&bytes).into()));
     let mut session = Session::attached(Box::new(Script(Rc::clone(&pending), echo)));
+    catch_interrupt();
     run_lines(&mut session, &pending, echo);
     io::stdout().flush()
 }
@@ -104,12 +73,14 @@ fn run_lines(session: &mut Session, pending: &Pending, echo: bool) {
             println!("{}{}", session.prompt(), line.text);
         }
         let reply = match line.bad_at {
-            Some(at) => Reply::Output(vec![format!("CHARACTER ERROR: invalid UTF-8 at byte {at}")]),
+            Some(at) => Reply::from(vec![format!("CHARACTER ERROR: invalid UTF-8 at byte {at}")]),
             None => session.respond(&line.text),
         };
-        let Reply::Output(output) = reply else { break };
-        for text in &output {
+        for text in &reply.lines {
             println!("{text}");
+        }
+        if reply.off {
+            break;
         }
     }
 }

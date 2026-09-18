@@ -11,32 +11,11 @@ use std::io;
 use std::path::PathBuf;
 use std::rc::Rc;
 
-use apl_session::{Console, INDENT, Reply, Session, Shown};
+use apl_session::Session;
 use rustyline::error::ReadlineError;
 use rustyline::{DefaultEditor, Result as LineResult};
 
-/// The line editor, shared between the loop and the console so a read
-/// part way through a statement uses the same history.
-type Editor = Rc<RefCell<DefaultEditor>>;
-
-/// The console the interactive session reads through, over the same
-/// editor the loop uses.
-#[derive(Debug)]
-struct Terminal(Editor);
-
-impl Console for Terminal {
-    fn read(&mut self, shown: &Shown, prompt: &str) -> Option<String> {
-        let (lines, open) = shown.split();
-        for line in lines {
-            println!("{line}");
-        }
-        if !prompt.is_empty() {
-            println!("{prompt}");
-        }
-        let at = open.unwrap_or(INDENT);
-        read_line(&mut self.0.borrow_mut(), at).ok().flatten()
-    }
-}
+use crate::host::{Editor, Terminal, catch_interrupt};
 
 /// Run the interactive loop until `)OFF` or end of input.
 ///
@@ -50,26 +29,39 @@ pub fn run_interactive() -> io::Result<()> {
         let _ = editor.borrow_mut().load_history(path);
     }
     let mut session = Session::attached(Box::new(Terminal(Rc::clone(&editor))));
-    loop {
-        let prompt = session.prompt();
-        match read_line(&mut editor.borrow_mut(), &prompt) {
-            Ok(Some(line)) => match session.respond(&line) {
-                Reply::Off => break,
-                Reply::Output(output) => output.iter().for_each(|t| println!("{t}")),
-            },
-            Ok(None) => break,
-            Err(err) => return Err(io::Error::other(err)),
-        }
-    }
+    catch_interrupt();
+    prompt_loop(&mut session, &editor)?;
     if let Some(path) = &history {
         let _ = editor.borrow_mut().save_history(path);
     }
     Ok(())
 }
 
+/// Prompt and answer until `)OFF` or end of input.
+fn prompt_loop(session: &mut Session, editor: &Editor) -> io::Result<()> {
+    loop {
+        let prompt = session.prompt();
+        // End of input is Ctrl-D, which signs off as `)OFF` does. It
+        // ends the loop either way: in definition mode `)OFF` is a
+        // body line, and there would be nothing left to close it.
+        let read = match read_line(&mut editor.borrow_mut(), &prompt) {
+            Ok(read) => read,
+            Err(err) => return Err(io::Error::other(err)),
+        };
+        let ending = read.is_none();
+        let reply = session.respond(&read.unwrap_or_else(|| ")OFF".to_string()));
+        for text in &reply.lines {
+            println!("{text}");
+        }
+        if reply.off || ending {
+            return Ok(());
+        }
+    }
+}
+
 /// One edited line; `None` at end of input. A cancelled line (Ctrl-C)
 /// is skipped and the prompt shown again.
-fn read_line(editor: &mut DefaultEditor, prompt: &str) -> LineResult<Option<String>> {
+pub fn read_line(editor: &mut DefaultEditor, prompt: &str) -> LineResult<Option<String>> {
     loop {
         match editor.readline(prompt) {
             Ok(line) => {

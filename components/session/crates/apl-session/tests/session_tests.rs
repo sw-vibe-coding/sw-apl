@@ -1,12 +1,11 @@
 //! The session turns one input line into transcript lines.
 
-use apl_session::{Reply, Session};
+use apl_session::Session;
 
 fn out(s: &mut Session, line: &str) -> Vec<String> {
-    match s.respond(line) {
-        Reply::Output(v) => v,
-        Reply::Off => panic!("unexpected )OFF"),
-    }
+    let reply = s.respond(line);
+    assert!(!reply.off, "unexpected )OFF");
+    reply.lines
 }
 
 #[test]
@@ -55,8 +54,14 @@ fn errors_print_name_statement_and_caret() {
 #[test]
 fn system_commands() {
     let mut s = Session::default();
-    assert_eq!(s.respond(")OFF"), Reply::Off);
-    assert_eq!(s.respond("  )off"), Reply::Off);
+    // )OFF ends the session and signs off: the time and date, then how
+    // long it was connected and what processor time it used.
+    let reply = s.respond(")OFF");
+    assert!(reply.off);
+    assert_eq!(reply.lines.len(), 3);
+    assert!(reply.lines[1].starts_with("CONNECTED "), "{reply:?}");
+    assert!(reply.lines[2].starts_with("CPU TIME "), "{reply:?}");
+    assert!(s.respond("  )off").off, "the name is not case sensitive");
     assert_eq!(out(&mut s, ")FOO"), vec!["INCORRECT COMMAND"]);
 }
 

@@ -11,18 +11,18 @@
       ⍝ Time of day and sign-on time, in sixtieths of a second since
       ⍝ midnight; processor time used so far, in the same units.
       'TIME OF DAY (VARIES): ';⌶20
-TIME OF DAY (VARIES): 4269804
+TIME OF DAY (VARIES): 4340465
       'CPU TIME (VARIES): ';⌶21
 CPU TIME (VARIES): 0
       'SIGNED ON (VARIES): ';⌶24
-SIGNED ON (VARIES): 4269804
+SIGNED ON (VARIES): 4340465
       ⍝ Today's date as MMDDYY.
       'DATE (VARIES): ';⌶25
 DATE (VARIES): 91726
       ⍝ Sixtieths divide into seconds, and seconds into hours, like any
       ⍝ other number: an I-beam is a function, not a special form.
       'HOUR (VARIES): ';⌊(⌶20)÷60×60×60
-HOUR (VARIES): 19
+HOUR (VARIES): 20
       ⍝ 26 is the line now executing and 27 is every line in the state
       ⍝ indicator, innermost first. Neither moves with the clock, so both
       ⍝ are shown outright. In immediate execution there is no line.
@@ -54,10 +54,13 @@ HOUR (VARIES): 19
       STIR
       X←?5⍴10
       'DEAL (VARIES): ';X
-DEAL (VARIES): 1 7 5 8 10
+DEAL (VARIES): 7 7 10 4 6
       ⍝ Whatever X holds, it is five numbers between 1 and 10.
       ⍴X
 5
       ∧/(X≥1)∧X≤10
 1
       )OFF
+20.05.41 09/17/26
+CONNECTED 0.00.00
+CPU TIME 0.00.00

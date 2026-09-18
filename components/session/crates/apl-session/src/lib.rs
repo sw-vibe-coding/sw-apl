@@ -3,8 +3,9 @@
 //! settings; knows nothing about terminals.
 
 mod commands;
-mod render;
+mod reply;
 mod session;
 
 pub use apl_eval::{Console, INDENT, Shown, system};
-pub use session::{Reply, Session};
+pub use reply::Reply;
+pub use session::Session;
