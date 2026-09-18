@@ -236,6 +236,8 @@ displaying it is DEFN ERROR. Nothing unlocks it.
 
 ## DESCRIBE convention
 
+`workspaces.md` is the guide; this is the summary.
+
 Every workspace shipped in `ws/lib1/` defines a niladic function
 DESCRIBE that prints a short description of the workspace, the
 main functions, and how to start. After `)LOAD`, when DESCRIBE
