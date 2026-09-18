@@ -1,0 +1,11 @@
+{
+  "task_type": "rust-interpreter",
+  "state": {
+    "number": 10,
+    "step": "cli-tests-to-reg"
+  },
+  "action": "Read the moved tests one at a time and asked of each whether it tested the binary or a library, rather than translating mechanically; hit two reg-rs argument-parsing refusals and wrote both into the docs instead of only working around them; expressed the two property tests as commands whose output is their own verdict, which the step had offered as one of two options; demonstrated the moved tests still catch a regression by breaking the help text and watching the right test fail.",
+  "result": "success",
+  "reward": 1,
+  "timestamp": "2026-09-17T20:35:35"
+}
