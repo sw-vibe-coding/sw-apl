@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-17
 
+- chore(agentrail): complete 006-library-workspaces; advance to 007-locked-workspace-file
+- feat(library): ship library 1, and a --library option to find it
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 005-system-commands-inquiry; advance to 006-library-workspaces
 - feat(session): )FNS )VARS )GRPS )GRP )GROUP )ERASE )SYMBOLS
 - docs(changes): refresh CHANGES.md to HEAD
