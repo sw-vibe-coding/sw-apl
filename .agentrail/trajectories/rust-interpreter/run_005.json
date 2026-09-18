@@ -1,0 +1,11 @@
+{
+  "task_type": "rust-interpreter",
+  "state": {
+    "number": 5,
+    "step": "quad-input"
+  },
+  "action": "Weighed four designs for the mid-statement read before writing any code and picked the one that puts the prompt in the right place; built the new crates bottom up with tests at each layer; ran the gates in order after every change and let sw-checklist drive three refactors (a new crate, a tuple struct to dodge a struct-literal expansion, and splitting the batch runner); verified the sample by running it, which is what exposed the borrow bug; corrected two of my own test expectations where the new behaviour was more faithful than what I had written.",
+  "result": "success",
+  "reward": 1,
+  "timestamp": "2026-09-17T19:15:13"
+}
