@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-17
 
+- chore(agentrail): complete 006-i-beams; advance to 007-session-polish
+- feat(eval): the I-beam system functions
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 005-quad-input; advance to 006-i-beams
 - feat(eval): quad and quote-quad input
 - docs(changes): refresh CHANGES.md to HEAD
