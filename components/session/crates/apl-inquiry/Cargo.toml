@@ -1,6 +1,6 @@
 [package]
-name = "apl-commands"
-description = "sw-apl system commands: the lines that begin with a parenthesis"
+name = "apl-inquiry"
+description = "sw-apl inquiry commands: listing names, groups, erasing"
 edition.workspace = true
 license.workspace = true
 version.workspace = true
@@ -9,9 +9,7 @@ repository.workspace = true
 
 [dependencies]
 apl-eval = { path = "../../../eval/crates/apl-eval" }
-apl-inquiry = { path = "../apl-inquiry" }
 apl-value = { path = "../../../value/crates/apl-value" }
-apl-wsfile = { path = "../../../eval/crates/apl-wsfile" }
 
 [lints]
 workspace = true

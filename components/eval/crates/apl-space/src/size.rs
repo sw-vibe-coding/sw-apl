@@ -30,6 +30,11 @@ pub type Vars = HashMap<String, Array>;
 /// The names holding a defined function.
 pub type Funcs = HashMap<String, Rc<Defn>>;
 
+/// The names holding a group: a name standing for a list of names.
+/// A member need not exist, which is why this holds names and not
+/// references to anything.
+pub type Groups = HashMap<String, Vec<String>>;
+
 /// What a value costs: its descriptor, one entry per axis, and its
 /// elements. An empty array still costs the first two.
 #[must_use]
@@ -64,8 +69,15 @@ pub fn of_function(defn: &Defn) -> usize {
 /// out of scope, a rename, a clear -- and one forgotten place is a
 /// workspace that fills up and never empties.
 #[must_use]
-pub fn used(vars: &Vars, funcs: &Funcs) -> usize {
+pub fn used(vars: &Vars, funcs: &Funcs, groups: &Groups) -> usize {
     let held: usize = vars.iter().map(|(n, v)| of_name(n) + of_value(v)).sum();
     let defined: usize = funcs.iter().map(|(n, f)| of_name(n) + of_function(f)).sum();
-    held + defined
+    // A group is its own name and the names it lists. The members
+    // are names, not referents: a member that holds nothing still
+    // costs the entry that records it.
+    let gathered: usize = groups
+        .iter()
+        .map(|(n, m)| of_name(n) + m.iter().map(|x| of_name(x)).sum::<usize>())
+        .sum();
+    held + defined + gathered
 }

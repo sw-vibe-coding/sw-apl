@@ -15,6 +15,7 @@ says which of them sw-apl answers yet. This is the guide.
 | In the workspace | Not in the workspace |
 |---|---|
 | Variables and defined functions | The console it reads and writes through |
+| Groups, which gather names under a name | The size `--ws-size` gives it |
 | The index origin, print precision, print width | The clock the I-beams read |
 | The random link | The sign-on time `⌶24` reports |
 | The name `)WSID` reports | Whatever the current line has displayed |
@@ -51,7 +52,7 @@ under, and says so rather than inventing something:
       )CLEAR
 CLEAR WS
       )SAVE
-NOT SAVED: THIS WS IS CLEAR WS
+NOT SAVED, THIS WS IS CLEAR WS
 ```
 
 ## Libraries
@@ -94,6 +95,10 @@ sw-apl -f work/CLASS.apl.ws
 A workspace file is a sample and a sample is a workspace. That is
 deliberate: it keeps the format honest, and it means you can read,
 diff and edit a saved workspace with ordinary tools.
+
+Groups are written after the functions, as the `)GROUP` commands
+that would gather them again. A group is only names, so it does not
+matter whether what it names has been written yet.
 
 Lines beginning `⍝!` are comments to APL and instructions to `)LOAD`.
 There are two, for the things APL has no way of saying about itself:
@@ -197,6 +202,10 @@ They are different, and the difference matters:
   for, and the result can be wrong without being an error.
 - **`)PCOPY`** is `)COPY` that will not overwrite a name you already
   have.
+
+Copying a **group** by name brings the group and the objects its
+members name -- that is what a group is for. `session.md` has the
+group rules.
 
 `index-origin-considerations.md` is the long version of why that
 matters, and how APL\360 programmers lived with it.

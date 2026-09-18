@@ -8,7 +8,7 @@ use std::path::PathBuf;
 use apl_console::{Console, Output, Print, Shown, Transcript, render_all};
 use apl_ibeam::{Clock, stopped};
 use apl_prims::Env;
-use apl_space::{Funcs, Vars, of_value, room, used};
+use apl_space::{Funcs, Groups, Vars, of_value, room, used};
 use apl_value::{AplResult, Array};
 
 use crate::frame::Activation;
@@ -36,6 +36,10 @@ pub struct Saved {
     pub vars: Vars,
     /// Names that hold a defined function.
     pub funcs: Funcs,
+    /// Names that stand for a list of other names. A group is a
+    /// handle for copying or erasing several things at once; its
+    /// members need not exist, so this holds names, not referents.
+    pub groups: Groups,
     /// The activation stack: running and stopped calls, outermost
     /// first. It is the state indicator.
     pub stack: Vec<Activation>,
@@ -117,7 +121,7 @@ impl Workspace {
     /// WS FULL when the value does not fit in what the quota leaves.
     pub fn set(&mut self, name: &str, value: Array) -> AplResult<()> {
         let freed = self.saved.vars.get(name).map_or(0, of_value);
-        let held = used(&self.saved.vars, &self.saved.funcs);
+        let held = used(&self.saved.vars, &self.saved.funcs, &self.saved.groups);
         room(self.quota, held, of_value(&value), freed)?;
         self.saved.vars.insert(name.to_string(), value);
         Ok(())

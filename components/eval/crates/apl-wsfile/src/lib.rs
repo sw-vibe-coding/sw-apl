@@ -15,6 +15,6 @@ mod groups;
 mod literal;
 mod write;
 
-pub use groups::definitions;
+pub use groups::{definitions, expand};
 pub use literal::literal;
 pub use write::{DIRECTIVE, write};

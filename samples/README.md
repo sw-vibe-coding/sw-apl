@@ -22,6 +22,12 @@ character matrix for the names, mixed output, and the conditional
 branch idiom driving two functions. Its transcript is reproducible
 because the random link starts from a fixed value.
 
+`63-names-and-groups.apl` lists what a workspace holds with `)FNS`
+and `)VARS`, shows that `)VARS` reports globals even while a call's
+locals are in scope, gathers names into a group and erases them
+through it, and shows the one thing `)ERASE` will not take: a
+function the state indicator is still holding.
+
 `62-workspace-space.apl` shows how much room a workspace has: what a
 name, a value, a character and a defined function each cost, what is
 given back when a name is reassigned or the workspace cleared, and

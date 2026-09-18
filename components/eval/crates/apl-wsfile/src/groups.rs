@@ -21,11 +21,34 @@ pub fn definitions(text: &str) -> Vec<(String, Vec<String>)> {
         } else if let Some(header) = line.strip_prefix('∇') {
             groups.push((function_name(header), vec![line.to_string()]));
             open = true;
+        } else if let Some(rest) = line.strip_prefix(")GROUP ") {
+            let name = rest.split_whitespace().next().unwrap_or_default();
+            groups.push((name.to_string(), vec![line.to_string()]));
         } else if let Some((name, _)) = line.split_once('←') {
             groups.push((name.trim().to_string(), vec![line.to_string()]));
         }
     }
     groups
+}
+
+/// The names to copy, with the members of any group among them
+/// added. Copying a group brings what it gathers -- that is what a
+/// group is for -- and the file's own `)GROUP` line is where its
+/// members are written down.
+#[must_use]
+pub fn expand(text: &str, wanted: &[&str]) -> Vec<String> {
+    let mut names: Vec<String> = wanted.iter().map(|n| (*n).to_string()).collect();
+    for line in text.lines() {
+        let Some(rest) = line.strip_prefix(")GROUP ") else {
+            continue;
+        };
+        let mut words = rest.split_whitespace();
+        let group = words.next().unwrap_or_default();
+        if names.iter().any(|n| n == group) {
+            names.extend(words.map(String::from));
+        }
+    }
+    names
 }
 
 /// The name a del header defines: the one before the right argument,

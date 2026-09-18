@@ -33,6 +33,7 @@ name = "apl-commands"
 version = "0.1.0"
 dependencies = [
  "apl-eval",
+ "apl-inquiry",
  "apl-value",
  "apl-wsfile",
 ]
@@ -90,6 +91,14 @@ dependencies = [
  "apl-value",
  "chrono",
  "libc",
+]
+
+[[package]]
+name = "apl-inquiry"
+version = "0.1.0"
+dependencies = [
+ "apl-eval",
+ "apl-value",
 ]
 
 [[package]]

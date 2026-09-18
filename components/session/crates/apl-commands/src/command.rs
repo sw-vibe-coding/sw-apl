@@ -1,6 +1,7 @@
 //! Which command, and what it replies.
 
-use apl_eval::{Activation, Saved, Workspace, hms};
+use apl_eval::{Saved, Workspace, hms};
+use apl_inquiry::command as inquiry;
 
 use crate::load::{copy, lib, load};
 use crate::save::{drop_workspace, moment, save};
@@ -33,23 +34,35 @@ pub fn system_command(ws: &mut Workspace, command: &str) -> Answer {
     let rest: Vec<&str> = words.collect();
     // )OFF signs off, and )CONTINUE saves the workspace first.
     let off = matches!((name.as_str(), rest.as_slice()), ("OFF" | "CONTINUE", []));
-    let mut lines = match (name.as_str(), rest.as_slice()) {
+    let lines = match (name.as_str(), rest.as_slice()) {
         ("OFF", []) => Vec::new(),
         ("CONTINUE", []) => save(ws, Some("CONTINUE")),
-        ("SI" | "SIV", []) => si_lines(ws.si(), name == "SIV"),
         ("SAVE", []) => save(ws, None),
         ("SAVE", [id]) => save(ws, Some(id)),
         ("LOAD", _) => return load(ws, &rest),
         ("DROP", _) => drop_workspace(ws, &rest),
         ("LIB", _) => lib(ws, &rest),
         ("COPY" | "PCOPY", _) => return copy(ws, &rest, name == "PCOPY"),
-        _ => vec![workspace_command(&mut ws.saved, &name, &rest)],
+        // The inquiry commands answer for themselves, and None for
+        // a name they do not know.
+        _ => inquiry(ws, &name, &rest)
+            .unwrap_or_else(|| vec![workspace_command(&mut ws.saved, &name, &rest)]),
     };
+    ending(ws, lines, off)
+}
+
+/// What a command hands back once it has run: its own lines, and the
+/// sign-off after them when the session is ending. Nothing here feeds
+/// lines back -- `)LOAD` and `)COPY` return before this.
+fn ending(ws: &Workspace, mut lines: Vec<String>, off: bool) -> Answer {
     if off {
         lines.extend(sign_off(ws));
     }
-    let feed = Vec::new();
-    Answer { lines, feed, off }
+    Answer {
+        lines,
+        feed: Vec::new(),
+        off,
+    }
 }
 
 /// A command that changes the workspace itself: its settings, the
@@ -77,31 +90,6 @@ fn workspace_command(saved: &mut Saved, name: &str, rest: &[&str]) -> String {
         _ => return INCORRECT.to_string(),
     };
     format!("WAS {}", was.unwrap_or_else(|| CLEAR.to_string()))
-}
-
-/// The state indicator, innermost first: each function with the line
-/// it stopped on, starred when it is the one the user can take up
-/// again rather than a caller waiting on it. `verbose` adds the names
-/// it made local, which is what `)SIV` shows.
-fn si_lines(stack: &[Activation], verbose: bool) -> Vec<String> {
-    let entries: Vec<(String, &[String])> = stack
-        .iter()
-        .rev()
-        .map(|a| {
-            let star = if a.suspended { "*" } else { "" };
-            (format!("{}[{}]{star}", a.name, a.line), a.locals.as_slice())
-        })
-        .collect();
-    let column = entries.iter().map(|(e, _)| e.chars().count()).max();
-    entries
-        .iter()
-        .map(|(entry, locals)| match column {
-            Some(width) if verbose && !locals.is_empty() => {
-                format!("{entry:width$}  {}", locals.join(" "))
-            }
-            _ => entry.clone(),
-        })
-        .collect()
 }
 
 /// The APL\360 sign-off: the time and date the session ended, then

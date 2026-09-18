@@ -7,7 +7,7 @@ use std::collections::HashMap;
 use std::rc::Rc;
 
 use apl_ast::Defn;
-use apl_space::{DEFAULT, Funcs, Vars, free, of_function, of_name, of_value, room, used};
+use apl_space::{DEFAULT, Funcs, Groups, Vars, free, of_function, of_name, of_value, room, used};
 use apl_value::{Array, Data, ErrorKind, Number};
 
 fn ints(v: &[i64]) -> Array {
@@ -71,7 +71,19 @@ fn the_symbol_table_is_every_name_and_what_it_holds() {
     funcs.insert("F".to_string(), Rc::new(Defn::default()));
     let want = (of_name("A") + of_value(&ints(&[1, 2, 3])))
         + (of_name("F") + of_function(&Defn::default()));
-    assert_eq!(used(&vars, &funcs), want);
+    assert_eq!(used(&vars, &funcs, &Groups::new()), want);
+}
+
+#[test]
+fn a_group_costs_its_own_name_and_the_names_it_lists() {
+    let mut groups: Groups = HashMap::new();
+    groups.insert("G".to_string(), vec!["A".to_string(), "LONGER".to_string()]);
+    let want = of_name("G") + of_name("A") + of_name("LONGER");
+    assert_eq!(used(&Vars::new(), &Funcs::new(), &groups), want);
+    // A member that holds nothing still costs the entry recording
+    // it, which is why a group is charged for names and not for
+    // whatever they refer to.
+    assert_eq!(want, 9 + 9 + 14);
 }
 
 #[test]

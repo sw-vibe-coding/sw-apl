@@ -38,8 +38,8 @@ pub fn eval_monadic(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
     if *func == Function::Prim('⌶') && axis.is_none() {
         let si = ws.si().iter().rev();
         let lines: Vec<i64> = si.filter_map(|a| a.line.try_into().ok()).collect();
-        let left = free(ws.quota, used(&ws.saved.vars, &ws.saved.funcs));
-        let left = i64::try_from(left).unwrap_or(i64::MAX);
+        let held = used(&ws.saved.vars, &ws.saved.funcs, &ws.saved.groups);
+        let left = i64::try_from(free(ws.quota, held)).unwrap_or(i64::MAX);
         let got = ibeam(argument(&r)?, (ws.clock)(), ws.signed_on, &lines, left);
         return got.map_err(|e| e.at(*pos));
     }

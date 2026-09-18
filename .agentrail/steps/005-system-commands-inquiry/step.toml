@@ -1,6 +1,6 @@
 number = 5
 slug = "system-commands-inquiry"
-status = "pending"
+status = "in-progress"
 description = "Phase 4 step 4 (docs/plan.md). The inquiry commands: )FNS )VARS )GRPS )GRP )G..."
 role = "production"
 context_files = []

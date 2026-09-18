@@ -132,15 +132,17 @@ Inquiry and settings:
 
 | Command | Meaning |
 |---|---|
-| `)FNS [letter]` | List functions (from a letter) |
-| `)VARS [letter]` | List variables (from a letter) |
-| `)GRPS`, `)GRP name`, `)GROUP name members` | Groups |
-| `)ERASE names` | Remove objects |
+| `)FNS [letter]` | List defined functions, alphabetically, from a letter |
+| `)VARS [letter]` | List global variables, alphabetically, from a letter |
+| `)GRPS [letter]` | List group names, alphabetically, from a letter |
+| `)GRP name` | List what a group gathers, as it was gathered |
+| `)GROUP name [members]` | Gather names under one name; one name alone disperses it |
+| `)ERASE names` | Remove global objects; a group name takes its members |
 | `)SI`, `)SIV` | State indicator; `)SIV` adds local names |
 | `)ORIGIN n` | Set index origin (0 or 1); replies `WAS n` |
 | `)DIGITS n` | Set print precision (1 to 16); replies `WAS n` |
 | `)WIDTH n` | Set print width (30 to 254); replies `WAS n` |
-| `)SYMBOLS [n]` | Report or set symbol table size |
+| `)SYMBOLS` | How many names are held, and how many would fit |
 
 ## What the workspace is
 
@@ -159,6 +161,72 @@ to where a clear workspace starts, the name goes, and so does a
 suspended function -- the state indicator is part of the
 workspace, not of the session, and is cleared with everything
 else. A function you were in the middle of is gone, not resumed.
+
+## Listing what a workspace holds
+
+`)FNS` lists the defined functions and `)VARS` the global
+variables, alphabetically, wrapped at the print width. A letter
+starts the listing there:
+
+```
+      )VARS
+ALPHA MID ZED
+      )VARS M
+MID ZED
+```
+
+`)VARS` lists *global* variables. Inside a suspended function the
+call's locals are in scope and a local may shadow a global of the
+same name, but the listing is of the globals either way -- which is
+what you want when you are deciding what to save.
+
+`)ERASE` removes global objects. A function on the state indicator
+is waiting to be taken up again, so it is left alone and named:
+
+```
+      )ERASE STUCK MID
+NOT ERASED: STUCK
+```
+
+## Groups
+
+A group gives one name to a collection of names, so that they can
+be copied or erased together, or gathered into a larger group.
+
+```
+      )GROUP TRIG HYP TWICE LATER
+      )GRPS
+TRIG
+      )GRP TRIG
+HYP TWICE LATER
+```
+
+A group holds names, not what they refer to: a member need not
+exist, and dispersing a group leaves its members alone. The rules:
+
+- The first name must not already hold a function or a variable,
+  or the reply is `NOT GROUPED, NAME IN USE`.
+- Naming a group again supersedes it. To add to it instead, name
+  it among its own members: `)GROUP TRIG TRIG ALPHA`.
+- `)GROUP name` with no members disperses the group. The names it
+  gathered keep whatever they held.
+- `)ERASE` of a group name erases the group and the objects its
+  members name. That is what a group is for.
+- `)COPY name GROUPNAME` brings the group and its members.
+
+`)GRPS` sorts, as the name listings do. `)GRP` does not: it shows
+the group as it was gathered.
+
+## How many names
+
+`)SYMBOLS` reports `IS n, USED m`: how many names the workspace
+holds, and how many it could hold. APL\360 set a symbol table
+aside when you signed on, and `)SYMBOLS n` in a clear workspace
+resized it. sw-apl sets nothing aside -- names are charged against
+the workspace like everything else -- so the size is what the space
+still free would hold if every further name were the shortest one,
+and it falls as the workspace fills. There is nothing to set, so
+`)SYMBOLS n` is `INCORRECT COMMAND`.
 
 ## How big a workspace is
 

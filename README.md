@@ -97,8 +97,15 @@ I-beam 22 reports what is left of. Anything that will not fit -- an
 assignment, a definition, the arguments a call binds, a `)LOAD` or a
 `)COPY` -- is WS FULL, and the workspace is left exactly as it was.
 
-Not there yet: `)FNS` and the other inquiry commands, the shipped
-library workspaces, and domino. A
+`)FNS` and `)VARS` list what a workspace holds, alphabetically and
+from a letter if one is given; `)VARS` reports global variables even
+while a call's locals are in scope. A group gives one name to a
+collection of names so they can be copied or erased together:
+`)GROUP` gathers, `)GRPS` and `)GRP` show, and `)ERASE` of a group
+name takes its members with it. `)SYMBOLS` says how many names are
+held and how many would fit.
+
+Not there yet: the shipped library workspaces and domino. A
 glyph from a later APL is a CHARACTER ERROR that names it, so the
 Dyalog Life one-liner answers "dfn brace, not APL\360". See the
 parity checklist for the row-by-row picture. Batch mode, `)OFF`, help, and the

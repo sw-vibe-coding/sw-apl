@@ -9,7 +9,7 @@
 use std::fs;
 
 use apl_eval::Workspace;
-use apl_wsfile::{DIRECTIVE, definitions};
+use apl_wsfile::{DIRECTIVE, definitions, expand};
 
 use crate::command::{Answer, INCORRECT};
 use crate::save::library;
@@ -55,11 +55,14 @@ pub fn copy(ws: &Workspace, rest: &[&str], protect: bool) -> Answer {
             ..Answer::default()
         };
     };
-    let wanted = &rest[used.min(rest.len())..];
+    let asked = &rest[used.min(rest.len())..];
+    // A group among the names asked for brings its members with it.
+    let wanted = expand(&text, asked);
     let mut feed = Vec::new();
     for (name, lines) in definitions(&text) {
-        let unwanted = !wanted.is_empty() && !wanted.contains(&name.as_str());
-        let held = protect && (ws.get(&name).is_some() || ws.is_function(&name));
+        let unwanted = !asked.is_empty() && !wanted.contains(&name);
+        let taken = ws.saved.groups.contains_key(&name);
+        let held = protect && (taken || ws.get(&name).is_some() || ws.is_function(&name));
         if !unwanted && !held {
             feed.extend(lines);
         }

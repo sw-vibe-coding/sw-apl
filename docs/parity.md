@@ -152,9 +152,9 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | `)CLEAR` | done |
 | `)WSID` | done |
 | `)SAVE` `)LOAD` `)DROP` `)LIB` `)COPY` `)PCOPY` `)CONTINUE` | done |
-| `)FNS` `)VARS` `)GRPS` `)GRP` `)GROUP` `)ERASE` | todo |
+| `)FNS` `)VARS` `)GRPS` `)GRP` `)GROUP` `)ERASE` | done |
 | `)SI` `)SIV` | done |
-| `)SYMBOLS` | todo |
+| `)SYMBOLS` | partial; reports `IS n, USED m`, but the number cannot be set: sw-apl sets no symbol table aside, so `)SYMBOLS n` is INCORRECT COMMAND |
 | Library form `)LOAD 1 NAME`, DESCRIBE convention | todo |
 | `)LOAD` prints only the SAVED line, as APL\360 did, and nothing runs on load | done | command tests, sample 61 |
 | `)MSG` `)OPR` `)PORTS` | stub |

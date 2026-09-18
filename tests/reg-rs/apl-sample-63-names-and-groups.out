@@ -1,0 +1,84 @@
+      ⍝ What a workspace holds, and how to handle several names as one.
+      ⍝ )VARS lists the global variables and )FNS the defined functions,
+      ⍝ alphabetically. A letter starts the listing there.
+      ZED←1
+      ALPHA←2
+      MID←3
+      )VARS
+ALPHA MID ZED
+      )VARS M
+MID ZED
+      ∇R←A HYP B
+[1]   R←((A*2)+B*2)*0.5
+[2]   ∇
+      ∇R←TWICE B
+[1]   R←B×2
+[2]   ∇
+      )FNS
+HYP TWICE
+      ⍝ )VARS lists GLOBAL variables. Inside a suspended function the
+      ⍝ locals are in scope, but they are not what )VARS shows.
+      ∇SHOW;LOCAL
+[1]   LOCAL←99
+[2]   NOSUCH
+[3]   ∇
+      SHOW
+VALUE ERROR
+SHOW[2]  NOSUCH
+         ^
+      )SI
+SHOW[2]*
+      LOCAL
+99
+      )VARS
+ALPHA MID ZED
+      →
+      ⍝ A group gives one name to a collection of names, so that they can
+      ⍝ be copied or erased together. A member need not exist yet.
+      )GROUP TRIG HYP TWICE LATER
+      )GRPS
+TRIG
+      )GRP TRIG
+HYP TWICE LATER
+      ⍝ )GRPS and the name listings sort; )GRP shows the group as it was
+      ⍝ gathered. Naming the group again supersedes it; naming it among
+      ⍝ its own members adds to it.
+      )GROUP TRIG TRIG ALPHA
+      )GRP TRIG
+HYP TWICE LATER ALPHA
+      ⍝ )ERASE removes global objects. A group name takes its members.
+      )ERASE TRIG
+      )FNS
+SHOW
+      )VARS
+MID ZED
+      ⍝ The group went with them.
+      )GRPS
+      ⍝ A function on the state indicator is waiting to be taken up again,
+      ⍝ so )ERASE leaves it and says which.
+      ∇R←STUCK
+[1]   NOSUCH
+[2]   ∇
+      STUCK
+VALUE ERROR
+STUCK[1]  NOSUCH
+          ^
+      )ERASE STUCK MID
+NOT ERASED: STUCK
+      )FNS
+SHOW STUCK
+      →
+      ⍝ )SYMBOLS says how many names the workspace holds. The size is what
+      ⍝ the space still free would hold, so it moves as the workspace
+      ⍝ fills; APL\360 set a symbol table aside at sign-on and sw-apl
+      ⍝ charges names against the workspace like everything else.
+      )CLEAR
+CLEAR WS
+      X←1
+      Y←2
+      )SYMBOLS
+IS 116503, USED 2
+      )OFF
+22.42.22 09/17/26
+CONNECTED 0.00.00
+CPU TIME 0.00.00

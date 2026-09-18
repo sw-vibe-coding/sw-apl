@@ -126,7 +126,7 @@ fn dropping_removes_a_saved_workspace() {
 fn a_clear_workspace_has_no_name_to_save_under() {
     let (mut s, _dir) = in_own_dir("noname");
     let reply = out(&mut s, ")SAVE");
-    assert_eq!(reply, vec!["NOT SAVED: THIS WS IS CLEAR WS"]);
+    assert_eq!(reply, vec!["NOT SAVED, THIS WS IS CLEAR WS"]);
     // Naming it on the command names the workspace too.
     out(&mut s, ")SAVE FIRST");
     assert_eq!(out(&mut s, ")WSID"), vec!["FIRST"]);

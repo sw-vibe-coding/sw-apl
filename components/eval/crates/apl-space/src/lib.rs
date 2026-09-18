@@ -13,4 +13,4 @@ mod quota;
 mod size;
 
 pub use quota::{DEFAULT, free, room};
-pub use size::{Funcs, Vars, of_function, of_name, of_value, used};
+pub use size::{Funcs, Groups, Vars, of_function, of_name, of_value, used};

@@ -18,11 +18,9 @@ mkdir -p "$REG_RS_DATA_DIR"
 (cd components/cli && cargo build --release --quiet -p sw-apl)
 # Samples deliberately left unseeded, and why. Without this the --all
 # recreate sweeps them back in, which is how they arrived once before.
-#   11-system-cmds  )VARS and )CLEAR answer INCORRECT COMMAND until
-#                   Phase 4 implements them; a baseline would pin that.
 #   14-multiline    a comment-only leftover from sw-cor24-apl that
 #                   describes )LIST and )RUN, which are not APL\360.
-skip_seed="11-system-cmds 14-multiline"
+skip_seed="14-multiline"
 
 pattern="${1:-}"
 recreate=""

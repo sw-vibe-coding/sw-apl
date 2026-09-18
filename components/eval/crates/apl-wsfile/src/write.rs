@@ -39,7 +39,20 @@ pub fn write(saved: &Saved, when: &str) -> String {
     for name in functions {
         lines.extend(definition(&saved.funcs[name]));
     }
+    lines.extend(gatherings(saved));
     lines.join("\n") + "\n"
+}
+
+/// The groups, as the commands that would gather them again. They
+/// come last because a group is only names: it does not matter
+/// whether what it names has been written yet.
+fn gatherings(saved: &Saved) -> Vec<String> {
+    let mut names: Vec<&String> = saved.groups.keys().collect();
+    names.sort();
+    names
+        .iter()
+        .map(|name| format!(")GROUP {name} {}", saved.groups[*name].join(" ")))
+        .collect()
 }
 
 /// One function in del form, closed the way it was closed: del-tilde

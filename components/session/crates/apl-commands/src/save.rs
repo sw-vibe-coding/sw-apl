@@ -29,11 +29,13 @@ pub fn save(ws: &mut Workspace, name: Option<&str>) -> Vec<String> {
     let id = name
         .map(ToString::to_string)
         .or_else(|| ws.saved.id.clone());
-    // Colon, not comma: the only attested wording we could find for
-    // this reply is GNU APL's, and the two failures below already
-    // read `NOT SAVED: <reason>`. One separator, one source.
+    // Comma, not colon: the APL\360 manual's trouble-report table
+    // gives `NOT SAVED, THIS WS IS wsid`, beside `NOT SAVED, WS
+    // QUOTA USED UP` and `NOT GROUPED, NAME IN USE`. A comma
+    // introduces a reason; a colon introduces a list, as in `NOT
+    // COPIED:` and `NOT ERASED:`. Both forms are used below.
     let Some(id) = id else {
-        return vec![format!("NOT SAVED: THIS WS IS {CLEAR}")];
+        return vec![format!("NOT SAVED, THIS WS IS {CLEAR}")];
     };
     ws.saved.id = Some(id.clone());
     let when = moment(ws);
@@ -41,11 +43,11 @@ pub fn save(ws: &mut Workspace, name: Option<&str>) -> Vec<String> {
         return vec![INCORRECT.to_string()];
     };
     if let Err(err) = fs::create_dir_all(&dir) {
-        return vec![format!("NOT SAVED: {err}")];
+        return vec![format!("NOT SAVED, {err}")];
     }
     match fs::write(dir.join(format!("{id}.apl.ws")), write(&ws.saved, &when)) {
         Ok(()) => vec![format!("{when} {id}")],
-        Err(err) => vec![format!("NOT SAVED: {err}")],
+        Err(err) => vec![format!("NOT SAVED, {err}")],
     }
 }
 

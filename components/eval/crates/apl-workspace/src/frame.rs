@@ -35,8 +35,12 @@ pub struct Activation {
     /// True for the function an error came from; a caller waiting on
     /// one that stopped is pendent, not suspended.
     pub suspended: bool,
-    /// The values the locals displaced, to put back on return.
-    saved: Vec<(String, Option<Array>)>,
+    /// The values the locals displaced, to put back on return. It is
+    /// public because `)VARS` lists *global* variables: under a
+    /// suspension a local shadows a global of the same name, and the
+    /// displaced entry is the only record that the global is there.
+    /// Nothing outside the workspace writes it.
+    pub displaced: Vec<(String, Option<Array>)>,
 }
 
 impl Workspace {
@@ -49,7 +53,7 @@ impl Workspace {
         if self.saved.stack.len() >= MAX_DEPTH {
             return Err(AplError::new(ErrorKind::Depth));
         }
-        let saved = names
+        let displaced = names
             .iter()
             .map(|n| (n.clone(), self.saved.vars.remove(n)))
             .collect();
@@ -58,7 +62,7 @@ impl Workspace {
             line: 1,
             locals: names.to_vec(),
             suspended: false,
-            saved,
+            displaced,
         });
         Ok(self.saved.stack.len() - 1)
     }
@@ -77,7 +81,7 @@ impl Workspace {
         let Some(activation) = self.saved.stack.pop() else {
             return;
         };
-        for (name, was) in activation.saved {
+        for (name, was) in activation.displaced {
             match was {
                 Some(value) => self.saved.vars.insert(name, value),
                 None => self.saved.vars.remove(&name),

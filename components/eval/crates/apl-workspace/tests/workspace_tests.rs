@@ -25,7 +25,10 @@ fn sized(quota: usize) -> Workspace {
 /// Bytes still free. The workspace holds the quota and `apl-space`
 /// does the counting, so this is the one place the two meet.
 fn free(ws: &Workspace) -> usize {
-    apl_space::free(ws.quota, apl_space::used(&ws.saved.vars, &ws.saved.funcs))
+    apl_space::free(
+        ws.quota,
+        apl_space::used(&ws.saved.vars, &ws.saved.funcs, &ws.saved.groups),
+    )
 }
 
 #[test]

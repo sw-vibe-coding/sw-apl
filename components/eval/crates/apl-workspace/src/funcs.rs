@@ -36,7 +36,7 @@ impl Workspace {
             .funcs
             .get(&defn.name)
             .map_or(0, |f| of_function(f));
-        let table = used(&self.saved.vars, &self.saved.funcs);
+        let table = used(&self.saved.vars, &self.saved.funcs, &self.saved.groups);
         room(self.quota, table, of_function(&defn), held + was)?;
         self.saved.vars.remove(&defn.name);
         self.saved.funcs.insert(defn.name.clone(), Rc::new(defn));

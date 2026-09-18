@@ -1,0 +1,14 @@
+      ⍝ System commands
+      A ← 5
+      B ← 10
+      )VARS
+A B
+      A + B
+15
+      )CLEAR
+CLEAR WS
+      )VARS
+      )OFF
+22.42.22 09/17/26
+CONNECTED 0.00.00
+CPU TIME 0.00.00

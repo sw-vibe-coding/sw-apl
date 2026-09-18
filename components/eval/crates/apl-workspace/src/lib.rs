@@ -13,6 +13,6 @@ pub use apl_console::{
 };
 pub use apl_ibeam::{Clock, Time, hms, ibeam, stopped, system};
 pub use apl_prims::Env;
-pub use apl_space::{DEFAULT as QUOTA, free, of_function, of_name, of_value, room, used};
+pub use apl_space::{DEFAULT as QUOTA, Groups, free, of_function, of_name, of_value, room, used};
 pub use frame::Activation;
 pub use workspace::{Run, Saved, Workspace};

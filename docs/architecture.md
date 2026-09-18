@@ -26,7 +26,8 @@ sw-apl/
                apl-ibeam                   I-beam values and the clock
                apl-space                   what a value costs, and the quota
                apl-eval                    interpreter
-    session/   apl-session                 system commands, del editor,
+    session/   apl-inquiry                 listing names, groups, erasing
+               apl-session                 system commands, del editor,
                                            workspace files, libraries
     cli/       sw-apl                      terminal REPL and batch
     web/       (later) Yew/WASM demo
@@ -87,6 +88,12 @@ eval -> session -> web
   than depending on the evaluator.
 - `apl-eval` owns the state indicator and dispatch from AST to
   primitives.
+- `apl-inquiry` answers the commands that report what a workspace
+  holds -- `)FNS`, `)VARS`, `)GRPS`, `)GRP`, `)SI`, `)SIV`,
+  `)SYMBOLS` -- and owns the group facility and `)ERASE`. It is
+  `apl-commands`' neighbour rather than its contents: that crate
+  was at its module budget, and listing names has little to do
+  with reading and writing workspace files.
 - `apl-session` owns everything that begins with a right
   parenthesis, the del editor, workspace files, and the library
   directory map. It exposes a line-oriented `Session` API: feed a
