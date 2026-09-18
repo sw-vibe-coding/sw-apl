@@ -14,6 +14,10 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-17
 
+- chore(agentrail): complete 001-ws-model; advance to 002-ws-file-format
+- feat(workspace): separate what a )SAVE writes from the terminal
+- chore(agentrail): archive core-session; init workspaces saga
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 010-cli-tests-to-reg; core-session saga done
 - test(cli): move the CLI checks from Rust tests to reg-rs
 - docs(changes): refresh CHANGES.md to HEAD
