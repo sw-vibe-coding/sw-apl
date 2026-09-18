@@ -1,0 +1,11 @@
+{
+  "task_type": "rust-interpreter",
+  "state": {
+    "number": 7,
+    "step": "locked-workspace-file"
+  },
+  "action": "Used rot13's self-inverse property so one helper serves both directions rather than writing two that could disagree; put the explanation of what obscuring is NOT into the code comment, the doc and the file's own preamble, since the risk here is someone believing it is encryption; made the obscured file announce itself when run as a program instead of documenting the failure, so the answer is in the artifact; anchored a gitignore pattern rather than widening a test fixture's path, and re-ran the suite to prove no test writes outside its own directory; added the owner's bug as its own step rather than folding it into this one",
+  "result": "success",
+  "reward": 1,
+  "timestamp": "2026-09-18T10:11:18"
+}
