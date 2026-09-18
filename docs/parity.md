@@ -140,7 +140,8 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | `)CLEAR` clears the state indicator with everything else | done | session tests, sample 60 |
 | Workspace file: re-executable UTF-8, stable byte-for-byte, round trips through the interpreter | done | wsfile tests, `tests/scripts/saved-workspace.apl.ws` |
 | A saved workspace keeps a suspended function | todo | a re-executable file cannot put execution back in the middle of a call, so `)SAVE` leaves the state indicator out; APL\360's workspaces were binary and kept it |
-| `)SAVE` and `)LOAD` themselves | todo | the format is done; the commands are the next step |
+| `)SAVE` and `)LOAD` round trip a workspace through a file | done | command tests, sample 61 |
+| `)COPY` takes the definitions and leaves the settings | done | command tests, sample 61; see `index-origin-considerations.md` |
 
 ## System commands
 
@@ -150,12 +151,12 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | `)ORIGIN` `)DIGITS` `)WIDTH` | done |
 | `)CLEAR` | done |
 | `)WSID` | done |
-| `)SAVE` `)LOAD` `)DROP` `)LIB` `)COPY` `)PCOPY` `)CONTINUE` | todo |
+| `)SAVE` `)LOAD` `)DROP` `)LIB` `)COPY` `)PCOPY` `)CONTINUE` | done |
 | `)FNS` `)VARS` `)GRPS` `)GRP` `)GROUP` `)ERASE` | todo |
 | `)SI` `)SIV` | done |
 | `)SYMBOLS` | todo |
 | Library form `)LOAD 1 NAME`, DESCRIBE convention | todo |
-| `)LOAD` prints only the SAVED line, as APL\360 did, and nothing runs on load | todo | no hint, no latent expression: a transcript should sit beside a 1968 one unchanged |
+| `)LOAD` prints only the SAVED line, as APL\360 did, and nothing runs on load | done | command tests, sample 61 |
 | `)MSG` `)OPR` `)PORTS` | stub |
 
 ## Errors

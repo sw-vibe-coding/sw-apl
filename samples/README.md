@@ -22,6 +22,10 @@ character matrix for the names, mixed output, and the conditional
 branch idiom driving two functions. Its transcript is reproducible
 because the random link starts from a fixed value.
 
+`61-save-load.apl` saves a workspace, clears, loads it back, and then
+copies from it -- showing that copying takes the names but leaves the
+index origin alone, which is the difference that matters.
+
 `60-workspace.apl` names a workspace with `)WSID` and clears it with
 `)CLEAR`, showing what belongs to the workspace -- names, settings,
 and a suspended function -- and what a clear one starts with.

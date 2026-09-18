@@ -1,5 +1,9 @@
 [workspace]
-members = ["crates/apl-editor", "crates/apl-session"]
+members = [
+    "crates/apl-editor",
+    "crates/apl-commands",
+    "crates/apl-session",
+]
 resolver = "2"
 
 [workspace.package]

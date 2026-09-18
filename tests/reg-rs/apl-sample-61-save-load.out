@@ -1,0 +1,76 @@
+      ⍝ Saving and loading. )SAVE writes the workspace into library 0 and
+      ⍝ replies with the moment and the name; )LOAD reads it back and says
+      ⍝ only when it was saved, as APL\360 did. Typing DESCRIBE is the
+      ⍝ reader's move, not the loader's.
+      ⍝ The moments )SAVE and )LOAD report vary, so the reg-rs filter keeps
+      ⍝ their shape and masks their values; see docs/testing.md.
+      )WSID CLASS
+WAS CLEAR WS
+      A←5
+      ∇R←HYP B
+[1]   R←B×2
+[2]   ∇
+      )ORIGIN 0
+WAS 1
+      )SAVE
+21.37.03 09/17/26 CLASS
+      )LIB
+CLASS
+      ⍝ Clearing loses everything; loading brings it back, settings and all.
+      )CLEAR
+CLEAR WS
+      A
+VALUE ERROR
+      A
+      ^
+      )LOAD CLASS
+SAVED 21.37.03 09/17/26
+      )WSID
+CLASS
+      A
+5
+      HYP 4
+8
+      ⍳3
+0 1 2
+      ⍝ Copying is not loading. It takes the names and leaves the settings,
+      ⍝ so the index origin here is untouched by the donor's. That matters:
+      ⍝ see docs/index-origin-considerations.md.
+      )CLEAR
+CLEAR WS
+      A←99
+      )ORIGIN 1
+WAS 1
+      )COPY CLASS
+      A
+5
+      HYP 4
+8
+      ⍳3
+1 2 3
+      )WSID
+CLEAR WS
+      ⍝ )PCOPY keeps what is already here.
+      )CLEAR
+CLEAR WS
+      A←99
+      )PCOPY CLASS
+      A
+99
+      ⍝ And copying can name what it wants.
+      )CLEAR
+CLEAR WS
+      )COPY CLASS HYP
+      HYP 3
+6
+      A
+VALUE ERROR
+      A
+      ^
+      )DROP CLASS
+DROPPED CLASS
+      )LIB
+      )OFF
+21.37.03 09/17/26
+CONNECTED 0.00.00
+CPU TIME 0.00.00

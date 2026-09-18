@@ -26,6 +26,34 @@ it is not written to a file: see **What a saved file cannot hold**.
 An unnamed workspace is called `CLEAR WS`, which is what `)WSID`
 reports until you give it a name.
 
+## Naming one
+
+**There is no default name.** `CLEAR WS` is not one -- it is the
+absence of one, printed where a name would go. A workspace gets its
+name from you, in one of two ways:
+
+```apl
+      )WSID CLASS          ⍝ name it now, save it later
+      )SAVE CLASS          ⍝ name it and save it in one command
+```
+
+`)SAVE` with no name uses the name the workspace already answers to,
+so `)WSID CLASS` then `)SAVE` and `)SAVE CLASS` come to the same
+thing. `)WSID` on its own reports the name without changing it, and
+`)WSID NEWNAME` renames the workspace you are in -- the file you
+saved under the old name is untouched, so renaming and saving leaves
+you with two.
+
+Saving a workspace that has never been named has nothing to write
+under, and says so rather than inventing something:
+
+```
+      )CLEAR
+CLEAR WS
+      )SAVE
+NOT SAVED: THIS WS IS CLEAR WS
+```
+
 ## Libraries
 
 Libraries are numbered, as in APL\360. Library 0 is yours; the
@@ -83,6 +111,30 @@ workspace with an empty state indicator.
 APL\360 did not have this problem, because its workspaces were binary
 images and `)SAVE` really did preserve a suspension. It is the price
 of a file you can read. `parity.md` carries the row.
+
+## How much room is left
+
+`⌶22` reports the space available, in bytes, and it is the only way
+APL\360 offered -- the `⎕WA` of later systems is one more
+quad-name sw-apl does not have.
+
+```apl
+      ⌶22
+1048576
+```
+
+**In sw-apl the number is nominal.** A workspace is a Rust process's
+memory, not a fixed partition carved out of a 360, so there is no
+quota to report against and `⌶22` answers the same figure every time.
+`WS FULL` is in `parity.md` as not implemented and is never raised:
+sw-apl will not refuse a `)LOAD` for size, and a workspace grows
+until the machine itself objects.
+
+On a real APL\360 this was a live constraint. A workspace was a
+fixed allocation, `WS FULL` was an error you hit routinely, and a
+`)LOAD` of a large workspace could fail against a small quota -- which
+is why `)COPY` of a few names mattered as much as it did, and why
+`⌶22` was worth checking before starting something big.
 
 ## Loading, and copying
 

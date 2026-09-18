@@ -202,6 +202,13 @@ widen each layer to the full APL\360 set.
    workspaces are ones we wrote: give each a provenance line and
    gate on it, so material from elsewhere cannot be committed by
    mistake. (Owner direction 2026-09-17.)
+6. `locked-workspace-file` -- a workspace holding a locked
+   function is not written as plain text: `)SAVE` obscures it
+   (rot-13 to begin with) and `)LOAD` reads both forms. A text
+   workspace shows what the del editor refuses to, which is the
+   one place sw-apl's lock is weaker than APL\360's binary
+   workspaces. Obscuring is not encryption and the docs must not
+   claim it is. (Owner direction 2026-09-17, deferred.)
 
 ### Phase 5: numerics (saga `numerics`)
 

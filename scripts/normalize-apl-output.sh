@@ -40,6 +40,12 @@
 #     20.01.12 09/17/26   ->   H.MM.SS MM/DD/YY
 #     CONNECTED 0.00.07   ->   CONNECTED H.MM.SS
 #     CPU TIME 0.00.01    ->   CPU TIME H.MM.SS
+#
+# )SAVE and )LOAD report a moment the same way, one with the name it
+# saved under and one behind the word SAVED. Both keep their shape.
+#
+#     20.01.12 09/17/26 CLASS  ->  H.MM.SS MM/DD/YY CLASS
+#     SAVED 20.01.12 09/17/26  ->  SAVED H.MM.SS MM/DD/YY
 
 # The version block names the machine it was built on and the commit
 # and moment it was built from. Those cannot be a baseline, and the
@@ -58,7 +64,8 @@ set -euo pipefail
 
 sed -E \
     -e 's/^([A-Z][A-Z0-9 ,.-]*\(VARIES\): ).*/\1.../' \
-    -e 's/^[0-9]+\.[0-9]{2}\.[0-9]{2} [0-9]{2}\/[0-9]{2}\/[0-9]{2}$/H.MM.SS MM\/DD\/YY/' \
+    -e 's/^[0-9]+\.[0-9]{2}\.[0-9]{2} [0-9]{2}\/[0-9]{2}\/[0-9]{2}( |$)/H.MM.SS MM\/DD\/YY\1/' \
+    -e 's/^SAVED [0-9]+\.[0-9]{2}\.[0-9]{2} [0-9]{2}\/[0-9]{2}\/[0-9]{2}$/SAVED H.MM.SS MM\/DD\/YY/' \
     -e 's/^(CONNECTED|CPU TIME) [0-9]+\.[0-9]{2}\.[0-9]{2}$/\1 H.MM.SS/' \
     -e 's/^(  (Host|Commit|Timestamp): ).*/\1.../' \
     -e 's/^(sw-apl: ).*\(os error [0-9]+\)$/\1.../'

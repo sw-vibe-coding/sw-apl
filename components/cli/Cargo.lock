@@ -79,6 +79,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-commands"
+version = "0.1.0"
+dependencies = [
+ "apl-eval",
+ "apl-value",
+ "apl-wsfile",
+]
+
+[[package]]
 name = "apl-console"
 version = "0.1.0"
 dependencies = [
@@ -286,6 +295,7 @@ name = "apl-session"
 version = "0.1.0"
 dependencies = [
  "apl-call",
+ "apl-commands",
  "apl-display",
  "apl-editor",
  "apl-eval",

@@ -4,6 +4,7 @@
 //! first half to a file, and cannot be handed the second by mistake.
 
 use std::collections::HashMap;
+use std::path::PathBuf;
 use std::rc::Rc;
 
 use apl_ast::Defn;
@@ -65,6 +66,11 @@ pub struct Workspace {
     /// Sixtieths of a second since midnight when the session began,
     /// which `⌶24` reports. The host sets it with the clock.
     pub signed_on: i64,
+    /// Where the workspace libraries are, which is the directory
+    /// holding `work/` and `ws/`. It belongs to the session, not to
+    /// the workspace: a saved workspace does not carry the machine
+    /// it was saved on.
+    pub libraries: PathBuf,
 }
 
 impl Default for Workspace {
@@ -75,6 +81,7 @@ impl Default for Workspace {
             console: Box::new(Transcript::default()),
             clock: stopped,
             signed_on: 0,
+            libraries: PathBuf::from("."),
         }
     }
 }

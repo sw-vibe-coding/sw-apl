@@ -5,7 +5,7 @@ use apl_editor::Definition;
 use apl_eval::{Console, INDENT, Output, Workspace, error_lines, eval_line, render_all, system};
 use apl_value::AplResult;
 
-use crate::commands::{definition_line, open_definition, system_command};
+use crate::commands::{definition_line, open_definition, run_command};
 use crate::reply::Reply;
 
 /// An interactive APL session.
@@ -72,7 +72,7 @@ impl Session {
         }
         let trimmed = line.trim();
         if let Some(command) = trimmed.strip_prefix(')') {
-            return system_command(self, command);
+            return run_command(self, command);
         }
         if let Some(header) = trimmed.strip_prefix('∇') {
             return open_definition(self, header);

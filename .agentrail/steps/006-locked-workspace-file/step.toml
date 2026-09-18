@@ -1,0 +1,9 @@
+number = 6
+slug = "locked-workspace-file"
+status = "pending"
+description = "Phase 4 step 6 (docs/plan.md, owner direction 2026-09-17, deferred at the tim..."
+role = "production"
+context_files = []
+created_at = "2026-09-17T21:30:28"
+task_type = "rust-interpreter"
+commits = []

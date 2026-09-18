@@ -11,8 +11,10 @@
 //! which are comments to the interpreter and instructions to `)LOAD`:
 //! when the workspace was saved, and where its random link stands.
 
+mod groups;
 mod literal;
 mod write;
 
+pub use groups::definitions;
 pub use literal::literal;
 pub use write::{DIRECTIVE, write};

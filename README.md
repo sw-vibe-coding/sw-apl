@@ -88,7 +88,12 @@ the processor time. Ctrl-C stops a running function: it reports
 INTERRUPT, names the line it stopped on, and leaves the function
 suspended for `)SI` to show and a branch to take up again.
 
-Not there yet: workspaces (`)SAVE`, `)LOAD`) and domino. A
+Workspaces save and load: `)SAVE` writes a plain UTF-8 file that is
+APL you could have typed, `)LOAD` reads it back by running it, and
+`)COPY` takes names out of one without taking its settings.
+
+Not there yet: `)FNS` and the other inquiry commands, the shipped
+library workspaces, and domino. A
 glyph from a later APL is a CHARACTER ERROR that names it, so the
 Dyalog Life one-liner answers "dfn brace, not APL\360". See the
 parity checklist for the row-by-row picture. Batch mode, `)OFF`, help, and the

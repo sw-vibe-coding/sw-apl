@@ -1,62 +1,15 @@
-//! The input lines the session answers itself instead of evaluating:
-//! system commands, and the lines that drive the del editor.
+//! The input lines the session answers itself rather than evaluating:
+//! the system commands, whose work is in `apl-commands`, and the
+//! lines that drive the del editor.
 
+use apl_commands::system_command;
 use apl_editor::Definition;
-use apl_eval::{Saved, error_lines};
+use apl_eval::error_lines;
 use apl_parse::parse_header;
 use apl_value::{AplError, ErrorKind};
 
-use crate::reply::{Reply, si_lines, sign_off};
-
-/// What an unnamed workspace is called, as APL\360 named it.
-pub const CLEAR: &str = "CLEAR WS";
+use crate::reply::Reply;
 use crate::session::Session;
-
-/// Run one system command (the text after the parenthesis).
-pub fn system_command(session: &mut Session, command: &str) -> Reply {
-    let mut words = command.split_whitespace();
-    let name = words.next().unwrap_or("").to_ascii_uppercase();
-    let rest: Vec<&str> = words.collect();
-    match (name.as_str(), rest.as_slice()) {
-        ("OFF", []) => return Reply::off(sign_off(&session.ws)),
-        ("SI" | "SIV", []) => {
-            return Reply::from(si_lines(session.ws.si(), name == "SIV"));
-        }
-        _ => {}
-    }
-    let reply = workspace_command(&mut session.ws.saved, &name, &rest);
-    Reply::from(vec![
-        reply.unwrap_or_else(|| "INCORRECT COMMAND".to_string()),
-    ])
-}
-
-/// A command that changes the workspace: its settings, the name it
-/// answers to, or clearing it altogether. A setting replies with the
-/// value it replaced, as APL\360 did. `None` when the name or the
-/// argument is not one of them.
-fn workspace_command(saved: &mut Saved, name: &str, rest: &[&str]) -> Option<String> {
-    let number = rest.first().and_then(|v| v.parse::<usize>().ok());
-    let was = match (name, rest, number) {
-        ("CLEAR", [], _) => {
-            *saved = Saved::default();
-            return Some(CLEAR.to_string());
-        }
-        ("WSID", [], _) => return Some(saved.id.clone().unwrap_or_else(|| CLEAR.to_string())),
-        ("WSID", [id], _) => saved.id.replace((*id).to_string()),
-        ("ORIGIN", [_], Some(n @ (0 | 1))) => {
-            let io = i64::try_from(n).unwrap_or(1);
-            Some(std::mem::replace(&mut saved.env.io, io).to_string())
-        }
-        ("DIGITS", [_], Some(n @ 1..=16)) => {
-            Some(std::mem::replace(&mut saved.print.digits, n).to_string())
-        }
-        ("WIDTH", [_], Some(n @ 30..=254)) => {
-            Some(std::mem::replace(&mut saved.print.width, n).to_string())
-        }
-        _ => return None,
-    };
-    Some(format!("WAS {}", was.unwrap_or_else(|| CLEAR.to_string())))
-}
 
 /// An opening del: start a new function, or reopen one for editing.
 /// A command written on the same line takes effect at once, so
@@ -105,4 +58,19 @@ pub fn definition_line(session: &mut Session, line: &str) -> Reply {
         session.ws.define(defn);
     }
     Reply::from(step.lines)
+}
+
+/// Run one system command. `)LOAD` and `)COPY` hand back lines
+/// to run as though they had been typed, which is the only way
+/// the `)` commands and the del definitions in a workspace file
+/// take effect; what they print on the way is not shown.
+pub fn run_command(session: &mut Session, command: &str) -> Reply {
+    let answer = system_command(&mut session.ws, command);
+    for line in answer.feed {
+        let _ = session.respond(&line);
+    }
+    Reply {
+        lines: answer.lines,
+        off: answer.off,
+    }
 }

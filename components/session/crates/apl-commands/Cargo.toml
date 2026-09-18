@@ -1,0 +1,16 @@
+[package]
+name = "apl-commands"
+description = "sw-apl system commands: the lines that begin with a parenthesis"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-eval = { path = "../../../eval/crates/apl-eval" }
+apl-value = { path = "../../../value/crates/apl-value" }
+apl-wsfile = { path = "../../../eval/crates/apl-wsfile" }
+
+[lints]
+workspace = true
