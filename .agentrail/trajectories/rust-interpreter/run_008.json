@@ -1,0 +1,11 @@
+{
+  "task_type": "rust-interpreter",
+  "state": {
+    "number": 8,
+    "step": "session-polish"
+  },
+  "action": "Split the step into the sign-off, the interrupt and the docs pass and did them in order, running the gates after each; proved the interrupt by sending a real SIGINT to a running loop rather than trusting the unit test; copied the baselines before the rebase so the claim that only the sign-off changed could be shown; when a global flag made tests race, moved the test to its own process rather than weakening it, and ran the suite five times to confirm; took the sw-checklist pressure on the CLI as a sign the binary had grown a fourth concern and restructured it instead of shaving lines again.",
+  "result": "success",
+  "reward": 1,
+  "timestamp": "2026-09-17T20:16:30"
+}
