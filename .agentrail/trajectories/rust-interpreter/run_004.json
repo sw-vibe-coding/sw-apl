@@ -1,0 +1,11 @@
+{
+  "task_type": "rust-interpreter",
+  "state": {
+    "number": 6,
+    "step": "library-workspaces"
+  },
+  "action": "Generated the shipped workspaces by running the binary rather than writing the files by hand, then pinned that with a round-trip test, so the format cannot drift away from what )SAVE produces; wrote the provenance gate to fail on untracked files under ws/ as well as unmarked tracked ones, and tested both failure modes by hand before wiring it into just gates; chose three workspaces on whether each was worth loading, and said so in the commit; gave the library root a CLI option so the tests could stop depending on the user's directory",
+  "result": "success",
+  "reward": 1,
+  "timestamp": "2026-09-17T22:57:37"
+}
