@@ -249,7 +249,39 @@ widen each layer to the full APL\360 set.
    are the sort of thing a reader needs spelled out with worked
    examples. (Owner request 2026-09-18.)
 
-### Phase 6: web demo (saga `web-demo`)
+### Phase 6: the system commands, said properly (saga `commands`)
+
+Raised by the owner 2026-09-18, on finding no reference for the
+system commands and no mention anywhere of `)MSG`, `)OPR` and
+`)PORTS`. Checking that turned up two parity gaps behind the
+documentation one.
+
+1. `commands-reference` -- `docs/commands-reference.md`: every
+   system command APL\360 had, what it does, what it replies, what
+   it refuses and with which trouble report. Including the ones
+   sw-apl does not implement and will not: `)NUMBER`, `)OFF HOLD`,
+   `)CONTINUE HOLD`, `)MSG`, `)MSGN`, `)OPR`, `)OPRN`, `)PORTS` are
+   the multi-user surface of a shared machine with accounts, ports
+   and an operator, and saying so per command is the deliverable.
+   `session.md` keeps its tables and links here; `parity.md` keeps
+   the status.
+2. `command-abbreviation` -- the manual: "Where the first word of a
+   command form is more than four characters long, only the first
+   four are significant. The others are included only for mnemonic
+   reasons, and may be dropped or replaced, as desired. For
+   example, )CLEAR, )CLEA, )CLEAVER, etc., are all equivalent."
+   sw-apl requires the exact spelling, so `)CLEA` and `)ORIG 0`
+   answer INCORRECT COMMAND. Add the rule, and a parity row, which
+   it has never had.
+3. `save-lock-syntax` -- `)SAVE NAME:PASSWORD` stores a workspace
+   literally called `NAME:PASSWORD`, because the `[LOCK]` and
+   `[KEY]` password forms are not parsed and the colon is taken as
+   part of the name. Locks are the multi-user surface again and are
+   not wanted; a colon in a workspace name should be refused rather
+   than silently making a strangely named workspace. Decide the
+   reply against the manual's table and record it.
+
+### Phase 7: web demo (saga `web-demo`)
 
 1. `wasm-facade` -- session API usable from wasm32.
 2. `yew-terminal` -- printer-style terminal component with glyph
@@ -285,7 +317,7 @@ Answers to the questions raised at bootstrap, now policy:
    workspace; execute and format are gone. Quad and quote-quad
    input/output stay, as in APL\360.
 
-### Phase 7: literate and recorded docs (saga `doc-tooling`, unscheduled)
+### Phase 8: literate and recorded docs (saga `doc-tooling`, unscheduled)
 
 1. `vhs-tapes` -- vhs tape scripts under `docs/tapes/` rendering
    CLI sessions with glyph input and output to GIF/PNG for the

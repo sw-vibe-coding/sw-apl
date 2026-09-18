@@ -1,41 +1,41 @@
-# numerics
+# commands
 
-Phase 5 of docs/plan.md: the last unimplemented primitive, and the
-numeric edges everything else has been avoiding.
+Phase 6 of docs/plan.md, raised by the owner on 2026-09-18: there is
+no reference for the system commands, and `)MSG`, `)OPR` and
+`)PORTS` are mentioned in one parity row and nowhere else. Checking
+that turned up two parity gaps behind the documentation one.
 
-`⌹` is the only `todo` left in the primitives table of
-docs/parity.md. Monadic it is matrix inverse; dyadic it is matrix
-divide, which for a non-square left argument is the least-squares
-solution -- that is the whole point of the glyph, and a version that
-only inverts square matrices would be a stub wearing its name.
+The commands are documented today in three places and none of them
+is a reference: a 21-row table of one-line glosses in
+`session.md`, status rows in `parity.md`, and a gloss in
+`sw-apl --help`. A reader who wants to know what `)COPY` replies
+when the workspace is not there has to find the trouble report
+table in `session.md` and join it up themselves.
 
-The edges are the other half. Floating point, a comparison
-tolerance, `)DIGITS` from 1 to 16, exponent notation on the way in
-and on the way out: each of those has a boundary, and none of them
-has a test that sits on it. APL\360 was specific about several --
-integer overflow becoming floating point, the fuzz used for
-comparison and for `⌊`, what `⍳` does with a number too large --
-and where the manual is specific, follow it and say where it says
-so.
+APL\360 had 26 system commands. sw-apl implements 20. The six it
+does not are the multi-user surface of a shared machine -- accounts,
+ports, an operator, other users to send messages to -- and they are
+out of scope by the rule already in `parity.md`. Saying so per
+command, in the reference, is the point: a reader should not have to
+infer absence.
 
-Pure APL\360 throughout: no `⎕CT`, no `⎕FC`, no system variables of
-any kind. Every step: format first, then tests, clippy, and gates
-(see /mw-cp); TDD; reg-rs for anything run through the binary, Rust
-tests for the libraries; update docs/parity.md rows in the same
-commit; commit, push, report.
+Read the manual rather than recalling it. Table 2.1 summarises every
+command with its form, its normal response and its trouble reports,
+and the detailed sections that follow give the wording. The text is
+at
+https://archive.org/stream/bitsavers_ibmaplAPL3_8068299/APL_360_Users_Manual_Aug68_djvu.txt
+and Table 2.1 is around line 4640. Quote it where it settles a
+question, and where it does not, say what was chosen instead.
+
+Every step: format first, then tests, clippy, and gates (see
+/mw-cp); TDD; reg-rs for anything run through the binary; update
+docs/parity.md rows in the same commit; commit, push, report.
 
 ## Steps
 
-1. domino -- `⌹B` matrix inverse and `A⌹B` matrix divide, including
-   the least-squares case where B has more rows than columns.
-   Householder QR rather than a normal-equations shortcut, because
-   the normal equations square the condition number and the whole
-   reason to have this glyph is the overdetermined fit. Vectors and
-   scalars are the rank cases to get right; a singular matrix is
-   DOMAIN ERROR.
-2. numeric-edge-cases -- overflow from integer to floating point,
-   the comparison tolerance and what it does to `=`, `⌊`, `⌈` and
-   `⍳` of a computed length, large `⍳`, exponent notation round
-   trips, and `)DIGITS` at 1 and at 16. Find the boundaries, pin
-   them, and record in parity.md which are APL\360's and which are
-   ours.
+1. commands-reference -- `docs/commands-reference.md`, every
+   command including the refused ones and why.
+2. command-abbreviation -- only the first four characters of a
+   command name are significant, which sw-apl does not honour.
+3. save-lock-syntax -- `)SAVE NAME:PASSWORD` stores a workspace
+   literally called `NAME:PASSWORD`; the colon should be refused.

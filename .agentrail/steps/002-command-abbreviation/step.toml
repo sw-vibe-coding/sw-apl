@@ -1,0 +1,11 @@
+number = 2
+slug = "command-abbreviation"
+status = "pending"
+description = """
+Phase 6 step 2 (docs/plan.md). Only the first four characters of a
+command na..."""
+role = "production"
+context_files = []
+created_at = "2026-09-18T16:59:17"
+task_type = "rust-interpreter"
+commits = []

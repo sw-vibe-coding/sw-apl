@@ -1,0 +1,11 @@
+number = 1
+slug = "commands-reference"
+status = "pending"
+description = """
+Phase 6 step 1 (docs/plan.md, owner request 2026-09-18). Write
+docs/commands-..."""
+role = "production"
+context_files = []
+created_at = "2026-09-18T16:59:17"
+task_type = "rust-interpreter"
+commits = []
