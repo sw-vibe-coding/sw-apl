@@ -173,6 +173,11 @@ widen each layer to the full APL\360 set.
    `#!` line so a shebang script runs without a CHARACTER ERROR,
    and document running a workspace file from the shell.
    (Owner direction 2026-09-17.)
+10. `cli-tests-to-reg` -- reg-rs is for CLI regression testing in
+    general, not only for transcripts that vary. Move what
+    `cli_tests.rs` checks by spawning the binary into reg-rs
+    tests; Rust tests keep the unit, function and integration
+    testing of the libraries. (Owner direction 2026-09-17.)
 
 ### Phase 4: workspaces (saga `workspaces`)
 
