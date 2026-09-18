@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-17
 
+- chore(agentrail): complete 004-workspace-quota; advance to 005-system-commands-inquiry
+- feat(workspace): give a workspace a size, and raise WS FULL
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 003-system-commands-ws; advance to 004-system-commands-inquiry
 - feat(session): )SAVE )LOAD )DROP )LIB )COPY )PCOPY )CONTINUE
 - docs: )LOAD prints the SAVED line and nothing else
