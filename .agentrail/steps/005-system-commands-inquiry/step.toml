@@ -1,9 +1,10 @@
 number = 5
 slug = "system-commands-inquiry"
-status = "in-progress"
+status = "completed"
 description = "Phase 4 step 4 (docs/plan.md). The inquiry commands: )FNS )VARS )GRPS )GRP )G..."
 role = "production"
 context_files = []
 created_at = "2026-09-17T21:31:02"
+completed_at = "2026-09-17T22:47:26"
 task_type = "rust-interpreter"
-commits = []
+commits = ["2293f5f9ccdcb9c9b8cdb98b116dad4b213d7c7b"]
