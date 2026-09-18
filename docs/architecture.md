@@ -24,6 +24,7 @@ sw-apl/
                apl-call                    defined-function calls
                apl-quad                    reading a line mid-statement
                apl-ibeam                   I-beam values and the clock
+               apl-space                   what a value costs, and the quota
                apl-eval                    interpreter
     session/   apl-session                 system commands, del editor,
                                            workspace files, libraries
@@ -75,6 +76,12 @@ eval -> session -> web
   workspace holds. A clear workspace has a clock that does not
   move, so nothing reads the real world until a host installs one
   that does, and a transcript made without a terminal reproduces.
+- `apl-space` says what a value, a name and a defined function cost
+  in bytes, and whether one more will fit. It measures nothing: the
+  figures are what APL\360 would have charged, so a workspace is the
+  same size on every machine and in every build, and a test can
+  state a number. It sits below `apl-workspace`, which checks the
+  quota in `set` and `define` so that no assignment can go round it.
 - `apl-quad` reads that line: quad evaluates the reply, quote-quad
   takes it as characters. Like `apl-call` it is handed `Run` rather
   than depending on the evaluator.

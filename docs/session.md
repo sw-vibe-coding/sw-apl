@@ -160,6 +160,17 @@ suspended function -- the state indicator is part of the
 workspace, not of the session, and is cleared with everything
 else. A function you were in the middle of is gone, not resumed.
 
+## How big a workspace is
+
+A workspace holds a fixed number of bytes. `⌶22` reports how many
+are still free; `--ws-size` sets the size, and the default is
+1048576 bytes. Anything that will not fit is `WS FULL`, and
+nothing is stored.
+
+The size belongs to the session, not to the workspace: it is not
+saved, so a workspace saved under a large size need not load under
+a small one. `workspaces.md` has what each thing costs.
+
 ## Where workspaces live
 
 Libraries are numbered, as in APL\360: library 0 is your own and

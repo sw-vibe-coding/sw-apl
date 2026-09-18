@@ -30,7 +30,7 @@ pub fn open_definition(session: &mut Session, text: &str) -> Reply {
         }),
     };
     match opening {
-        Err(err) => return Reply::from(error_lines(&err, &format!("∇{text}"))),
+        Err(err) => return Reply::failed(error_lines(&err, &format!("∇{text}"))),
         Ok(defn) => session.defining = Some(Definition::start(defn)),
     }
     if rest.is_empty() {
@@ -47,7 +47,7 @@ pub fn definition_line(session: &mut Session, line: &str) -> Reply {
     };
     let step = match definition.line(line) {
         Ok(step) => step,
-        Err(err) => return Reply::from(error_lines(&err, line)),
+        Err(err) => return Reply::failed(error_lines(&err, line)),
     };
     if let Some(locked) = step.closed {
         let open = session.defining.take().expect("a definition is open");
@@ -55,7 +55,9 @@ pub fn definition_line(session: &mut Session, line: &str) -> Reply {
         if let Some(was) = renamed {
             session.ws.erase(&was);
         }
-        session.ws.define(defn);
+        if let Err(err) = session.ws.define(defn) {
+            return Reply::failed(error_lines(&err, line));
+        }
     }
     Reply::from(step.lines)
 }
@@ -66,11 +68,20 @@ pub fn definition_line(session: &mut Session, line: &str) -> Reply {
 /// take effect; what they print on the way is not shown.
 pub fn run_command(session: &mut Session, command: &str) -> Reply {
     let answer = system_command(&mut session.ws, command);
-    for line in answer.feed {
-        let _ = session.respond(&line);
+    if answer.feed.is_empty() {
+        return Reply::from(answer);
     }
-    Reply {
-        lines: answer.lines,
-        off: answer.off,
+    // A workspace put together by running APL is all or nothing: the
+    // old one is put aside first, and given back the moment a fed
+    // line reports an error. A half-loaded workspace is worse than a
+    // refused one, because nothing says which half arrived.
+    let was = session.ws.saved.clone();
+    for line in &answer.feed {
+        let reply = session.respond(line);
+        if reply.error {
+            session.ws.saved = was;
+            return reply;
+        }
     }
+    Reply::from(answer)
 }

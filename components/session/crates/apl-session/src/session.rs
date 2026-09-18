@@ -82,10 +82,12 @@ impl Session {
         // the statement produced after it.
         let mut lines = self.ws.console.take();
         lines.extend(self.ws.flush().lines);
-        lines.extend(match result {
-            Ok(out) => render_all(&[out], self.ws.saved.print).lines,
-            Err(err) => error_lines(&err, line),
-        });
-        Reply::from(lines)
+        let mut reply = match result {
+            Ok(out) => Reply::from(render_all(&[out], self.ws.saved.print).lines),
+            Err(err) => Reply::failed(error_lines(&err, line)),
+        };
+        lines.append(&mut reply.lines);
+        reply.lines = lines;
+        reply
     }
 }

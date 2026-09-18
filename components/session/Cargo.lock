@@ -256,6 +256,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-space"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-value",
+]
+
+[[package]]
 name = "apl-value"
 version = "0.1.0"
 dependencies = [
@@ -270,6 +278,7 @@ dependencies = [
  "apl-console",
  "apl-ibeam",
  "apl-prims",
+ "apl-space",
  "apl-value",
 ]
 

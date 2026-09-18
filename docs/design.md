@@ -141,3 +141,25 @@ comments any Unicode scalar value is data. Invalid UTF-8 input is
 reported as CHARACTER ERROR with a byte offset. Rules out: silent
 acceptance of Greek lookalikes and of tabs or other control
 characters in source.
+
+## D13. A workspace is a modelled size, not measured memory
+
+A workspace holds a fixed number of bytes, set by `--ws-size` and
+reported free by `⌶22`. What a value costs is charged the way
+APL\360 charged it -- a descriptor, an entry per axis, eight bytes
+a number and one a character -- and never measured from Rust's
+allocator, so a workspace is the same size on every machine, in
+every build, and in a test that states a number. The total is
+recomputed from the symbol table rather than carried along, so a
+name going out of scope cannot leak space by being forgotten in
+one place.
+
+The size belongs to the session and is not written by `)SAVE`,
+exactly as an APL\360 quota belonged to the account rather than
+the workspace. Rules out: `⎕WA`, a saved quota, and an accounting
+that reports how much memory the process is using.
+
+A command that fills a workspace by running APL -- `)LOAD`,
+`)COPY` -- is all or nothing: the old workspace is put aside first
+and given back if any line fails. Rules out: a half-loaded
+workspace, which cannot be told from a whole one.

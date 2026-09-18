@@ -83,7 +83,7 @@ pub fn eval_expr(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
             .ok_or_else(|| AplError::new(ErrorKind::Value).at(*pos)),
         Expr::Assign { name, value, .. } => {
             let v = eval_expr(ws, value)?;
-            ws.set(name, v.clone());
+            ws.set(name, v.clone())?;
             Ok(v)
         }
         Expr::Monadic { .. } => apply::eval_monadic(ws, expr),

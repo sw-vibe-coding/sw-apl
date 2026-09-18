@@ -22,7 +22,9 @@ use crate::workspace::Workspace;
 const MAX_DEPTH: usize = 128;
 
 /// One call: what it displaced, where it is, and whether it stopped.
-#[derive(Debug)]
+/// Clonable because a workspace is: `)LOAD` and `)COPY` put a copy
+/// aside so a load that fails part way can be undone.
+#[derive(Debug, Clone)]
 pub struct Activation {
     /// The function's name.
     pub name: String,

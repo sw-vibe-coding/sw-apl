@@ -15,7 +15,8 @@ use apl_workspace::Run;
 /// values. A label holds the number of the line it names.
 ///
 /// # Errors
-/// DEPTH ERROR when calls nest too deeply.
+/// DEPTH ERROR when calls nest too deeply, WS FULL when the
+/// arguments and labels will not fit in what the quota leaves.
 pub fn bind(
     ws: &mut Workspace,
     defn: &Defn,
@@ -27,12 +28,12 @@ pub fn bind(
     let at = ws.enter(&defn.name, &names)?;
     for (n, v) in [(&defn.left, args.0), (&defn.right, args.1)] {
         if let (Some(n), Some(v)) = (n, v) {
-            ws.set(n, v);
+            ws.set(n, v)?;
         }
     }
     for (n, line) in labels {
         let line = i64::try_from(line).unwrap_or_default();
-        ws.set(&n, Array::scalar(Number::Int(line)));
+        ws.set(&n, Array::scalar(Number::Int(line)))?;
     }
     Ok(at)
 }

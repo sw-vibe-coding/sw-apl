@@ -8,7 +8,7 @@
 
 use std::fs;
 
-use apl_eval::{Saved, Workspace};
+use apl_eval::Workspace;
 use apl_wsfile::{DIRECTIVE, definitions};
 
 use crate::command::{Answer, INCORRECT};
@@ -21,20 +21,26 @@ use crate::save::library;
 ///
 /// The reply is SAVED and the moment the file records, as APL\360
 /// replied, and nothing else: typing DESCRIBE is the reader's move.
-pub fn load(ws: &mut Workspace, rest: &[&str]) -> Answer {
+///
+/// The clear that replaces the old workspace is the first line fed
+/// back rather than something done here, so that it is undone with
+/// the rest if a line of the file will not fit: the session puts the
+/// old workspace aside before it runs any of them.
+pub fn load(ws: &Workspace, rest: &[&str]) -> Answer {
     let Some((text, _)) = read(ws, rest) else {
         return Answer {
             lines: vec![INCORRECT.to_string()],
             ..Answer::default()
         };
     };
-    ws.saved = Saved::default();
     let when = text
         .lines()
         .find_map(|l| l.strip_prefix(&format!("{DIRECTIVE}SAVED ")));
+    let mut feed = vec![")CLEAR".to_string()];
+    feed.extend(text.lines().map(String::from));
     Answer {
         lines: vec![format!("SAVED {}", when.unwrap_or_default())],
-        feed: text.lines().map(String::from).collect(),
+        feed,
         off: false,
     }
 }

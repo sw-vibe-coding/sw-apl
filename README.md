@@ -78,7 +78,7 @@ prompt written with quote-quad shares a line with its answer. In
 batch the lines come from the script.
 
 The I-beam system functions report the time of day, the processor
-time used, the space available, the terminals connected, the sign-on
+time used, the space still free, the terminals connected, the sign-on
 time, the date, the line now executing, and the state indicator.
 
 A `.apl` file can be executable: a leading `#!` line belongs to the
@@ -91,6 +91,11 @@ suspended for `)SI` to show and a branch to take up again.
 Workspaces save and load: `)SAVE` writes a plain UTF-8 file that is
 APL you could have typed, `)LOAD` reads it back by running it, and
 `)COPY` takes names out of one without taking its settings.
+
+A workspace holds a fixed number of bytes, which `--ws-size` sets and
+I-beam 22 reports what is left of. Anything that will not fit -- an
+assignment, a definition, the arguments a call binds, a `)LOAD` or a
+`)COPY` -- is WS FULL, and the workspace is left exactly as it was.
 
 Not there yet: `)FNS` and the other inquiry commands, the shipped
 library workspaces, and domino. A

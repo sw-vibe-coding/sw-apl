@@ -70,7 +70,7 @@ pub fn assign_indexed(
         .cloned()
         .ok_or_else(|| AplError::new(ErrorKind::Value).at(pos))?;
     let updated = indexed_assign(&base, &idx, &v, ws.saved.env.io).map_err(|e| e.at(pos))?;
-    ws.set(name, updated);
+    ws.set(name, updated)?;
     Ok(v)
 }
 

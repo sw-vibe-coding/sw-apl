@@ -4,6 +4,9 @@
 ⍝ reader's move, not the loader's.
 ⍝ The moments )SAVE and )LOAD report vary, so the reg-rs filter keeps
 ⍝ their shape and masks their values; see docs/testing.md.
+⍝ )LIB is not shown here: it lists library 0, which is yours, and a
+⍝ sample cannot know what you keep in it. The command tests check it
+⍝ in a directory of their own.
 )WSID CLASS
 A←5
 ∇R←HYP B
@@ -11,7 +14,6 @@ R←B×2
 ∇
 )ORIGIN 0
 )SAVE
-)LIB
 ⍝ Clearing loses everything; loading brings it back, settings and all.
 )CLEAR
 A
@@ -42,5 +44,4 @@ A
 HYP 3
 A
 )DROP CLASS
-)LIB
 )OFF

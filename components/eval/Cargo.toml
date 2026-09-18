@@ -5,6 +5,7 @@ members = [
     "crates/apl-call",
     "crates/apl-quad",
     "crates/apl-ibeam",
+    "crates/apl-space",
     "crates/apl-wsfile",
     "crates/apl-eval",
 ]

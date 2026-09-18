@@ -203,7 +203,7 @@ fn indexing_and_indexed_assignment_evaluate() {
 fn define(ws: &mut Workspace, header: &str, body: &[&str]) {
     let mut defn = parse_header(header).unwrap();
     defn.body = body.iter().map(|&l| l.to_string()).collect();
-    ws.define(defn);
+    ws.define(defn).expect("the definition fits");
 }
 
 #[test]

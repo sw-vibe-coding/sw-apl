@@ -47,15 +47,21 @@ pub struct Args {
     /// Do not echo input lines (with their indent) in batch mode.
     #[arg(long)]
     pub no_echo: bool,
+
+    /// Workspace size in bytes: how much the workspace may hold
+    /// before WS FULL.
+    #[arg(long = "ws-size", value_name = "BYTES", default_value_t = apl_session::QUOTA)]
+    pub ws_size: usize,
 }
 
 fn main() -> ExitCode {
     let args = Args::parse();
     let echo = !args.no_echo;
+    let size = args.ws_size;
     let outcome = match args.file {
-        Some(path) => shell::run_batch(Some(&path), echo),
-        None if std::io::stdin().is_terminal() => repl::run_interactive(),
-        None => shell::run_batch(None, echo),
+        Some(path) => shell::run_batch(Some(&path), echo, size),
+        None if std::io::stdin().is_terminal() => repl::run_interactive(size),
+        None => shell::run_batch(None, echo, size),
     };
     match outcome {
         Ok(()) => ExitCode::SUCCESS,

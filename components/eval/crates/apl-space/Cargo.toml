@@ -1,6 +1,6 @@
 [package]
-name = "apl-workspace"
-description = "sw-apl active workspace: variables, functions, environment, output"
+name = "apl-space"
+description = "sw-apl workspace accounting: what a value costs and what a quota allows"
 edition.workspace = true
 license.workspace = true
 version.workspace = true
@@ -9,11 +9,7 @@ repository.workspace = true
 
 [dependencies]
 apl-ast = { path = "../../../parse/crates/apl-ast" }
-apl-console = { path = "../apl-console" }
-apl-ibeam = { path = "../apl-ibeam" }
 apl-value = { path = "../../../value/crates/apl-value" }
-apl-prims = { path = "../../../prims/crates/apl-prims" }
-apl-space = { path = "../apl-space" }
 
 [lints]
 workspace = true

@@ -1,0 +1,62 @@
+      ⍝ How much room a workspace has, and what happens when it runs out.
+      ⍝ I-beam 22 reports the bytes still free. A clear workspace has the
+      ⍝ whole of its size free; the default is 1048576 bytes, and --ws-size
+      ⍝ sets a different one.
+      ⌶22
+1048576
+      ⍝ A name costs its entry and its characters; a value costs a
+      ⍝ descriptor, an entry per axis, and its elements -- eight bytes a
+      ⍝ number, one a character. So a hundred numbers under a one-letter
+      ⍝ name come to 829 bytes.
+      A←⍳100
+      ⌶22
+1047747
+      ⍝ Assigning over a name gives back what it held first, so replacing
+      ⍝ the hundred numbers with one leaves only the small value behind.
+      A←1
+      ⌶22
+1048543
+      ⍝ Characters are a byte each, whatever they take in UTF-8: the
+      ⍝ accounting is of characters, not of their encoding.
+      T←'ABCDE'
+      ⌶22
+1048509
+      ⍝ A defined function costs a descriptor, the names its header makes
+      ⍝ local, and each body line as it was typed -- the body is held as
+      ⍝ text and parsed when it runs, so text is what it costs.
+      ∇R←A HYP B
+[1]   R←((A*2)+B*2)*0.5
+[2]   ∇
+      ⌶22
+1048434
+      3 HYP 4
+5
+      ⍝ )CLEAR gives everything back.
+      )CLEAR
+CLEAR WS
+      ⌶22
+1048576
+      ⍝ A value that will not fit in what is left is WS FULL, and nothing
+      ⍝ is stored: the workspace is left exactly as it was. Two hundred
+      ⍝ thousand numbers want 1600020 bytes, which the default size has
+      ⍝ no room for.
+      BIG←⍳200000
+WS FULL
+      BIG←⍳200000
+      ^
+      ⌶22
+1048576
+      ⍝ The name still holds nothing.
+      BIG
+VALUE ERROR
+      BIG
+      ^
+      ⍝ What a workspace holds is bounded; what an expression builds on
+      ⍝ the way to a result is not. This is the size of the workspace, not
+      ⍝ of the machine.
+      ⍴⍳200000
+200000
+      )OFF
+22.19.24 09/17/26
+CONNECTED 0.00.00
+CPU TIME 0.00.00

@@ -194,15 +194,31 @@ widen each layer to the full APL\360 set.
    `index-origin-considerations.md`. `)LOAD` prints the SAVED
    line and nothing else: no DESCRIBE hint, no latent
    expression, strict parity. (Owner direction 2026-09-17.)
-4. `system-commands-inquiry` -- )FNS )VARS )GRPS )GRP )GROUP
+4. `workspace-quota` -- a workspace is a bounded space, not the
+   whole of the process's memory. Give it a size, with a sensible
+   default and a way to change it, so that `⌶22` reports
+   something true and `WS FULL` can be raised: on assignment, on
+   a definition, and on a `)LOAD` or `)COPY` of a workspace too
+   big to fit. The figure is an account of what the workspace
+   holds, not of Rust allocations, so it must be stable across
+   runs and machines. The quota belongs to the session, not the
+   workspace: like the console and the clock it is not saved, so
+   a workspace saved under a large quota may not load under a
+   small one -- which is what happened on a real APL\360.
+   (Owner direction 2026-09-17.)
+5. `system-commands-inquiry` -- )FNS )VARS )GRPS )GRP )GROUP
    )ERASE )SI )SIV )ORIGIN )DIGITS )WIDTH )SYMBOLS.
-5. `library-workspaces` -- numbered public libraries (`)LOAD 1
+6. `library-workspaces` -- numbered public libraries (`)LOAD 1
    CLASS` style) mapped to directories; ship starter workspaces
    in `ws/lib1/`, each carrying a DESCRIBE function. Tracked
    workspaces are ones we wrote: give each a provenance line and
    gate on it, so material from elsewhere cannot be committed by
-   mistake. (Owner direction 2026-09-17.)
-6. `locked-workspace-file` -- a workspace holding a locked
+   mistake. (Owner direction 2026-09-17.) Give the library root a
+   command-line option too: a sample that runs `)SAVE` or `)LIB`
+   writes into, and reads, the user's own library 0, so a reg-rs
+   baseline changes the moment the user saves a workspace of their
+   own. Sample 61 lost its `)LIB` line for exactly that reason.
+7. `locked-workspace-file` -- a workspace holding a locked
    function is not written as plain text: `)SAVE` obscures it
    (rot-13 to begin with) and `)LOAD` reads both forms. A text
    workspace shows what the del editor refuses to, which is the

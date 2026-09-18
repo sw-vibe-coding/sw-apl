@@ -208,7 +208,7 @@ selects a system value, as in APL\360:
 |---|---|
 | `⌶20` | time of day, in sixtieths of a second since midnight |
 | `⌶21` | CPU time used this session, in sixtieths of a second |
-| `⌶22` | workspace space available, in bytes (nominal) |
+| `⌶22` | workspace space still free, in bytes |
 | `⌶23` | number of terminals connected (always 1) |
 | `⌶24` | time of sign-on, in sixtieths of a second since midnight |
 | `⌶25` | today's date as the integer MMDDYY |

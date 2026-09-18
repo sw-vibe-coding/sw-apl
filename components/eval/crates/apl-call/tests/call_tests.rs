@@ -17,7 +17,7 @@ fn run(ws: &mut Workspace, line: &str) -> AplResult<Output> {
         "show" => Ok(Output::Value(num(1))),
         "go" => Ok(Output::Branch(rest.trim().parse().ok())),
         "set" => {
-            ws.set(rest.trim(), num(42));
+            ws.set(rest.trim(), num(42))?;
             Ok(Output::Nothing)
         }
         _ => Ok(Output::Nothing),
@@ -34,7 +34,8 @@ fn define(ws: &mut Workspace, name: &str, result: Option<&str>, body: &[&str]) {
         result: result.map(str::to_string),
         body: body.iter().map(|l| (*l).to_string()).collect(),
         ..Defn::default()
-    });
+    })
+    .expect("the definition fits");
 }
 
 #[test]

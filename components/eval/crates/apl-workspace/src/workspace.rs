@@ -3,14 +3,12 @@
 //! The boundary is the point of the split -- a later step writes the
 //! first half to a file, and cannot be handed the second by mistake.
 
-use std::collections::HashMap;
 use std::path::PathBuf;
-use std::rc::Rc;
 
-use apl_ast::Defn;
 use apl_console::{Console, Output, Print, Shown, Transcript, render_all};
 use apl_ibeam::{Clock, stopped};
 use apl_prims::Env;
+use apl_space::{Funcs, Vars, of_value, room, used};
 use apl_value::{AplResult, Array};
 
 use crate::frame::Activation;
@@ -28,13 +26,16 @@ pub type Run = fn(&mut Workspace, &str) -> AplResult<Output>;
 /// current line has displayed. None of it can be written to a file
 /// and read back, and a loaded workspace must not carry someone
 /// else's terminal along with it.
-#[derive(Debug, Default)]
+/// Clonable so that a command which fills a workspace by running APL
+/// -- `)LOAD`, `)COPY` -- can put the old one aside and give it back
+/// if the new one does not fit.
+#[derive(Debug, Default, Clone)]
 pub struct Saved {
     /// Names that hold a value. A name holds a variable or a
     /// function, never both, which `define` and `set` keep true.
-    pub vars: HashMap<String, Array>,
+    pub vars: Vars,
     /// Names that hold a defined function.
-    pub funcs: HashMap<String, Rc<Defn>>,
+    pub funcs: Funcs,
     /// The activation stack: running and stopped calls, outermost
     /// first. It is the state indicator.
     pub stack: Vec<Activation>,
@@ -71,6 +72,11 @@ pub struct Workspace {
     /// the workspace: a saved workspace does not carry the machine
     /// it was saved on.
     pub libraries: PathBuf,
+    /// How many bytes this workspace may hold, and so what the space
+    /// available reads against. Session state for the same reason the
+    /// libraries are: a workspace saved under a large quota need not
+    /// fit under a small one, exactly as on APL\360.
+    pub quota: usize,
 }
 
 impl Default for Workspace {
@@ -82,6 +88,7 @@ impl Default for Workspace {
             clock: stopped,
             signed_on: 0,
             libraries: PathBuf::from("."),
+            quota: apl_space::DEFAULT,
         }
     }
 }
@@ -101,7 +108,18 @@ impl Workspace {
     }
 
     /// Assign a variable, replacing any previous value.
-    pub fn set(&mut self, name: &str, value: Array) {
+    ///
+    /// Every assignment comes through here, which is why the quota is
+    /// checked here rather than at the call sites: a value that will
+    /// not fit is not stored, and the workspace is left as it was.
+    ///
+    /// # Errors
+    /// WS FULL when the value does not fit in what the quota leaves.
+    pub fn set(&mut self, name: &str, value: Array) -> AplResult<()> {
+        let freed = self.saved.vars.get(name).map_or(0, of_value);
+        let held = used(&self.saved.vars, &self.saved.funcs);
+        room(self.quota, held, of_value(&value), freed)?;
         self.saved.vars.insert(name.to_string(), value);
+        Ok(())
     }
 }

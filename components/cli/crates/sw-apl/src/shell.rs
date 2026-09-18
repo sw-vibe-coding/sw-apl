@@ -62,11 +62,12 @@ fn without_shebang(bytes: &[u8]) -> &[u8] {
     }
 }
 
-/// Run every line of `path` (or of stdin when `None`) in batch mode.
+/// Run every line of `path` (or of stdin when `None`) in batch mode,
+/// in a workspace of `size` bytes.
 ///
 /// # Errors
 /// I/O errors reading the input or writing the transcript.
-pub fn run_batch(path: Option<&Path>, echo: bool) -> io::Result<()> {
+pub fn run_batch(path: Option<&Path>, echo: bool, size: usize) -> io::Result<()> {
     let mut bytes = Vec::new();
     if let Some(p) = path {
         bytes = fs::read(p)?;
@@ -75,6 +76,7 @@ pub fn run_batch(path: Option<&Path>, echo: bool) -> io::Result<()> {
     }
     let pending: Pending = Rc::new(RefCell::new(lines(&bytes).into()));
     let mut session = Session::attached(Box::new(Script(Rc::clone(&pending), echo)));
+    session.ws.quota = size;
     catch_interrupt();
     run_lines(&mut session, &pending, echo);
     io::stdout().flush()

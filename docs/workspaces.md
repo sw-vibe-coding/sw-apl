@@ -114,27 +114,75 @@ of a file you can read. `parity.md` carries the row.
 
 ## How much room is left
 
-`⌶22` reports the space available, in bytes, and it is the only way
-APL\360 offered -- the `⎕WA` of later systems is one more
-quad-name sw-apl does not have.
+A workspace holds a fixed number of bytes. `⌶22` reports how many
+are still free, and it is the only way APL\360 offered -- the `⎕WA`
+of later systems is one more quad-name sw-apl does not have.
 
 ```apl
       ⌶22
 1048576
+      A←⍳100
+      ⌶22
+1047747
 ```
 
-**In sw-apl the number is nominal.** A workspace is a Rust process's
-memory, not a fixed partition carved out of a 360, so there is no
-quota to report against and `⌶22` answers the same figure every time.
-`WS FULL` is in `parity.md` as not implemented and is never raised:
-sw-apl will not refuse a `)LOAD` for size, and a workspace grows
-until the machine itself objects.
+The default size is 1048576 bytes, and `--ws-size` sets a different
+one:
 
-On a real APL\360 this was a live constraint. A workspace was a
-fixed allocation, `WS FULL` was an error you hit routinely, and a
-`)LOAD` of a large workspace could fail against a small quota -- which
-is why `)COPY` of a few names mattered as much as it did, and why
-`⌶22` was worth checking before starting something big.
+```sh
+sw-apl --ws-size 4096
+```
+
+**The size belongs to the session, not to the workspace.** Like the
+console and the clock it is not written by `)SAVE`, so a workspace
+saved under a large size need not load under a small one -- which is
+what happened on a real APL\360, and is the reason `)COPY` of a few
+names mattered as much as `)LOAD` of the lot.
+
+### What a thing costs
+
+The figures are a model, not a measurement of Rust's heap: a
+workspace has to be the same size on every machine and in every
+build, so what is charged is what APL\360 would have charged.
+
+| | Bytes |
+|---|---|
+| A value | 16, plus 4 an axis, plus its elements |
+| A number | 8, whether or not it is whole |
+| A character | 1, whatever it takes in UTF-8 |
+| A name in the symbol table | 8, plus its characters |
+| A defined function | 16, plus the names its header makes local, plus 4 and its text for each body line |
+
+A function's body is held as text and parsed when it runs, so text
+is what it costs.
+
+### WS FULL
+
+Anything that will not fit in what is left is `WS FULL`, and nothing
+is stored: an assignment, a definition, the arguments a call binds,
+and a `)LOAD` or `)COPY` of a workspace too big for the size you are
+working under.
+
+```
+      BIG←⍳200000
+WS FULL
+      BIG←⍳200000
+      ^
+```
+
+A refused `)LOAD` leaves the workspace you were in exactly as it
+was, down to its name and its settings. The file is APL and loading
+it is running it, so a load that stopped part way would leave you
+with half a workspace and no way to tell which half; instead the old
+one is put aside first and given back the moment a line will not
+fit.
+
+What a workspace *holds* is bounded. What an expression builds on
+the way to a result is not: `⍴⍳200000` answers 200000 in a
+workspace far too small to hold that vector, because nothing keeps
+it. The size is the workspace's, not the machine's.
+
+`samples/62-workspace-space.apl` is the worked example.
 
 ## Loading, and copying
 

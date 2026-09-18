@@ -14,6 +14,13 @@ MODES:
                          flags before -f, and prefer the portable
                          form #!/usr/bin/env -S sw-apl --no-echo -f.
 
+WORKSPACE SIZE:
+  A workspace holds a fixed number of bytes, and a value that will
+  not fit in what is left is WS FULL. --ws-size sets it; the default
+  is 1048576. What is left is reported by I-beam 22. The size is the
+  session's, not the workspace's: it is not saved, so a workspace
+  saved under a large size need not load under a small one.
+
 INPUT:
   Traditional APL glyphs as Unicode. There are no keyword aliases.
   See docs/input-methods.md for Espanso and Emacs setups and

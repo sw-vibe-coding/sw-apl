@@ -22,6 +22,12 @@ character matrix for the names, mixed output, and the conditional
 branch idiom driving two functions. Its transcript is reproducible
 because the random link starts from a fixed value.
 
+`62-workspace-space.apl` shows how much room a workspace has: what a
+name, a value, a character and a defined function each cost, what is
+given back when a name is reassigned or the workspace cleared, and
+what WS FULL looks like. What a workspace holds is bounded; what an
+expression builds on the way to a result is not.
+
 `61-save-load.apl` saves a workspace, clears, loads it back, and then
 copies from it -- showing that copying takes the names but leaves the
 index origin alone, which is the difference that matters.

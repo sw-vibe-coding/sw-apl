@@ -24,7 +24,8 @@ fn define(ws: &mut Workspace, name: &str, body: &[&str]) {
         name: name.to_string(),
         body: body.iter().map(|l| (*l).to_string()).collect(),
         ..Defn::default()
-    });
+    })
+    .expect("the definition fits");
 }
 
 #[test]

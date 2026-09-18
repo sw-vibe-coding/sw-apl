@@ -4,6 +4,8 @@
 use std::rc::Rc;
 
 use apl_ast::Defn;
+use apl_space::{of_function, of_value, room, used};
+use apl_value::AplResult;
 
 use crate::workspace::Workspace;
 
@@ -22,9 +24,23 @@ impl Workspace {
     }
 
     /// Store a definition, replacing whatever the name held.
-    pub fn define(&mut self, defn: Defn) {
+    ///
+    /// # Errors
+    /// WS FULL when the function does not fit in what the quota
+    /// leaves. Nothing is stored and nothing is removed: a name that
+    /// held something still holds it.
+    pub fn define(&mut self, defn: Defn) -> AplResult<()> {
+        let held = self.saved.vars.get(&defn.name).map_or(0, of_value);
+        let was = self
+            .saved
+            .funcs
+            .get(&defn.name)
+            .map_or(0, |f| of_function(f));
+        let table = used(&self.saved.vars, &self.saved.funcs);
+        room(self.quota, table, of_function(&defn), held + was)?;
         self.saved.vars.remove(&defn.name);
         self.saved.funcs.insert(defn.name.clone(), Rc::new(defn));
+        Ok(())
     }
 
     /// Forget whatever a name holds. Nothing happens if it holds
