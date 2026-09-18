@@ -1,21 +1,24 @@
-⍝ The I-beam system functions. Three of them read the clock, so this
-⍝ transcript can only show that their values are sensible, never what
-⍝ they are: a baseline made from them would fail a second later.
-⍝ The ones that do not move are shown outright.
+⍝ The I-beam system functions. Four of them read the clock, so what
+⍝ they print is different every run. The transcript still shows the
+⍝ values: the sample labels them (VARIES) and the reg-rs preprocess
+⍝ filter masks what follows, so a baseline holds the shape of the
+⍝ answer without pinning a number that cannot come back.
+⍝ Space available, in bytes, and the terminals connected.
 ⌶22
 ⌶23
-⍝ Time of day, in sixtieths of a second since midnight, so somewhere
-⍝ in the day. Processor time is never negative.
-((⌶20)≥0)∧(⌶20)<5184000
-(⌶21)≥0
-⍝ Sign-on was earlier today, or today began after it.
-(⌶24)≥0
-⍝ The date is MMDDYY, so the month is a month and the day is a day.
-MONTH←⌊(⌶25)÷10000
-DAY←⌊100|(⌶25)÷100
-((MONTH≥1)∧MONTH≤12)∧(DAY≥1)∧DAY≤31
+⍝ Time of day and sign-on time, in sixtieths of a second since
+⍝ midnight; processor time used so far, in the same units.
+'TIME OF DAY (VARIES): ';⌶20
+'CPU TIME (VARIES): ';⌶21
+'SIGNED ON (VARIES): ';⌶24
+⍝ Today's date as MMDDYY.
+'DATE (VARIES): ';⌶25
+⍝ Sixtieths divide into seconds, and seconds into hours, like any
+⍝ other number: an I-beam is a function, not a special form.
+'HOUR (VARIES): ';⌊(⌶20)÷60×60×60
 ⍝ 26 is the line now executing and 27 is every line in the state
-⍝ indicator, innermost first. In immediate execution there is none.
+⍝ indicator, innermost first. Neither moves with the clock, so both
+⍝ are shown outright. In immediate execution there is no line.
 ⌶26
 ⍴⌶27
 ∇R←WHERE
@@ -39,8 +42,8 @@ N←?(1+60|⌶20)⍴2
 ∇
 STIR
 X←?5⍴10
-⍝ What X holds now differs from run to run, so only its shape and the
-⍝ range of its values can be shown.
+'DEAL (VARIES): ';X
+⍝ Whatever X holds, it is five numbers between 1 and 10.
 ⍴X
 ∧/(X≥1)∧X≤10
 )OFF

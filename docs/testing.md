@@ -36,6 +36,50 @@ Rebase a baseline only when the change is intentional, and say so
 in the commit message (`reg-rs: rebased 06-reduce, identity of
 empty reduce`).
 
+### Output that cannot come back the same
+
+`reg-rs` is built for commands that are not byte-identical twice.
+`reg-rs create` takes:
+
+| Option | What it is for |
+|---|---|
+| `-P`, `--preprocess CMD` | A filter run over the output before it is compared |
+| `-M`, `--diff-mode MODE` | How differences are normalized (default `text`) |
+| `--expects TEXT` | What the test is meant to show |
+| `--flaky-note TEXT` | Why a test is unreliable, when it is |
+
+sw-apl uses the filter. `scripts/normalize-apl-output.sh` is it, and
+`scripts/reg-seed.sh` gives it to every test, because it changes
+nothing in a transcript that has no value to mask and is then one
+less thing to remember when a sample later grows one.
+
+APL prints bare numbers, so a filter cannot tell a clock reading from
+arithmetic. The convention is that the sample says which is which. A
+value that cannot reproduce is printed behind an upper-case label
+ending `(VARIES): `, in the sample's own mixed output:
+
+```apl
+'TIME OF DAY (VARIES): ';⌶20
+```
+
+The filter replaces what follows with `...`, and only on an output
+line: output starts in column one, while an echoed input line is
+indented six spaces or headed by its `[n]` prompt, so the statement
+stays legible beside its masked answer. `samples/58-ibeams.apl` is
+the worked example.
+
+Mask only what genuinely cannot reproduce -- a clock, a processor
+time, a host name. A sample twisted into determinism, printing
+`((⌶20)≥0)∧(⌶20)<5184000` rather than the time, is a worse sample: it
+stops showing what the feature returns. A value masked because it is
+merely inconvenient is worse still, because the test then pins
+nothing. Where a whole test is unreliable rather than one value in
+it, say so with `--flaky-note` instead of widening the filter.
+
+`scripts/reg-seed.sh` also carries the list of samples deliberately
+left unseeded, each with its reason, so `--all` cannot quietly sweep
+one back in.
+
 The command each test runs is `target/release/sw-apl -f
 samples/NAME.apl`; `scripts/reg-seed.sh` builds the release
 binary first. The transcript includes the echoed input line so

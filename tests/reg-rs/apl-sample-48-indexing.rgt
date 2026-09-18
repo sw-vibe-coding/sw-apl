@@ -1,4 +1,5 @@
 command = "target/release/sw-apl -f samples/48-indexing.apl"
 timeout = 60
+preprocess = "bash scripts/normalize-apl-output.sh"
 exit_code = 0
 desc = "Transcript of samples/48-indexing.apl"

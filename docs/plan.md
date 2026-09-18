@@ -162,10 +162,14 @@ widen each layer to the full APL\360 set.
    sign-on time, 25 date, 26 current line, 27 state indicator
    lines (all in sixtieths of a second where APL\360 used them);
    `)ORIGIN`, `)DIGITS`, `)WIDTH` with the `WAS n` reply.
-7. `terminal-feel` -- six-space indent prompt, printer-style
+7. `reg-normalization` -- use reg-rs as it is meant to be used:
+   a preprocess filter so a baseline can hold output that varies
+   between runs, rather than samples contorted into determinism.
+   (Owner direction 2026-09-17.)
+8. `terminal-feel` -- six-space indent prompt, printer-style
    scrollback, interrupt handling, line editing with Unicode
    input, history file.
-8. `script-files` -- an executable `.apl` file: skip a leading
+9. `script-files` -- an executable `.apl` file: skip a leading
    `#!` line so a shebang script runs without a CHARACTER ERROR,
    and document running a workspace file from the shell.
    (Owner direction 2026-09-17.)
