@@ -53,6 +53,7 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | State indicator: suspension, pendent callers, resumption with `→`n, clearing with a bare `→` | done | call/session tests, sample 56 |
 | Suspending a call written inside a larger expression | todo | sw-apl unwinds it instead, since it cannot take up a half-evaluated expression; the error still names the function and line |
 | Six-space prompt, batch echo | done | cli tests |
+| Executable `.apl` file: a leading `#!` line is the shell's and is not read as APL | done | reg-rs CLI tests, `tests/scripts/` |
 | `)OFF` sign-off: time and date, connect time, processor time | done | session tests, sample 59 |
 | Line editing with history (up arrow), Ctrl-C cancels a line, Ctrl-D signs off | done | manual (rustyline); tape |
 | Interrupt a running statement: INTERRUPT, suspended, state indicator kept | done | call tests; a body is read between its lines, so one long line cannot yet be stopped |

@@ -9,6 +9,10 @@ MODES:
                          input line with the indent so the transcript
                          reads like a session. Stops at )OFF.
   sw-apl < FILE          Batch from stdin (same as -f).
+  ./FILE.apl             An executable file: a leading #! line is
+                         the shell's and is not read as APL. Put the
+                         flags before -f, and prefer the portable
+                         form #!/usr/bin/env -S sw-apl --no-echo -f.
 
 INPUT:
   Traditional APL glyphs as Unicode. There are no keyword aliases.

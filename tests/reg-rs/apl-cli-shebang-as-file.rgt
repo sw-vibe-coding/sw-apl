@@ -1,0 +1,5 @@
+command = "target/release/sw-apl --no-echo -f tests/scripts/hello.apl"
+timeout = 60
+preprocess = "bash scripts/normalize-apl-output.sh"
+exit_code = 0
+desc = "A file with a shebang, run with -f rather than executed"

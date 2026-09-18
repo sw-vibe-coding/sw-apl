@@ -81,6 +81,8 @@ The I-beam system functions report the time of day, the processor
 time used, the space available, the terminals connected, the sign-on
 time, the date, the line now executing, and the state indicator.
 
+A `.apl` file can be executable: a leading `#!` line belongs to the
+shell, so sw-apl drops it and the transcript begins with the program.
 `)OFF` signs off the APL\360 way, with the time, the connect time and
 the processor time. Ctrl-C stops a running function: it reports
 INTERRUPT, names the line it stopped on, and leaves the function

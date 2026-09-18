@@ -1,0 +1,5 @@
+command = "./tests/scripts/bare-shebang.apl"
+timeout = 60
+preprocess = "bash scripts/normalize-apl-output.sh"
+exit_code = 0
+desc = "An executable .apl file run through a bare shebang"

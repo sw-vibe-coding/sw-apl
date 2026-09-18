@@ -1,6 +1,6 @@
 number = 9
 slug = "script-files"
-status = "pending"
+status = "in-progress"
 description = "Phase 3 step 8 (docs/plan.md, owner direction 2026-09-17). Make a .apl file e..."
 role = "production"
 context_files = []

@@ -227,6 +227,46 @@ SPIN[4]*
   and no interrupt is sent.
 - Ctrl-D at the prompt signs off, as `)OFF` does.
 
+## Running a file from the shell
+
+Four ways, all equivalent:
+
+```sh
+sw-apl -f prog.apl          # batch, with the transcript echo
+sw-apl --no-echo -f prog.apl   # output only
+sw-apl < prog.apl           # the same, from stdin
+printf '2+2\n)OFF\n' | sw-apl
+```
+
+A here-document puts a program inside a shell script. Quote the
+delimiter so the shell leaves `$` and backticks alone:
+
+```sh
+sw-apl --no-echo <<'APL'
+3 HYP 4
+)OFF
+APL
+```
+
+A `.apl` file can also be executable. sw-apl drops a first line
+that starts with `#!`, since the kernel has already acted on it,
+so the transcript begins with the program:
+
+```apl
+#!/usr/bin/env -S sw-apl --no-echo -f
+'HELLO'
+)OFF
+```
+
+Two things about that line. The flags come before `-f`, because
+`-f` would otherwise take `--no-echo` as its filename. And the
+`env -S` form is the portable one: a bare `#!/path/sw-apl -f`
+works on macOS, which splits a shebang's arguments, but not on
+Linux, which passes them as a single argument.
+
+Only the first line, and only those two characters: `#` is not an
+APL\360 character, so it is a CHARACTER ERROR anywhere else.
+
 ## Sign-off
 
 `)OFF` signs off and exits with status 0: the time and date the

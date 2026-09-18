@@ -80,6 +80,16 @@ it, say so with `--flaky-note` instead of widening the filter.
 left unseeded, each with its reason, so `--all` cannot quietly sweep
 one back in.
 
+### Tests of the CLI itself
+
+`scripts/reg-seed-cli.sh` seeds the tests that check how the binary
+answers the shell rather than what a sample prints: the executable
+`.apl` files in `tests/scripts/`, run through both shebang forms and
+also through `-f`. They are reg-rs tests because that is what reg-rs
+is for. Rust tests are for the unit, function and integration testing
+of the libraries; `components/cli/crates/sw-apl/tests/cli_tests.rs`
+still holds checks that belong here, and moving them is its own step.
+
 The command each test runs is `target/release/sw-apl -f
 samples/NAME.apl`; `scripts/reg-seed.sh` builds the release
 binary first. The transcript includes the echoed input line so

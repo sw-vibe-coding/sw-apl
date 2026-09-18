@@ -1,0 +1,5 @@
+command = "./tests/scripts/hash-elsewhere.apl"
+timeout = 60
+preprocess = "bash scripts/normalize-apl-output.sh"
+exit_code = 0
+desc = "A hash after the first line is still a CHARACTER ERROR"

@@ -26,9 +26,14 @@ pub struct Line {
 }
 
 /// Split a byte stream into lines (LF or CRLF), decoding each. A
-/// final newline does not start an extra empty line.
+/// final newline does not start an extra empty line, and a leading
+/// `#!` line is dropped.
 #[must_use]
 pub fn lines(bytes: &[u8]) -> Vec<Line> {
+    if bytes.is_empty() {
+        return Vec::new();
+    }
+    let bytes = without_shebang(bytes);
     if bytes.is_empty() {
         return Vec::new();
     }
@@ -40,6 +45,21 @@ pub fn lines(bytes: &[u8]) -> Vec<Line> {
             bad_at: std::str::from_utf8(l).err().map(|e| e.valid_up_to()),
         })
         .collect()
+}
+
+/// The file with a leading `#!` line removed: that line belongs to
+/// the shell that ran the file, and the kernel has already acted on
+/// it. Only the first line, and only those two characters -- `#` is
+/// not in the APL\360 character set, so it stays a CHARACTER ERROR
+/// everywhere else.
+fn without_shebang(bytes: &[u8]) -> &[u8] {
+    if !bytes.starts_with(b"#!") {
+        return bytes;
+    }
+    match bytes.iter().position(|&b| b == b'\n') {
+        Some(at) => &bytes[at + 1..],
+        None => &[],
+    }
 }
 
 /// Run every line of `path` (or of stdin when `None`) in batch mode.
