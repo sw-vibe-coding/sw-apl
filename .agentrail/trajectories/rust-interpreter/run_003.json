@@ -1,0 +1,11 @@
+{
+  "task_type": "rust-interpreter",
+  "state": {
+    "number": 3,
+    "step": "ibeam-reference"
+  },
+  "action": "Ran every example through the binary before writing it into the doc rather than after, and corrected two claims that were wrong; turned the doc's deterministic claims into sample assertions so the prose and the binary cannot drift apart; kept the step to documentation as the prompt asked, and fixed only the one factual error found in a neighbouring doc rather than widening scope; wrote the units out with worked conversions, since the eight-row table already said what each I-beam is and that was never the missing part",
+  "result": "success",
+  "reward": 1,
+  "timestamp": "2026-09-18T16:44:35"
+}
