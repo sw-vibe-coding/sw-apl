@@ -1,0 +1,1 @@
+BLOCKED: Not part of core-session. Completing step 010 with --next-slug created this pointer to Phase 4's first step; --done was the right flag, since 010 was the last of Phase 3. The prompt is carried into the workspaces saga, which docs/plan.md gives Phase 4.

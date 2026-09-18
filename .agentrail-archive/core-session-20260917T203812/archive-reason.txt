@@ -1,0 +1,1 @@
+Phase 3 complete: defined functions, branch and labels, the del editor, suspension and the state indicator, quad and quote-quad input, the I-beam system functions, the sign-off line and Ctrl-C, executable .apl files, and two corrections to how the project uses reg-rs. Ten steps. Phase 4 continues in the workspaces saga.

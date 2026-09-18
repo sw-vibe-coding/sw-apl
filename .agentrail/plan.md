@@ -1,46 +1,43 @@
-# core-session
+# workspaces
 
-Phase 3 of docs/plan.md: defined functions, branching, the del
-editor, the state indicator, quad input, and the I-beam system
-functions. This is the phase that turns sw-apl from a calculator
-into APL\360: after step 2 the horse race and Life run as functions.
+Phase 4 of docs/plan.md: the workspace as a thing you can name,
+clear, save, load and look inside. Phase 3 left a Workspace that
+holds the symbol table, the settings, the state indicator, a
+console and a clock; the last two are the terminal's and must not
+be saved. Separating them is the first step, and the file format
+follows from it.
 
-Pure APL\360 throughout: del editor (no line editor for function
-bodies), dynamic scoping, I-beams for system information, no quad
-names. Every step: format first, then tests, clippy, and gates
-(see /mw-cp); TDD; update docs/parity.md rows in the same commit;
-commit, push, report.
+The workspace file is plain UTF-8 that a person can read and APL
+can re-execute: del form for functions, assignment for variables,
+settings commands for the environment. That makes a saved
+workspace a sample, and a sample a saved workspace.
+
+Pure APL\360 throughout: numbered public libraries, the DESCRIBE
+convention, no quad names. Every step: format first, then tests,
+clippy, and gates (see /mw-cp); TDD; reg-rs for anything run
+through the binary, Rust tests for the libraries; update
+docs/parity.md rows in the same commit; commit, push, report.
 
 ## Steps
 
-1. user-functions -- the del definition form and the function call.
-   Headers: NAME, NAME B, A NAME B, each with or without R←;
-   locals after semicolons; the symbol table holds functions beside
-   variables; calls bind arguments, shadow locals, restore on exit;
-   recursion; VALUE ERROR for a result-less function used for its
-   value; SYNTAX ERROR for wrong valence. Multi-line definition in
-   immediate execution ends at the closing del.
-2. branch-and-labels -- labels as local constants holding line
-   numbers, → with an expression (first element selects the line,
-   empty vector falls through, 0 or out-of-range exits), the
-   →LABEL×⍳COND idiom, execution order and the line counter. After
-   this step samples 50 (horse race) and a function form of Life
-   run; seed their baselines.
-3. del-editor -- definition mode prompt [n], display [⎕] and [n⎕],
-   replace [n], insert at fractional line numbers, delete [∆n],
-   header edit [0], close with del or del-tilde (locked), reopen an
-   existing function with ∇NAME, DEFN ERROR cases.
-4. error-display-and-state-indicator -- FN[n] prefixes on errors
-   inside functions, suspended functions, )SI and )SIV, a bare →
-   clearing the top entry, resumption, DEPTH ERROR guard.
-5. quad-input -- ⎕ on the right evaluates a typed line (in the
-   session and inside functions), ⍞ character input and output
-   without a newline, interrupt handling.
-6. i-beams -- ⌶20 through ⌶27 (time of day, CPU time, workspace
-   available, terminals, sign-on time, date, current line, state
-   indicator lines) in sixtieths of a second where APL\360 used
-   them; DOMAIN ERROR elsewhere. A STIR idiom sample showing how to
-   advance the random link from the clock.
-7. session-polish -- the )OFF sign-off line with connect and CPU
-   time, interrupt during a running statement, and a pass over the
-   session transcript against docs/session.md.
+1. ws-model -- the workspace as a value: what is saved with it
+   (symbol table, index origin, print precision and width, the
+   random link, the workspace identifier) and what belongs to the
+   session it runs in (the console, the clock, the sign-on time).
+   )CLEAR gives a fresh one and prints CLEAR WS; )WSID shows or
+   sets the identifier. Say what clearing does to a suspended
+   function.
+2. ws-file-format -- a plain-text UTF-8 workspace file that is
+   both human readable and re-executable: del form for functions,
+   assignment for variables, settings commands for the
+   environment. Round-trip it in a test, and pin the file itself
+   as a fixture so its shape is a baseline.
+3. system-commands-ws -- )SAVE )LOAD )DROP )LIB )COPY )PCOPY
+   )CONTINUE, with the timestamps and replies docs/session.md
+   describes. )CONTINUE saves and signs off.
+4. system-commands-inquiry -- )FNS )VARS )GRPS )GRP )GROUP )ERASE
+   )SYMBOLS, in the order and column layout APL\360 used.
+5. library-workspaces -- numbered public libraries mapped to
+   directories, the library form )LOAD 1 CLASS, and starter
+   workspaces in ws/lib1/ each carrying a DESCRIBE function that
+   the session points at after a load.

@@ -1,6 +1,6 @@
 number = 11
 slug = "ws-model"
-status = "pending"
+status = "blocked"
 description = "Phase 4 step 1 (docs/plan.md, saga workspaces). This step opens a new saga; r..."
 role = "legacy"
 context_files = []
