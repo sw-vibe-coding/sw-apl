@@ -108,14 +108,32 @@ matters, and how APL\360 programmers lived with it.
 APL.SV in 1973, along with the rest of the quad-named system
 variables, and sw-apl has none of them.
 
-What APL\360 had instead was a convention, and sw-apl keeps it: a
-workspace defines a niladic function called `DESCRIBE` that prints
-what the workspace holds and how to start. After `)LOAD`, when a
-DESCRIBE exists, the session prints a line suggesting you type it.
+Nor is there an automatic banner. All `)LOAD` prints is the line
+saying when the workspace was saved. This is APL\360 loading its own
+teaching workspace:
 
-Nothing registers it. You do not declare it before saving, and there
-is no command that marks it. You simply define a function with that
-name, and it is in the workspace like any other:
+```
+      )LOAD 1 APLCOURSE
+SAVED  16.13.05 08/08/68
+      DESCRIBE
+THE MAIN FUNCTIONS IN THIS LIBRARY WORKSPACE ARE:
+...
+```
+
+The greeting is the user typing `DESCRIBE`, and that is the whole
+convention.
+
+**A function or a variable, as you please.** What matters is the
+name, because typing a name either runs a niladic function or
+displays a variable, and the reader cannot tell which. In APLCOURSE
+it is a function -- it appears in `)FNS` -- but a character matrix
+called DESCRIBE reads the same to whoever loads the workspace. A
+function is the more usual choice, and the more flexible, since it
+can decide what to say.
+
+Nothing registers it either way. You do not declare it before saving,
+and there is no command that marks it. You simply define it, and it
+is in the workspace like any other name:
 
 ```apl
       ∇DESCRIBE

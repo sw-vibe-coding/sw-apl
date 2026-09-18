@@ -93,11 +93,21 @@ library directory.
 
 ## D8. DESCRIBE convention
 
-Every workspace shipped with sw-apl defines a niladic function
-`DESCRIBE` that prints what the workspace contains and how to
-start. The session prints a hint to type DESCRIBE after `)LOAD`
-when the function exists. Per-function help may follow the
-`HOWNAME` convention. Rules out: a separate help system.
+Every workspace shipped with sw-apl defines `DESCRIBE`, which
+prints what the workspace contains and how to start. A niladic
+function is the usual form, and the one the IBM library
+workspaces used, but a character matrix of the same name reads
+identically to whoever loads it: typing a name runs a niladic
+function or displays a variable, and the convention is the name.
+Per-function help may follow the `HOWNAME` convention. Rules out:
+a separate help system.
+
+APL\360 printed nothing on load but the line saying when the
+workspace was saved; the greeting was the user typing DESCRIBE.
+Whether sw-apl adds a hint after `)LOAD` is open, and is decided
+by the step that implements `)LOAD`: it is friendlier, and it is
+output APL\360 did not produce, so it is a parity question rather
+than a free improvement.
 
 ## D9. sw-checklist gates drive crate granularity
 
