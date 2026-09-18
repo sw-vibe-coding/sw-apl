@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-17
 
+- chore(agentrail): complete 007-reg-normalization; advance to 008-session-polish
+- test(reg): use reg-rs preprocess so a baseline can hold what varies
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 006-i-beams; advance to 007-session-polish
 - feat(eval): the I-beam system functions
 - docs(changes): refresh CHANGES.md to HEAD
