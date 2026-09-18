@@ -29,11 +29,14 @@ pub type Run = fn(&mut Workspace, &str) -> AplResult<Output>;
 /// else's terminal along with it.
 #[derive(Debug, Default)]
 pub struct Saved {
-    pub(crate) vars: HashMap<String, Array>,
-    pub(crate) funcs: HashMap<String, Rc<Defn>>,
+    /// Names that hold a value. A name holds a variable or a
+    /// function, never both, which `define` and `set` keep true.
+    pub vars: HashMap<String, Array>,
+    /// Names that hold a defined function.
+    pub funcs: HashMap<String, Rc<Defn>>,
     /// The activation stack: running and stopped calls, outermost
     /// first. It is the state indicator.
-    pub(crate) stack: Vec<Activation>,
+    pub stack: Vec<Activation>,
     /// Index origin and random link. The link is saved so a loaded
     /// workspace carries on its sequence and a transcript that rolls
     /// still reproduces.

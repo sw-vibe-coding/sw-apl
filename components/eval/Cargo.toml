@@ -5,6 +5,7 @@ members = [
     "crates/apl-call",
     "crates/apl-quad",
     "crates/apl-ibeam",
+    "crates/apl-wsfile",
     "crates/apl-eval",
 ]
 resolver = "2"

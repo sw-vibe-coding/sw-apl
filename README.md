@@ -123,6 +123,9 @@ documents below show real APL glyphs:
   commands, the DESCRIBE convention
 - [Using the del editor](docs/del-editor-guide.md) -- writing and
   changing a function, line by line
+- [Index origin considerations](docs/index-origin-considerations.md)
+  -- what it changes, why a function cannot set it, and why copying
+  is riskier than loading
 - [Typing glyphs](docs/input-methods.md) -- Espanso and Emacs
   keymaps, OS layouts
 - [Testing](docs/testing.md), [Architecture](docs/architecture.md),

@@ -67,9 +67,25 @@ numeric literals form vectors at lex time.
 
 `)SAVE` writes a file that lists settings, variables as APL
 expressions, and functions as del definitions. It is readable by
-humans, diffable in git, and re-executable. A header line carries
-the workspace id and save timestamp so `)LOAD` can print the
-APL\360 `SAVED` line. Rules out: binary snapshots.
+humans, diffable in git, and re-executable: loading a workspace is
+running it. A workspace file is therefore also a sample, and a
+sample is also a workspace. Rules out: binary snapshots.
+
+Two things APL cannot say about itself travel as `⍝!` directives,
+which are comments to the interpreter and instructions to `)LOAD`:
+`⍝!SAVED` is when the workspace was written, so `)LOAD` can print
+the APL\360 `SAVED` line, and `⍝!LINK` is where the random link
+stands, so a loaded workspace carries on its sequence.
+
+Names are written sorted, so the same workspace writes the same
+bytes every time and a saved file is worth keeping in git.
+
+What a text file cannot hold is a suspended function: the state
+indicator is a stack of half-run calls, and re-executing a file
+cannot put execution back in the middle of one. `)SAVE` leaves it
+out and `)LOAD` gives a workspace with none, which APL\360 -- whose
+workspaces were binary -- did not have to do. `parity.md` carries
+the row.
 
 Numbered libraries map to directories through a small config
 file so `)LOAD 1 CLASS` works as in APL\360. `)LIB` lists a

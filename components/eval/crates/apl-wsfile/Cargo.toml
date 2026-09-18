@@ -1,0 +1,17 @@
+[package]
+name = "apl-wsfile"
+description = "sw-apl workspace file: a saved workspace as re-executable APL"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-ast = { path = "../../../parse/crates/apl-ast" }
+apl-scan = { path = "../../../parse/crates/apl-scan" }
+apl-value = { path = "../../../value/crates/apl-value" }
+apl-workspace = { path = "../apl-workspace" }
+
+[lints]
+workspace = true

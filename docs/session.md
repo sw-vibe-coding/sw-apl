@@ -162,10 +162,30 @@ else. A function you were in the middle of is gone, not resumed.
 
 ## Where workspaces live
 
-Library 0, the default, is `work/` beside the interpreter. It is
-not tracked, and the first `)SAVE` creates it rather than
-failing. A workspace saved there is `NAME.apl.ws` (UTF-8 text,
-see `design.md` D7).
+Libraries are numbered, as in APL\360: library 0 is your own and
+the numbered ones are public.
+
+| Library | Directory | |
+|---|---|---|
+| 0 | `work/` | Yours. `)SAVE` writes here, and `)LOAD NAME` reads here. Not tracked; the first `)SAVE` creates it |
+| 1 | `ws/lib1/` | The workspaces sw-apl ships, each with a DESCRIBE function |
+
+`)LIB` lists library 0 and `)LIB 1` lists library 1; one library
+at a time, as APL\360 did. A workspace is `NAME.apl.ws`, UTF-8
+text (see `design.md` D7).
+
+A saved workspace is APL you could have typed, so it can also be
+run as a program:
+
+```
+      )LOAD CLASS
+      sw-apl -f work/CLASS.apl.ws     # the same thing, from a shell
+```
+
+What it holds is the names, the settings and the random link. It
+does not hold a suspended function: re-executing a file cannot
+put execution back in the middle of a call, so `)LOAD` gives a
+workspace with an empty state indicator.
 
 Library form: `)LOAD 1 CLASS` loads workspace CLASS from library
 1. Libraries map to directories through a small configuration

@@ -23,9 +23,16 @@
 .agentrail/sessions/
 .agentrail-archive/*/sessions/
 
-# Saved APL workspaces written by )SAVE during local sessions.
-/ws/
-*.apl.ws
+# Workspaces are tracked or not by who wrote them, not by what they
+# are: they are small UTF-8 text, so size is no reason either way.
+#
+#   ws/    tracked -- the library workspaces sw-apl ships, which are
+#          ours, each carrying a DESCRIBE function.
+#   work/  ignored -- library 0, where )SAVE writes, and where
+#          anything converted from elsewhere belongs. See its README.
+#
+# Material we do not own goes in work/ and nowhere else, so that it
+# cannot be redistributed by accident.
 
 # reg-rs keeps the .rgt spec and .out baseline under version control;
 # the SQLite run database and its lock are per-machine state.

@@ -188,12 +188,18 @@ widen each layer to the full APL\360 set.
 3. `system-commands-ws` -- )CLEAR )WSID )SAVE )LOAD )DROP )LIB
    )COPY )PCOPY )CONTINUE )OFF. Library 0 is `work/`, which is not
    tracked; the first `)SAVE` creates it rather than failing.
-   (Owner direction 2026-09-17.)
+   `)LOAD` runs the file, so it takes the saved origin; `)COPY`
+   must take the definitions and leave the settings, or it
+   changes the origin under code already written. See
+   `index-origin-considerations.md`. (Owner direction 2026-09-17.)
 4. `system-commands-inquiry` -- )FNS )VARS )GRPS )GRP )GROUP
    )ERASE )SI )SIV )ORIGIN )DIGITS )WIDTH )SYMBOLS.
 5. `library-workspaces` -- numbered public libraries (`)LOAD 1
    CLASS` style) mapped to directories; ship starter workspaces
-   each carrying a DESCRIBE function.
+   in `ws/lib1/`, each carrying a DESCRIBE function. Tracked
+   workspaces are ones we wrote: give each a provenance line and
+   gate on it, so material from elsewhere cannot be committed by
+   mistake. (Owner direction 2026-09-17.)
 
 ### Phase 5: numerics (saga `numerics`)
 

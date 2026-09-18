@@ -138,7 +138,9 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 |---|---|---|
 | The workspace as a value: what `)SAVE` writes is separate from the terminal it runs on | done | workspace tests |
 | `)CLEAR` clears the state indicator with everything else | done | session tests, sample 60 |
-| Workspace file format, `)SAVE` and `)LOAD` round trip | todo | |
+| Workspace file: re-executable UTF-8, stable byte-for-byte, round trips through the interpreter | done | wsfile tests, `tests/scripts/saved-workspace.apl.ws` |
+| A saved workspace keeps a suspended function | todo | a re-executable file cannot put execution back in the middle of a call, so `)SAVE` leaves the state indicator out; APL\360's workspaces were binary and kept it |
+| `)SAVE` and `)LOAD` themselves | todo | the format is done; the commands are the next step |
 
 ## System commands
 

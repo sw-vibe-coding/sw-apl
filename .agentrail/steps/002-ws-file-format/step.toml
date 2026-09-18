@@ -1,6 +1,6 @@
 number = 2
 slug = "ws-file-format"
-status = "pending"
+status = "in-progress"
 description = "Phase 4 step 2 (docs/plan.md). The workspace file: plain UTF-8 that a person ..."
 role = "legacy"
 context_files = []

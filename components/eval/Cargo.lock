@@ -241,6 +241,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-wsfile"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-scan",
+ "apl-value",
+ "apl-workspace",
+]
+
+[[package]]
 name = "autocfg"
 version = "1.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"

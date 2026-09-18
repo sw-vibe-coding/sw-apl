@@ -1,0 +1,13 @@
+command = """
+cat tests/scripts/saved-workspace.apl.ws - <<'"APL"' | target/release/sw-apl --no-echo
+SUM 10
+3 HYP 4
+M
+T
+)WSID
+)OFF
+APL"""
+timeout = 60
+preprocess = "bash scripts/normalize-apl-output.sh"
+exit_code = 0
+desc = "A saved workspace file is a program: running it rebuilds the workspace"

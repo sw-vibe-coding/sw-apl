@@ -292,6 +292,7 @@ dependencies = [
  "apl-lex",
  "apl-parse",
  "apl-value",
+ "apl-wsfile",
 ]
 
 [[package]]
@@ -310,6 +311,16 @@ dependencies = [
  "apl-ibeam",
  "apl-prims",
  "apl-value",
+]
+
+[[package]]
+name = "apl-wsfile"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-scan",
+ "apl-value",
+ "apl-workspace",
 ]
 
 [[package]]

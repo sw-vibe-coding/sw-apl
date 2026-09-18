@@ -79,6 +79,16 @@ seed apl-cli-quote-quad-line \
 seed apl-cli-open-line-ends \
     "A statement ends the line quote-quad left open, unlike a function" \
     "$apl -f tests/scripts/open-line.apl"
+seed apl-cli-workspace-file \
+    "A saved workspace file is a program: running it rebuilds the workspace" \
+    "cat tests/scripts/saved-workspace.apl.ws - <<'"'"'APL'"'"' | $apl --no-echo
+SUM 10
+3 HYP 4
+M
+T
+)WSID
+)OFF
+APL"
 seed apl-cli-shebang-env \
     "An executable .apl file run through its env -S shebang" \
     "./tests/scripts/hello.apl"
