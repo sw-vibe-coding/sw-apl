@@ -22,6 +22,10 @@ character matrix for the names, mixed output, and the conditional
 branch idiom driving two functions. Its transcript is reproducible
 because the random link starts from a fixed value.
 
+`60-workspace.apl` names a workspace with `)WSID` and clears it with
+`)CLEAR`, showing what belongs to the workspace -- names, settings,
+and a suspended function -- and what a clear one starts with.
+
 `59-sign-off.apl` is the sign-off `)OFF` prints. Its three values
 come from the clock, so the reg-rs filter keeps their shape and masks
 what they say.

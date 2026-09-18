@@ -41,7 +41,7 @@ pub fn eval_monadic(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
         return ibeam(argument(&r)?, (ws.clock)(), ws.signed_on, &lines).map_err(|e| e.at(*pos));
     }
     let axis = axis.as_deref().map(|a| eval_expr(ws, a)).transpose()?;
-    monadic(func, axis.as_ref(), &r, &mut ws.env).map_err(|e| e.at(*pos))
+    monadic(func, axis.as_ref(), &r, &mut ws.saved.env).map_err(|e| e.at(*pos))
 }
 
 /// `left f right`: right, then left, then the axis.
@@ -65,7 +65,7 @@ pub fn eval_dyadic(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
         return value(ws, name, *pos, (Some(l), Some(r)), eval_line);
     }
     let axis = axis.as_deref().map(|a| eval_expr(ws, a)).transpose()?;
-    dyadic(func, axis.as_ref(), &l, &r, &mut ws.env).map_err(|e| e.at(*pos))
+    dyadic(func, axis.as_ref(), &l, &r, &mut ws.saved.env).map_err(|e| e.at(*pos))
 }
 
 /// `func right`, with the evaluated axis: a primitive, or a reduce

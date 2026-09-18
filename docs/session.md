@@ -118,7 +118,7 @@ Workspace control:
 | Command | Meaning |
 |---|---|
 | `)CLEAR` | Fresh workspace; prints `CLEAR WS` |
-| `)WSID [name]` | Show or set the workspace id |
+| `)WSID [name]` | Show or set the workspace id; setting replies `WAS` the old one |
 | `)SAVE [name]` | Save; prints the timestamp and id |
 | `)LOAD name` | Load; prints `SAVED` and the timestamp |
 | `)DROP name` | Delete a saved workspace |
@@ -141,6 +141,31 @@ Inquiry and settings:
 | `)DIGITS n` | Set print precision (1 to 16); replies `WAS n` |
 | `)WIDTH n` | Set print width (30 to 254); replies `WAS n` |
 | `)SYMBOLS [n]` | Report or set symbol table size |
+
+## What the workspace is
+
+The workspace is what `)SAVE` writes and `)LOAD` reads back: the
+names it holds (variables and defined functions), the state
+indicator, the index origin, the print precision and width, the
+random link, and the name it answers to. The terminal it is
+running on is not part of it, so a loaded workspace does not
+carry someone else's console, clock or sign-on time along.
+
+An unnamed workspace is called `CLEAR WS`, which is what `)WSID`
+reports until it is given a name.
+
+`)CLEAR` gives a fresh one: every name goes, the settings go back
+to where a clear workspace starts, the name goes, and so does a
+suspended function -- the state indicator is part of the
+workspace, not of the session, and is cleared with everything
+else. A function you were in the middle of is gone, not resumed.
+
+## Where workspaces live
+
+Library 0, the default, is `work/` beside the interpreter. It is
+not tracked, and the first `)SAVE` creates it rather than
+failing. A workspace saved there is `NAME.apl.ws` (UTF-8 text,
+see `design.md` D7).
 
 Library form: `)LOAD 1 CLASS` loads workspace CLASS from library
 1. Libraries map to directories through a small configuration

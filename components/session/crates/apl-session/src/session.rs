@@ -83,7 +83,7 @@ impl Session {
         let mut lines = self.ws.console.take();
         lines.extend(self.ws.flush().lines);
         lines.extend(match result {
-            Ok(out) => render_all(&[out], self.ws.print).lines,
+            Ok(out) => render_all(&[out], self.ws.saved.print).lines,
             Err(err) => error_lines(&err, line),
         });
         Reply::from(lines)

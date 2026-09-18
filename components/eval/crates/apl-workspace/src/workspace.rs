@@ -1,5 +1,7 @@
-//! The active workspace: variables, defined functions, the index
-//! origin, pending output.
+//! The active workspace, in two halves: what a `)SAVE` writes and a
+//! `)LOAD` reads back, and what the terminal it is running on adds.
+//! The boundary is the point of the split -- a later step writes the
+//! first half to a file, and cannot be handed the second by mistake.
 
 use std::collections::HashMap;
 use std::rc::Rc;
@@ -17,22 +19,40 @@ use crate::frame::Activation;
 /// what evaluation means.
 pub type Run = fn(&mut Workspace, &str) -> AplResult<Output>;
 
-/// State of the active workspace.
-#[derive(Debug)]
-pub struct Workspace {
+/// Everything `)SAVE` writes and `)LOAD` reads back: the symbol
+/// table, the state indicator, and the settings kept beside them.
+///
+/// What the terminal adds is deliberately not here -- the console,
+/// the clock, the moment the session signed on, and whatever the
+/// current line has displayed. None of it can be written to a file
+/// and read back, and a loaded workspace must not carry someone
+/// else's terminal along with it.
+#[derive(Debug, Default)]
+pub struct Saved {
     pub(crate) vars: HashMap<String, Array>,
     pub(crate) funcs: HashMap<String, Rc<Defn>>,
     /// The activation stack: running and stopped calls, outermost
     /// first. It is the state indicator.
     pub(crate) stack: Vec<Activation>,
-    /// Index origin and random link.
+    /// Index origin and random link. The link is saved so a loaded
+    /// workspace carries on its sequence and a transcript that rolls
+    /// still reproduces.
     pub env: Env,
+    /// Print precision and width.
+    pub print: Print,
+    /// The workspace identifier `)WSID` reports. `None` until it is
+    /// named, which the session shows as CLEAR WS.
+    pub id: Option<String>,
+}
+
+/// A workspace running on a terminal.
+#[derive(Debug)]
+pub struct Workspace {
+    /// What `)SAVE` writes and `)LOAD` reads back.
+    pub saved: Saved,
     /// What the current line has displayed, in order, not yet sent
     /// to the terminal.
     pub output: Vec<Output>,
-    /// Print precision and width, which APL\360 keeps here so they
-    /// are saved with the workspace.
-    pub print: Print,
     /// The terminal: where a statement reads a line when it reads one.
     pub console: Box<dyn Console>,
     /// Where the I-beams read the time. A clear workspace has a clock
@@ -47,12 +67,8 @@ pub struct Workspace {
 impl Default for Workspace {
     fn default() -> Self {
         Workspace {
-            vars: HashMap::new(),
-            funcs: HashMap::new(),
-            stack: Vec::new(),
-            env: Env::default(),
+            saved: Saved::default(),
             output: Vec::new(),
-            print: Print::default(),
             console: Box::new(Transcript::default()),
             clock: stopped,
             signed_on: 0,
@@ -65,17 +81,17 @@ impl Workspace {
     /// can put its prompt after it rather than before it.
     pub fn flush(&mut self) -> Shown {
         let shown: Vec<Output> = self.output.drain(..).collect();
-        render_all(&shown, self.print)
+        render_all(&shown, self.saved.print)
     }
 
     /// Look up a variable.
     #[must_use]
     pub fn get(&self, name: &str) -> Option<&Array> {
-        self.vars.get(name)
+        self.saved.vars.get(name)
     }
 
     /// Assign a variable, replacing any previous value.
     pub fn set(&mut self, name: &str, value: Array) {
-        self.vars.insert(name.to_string(), value);
+        self.saved.vars.insert(name.to_string(), value);
     }
 }

@@ -119,3 +119,54 @@ fn a_name_holds_a_function_or_a_variable_never_both() {
     // does it after a rename that had nothing to replace.
     ws.erase("NOTHING");
 }
+
+#[test]
+fn what_is_saved_is_separate_from_the_terminal_it_runs_on() {
+    let mut ws = Workspace::default();
+    ws.set("A", n(1));
+    ws.define(Defn {
+        name: "F".to_string(),
+        ..Defn::default()
+    });
+    ws.saved.env.io = 0;
+    ws.saved.env.link = 12345;
+    ws.saved.print.digits = 3;
+    ws.saved.id = Some("MYWS".to_string());
+    ws.enter("F", &[]).unwrap();
+    ws.signed_on = 999;
+    ws.output.push(apl_workspace::Output::Nothing);
+    // Everything a )SAVE writes is in one value, which can be taken
+    // out whole and put back without the terminal noticing.
+    let saved = std::mem::take(&mut ws.saved);
+    assert_eq!(saved.env.io, 0);
+    assert_eq!(saved.env.link, 12345);
+    assert_eq!(saved.print.digits, 3);
+    assert_eq!(saved.id.as_deref(), Some("MYWS"));
+    // The state indicator goes with it, which `si()` reports once
+    // the saved half is back in a workspace.
+    // The workspace it was taken from is now clear.
+    assert!(ws.get("A").is_none());
+    assert!(!ws.is_function("F"));
+    assert!(ws.si().is_empty());
+    // And what the terminal added stayed behind.
+    assert_eq!(ws.signed_on, 999);
+    assert_eq!(ws.output.len(), 1);
+    ws.saved = saved;
+    assert_eq!(ws.get("A"), Some(&n(1)));
+    assert!(ws.is_function("F"));
+    assert_eq!(ws.si().len(), 1);
+}
+
+#[test]
+fn a_clear_workspace_starts_with_the_apl360_settings() {
+    let saved = apl_workspace::Saved::default();
+    assert_eq!(saved.env.io, 1, "index origin");
+    assert_eq!(saved.print.digits, 10);
+    assert_eq!(saved.print.width, 120);
+    assert_eq!(saved.id, None, "unnamed until )WSID names it");
+    let ws = Workspace {
+        saved,
+        ..Workspace::default()
+    };
+    assert!(ws.si().is_empty(), "nothing is suspended");
+}

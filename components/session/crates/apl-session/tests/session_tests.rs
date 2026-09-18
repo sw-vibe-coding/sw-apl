@@ -863,3 +863,44 @@ fn a_branch_with_nothing_suspended_does_nothing() {
     assert_eq!(out(&mut s, ")SI"), Vec::<String>::new());
     assert_eq!(out(&mut s, "2+2"), vec!["4"]);
 }
+
+#[test]
+fn wsid_shows_and_sets_the_name_the_workspace_answers_to() {
+    let mut s = Session::default();
+    assert_eq!(out(&mut s, ")WSID"), vec!["CLEAR WS"]);
+    assert_eq!(out(&mut s, ")WSID CLASS"), vec!["WAS CLEAR WS"]);
+    assert_eq!(out(&mut s, ")WSID"), vec!["CLASS"]);
+    assert_eq!(out(&mut s, ")WSID OTHER"), vec!["WAS CLASS"]);
+    assert_eq!(out(&mut s, "  )wsid"), vec!["OTHER"], "not case sensitive");
+    assert_eq!(out(&mut s, ")WSID A B"), vec!["INCORRECT COMMAND"]);
+}
+
+#[test]
+fn clear_gives_a_fresh_workspace() {
+    let mut s = Session::default();
+    out(&mut s, ")WSID CLASS");
+    out(&mut s, "A\u{2190}5");
+    define(&mut s, "\u{2207}R\u{2190}F", &["R\u{2190}1"]);
+    out(&mut s, ")ORIGIN 0");
+    out(&mut s, ")DIGITS 3");
+    assert_eq!(out(&mut s, ")CLEAR"), vec!["CLEAR WS"]);
+    // The names are gone, and so is the name of the workspace.
+    assert_eq!(out(&mut s, "A")[0], "VALUE ERROR");
+    // F was a function; now it is only an unknown name.
+    assert_eq!(out(&mut s, "F")[0], "VALUE ERROR");
+    assert_eq!(out(&mut s, ")WSID"), vec!["CLEAR WS"]);
+    // And the settings are back where a clear workspace starts.
+    assert_eq!(out(&mut s, ")ORIGIN 1"), vec!["WAS 1"]);
+    assert_eq!(out(&mut s, ")DIGITS 10"), vec!["WAS 10"]);
+}
+
+#[test]
+fn clear_takes_a_suspended_function_with_it() {
+    let mut s = Session::default();
+    define(&mut s, "\u{2207}R\u{2190}BAD", &["R\u{2190}\u{f7}0"]);
+    assert_eq!(out(&mut s, "BAD")[0], "DOMAIN ERROR");
+    assert_eq!(out(&mut s, ")SI"), vec!["BAD[1]*"]);
+    out(&mut s, ")CLEAR");
+    assert_eq!(out(&mut s, ")SI"), Vec::<String>::new());
+    assert_eq!(out(&mut s, "2+2"), vec!["4"]);
+}

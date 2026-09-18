@@ -31,3 +31,7 @@
 # the SQLite run database and its lock are per-machine state.
 tests/reg-rs/*.tdb
 tests/reg-rs/*.tdb.lock
+
+# Scratch: saved workspaces and material converted for local use.
+# See work/README.md -- nothing in here is part of sw-apl.
+work/

@@ -90,7 +90,7 @@ fn iota_rho_reduce_end_to_end() {
 #[test]
 fn the_index_origin_is_workspace_state_not_a_quad_name() {
     let mut ws = Workspace::default();
-    ws.env.io = 0;
+    ws.saved.env.io = 0;
     assert_eq!(
         nums(&mut ws, "\u{2373}3"),
         [Number::Int(0), Number::Int(1), Number::Int(2)]
@@ -420,12 +420,14 @@ fn a_label_does_not_change_what_its_line_does() {
 /// A workspace whose console will answer reads with these lines.
 fn typing(lines: &[&str]) -> Workspace {
     let typed = lines.iter().map(|l| (*l).to_string()).collect();
-    let mut ws = Workspace::default();
-    ws.console = Box::new(Transcript {
+    let console = Transcript {
         shown: Vec::new(),
         typed,
-    });
-    ws
+    };
+    Workspace {
+        console: Box::new(console),
+        ..Workspace::default()
+    }
 }
 
 #[test]
@@ -504,14 +506,15 @@ fn a_prompt_written_with_quote_quad_is_shown_before_the_read() {
 /// A workspace whose clock does not move, so what the I-beams report
 /// is the same on every run.
 fn at_noon() -> Workspace {
-    let mut ws = Workspace::default();
-    ws.clock = || apl_eval::Time {
-        now: 12 * 60 * 60 * 60,
-        cpu: 300,
-        date: 91_726,
-    };
-    ws.signed_on = 9 * 60 * 60 * 60;
-    ws
+    Workspace {
+        clock: || apl_eval::Time {
+            now: 12 * 60 * 60 * 60,
+            cpu: 300,
+            date: 91_726,
+        },
+        signed_on: 9 * 60 * 60 * 60,
+        ..Workspace::default()
+    }
 }
 
 #[test]

@@ -1,0 +1,60 @@
+      ⍝ The workspace is a thing you can name and clear. What )SAVE will
+      ⍝ write and )LOAD will read back is the symbol table, the state
+      ⍝ indicator, and the settings kept beside them; the terminal it runs
+      ⍝ on is not part of it.
+      ⍝ An unnamed workspace is CLEAR WS.
+      )WSID
+CLEAR WS
+      )WSID CLASS
+WAS CLEAR WS
+      )WSID
+CLASS
+      ⍝ Names, functions and settings all belong to the workspace.
+      A←5
+      ∇R←DOUBLE N
+[1]   R←N+N
+[2]   ∇
+      )ORIGIN 0
+WAS 1
+      )DIGITS 3
+WAS 10
+      DOUBLE A
+10
+      ⍳3
+0 1 2
+      1÷3
+0.333
+      ⍝ A function that stops is part of it too: the state indicator holds
+      ⍝ it, with its locals, until something clears it.
+      ∇R←BAD;T
+[1]   T←1
+[2]   R←T÷0
+[3]   ∇
+      BAD
+DOMAIN ERROR
+BAD[2]  R←T÷0
+           ^
+      )SI
+BAD[2]*
+      T
+1
+      ⍝ )CLEAR gives a fresh workspace: the names go, the settings go back
+      ⍝ to where a clear workspace starts, the name goes, and so does the
+      ⍝ suspended function.
+      )CLEAR
+CLEAR WS
+      )WSID
+CLEAR WS
+      )SI
+      A
+VALUE ERROR
+      A
+      ^
+      ⍳3
+1 2 3
+      1÷3
+0.3333333333
+      )OFF
+20.52.41 09/17/26
+CONNECTED 0.00.00
+CPU TIME 0.00.00

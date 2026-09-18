@@ -25,7 +25,7 @@ pub fn quad(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
         }
         Expr::QuoteQuadOut { value, .. } => {
             let v = eval_expr(ws, value)?;
-            let text = render(&Output::Value(v.clone()), ws.print).join("\n");
+            let text = render(&Output::Value(v.clone()), ws.saved.print).join("\n");
             ws.output.push(Output::Bare(text));
             Ok(v)
         }
@@ -47,7 +47,7 @@ pub fn indexed(
 ) -> AplResult<Array> {
     let idx = eval_indexes(ws, indexes)?;
     let base = eval_expr(ws, array)?;
-    index(&base, &idx, ws.env.io).map_err(|e| e.at(pos))
+    index(&base, &idx, ws.saved.env.io).map_err(|e| e.at(pos))
 }
 
 /// `name[indexes]←value`: the value first, then the indexes, then the
@@ -69,7 +69,7 @@ pub fn assign_indexed(
         .get(name)
         .cloned()
         .ok_or_else(|| AplError::new(ErrorKind::Value).at(pos))?;
-    let updated = indexed_assign(&base, &idx, &v, ws.env.io).map_err(|e| e.at(pos))?;
+    let updated = indexed_assign(&base, &idx, &v, ws.saved.env.io).map_err(|e| e.at(pos))?;
     ws.set(name, updated);
     Ok(v)
 }

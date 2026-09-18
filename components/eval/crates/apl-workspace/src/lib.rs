@@ -14,4 +14,4 @@ pub use apl_console::{
 pub use apl_ibeam::{Clock, Time, hms, ibeam, stopped, system};
 pub use apl_prims::Env;
 pub use frame::Activation;
-pub use workspace::{Run, Workspace};
+pub use workspace::{Run, Saved, Workspace};

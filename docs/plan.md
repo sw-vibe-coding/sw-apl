@@ -186,7 +186,9 @@ widen each layer to the full APL\360 set.
 2. `ws-file-format` -- plain-text UTF-8 workspace file that is
    both human readable and re-executable.
 3. `system-commands-ws` -- )CLEAR )WSID )SAVE )LOAD )DROP )LIB
-   )COPY )PCOPY )CONTINUE )OFF.
+   )COPY )PCOPY )CONTINUE )OFF. Library 0 is `work/`, which is not
+   tracked; the first `)SAVE` creates it rather than failing.
+   (Owner direction 2026-09-17.)
 4. `system-commands-inquiry` -- )FNS )VARS )GRPS )GRP )GROUP
    )ERASE )SI )SIV )ORIGIN )DIGITS )WIDTH )SYMBOLS.
 5. `library-workspaces` -- numbered public libraries (`)LOAD 1

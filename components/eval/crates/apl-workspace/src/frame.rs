@@ -44,27 +44,27 @@ impl Workspace {
     /// # Errors
     /// DEPTH ERROR when calls nest, or suspensions pile up, too deep.
     pub fn enter(&mut self, name: &str, names: &[String]) -> AplResult<usize> {
-        if self.stack.len() >= MAX_DEPTH {
+        if self.saved.stack.len() >= MAX_DEPTH {
             return Err(AplError::new(ErrorKind::Depth));
         }
         let saved = names
             .iter()
-            .map(|n| (n.clone(), self.vars.remove(n)))
+            .map(|n| (n.clone(), self.saved.vars.remove(n)))
             .collect();
-        self.stack.push(Activation {
+        self.saved.stack.push(Activation {
             name: name.to_string(),
             line: 1,
             locals: names.to_vec(),
             suspended: false,
             saved,
         });
-        Ok(self.stack.len() - 1)
+        Ok(self.saved.stack.len() - 1)
     }
 
     /// Record where activation `at` stopped. `suspended` marks the one
     /// the error came from; a caller waiting on it only notes its line.
     pub fn stop(&mut self, at: usize, line: usize, suspended: bool) {
-        if let Some(activation) = self.stack.get_mut(at) {
+        if let Some(activation) = self.saved.stack.get_mut(at) {
             activation.line = line;
             activation.suspended = suspended;
         }
@@ -72,13 +72,13 @@ impl Workspace {
 
     /// End the innermost activation, putting the displaced values back.
     pub fn leave(&mut self) {
-        let Some(activation) = self.stack.pop() else {
+        let Some(activation) = self.saved.stack.pop() else {
             return;
         };
         for (name, was) in activation.saved {
             match was {
-                Some(value) => self.vars.insert(name, value),
-                None => self.vars.remove(&name),
+                Some(value) => self.saved.vars.insert(name, value),
+                None => self.saved.vars.remove(&name),
             };
         }
     }
@@ -86,6 +86,6 @@ impl Workspace {
     /// The state indicator: every activation, outermost first.
     #[must_use]
     pub fn si(&self) -> &[Activation] {
-        &self.stack
+        &self.saved.stack
     }
 }

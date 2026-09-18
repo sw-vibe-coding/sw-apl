@@ -132,14 +132,23 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | `)WIDTH` wrapping (vectors between elements, matrices in column blocks) | done |
 | Mixed integer and float columns (each element formatted, right-aligned) | done |
 
+## Workspaces
+
+| Feature | Status | Pinned by |
+|---|---|---|
+| The workspace as a value: what `)SAVE` writes is separate from the terminal it runs on | done | workspace tests |
+| `)CLEAR` clears the state indicator with everything else | done | session tests, sample 60 |
+| Workspace file format, `)SAVE` and `)LOAD` round trip | todo | |
+
 ## System commands
 
 | Command | Status |
 |---|---|
 | `)OFF` | done |
 | `)ORIGIN` `)DIGITS` `)WIDTH` | done |
-| `)CLEAR` | todo |
-| `)WSID` `)SAVE` `)LOAD` `)DROP` `)LIB` `)COPY` `)PCOPY` `)CONTINUE` | todo |
+| `)CLEAR` | done |
+| `)WSID` | done |
+| `)SAVE` `)LOAD` `)DROP` `)LIB` `)COPY` `)PCOPY` `)CONTINUE` | todo |
 | `)FNS` `)VARS` `)GRPS` `)GRP` `)GROUP` `)ERASE` | todo |
 | `)SI` `)SIV` | done |
 | `)SYMBOLS` | todo |

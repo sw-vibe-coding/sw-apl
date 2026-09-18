@@ -2,11 +2,14 @@
 //! system commands, and the lines that drive the del editor.
 
 use apl_editor::Definition;
-use apl_eval::error_lines;
+use apl_eval::{Saved, error_lines};
 use apl_parse::parse_header;
 use apl_value::{AplError, ErrorKind};
 
 use crate::reply::{Reply, si_lines, sign_off};
+
+/// What an unnamed workspace is called, as APL\360 named it.
+pub const CLEAR: &str = "CLEAR WS";
 use crate::session::Session;
 
 /// Run one system command (the text after the parenthesis).
@@ -19,30 +22,40 @@ pub fn system_command(session: &mut Session, command: &str) -> Reply {
         ("SI" | "SIV", []) => {
             return Reply::from(si_lines(session.ws.si(), name == "SIV"));
         }
-        (name, [value]) => {
-            let reply = value.parse().ok().and_then(|n| setting(session, name, n));
-            if let Some(reply) = reply {
-                return Reply::from(vec![reply]);
-            }
-        }
         _ => {}
     }
-    Reply::from(vec!["INCORRECT COMMAND".to_string()])
+    let reply = workspace_command(&mut session.ws.saved, &name, &rest);
+    Reply::from(vec![
+        reply.unwrap_or_else(|| "INCORRECT COMMAND".to_string()),
+    ])
 }
 
-/// A settings command: the new value takes effect and the reply names
-/// the old one. `None` when the name or the value is not one of them.
-fn setting(session: &mut Session, name: &str, n: usize) -> Option<String> {
-    let was = match (name, n) {
-        ("ORIGIN", 0 | 1) => {
-            let new = i64::try_from(n).unwrap_or(1);
-            std::mem::replace(&mut session.ws.env.io, new).to_string()
+/// A command that changes the workspace: its settings, the name it
+/// answers to, or clearing it altogether. A setting replies with the
+/// value it replaced, as APL\360 did. `None` when the name or the
+/// argument is not one of them.
+fn workspace_command(saved: &mut Saved, name: &str, rest: &[&str]) -> Option<String> {
+    let number = rest.first().and_then(|v| v.parse::<usize>().ok());
+    let was = match (name, rest, number) {
+        ("CLEAR", [], _) => {
+            *saved = Saved::default();
+            return Some(CLEAR.to_string());
         }
-        ("DIGITS", 1..=16) => std::mem::replace(&mut session.ws.print.digits, n).to_string(),
-        ("WIDTH", 30..=254) => std::mem::replace(&mut session.ws.print.width, n).to_string(),
+        ("WSID", [], _) => return Some(saved.id.clone().unwrap_or_else(|| CLEAR.to_string())),
+        ("WSID", [id], _) => saved.id.replace((*id).to_string()),
+        ("ORIGIN", [_], Some(n @ (0 | 1))) => {
+            let io = i64::try_from(n).unwrap_or(1);
+            Some(std::mem::replace(&mut saved.env.io, io).to_string())
+        }
+        ("DIGITS", [_], Some(n @ 1..=16)) => {
+            Some(std::mem::replace(&mut saved.print.digits, n).to_string())
+        }
+        ("WIDTH", [_], Some(n @ 30..=254)) => {
+            Some(std::mem::replace(&mut saved.print.width, n).to_string())
+        }
         _ => return None,
     };
-    Some(format!("WAS {was}"))
+    Some(format!("WAS {}", was.unwrap_or_else(|| CLEAR.to_string())))
 }
 
 /// An opening del: start a new function, or reopen one for editing.
