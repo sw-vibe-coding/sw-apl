@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-17
 
+- chore(agentrail): complete 002-ws-file-format; advance to 003-system-commands-ws
+- feat(workspace): the workspace file, as APL you could have typed
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 001-ws-model; advance to 002-ws-file-format
 - feat(workspace): separate what a )SAVE writes from the terminal
 - chore(agentrail): archive core-session; init workspaces saga
