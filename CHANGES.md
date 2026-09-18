@@ -14,6 +14,10 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-18
 
+- chore(agentrail): complete 001-domino; advance to 002-numeric-edge-cases
+- feat(prims): domino, matrix inverse and least-squares matrix divide
+- chore(agentrail): archive workspaces; open the numerics saga
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 008-command-error-messages
 - fix(commands): say what is actually wrong, not INCORRECT COMMAND
 - docs(changes): refresh CHANGES.md to HEAD
