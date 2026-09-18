@@ -1,0 +1,8 @@
+number = 3
+slug = "system-commands-ws"
+status = "pending"
+description = "Phase 4 step 3 (docs/plan.md). The workspace commands: )SAVE )LOAD )DROP )LIB..."
+role = "legacy"
+context_files = []
+created_at = "2026-09-17T21:07:06"
+commits = []
