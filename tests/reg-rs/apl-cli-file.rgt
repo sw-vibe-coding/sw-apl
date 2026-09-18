@@ -1,0 +1,5 @@
+command = "target/release/sw-apl -f tests/scripts/two-lines.apl"
+timeout = 60
+preprocess = "bash scripts/normalize-apl-output.sh"
+exit_code = 0
+desc = "A file run with -f"

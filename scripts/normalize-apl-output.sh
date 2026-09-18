@@ -41,9 +41,24 @@
 #     CONNECTED 0.00.07   ->   CONNECTED H.MM.SS
 #     CPU TIME 0.00.01    ->   CPU TIME H.MM.SS
 
+# The version block names the machine it was built on and the commit
+# and moment it was built from. Those cannot be a baseline, and the
+# (VARIES) convention cannot reach them: the binary prints them about
+# itself, so no program can label them. The field names are kept and
+# their values masked, so a field going missing still fails.
+#
+#     Host: max            ->   Host: ...
+#     Commit: 5364d78      ->   Commit: ...
+#     Timestamp: 2026-...  ->   Timestamp: ...
+#
+# The error text for a file that is not there comes from the operating
+# system and is worded differently on each, so it is masked too.
+
 set -euo pipefail
 
 sed -E \
     -e 's/^([A-Z][A-Z0-9 ,.-]*\(VARIES\): ).*/\1.../' \
     -e 's/^[0-9]+\.[0-9]{2}\.[0-9]{2} [0-9]{2}\/[0-9]{2}\/[0-9]{2}$/H.MM.SS MM\/DD\/YY/' \
-    -e 's/^(CONNECTED|CPU TIME) [0-9]+\.[0-9]{2}\.[0-9]{2}$/\1 H.MM.SS/'
+    -e 's/^(CONNECTED|CPU TIME) [0-9]+\.[0-9]{2}\.[0-9]{2}$/\1 H.MM.SS/' \
+    -e 's/^(  (Host|Commit|Timestamp): ).*/\1.../' \
+    -e 's/^(sw-apl: ).*\(os error [0-9]+\)$/\1.../'

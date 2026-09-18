@@ -64,9 +64,11 @@ that print nothing.
   failures; warnings at zero except "Binary Freshness" (sw-install
   is owner-only). If your change introduced a warning, split to the
   gate before committing.
-- `scripts/reg.sh run -q` when interpreter or session behaviour
-  changed. Rebase a baseline only intentionally; name the test
-  and the reason in the commit message.
+- `scripts/reg.sh run -q` when interpreter, session or CLI
+  behaviour changed. reg-rs covers both: the sample transcripts
+  and the CLI itself -- arguments, batch and stdin modes, exit
+  codes, executable files. Rebase a baseline only intentionally;
+  name the test and the reason in the commit message.
 
 ## 6. Docs
 

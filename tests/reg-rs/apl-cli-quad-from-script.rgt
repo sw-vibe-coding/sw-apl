@@ -1,0 +1,5 @@
+command = '''printf 'X\342\206\220\342\216\225\n2 3 4\nX\303\2272\n)OFF\n' | target/release/sw-apl'''
+timeout = 60
+preprocess = "bash scripts/normalize-apl-output.sh"
+exit_code = 0
+desc = "A read takes the next line of the script"

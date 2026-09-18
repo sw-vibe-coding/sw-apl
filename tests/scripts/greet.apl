@@ -1,0 +1,8 @@
+∇R←GREET;WHO
+⍞←'NAME: '
+WHO←⍞
+R←'HELLO ',WHO
+∇
+GREET
+MIKE
+)OFF

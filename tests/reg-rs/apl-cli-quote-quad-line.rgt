@@ -1,0 +1,5 @@
+command = "target/release/sw-apl -f tests/scripts/greet.apl"
+timeout = 60
+preprocess = "bash scripts/normalize-apl-output.sh"
+exit_code = 0
+desc = "A quote-quad prompt and its answer share a line"

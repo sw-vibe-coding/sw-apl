@@ -1,0 +1,5 @@
+command = "target/release/sw-apl -f tests/scripts/open-line.apl"
+timeout = 60
+preprocess = "bash scripts/normalize-apl-output.sh"
+exit_code = 0
+desc = "A statement ends the line quote-quad left open, unlike a function"

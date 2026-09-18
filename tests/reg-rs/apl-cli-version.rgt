@@ -1,0 +1,5 @@
+command = "target/release/sw-apl --version"
+timeout = 60
+preprocess = "bash scripts/normalize-apl-output.sh"
+exit_code = 0
+desc = "The version block: name, copyright, licence, repository, build"

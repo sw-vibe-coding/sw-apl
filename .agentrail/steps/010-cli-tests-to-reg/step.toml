@@ -1,6 +1,6 @@
 number = 10
 slug = "cli-tests-to-reg"
-status = "pending"
+status = "in-progress"
 description = "Phase 3 step 10 (docs/plan.md, owner direction 2026-09-17). reg-rs is the too..."
 role = "production"
 context_files = []

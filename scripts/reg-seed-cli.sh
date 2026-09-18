@@ -1,11 +1,22 @@
 #!/usr/bin/env bash
-# Seed the reg-rs tests that check the CLI itself rather than a
-# sample's transcript: how the binary answers the shell. Each is
-# created with the same normalize filter the samples use, so the
-# sign-off does not pin a clock.
+# Seed the reg-rs tests that check the CLI itself: how the binary
+# answers the shell, rather than what a sample program prints. Rust
+# tests cover the unit, function and integration testing of the
+# libraries; this is the other half. See docs/testing.md.
 #
-# Existing tests are skipped, as in reg-seed.sh; pass --all to
-# recreate them.
+# Each is created with the same normalize filter the samples use, so
+# the sign-off does not pin a clock and the version block does not pin
+# the machine it was built on.
+#
+# Two of these are not transcripts but properties, so the command is
+# written to make its own answer the output: whether -V agrees with
+# --version, and whether -h is shorter than --help.
+#
+# A description may not begin with a dash: reg-rs reads it with clap,
+# which refuses a flag-like value, so each is worded to start with a
+# word.
+#
+# Existing tests are skipped; pass --all to recreate them.
 #
 # Usage: scripts/reg-seed-cli.sh [--all]
 set -euo pipefail
@@ -15,23 +26,70 @@ mkdir -p "$REG_RS_DATA_DIR"
 (cd components/cli && cargo build --release --quiet -p sw-apl)
 filter="bash scripts/normalize-apl-output.sh"
 recreate="${1:-}"
+apl="target/release/sw-apl"
 
-# name|command|description
-tests=(
-"apl-cli-shebang-env|./tests/scripts/hello.apl|An executable .apl file run through its env -S shebang"
-"apl-cli-shebang-bare|./tests/scripts/bare-shebang.apl|An executable .apl file run through a bare shebang"
-"apl-cli-hash-elsewhere|./tests/scripts/hash-elsewhere.apl|A hash after the first line is still a CHARACTER ERROR"
-"apl-cli-shebang-as-file|target/release/sw-apl --no-echo -f tests/scripts/hello.apl|A file with a shebang, run with -f rather than executed"
-)
-
-for spec in "${tests[@]}"; do
-    IFS='|' read -r name command desc <<< "$spec"
+# seed NAME DESCRIPTION COMMAND
+seed() {
+    local name="$1" desc="$2" command="$3"
     if [ -f "$REG_RS_DATA_DIR/$name.rgt" ]; then
-        [ "$recreate" != "--all" ] && { echo "  skip $name"; continue; }
+        [ "$recreate" != "--all" ] && { echo "  skip $name"; return; }
         reg-rs remove -p "$name" >/dev/null
     fi
     echo "  create $name"
     reg-rs create -t "$name" -c "$command" \
         --timeout 60 --desc "$desc" --preprocess "$filter"
-done
+}
+
+seed apl-cli-version \
+    "The version block: name, copyright, licence, repository, build" \
+    "$apl --version"
+seed apl-cli-version-short \
+    "The short form -V gives the same block as --version" \
+    "if [ \"\$($apl -V)\" = \"\$($apl --version)\" ]; then echo 'same'; else echo 'DIFFER'; fi"
+seed apl-cli-help \
+    "The long help, including the agent instructions" \
+    "$apl --help"
+seed apl-cli-help-short \
+    "The short form -h gives less than --help" \
+    "if [ \"\$($apl -h | wc -c)\" -lt \"\$($apl --help | wc -c)\" ]; then echo 'shorter'; else echo 'NOT SHORTER'; fi"
+seed apl-cli-stdin \
+    "Batch from stdin, echoing each line, stopping at )OFF" \
+    "printf '2+2\n)OFF\n3+3\n' | $apl"
+seed apl-cli-no-echo \
+    "The --no-echo flag prints the output without the input" \
+    "printf '2+2\n)OFF\n' | $apl --no-echo"
+seed apl-cli-file \
+    "A file run with -f" \
+    "$apl -f tests/scripts/two-lines.apl"
+seed apl-cli-missing-file \
+    "A file that is not there: a message, and a non-zero status" \
+    "$apl -f /nonexistent/x.apl 2>&1"
+seed apl-cli-bad-utf8 \
+    "A line that is not UTF-8 is reported and the run carries on" \
+    "$apl -f tests/scripts/bad-utf8.apl"
+seed apl-cli-definition-echo \
+    "Definition lines echo behind the bracketed prompt" \
+    "printf '\342\210\207R\342\206\220DOUBLE N\nR\342\206\220N+N\n\342\210\207\nDOUBLE 4\n)OFF\n' | $apl"
+seed apl-cli-quad-from-script \
+    "A read takes the next line of the script" \
+    "printf 'X\342\206\220\342\216\225\n2 3 4\nX\303\2272\n)OFF\n' | $apl"
+seed apl-cli-quote-quad-line \
+    "A quote-quad prompt and its answer share a line" \
+    "$apl -f tests/scripts/greet.apl"
+seed apl-cli-open-line-ends \
+    "A statement ends the line quote-quad left open, unlike a function" \
+    "$apl -f tests/scripts/open-line.apl"
+seed apl-cli-shebang-env \
+    "An executable .apl file run through its env -S shebang" \
+    "./tests/scripts/hello.apl"
+seed apl-cli-shebang-bare \
+    "An executable .apl file run through a bare shebang" \
+    "./tests/scripts/bare-shebang.apl"
+seed apl-cli-hash-elsewhere \
+    "A hash after the first line is still a CHARACTER ERROR" \
+    "./tests/scripts/hash-elsewhere.apl"
+seed apl-cli-shebang-as-file \
+    "A file with a shebang, run with -f rather than executed" \
+    "$apl --no-echo -f tests/scripts/hello.apl"
+
 reg-rs run -q && echo "ALL PASS" || echo "SOME FAILURES"

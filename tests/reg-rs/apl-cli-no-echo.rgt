@@ -1,0 +1,5 @@
+command = '''printf '2+2\n)OFF\n' | target/release/sw-apl --no-echo'''
+timeout = 60
+preprocess = "bash scripts/normalize-apl-output.sh"
+exit_code = 0
+desc = "The --no-echo flag prints the output without the input"

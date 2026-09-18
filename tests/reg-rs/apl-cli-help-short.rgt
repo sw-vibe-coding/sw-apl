@@ -1,0 +1,5 @@
+command = """if [ "$(target/release/sw-apl -h | wc -c)" -lt "$(target/release/sw-apl --help | wc -c)" ]; then echo 'shorter'; else echo 'NOT SHORTER'; fi"""
+timeout = 60
+preprocess = "bash scripts/normalize-apl-output.sh"
+exit_code = 0
+desc = "The short form -h gives less than --help"

@@ -1,0 +1,5 @@
+command = "target/release/sw-apl -f tests/scripts/bad-utf8.apl"
+timeout = 60
+preprocess = "bash scripts/normalize-apl-output.sh"
+exit_code = 0
+desc = "A line that is not UTF-8 is reported and the run carries on"

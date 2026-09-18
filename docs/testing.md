@@ -1,5 +1,19 @@
 # sw-apl Testing
 
+## Which tool covers what
+
+- **reg-rs** covers anything checked by running the binary: the
+  sample transcripts, and the CLI itself -- arguments, the version
+  and help blocks, batch and stdin modes, exit codes, executable
+  files. It is a CLI regression tool, not only a transcript tool.
+- **Rust tests** cover the libraries: unit tests inside a crate,
+  and the integration tests in each crate's `tests/`, which drive
+  a crate's public API rather than a process.
+
+The binary therefore has no Rust test crate. What used to be in
+`components/cli/crates/sw-apl/tests/cli_tests.rs` is now seeded by
+`scripts/reg-seed-cli.sh`.
+
 ## Test-first, always
 
 Every saga step follows red, green, refactor:
@@ -83,12 +97,21 @@ one back in.
 ### Tests of the CLI itself
 
 `scripts/reg-seed-cli.sh` seeds the tests that check how the binary
-answers the shell rather than what a sample prints: the executable
-`.apl` files in `tests/scripts/`, run through both shebang forms and
-also through `-f`. They are reg-rs tests because that is what reg-rs
-is for. Rust tests are for the unit, function and integration testing
-of the libraries; `components/cli/crates/sw-apl/tests/cli_tests.rs`
-still holds checks that belong here, and moving them is its own step.
+answers the shell rather than what a sample prints. Its fixtures live
+in `tests/scripts/`: ordinary `.apl` files, and executable ones with
+a shebang.
+
+Two of those tests are properties rather than transcripts -- that
+`-V` agrees with `--version`, and that `-h` is shorter than `--help`
+-- so each command is written to make its own answer the output, and
+the baseline is the word `same` or `shorter`. A test whose command
+cannot say what it found does not belong here.
+
+Two things reg-rs will refuse. A `--desc` may not begin with a dash,
+because clap reads it and takes it for a flag. And a command with a
+pipe in it cannot be split out of a delimited list, which is why the
+seeding script calls a function per test rather than looping over a
+table.
 
 The command each test runs is `target/release/sw-apl -f
 samples/NAME.apl`; `scripts/reg-seed.sh` builds the release
@@ -129,7 +152,8 @@ that the generated tables are consistent.
   markdown when they changed (`just gates`); `docs/*.md` may hold
   glyphs and is not ASCII-gated.
 - `sw-checklist` always; zero failures, warnings kept at zero.
-- `scripts/reg.sh run -q` when interpreter behaviour changed.
+- `scripts/reg.sh run -q` when interpreter, session or CLI
+  behaviour changed.
 
 `/mw-cp` (in `.claude/commands/mw-cp.md`) runs this list in
 order and commits.

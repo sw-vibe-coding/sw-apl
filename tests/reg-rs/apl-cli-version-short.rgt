@@ -1,0 +1,5 @@
+command = """if [ "$(target/release/sw-apl -V)" = "$(target/release/sw-apl --version)" ]; then echo 'same'; else echo 'DIFFER'; fi"""
+timeout = 60
+preprocess = "bash scripts/normalize-apl-output.sh"
+exit_code = 0
+desc = "The short form -V gives the same block as --version"

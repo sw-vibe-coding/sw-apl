@@ -1,0 +1,5 @@
+command = '''printf '\342\210\207R\342\206\220DOUBLE N\nR\342\206\220N+N\n\342\210\207\nDOUBLE 4\n)OFF\n' | target/release/sw-apl'''
+timeout = 60
+preprocess = "bash scripts/normalize-apl-output.sh"
+exit_code = 0
+desc = "Definition lines echo behind the bracketed prompt"

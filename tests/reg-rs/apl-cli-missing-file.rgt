@@ -1,0 +1,5 @@
+command = "target/release/sw-apl -f /nonexistent/x.apl 2>&1"
+timeout = 60
+preprocess = "bash scripts/normalize-apl-output.sh"
+exit_code = 1
+desc = "A file that is not there: a message, and a non-zero status"

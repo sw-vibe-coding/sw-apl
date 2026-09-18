@@ -1,0 +1,5 @@
+⍞←'NAME: '
+WHO←⍞
+MIKE
+WHO
+)OFF

@@ -1,0 +1,5 @@
+command = '''printf '2+2\n)OFF\n3+3\n' | target/release/sw-apl'''
+timeout = 60
+preprocess = "bash scripts/normalize-apl-output.sh"
+exit_code = 0
+desc = "Batch from stdin, echoing each line, stopping at )OFF"
