@@ -17,12 +17,13 @@ use rustyline::{DefaultEditor, Result as LineResult};
 
 use crate::host::{Editor, Terminal, catch_interrupt};
 
-/// Run the interactive loop until `)OFF` or end of input, in a
-/// workspace of `size` bytes.
+/// Run the interactive loop until `)OFF` or end of input. `ws` is
+/// the workspace size in bytes and the directory the libraries are
+/// under.
 ///
 /// # Errors
 /// Terminal or I/O failures from the line editor.
-pub fn run_interactive(size: usize) -> io::Result<()> {
+pub fn run_interactive(ws: (usize, PathBuf)) -> io::Result<()> {
     let editor = DefaultEditor::new().map_err(io::Error::other)?;
     let editor: Editor = Rc::new(RefCell::new(editor));
     let history = history_path();
@@ -30,7 +31,7 @@ pub fn run_interactive(size: usize) -> io::Result<()> {
         let _ = editor.borrow_mut().load_history(path);
     }
     let mut session = Session::attached(Box::new(Terminal(Rc::clone(&editor))));
-    session.ws.quota = size;
+    (session.ws.quota, session.ws.libraries) = ws;
     catch_interrupt();
     prompt_loop(&mut session, &editor)?;
     if let Some(path) = &history {

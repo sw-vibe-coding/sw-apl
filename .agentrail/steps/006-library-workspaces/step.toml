@@ -1,6 +1,6 @@
 number = 6
 slug = "library-workspaces"
-status = "pending"
+status = "in-progress"
 description = "Phase 4 step 5 (docs/plan.md). Numbered public libraries and the workspaces s..."
 role = "production"
 context_files = []

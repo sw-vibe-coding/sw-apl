@@ -96,3 +96,15 @@ material belongs there and not in `ws/`.
 - APL History Collection, Software Preservation Group:
   <https://softwarepreservation.computerhistory.org/apl/>
 - APL\360 on the APL Wiki: <https://aplwiki.com/wiki/APL%5C360>
+
+## Why the converted workspace is not tracked
+
+`ws/` is tracked and `work/` is not. Every workspace under `ws/`
+carries a provenance directive naming sw-apl as its source, and
+`scripts/check-provenance.sh` fails the build when a tracked
+workspace lacks it or when an untracked one turns up under `ws/`.
+
+So a converted APLCOURSE cannot reach `ws/` by accident: it would
+have to be given a line claiming we wrote it. Put it in `work/`,
+which git ignores, and it stays yours. `workspaces.md` has the
+rule; `work/README.md` has the reason.

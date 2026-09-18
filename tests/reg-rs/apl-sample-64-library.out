@@ -1,0 +1,58 @@
+      ⍝ The numbered libraries. Library 0 is yours, where )SAVE writes;
+      ⍝ library 1 holds the workspaces sw-apl ships. )LIB 1 lists one and
+      ⍝ )LOAD 1 NAME reads from it.
+      )LIB 1
+EDIT
+LIFE
+RACE
+      ⍝ )LOAD says when the workspace was saved and nothing else, as
+      ⍝ APL\360 did. Typing DESCRIBE is the reader's move, not the
+      ⍝ loader's; the convention is the name.
+      )LOAD 1 EDIT
+SAVED 22.53.10 09/17/26
+      DESCRIBE
+EDIT -- A WORKSPACE TO PRACTISE THE DEL EDITOR ON.
+
+   FACT N     N FACTORIAL, BY A LOOP. IT IS WRONG BY ONE.
+   MEAN X     THE MEAN OF A VECTOR. THIS ONE IS RIGHT.
+
+FACT 5 SHOULD BE 120 AND IS NOT. OPEN IT, FIND THE LINE,
+CHANGE IT, CLOSE IT. TYPE HOWEDIT FOR THE COMMANDS.
+      )FNS
+DESCRIBE FACT HOWEDIT MEAN
+      )VARS
+      ⍝ EDIT exists to be edited. FACT is wrong by one, which is a line to
+      ⍝ find and a line to change.
+      FACT 5
+24
+      ∇FACT[⎕]∇
+      ∇R←FACT N;I
+[1]   R←1
+[2]   I←1
+[3]   LOOP:R←R×I
+[4]   I←I+1
+[5]   →LOOP×⍳I<N
+      ∇
+      ⍝ Line 5 branches back while I is less than N, so the last multiply
+      ⍝ never happens. Reopen, write line 5 again, close.
+      ∇FACT
+[6]   [5] →LOOP×⍳I≤N
+[6]   ∇
+      FACT 5
+120
+      ⍝ The fix is this session's, not the library's: )SAVE would write it
+      ⍝ into library 0, and the shipped workspace is untouched.
+      ∇FACT[⎕]∇
+      ∇R←FACT N;I
+[1]   R←1
+[2]   I←1
+[3]   LOOP:R←R×I
+[4]   I←I+1
+[5]   →LOOP×⍳I≤N
+      ∇
+      ⍝ A library workspace is a plain text file you can read in an
+      ⍝ editor, so nothing here is hidden.
+      )OFF
+22.55.49 09/17/26
+CONNECTED 0.00.00
+CPU TIME 0.00.00

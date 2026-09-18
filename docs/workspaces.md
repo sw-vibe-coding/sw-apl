@@ -66,7 +66,36 @@ numbered ones are public.
 | 1 | `ws/lib1/` | The workspaces sw-apl ships, each with a DESCRIBE function |
 
 `)LIB` lists library 0, `)LIB 1` lists library 1 -- one at a time, as
-APL\360 did. A workspace is the file `NAME.apl.ws`.
+APL\360 did. A workspace is the file `NAME.apl.ws`. `--library DIR`
+sets the directory they are all under, so a script or a test can work
+somewhere other than your own `work/`.
+
+Library 1 holds `LIFE` (Conway's Life on a torus), `RACE` (a horse
+race written to be read) and `EDIT` (a workspace to practise the del
+editor on, whose `FACT` is wrong by one on purpose). Each is a plain
+text file you can open in an editor.
+
+### Tracked, or not
+
+`ws/` is tracked and `work/` is not, and the line between them is
+who wrote the workspace rather than what is in it. Every workspace
+under `ws/` carries a provenance directive:
+
+```apl
+⍝!SOURCE sw-apl -- written for this repository. MIT, (c) 2026 Michael A Wright.
+```
+
+`scripts/check-provenance.sh` fails the build when a tracked
+workspace does not carry it, or when an untracked one appears under
+`ws/` on its way to being added. The point is not the line but what
+committing without it would mean: historical APL workspaces are IBM
+material of unclear copyright, converting one is easy, and this makes
+putting one in `ws/` a deliberate false claim rather than an
+oversight. Anything from elsewhere belongs in `work/`. See
+`aplcourse-how-to.md`.
+
+`)SAVE` does not write the directive. A mark a program stamps on
+everything asserts nothing.
 
 ## The file
 

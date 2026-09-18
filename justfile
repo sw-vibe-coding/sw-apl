@@ -52,6 +52,7 @@ gates:
     sw-markdown-checker -f README.md
     sw-markdown-checker -f CHANGES.md
     sw-markdown-checker -f "samples/*.md"
+    ./scripts/check-provenance.sh
     sw-checklist
 
 # The full pre-commit gate, in order: format, test, lint, standards.

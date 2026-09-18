@@ -14,6 +14,14 @@ MODES:
                          flags before -f, and prefer the portable
                          form #!/usr/bin/env -S sw-apl --no-echo -f.
 
+LIBRARIES:
+  Library 0 is work/ under the library directory: yours, where
+  )SAVE writes and )LOAD NAME reads. Library 1 is ws/lib1/ there:
+  the workspaces sw-apl ships, each with a DESCRIBE. )LOAD 1 NAME
+  reads a numbered library and )LIB 1 lists one. --library sets the
+  directory they are all under; the default is the current one, so
+  running sw-apl from a checkout finds the shipped workspaces.
+
 WORKSPACE SIZE:
   A workspace holds a fixed number of bytes, and a value that will
   not fit in what is left is WS FULL. --ws-size sets it; the default

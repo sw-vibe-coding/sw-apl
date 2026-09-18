@@ -249,6 +249,19 @@ the numbered ones are public.
 | 0 | `work/` | Yours. `)SAVE` writes here, and `)LOAD NAME` reads here. Not tracked; the first `)SAVE` creates it |
 | 1 | `ws/lib1/` | The workspaces sw-apl ships, each with a DESCRIBE function |
 
+`--library DIR` sets the directory they are all under; the default
+is the current one, so running sw-apl from a checkout finds the
+shipped workspaces. Point it somewhere else and library 0 goes with
+it, which is how a test or a script keeps out of your own `work/`.
+
+Library 1 holds:
+
+| Workspace | |
+|---|---|
+| `LIFE` | Conway's Life on a torus: `GLIDER` then `RUN 4` |
+| `RACE` | A horse race, written to be read: character matrix, mixed output, the conditional branch idiom |
+| `EDIT` | A workspace to practise the del editor on. `FACT` is wrong by one on purpose |
+
 `)LIB` lists library 0 and `)LIB 1` lists library 1; one library
 at a time, as APL\360 did. A workspace is `NAME.apl.ws`, UTF-8
 text (see `design.md` D7).

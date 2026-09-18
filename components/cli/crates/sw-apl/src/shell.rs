@@ -10,7 +10,7 @@
 use std::cell::RefCell;
 use std::fs;
 use std::io::{self, Read, Write};
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::rc::Rc;
 
 use crate::host::{Pending, Script, catch_interrupt};
@@ -62,12 +62,13 @@ fn without_shebang(bytes: &[u8]) -> &[u8] {
     }
 }
 
-/// Run every line of `path` (or of stdin when `None`) in batch mode,
-/// in a workspace of `size` bytes.
+/// Run every line of `path` (or of stdin when `None`) in batch mode.
+/// `ws` is the workspace size in bytes and the directory the
+/// libraries are under.
 ///
 /// # Errors
 /// I/O errors reading the input or writing the transcript.
-pub fn run_batch(path: Option<&Path>, echo: bool, size: usize) -> io::Result<()> {
+pub fn run_batch(path: Option<&Path>, echo: bool, ws: (usize, PathBuf)) -> io::Result<()> {
     let mut bytes = Vec::new();
     if let Some(p) = path {
         bytes = fs::read(p)?;
@@ -76,7 +77,7 @@ pub fn run_batch(path: Option<&Path>, echo: bool, size: usize) -> io::Result<()>
     }
     let pending: Pending = Rc::new(RefCell::new(lines(&bytes).into()));
     let mut session = Session::attached(Box::new(Script(Rc::clone(&pending), echo)));
-    session.ws.quota = size;
+    (session.ws.quota, session.ws.libraries) = ws;
     catch_interrupt();
     run_lines(&mut session, &pending, echo);
     io::stdout().flush()

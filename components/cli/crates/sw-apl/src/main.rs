@@ -52,16 +52,21 @@ pub struct Args {
     /// before WS FULL.
     #[arg(long = "ws-size", value_name = "BYTES", default_value_t = apl_session::QUOTA)]
     pub ws_size: usize,
+
+    /// Where the workspace libraries are: the directory holding
+    /// work/ (library 0) and ws/ (the shipped libraries).
+    #[arg(long = "library", value_name = "DIR", default_value = ".")]
+    pub library: PathBuf,
 }
 
 fn main() -> ExitCode {
     let args = Args::parse();
     let echo = !args.no_echo;
-    let size = args.ws_size;
+    let ws = (args.ws_size, args.library);
     let outcome = match args.file {
-        Some(path) => shell::run_batch(Some(&path), echo, size),
-        None if std::io::stdin().is_terminal() => repl::run_interactive(size),
-        None => shell::run_batch(None, echo, size),
+        Some(path) => shell::run_batch(Some(&path), echo, ws),
+        None if std::io::stdin().is_terminal() => repl::run_interactive(ws),
+        None => shell::run_batch(None, echo, ws),
     };
     match outcome {
         Ok(()) => ExitCode::SUCCESS,

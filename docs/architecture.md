@@ -35,7 +35,7 @@ sw-apl/
   samples/     conformance corpus (.apl transcripts)
   tests/reg-rs reg-rs regression baselines
   scripts/     gen-changes, run-samples, reg wrappers
-  ws/lib1/     shipped library workspaces (DESCRIBE convention)
+  ws/lib1/     shipped library workspaces: LIFE, RACE, EDIT
 ```
 
 Workspaces are created by the saga step that first needs them;

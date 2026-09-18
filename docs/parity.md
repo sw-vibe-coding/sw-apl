@@ -155,7 +155,7 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | `)FNS` `)VARS` `)GRPS` `)GRP` `)GROUP` `)ERASE` | done |
 | `)SI` `)SIV` | done |
 | `)SYMBOLS` | partial; reports `IS n, USED m`, but the number cannot be set: sw-apl sets no symbol table aside, so `)SYMBOLS n` is INCORRECT COMMAND |
-| Library form `)LOAD 1 NAME`, DESCRIBE convention | todo |
+| Library form `)LOAD 1 NAME`, DESCRIBE convention | done; `--library` sets the directory they are under, library 1 is `ws/lib1/`, and LIFE, RACE and EDIT each carry a DESCRIBE; library tests, sample 64 |
 | `)LOAD` prints only the SAVED line, as APL\360 did, and nothing runs on load | done | command tests, sample 61 |
 | `)MSG` `)OPR` `)PORTS` | stub |
 

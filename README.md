@@ -97,6 +97,13 @@ I-beam 22 reports what is left of. Anything that will not fit -- an
 assignment, a definition, the arguments a call binds, a `)LOAD` or a
 `)COPY` -- is WS FULL, and the workspace is left exactly as it was.
 
+Libraries are numbered as in APL\360: library 0 is yours, where
+`)SAVE` writes, and library 1 holds the workspaces sw-apl ships, each
+carrying a DESCRIBE that says what it holds. `)LOAD 1 NAME` reads a
+numbered library and `)LIB 1` lists one; `--library` sets the
+directory they are under. The shipped workspaces are LIFE, RACE and
+EDIT, and each is a plain text file you can open in an editor.
+
 `)FNS` and `)VARS` list what a workspace holds, alphabetically and
 from a letter if one is given; `)VARS` reports global variables even
 while a call's locals are in scope. A group gives one name to a
@@ -105,7 +112,7 @@ collection of names so they can be copied or erased together:
 name takes its members with it. `)SYMBOLS` says how many names are
 held and how many would fit.
 
-Not there yet: the shipped library workspaces and domino. A
+Not there yet: domino. A
 glyph from a later APL is a CHARACTER ERROR that names it, so the
 Dyalog Life one-liner answers "dfn brace, not APL\360". See the
 parity checklist for the row-by-row picture. Batch mode, `)OFF`, help, and the

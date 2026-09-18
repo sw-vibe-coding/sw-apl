@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# Every workspace tracked in ws/ must say it is ours.
+#
+# The point is not the line; it is what committing without it would
+# mean. Historical APL workspaces -- APLCOURSE and the rest of
+# APL\360's library 1 -- are IBM material of unclear copyright, and
+# converting one is easy enough that it could land in ws/ by
+# accident. This gate makes that a deliberate false claim rather than
+# an oversight. Anything from elsewhere belongs in work/, which is
+# gitignored; see work/README.md and docs/aplcourse-how-to.md.
+#
+# `)SAVE` deliberately does NOT write this line. A mark a program
+# stamps on everything asserts nothing.
+set -euo pipefail
+cd "$(git rev-parse --show-toplevel)"
+mark='⍝!SOURCE sw-apl'
+status=0
+tracked="$(git ls-files 'ws/**/*.apl.ws' 'ws/*.apl.ws')"
+for f in $tracked; do
+    if grep -qF "$mark" "$f"; then
+        echo "  ok   $f"
+    else
+        echo "  FAIL $f: no '$mark' line"
+        status=1
+    fi
+done
+# An untracked workspace under ws/ is the mistake this guards against
+# one step earlier: it is on its way to being added.
+untracked="$(git ls-files --others --exclude-standard 'ws/')"
+if [ -n "$untracked" ]; then
+    echo "  FAIL untracked files under ws/ (material from elsewhere belongs in work/):"
+    echo "$untracked" | sed 's/^/    /'
+    status=1
+fi
+[ "$status" = 0 ] && echo "check-provenance: all workspaces in ws/ are ours"
+exit "$status"
