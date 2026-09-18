@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-17
 
+- chore(agentrail): complete 010-cli-tests-to-reg; core-session saga done
+- test(cli): move the CLI checks from Rust tests to reg-rs
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 009-script-files; advance to 010-cli-tests-to-reg
 - feat(cli): an executable .apl file
 - docs(changes): refresh CHANGES.md to HEAD
