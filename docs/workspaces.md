@@ -121,7 +121,10 @@ THE MAIN FUNCTIONS IN THIS LIBRARY WORKSPACE ARE:
 ```
 
 The greeting is the user typing `DESCRIBE`, and that is the whole
-convention.
+convention. sw-apl does the same: `)LOAD` prints the SAVED line and
+nothing else. It would be friendlier to add a line pointing at
+DESCRIBE, and sw-apl does not, because that is output APL\360 never
+produced.
 
 **A function or a variable, as you please.** What matters is the
 name, because typing a name either runs a niladic function or

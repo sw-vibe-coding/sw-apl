@@ -102,12 +102,12 @@ function or displays a variable, and the convention is the name.
 Per-function help may follow the `HOWNAME` convention. Rules out:
 a separate help system.
 
-APL\360 printed nothing on load but the line saying when the
-workspace was saved; the greeting was the user typing DESCRIBE.
-Whether sw-apl adds a hint after `)LOAD` is open, and is decided
-by the step that implements `)LOAD`: it is friendlier, and it is
-output APL\360 did not produce, so it is a parity question rather
-than a free improvement.
+`)LOAD` prints the line saying when the workspace was saved and
+nothing else, as APL\360 did. The greeting is the user typing
+DESCRIBE. sw-apl does not add a hint, friendlier though that
+would be: it would be output APL\360 never produced, and a
+transcript from sw-apl should be able to sit beside a 1968 one
+unchanged. Rules out: a loader that helps.
 
 ## D9. sw-checklist gates drive crate granularity
 

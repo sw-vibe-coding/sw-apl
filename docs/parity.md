@@ -155,7 +155,7 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | `)SI` `)SIV` | done |
 | `)SYMBOLS` | todo |
 | Library form `)LOAD 1 NAME`, DESCRIBE convention | todo |
-| `)LOAD` prints only the SAVED line, as APL\360 did | todo | a hint to type DESCRIBE would be output APL\360 did not produce; decided by the step that implements `)LOAD` |
+| `)LOAD` prints only the SAVED line, as APL\360 did, and nothing runs on load | todo | no hint, no latent expression: a transcript should sit beside a 1968 one unchanged |
 | `)MSG` `)OPR` `)PORTS` | stub |
 
 ## Errors

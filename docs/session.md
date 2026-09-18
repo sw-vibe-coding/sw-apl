@@ -240,8 +240,9 @@ displaying it is DEFN ERROR. Nothing unlocks it.
 
 Every workspace shipped in `ws/lib1/` defines a niladic function
 DESCRIBE that prints a short description of the workspace, the
-main functions, and how to start. After `)LOAD`, when DESCRIBE
-exists the session prints a one-line hint to type it. Longer
+main functions, and how to start. `)LOAD` prints only the line
+saying when the workspace was saved, as APL\360 did; typing
+DESCRIBE is the reader's move, not the loader's. Longer
 per-function help follows the `HOWNAME` convention, one niladic
 function per documented function.
 

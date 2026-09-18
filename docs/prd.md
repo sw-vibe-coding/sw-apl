@@ -51,8 +51,10 @@ interpreter crates.
   control, inquiry, and settings, following the APL\360 names.
 - Workspaces are saved to and loaded from plain text files; a
   numbered library convention maps `)LOAD 1 NAME` to directories.
-- Each shipped workspace carries a niladic DESCRIBE function that
-  prints what the workspace holds and how to use it.
+- Each shipped workspace carries a DESCRIBE that prints what the
+  workspace holds and how to use it. `)LOAD` prints only the line
+  saying when the workspace was saved, as APL\360 did; typing
+  DESCRIBE is the reader's move.
 
 ### Input
 

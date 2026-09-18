@@ -191,10 +191,9 @@ widen each layer to the full APL\360 set.
    `)LOAD` runs the file, so it takes the saved origin; `)COPY`
    must take the definitions and leave the settings, or it
    changes the origin under code already written. See
-   `index-origin-considerations.md`. Decide whether `)LOAD`
-   prints anything beyond the SAVED line: APL\360 did not, so a
-   DESCRIBE hint is a deviation to choose deliberately.
-   (Owner direction 2026-09-17.)
+   `index-origin-considerations.md`. `)LOAD` prints the SAVED
+   line and nothing else: no DESCRIBE hint, no latent
+   expression, strict parity. (Owner direction 2026-09-17.)
 4. `system-commands-inquiry` -- )FNS )VARS )GRPS )GRP )GROUP
    )ERASE )SI )SIV )ORIGIN )DIGITS )WIDTH )SYMBOLS.
 5. `library-workspaces` -- numbered public libraries (`)LOAD 1
