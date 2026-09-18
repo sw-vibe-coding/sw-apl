@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-17
 
+- chore(agentrail): complete 009-script-files; advance to 010-cli-tests-to-reg
+- feat(cli): an executable .apl file
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 008-session-polish; advance to 009-script-files
 - feat(session): the sign-off line, and stopping a running function
 - docs(plan): queue cli-tests-to-reg, moving CLI checks onto reg-rs
