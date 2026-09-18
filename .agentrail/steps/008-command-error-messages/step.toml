@@ -1,11 +1,12 @@
 number = 8
 slug = "command-error-messages"
-status = "in-progress"
+status = "completed"
 description = """
 Phase 4 step 8 (docs/plan.md, owner report 2026-09-18). The system
 commands a..."""
 role = "production"
 context_files = []
 created_at = "2026-09-18T10:10:19"
+completed_at = "2026-09-18T11:11:38"
 task_type = "rust-interpreter"
-commits = []
+commits = ["36d831997093edfa2bf0bf489e14dde69ff7256d"]
