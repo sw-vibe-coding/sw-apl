@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-18
 
+- chore(agentrail): complete 003-ibeam-reference; numerics saga done
+- docs: an I-beam reference, and pin the claims it makes
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 002-numeric-edge-cases; advance to 003-ibeam-reference
 - fix(prims): apply the fuzz to a count, and pin the numeric edges
 - docs(changes): refresh CHANGES.md to HEAD
