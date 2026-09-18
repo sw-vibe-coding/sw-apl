@@ -1,0 +1,11 @@
+{
+  "task_type": "rust-interpreter",
+  "state": {
+    "number": 7,
+    "step": "reg-normalization"
+  },
+  "action": "Read reg-rs create --help and then a sibling repo that already used the feature, rather than guessing from the top-level help; copied the baselines before touching them so the claim that only one changed could be demonstrated instead of asserted; when the recreate swept back three excluded samples, made the exclusion durable and documented in the script rather than quietly deleting them again; wrote the missing docs section that caused the gap.",
+  "result": "success",
+  "reward": 1,
+  "timestamp": "2026-09-17T19:49:15"
+}
