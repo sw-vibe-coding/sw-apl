@@ -162,6 +162,29 @@ suspended function -- the state indicator is part of the
 workspace, not of the session, and is cleared with everything
 else. A function you were in the middle of is gone, not resumed.
 
+## When a command cannot do it
+
+The APL\360 manual calls these trouble reports, and the distinction
+it draws is worth knowing: **INCORRECT COMMAND is about the
+command**, not about the workspace.
+
+| Reply | Means |
+|---|---|
+| `INCORRECT COMMAND` | The command was given an argument it does not take: a missing name, one word too many, a value out of range |
+| `WS NOT FOUND` | No stored workspace of that name. `)LOAD`, `)COPY`, `)PCOPY`, `)DROP` |
+| `OBJECT NOT FOUND` | The workspace is there but holds no such name. A `)COPY` that named one |
+| `IMPROPER LIBRARY REFERENCE` | That number is not a library. An *empty* library is a different thing and says nothing |
+| `NOT SAVED, THIS WS IS name` | `)SAVE name` where a stored workspace of that name is not this one. It is not overwritten |
+| `NOT GROUPED, NAME IN USE` | The first name of a `)GROUP` already holds a function or a variable |
+| `NOT ERASED: names` | `)ERASE` left those alone: they are functions on the state indicator |
+
+A comma introduces a reason and a colon introduces a list, which is
+the manual's own convention.
+
+`)COPY name A B` where the workspace holds A but not B copies
+neither, so a copy that half worked cannot be mistaken for one that
+worked.
+
 ## Listing what a workspace holds
 
 `)FNS` lists the defined functions and `)VARS` the global

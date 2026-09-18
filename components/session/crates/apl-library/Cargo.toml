@@ -1,6 +1,6 @@
 [package]
-name = "apl-inquiry"
-description = "sw-apl inquiry commands: listing names, groups, erasing"
+name = "apl-library"
+description = "sw-apl workspace libraries: where a file is, and what to say when it is not there"
 edition.workspace = true
 license.workspace = true
 version.workspace = true
@@ -9,8 +9,7 @@ repository.workspace = true
 
 [dependencies]
 apl-eval = { path = "../../../eval/crates/apl-eval" }
-apl-library = { path = "../apl-library" }
-apl-value = { path = "../../../value/crates/apl-value" }
+apl-wsfile = { path = "../../../eval/crates/apl-wsfile" }
 
 [lints]
 workspace = true

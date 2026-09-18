@@ -152,12 +152,14 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | `)ORIGIN` `)DIGITS` `)WIDTH` | done |
 | `)CLEAR` | done |
 | `)WSID` | done |
-| `)SAVE` `)LOAD` `)DROP` `)LIB` `)COPY` `)PCOPY` `)CONTINUE` | done |
+| `)SAVE` `)LOAD` `)DROP` `)LIB` `)COPY` `)PCOPY` `)CONTINUE` | done; `)DROP` replies with the moment alone, as APL\360's did |
 | `)FNS` `)VARS` `)GRPS` `)GRP` `)GROUP` `)ERASE` | done |
 | `)SI` `)SIV` | done |
 | `)SYMBOLS` | partial; reports `IS n, USED m`, but the number cannot be set: sw-apl sets no symbol table aside, so `)SYMBOLS n` is INCORRECT COMMAND |
 | Library form `)LOAD 1 NAME`, DESCRIBE convention | done; `--library` sets the directory they are under, library 1 is `ws/lib1/`, and LIFE, RACE and EDIT each carry a DESCRIBE; library tests, sample 64 |
 | `)LOAD` prints only the SAVED line, as APL\360 did, and nothing runs on load | done | command tests, sample 61 |
+| Trouble reports: WS NOT FOUND, OBJECT NOT FOUND, IMPROPER LIBRARY REFERENCE, NOT SAVED THIS WS IS | done; INCORRECT COMMAND is kept for a command given an argument it does not take, as the manual's table has it; report tests, sample 65 |
+| WS LOCKED, NOT SAVED WS QUOTA USED UP, NOT WITH OPEN DEFINITION | todo | sw-apl has no accounts, no keys and no disk quota, so the first two cannot arise; the third is a real gap, since a `)COPY` typed in definition mode should be refused |
 | `)MSG` `)OPR` `)PORTS` | stub |
 
 ## Errors

@@ -92,6 +92,12 @@ Workspaces save and load: `)SAVE` writes a plain UTF-8 file that is
 APL you could have typed, `)LOAD` reads it back by running it, and
 `)COPY` takes names out of one without taking its settings.
 
+A command that cannot do what was asked says which thing went wrong:
+INCORRECT COMMAND is about the command, while WS NOT FOUND, OBJECT
+NOT FOUND and IMPROPER LIBRARY REFERENCE are about what was asked
+for. The wording follows the trouble report table in the APL\360
+User's Manual.
+
 A workspace holds a fixed number of bytes, which `--ws-size` sets and
 I-beam 22 reports what is left of. Anything that will not fit -- an
 assignment, a definition, the arguments a call binds, a `)LOAD` or a

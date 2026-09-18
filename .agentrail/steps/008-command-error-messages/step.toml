@@ -1,6 +1,6 @@
 number = 8
 slug = "command-error-messages"
-status = "pending"
+status = "in-progress"
 description = """
 Phase 4 step 8 (docs/plan.md, owner report 2026-09-18). The system
 commands a..."""

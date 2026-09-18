@@ -1,0 +1,5 @@
+command = "target/release/sw-apl -f samples/65-trouble-reports.apl"
+timeout = 60
+preprocess = "bash scripts/normalize-apl-output.sh"
+exit_code = 0
+desc = "Transcript of samples/65-trouble-reports.apl"

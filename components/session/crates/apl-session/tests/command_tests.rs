@@ -117,9 +117,11 @@ fn dropping_removes_a_saved_workspace() {
     out(&mut s, ")WSID GONE");
     out(&mut s, ")SAVE");
     assert_eq!(out(&mut s, ")LIB"), vec!["GONE"]);
-    assert_eq!(out(&mut s, ")DROP GONE"), vec!["DROPPED GONE"]);
+    // The reply is the moment it was dropped and nothing else, as
+    // APL\360's )DROP printed the time and the date.
+    assert_eq!(out(&mut s, ")DROP GONE"), vec!["0.00.00 00/00/00"]);
     assert_eq!(out(&mut s, ")LIB"), Vec::<String>::new());
-    assert_eq!(out(&mut s, ")DROP GONE"), vec!["NOT FOUND GONE"]);
+    assert_eq!(out(&mut s, ")DROP GONE"), vec!["WS NOT FOUND"]);
 }
 
 #[test]
@@ -142,10 +144,13 @@ fn continue_saves_and_signs_off() {
     assert!(reply.lines.iter().any(|l| l.starts_with("CONNECTED ")));
 }
 
+/// INCORRECT COMMAND is for a command given an argument it does not
+/// take. What it is *not* for -- a name that is simply not there --
+/// is `report_tests.rs`.
 #[test]
-fn a_command_that_names_nothing_is_incorrect() {
+fn a_command_given_what_it_does_not_take_is_incorrect() {
     let (mut s, _dir) = in_own_dir("bad");
-    for bad in [")LOAD", ")LOAD NOSUCH", ")COPY NOSUCH", ")LIB 9", ")DROP"] {
+    for bad in [")LOAD", ")DROP", ")DROP 1 NAME", ")LIB TWO", ")LIB 1 2"] {
         assert_eq!(out(&mut s, bad), vec!["INCORRECT COMMAND"], "{bad}");
     }
 }

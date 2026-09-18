@@ -26,7 +26,9 @@ sw-apl/
                apl-ibeam                   I-beam values and the clock
                apl-space                   what a value costs, and the quota
                apl-eval                    interpreter
-    session/   apl-inquiry                 listing names, groups, erasing
+    session/   apl-library                 where a workspace file is, and
+                                           what to say when it is not there
+               apl-inquiry                 listing names, groups, erasing
                apl-session                 system commands, del editor,
                                            workspace files, libraries
     cli/       sw-apl                      terminal REPL and batch
@@ -88,6 +90,11 @@ eval -> session -> web
   than depending on the evaluator.
 - `apl-eval` owns the state indicator and dispatch from AST to
   primitives.
+- `apl-library` resolves `[lib] name` to a file and owns the
+  trouble reports -- WS NOT FOUND, OBJECT NOT FOUND, IMPROPER
+  LIBRARY REFERENCE, INCORRECT COMMAND -- so that every command
+  which names a workspace fails the same way and the reports have
+  one spelling.
 - `apl-inquiry` answers the commands that report what a workspace
   holds -- `)FNS`, `)VARS`, `)GRPS`, `)GRP`, `)SI`, `)SIV`,
   `)SYMBOLS` -- and owns the group facility and `)ERASE`. It is

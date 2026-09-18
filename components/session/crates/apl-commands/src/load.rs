@@ -9,10 +9,10 @@
 use std::fs;
 
 use apl_eval::Workspace;
-use apl_wsfile::{DIRECTIVE, definitions, expand, plain};
+use apl_library::{IMPROPER_LIBRARY, INCORRECT, holds, root, text};
+use apl_wsfile::{DIRECTIVE, definitions, expand};
 
-use crate::command::{Answer, INCORRECT};
-use crate::save::library;
+use crate::command::Answer;
 
 /// `)LOAD [lib] name`: replace the workspace with a saved one. The
 /// file is APL, and loading it is typing it, so its lines come back
@@ -27,17 +27,23 @@ use crate::save::library;
 /// the rest if a line of the file will not fit: the session puts the
 /// old workspace aside before it runs any of them.
 pub fn load(ws: &Workspace, rest: &[&str]) -> Answer {
-    let Some((text, _)) = read(ws, rest) else {
-        return Answer {
-            lines: vec![INCORRECT.to_string()],
-            ..Answer::default()
-        };
+    // A word `)LOAD` did not account for is a command it does not
+    // take, which is a different fault from a name it cannot find.
+    // `used` is 1 or 2 and never more than `rest` has, so what is
+    // left over is what the command was given and cannot use.
+    let whole = |(apl, used): (String, usize)| match rest.len() - used {
+        0 => Ok(apl),
+        _ => Err(INCORRECT),
     };
-    let when = text
+    let apl = match text(ws, rest).and_then(whole) {
+        Ok(apl) => apl,
+        Err(report) => return trouble(report),
+    };
+    let when = apl
         .lines()
         .find_map(|l| l.strip_prefix(&format!("{DIRECTIVE}SAVED ")));
     let mut feed = vec![")CLEAR".to_string()];
-    feed.extend(text.lines().map(String::from));
+    feed.extend(apl.lines().map(String::from));
     Answer {
         lines: vec![format!("SAVED {}", when.unwrap_or_default())],
         feed,
@@ -45,25 +51,34 @@ pub fn load(ws: &Workspace, rest: &[&str]) -> Answer {
     }
 }
 
+/// A command that did nothing, and the report saying why.
+fn trouble(report: &str) -> Answer {
+    Answer {
+        lines: vec![report.to_string()],
+        ..Answer::default()
+    }
+}
+
 /// `)COPY [lib] name [objects]` and `)PCOPY`: bring names out of a
 /// saved workspace into this one, running its definitions but not its
 /// commands. `protect` leaves alone any name already here.
 pub fn copy(ws: &Workspace, rest: &[&str], protect: bool) -> Answer {
-    let Some((text, used)) = read(ws, rest) else {
-        return Answer {
-            lines: vec![INCORRECT.to_string()],
-            ..Answer::default()
-        };
+    let (apl, used) = match text(ws, rest) {
+        Ok(found) => found,
+        Err(report) => return trouble(report),
     };
     let asked = &rest[used.min(rest.len())..];
     // A group among the names asked for brings its members with it.
-    let wanted = expand(&text, asked);
+    let wanted = expand(&apl, asked);
+    if let Err(report) = holds(&apl, asked) {
+        return trouble(report);
+    }
     let mut feed = Vec::new();
-    for (name, lines) in definitions(&text) {
+    for (name, lines) in definitions(&apl) {
         let unwanted = !asked.is_empty() && !wanted.contains(&name);
         let taken = ws.saved.groups.contains_key(&name);
-        let held = protect && (taken || ws.get(&name).is_some() || ws.is_function(&name));
-        if !unwanted && !held {
+        let kept = protect && (taken || ws.get(&name).is_some() || ws.is_function(&name));
+        if !unwanted && !kept {
             feed.extend(lines);
         }
     }
@@ -75,41 +90,24 @@ pub fn copy(ws: &Workspace, rest: &[&str], protect: bool) -> Answer {
 
 /// `)LIB [n]`: the workspaces in one library, by name.
 pub fn lib(ws: &Workspace, rest: &[&str]) -> Vec<String> {
-    let number = match rest {
-        [] => Some(0),
-        [n] => n.parse().ok(),
-        _ => None,
+    // A word that is not a number is a command `)LIB` does not take;
+    // a number naming no library is a reference that is not a
+    // library. The manual keeps those apart and so does this.
+    let numbered = |n: usize| root(ws, n).ok_or(IMPROPER_LIBRARY);
+    let found = match rest {
+        [] => numbered(0),
+        [n] => n.parse().map_err(|_| INCORRECT).and_then(numbered),
+        _ => Err(INCORRECT),
     };
-    let Some(dir) = number.and_then(|n| library(ws, n)) else {
-        return vec![INCORRECT.to_string()];
+    let dir = match found {
+        Ok(dir) => dir,
+        Err(report) => return vec![report.to_string()],
     };
     let Ok(entries) = fs::read_dir(dir) else {
         return Vec::new();
     };
-    let mut names: Vec<String> = entries
-        .filter_map(Result::ok)
-        .filter_map(|e| {
-            e.file_name()
-                .to_str()?
-                .strip_suffix(".apl.ws")
-                .map(String::from)
-        })
-        .collect();
-    names.sort();
-    names
-}
-
-/// The text of the workspace the first word or two of `rest` names,
-/// from its library, with how many of those words it took: a library
-/// number and a name, or just a name.
-fn read(ws: &Workspace, rest: &[&str]) -> Option<(String, usize)> {
-    let (number, name, used) = match rest {
-        [number, name, ..] if number.parse::<usize>().is_ok() => (number.parse().ok()?, *name, 2),
-        [name, ..] => (0, *name, 1),
-        [] => return None,
-    };
-    let path = library(ws, number)?.join(format!("{name}.apl.ws"));
-    // A workspace holding a locked function was written obscured;
-    // everything above here works on the APL, not on the file.
-    Some((plain(&fs::read_to_string(path).ok()?), used))
+    let stem = |e: fs::DirEntry| Some(e.file_name().to_str()?.strip_suffix(".apl.ws")?.to_string());
+    let mut found: Vec<String> = entries.filter_map(Result::ok).filter_map(stem).collect();
+    found.sort();
+    found
 }

@@ -22,6 +22,11 @@ character matrix for the names, mixed output, and the conditional
 branch idiom driving two functions. Its transcript is reproducible
 because the random link starts from a fixed value.
 
+`65-trouble-reports.apl` walks what a system command says when it
+cannot do what was asked, and what separates the replies: INCORRECT
+COMMAND is about the command, while WS NOT FOUND, OBJECT NOT FOUND
+and IMPROPER LIBRARY REFERENCE are about what was asked for.
+
 `64-library.apl` lists the shipped library with `)LIB 1`, loads a
 workspace from it with `)LOAD 1 EDIT`, and fixes the off-by-one that
 workspace carries on purpose -- one line found with a bracketed quad

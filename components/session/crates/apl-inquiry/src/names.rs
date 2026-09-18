@@ -2,8 +2,9 @@
 
 use apl_eval::{Saved, Workspace};
 
-/// The reply to a command given an argument it does not take.
-pub const INCORRECT: &str = "INCORRECT COMMAND";
+/// The reply to a command given an argument it does not take, in
+/// the one place it is spelled.
+pub use apl_library::INCORRECT;
 
 /// The names that hold a defined function.
 #[must_use]

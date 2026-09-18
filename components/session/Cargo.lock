@@ -34,6 +34,7 @@ version = "0.1.0"
 dependencies = [
  "apl-eval",
  "apl-inquiry",
+ "apl-library",
  "apl-value",
  "apl-wsfile",
 ]
@@ -98,6 +99,7 @@ name = "apl-inquiry"
 version = "0.1.0"
 dependencies = [
  "apl-eval",
+ "apl-library",
  "apl-value",
 ]
 
@@ -106,6 +108,14 @@ name = "apl-lex"
 version = "0.1.0"
 dependencies = [
  "apl-value",
+]
+
+[[package]]
+name = "apl-library"
+version = "0.1.0"
+dependencies = [
+ "apl-eval",
+ "apl-wsfile",
 ]
 
 [[package]]
