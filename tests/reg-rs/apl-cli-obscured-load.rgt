@@ -1,0 +1,13 @@
+command = """
+target/release/sw-apl --library tests/scripts --no-echo <<'"APL"'
+)LOAD VAULT
+SECRET
+OPEN 4
+∇SECRET
+)FNS
+)OFF
+APL"""
+timeout = 60
+preprocess = "bash scripts/normalize-apl-output.sh"
+exit_code = 0
+desc = "An obscured workspace loads, runs, and keeps its function locked"

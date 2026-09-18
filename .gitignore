@@ -41,4 +41,8 @@ tests/reg-rs/*.tdb.lock
 
 # Scratch: saved workspaces and material converted for local use.
 # See work/README.md -- nothing in here is part of sw-apl.
-work/
+#
+# Anchored to the repository root: it is THIS library 0 that is
+# scratch, not every directory named work. tests/scripts/work/ is a
+# fixture library our own binary wrote, and it is tracked.
+/work/

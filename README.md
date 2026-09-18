@@ -97,6 +97,13 @@ I-beam 22 reports what is left of. Anything that will not fit -- an
 assignment, a definition, the arguments a call binds, a `)LOAD` or a
 `)COPY` -- is WS FULL, and the workspace is left exactly as it was.
 
+A function closed with del-tilde is locked: it runs, but it cannot be
+displayed, reopened or unlocked. A workspace holding one is not saved
+as plain text -- the file is obscured with rot-13, and `)LOAD` reads
+both forms. That is obscuring and not encryption: it stops a locked
+body being read by accident, which is all a binary workspace ever
+stopped. An obscured file cannot be run as a program and says so.
+
 Libraries are numbered as in APL\360: library 0 is yours, where
 `)SAVE` writes, and library 1 holds the workspaces sw-apl ships, each
 carrying a DESCRIBE that says what it holds. `)LOAD 1 NAME` reads a

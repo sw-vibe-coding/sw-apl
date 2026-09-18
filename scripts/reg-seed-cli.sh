@@ -101,5 +101,24 @@ seed apl-cli-hash-elsewhere \
 seed apl-cli-shebang-as-file \
     "A file with a shebang, run with -f rather than executed" \
     "$apl --no-echo -f tests/scripts/hello.apl"
+# A workspace holding a locked function is written obscured, so it is
+# not a program the way a plain one is. It says so itself rather than
+# printing a screen of CHARACTER ERRORs.
+seed apl-cli-obscured-as-file \
+    "An obscured workspace run as a program says what it is and signs off" \
+    "$apl -f tests/scripts/work/VAULT.apl.ws"
+# The same file through )LOAD, which is the way in. --library points
+# library 0 at the fixture directory, so the test does not read or
+# write the user's own work/.
+seed apl-cli-obscured-load \
+    "An obscured workspace loads, runs, and keeps its function locked" \
+    "$apl --library tests/scripts --no-echo <<'"'"'APL'"'"'
+)LOAD VAULT
+SECRET
+OPEN 4
+∇SECRET
+)FNS
+)OFF
+APL"
 
 reg-rs run -q && echo "ALL PASS" || echo "SOME FAILURES"

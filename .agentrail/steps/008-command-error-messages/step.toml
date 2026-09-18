@@ -1,0 +1,11 @@
+number = 8
+slug = "command-error-messages"
+status = "pending"
+description = """
+Phase 4 step 8 (docs/plan.md, owner report 2026-09-18). The system
+commands a..."""
+role = "production"
+context_files = []
+created_at = "2026-09-18T10:10:19"
+task_type = "rust-interpreter"
+commits = []

@@ -141,6 +141,7 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | Workspace file: re-executable UTF-8, stable byte-for-byte, round trips through the interpreter | done | wsfile tests, `tests/scripts/saved-workspace.apl.ws` |
 | A saved workspace keeps a suspended function | todo | a re-executable file cannot put execution back in the middle of a call, so `)SAVE` leaves the state indicator out; APL\360's workspaces were binary and kept it |
 | `)SAVE` and `)LOAD` round trip a workspace through a file | done | command tests, sample 61 |
+| A locked function cannot be read out of a saved workspace | partial | APL\360's workspaces were binary; sw-apl's are text, so a workspace holding a locked function is obscured with rot-13 and `)LOAD` reads both forms. Obscuring, not encryption: it stops reading a locked body by accident, not on purpose. An obscured file is not runnable as a program and says so. wsfile and locked tests, `tests/scripts/work/VAULT.apl.ws` |
 | `)COPY` takes the definitions and leaves the settings | done | command tests, sample 61; see `index-origin-considerations.md` |
 
 ## System commands

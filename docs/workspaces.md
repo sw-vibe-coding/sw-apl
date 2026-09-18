@@ -310,12 +310,49 @@ copy of what is behind it. In APL\360 that was the whole point:
 workspaces were binary, so a locked function was genuinely opaque to
 whoever you sent it to.
 
-**In sw-apl it is weaker, and you should know that.** A saved
-workspace is text, and a locked function is written into it in full,
-closed with `⍫` so that loading it reproduces the lock. Anyone with
-the file can read the body and retype it unlocked. Locking here
-guards the editor, not the file. If you need a function nobody can
-read, a text workspace is the wrong place for it.
+**In sw-apl a locked function is written into the file in full**,
+closed with `⍫` so that loading it reproduces the lock. There is
+nowhere else for it to go. So a workspace holding at least one
+locked function is not written as plain text: `)SAVE` obscures the
+whole file.
+
+```
+⍝!OBSCURED sw-apl workspace. Rot-13, not encryption: docs/workspaces.md.
+'OBSCURED WORKSPACE. )LOAD IT -- IT CANNOT BE RUN AS A PROGRAM.'
+)OFF
+⍝ fj-ncy jbexfcnpr. Er-rkrphgnoyr NCY: ybnqvat vg ehaf vg.
+...
+```
+
+`)LOAD` and `)COPY` read both forms and tell them apart by the first
+line, so nothing changes in how you use one. A workspace with
+nothing locked stays plain text, because readable, diffable and
+re-executable is the format's whole virtue; one locked function is
+enough to obscure the lot.
+
+**This is obscuring, not encryption, and you should not treat it as
+anything else.** Rot-13 is a letter shift. Anyone who means to read
+an obscured workspace can, in one line of any language, and this
+document is not going to pretend otherwise. What it stops is reading
+a locked function by accident or by curiosity -- which is exactly
+what APL\360's binary workspaces stopped, and all they stopped. If
+you need a function nobody can read, a workspace is the wrong place
+for it.
+
+### An obscured workspace is not a program
+
+A plain workspace file is also a sample: `sw-apl -f
+work/NAME.apl.ws` rebuilds the workspace, because loading it is
+running it. An obscured one cannot be, and rather than leave that
+to be found out it says so:
+
+```
+      sw-apl -f work/VAULT.apl.ws
+OBSCURED WORKSPACE. )LOAD IT -- IT CANNOT BE RUN AS A PROGRAM.
+```
+
+Those two lines and the `)OFF` after them are the only plain APL in
+the file. `)LOAD` is the way in.
 
 ## Writing a workspace for someone else
 

@@ -1,0 +1,5 @@
+command = "target/release/sw-apl -f tests/scripts/work/VAULT.apl.ws"
+timeout = 60
+preprocess = "bash scripts/normalize-apl-output.sh"
+exit_code = 0
+desc = "An obscured workspace run as a program says what it is and signs off"

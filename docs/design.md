@@ -163,3 +163,26 @@ A command that fills a workspace by running APL -- `)LOAD`,
 `)COPY` -- is all or nothing: the old workspace is put aside first
 and given back if any line fails. Rules out: a half-loaded
 workspace, which cannot be told from a whole one.
+
+## D14. A locked function obscures the whole workspace file
+
+APL\360 workspaces were binary, so a locked function was opaque to
+whoever you sent it to. A sw-apl workspace is text and the writer
+must put a locked body into it in full, which would hand it to
+anyone who opened the file. So `)SAVE` writes a workspace holding at
+least one locked function as a three-line preamble and the rest
+rot-13; `)LOAD` and `)COPY` read both forms, telling them apart by
+the first line. A workspace with nothing locked stays plain text,
+because readable, diffable and re-executable is the format's whole
+virtue.
+
+This is obscuring and not encryption, and the docs say so rather
+than implying otherwise. It stops a locked body being read by
+accident or by curiosity, which is all APL\360's binary format
+stopped. Rules out: claiming a text file can keep a secret, and
+obscuring workspaces that hold nothing locked.
+
+An obscured file is not a program. A plain workspace file can be run
+with `-f`, and an obscured one says so in its preamble and signs
+off, rather than printing a screen of CHARACTER ERRORs. Rules out:
+leaving it to be discovered.

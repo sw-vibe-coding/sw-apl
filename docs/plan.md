@@ -225,6 +225,16 @@ widen each layer to the full APL\360 set.
    one place sw-apl's lock is weaker than APL\360's binary
    workspaces. Obscuring is not encryption and the docs must not
    claim it is. (Owner direction 2026-09-17, deferred.)
+8. `command-error-messages` -- a command that names a workspace
+   which is not there answers INCORRECT COMMAND, which is wrong:
+   the manual keeps that for a command given an argument it does
+   not take, and has `WS NOT FOUND` for a name that is not there,
+   `OBJECT NOT FOUND` for an object a `)COPY` cannot find, and
+   `IMPROPER LIBRARY REFERENCE` for a library number that is not
+   one. Work through the trouble-report table in the APL\360
+   User's Manual (Aug 1968) and give each command the reply it
+   should give, `)DROP` included. (Owner report 2026-09-18:
+   `)LOAD RACE` and `)LOAD 1 RAXE` both said INCORRECT COMMAND.)
 
 ### Phase 5: numerics (saga `numerics`)
 

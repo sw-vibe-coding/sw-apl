@@ -9,7 +9,7 @@
 use std::fs;
 
 use apl_eval::Workspace;
-use apl_wsfile::{DIRECTIVE, definitions, expand};
+use apl_wsfile::{DIRECTIVE, definitions, expand, plain};
 
 use crate::command::{Answer, INCORRECT};
 use crate::save::library;
@@ -109,5 +109,7 @@ fn read(ws: &Workspace, rest: &[&str]) -> Option<(String, usize)> {
         [] => return None,
     };
     let path = library(ws, number)?.join(format!("{name}.apl.ws"));
-    Some((fs::read_to_string(path).ok()?, used))
+    // A workspace holding a locked function was written obscured;
+    // everything above here works on the APL, not on the file.
+    Some((plain(&fs::read_to_string(path).ok()?), used))
 }

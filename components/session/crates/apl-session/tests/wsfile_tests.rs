@@ -3,7 +3,7 @@
 //! where there is a session to run it in.
 
 use apl_session::Session;
-use apl_wsfile::write;
+use apl_wsfile::{plain, write};
 
 fn out(s: &mut Session, line: &str) -> Vec<String> {
     let reply = s.respond(line);
@@ -96,7 +96,13 @@ fn a_locked_function_is_carried_by_the_file() {
     for line in ["\u{2207}R\u{2190}SECRET", "R\u{2190}42", "\u{236b}"] {
         out(&mut s, line);
     }
-    let text = write(&s.ws.saved, "20.00.00 09/17/26");
+    // A workspace holding a locked function is written obscured, so
+    // the file is not APL until it is revealed. `)LOAD` does that
+    // for itself; here it is done by hand, because the point is the
+    // round trip and not the command.
+    let file = write(&s.ws.saved, "20.00.00 09/17/26");
+    assert!(!file.contains("R\u{2190}42"), "not there to read: {file}");
+    let text = plain(&file);
     assert!(text.contains("\u{236b}"), "closed locked: {text}");
     let mut after = Session::default();
     for line in text.lines() {

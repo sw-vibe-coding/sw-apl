@@ -5,6 +5,24 @@
 //! leaves the commands, because running the file would apply its
 //! settings and change the index origin under code already written.
 
+use crate::write::{PREAMBLE, rot13};
+
+/// A workspace file as APL, whichever way it was written. A plain
+/// file is itself; an obscured one -- which is what a workspace
+/// holding a locked function is written as -- is what lies under the
+/// preamble, unscrambled. The two are told apart by the first line.
+///
+/// Everything that reads a workspace goes through here, so nothing
+/// above it needs to know the two forms exist.
+#[must_use]
+pub fn plain(text: &str) -> String {
+    if !text.starts_with(PREAMBLE[0]) {
+        return text.to_string();
+    }
+    let body: Vec<&str> = text.lines().skip(PREAMBLE.len()).collect();
+    rot13(&(body.join("\n") + "\n"))
+}
+
 /// The file's definitions, each as the name it defines and the lines
 /// that define it, in the order they appear. Commands and directives
 /// are left out, which is what makes copying different from loading.
