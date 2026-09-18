@@ -14,6 +14,12 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-17
 
+- chore(agentrail): complete 003-system-commands-ws; advance to 004-system-commands-inquiry
+- feat(session): )SAVE )LOAD )DROP )LIB )COPY )PCOPY )CONTINUE
+- docs: )LOAD prints the SAVED line and nothing else
+- docs: correct the DESCRIBE convention against a real APL\360 transcript
+- docs: a guide to workspaces
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 002-ws-file-format; advance to 003-system-commands-ws
 - feat(workspace): the workspace file, as APL you could have typed
 - docs(changes): refresh CHANGES.md to HEAD
