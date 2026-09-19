@@ -296,7 +296,7 @@ change, same commit). `docs/plan.md` is the master plan. Every owner instruction
 there first; sagas and steps are derived from its phases. Other
 docs: `docs/prd.md`, `docs/architecture.md`, `docs/design.md`,
 `docs/language.md`, `docs/session.md`, `docs/glyphs.txt`,
-`docs/testing.md`, `docs/input-methods.md`, `docs/saga.md`,
+`docs/testing.md`, `docs/glyph-entry.md`, `docs/saga.md`,
 `docs/del-editor-guide.md`.
 
 ## Build / Test
@@ -385,7 +385,7 @@ refresh CHANGES.md to HEAD`. Never hand-edit it.
 ## User-facing docs: what and how, never when or plans
 
 README and `docs/language.md`, `docs/session.md`,
-`docs/input-methods.md` say WHAT a feature is and HOW to use it.
+`docs/glyph-entry.md` say WHAT a feature is and HOW to use it.
 No saga names, step numbers, dates, "new"/"planned" framing.
 Chronology and plans live only in `docs/plan.md`, `docs/saga.md`,
 `CHANGES.md`. A capability boundary is a present-tense statement:

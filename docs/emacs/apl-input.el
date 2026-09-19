@@ -8,7 +8,7 @@
 ;; A self-contained input method for typing the APL\360 glyph set
 ;; used by sw-apl.  Backtick is the prefix; positions follow the
 ;; classic APL typeball keyboard (the same positions Dyalog and
-;; gnu-apl-mode use).  See docs/input-methods.md.
+;; gnu-apl-mode use).  See docs/glyph-entry.md.
 ;;
 ;;   (load-file "path/to/sw-apl/docs/emacs/apl-input.el")
 ;;   (set-input-method "sw-apl")   ; or C-\ then sw-apl

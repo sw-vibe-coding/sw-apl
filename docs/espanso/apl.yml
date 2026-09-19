@@ -1,7 +1,7 @@
 # sw-apl glyph expansions for Espanso (https://espanso.org).
 # Copy to "$(espanso path config)/match/apl.yml" and run
 # `espanso restart`. Prefix is the backtick; positions follow the
-# classic APL typeball keyboard. See docs/input-methods.md.
+# classic APL typeball keyboard. See docs/glyph-entry.md.
 matches:
   # number row
   - trigger: "`2"

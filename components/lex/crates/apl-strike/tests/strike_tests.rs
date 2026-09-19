@@ -156,7 +156,7 @@ fn a_strike_at_the_start_of_a_line_strikes_nothing() {
 
 /// The key is named in one place so that no help text can promise a
 /// key that is not bound. These pin the pair; the CLI help and
-/// `docs/input-methods.md` quote the label, and the reader binds the
+/// `docs/glyph-entry.md` quote the label, and the reader binds the
 /// character.
 #[test]
 fn the_key_and_its_label_agree() {

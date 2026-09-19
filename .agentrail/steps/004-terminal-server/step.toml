@@ -1,0 +1,12 @@
+number = 4
+slug = "terminal-server"
+status = "in-progress"
+description = """
+Phase 8 step 1 (docs/plan.md). The service.
+
+`sw-apl-server`: a local process..."""
+role = "production"
+context_files = []
+created_at = "2026-09-19T07:15:06"
+task_type = "rust-interpreter"
+commits = []

@@ -10,7 +10,7 @@ Companion docs: `parity.md` (the definition of done: every
 APL\360 feature with its status), `prd.md` (what and why), `language.md` (the APL
 subset), `session.md` (terminal look and feel, system commands),
 `architecture.md` (crate layout), `design.md` (decisions),
-`testing.md` (TDD + reg-rs), `input-methods.md` (typing glyphs).
+`testing.md` (TDD + reg-rs), `glyph-entry.md` (typing glyphs).
 
 ## Goal
 
@@ -75,7 +75,7 @@ identifiers; prompts are written when the saga is planned.
    `/mw-cp` command, CLAUDE.md project notes, README skeleton,
    samples corpus copied from sw-cor24-apl (APL\360-scope only).
 2. `planning-docs` -- this plan plus prd, architecture, design,
-   language, session, glyphs, testing, input-methods, saga docs.
+   language, session, glyphs, testing, glyph-entry, saga docs.
 3. `cli-skeleton` -- `components/cli` workspace with the `sw-apl`
    binary: `--help`, `--version`, `-f FILE`, stdin batch mode, a
    REPL loop with the six-space indent prompt that reports

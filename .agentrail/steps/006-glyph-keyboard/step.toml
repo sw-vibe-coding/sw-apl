@@ -1,10 +1,10 @@
-number = 2
-slug = "terminal-server"
+number = 6
+slug = "glyph-keyboard"
 status = "pending"
 description = """
-Phase 8 step 1 (docs/plan.md). The service.
+Phase 8 step 3 (docs/plan.md). The keyboard, and arriving.
 
-`sw-apl-server`: a local process..."""
+Typing APL is the..."""
 role = "production"
 context_files = []
 created_at = "2026-09-19T07:15:06"

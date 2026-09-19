@@ -18,7 +18,7 @@ Input is Unicode. There are no Latin keyword aliases (`rho`,
 `iota`) and no translation table between glyph, Greek letter
 name, and English function name. Rules out: the cor24 keyword
 surface syntax and any "prettify" layer in the interpreter.
-Typing help belongs in `input-methods.md`, not in the lexer.
+Typing help belongs in `glyph-entry.md`, not in the lexer.
 
 Canonical code points are listed in `glyphs.txt`. Lookalike Greek
 letters (rho, iota, alpha, omega) are rejected with CHARACTER

@@ -387,7 +387,7 @@ function per documented function.
 
 ## Input and editing
 
-- Unicode glyph input is expected; see `input-methods.md` for
+- Unicode glyph input is expected; see `glyph-entry.md` for
   Espanso and Emacs setups.
 - Line editing with history: up and down arrows recall earlier
   input for editing or re-submission (so `+/?6 6` can be rolled

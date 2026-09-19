@@ -146,7 +146,7 @@ web demo.
 | Functions | Del editor, niladic/monadic/dyadic headers, locals, labels, branching, recursion |
 | System | I-beam system functions, quad and quote-quad I/O, the APL\360 system commands (`)ORIGIN`, `)DIGITS`, `)WIDTH`, workspaces on disk), the DESCRIBE convention |
 | Session | Six-space indent prompt, APL\360 error display with caret, batch transcripts |
-| Input | Espanso and Emacs keymaps, and 2741 overstrikes on Ctrl-] (`docs/input-methods.md`) |
+| Input | Espanso and Emacs keymaps, and 2741 overstrikes on Ctrl-] (`docs/glyph-entry.md`) |
 
 This README is plain ASCII so it renders the same everywhere; the
 documents below show real APL glyphs:
@@ -171,8 +171,9 @@ documents below show real APL glyphs:
 - [Index origin considerations](docs/index-origin-considerations.md)
   -- what it changes, why a function cannot set it, and why copying
   is riskier than loading
-- [Typing glyphs](docs/input-methods.md) -- Espanso and Emacs
-  keymaps, OS layouts
+- [Entering glyphs](docs/glyph-entry.md) -- Espanso and Emacs
+  keymaps, OS layouts, and every 2741 overstrike with the two
+  characters that form it
 - [Testing](docs/testing.md), [Architecture](docs/architecture.md),
   [Design decisions](docs/design.md), [Requirements](docs/prd.md)
 
