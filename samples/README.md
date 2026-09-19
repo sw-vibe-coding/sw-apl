@@ -22,6 +22,12 @@ character matrix for the names, mixed output, and the conditional
 branch idiom driving two functions. Its transcript is reproducible
 because the random link starts from a fixed value.
 
+`71-overstrikes.apl` forms glyphs the way a 2741 did, by striking
+one character over another: log from circle and star, domino from
+quad and divide, the lamp from a character that is not an APL\360
+glyph at all. The file carries the backspace a 2741 sent; at a
+terminal the key is Ctrl-].
+
 `70-open-definition.apl` types eight system commands into an open
 function definition: none becomes a body line, most run at once, and
 the four that would store or copy a half-changed workspace are

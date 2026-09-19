@@ -1,5 +1,5 @@
 [workspace]
-members = ["crates/apl-lex"]
+members = ["crates/apl-lex", "crates/apl-strike"]
 resolver = "2"
 
 [workspace.package]

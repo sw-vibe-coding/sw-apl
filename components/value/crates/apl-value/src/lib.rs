@@ -8,7 +8,7 @@ mod error;
 mod number;
 
 pub use apl_glyphs::{
-    AXIS, DYADIC, LATER, LOOKALIKE, MONADIC, PRIMITIVE_NAMES, PRIMITIVES, SYNTAX,
+    AXIS, DYADIC, LATER, LOOKALIKE, MONADIC, OVERSTRIKE, PRIMITIVE_NAMES, PRIMITIVES, SYNTAX,
 };
 pub use array::{Array, Data};
 pub use error::{AplError, Context, ErrorKind};

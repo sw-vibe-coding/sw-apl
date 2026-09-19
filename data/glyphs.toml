@@ -519,3 +519,161 @@ name = "rank operator"
 [[later]]
 glyph = "⍥"
 name = "over operator"
+
+# Overstrikes: glyphs formed on a 2741 by typing one character,
+# backspacing, and typing another over it. The manual, on the 2741:
+# "Backspacing serves only to position the carriage and does not
+# cause erasure or deletion of characters. It can be used ... to
+# form compound characters by overstriking".
+#
+# `base` is typed first and `over` second, which is the order the
+# manual gives for domino: "⌹ is formed by typing ⎕, backspace, ÷".
+#
+# sw-apl accepts either order. On paper there is no difference: the
+# backspace only positions the carriage, so both impressions land on
+# one spot and ⎕ over ' looks exactly like ' over ⎕. Whether APL\360
+# itself accepted both is not stated in either manual, so this is a
+# choice rather than a reproduction -- a safe one, because no two
+# pairs below use the same two characters, which a test checks.
+#
+# `source` says how each pair is known, because they are not all
+# known the same way:
+#   manual    stated in the IBM APL\360 User's Manual (Aug 1968) or
+#             the APL\360-OS/DOS manual (Dec 1970); the quote is in
+#             the comment beside it
+#   symmetry  the mirror of a pair the manual states, differing only
+#             in the axis it works along
+#   shape     the composite is visibly its two parts, which is the
+#             principle the manual describes for the keyboard as a
+#             whole: "This may be appearance (ω over W)"
+#
+# An overstrike that is not in this table is CHARACTER ERROR, which
+# is the manual's own answer: Table 3.1 gives "Illegitimate
+# overstrike" as the cause of a CHARACTER error.
+
+# "The symbol ⌿ is formed by overstriking the solidus with the
+# minus sign." (1968, 1970)
+[[overstrike]]
+glyph = "⌿"
+base = "/"
+over = "-"
+source = "manual"
+
+# "The symbol ⊖ is formed by overstriking a ○ with a minus sign."
+[[overstrike]]
+glyph = "⊖"
+base = "○"
+over = "-"
+source = "manual"
+
+# "The symbol ⍋ is formed by overstriking | and ∆."
+[[overstrike]]
+glyph = "⍋"
+base = "∆"
+over = "|"
+source = "manual"
+
+# "The lamp symbol ⍝, formed by overstriking ∩ and ○."
+[[overstrike]]
+glyph = "⍝"
+base = "∩"
+over = "○"
+source = "manual"
+
+# "... functions denoted by ⌶ (formed by overstriking ⊤ and ⊥)."
+# The OCR of both scans is weakest here; the components are certain
+# from the glyph's shape even where the letters are not legible.
+[[overstrike]]
+glyph = "⌶"
+base = "⊥"
+over = "⊤"
+source = "manual"
+
+# "If the symbol ⍫ (formed by a ∇ overstruck with a ~ and called
+# del-tilde) is used instead of ∇ ..."
+[[overstrike]]
+glyph = "⍫"
+base = "∇"
+over = "~"
+source = "manual"
+
+# "The quote-quad symbol ⍞ (i.e., a quad overstruck with a quote)
+# accepts character input."
+[[overstrike]]
+glyph = "⍞"
+base = "⎕"
+over = "'"
+source = "manual"
+
+# "... where ⌹ is formed by typing ⎕, backspace, ÷." (1970)
+[[overstrike]]
+glyph = "⌹"
+base = "⎕"
+over = "÷"
+source = "manual"
+
+# The mirror of ⊖, which the manual states: same circle, the other
+# stroke, for the other axis.
+[[overstrike]]
+glyph = "⌽"
+base = "○"
+over = "|"
+source = "symmetry"
+
+# The mirror of ⍋, which the manual states.
+[[overstrike]]
+glyph = "⍒"
+base = "∇"
+over = "|"
+source = "symmetry"
+
+# The mirror of ⌿, which the manual states.
+[[overstrike]]
+glyph = "⍀"
+base = "\\"
+over = "-"
+source = "symmetry"
+
+# A circle with a star in it.
+[[overstrike]]
+glyph = "⍟"
+base = "○"
+over = "*"
+source = "shape"
+
+# A circle with a stroke through it.
+[[overstrike]]
+glyph = "⍉"
+base = "○"
+over = "\\"
+source = "shape"
+
+# And-with-a-tilde, beside ⍫ which the manual states.
+[[overstrike]]
+glyph = "⍲"
+base = "∧"
+over = "~"
+source = "shape"
+
+# Or-with-a-tilde.
+[[overstrike]]
+glyph = "⍱"
+base = "∨"
+over = "~"
+source = "shape"
+
+# Delta with an underbar, which is what the name says.
+[[overstrike]]
+glyph = "⍙"
+base = "∆"
+over = "_"
+source = "shape"
+
+# The manual names ! as a compound without giving its parts: "to
+# form compound characters by overstriking (e.g. ⍫ and !)". A quote
+# over a full stop is what it looks like.
+[[overstrike]]
+glyph = "!"
+base = "'"
+over = "."
+source = "shape"

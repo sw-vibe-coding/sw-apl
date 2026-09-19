@@ -13,6 +13,7 @@ struct Tables {
     syntax: Vec<Syntax>,
     lookalike: Vec<Lookalike>,
     later: Vec<Later>,
+    overstrike: Vec<Overstrike>,
 }
 
 #[derive(Deserialize)]
@@ -43,6 +44,21 @@ struct Lookalike {
 struct Later {
     glyph: String,
     name: String,
+}
+
+/// A glyph formed by striking one character over another, as on a
+/// 2741.
+///
+/// The TOML also carries a `source` for each pair, saying whether
+/// the manual states it, it mirrors one the manual states, or the
+/// composite is visibly its parts. That is for whoever reads the
+/// table; serde ignores it here, and the generated const does not
+/// need it.
+#[derive(Deserialize)]
+struct Overstrike {
+    glyph: String,
+    base: String,
+    over: String,
 }
 
 fn main() {
@@ -85,6 +101,12 @@ fn render(tables: &Tables) -> String {
             .lookalike
             .iter()
             .map(|l| [quoted(&l.typed), quoted(&l.meant)].join(", ")),
+    );
+    let struck = rows(
+        tables
+            .overstrike
+            .iter()
+            .map(|o| [quoted(&o.glyph), quoted(&o.base), quoted(&o.over)].join(", ")),
     );
     let later = rows(
         tables
@@ -141,6 +163,13 @@ fn render(tables: &Tables) -> String {
             "(char, &str)",
             tables.later.len(),
             &later,
+        ),
+        table(
+            "Glyphs struck from two characters on a 2741, as\n             /// `(glyph, base, over)`. Either order forms it: the two\n             /// land on one position, and no two pairs share their\n             /// characters. A pair not here is CHARACTER ERROR, which\n             /// is the manual's own answer -- \"Illegitimate\n             /// overstrike\" is what it gives as the cause.",
+            "OVERSTRIKE",
+            "(char, char, char)",
+            tables.overstrike.len(),
+            &struck,
         ),
     ]
     .join("\n\n")

@@ -18,6 +18,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-strike"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+]
+
+[[package]]
 name = "apl-value"
 version = "0.1.0"
 dependencies = [

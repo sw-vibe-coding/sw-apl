@@ -58,6 +58,8 @@ WORKSPACE SIZE:
 
 INPUT:
   Traditional APL glyphs as Unicode. There are no keyword aliases.
+  Ctrl-] is the overstrike key: type a character, press it, and type
+  another over the first, as on a 2741. Backspace still deletes.
   See docs/input-methods.md for Espanso and Emacs setups and
   docs/glyphs.txt for the accepted code points.
 

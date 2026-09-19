@@ -11,9 +11,12 @@ use std::io;
 use std::path::PathBuf;
 use std::rc::Rc;
 
-use apl_session::Session;
+use apl_session::{Reply, Session};
+use apl_strike::{BACK, read as struck};
 use rustyline::error::ReadlineError;
-use rustyline::{DefaultEditor, Result as LineResult};
+use rustyline::{
+    Cmd, DefaultEditor, EventHandler, KeyCode, KeyEvent, Modifiers, Result as LineResult,
+};
 
 use crate::host::{Editor, Terminal, catch_interrupt};
 use crate::shell::show;
@@ -25,7 +28,15 @@ use crate::shell::show;
 /// # Errors
 /// Terminal or I/O failures from the line editor.
 pub fn run_interactive(ws: (usize, PathBuf)) -> io::Result<()> {
-    let editor = DefaultEditor::new().map_err(io::Error::other)?;
+    let mut editor = DefaultEditor::new().map_err(io::Error::other)?;
+    // The overstrike key inserts the marker that `compose` reads, so
+    // rustyline goes on editing an ordinary line and the strike is
+    // formed when the line is done. Backspace keeps deleting, which
+    // a line editor needs and a 2741 never had.
+    editor.bind_sequence(
+        KeyEvent(KeyCode::Char(']'), Modifiers::CTRL),
+        EventHandler::Simple(Cmd::Insert(1, BACK.to_string())),
+    );
     let editor: Editor = Rc::new(RefCell::new(editor));
     let history = history_path();
     if let Some(path) = &history {
@@ -42,9 +53,14 @@ pub fn run_interactive(ws: (usize, PathBuf)) -> io::Result<()> {
 }
 
 /// Prompt and answer until `)OFF` or end of input.
+///
+/// A line `⍞←` left open is where the carriage is, so it is what the
+/// reader prompts with: typing continues it, as at a terminal. End
+/// of input is Ctrl-D, which signs off as `)OFF` does and ends the
+/// loop either way. Every line read is composed first, so an
+/// overstrike typed with the key bound above becomes its glyph
+/// before the session sees it.
 fn prompt_loop(session: &mut Session, editor: &Editor) -> io::Result<()> {
-    // A line `⍞←` left open is where the carriage is, so it is what
-    // the reader prompts with: typing continues it, as at a terminal.
     let mut open = String::new();
     loop {
         let prompt = if open.is_empty() {
@@ -52,14 +68,16 @@ fn prompt_loop(session: &mut Session, editor: &Editor) -> io::Result<()> {
         } else {
             std::mem::take(&mut open)
         };
-        // End of input is Ctrl-D, which signs off as `)OFF` does, and
-        // ends the loop either way.
         let read = match read_line(&mut editor.borrow_mut(), &prompt) {
             Ok(read) => read,
             Err(err) => return Err(io::Error::other(err)),
         };
         let ending = read.is_none();
-        let reply = session.respond(&read.unwrap_or_else(|| ")OFF".to_string()));
+        let typed = read.unwrap_or_else(|| ")OFF".to_string());
+        let reply = match struck(&typed) {
+            Ok(line) => session.respond(&line),
+            Err(report) => Reply::failed(vec![report]),
+        };
         open = show(&reply);
         if reply.off || ending {
             return Ok(());

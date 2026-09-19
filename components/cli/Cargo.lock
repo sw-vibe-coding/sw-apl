@@ -352,6 +352,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-strike"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+]
+
+[[package]]
 name = "apl-value"
 version = "0.1.0"
 dependencies = [
@@ -813,6 +820,7 @@ version = "0.1.0"
 dependencies = [
  "apl-call",
  "apl-session",
+ "apl-strike",
  "chrono",
  "clap",
  "hostname",

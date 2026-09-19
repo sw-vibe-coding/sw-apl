@@ -16,6 +16,7 @@ use std::rc::Rc;
 use crate::host::{Pending, Script, catch_interrupt};
 
 use apl_session::{Reply, Session};
+use apl_strike::read;
 
 /// One input line: its text (lossy when invalid) and, when the bytes
 /// were not valid UTF-8, the offset of the first bad sequence.
@@ -79,22 +80,29 @@ pub fn run_batch(path: Option<&Path>, echo: bool, ws: (usize, PathBuf)) -> io::R
 /// taken with `let ... else` rather than `while let`, which would
 /// hold the borrow across the body: a statement that reads borrows
 /// the same queue.
+///
+/// Overstrikes are formed before the line is echoed: the paper shows
+/// the struck glyph, not the keystrokes that made it, and a file may
+/// carry the 2741's own backspace. Typing continues a line `⍞←` left
+/// open rather than starting one, so the prompt is not printed again
+/// and pressing return is what ends it.
 fn run_lines(session: &mut Session, pending: &Pending, echo: bool) {
     let mut open = false;
     loop {
         let Some(line) = pending.borrow_mut().pop_front() else {
             break;
         };
+        let struck = read(&line.text);
         if echo {
-            // Typing continues an open line rather than starting
-            // one, so the prompt is not printed again, and pressing
-            // return is what ends it.
             let prompt = if open { "" } else { &session.prompt() };
-            println!("{prompt}{}", line.text);
+            println!("{prompt}{}", struck.as_deref().unwrap_or(&line.text));
         }
-        let reply = match line.bad_at {
-            Some(at) => Reply::from(vec![format!("CHARACTER ERROR: invalid UTF-8 at byte {at}")]),
-            None => session.respond(&line.text),
+        let reply = match (line.bad_at, struck) {
+            (Some(at), _) => {
+                Reply::from(vec![format!("CHARACTER ERROR: invalid UTF-8 at byte {at}")])
+            }
+            (None, Err(report)) => Reply::failed(vec![report]),
+            (None, Ok(text)) => session.respond(&text),
         };
         open = !show(&reply).is_empty();
         if reply.off {

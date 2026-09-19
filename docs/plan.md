@@ -370,15 +370,42 @@ to a platform nobody tested.
 1. `overstrike-input` -- base, backspace, overstrike as a way of
    typing, and the overstrike table in `data/glyphs.toml` where
    both hosts read it.
-2. `terminal-server` -- `sw-apl-server`: one session per
-   connection, a line protocol, and a blocking read that works
-   because the server may block.
+Owner direction 2026-09-19, third: both clients talk to the same
+service over a socket, so the server can run on one machine and the
+terminal on another. The CLI is a client too -- `sw-apl --connect
+host:port` -- and not only the browser. That is the 2741 dialling
+in, and it makes the server testable without a browser at all.
+
+One protocol, two transports: a TCP port for CLI clients, and an
+HTTP/WebSocket port for browsers, which cannot open a raw socket.
+Framing is plain UTF-8 lines, so `nc host port` is an emergency
+client and a debugging window -- though a bare `nc` gets no
+overstrike composition, because that belongs to the front end.
+
+Not telnet: no IAC, no option negotiation.
+
+`sw-apl` with no `--connect` holds its session in process exactly as
+it does today. The reg-rs suite is the check.
+
+The listener binds to localhost unless told otherwise. A service
+holding `)SAVE` and `)LOAD` is a file-writing primitive for whoever
+can reach it, and APL\360's own answer to that -- sign-on numbers
+and passwords -- is out of scope here. Safe default, explicit flag
+to open it to the LAN, and the docs saying which.
+
+2. `terminal-server` -- `sw-apl-server` and the CLI client: one
+   session per connection, a line protocol over TCP and WebSocket,
+   and a blocking read that works because the server may block.
 3. `terminal-2741` -- the browser terminal: the printing-terminal
    feel, the carriage, ATTN as interrupt, and the overstrike
    sequence sent rather than composed -- the table it needs is
    already in `data/glyphs.toml` by then, which is the reason to
    compile the terminal from Rust rather than write it in
    JavaScript with a second copy.
+5. `del-tilde-opens` -- `⍫` opens a locked definition as well as
+   closing one: "used instead of ∇ to open or close a function
+   definition". sw-apl takes it only to close, so `⍫R←SECRET` is a
+   SYNTAX ERROR. (Found writing the overstrike sample, 2026-09-19.)
 4. `glyph-keyboard` -- the IBM 2741 APL layout, a clickable board,
    and the expansions already in `docs/espanso/` and
    `docs/emacs/`; a first screen worth arriving at.

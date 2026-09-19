@@ -1,0 +1,34 @@
+      ⍝ Overstrikes. A 2741 had no key for most APL glyphs: you typed
+      ⍝ one character, backspaced, and typed another over it, and the
+      ⍝ golf ball struck both on one position.
+      ⍝ This file carries the backspace a 2741 sent, 0x08, between the
+      ⍝ two characters. At a terminal the key is Ctrl-] instead, because
+      ⍝ a line editor needs backspace for deleting.
+      ⍝ Circle struck with star is log.
+      A←⍟3
+      A
+1.098612289
+      ⍝ Quad struck with divide is domino.
+      ⌹2 2⍴4 7 2 6
+ 0.6 ¯0.7
+¯0.2  0.4
+      ⍝ Either order forms the same glyph: on paper there is no
+      ⍝ difference, since both impressions land on one spot.
+      ∧/,(⌹2 2⍴4 7 2 6)=⌹2 2⍴4 7 2 6
+1
+      ⍝ Some components are not glyphs in their own right. Intersection
+      ⍝ is not APL\360 and is a CHARACTER ERROR alone, but the 2741
+      ⍝ keyboard carried it so that the lamp could be struck.
+      ∩
+CHARACTER ERROR: U+2229 (intersection, not APL\360)
+      ∩
+      ^
+      ⍝ this is a comment
+      ⍝ A pair that forms no glyph is what the manual calls an
+      ⍝ illegitimate overstrike, and gives as a cause of CHARACTER ERROR.
+      QZ
+CHARACTER ERROR: U+005A struck over U+0051 forms no glyph
+      )OFF
+8.22.08 09/19/26
+CONNECTED 0.00.00
+CPU TIME 0.00.00

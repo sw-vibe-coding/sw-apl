@@ -1,6 +1,6 @@
 number = 1
 slug = "overstrike-input"
-status = "pending"
+status = "in-progress"
 description = """
 Phase 8 step 1 (docs/plan.md, owner direction 2026-09-19). Typing an
 APL glyp..."""

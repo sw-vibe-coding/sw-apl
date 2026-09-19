@@ -53,5 +53,33 @@ Later-APL glyphs NOT accepted (APL\\360 only)
 --------------------------------------------""")
 for l in tables["later"]:
     print(row(l["glyph"], "", l["name"]))
+
+print("""
+Overstrikes: struck from two characters, as on a 2741
+-----------------------------------------------------
+Type the base, press the overstrike key, type the other over it.
+Either order forms the same glyph. A pair not listed here is a
+CHARACTER ERROR -- the manual's own answer, which gives
+"Illegitimate overstrike" as the cause of one.
+
+"source" says how the pair is known: from the IBM manuals, by
+mirroring a pair they state, or from the glyph being visibly its
+two parts.""")
+for o in tables["overstrike"]:
+    struck = f"{o['base']} {point(o['base'])} over {o['over']} {point(o['over'])}"
+    print(row(o["glyph"], "", struck, o["source"]))
+
+foundational = sorted(
+    {c for o in tables["overstrike"] for c in (o["base"], o["over"])}
+)
+struck = {o["glyph"] for o in tables["overstrike"]}
+print("""
+Foundational characters: what a keycap carries
+----------------------------------------------
+Every glyph above is struck from two of these, and none of them is
+itself struck. A 2741's keyboard carried them and nothing else.""")
+for c in foundational:
+    note = "" if c not in struck else "ALSO STRUCK -- check the table"
+    print(row(c, "", note))
 PY
 echo "Wrote docs/glyphs.txt from data/glyphs.toml"

@@ -1,10 +1,14 @@
 # Typing APL glyphs
 
 sw-apl reads Unicode glyphs and nothing else, so you need a way to
-type them. This page covers three: Espanso (any application, any
+type them. This page covers four: Espanso (any application, any
 OS), Emacs (a self-contained input method plus the MELPA modes),
-and OS keyboard layouts. The glyph inventory with code points is
-in `glyphs.txt`.
+OS keyboard layouts, and overstrikes, which is how a 2741 did it.
+The glyph inventory with code points is in `glyphs.txt`.
+
+Any of them will do, and they work together. Espanso and Emacs are
+the ones that need no special hardware, and they are not going
+anywhere.
 
 All three use the same idea: a prefix key followed by the letter
 in the glyph's position on the classic APL typeball keyboard,
@@ -129,3 +133,55 @@ glyph is a lookalike from the wrong Unicode block (Greek rho
 instead of APL rho, for instance) sw-apl reports CHARACTER ERROR
 and names the code point it saw; `glyphs.txt` lists the common
 confusions.
+
+## Overstrikes
+
+A 2741 had no key for most APL glyphs. You typed one character,
+pressed backspace, and typed another over it: the carriage did not
+erase, it only moved, so the golf ball struck both on one position.
+`⍟` is `○` struck with `*`. `⌹` is `⎕` struck with `÷`.
+
+sw-apl accepts this, with one change forced by the century: a line
+editor needs backspace for deleting, so the carriage move is on a
+key of its own.
+
+```
+      A←○     press Ctrl-]     then *     then 3
+      A←⍟3
+```
+
+**The key is `Ctrl-]`.** Not `Ctrl-H`, which would be the obvious
+choice and cannot work: `Ctrl-H` *is* `0x08`, the backspace byte, so
+a terminal cannot tell them apart. `0x1D` is claimed by neither
+rustyline nor the terminal's line discipline. If you have a
+programmable keyboard, a spare key sending `Ctrl-]` -- a keypad key
+relabelled, say -- gives you the 2741 gesture with keycaps that
+carry only the foundational characters, as a 2741's did.
+
+A file may use the backspace a 2741 actually sent, `0x08`, between
+the two characters; `samples/71-overstrikes.apl` does. Both markers
+mean the same thing.
+
+Either order forms the same glyph. On paper there is no difference
+-- both impressions land on one spot -- so `⎕` then `'` and `'` then
+`⎕` are both `⍞`. Whether APL\360 accepted both is not recorded in
+its manuals; sw-apl does, and it is unambiguous because no two
+pairs use the same two characters.
+
+A pair that forms no glyph is a CHARACTER ERROR naming both. The
+manual calls it an illegitimate overstrike and gives it as a cause
+of exactly that error.
+
+### Which glyphs are struck, and which are keys
+
+`glyphs.txt` has two sections for this: **Overstrikes**, listing
+each struck glyph with its two characters and how the pair is known,
+and **Foundational characters**, which is what a keycap carries.
+Every struck glyph is made from two foundational ones, and no
+foundational character is itself struck.
+
+One surprise worth knowing before you print keycaps: `∩` is on the
+list. Intersection is not an APL\360 function and typing it alone is
+a CHARACTER ERROR -- it is there only because the lamp `⍝` is struck
+from `∩` and `○`. The underbar `_` is likewise a component, of `⍙`,
+and nothing else.

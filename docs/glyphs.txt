@@ -118,3 +118,55 @@ Later-APL glyphs NOT accepted (APL\360 only)
 ⌺   U+233A                  stencil operator
 ⍤   U+2364                  rank operator
 ⍥   U+2365                  over operator
+
+Overstrikes: struck from two characters, as on a 2741
+-----------------------------------------------------
+Type the base, press the overstrike key, type the other over it.
+Either order forms the same glyph. A pair not listed here is a
+CHARACTER ERROR -- the manual's own answer, which gives
+"Illegitimate overstrike" as the cause of one.
+
+"source" says how the pair is known: from the IBM manuals, by
+mirroring a pair they state, or from the glyph being visibly its
+two parts.
+⌿   U+233F                  / U+002F over - U+002D manual
+⊖   U+2296                  ○ U+25CB over - U+002D manual
+⍋   U+234B                  ∆ U+2206 over | U+007C manual
+⍝   U+235D                  ∩ U+2229 over ○ U+25CB manual
+⌶   U+2336                  ⊥ U+22A5 over ⊤ U+22A4 manual
+⍫   U+236B                  ∇ U+2207 over ~ U+007E manual
+⍞   U+235E                  ⎕ U+2395 over ' U+0027 manual
+⌹   U+2339                  ⎕ U+2395 over ÷ U+00F7 manual
+⌽   U+233D                  ○ U+25CB over | U+007C symmetry
+⍒   U+2352                  ∇ U+2207 over | U+007C symmetry
+⍀   U+2340                  \ U+005C over - U+002D symmetry
+⍟   U+235F                  ○ U+25CB over * U+002A shape
+⍉   U+2349                  ○ U+25CB over \ U+005C shape
+⍲   U+2372                  ∧ U+2227 over ~ U+007E shape
+⍱   U+2371                  ∨ U+2228 over ~ U+007E shape
+⍙   U+2359                  ∆ U+2206 over _ U+005F shape
+!   U+0021                  ' U+0027 over . U+002E shape
+
+Foundational characters: what a keycap carries
+----------------------------------------------
+Every glyph above is struck from two of these, and none of them is
+itself struck. A 2741's keyboard carried them and nothing else.
+'   U+0027
+*   U+002A
+-   U+002D
+.   U+002E
+/   U+002F
+\   U+005C
+_   U+005F
+|   U+007C
+~   U+007E
+÷   U+00F7
+∆   U+2206
+∇   U+2207
+∧   U+2227
+∨   U+2228
+∩   U+2229
+⊤   U+22A4
+⊥   U+22A5
+⎕   U+2395
+○   U+25CB
