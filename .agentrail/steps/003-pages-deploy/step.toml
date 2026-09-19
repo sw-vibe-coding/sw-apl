@@ -1,0 +1,12 @@
+number = 3
+slug = "pages-deploy"
+status = "pending"
+description = """
+Phase 8 step 3 (docs/plan.md). Build it and put it somewhere.
+
+The deploy: Gi..."""
+role = "production"
+context_files = []
+created_at = "2026-09-19T07:07:12"
+task_type = "rust-interpreter"
+commits = []

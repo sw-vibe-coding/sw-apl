@@ -1,0 +1,11 @@
+number = 1
+slug = "wasm-facade"
+status = "pending"
+description = """
+Phase 8 step 1 (docs/plan.md). The session, compiled for wasm32 and
+driven fr..."""
+role = "production"
+context_files = []
+created_at = "2026-09-19T07:07:12"
+task_type = "rust-interpreter"
+commits = []

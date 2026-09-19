@@ -1,32 +1,44 @@
-# parity
+# web-demo
 
-Phase 7 of docs/plan.md, owner direction 2026-09-18: clear the last
-rows of the checklist before starting a new component.
+Phase 8 of docs/plan.md: sw-apl in a browser, as a live demo.
 
-Five rows are left. Two are real gaps, and three are restrictions --
-things this implementation does not do and will not, which is a
-different statement from work outstanding. Carrying a restriction as
-`todo` says the wrong thing to anyone reading the file, including
-the next agent.
+The interpreter is already host-independent in two of the three
+places it needs to be. `Console` is a trait the host implements, so
+where a statement reads a line is the host's business; `Clock` is a
+plain function pointer the host installs, and a workspace that has
+not been given one does not move. The CLI implements both, and the
+web build implements them differently.
 
-The two real ones share a shape: sw-apl answers NOT IMPLEMENTED or
-nothing at all where APL\360 had a definite answer. NOT IMPLEMENTED
-is a placeholder this project put in deliberately and undertook to
-remove; the row saying so has been there since Phase 1.
+The third place is not abstracted: `apl-library` and `apl-commands`
+reach `std::fs` directly. In a browser there is no filesystem, so
+either the workspace commands stop working -- which would take
+`)LOAD 1 LIFE` and the shipped workspaces out of the demo, and they
+are the best thing to show -- or where a workspace lives becomes a
+seam like the other two. `apl-library` exists to answer "which file
+does this command mean", so it is where the seam belongs.
 
-Read the manual rather than recalling it, and quote it where it
-settles a question. The text is at
-https://archive.org/stream/bitsavers_ibmaplAPL3_8068299/APL_360_Users_Manual_Aug68_djvu.txt
+Two things the browser cannot do that the terminal can, both to be
+decided rather than discovered:
+
+- It cannot block. `Console::read` is synchronous, and a browser
+  has no way to stop and wait for a keystroke in the middle of a
+  statement. Batch mode already faces this and answers INTERRUPT at
+  end of input; whether that is the right answer for a demo is a
+  question for the step, not a default to fall into.
+- There is no `)OFF`. A session that signs off has nowhere to go.
+
+Nothing about APL changes. The same `Session` answers the same
+lines; what differs is who reads, who keeps the workspaces, and what
+the clock says. If a step finds itself changing the interpreter to
+suit the browser, that is the signal to stop and ask.
 
 Every step: format first, then tests, clippy, and gates (see
-/mw-cp); TDD; reg-rs for anything run through the binary; update
-docs/parity.md rows in the same commit; commit, push, report.
+/mw-cp); TDD; reg-rs for anything run through the CLI binary, which
+keeps working throughout; commit, push, report.
 
 ## Steps
 
-1. valence-syntax-error -- a glyph used where it has no meaning is
-   a SYNTAX ERROR, and `ErrorKind::NotImplemented` goes.
-2. open-definition-guard -- NOT WITH OPEN DEFINITION for the
-   commands the manual gives it to.
-3. documented-restrictions -- say what this implementation does not
-   do, in a Restrictions section, and stop calling it todo.
+1. wasm-facade -- the session compiled and driven from wasm32,
+   with the library store behind a seam.
+2. yew-terminal -- a printer-style terminal with a glyph keyboard.
+3. pages-deploy -- the build and the deploy.
