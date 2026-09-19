@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-18
 
+- chore(agentrail): complete 003-documented-restrictions; advance to 004-open-output-line
+- docs(parity): say what sw-apl will not do, instead of calling it todo
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 002-open-definition-guard; advance to 003-documented-restrictions
 - feat(session): a command is never a body line, and four are refused
 - docs(changes): refresh CHANGES.md to HEAD
