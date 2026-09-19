@@ -337,16 +337,49 @@ Hosting: local only. `just demo` starts the server and opens the
 terminal; the README carries a recording for readers who will not
 clone. No always-on service, no accounts, no ops.
 
-1. `terminal-server` -- `sw-apl-server`: one session per
+Owner direction 2026-09-19, second: base, backspace, overstrike is
+how an APL glyph is typed. A 2741 formed `⍟` from `○`, backspace,
+`*`, and the owner's keyboard carries only the foundational glyphs
+on its caps, as a 2741's did. So this is the input method, not a
+curiosity, and it lands in the CLI first where it will be used
+daily.
+
+The front end composes, both hosts, one state machine. A 2741 sent
+the three characters and let the mainframe compose them, and sw-apl
+does not, for a reason that settles it: the CLI has no server, so
+composition has to happen in the front end there regardless. Doing
+it front-end in both means one mechanism and one table fed two
+ways, rather than two composition points that can disagree. The
+wire protocol then carries ordinary lines, which is what
+`Session::respond` wants.
+
+The backspace key cannot be the key, because a line editor needs it
+for delete. It is a separate keystroke, and `Ctrl-H` cannot be that
+either: `Ctrl-H` *is* `0x08`, byte-identical to backspace, and
+rustyline already binds it. `Ctrl-]` (0x1D) is free in rustyline,
+is not a terminal signal (SIGQUIT is `Ctrl-\`), and is claimed by
+no browser shortcut known; `Ctrl-^` (0x1E) is the fallback. The
+owner's keyboard sends it from a repurposed, relabelled keypad key.
+
+Two lessons from `sw-embed/web-sw-tos`, whose frontend assists with
+keystrokes rather than forwarding them: name the key in one
+constant so the help text cannot drift from the binding, and keep a
+path that needs no keyboard at all, because a key can still be lost
+to a platform nobody tested.
+
+1. `overstrike-input` -- base, backspace, overstrike as a way of
+   typing, and the overstrike table in `data/glyphs.toml` where
+   both hosts read it.
+2. `terminal-server` -- `sw-apl-server`: one session per
    connection, a line protocol, and a blocking read that works
    because the server may block.
-2. `terminal-2741` -- the browser terminal: overstruck characters
-   formed by backspace, the printing-terminal feel, ATTN as
-   interrupt. The overstrike table belongs in `data/glyphs.toml`
-   with the rest of the glyph data, which is the reason to write
-   the terminal in Rust and compile it rather than writing it in
-   JavaScript with a second copy of the table.
-3. `glyph-keyboard` -- the IBM 2741 APL layout, a clickable board,
+3. `terminal-2741` -- the browser terminal: the printing-terminal
+   feel, the carriage, ATTN as interrupt, and the overstrike
+   sequence sent rather than composed -- the table it needs is
+   already in `data/glyphs.toml` by then, which is the reason to
+   compile the terminal from Rust rather than write it in
+   JavaScript with a second copy.
+4. `glyph-keyboard` -- the IBM 2741 APL layout, a clickable board,
    and the expansions already in `docs/espanso/` and
    `docs/emacs/`; a first screen worth arriving at.
 
