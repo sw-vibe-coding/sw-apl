@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-18
 
+- chore(agentrail): complete 004-open-output-line; parity saga done
+- fix(session): an open output line carries across a statement
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 003-documented-restrictions; advance to 004-open-output-line
 - docs(parity): say what sw-apl will not do, instead of calling it todo
 - docs(changes): refresh CHANGES.md to HEAD
