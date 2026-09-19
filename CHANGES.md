@@ -14,6 +14,8 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-19
 
+- docs(html): vendor the APL evolution explorer, NAND and NOR corrected
+- docs(changes): refresh CHANGES.md to HEAD
 - docs(plan): owner decision 2026-09-19, cap and cup are reserved characters
 - chore(agentrail): add 010-iota-one-element-vector
 - docs(changes): refresh CHANGES.md to HEAD
