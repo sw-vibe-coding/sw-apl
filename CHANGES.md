@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-18
 
+- chore(agentrail): complete 003-save-lock-syntax; advance to 004-copy-replies
+- fix(library): a workspace name is a name, not a path
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 002-command-abbreviation; advance to 003-save-lock-syntax
 - feat(commands): only the first four characters of a name matter
 - docs(changes): refresh CHANGES.md to HEAD
