@@ -12,8 +12,17 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-09-19
+
+- chore(agentrail): complete 001-overstrike-input; advance to 002-terminal-server
+- feat(input): overstrikes, the way a 2741 formed a glyph
+- chore(agentrail): overstrike input comes first, and not on Ctrl-H
+- chore(agentrail): replan Phase 8 as a 2741 and a local service
+- chore(agentrail): archive parity; open the web-demo saga
+
 ## 2026-09-18
 
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 004-open-output-line; parity saga done
 - fix(session): an open output line carries across a statement
 - docs(changes): refresh CHANGES.md to HEAD
