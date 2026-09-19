@@ -28,7 +28,33 @@ CHARACTER ERROR: U+2229 (intersection, not APL\360)
       ⍝ illegitimate overstrike, and gives as a cause of CHARACTER ERROR.
       QZ
 CHARACTER ERROR: U+005A struck over U+0051 forms no glyph
+      ⍝ The underbar struck over a letter is one of the twenty-six
+      ⍝ underscored letters: A̲ through Z̲, characters of the APL\360 set
+      ⍝ in their own right and valid in names.
+      X←2
+      X̲←3
+      X
+2
+      X̲
+3
+      X×X̲
+6
+      ⍝ They are letters, not decoration: X and X̲ are two names.
+      )VARS
+A X X̲
+      ⍝ The low line prints on its letter and takes no column, so the
+      ⍝ caret points where it should.
+      X̲←1 2
+      X̲+4 5 6
+LENGTH ERROR
+      X̲+4 5 6
+       ^
+      ⍝ Alone it underscores nothing, and is a CHARACTER ERROR.
+      ̲
+CHARACTER ERROR: U+0332 (combining low line, not on a letter)
+      ̲
+      ^
       )OFF
-8.22.08 09/19/26
+9.24.01 09/19/26
 CONNECTED 0.00.00
 CPU TIME 0.00.00

@@ -219,3 +219,37 @@ fn unbalanced_brackets_are_syntax_errors_at_the_offender() {
         assert_eq!(err.caret, Some(caret), "{line}");
     }
 }
+
+#[test]
+fn an_underscored_letter_is_a_letter_in_a_name() {
+    // A̲ through Z̲ are characters of the APL\360 set, each a letter
+    // and a combining low line here, and each valid in a name.
+    assert_eq!(
+        kinds("X\u{332} A\u{332}B1 \u{2206}C\u{332}"),
+        vec![
+            TokenKind::Name("X\u{332}".into()),
+            TokenKind::Name("A\u{332}B1".into()),
+            TokenKind::Name("\u{2206}C\u{332}".into()),
+        ]
+    );
+}
+
+#[test]
+fn a_letter_and_the_same_letter_underscored_are_two_names() {
+    // The manual's point: they were distinct characters, not
+    // decoration, so X and X̲ name two different things.
+    let two = kinds("X X\u{332}");
+    assert_ne!(two[0], two[1]);
+    assert_eq!(two[1], TokenKind::Name("X\u{332}".into()));
+}
+
+#[test]
+fn a_low_line_with_no_letter_before_it_is_a_character_error() {
+    // It underscores a letter; it is not a name start and not a
+    // glyph of its own.
+    for (text, caret) in [("\u{332}", 0), ("1\u{332}", 1), ("\u{2206}\u{332}", 1)] {
+        let err = tokenize(text).unwrap_err();
+        assert_eq!(err.kind, ErrorKind::Character('\u{332}'), "{text:?}");
+        assert_eq!(err.caret, Some(caret), "{text:?}");
+    }
+}

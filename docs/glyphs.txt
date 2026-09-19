@@ -147,6 +147,43 @@ two parts.
 ⍙   U+2359                  ∆ U+2206 over _ U+005F shape
 !   U+0021                  ' U+0027 over . U+002E shape
 
+The underscored alphabet: a letter struck with the underbar
+-----------------------------------------------------------
+A rule, not a table: _ U+005F struck over any of the twenty-six
+letters gives a further character of the APL\360 set, a letter in
+its own right and distinct from the plain one -- X and X̲ are two
+names in one workspace. Either order forms it, as above.
+
+Unicode has no precomposed underscored Latin letter, so each is
+written as the letter followed by U+0332 COMBINING LOW LINE: two code
+points, one column. data/glyphs.toml records why.
+A̲  U+0041+U+0332      A U+0041 over _ U+005F rule
+B̲  U+0042+U+0332      B U+0042 over _ U+005F rule
+C̲  U+0043+U+0332      C U+0043 over _ U+005F rule
+D̲  U+0044+U+0332      D U+0044 over _ U+005F rule
+E̲  U+0045+U+0332      E U+0045 over _ U+005F rule
+F̲  U+0046+U+0332      F U+0046 over _ U+005F rule
+G̲  U+0047+U+0332      G U+0047 over _ U+005F rule
+H̲  U+0048+U+0332      H U+0048 over _ U+005F rule
+I̲  U+0049+U+0332      I U+0049 over _ U+005F rule
+J̲  U+004A+U+0332      J U+004A over _ U+005F rule
+K̲  U+004B+U+0332      K U+004B over _ U+005F rule
+L̲  U+004C+U+0332      L U+004C over _ U+005F rule
+M̲  U+004D+U+0332      M U+004D over _ U+005F rule
+N̲  U+004E+U+0332      N U+004E over _ U+005F rule
+O̲  U+004F+U+0332      O U+004F over _ U+005F rule
+P̲  U+0050+U+0332      P U+0050 over _ U+005F rule
+Q̲  U+0051+U+0332      Q U+0051 over _ U+005F rule
+R̲  U+0052+U+0332      R U+0052 over _ U+005F rule
+S̲  U+0053+U+0332      S U+0053 over _ U+005F rule
+T̲  U+0054+U+0332      T U+0054 over _ U+005F rule
+U̲  U+0055+U+0332      U U+0055 over _ U+005F rule
+V̲  U+0056+U+0332      V U+0056 over _ U+005F rule
+W̲  U+0057+U+0332      W U+0057 over _ U+005F rule
+X̲  U+0058+U+0332      X U+0058 over _ U+005F rule
+Y̲  U+0059+U+0332      Y U+0059 over _ U+005F rule
+Z̲  U+005A+U+0332      Z U+005A over _ U+005F rule
+
 Foundational characters: what a keycap carries
 ----------------------------------------------
 Every glyph above is struck from two of these, and none of them is

@@ -262,30 +262,77 @@ keycaps:
 - `∩` U+2229, intersection, is **not** an APL\360 function. Typing it
   alone is a CHARACTER ERROR. It is on the keyboard only so that the
   lamp `⍝` can be struck from it and `○`.
-- `_` U+005F, underbar, is likewise a component: in sw-apl it makes
-  `⍙` and nothing else, and alone it is a CHARACTER ERROR. On a
-  2741 it did more -- see the next section.
+- `_` U+005F, underbar, is likewise a component: it makes `⍙` and
+  the underscored alphabet of the next section, and alone it is a
+  CHARACTER ERROR.
 
 ### The underscored alphabet
 
 A 2741 could strike the underbar over any letter, and APL\360 used
-that: A̲ through Z̲ were twenty-six further characters of the set,
-each a letter struck with `_`, and each valid in a variable or
-function name. They were distinct characters, not decoration -- `X`
-and `X̲` were two different names in the same workspace.
-Delta-underbar `⍙`, which sw-apl does have, is the same idea applied
-to delta.
+that: A̲ through Z̲ are twenty-six further characters of the set, each
+a letter struck with `_`, and each valid in a variable or function
+name. They are distinct characters, not decoration -- `X` and `X̲` are
+two different names in the same workspace. Delta-underbar `⍙` is the
+same idea applied to delta.
 
-sw-apl does not have them. Not implemented: `_` struck over a letter
-is an illegitimate overstrike, and the combining low line U+0332 is a
-CHARACTER ERROR.
+Type one the way you type any overstrike: the letter, `Ctrl-]`, then
+`_`. Either order forms it, as everywhere else.
 
 ```
-      A_
-CHARACTER ERROR: U+005F struck over U+0041 forms no glyph
+      X←2
+      X̲←3
+      X×X̲
+6
+      )VARS
+X X̲
 ```
 
-Names use letters, digits, `∆` and `⍙`; see `language.md`.
+They are a rule rather than a table of twenty-six pairs: any letter
+struck with the underbar gives that letter underscored. The one table
+pair that uses the underbar strikes it over `∆`, which is no letter,
+so nothing collides.
+
+#### Two code points, one column
+
+Unicode has no precomposed underscored Latin letter, so sw-apl writes
+each as the letter followed by U+0332 COMBINING LOW LINE. That is
+what any editor produces and what a file written elsewhere will hold,
+so `X̲` pasted in from one is the same name as `X̲` struck at the
+keyboard -- U+0332 has no precomposed form, so normalization leaves
+it alone.
+
+It prints in one position, as it did on paper, and sw-apl counts it
+that way: `)WIDTH` wrapping, `)FNS` and `)VARS` columns, and the
+caret under an error all treat the low line as no column of its own.
+
+As character data, though, each underscored letter is two elements
+rather than one: `⍴'X̲'` is 2. APL\360 had one character of its 256
+there. sw-apl's characters are Unicode scalars and its quoted
+literals already accept any of them, so this is that difference
+showing rather than a new one.
+
+The low line underscores the letter before it, and needs one:
+
+```
+      ̲
+CHARACTER ERROR: U+0332 (combining low line, not on a letter)
+      ̲
+      ^
+```
+
+Striking a third character over an underscored letter forms nothing,
+which is what three impressions on one position are:
+
+```
+      A_B
+CHARACTER ERROR: U+0042 struck over U+0332 forms no glyph
+```
+
+The transcript shows the three characters side by side, as it does
+for any refused strike: the paper never held a glyph to show.
+
+Names use letters, the underscored letters, digits, `∆` and `⍙`; see
+`language.md`.
 
 ### When a strike forms nothing
 

@@ -185,3 +185,19 @@ fn an_element_wider_than_the_width_still_prints() {
         vec!["0.3333333333", "      0.6666666667"]
     );
 }
+
+#[test]
+fn a_combining_low_line_takes_no_column() {
+    // An underscored letter prints in one position, as it did on
+    // paper: the low line lands on the letter. `)WIDTH` must count
+    // it as nothing, or a line holding one wraps a character early.
+    let text = chars(&[8], "A\u{332}B\u{332}C\u{332}D\u{332}");
+    assert_eq!(
+        format_array(&text, PP, 4),
+        vec!["A\u{332}B\u{332}C\u{332}D\u{332}"]
+    );
+    assert_eq!(
+        format_array(&text, PP, 3),
+        vec!["A\u{332}B\u{332}C\u{332}", "      D\u{332}"]
+    );
+}

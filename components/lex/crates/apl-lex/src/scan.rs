@@ -3,7 +3,7 @@
 use apl_value::{AplError, AplResult, ErrorKind};
 
 use crate::literal::{join_strands, lex_number, lex_string};
-use crate::token::{PRIMITIVES, Token, TokenKind, check_balance, is_name_start};
+use crate::token::{PRIMITIVES, Token, TokenKind, check_balance, is_name_char};
 
 /// Tokenize one line. A line whose first non-blank character is a
 /// right parenthesis is one `SystemCommand` token; a lamp ends the
@@ -47,16 +47,17 @@ fn classify(chars: &[char], i: usize) -> AplResult<(TokenKind, usize)> {
     }
     Ok(match c {
         '\'' => lex_string(chars, i)?,
-        _ if is_name_start(c) => lex_name(chars, i),
+        _ if is_name_char(c, None) => lex_name(chars, i),
         _ if PRIMITIVES.contains(c) => (TokenKind::Prim(c), i + 1),
         _ => return Err(AplError::new(ErrorKind::Character(c)).at(i)),
     })
 }
 
-/// A name: a name-start letter followed by letters and digits.
+/// A name: a name-start letter followed by letters, digits, and the
+/// low lines that underscore them.
 fn lex_name(chars: &[char], start: usize) -> (TokenKind, usize) {
     let mut end = start + 1;
-    while end < chars.len() && (is_name_start(chars[end]) || chars[end].is_ascii_digit()) {
+    while end < chars.len() && is_name_char(chars[end], Some(chars[end - 1])) {
         end += 1;
     }
     (TokenKind::Name(chars[start..end].iter().collect()), end)

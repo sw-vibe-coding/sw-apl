@@ -2,7 +2,7 @@
 
 use std::fmt;
 
-use apl_glyphs::{LATER, LOOKALIKE};
+use apl_glyphs::{LATER, LOOKALIKE, UNDERSCORE};
 
 /// The APL\360 error vocabulary.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -44,6 +44,11 @@ fn write_character(f: &mut fmt::Formatter<'_>, c: char) -> fmt::Result {
     write!(f, "CHARACTER ERROR: U+{:04X}", u32::from(c))?;
     if let Some((_, glyph)) = LOOKALIKE.iter().find(|(bad, _)| *bad == c) {
         return write!(f, " (use {glyph} U+{:04X})", u32::from(*glyph));
+    }
+    if c == UNDERSCORE {
+        // A character of the set, but it underscores the letter
+        // before it and there was none.
+        return write!(f, " (combining low line, not on a letter)");
     }
     match LATER.iter().find(|(bad, _)| *bad == c) {
         Some((_, what)) => write!(f, " ({what}, not APL\\360)"),

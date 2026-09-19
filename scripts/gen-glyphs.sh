@@ -69,6 +69,22 @@ for o in tables["overstrike"]:
     struck = f"{o['base']} {point(o['base'])} over {o['over']} {point(o['over'])}"
     print(row(o["glyph"], "", struck, o["source"]))
 
+u = tables["underscored"]
+print(f"""
+The underscored alphabet: a letter struck with the underbar
+-----------------------------------------------------------
+A rule, not a table: {u['struck']} {point(u['struck'])} struck over any of the twenty-six
+letters gives a further character of the APL\\360 set, a letter in
+its own right and distinct from the plain one -- X and X{u['mark']} are two
+names in one workspace. Either order forms it, as above.
+
+Unicode has no precomposed underscored Latin letter, so each is
+written as the letter followed by {point(u['mark'])} COMBINING LOW LINE: two code
+points, one column. data/glyphs.toml records why.""")
+for letter in u["letters"]:
+    struck = f"{letter} {point(letter)} over {u['struck']} {point(u['struck'])}"
+    print(f"{letter}{u['mark']:<2} {point(letter)}+{point(u['mark'])} {'':<5}{struck:<23}rule".rstrip())
+
 foundational = sorted(
     {c for o in tables["overstrike"] for c in (o["base"], o["over"])}
 )

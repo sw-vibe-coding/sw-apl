@@ -677,3 +677,43 @@ glyph = "!"
 base = "'"
 over = "."
 source = "shape"
+
+# The underscored alphabet: A̲ through Z̲, twenty-six further
+# characters of the APL\360 set. A 2741 struck the underbar over any
+# letter, and APL\360 used every one of them: they are letters, valid
+# in names and distinct from the plain letter, so X and X̲ are two
+# names in one workspace. ⍙ above is the same idea applied to ∆.
+#
+# This is a rule, not twenty-six table rows: any letter struck with
+# `struck` gives that letter followed by `mark`. It is kept out of
+# [[overstrike]] because that table's glyph is one character and
+# these are two -- see below -- and because a rule that reads
+# "a letter and an underbar" says what the 2741 did, while twenty-six
+# rows say only what someone typed out.
+#
+# The representation is the letter followed by U+0332 COMBINING LOW
+# LINE. Unicode has no precomposed underscored Latin letter, so the
+# choice is between the combining form and inventing a single code
+# point for each -- Dyalog, needing single characters for its ⎕AV,
+# maps them onto the circled capitals Ⓐ-Ⓩ; APL2 dropped them and
+# mapped them onto the lowercase letters it had gained. Neither suits
+# sw-apl: the circled letters are not what a 2741 printed, and
+# lowercase is already a distinct name letter here.
+#
+# The cost of the combining form is that an underscored letter is two
+# code points rather than one:
+#
+#   - In a name it is invisible: names are compared as strings, and
+#     U+0332 has no precomposed form, so NFC leaves it alone and
+#     A̲ is one sequence however it was typed or pasted.
+#   - On paper it is one column, which the display must be told:
+#     `columns` counts it as zero. Counting the code points would
+#     take every line holding such a name out by one.
+#   - As character data it is two elements: ⍴'A̲' is 2, where APL\360
+#     had one character of its 256. sw-apl's characters are Unicode
+#     scalars and its quoted literals already take any of them, so
+#     this is that difference showing rather than a new one.
+[underscored]
+letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+struck = "_"
+mark = "̲"

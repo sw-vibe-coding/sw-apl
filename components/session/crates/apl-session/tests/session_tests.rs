@@ -905,3 +905,28 @@ fn clear_takes_a_suspended_function_with_it() {
     assert_eq!(out(&mut s, ")SI"), Vec::<String>::new());
     assert_eq!(out(&mut s, "2+2"), vec!["4"]);
 }
+
+#[test]
+fn a_name_and_the_same_name_underscored_are_two_variables() {
+    // A̲ through Z̲ are characters of the APL\360 set, not decoration:
+    // the manual's own example is that X and X̲ are different names.
+    let mut s = Session::default();
+    assert_eq!(out(&mut s, "X \u{2190} 1"), Vec::<String>::new());
+    assert_eq!(out(&mut s, "X\u{332} \u{2190} 2"), Vec::<String>::new());
+    assert_eq!(out(&mut s, "X"), vec!["1"]);
+    assert_eq!(out(&mut s, "X\u{332}"), vec!["2"]);
+    assert_eq!(out(&mut s, "X + X\u{332}"), vec!["3"]);
+}
+
+#[test]
+fn an_underscored_name_is_one_column_wide_under_the_caret() {
+    // The low line prints on the letter, so it takes no column of
+    // its own. Counting code points would put the caret one place
+    // right of the character it is pointing at.
+    let mut s = Session::default();
+    assert_eq!(out(&mut s, "A\u{332} \u{2190} 2 3"), Vec::<String>::new());
+    assert_eq!(
+        out(&mut s, "A\u{332}+4 5 6"),
+        vec!["LENGTH ERROR", "      A\u{332}+4 5 6", "       ^"]
+    );
+}

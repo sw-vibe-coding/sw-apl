@@ -1,6 +1,7 @@
 //! What names a workspace holds, and how a list of them prints.
 
 use apl_eval::{Saved, Workspace};
+use apl_value::columns;
 
 /// The reply to a command given an argument it does not take, in
 /// the one place it is spelled.
@@ -66,7 +67,7 @@ pub fn listing(mut names: Vec<String>, rest: &[&str], width: usize) -> Vec<Strin
     let mut lines: Vec<String> = Vec::new();
     for name in names {
         match lines.last_mut() {
-            Some(line) if line.chars().count() + 1 + name.chars().count() <= width => {
+            Some(line) if columns(line) + 1 + columns(&name) <= width => {
                 line.push(' ');
                 line.push_str(&name);
             }

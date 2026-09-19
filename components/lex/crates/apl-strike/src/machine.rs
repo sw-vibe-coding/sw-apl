@@ -37,15 +37,20 @@ impl Strike {
     /// One character typed: what to put on the line, or `None` when
     /// it struck nothing, in which case `refused` says what was
     /// typed so the caller can report it.
-    pub fn typed(&mut self, c: char) -> Option<char> {
+    ///
+    /// Text, not a character: an underscored letter is a letter and
+    /// a combining low line. `last` keeps the final code point, so
+    /// the key below takes back the low line and a third impression
+    /// on one position forms nothing -- which is what it is.
+    pub fn typed(&mut self, c: char) -> Option<String> {
         self.refused = None;
         let Some(held) = self.held.take() else {
             self.last = Some(c);
-            return Some(c);
+            return Some(c.to_string());
         };
         let struck = strike(held, c);
-        match struck {
-            Some(glyph) => self.last = Some(glyph),
+        match &struck {
+            Some(glyph) => self.last = glyph.chars().next_back(),
             None => self.refused = Some((held, c)),
         }
         struck
@@ -102,7 +107,7 @@ pub fn compose(line: &str) -> Result<String, (char, char)> {
         let held = if back { out.pop() } else { None };
         back = false;
         match held {
-            Some(held) => out.push(strike(held, c).ok_or((held, c))?),
+            Some(held) => out.push_str(&strike(held, c).ok_or((held, c))?),
             None => out.push(c),
         }
     }

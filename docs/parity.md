@@ -100,7 +100,7 @@ and says why each is absent.
 | Scalar extension, RANK and LENGTH agreement | done | done | prims tests |
 | Exact integers, float promotion, fuzz | done | | value tests |
 
-| Overstrikes: a glyph struck from two characters, as on a 2741 | part | every struck glyph is there: the table is in `data/glyphs.toml` with its provenance per pair; `Ctrl-]` takes the carriage back, a file may use `0x08`, either order forms the glyph, and a pair that forms none is CHARACTER ERROR -- which is the manual's own answer, "Illegitimate overstrike" being a cause of one. Strike tests, sample 71. Missing: the underscored alphabet A̲ to Z̲, characters of the APL\360 set that a 2741 struck from a letter and `_` and that are valid in names, distinct from the plain letter |
+| Overstrikes: a glyph struck from two characters, as on a 2741 | done | every struck glyph is there: the table is in `data/glyphs.toml` with its provenance per pair, and the underscored alphabet A̲ to Z̲ beside it as a rule -- any letter struck with `_` is a further character of the set, a letter in its own right and distinct from the plain one. `Ctrl-]` takes the carriage back, a file may use `0x08`, either order forms the glyph, and a pair that forms none is CHARACTER ERROR -- which is the manual's own answer, "Illegitimate overstrike" being a cause of one. An underscored letter is written as its letter and U+0332 and counted as one column; as character data it is two elements, where APL\360 had one of its 256. Strike, lexer, session and display tests, sample 71. |
 
 ## Numeric boundaries
 

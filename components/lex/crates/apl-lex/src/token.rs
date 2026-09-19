@@ -1,6 +1,6 @@
 //! Token vocabulary and the accepted glyph set.
 
-use apl_value::{AplError, AplResult, Array, ErrorKind};
+use apl_value::{AplError, AplResult, Array, ErrorKind, UNDERSCORE};
 
 /// One lexical unit.
 #[derive(Debug, Clone, PartialEq)]
@@ -107,8 +107,21 @@ pub fn check_balance(tokens: &[Token]) -> AplResult<()> {
     }
 }
 
-/// Letters allowed in names: ASCII letters plus delta and delta-underbar.
+/// True when `c` may stand in a name at this point: `prev` is the
+/// character before it, or `None` where the name would start.
+///
+/// Letters are the ASCII ones plus delta and delta-underbar, and
+/// digits follow but do not start. The combining low line makes the
+/// letter before it one of the underscored alphabet -- A̲ through Z̲,
+/// characters of the APL\360 set in their own right -- so it
+/// continues a name, but only directly on a letter, which is the
+/// only thing it can underscore. Alone, on a digit, or on another
+/// low line it is a CHARACTER ERROR.
 #[must_use]
-pub fn is_name_start(c: char) -> bool {
-    c.is_ascii_alphabetic() || c == '∆' || c == '⍙'
+pub fn is_name_char(c: char, prev: Option<char>) -> bool {
+    let letter = c.is_ascii_alphabetic() || c == '\u{2206}' || c == '\u{2359}';
+    let follows = |ok: fn(char) -> bool| prev.is_some_and(ok);
+    letter
+        || (c.is_ascii_digit() && prev.is_some())
+        || (c == UNDERSCORE && follows(|p| p.is_ascii_alphabetic()))
 }

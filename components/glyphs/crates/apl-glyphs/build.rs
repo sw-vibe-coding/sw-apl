@@ -14,6 +14,7 @@ struct Tables {
     lookalike: Vec<Lookalike>,
     later: Vec<Later>,
     overstrike: Vec<Overstrike>,
+    underscored: Underscored,
 }
 
 #[derive(Deserialize)]
@@ -61,6 +62,18 @@ struct Overstrike {
     over: String,
 }
 
+/// The underscored alphabet, as a rule rather than twenty-six rows:
+/// any of `letters` struck with `struck` gives that letter followed
+/// by `mark`, the combining low line. Unicode has no precomposed
+/// underscored Latin letter, so the glyph is two code points and one
+/// column; `data/glyphs.toml` records why that was chosen.
+#[derive(Deserialize)]
+struct Underscored {
+    letters: String,
+    struck: String,
+    mark: String,
+}
+
 fn main() {
     let source = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../data/glyphs.toml");
     println!("cargo:rerun-if-changed={}", source.display());
@@ -73,14 +86,6 @@ fn main() {
 
 /// The generated Rust: one const per table.
 fn render(tables: &Tables) -> String {
-    let glyphs = |keep: fn(&Primitive) -> bool| -> String {
-        tables
-            .primitive
-            .iter()
-            .filter(|p| keep(p))
-            .map(|p| p.glyph.as_str())
-            .collect()
-    };
     let prims = rows(tables.primitive.iter().map(|p| {
         [
             quoted(&p.glyph),
@@ -116,26 +121,7 @@ fn render(tables: &Tables) -> String {
     );
     [
         "// Generated from data/glyphs.toml by build.rs. Do not edit.".to_string(),
-        konst(
-            "Every primitive function and operator glyph.",
-            "PRIMITIVES: &str",
-            &text(&glyphs(|_| true)),
-        ),
-        konst(
-            "Glyphs with a monadic meaning.",
-            "MONADIC: &str",
-            &text(&glyphs(|p| !p.monadic.is_empty())),
-        ),
-        konst(
-            "Glyphs with a dyadic meaning.",
-            "DYADIC: &str",
-            &text(&glyphs(|p| !p.dyadic.is_empty())),
-        ),
-        konst(
-            "Glyphs that accept an axis bracket. A glyph outside this\n             /// set followed by one is a SYNTAX ERROR: APL\\360 has no\n             /// such form.",
-            "AXIS: &str",
-            &text(&glyphs(|p| p.axis)),
-        ),
+        sets(&tables.primitive),
         table(
             "Each primitive: glyph, name, monadic and dyadic meanings.",
             "PRIMITIVE_NAMES",
@@ -170,6 +156,66 @@ fn render(tables: &Tables) -> String {
             "(char, char, char)",
             tables.overstrike.len(),
             &struck,
+        ),
+        underscored(&tables.underscored),
+    ]
+    .join("\n\n")
+}
+
+/// The four glyph-set consts: every primitive, those with a monadic
+/// meaning, those with a dyadic one, and those taking an axis.
+fn sets(primitive: &[Primitive]) -> String {
+    let glyphs = |keep: fn(&Primitive) -> bool| -> String {
+        primitive
+            .iter()
+            .filter(|p| keep(p))
+            .map(|p| p.glyph.as_str())
+            .collect()
+    };
+    [
+        konst(
+            "Every primitive function and operator glyph.",
+            "PRIMITIVES: &str",
+            &text(&glyphs(|_| true)),
+        ),
+        konst(
+            "Glyphs with a monadic meaning.",
+            "MONADIC: &str",
+            &text(&glyphs(|p| !p.monadic.is_empty())),
+        ),
+        konst(
+            "Glyphs with a dyadic meaning.",
+            "DYADIC: &str",
+            &text(&glyphs(|p| !p.dyadic.is_empty())),
+        ),
+        konst(
+            "Glyphs that accept an axis bracket. A glyph outside this\n             /// set followed by one is a SYNTAX ERROR: APL\\360 has no\n             /// such form.",
+            "AXIS: &str",
+            &text(&glyphs(|p| p.axis)),
+        ),
+    ]
+    .join("\n\n")
+}
+
+/// The underscored alphabet, as the rule it is: the letters that
+/// take an underbar, the character struck over them, and the
+/// combining low line each is written with.
+fn underscored(u: &Underscored) -> String {
+    [
+        konst(
+            "The letters a 2741 could strike an underbar over. Each\n             /// gives a further character of the APL\\360 set, a letter\n             /// in its own right and distinct from the plain one: X and\n             /// X-underscored are two names.",
+            "UNDERSCORED: &str",
+            &text(&u.letters),
+        ),
+        konst(
+            "The character struck over a letter to underscore it.",
+            "UNDERBAR: char",
+            &quoted(&u.struck),
+        ),
+        konst(
+            "The combining low line an underscored letter is written\n             /// with. It follows its letter, continues a name, and takes\n             /// no column of its own -- see `columns`.",
+            "UNDERSCORE: char",
+            &quoted(&u.mark),
         ),
     ]
     .join("\n\n")

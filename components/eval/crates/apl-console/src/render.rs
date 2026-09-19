@@ -1,7 +1,7 @@
 //! Turning what a statement produced into transcript lines.
 
 use apl_display::format_array;
-use apl_value::{AplError, Array};
+use apl_value::{AplError, Array, columns};
 
 use crate::console::INDENT;
 use crate::output::{Output, Print, Shown};
@@ -71,7 +71,11 @@ pub fn error_lines(err: &AplError, line: &str) -> Vec<String> {
         ),
         None => (INDENT.to_string(), line),
     };
-    let indent = " ".repeat(head.chars().count() + caret);
+    // Columns, not code points: the low line of an underscored
+    // letter prints on its letter, so counting it would put the
+    // caret one place right of what it points at.
+    let before: String = statement.chars().take(caret).collect();
+    let indent = " ".repeat(columns(&head) + columns(&before));
     vec![
         err.kind.to_string(),
         format!("{head}{statement}"),

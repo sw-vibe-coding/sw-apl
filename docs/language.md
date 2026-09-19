@@ -38,6 +38,13 @@ bad sequence; the session continues with the next line.
 - Names start with a letter, delta, or delta-underbar and
   continue with letters, digits, delta, delta-underbar. Case is
   significant. Traditional programs use upper case.
+- The underscored letters A̲ through Z̲ are letters too, each
+  distinct from the plain one: `X` and `X̲` are two names. Each is
+  written as its letter followed by U+0332 COMBINING LOW LINE,
+  which continues a name but cannot start one and must follow a
+  letter; elsewhere it is a CHARACTER ERROR. It prints in one
+  position and is counted as one column. As character data each
+  underscored letter is two elements, so `⍴'X̲'` is 2.
 - A quad followed by letters is quad input followed by a name;
   there are no quad-named system variables in APL\360. System
   information comes from the I-beam functions below and settings

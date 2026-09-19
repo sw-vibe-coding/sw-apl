@@ -1,4 +1,10 @@
 //! `)WIDTH` wrapping. Continuation lines are indented six spaces.
+//!
+//! Widths are columns on paper, not code points: `columns` passes
+//! over the combining low line of an underscored letter, which
+//! prints on the letter before it.
+
+use apl_value::columns;
 
 /// Indent for continuation lines.
 pub const CONTINUE: &str = "      ";
@@ -14,7 +20,10 @@ pub fn wrap_cells(cells: &[String], sep: &str, width: usize) -> Vec<String> {
         } else {
             format!("{line}{sep}{cell}")
         };
-        if candidate.chars().count() <= width || line.is_empty() {
+        // A cell of no columns is the low line of an underscored
+        // letter: it prints on the letter before it, so a break can
+        // never come between the two.
+        if columns(cell) == 0 || columns(&candidate) <= width || line.is_empty() {
             line = candidate;
         } else {
             lines.push(std::mem::replace(&mut line, format!("{CONTINUE}{cell}")));
@@ -28,7 +37,7 @@ pub fn wrap_cells(cells: &[String], sep: &str, width: usize) -> Vec<String> {
 pub fn column_widths(cells: &[String], cols: usize) -> Vec<usize> {
     let mut widths = vec![0; cols];
     for (i, c) in cells.iter().enumerate() {
-        widths[i % cols] = widths[i % cols].max(c.chars().count());
+        widths[i % cols] = widths[i % cols].max(columns(c));
     }
     widths
 }

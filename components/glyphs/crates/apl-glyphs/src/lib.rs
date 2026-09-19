@@ -5,4 +5,8 @@
 //! and run `scripts/gen-glyphs.sh`; never edit the generated output,
 //! and never keep a second copy of this data anywhere else.
 
+mod columns;
+
+pub use columns::{columns, pad};
+
 include!(concat!(env!("OUT_DIR"), "/glyphs.rs"));

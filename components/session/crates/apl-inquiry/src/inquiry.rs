@@ -1,6 +1,7 @@
 //! Which inquiry command, and what it replies.
 
 use apl_eval::{Activation, Workspace, free, used};
+use apl_value::{columns, pad};
 
 use crate::group::{erase, group, members};
 use crate::names::{INCORRECT, functions, globals, groups, listing};
@@ -59,12 +60,12 @@ fn si_lines(stack: &[Activation], verbose: bool) -> Vec<String> {
             (format!("{}[{}]{star}", a.name, a.line), a.locals.as_slice())
         })
         .collect();
-    let column = entries.iter().map(|(e, _)| e.chars().count()).max();
+    let column = entries.iter().map(|(e, _)| columns(e)).max();
     entries
         .iter()
         .map(|(entry, locals)| match column {
             Some(width) if verbose && !locals.is_empty() => {
-                format!("{entry:width$}  {}", locals.join(" "))
+                format!("{}  {}", pad(entry, width), locals.join(" "))
             }
             _ => entry.clone(),
         })

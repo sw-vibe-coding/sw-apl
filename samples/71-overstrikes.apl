@@ -20,4 +20,20 @@ A
 ⍝ A pair that forms no glyph is what the manual calls an
 ⍝ illegitimate overstrike, and gives as a cause of CHARACTER ERROR.
 QZ
+⍝ The underbar struck over a letter is one of the twenty-six
+⍝ underscored letters: A̲ through Z̲, characters of the APL\360 set
+⍝ in their own right and valid in names.
+X←2
+X_←3
+X
+X_
+X×X_
+⍝ They are letters, not decoration: X and X̲ are two names.
+)VARS
+⍝ The low line prints on its letter and takes no column, so the
+⍝ caret points where it should.
+X_←1 2
+X_+4 5 6
+⍝ Alone it underscores nothing, and is a CHARACTER ERROR.
+̲
 )OFF
