@@ -1,6 +1,6 @@
 number = 3
 slug = "underscored-alphabet"
-status = "in-progress"
+status = "completed"
 description = """
 Owner observation 2026-09-19: the underscored alphabet.
 
@@ -8,5 +8,6 @@ A 2741 struck the un..."""
 role = "production"
 context_files = []
 created_at = "2026-09-19T08:37:48"
+completed_at = "2026-09-19T10:20:23"
 task_type = "rust-interpreter"
-commits = []
+commits = ["a5c8b715d8fd7f3fe77ac7828b96c82fa85f546f"]
