@@ -1,0 +1,11 @@
+{
+  "task_type": "rust-interpreter",
+  "state": {
+    "number": 2,
+    "step": "glyph-entry-doc"
+  },
+  "action": "Read data/glyphs.toml, docs/glyphs.txt and the apl-strike crate before writing, so the pairs and the Ctrl-] rationale came from the source rather than memory; cross-checked all seventeen table rows and the foundational list against glyphs.txt with a python script; ran the interpreter to get the two CHARACTER ERROR texts verbatim instead of paraphrasing them; used agentrail insert twice rather than widening this step, once for the docs work the owner asked for mid-session and once for the underscored alphabet gap it exposed; git mv for the rename so history follows; rebased one reg-rs baseline with the reason stated.",
+  "result": "success",
+  "reward": 1,
+  "timestamp": "2026-09-19T08:49:09"
+}

@@ -1,6 +1,6 @@
 number = 2
 slug = "glyph-entry-doc"
-status = "in-progress"
+status = "completed"
 description = """
 Owner direction 2026-09-19, mid-session: the glyph entry documentation.
 
@@ -8,5 +8,6 @@ docs..."""
 role = "production"
 context_files = []
 created_at = "2026-09-19T08:31:31"
+completed_at = "2026-09-19T08:49:09"
 task_type = "rust-interpreter"
-commits = []
+commits = ["6679c9e7aeaef1b3b33acd9e510ef9a785c2d0f5"]
