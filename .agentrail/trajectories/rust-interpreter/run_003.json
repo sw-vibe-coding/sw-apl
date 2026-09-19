@@ -1,0 +1,11 @@
+{
+  "task_type": "rust-interpreter",
+  "state": {
+    "number": 3,
+    "step": "documented-restrictions"
+  },
+  "action": "Classified each open row by asking whether a decision already made forces it, rather than by whether it looked hard, which is what separated the one real gap from the four restrictions; checked the one I was unsure about by running it rather than reasoning about it; audited every status cell in the file programmatically instead of reading for impressions, which is what caught the stale qualifier and then its wrong sample reference; made the summary at the top a claim that can be checked with grep rather than a description",
+  "result": "success",
+  "reward": 1,
+  "timestamp": "2026-09-18T19:37:27"
+}
