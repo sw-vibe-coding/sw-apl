@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-19
 
+- chore(agentrail): complete 002-glyph-entry-doc; advance to 003-underscored-alphabet
+- docs(glyphs): rename input-methods to glyph-entry, document the overstrike properly
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 001-overstrike-input; advance to 002-terminal-server
 - feat(input): overstrikes, the way a 2741 formed a glyph
 - chore(agentrail): overstrike input comes first, and not on Ctrl-H
