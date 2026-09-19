@@ -164,6 +164,10 @@ carry someone else's console, clock or sign-on time along.
 An unnamed workspace is called `CLEAR WS`, which is what `)WSID`
 reports until it is given a name.
 
+A saved workspace does not keep a suspended function, and
+`)SYMBOLS` reports but cannot be set. Both are in `parity.md` under
+**Restrictions**, with the decision each follows from.
+
 `)CLEAR` gives a fresh one: every name goes, the settings go back
 to where a clear workspace starts, the name goes, and so does a
 suspended function -- the state indicator is part of the

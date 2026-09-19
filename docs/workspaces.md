@@ -150,7 +150,8 @@ workspace with an empty state indicator.
 
 APL\360 did not have this problem, because its workspaces were binary
 images and `)SAVE` really did preserve a suspension. It is the price
-of a file you can read. `parity.md` carries the row.
+of a file you can read, and `parity.md` carries it under
+**Restrictions** rather than as work outstanding.
 
 ## How much room is left
 

@@ -1,0 +1,11 @@
+number = 4
+slug = "open-output-line"
+status = "pending"
+description = """
+Phase 7 step 4 (docs/plan.md). An open output line does not survive
+a stateme..."""
+role = "production"
+context_files = []
+created_at = "2026-09-18T19:34:57"
+task_type = "rust-interpreter"
+commits = []

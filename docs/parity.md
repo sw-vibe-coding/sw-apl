@@ -7,7 +7,14 @@ implemented and locked by a unit test or a reg-rs transcript
 same step that changes a row.
 
 Status: `done`, `part` (partly there; the note says what is
-missing), `todo`.
+missing), `todo`. A row that is neither -- something sw-apl does
+not do and will not -- is not a row at all: it is under
+**Restrictions** at the foot of this file, with the decision it
+follows from.
+
+At the time of writing there is **one** `todo` row, and it names
+what is missing. Everything else here is `done`, and everything
+sw-apl will not do is a restriction with a reason.
 
 ## How we will know we have parity
 
@@ -28,7 +35,9 @@ and the criterion is:
 
 Deliberately out of scope and never counted against parity: the
 multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
-`)CONTINUE HOLD`), which get honest stub replies.
+`)CONTINUE HOLD`). They answer INCORRECT COMMAND, like any other
+name the session does not know; `commands-reference.md` lists them
+and says why each is absent.
 
 ## Syntax and the session
 
@@ -41,7 +50,7 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | Quad output `⎕←` | done | session tests, sample 20 |
 | Quad input `⎕`: prompts `⎕:`, evaluates the reply in the current environment, prompts again for a reply with no value | done | eval/cli tests, sample 57 |
 | Quote-quad `⍞`: reads characters without evaluating, and on the left writes with no line ending so a prompt and its answer share a line | done | eval/cli tests, sample 57 |
-| A line `⍞←` left open carries across a statement boundary | todo | it carries within a statement, so a prompt and read written on two lines of one function share a line; in immediate execution the statement ends the line first |
+| A line `⍞←` left open carries across a statement boundary | todo | it carries inside a function, so `⍞←'P'` and `⍞←'Q'` on two lines print `PQ`; in immediate execution each statement ends the line, because `Reply` carries complete lines and an unterminated one cannot cross that boundary. The one row still open |
 | Character literals `'...'`, doubled quote, any Unicode inside | done | lex tests, samples 19, 20 |
 | Bracket indexing `A[I;J]`, elided axes, index arrays of any rank | done | index tests, sample 48 |
 | Indexed assignment with scalar extension | done | index tests, sample 48 |
@@ -51,7 +60,6 @@ multi-user features (`)MSG`, `)OPR`, `)PORTS`, sign-on numbers,
 | Del editor: `[n]`, `[⎕]`, `[n⎕]`, `[∆n]`, fractional insert and renumber on close, header edit and rename `[0]`, reopen `∇NAME`, lock `⍫` | done | session tests, sample 55 |
 | Dynamic scoping, recursion | done | eval tests, samples 53, 54. A recursion with no branch to stop it reaches DEPTH ERROR |
 | State indicator: suspension, pendent callers, resumption with `→`n, clearing with a bare `→` | done | call/session tests, sample 56 |
-| Suspending a call written inside a larger expression | todo | sw-apl unwinds it instead, since it cannot take up a half-evaluated expression; the error still names the function and line |
 | Six-space prompt, batch echo | done | cli tests |
 | Executable `.apl` file: a leading `#!` line is the shell's and is not read as APL | done | reg-rs CLI tests, `tests/scripts/` |
 | `)OFF` sign-off: time and date, connect time, processor time | done | session tests, sample 59 |
@@ -147,7 +155,7 @@ the session numeric tests, and sample 67.
 | Matrix columns right-aligned | done |
 | Empty vector prints a blank line | done |
 | Rank 3 and higher (blank lines between planes) | done |
-| Character arrays without quotes | done (no literals yet) |
+| Character arrays without quotes | done | display tests, samples 19 and 50 |
 | `)WIDTH` wrapping (vectors between elements, matrices in column blocks) | done |
 | Mixed integer and float columns (each element formatted, right-aligned) | done |
 
@@ -158,9 +166,7 @@ the session numeric tests, and sample 67.
 | The workspace as a value: what `)SAVE` writes is separate from the terminal it runs on | done | workspace tests |
 | `)CLEAR` clears the state indicator with everything else | done | session tests, sample 60 |
 | Workspace file: re-executable UTF-8, stable byte-for-byte, round trips through the interpreter | done | wsfile tests, `tests/scripts/saved-workspace.apl.ws` |
-| A saved workspace keeps a suspended function | todo | a re-executable file cannot put execution back in the middle of a call, so `)SAVE` leaves the state indicator out; APL\360's workspaces were binary and kept it |
 | `)SAVE` and `)LOAD` round trip a workspace through a file | done | command tests, sample 61 |
-| A locked function cannot be read out of a saved workspace | partial | APL\360's workspaces were binary; sw-apl's are text, so a workspace holding a locked function is obscured with rot-13 and `)LOAD` reads both forms. Obscuring, not encryption: it stops reading a locked body by accident, not on purpose. An obscured file is not runnable as a program and says so. wsfile and locked tests, `tests/scripts/work/VAULT.apl.ws` |
 | `)COPY` takes the definitions and leaves the settings | done | command tests, sample 61; see `index-origin-considerations.md` |
 
 ## System commands
@@ -176,12 +182,11 @@ the session numeric tests, and sample 67.
 | `)SAVE` `)LOAD` `)DROP` `)LIB` `)COPY` `)PCOPY` `)CONTINUE` | done; `)DROP` replies with the moment alone, as APL\360's did |
 | `)FNS` `)VARS` `)GRPS` `)GRP` `)GROUP` `)ERASE` | done |
 | `)SI` `)SIV` | done |
-| `)SYMBOLS` | partial; reports `IS n, USED m`, but the number cannot be set: sw-apl sets no symbol table aside, so `)SYMBOLS n` is INCORRECT COMMAND |
+| `)SYMBOLS` | reports; the number cannot be set -- see Restrictions |
 | Library form `)LOAD 1 NAME`, DESCRIBE convention | done; `--library` sets the directory they are under, library 1 is `ws/lib1/`, and LIFE, RACE and EDIT each carry a DESCRIBE; library tests, sample 64 |
 | `)LOAD` prints only the SAVED line, as APL\360 did, and nothing runs on load | done | command tests, sample 61 |
 | Trouble reports: WS NOT FOUND, OBJECT NOT FOUND, IMPROPER LIBRARY REFERENCE, NOT SAVED THIS WS IS | done; INCORRECT COMMAND is kept for a command given an argument it does not take, as the manual's table has it; report tests, sample 65 |
 | NOT WITH OPEN DEFINITION | done | done; `)SAVE`, `)COPY`, `)PCOPY` and `)CONTINUE` are refused while a definition is open, and no command is ever taken as a body line. Definition tests, sample 70 |
-| WS LOCKED, NOT SAVED WS QUOTA USED UP | todo | sw-apl has no accounts, no keys and no disk quota, so neither can arise |
 | `)COPY` and `)PCOPY` print the SAVED line, and `)PCOPY` a NOT COPIED list | done | the manual's WC3 and WC4: "SAVED, followed by the time of day and the date that the source workspace was last stored", and "NOT COPIED:, followed by the names of objects not copied". Command tests, samples 61 and 65 |
 | `)NUMBER` `)OFF HOLD` `)CONTINUE HOLD` `)MSG` `)MSGN` `)OPR` `)OPRN` `)PORTS`, and the `[LOCK]`/`[KEY]` passwords | not implemented, and not wanted; they answer INCORRECT COMMAND. They are the multi-user surface of a shared machine -- accounts at ports, an operator, other users to message, a library someone else can read -- and sw-apl has one user. `commands-reference.md` says so per command |
 
@@ -196,3 +201,72 @@ the session numeric tests, and sample 67.
 | WS FULL | done | done; the workspace holds a fixed number of bytes (`--ws-size`, default 1048576) and anything that will not fit is refused without changing it; space, workspace and session tests, sample 62 |
 | A glyph used where it has no such form (`1~0`, `1⍋2`, `⍳/1 2`, `,[1]M`) | done | done; SYNTAX ERROR, because APL\360 has no such function and the sentence does not parse. A glyph that *has* the form and was given a bad argument is still DOMAIN ERROR |
 | NOT IMPLEMENTED (temporary, must reach zero) | reached zero; the error kind is gone from the vocabulary | |
+
+## Restrictions
+
+What sw-apl does not do, and will not. Each follows from a decision
+already made and written down; none is work outstanding, and none
+is counted against parity. They are here so that nobody -- reader
+or agent -- sets about implementing one.
+
+### A saved workspace does not keep a suspended function
+
+APL\360's workspaces were binary images, and `)SAVE` really did
+store a suspension: you could load a workspace and take up a
+function in the middle of a call.
+
+sw-apl's workspace file is re-executable APL, which is design.md
+D7, and re-executing a file cannot put execution back into the
+middle of a call. `)SAVE` leaves the state indicator out and
+`)LOAD` gives you a workspace with an empty one. The names and the
+settings all survive; only the suspension does not.
+
+It is the price of a file you can read, diff and edit, and D7 pays
+it deliberately.
+
+### A call inside a larger expression does not suspend
+
+When a defined function fails, APL\360 left it suspended wherever
+it was called from. sw-apl does that too, unless the call was
+written inside a larger expression: `2+F 3` unwinds instead of
+suspending, because the evaluator is a recursive walk over the
+tree and cannot take up a half-evaluated expression.
+
+The error still names the function and the line it failed on, so
+what went wrong is as clear; what is missing is being able to
+resume from it.
+
+### A locked function is obscured, not hidden
+
+A binary workspace made a locked function genuinely unreadable to
+whoever you sent it to. sw-apl's is text, and the writer must put
+a locked body into it in full, so a workspace holding one is
+written rot-13 instead (design.md D14).
+
+That is obscuring and not encryption, and `workspaces.md` says so
+plainly. It stops a locked body being read by accident or by
+curiosity, which is all a binary format ever stopped, and it stops
+nothing else.
+
+### `)SYMBOLS` reports but cannot be set
+
+APL\360 set a symbol table aside when you signed on, and
+`)SYMBOLS n` in a clear workspace resized it. sw-apl sets nothing
+aside: names are charged against the workspace like everything
+else, so there is no separate table to size. `)SYMBOLS` reports
+`IS n, USED m` and `)SYMBOLS n` is INCORRECT COMMAND.
+
+### WS LOCKED and NOT SAVED, WS QUOTA USED UP cannot arise
+
+`WS LOCKED` meant a stored workspace was behind a password. sw-apl
+has one user, no accounts and no shared library, so there is
+nothing to lock against and no key to be wrong.
+
+`NOT SAVED, WS QUOTA USED UP` meant the account's library
+allocation was full. sw-apl saves into a directory; if the disk is
+full the operating system says so, and `)SAVE` passes that on as
+`NOT SAVED, <reason>`. That is a different sentence about a
+different thing.
+
+Both belong to the multi-user surface that is out of scope at the
+top of this file.

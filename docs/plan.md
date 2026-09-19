@@ -305,6 +305,12 @@ restrictions to be written down rather than closed.
    manual's report 6. `)COPY`, `)PCOPY`, `)SAVE` and `)CONTINUE`
    carry it; `)LOAD` does not, which is worth understanding before
    implementing rather than after.
+4. `open-output-line` -- `⍞←` leaves the output line open, and it
+   survives inside a function but not across a statement in
+   immediate execution, because `Reply` carries complete lines and
+   an unterminated one cannot cross that boundary. Worth fixing
+   before the web demo rather than after, since the demo is a third
+   caller of the same API. (Found sorting the rows, 2026-09-18.)
 3. `documented-restrictions` -- a saved workspace does not keep a
    suspended function, and WS LOCKED and NOT SAVED, WS QUOTA USED
    UP cannot arise here. These are not work to be done; they are
