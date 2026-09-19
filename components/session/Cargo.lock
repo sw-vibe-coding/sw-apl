@@ -32,6 +32,7 @@ dependencies = [
 name = "apl-commands"
 version = "0.1.0"
 dependencies = [
+ "apl-copy",
  "apl-eval",
  "apl-inquiry",
  "apl-library",
@@ -45,6 +46,15 @@ version = "0.1.0"
 dependencies = [
  "apl-display",
  "apl-value",
+]
+
+[[package]]
+name = "apl-copy"
+version = "0.1.0"
+dependencies = [
+ "apl-eval",
+ "apl-library",
+ "apl-wsfile",
 ]
 
 [[package]]

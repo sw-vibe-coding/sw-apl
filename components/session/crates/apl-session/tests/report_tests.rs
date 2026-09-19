@@ -57,8 +57,9 @@ fn a_name_the_workspace_does_not_hold_is_object_not_found() {
         vec!["OBJECT NOT FOUND"]
     );
     assert_eq!(out(&mut s, "A")[0], "VALUE ERROR", "and A did not arrive");
-    // The names it does hold copy as before.
-    assert_eq!(out(&mut s, ")COPY DONOR A"), Vec::<String>::new());
+    // The names it does hold copy, and the copy says when the
+    // source was stored.
+    assert!(out(&mut s, ")COPY DONOR A")[0].starts_with("SAVED "));
     assert_eq!(out(&mut s, "A"), vec!["1"]);
 }
 

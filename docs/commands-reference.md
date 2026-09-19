@@ -127,9 +127,18 @@ See `index-origin-considerations.md`.
 A group among the names brings its members with it. `)PCOPY` is
 `)COPY` that will not overwrite a name you already hold.
 
-Neither prints anything at present. The manual gives both the
-`SAVED` line that `)LOAD` prints, and `)PCOPY` a `NOT COPIED:` list
-of the names it kept; `parity.md` carries the row.
+Both reply with the moment the source workspace was stored, which is
+the line `)LOAD` prints, and `)PCOPY` names what it kept:
+
+```
+      )PCOPY CLASS
+SAVED 18.52.48 09/18/26
+NOT COPIED: A
+```
+
+Without that second line a protected copy that skipped the name you
+asked for would look like one that worked. An ordinary `)COPY`
+overwrites, so it never keeps anything and never prints it.
 
 `)GROUP` and `)ERASE` are in `session.md` under **Groups**, with the
 rules for adding to a group and dispersing one.

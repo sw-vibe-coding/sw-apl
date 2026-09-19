@@ -2,6 +2,7 @@
 members = [
     "crates/apl-editor",
     "crates/apl-library",
+    "crates/apl-copy",
     "crates/apl-inquiry",
     "crates/apl-commands",
     "crates/apl-session",

@@ -11,5 +11,5 @@ mod path;
 mod report;
 
 pub use name::valid;
-pub use path::{file, holds, root, text};
+pub use path::{Stored, file, holds, root, text};
 pub use report::{IMPROPER_LIBRARY, INCORRECT, OBJECT_NOT_FOUND, WS_NOT_FOUND, not_saved};

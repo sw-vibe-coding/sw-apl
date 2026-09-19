@@ -28,6 +28,7 @@ sw-apl/
                apl-eval                    interpreter
     session/   apl-library                 where a workspace file is, and
                                            what to say when it is not there
+               apl-copy                    taking names out of a stored one
                apl-inquiry                 listing names, groups, erasing
                apl-session                 system commands, del editor,
                                            workspace files, libraries
@@ -95,6 +96,11 @@ eval -> session -> web
   LIBRARY REFERENCE, INCORRECT COMMAND -- so that every command
   which names a workspace fails the same way and the reports have
   one spelling.
+- `apl-copy` works out what a `)COPY` brings and what a `)PCOPY`
+  leaves: the names asked for, the members a group among them
+  brings, and the ones this workspace already holds. It is its own
+  crate because that is four separate questions and the command
+  crate had no room for them.
 - `apl-inquiry` answers the commands that report what a workspace
   holds -- `)FNS`, `)VARS`, `)GRPS`, `)GRP`, `)SI`, `)SIV`,
   `)SYMBOLS` -- and owns the group facility and `)ERASE`. It is

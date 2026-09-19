@@ -60,6 +60,78 @@ fn a_workspace_saved_and_loaded_comes_back_whole() {
     assert_eq!(out(&mut s, "1\u{f7}3"), vec!["0.333"], "digits came back");
 }
 
+/// The manual gives `)COPY` the same SAVED line `)LOAD` prints:
+/// "SAVED, followed by the time of day and the date that the source
+/// workspace was last stored."
+#[test]
+fn copying_says_when_the_source_was_stored() {
+    let (mut s, _dir) = in_own_dir("copy-saved");
+    for line in [")WSID DONOR", "A\u{2190}5", ")SAVE", ")CLEAR"] {
+        out(&mut s, line);
+    }
+    let reply = out(&mut s, ")COPY DONOR");
+    assert_eq!(reply.len(), 1, "{reply:?}");
+    assert!(reply[0].starts_with("SAVED "), "{reply:?}");
+    // Naming what to copy does not change the reply.
+    let named = out(&mut s, ")COPY DONOR A");
+    assert_eq!(named.len(), 1, "{named:?}");
+    assert!(named[0].starts_with("SAVED "), "{named:?}");
+}
+
+/// And `)PCOPY` adds "NOT COPIED:, followed by the names of objects
+/// not copied". Without it, a protected copy that skipped the name
+/// you asked for cannot be told from one that worked.
+#[test]
+fn a_protected_copy_names_what_it_would_not_overwrite() {
+    let (mut s, _dir) = in_own_dir("pcopy-report");
+    for line in [")WSID DONOR", "A\u{2190}5", "B\u{2190}6", ")SAVE", ")CLEAR"] {
+        out(&mut s, line);
+    }
+    out(&mut s, "A\u{2190}99");
+    let reply = out(&mut s, ")PCOPY DONOR");
+    assert_eq!(reply.len(), 2, "{reply:?}");
+    assert!(reply[0].starts_with("SAVED "), "{reply:?}");
+    assert_eq!(reply[1], "NOT COPIED: A");
+    assert_eq!(out(&mut s, "A"), vec!["99"], "kept");
+    assert_eq!(out(&mut s, "B"), vec!["6"], "taken");
+    // Nothing in the way, nothing to report.
+    out(&mut s, ")CLEAR");
+    assert_eq!(out(&mut s, ")PCOPY DONOR").len(), 1);
+}
+
+#[test]
+fn several_names_kept_are_reported_together() {
+    let (mut s, _dir) = in_own_dir("pcopy-several");
+    for line in [
+        ")WSID DONOR",
+        "A\u{2190}5",
+        "B\u{2190}6",
+        "C\u{2190}7",
+        ")SAVE",
+        ")CLEAR",
+    ] {
+        out(&mut s, line);
+    }
+    for line in ["A\u{2190}99", "C\u{2190}99"] {
+        out(&mut s, line);
+    }
+    let reply = out(&mut s, ")PCOPY DONOR");
+    assert_eq!(reply[1], "NOT COPIED: A C", "in the file's order");
+}
+
+/// An ordinary `)COPY` overwrites, so it never keeps anything and
+/// the manual gives it no NOT COPIED line.
+#[test]
+fn an_unprotected_copy_reports_nothing_kept() {
+    let (mut s, _dir) = in_own_dir("copy-overwrites");
+    for line in [")WSID DONOR", "A\u{2190}5", ")SAVE", ")CLEAR"] {
+        out(&mut s, line);
+    }
+    out(&mut s, "A\u{2190}99");
+    assert_eq!(out(&mut s, ")COPY DONOR").len(), 1);
+    assert_eq!(out(&mut s, "A"), vec!["5"], "overwritten");
+}
+
 #[test]
 fn copying_takes_the_names_and_leaves_the_settings() {
     let (mut s, _dir) = in_own_dir("copy");

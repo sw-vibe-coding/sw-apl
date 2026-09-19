@@ -31,6 +31,7 @@ OBJECT NOT FOUND
       )FNS
       ⍝ The name it does hold copies.
       )COPY 1 EDIT MEAN
+SAVED 22.53.10 09/17/26
       MEAN 1 2 3 4
 2.5
       ⍝ A number that names no library: report 14. An empty library is a
@@ -56,6 +57,6 @@ INCORRECT COMMAND
       ⍝ which is yours, and a sample must not write there. The session
       ⍝ tests cover it in a directory of their own.
       )OFF
-18.43.32 09/18/26
+18.52.38 09/18/26
 CONNECTED 0.00.00
 CPU TIME 0.00.00

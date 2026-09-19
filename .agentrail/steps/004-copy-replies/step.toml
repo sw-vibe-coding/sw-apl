@@ -1,6 +1,6 @@
 number = 4
 slug = "copy-replies"
-status = "pending"
+status = "in-progress"
 description = """
 Phase 6 step 4 (docs/plan.md). )COPY and )PCOPY say nothing and owe
 two repli..."""

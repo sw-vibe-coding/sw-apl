@@ -4,7 +4,7 @@ use std::fs;
 use std::path::PathBuf;
 
 use apl_eval::Workspace;
-use apl_wsfile::{definitions, plain};
+use apl_wsfile::{DIRECTIVE, definitions, plain};
 
 use crate::name::valid;
 use crate::report::{IMPROPER_LIBRARY, INCORRECT, OBJECT_NOT_FOUND, WS_NOT_FOUND};
@@ -52,18 +52,33 @@ pub fn file(ws: &Workspace, rest: &[&str]) -> Result<(PathBuf, usize), &'static 
     Ok((dir.join(format!("{name}.apl.ws")), used))
 }
 
-/// The APL in the file a `[lib] name` names, and how many words that
-/// took. A workspace holding a locked function was written obscured,
-/// so this reveals it: everything above works on the APL, not on the
-/// file.
+/// A stored workspace, read.
+pub struct Stored {
+    /// Its contents as APL, revealed if the file was obscured.
+    pub apl: String,
+    /// When it was stored, as the file records it. `)LOAD` and
+    /// `)COPY` both report this, which is why it is read here
+    /// rather than by each of them.
+    pub when: String,
+    /// How many words of the command the library and name took.
+    pub used: usize,
+}
+
+/// The workspace a `[lib] name` names. A workspace holding a locked
+/// function was written obscured, so this reveals it: everything
+/// above works on the APL, not on the file.
 ///
 /// # Errors
 /// As `file`, and WS NOT FOUND when no workspace of that name is
 /// stored there.
-pub fn text(ws: &Workspace, rest: &[&str]) -> Result<(String, usize), &'static str> {
+pub fn text(ws: &Workspace, rest: &[&str]) -> Result<Stored, &'static str> {
     let (path, used) = file(ws, rest)?;
     let read = fs::read_to_string(path).map_err(|_| WS_NOT_FOUND)?;
-    Ok((plain(&read), used))
+    let apl = plain(&read);
+    let stamp = format!("{DIRECTIVE}SAVED ");
+    let when = apl.lines().find_map(|l| l.strip_prefix(&stamp));
+    let when = when.unwrap_or_default().to_string();
+    Ok(Stored { apl, when, used })
 }
 
 /// Whether the workspace in `apl` holds every name asked for.

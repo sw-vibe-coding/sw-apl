@@ -8,9 +8,9 @@
 
 use std::fs;
 
+use apl_copy::take;
 use apl_eval::Workspace;
-use apl_library::{IMPROPER_LIBRARY, INCORRECT, holds, root, text};
-use apl_wsfile::{DIRECTIVE, definitions, expand};
+use apl_library::{IMPROPER_LIBRARY, INCORRECT, Stored, root, text};
 
 use crate::command::Answer;
 
@@ -31,21 +31,18 @@ pub fn load(ws: &Workspace, rest: &[&str]) -> Answer {
     // take, which is a different fault from a name it cannot find.
     // `used` is 1 or 2 and never more than `rest` has, so what is
     // left over is what the command was given and cannot use.
-    let whole = |(apl, used): (String, usize)| match rest.len() - used {
-        0 => Ok(apl),
+    let whole = |found: Stored| match rest.len() - found.used {
+        0 => Ok(found),
         _ => Err(INCORRECT),
     };
-    let apl = match text(ws, rest).and_then(whole) {
-        Ok(apl) => apl,
+    let found = match text(ws, rest).and_then(whole) {
+        Ok(found) => found,
         Err(report) => return trouble(report),
     };
-    let when = apl
-        .lines()
-        .find_map(|l| l.strip_prefix(&format!("{DIRECTIVE}SAVED ")));
     let mut feed = vec![")CLEAR".to_string()];
-    feed.extend(apl.lines().map(String::from));
+    feed.extend(found.apl.lines().map(String::from));
     Answer {
-        lines: vec![format!("SAVED {}", when.unwrap_or_default())],
+        lines: vec![format!("SAVED {}", found.when)],
         feed,
         off: false,
     }
@@ -60,31 +57,23 @@ fn trouble(report: &str) -> Answer {
 }
 
 /// `)COPY [lib] name [objects]` and `)PCOPY`: bring names out of a
-/// saved workspace into this one, running its definitions but not its
-/// commands. `protect` leaves alone any name already here.
+/// stored workspace into this one.
+///
+/// The reply is the SAVED line the source records, as APL\360 gave
+/// it, and for a protected copy the names it would not overwrite.
 pub fn copy(ws: &Workspace, rest: &[&str], protect: bool) -> Answer {
-    let (apl, used) = match text(ws, rest) {
+    let (stored, taken) = match take(ws, rest, protect) {
         Ok(found) => found,
         Err(report) => return trouble(report),
     };
-    let asked = &rest[used.min(rest.len())..];
-    // A group among the names asked for brings its members with it.
-    let wanted = expand(&apl, asked);
-    if let Err(report) = holds(&apl, asked) {
-        return trouble(report);
-    }
-    let mut feed = Vec::new();
-    for (name, lines) in definitions(&apl) {
-        let unwanted = !asked.is_empty() && !wanted.contains(&name);
-        let taken = ws.saved.groups.contains_key(&name);
-        let kept = protect && (taken || ws.get(&name).is_some() || ws.is_function(&name));
-        if !unwanted && !kept {
-            feed.extend(lines);
-        }
+    let mut lines = vec![format!("SAVED {}", stored.when)];
+    if !taken.kept.is_empty() {
+        lines.push(format!("NOT COPIED: {}", taken.kept.join(" ")));
     }
     Answer {
-        feed,
-        ..Answer::default()
+        lines,
+        feed: taken.feed,
+        off: false,
     }
 }
 

@@ -236,7 +236,7 @@ They are different, and the difference matters:
   function then runs under an origin it may never have been written
   for, and the result can be wrong without being an error.
 - **`)PCOPY`** is `)COPY` that will not overwrite a name you already
-  have.
+  have, and says which names it kept.
 
 Copying a **group** by name brings the group and the objects its
 members name -- that is what a group is for. `session.md` has the

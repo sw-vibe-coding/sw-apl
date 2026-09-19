@@ -33,7 +33,10 @@ A
 HYP 4
 ⍳3
 )WSID
-⍝ )PCOPY keeps what is already here.
+⍝ Copying replies with the moment the source was stored, as
+⍝ loading does. )PCOPY keeps what is already here, and names what
+⍝ it kept -- without that, a protected copy that skipped the name
+⍝ you asked for would look like one that worked.
 )CLEAR
 A←99
 )PCOPY CLASS

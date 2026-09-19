@@ -1,6 +1,6 @@
 [package]
-name = "apl-commands"
-description = "sw-apl system commands: the lines that begin with a parenthesis"
+name = "apl-copy"
+description = "sw-apl )COPY and )PCOPY: taking names out of a stored workspace"
 edition.workspace = true
 license.workspace = true
 version.workspace = true
@@ -10,9 +10,6 @@ repository.workspace = true
 [dependencies]
 apl-eval = { path = "../../../eval/crates/apl-eval" }
 apl-library = { path = "../apl-library" }
-apl-copy = { path = "../apl-copy" }
-apl-inquiry = { path = "../apl-inquiry" }
-apl-value = { path = "../../../value/crates/apl-value" }
 apl-wsfile = { path = "../../../eval/crates/apl-wsfile" }
 
 [lints]
