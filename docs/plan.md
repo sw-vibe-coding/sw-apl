@@ -439,6 +439,34 @@ Answers to the questions raised at bootstrap, now policy:
    workspace; execute and format are gone. Quad and quote-quad
    input/output stay, as in APL\360.
 
+## Owner decision (2026-09-19): cap and cup are reserved characters
+
+Researched and settled by the owner. `∩` and `∪` were on the IBM
+2741 typing element and on the 51xx keyboards, and were carried
+forward through APLSV for workspace compatibility, but in neither
+APL\360 nor APLSV were they primitive functions. `∩` existed so
+that the lamp `⍝` could be struck from it and `○`; `∪` was reserved
+and struck into nothing. Minimum and maximum, floor and ceiling,
+were `⌊` and `⌈` throughout, as they still are. They became
+primitives only in IBM APL2 (1984): dyadic `∩` intersection,
+monadic `∪` unique, dyadic `∪` union.
+
+So sw-apl's `[[later]]` classification of the two is wrong on its
+face -- a glyph a later APL *introduced* is not one the 2741 had --
+and it contradicts sw-apl's own overstrike table, which strikes the
+lamp from `∩`. They are characters of the APL\360 set with no
+function meaning, which is what `_` already is here. Step
+`008-cup-and-cap` carries this out; what it still has to decide
+from the manuals is which error a legitimate character with no
+meaning earns, and how the message should read, since
+"(intersection, not APL\360)" states something false.
+
+APL\360 has no set operations. Union, intersection, difference and
+unique are written with membership and compression -- `(A∊B)/A`,
+`A,(~B∊A)/B`, `(~A∊B)/A`, `((A⍳A)=⍳⍴A)/A` -- which is why `∊`
+exists, and is the subject of the sample in step
+`010-iota-one-element-vector`.
+
 ### Phase 9: literate and recorded docs (saga `doc-tooling`, unscheduled)
 
 1. `vhs-tapes` -- vhs tape scripts under `docs/tapes/` rendering
