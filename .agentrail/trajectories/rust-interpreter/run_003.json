@@ -1,0 +1,11 @@
+{
+  "task_type": "rust-interpreter",
+  "state": {
+    "number": 3,
+    "step": "save-lock-syntax"
+  },
+  "action": "Probed the input space before implementing -- a dozen candidate names run through the binary -- which turned a narrow password-syntax fix into finding a path traversal; chose the rule that was simultaneously the parity answer and the safety answer rather than blacklisting the characters I had found; put the check at the one place every command resolves a name, and held )WSID separately so a workspace cannot carry a name it could not be saved under; noted in the commit why this matters more once the web demo exists, since that is when input stops being the person at the terminal",
+  "result": "success",
+  "reward": 1,
+  "timestamp": "2026-09-18T18:45:06"
+}
