@@ -1,31 +1,22 @@
-# commands
+# parity
 
-Phase 6 of docs/plan.md, raised by the owner on 2026-09-18: there is
-no reference for the system commands, and `)MSG`, `)OPR` and
-`)PORTS` are mentioned in one parity row and nowhere else. Checking
-that turned up two parity gaps behind the documentation one.
+Phase 7 of docs/plan.md, owner direction 2026-09-18: clear the last
+rows of the checklist before starting a new component.
 
-The commands are documented today in three places and none of them
-is a reference: a 21-row table of one-line glosses in
-`session.md`, status rows in `parity.md`, and a gloss in
-`sw-apl --help`. A reader who wants to know what `)COPY` replies
-when the workspace is not there has to find the trouble report
-table in `session.md` and join it up themselves.
+Five rows are left. Two are real gaps, and three are restrictions --
+things this implementation does not do and will not, which is a
+different statement from work outstanding. Carrying a restriction as
+`todo` says the wrong thing to anyone reading the file, including
+the next agent.
 
-APL\360 had 26 system commands. sw-apl implements 20. The six it
-does not are the multi-user surface of a shared machine -- accounts,
-ports, an operator, other users to send messages to -- and they are
-out of scope by the rule already in `parity.md`. Saying so per
-command, in the reference, is the point: a reader should not have to
-infer absence.
+The two real ones share a shape: sw-apl answers NOT IMPLEMENTED or
+nothing at all where APL\360 had a definite answer. NOT IMPLEMENTED
+is a placeholder this project put in deliberately and undertook to
+remove; the row saying so has been there since Phase 1.
 
-Read the manual rather than recalling it. Table 2.1 summarises every
-command with its form, its normal response and its trouble reports,
-and the detailed sections that follow give the wording. The text is
-at
+Read the manual rather than recalling it, and quote it where it
+settles a question. The text is at
 https://archive.org/stream/bitsavers_ibmaplAPL3_8068299/APL_360_Users_Manual_Aug68_djvu.txt
-and Table 2.1 is around line 4640. Quote it where it settles a
-question, and where it does not, say what was chosen instead.
 
 Every step: format first, then tests, clippy, and gates (see
 /mw-cp); TDD; reg-rs for anything run through the binary; update
@@ -33,9 +24,9 @@ docs/parity.md rows in the same commit; commit, push, report.
 
 ## Steps
 
-1. commands-reference -- `docs/commands-reference.md`, every
-   command including the refused ones and why.
-2. command-abbreviation -- only the first four characters of a
-   command name are significant, which sw-apl does not honour.
-3. save-lock-syntax -- `)SAVE NAME:PASSWORD` stores a workspace
-   literally called `NAME:PASSWORD`; the colon should be refused.
+1. valence-syntax-error -- a glyph used where it has no meaning is
+   a SYNTAX ERROR, and `ErrorKind::NotImplemented` goes.
+2. open-definition-guard -- NOT WITH OPEN DEFINITION for the
+   commands the manual gives it to.
+3. documented-restrictions -- say what this implementation does not
+   do, in a Restrictions section, and stop calling it todo.

@@ -1,0 +1,12 @@
+number = 2
+slug = "open-definition-guard"
+status = "pending"
+description = """
+Phase 7 step 2 (docs/plan.md). NOT WITH OPEN DEFINITION.
+
+The manual's troubl..."""
+role = "production"
+context_files = []
+created_at = "2026-09-18T19:02:29"
+task_type = "rust-interpreter"
+commits = []

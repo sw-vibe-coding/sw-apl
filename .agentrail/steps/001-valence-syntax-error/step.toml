@@ -1,0 +1,11 @@
+number = 1
+slug = "valence-syntax-error"
+status = "pending"
+description = """
+Phase 7 step 1 (docs/plan.md). A glyph used where it has no meaning
+is a SYNT..."""
+role = "production"
+context_files = []
+created_at = "2026-09-18T19:02:29"
+task_type = "rust-interpreter"
+commits = []

@@ -288,7 +288,30 @@ documentation one.
    than silently making a strangely named workspace. Decide the
    reply against the manual's table and record it.
 
-### Phase 7: web demo (saga `web-demo`)
+### Phase 7: the last parity rows (saga `parity`)
+
+Owner direction 2026-09-18: clear the checklist before starting a
+new component. Two of the remaining rows are real and two are
+restrictions to be written down rather than closed.
+
+1. `valence-syntax-error` -- a glyph used in a valence it does not
+   have answers NOT IMPLEMENTED (`1~0`, `1⍋2`), and so does a
+   reduction or product by a glyph with no dyadic scalar form, and
+   an axis form belonging to APL2. In APL\360 there is no such
+   function, so the sentence does not parse: all of them are SYNTAX
+   ERROR. Removing `ErrorKind::NotImplemented` altogether is what
+   takes the "must reach zero" row to zero.
+2. `open-definition-guard` -- NOT WITH OPEN DEFINITION, the
+   manual's report 6. `)COPY`, `)PCOPY`, `)SAVE` and `)CONTINUE`
+   carry it; `)LOAD` does not, which is worth understanding before
+   implementing rather than after.
+3. `documented-restrictions` -- a saved workspace does not keep a
+   suspended function, and WS LOCKED and NOT SAVED, WS QUOTA USED
+   UP cannot arise here. These are not work to be done; they are
+   what this implementation is. Give `parity.md` a Restrictions
+   section that says so, and stop carrying them as todo.
+
+### Phase 8: web demo (saga `web-demo`)
 
 1. `wasm-facade` -- session API usable from wasm32.
 2. `yew-terminal` -- printer-style terminal component with glyph
@@ -324,7 +347,7 @@ Answers to the questions raised at bootstrap, now policy:
    workspace; execute and format are gone. Quad and quote-quad
    input/output stay, as in APL\360.
 
-### Phase 8: literate and recorded docs (saga `doc-tooling`, unscheduled)
+### Phase 9: literate and recorded docs (saga `doc-tooling`, unscheduled)
 
 1. `vhs-tapes` -- vhs tape scripts under `docs/tapes/` rendering
    CLI sessions with glyph input and output to GIF/PNG for the
