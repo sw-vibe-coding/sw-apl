@@ -19,7 +19,7 @@ and the criterion is:
 2. The worked examples in the manual, transcribed into
    `samples/manual-*.apl`, reproduce the printed output character
    for character (indent, spacing, high minus, error lines).
-3. Every sample in `samples/` runs without `NOT IMPLEMENTED`.
+3. Every sample in `samples/` runs without an unimplemented reply; the error kind no longer exists.
 4. Everything outside the APL\360 character set is CHARACTER
    ERROR, and the quad-named system variables of later APLs are
    SYNTAX ERROR (they are not in the language).
@@ -193,5 +193,5 @@ the session numeric tests, and sample 67.
 | INDEX, DEFN, DEPTH | done | done |
 | INTERRUPT when a read finds no more input, and from the keyboard | done | eval/cli/call tests |
 | WS FULL | done | done; the workspace holds a fixed number of bytes (`--ws-size`, default 1048576) and anything that will not fit is refused without changing it; space, workspace and session tests, sample 62 |
-| A monadic-only primitive used dyadically (`1~0`, `1⍋2`) | todo | answers NOT IMPLEMENTED; APL\360 has no such form, so it should be a SYNTAX ERROR |
-| NOT IMPLEMENTED (temporary, must reach zero) | in use | done |
+| A glyph used where it has no such form (`1~0`, `1⍋2`, `⍳/1 2`, `,[1]M`) | done | done; SYNTAX ERROR, because APL\360 has no such function and the sentence does not parse. A glyph that *has* the form and was given a bad argument is still DOMAIN ERROR |
+| NOT IMPLEMENTED (temporary, must reach zero) | reached zero; the error kind is gone from the vocabulary | |

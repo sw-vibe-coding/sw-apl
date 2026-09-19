@@ -17,8 +17,9 @@ use crate::random::{Env, deal, roll};
 /// `f r`, with the evaluated axis bracket when one was written.
 ///
 /// # Errors
-/// Whatever the primitive reports (RANK, LENGTH, DOMAIN, INDEX for a
-/// bad axis, NOT IMPLEMENTED), without a caret.
+/// Whatever the primitive reports (RANK, LENGTH, DOMAIN, INDEX for
+/// a bad axis, SYNTAX for a glyph with no such form), without a
+/// caret.
 pub fn apply_monadic(f: char, r: &Array, axis: Option<&Array>, env: &mut Env) -> AplResult<Array> {
     let rank = r.shape.len();
     match f {

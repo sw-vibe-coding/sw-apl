@@ -50,7 +50,6 @@ fn error_kind_names_match_apl360() {
         ErrorKind::Character('\u{3c1}').to_string(),
         "CHARACTER ERROR: U+03C1 (use \u{2374} U+2374)"
     );
-    assert_eq!(ErrorKind::NotImplemented.to_string(), "NOT IMPLEMENTED");
 }
 
 #[test]

@@ -15,7 +15,7 @@ pub const DYADIC: &str = "+-×÷⌈⌊|*⍟○!∧∨⍲⍱<≤=≥>≠";
 /// `f r` for one number.
 ///
 /// # Errors
-/// DOMAIN ERROR from the function; NOT IMPLEMENTED for other glyphs.
+/// DOMAIN ERROR from the function; SYNTAX ERROR for a glyph with no such form.
 pub fn apply_monadic(f: char, r: Number) -> AplResult<Number> {
     let a = r.as_f64();
     if let Some(x) = monadic_arith(f, a) {
@@ -25,14 +25,14 @@ pub fn apply_monadic(f: char, r: Number) -> AplResult<Number> {
         '○' => finite(std::f64::consts::PI * a),
         '!' => finite(factorial(a)?),
         '~' => Ok(Number::Int(not(a)?.into())),
-        _ => Err(AplError::new(ErrorKind::NotImplemented)),
+        _ => Err(AplError::new(ErrorKind::Syntax)),
     }
 }
 
 /// `l f r` for two numbers: exact integers first, then the families.
 ///
 /// # Errors
-/// DOMAIN ERROR from the function; NOT IMPLEMENTED for other glyphs.
+/// DOMAIN ERROR from the function; SYNTAX ERROR for a glyph with no such form.
 pub fn apply_dyadic(f: char, left: Number, right: Number) -> AplResult<Number> {
     if let Some(exact) = Number::exact_int(f, left, right) {
         return Ok(exact);
@@ -50,7 +50,7 @@ pub fn apply_dyadic(f: char, left: Number, right: Number) -> AplResult<Number> {
     match f {
         '○' => finite(circular(lhs, rhs)?),
         '!' => finite(binomial(lhs, rhs)?),
-        _ => Err(AplError::new(ErrorKind::NotImplemented)),
+        _ => Err(AplError::new(ErrorKind::Syntax)),
     }
 }
 

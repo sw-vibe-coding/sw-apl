@@ -10,11 +10,11 @@ use crate::reduce::{base_index, fold};
 /// Scan along axis `k`; a scalar scans to itself.
 ///
 /// # Errors
-/// NOT IMPLEMENTED for functions without a scalar dyadic form;
+/// SYNTAX ERROR for a function with no scalar dyadic form;
 /// DOMAIN ERROR from the function.
 pub fn scan(f: char, r: &Array, k: usize) -> AplResult<Array> {
     if !DYADIC.contains(f) {
-        return Err(AplError::new(ErrorKind::NotImplemented));
+        return Err(AplError::new(ErrorKind::Syntax));
     }
     let data = numbers(r)?;
     if r.shape.is_empty() {

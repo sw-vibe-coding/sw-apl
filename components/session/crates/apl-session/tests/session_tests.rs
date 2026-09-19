@@ -345,9 +345,10 @@ fn only_the_axis_taking_glyphs_accept_a_bracket() {
     ] {
         assert_eq!(out(&mut s, line)[0], "SYNTAX ERROR", "{line} takes no axis");
     }
-    // Monadic ravel with an axis is APL2, not APL\360 syntax we reject
-    // outright: the glyph does take an axis, dyadically.
-    assert_eq!(out(&mut s, ",[1]M")[0], "NOT IMPLEMENTED");
+    // Monadic ravel with an axis is APL2. The glyph does take an
+    // axis dyadically, but that is not the form here, and an APL\360
+    // sentence with a function APL\360 has not got does not parse.
+    assert_eq!(out(&mut s, ",[1]M")[0], "SYNTAX ERROR");
 }
 
 #[test]

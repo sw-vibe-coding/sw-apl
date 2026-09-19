@@ -257,4 +257,10 @@ the workspace.
 
 SYNTAX ERROR, VALUE ERROR, DOMAIN ERROR, RANK ERROR, LENGTH
 ERROR, INDEX ERROR, WS FULL, DEFN ERROR, CHARACTER ERROR, DEPTH
-ERROR, INTERRUPT. Display format is in `session.md`.
+ERROR, INTERRUPT. That is the whole vocabulary. Display format is
+in `session.md`.
+
+A glyph used where it has no such form is a SYNTAX ERROR: `1~0`,
+`1⍋2` and `⍳/1 2` name functions APL\360 has not got, so the
+sentence does not parse. A glyph that does have the form and was
+given an argument outside it is a DOMAIN ERROR: `÷0` and `1⍟0`.

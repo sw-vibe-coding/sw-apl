@@ -72,7 +72,8 @@ fn statement(ws: &mut Workspace, expr: &Expr) -> AplResult<Option<Output>> {
 ///
 /// # Errors
 /// VALUE ERROR for unknown names; primitive errors carry the glyph's
-/// position as the caret; NOT IMPLEMENTED for branch.
+/// position as the caret; SYNTAX ERROR for a branch, which is a
+/// statement and not a value.
 pub fn eval_expr(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
     match expr {
         Expr::Literal(a) => Ok(a.clone()),

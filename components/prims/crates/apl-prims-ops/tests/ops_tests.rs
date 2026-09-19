@@ -74,7 +74,7 @@ fn reduce_of_empty_gives_the_identity() {
     assert_eq!(reduce('+', &m(2, 0, &[]), 1).unwrap(), v(&[0, 0]));
     assert_eq!(
         reduce('⍳', &v(&[1, 2]), 0).unwrap_err().kind,
-        ErrorKind::NotImplemented
+        ErrorKind::Syntax
     );
 }
 
@@ -107,10 +107,7 @@ fn scan_gives_running_reductions() {
     let a = m(2, 3, &[1, 2, 3, 4, 5, 6]);
     assert_eq!(scan('+', &a, 1).unwrap(), m(2, 3, &[1, 3, 6, 4, 9, 15]));
     assert_eq!(scan('+', &a, 0).unwrap(), m(2, 3, &[1, 2, 3, 5, 7, 9]));
-    assert_eq!(
-        scan('⍳', &v(&[1]), 0).unwrap_err().kind,
-        ErrorKind::NotImplemented
-    );
+    assert_eq!(scan('⍳', &v(&[1]), 0).unwrap_err().kind, ErrorKind::Syntax);
 }
 
 #[test]
@@ -135,7 +132,7 @@ fn outer_product_pairs_every_element() {
     assert_eq!(outer('+', &v(&[]), &v(&[1, 2])).unwrap().shape, vec![0, 2]);
     assert_eq!(
         outer('⍳', &v(&[1]), &v(&[1])).unwrap_err().kind,
-        ErrorKind::NotImplemented
+        ErrorKind::Syntax
     );
 }
 
@@ -199,6 +196,6 @@ fn inner_product_reduces_over_the_shared_axis() {
     );
     assert_eq!(
         inner('⍳', '×', &v(&[1]), &v(&[1])).unwrap_err().kind,
-        ErrorKind::NotImplemented
+        ErrorKind::Syntax
     );
 }

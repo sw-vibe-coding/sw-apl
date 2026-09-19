@@ -1,6 +1,6 @@
 number = 1
 slug = "valence-syntax-error"
-status = "pending"
+status = "in-progress"
 description = """
 Phase 7 step 1 (docs/plan.md). A glyph used where it has no meaning
 is a SYNT..."""

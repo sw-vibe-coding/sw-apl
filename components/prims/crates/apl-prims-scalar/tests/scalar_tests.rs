@@ -151,14 +151,14 @@ fn monadic_functions() {
 }
 
 #[test]
-fn unknown_glyph_is_not_implemented() {
+fn a_glyph_with_no_such_form_is_a_syntax_error() {
     assert_eq!(
         dyadic('\u{2373}', &s(1.0), &s(1.0)).unwrap_err().kind,
-        ErrorKind::NotImplemented
+        ErrorKind::Syntax
     );
     assert_eq!(
         monadic('\u{2374}', &s(1.0)).unwrap_err().kind,
-        ErrorKind::NotImplemented
+        ErrorKind::Syntax
     );
 }
 
@@ -224,18 +224,18 @@ fn the_complete_scalar_family_dispatches() {
 }
 
 #[test]
-fn unknown_glyphs_are_not_implemented_even_on_empty_arguments() {
+fn a_glyph_with_no_such_form_is_a_syntax_error_on_empty_arguments_too() {
     assert_eq!(
         monadic('\u{233d}', &v(&[])).unwrap_err().kind,
-        ErrorKind::NotImplemented
+        ErrorKind::Syntax
     );
     assert_eq!(
         dyadic('\u{2373}', &v(&[]), &v(&[])).unwrap_err().kind,
-        ErrorKind::NotImplemented
+        ErrorKind::Syntax
     );
     assert_eq!(
         monadic('?', &v(&[])).unwrap_err().kind,
-        ErrorKind::NotImplemented,
+        ErrorKind::Syntax,
         "roll needs the random link; dispatched above the scalar family"
     );
 }

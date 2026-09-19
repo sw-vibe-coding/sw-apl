@@ -22,6 +22,11 @@ character matrix for the names, mixed output, and the conditional
 branch idiom driving two functions. Its transcript is reproducible
 because the random link starts from a fixed value.
 
+`69-no-such-function.apl` shows what a glyph used where it has no
+such form answers, and what separates that from a bad argument: a
+function APL\360 has not got is a SYNTAX ERROR, while a function it
+has, given something outside its domain, is a DOMAIN ERROR.
+
 `68-command-names.apl` shows how much of a command name has to be
 typed: four characters for a long one, and anything after the fourth
 ignored rather than forgiven, while a short name must be exact.

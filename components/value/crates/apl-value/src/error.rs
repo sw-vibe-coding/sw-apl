@@ -4,7 +4,7 @@ use std::fmt;
 
 use apl_glyphs::{LATER, LOOKALIKE};
 
-/// The APL\360 error vocabulary (plus a temporary `NotImplemented`).
+/// The APL\360 error vocabulary.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ErrorKind {
     Syntax,
@@ -19,8 +19,6 @@ pub enum ErrorKind {
     Character(char),
     Depth,
     Interrupt,
-    /// Primitive or feature not yet implemented in sw-apl.
-    NotImplemented,
 }
 
 impl fmt::Display for ErrorKind {
@@ -37,7 +35,6 @@ impl fmt::Display for ErrorKind {
             ErrorKind::Character(c) => write_character(f, *c),
             ErrorKind::Depth => write!(f, "DEPTH ERROR"),
             ErrorKind::Interrupt => write!(f, "INTERRUPT"),
-            ErrorKind::NotImplemented => write!(f, "NOT IMPLEMENTED"),
         }
     }
 }

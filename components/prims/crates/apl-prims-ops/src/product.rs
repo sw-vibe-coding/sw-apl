@@ -9,11 +9,11 @@ use crate::reduce::fold;
 /// shape of `l` followed by the shape of `r`.
 ///
 /// # Errors
-/// DOMAIN ERROR from `g` or for character data; NOT IMPLEMENTED
+/// DOMAIN ERROR from `g` or for character data; SYNTAX ERROR
 /// when `g` has no scalar dyadic form.
 pub fn outer(g: char, left: &Array, right: &Array) -> AplResult<Array> {
     if !DYADIC.contains(g) {
-        return Err(AplError::new(ErrorKind::NotImplemented));
+        return Err(AplError::new(ErrorKind::Syntax));
     }
     let (lv, rv) = (numbers(left)?, numbers(right)?);
     let data = lv
@@ -29,10 +29,10 @@ pub fn outer(g: char, left: &Array, right: &Array) -> AplResult<Array> {
 ///
 /// # Errors
 /// LENGTH ERROR when the shared axes differ; DOMAIN ERROR from the
-/// functions; NOT IMPLEMENTED when either lacks a scalar dyadic form.
+/// functions; SYNTAX ERROR when either lacks a scalar dyadic form.
 pub fn inner(f: char, g: char, left: &Array, right: &Array) -> AplResult<Array> {
     if !DYADIC.contains(f) || !DYADIC.contains(g) {
-        return Err(AplError::new(ErrorKind::NotImplemented));
+        return Err(AplError::new(ErrorKind::Syntax));
     }
     let shared = if right.shape.is_empty() {
         *left.shape.last().unwrap_or(&1)

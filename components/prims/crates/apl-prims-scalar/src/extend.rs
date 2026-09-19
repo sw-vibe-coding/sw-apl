@@ -7,10 +7,11 @@ use crate::dispatch::{DYADIC, MONADIC, apply_dyadic, apply_monadic};
 /// Apply monadic scalar function `f` to every element of `r`.
 ///
 /// # Errors
-/// DOMAIN ERROR from the function; NOT IMPLEMENTED for other glyphs.
+/// DOMAIN ERROR from the function; SYNTAX ERROR for a glyph with
+/// no monadic scalar form.
 pub fn monadic(f: char, r: &Array) -> AplResult<Array> {
     if !MONADIC.contains(f) {
-        return Err(AplError::new(ErrorKind::NotImplemented));
+        return Err(AplError::new(ErrorKind::Syntax));
     }
     let out = numbers(r)?
         .iter()
@@ -26,10 +27,11 @@ pub fn monadic(f: char, r: &Array) -> AplResult<Array> {
 ///
 /// # Errors
 /// RANK ERROR when ranks differ (and neither is a scalar), LENGTH
-/// ERROR when shapes differ, DOMAIN ERROR from the function.
+/// ERROR when shapes differ, DOMAIN ERROR from the function, and
+/// SYNTAX ERROR for a glyph with no dyadic scalar form.
 pub fn dyadic(f: char, l: &Array, r: &Array) -> AplResult<Array> {
     if !DYADIC.contains(f) {
-        return Err(AplError::new(ErrorKind::NotImplemented));
+        return Err(AplError::new(ErrorKind::Syntax));
     }
     let (ln, rn) = (numbers(l)?, numbers(r)?);
     let shape = agree(l, r)?;

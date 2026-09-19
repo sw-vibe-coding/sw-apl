@@ -7,7 +7,7 @@ use apl_value::{AplError, AplResult, Array, Data, ErrorKind, Number};
 /// Reduce along axis `k`; a scalar reduces to itself.
 ///
 /// # Errors
-/// NOT IMPLEMENTED for functions without a scalar dyadic form;
+/// SYNTAX ERROR for a function with no scalar dyadic form;
 /// DOMAIN ERROR from the function or for an empty reduction of a
 /// function with no identity element.
 pub fn reduce(f: char, r: &Array, k: usize) -> AplResult<Array> {
@@ -57,6 +57,6 @@ fn identity(f: char) -> AplResult<Number> {
         '⌈' => Number::Float(f64::MIN),
         '⌊' => Number::Float(f64::MAX),
         '⍟' | '○' | '⍲' | '⍱' => return Err(AplError::new(ErrorKind::Domain)),
-        _ => return Err(AplError::new(ErrorKind::NotImplemented)),
+        _ => return Err(AplError::new(ErrorKind::Syntax)),
     })
 }

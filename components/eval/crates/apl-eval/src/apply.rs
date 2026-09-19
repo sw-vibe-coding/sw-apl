@@ -79,7 +79,10 @@ fn monadic(func: &Function, axis: Option<&Array>, r: &Array, env: &mut Env) -> A
         Function::Prim(f) => apply_monadic(*f, r, axis, env),
         Function::Reduce { f, first } => reduce(*f, r, axis_index(axis, *first, rank, env.io)?),
         Function::Scan { f, first } => scan(*f, r, axis_index(axis, *first, rank, env.io)?),
-        _ => Err(AplError::new(ErrorKind::NotImplemented)),
+        // An inner or outer product with one argument, or a defined
+        // function that got this far: no such monadic function, so
+        // the sentence does not parse.
+        _ => Err(AplError::new(ErrorKind::Syntax)),
     }
 }
 
