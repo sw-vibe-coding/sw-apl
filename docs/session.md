@@ -128,6 +128,10 @@ Workspace control:
 | `)CONTINUE` | Save as CONTINUE and sign off |
 | `)OFF` | End the session |
 
+`commands-reference.md` is the long version: every command with
+what it replies and what it refuses, including the ones sw-apl does
+not have and why.
+
 Inquiry and settings:
 
 | Command | Meaning |

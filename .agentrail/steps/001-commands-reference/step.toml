@@ -1,6 +1,6 @@
 number = 1
 slug = "commands-reference"
-status = "pending"
+status = "in-progress"
 description = """
 Phase 6 step 1 (docs/plan.md, owner request 2026-09-18). Write
 docs/commands-..."""

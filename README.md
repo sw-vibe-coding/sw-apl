@@ -159,6 +159,9 @@ documents below show real APL glyphs:
 - [Glyph table](docs/glyphs.txt) -- every glyph with its code point
 - [Session](docs/session.md) -- prompt, error display, system
   commands, the DESCRIBE convention
+- [System commands reference](docs/commands-reference.md) -- every
+  command, what it replies, what it refuses, and the ones sw-apl
+  does not have
 - [Using the del editor](docs/del-editor-guide.md) -- writing and
   changing a function, line by line
 - [I-beam reference](docs/i-beam-reference.md) -- the eight system

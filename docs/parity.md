@@ -168,7 +168,7 @@ the session numeric tests, and sample 67.
 | Command | Status |
 |---|---|
 | `)OFF` | done |
-| `)ORIGIN` `)DIGITS` `)WIDTH` | done |
+| `)ORIGIN` `)DIGITS` `)WIDTH` | done; `)WIDTH` accepts 30 to 254 where the manual's table says 30 to 130. Deliberate: a 360 printed on a terminal 130 columns wide at most, and a window today is wider. The lower bound and the `WAS n` reply are the manual's |
 | `)CLEAR` | done |
 | `)WSID` | done |
 | `)SAVE` `)LOAD` `)DROP` `)LIB` `)COPY` `)PCOPY` `)CONTINUE` | done; `)DROP` replies with the moment alone, as APL\360's did |
@@ -179,7 +179,8 @@ the session numeric tests, and sample 67.
 | `)LOAD` prints only the SAVED line, as APL\360 did, and nothing runs on load | done | command tests, sample 61 |
 | Trouble reports: WS NOT FOUND, OBJECT NOT FOUND, IMPROPER LIBRARY REFERENCE, NOT SAVED THIS WS IS | done; INCORRECT COMMAND is kept for a command given an argument it does not take, as the manual's table has it; report tests, sample 65 |
 | WS LOCKED, NOT SAVED WS QUOTA USED UP, NOT WITH OPEN DEFINITION | todo | sw-apl has no accounts, no keys and no disk quota, so the first two cannot arise; the third is a real gap, since a `)COPY` typed in definition mode should be refused |
-| `)MSG` `)OPR` `)PORTS` | not implemented; they answer INCORRECT COMMAND. They talked to other users of a shared machine, and sw-apl has no accounts and no other users |
+| `)COPY` and `)PCOPY` print the SAVED line, and `)PCOPY` a NOT COPIED list | todo | both print nothing; the manual gives WC3/WC4 "SAVED, followed by the time of day and the date that the source workspace was last stored" and `)PCOPY` also "NOT COPIED:, followed by the names of objects not copied" |
+| `)NUMBER` `)OFF HOLD` `)CONTINUE HOLD` `)MSG` `)MSGN` `)OPR` `)OPRN` `)PORTS`, and the `[LOCK]`/`[KEY]` passwords | not implemented, and not wanted; they answer INCORRECT COMMAND. They are the multi-user surface of a shared machine -- accounts at ports, an operator, other users to message, a library someone else can read -- and sw-apl has one user. `commands-reference.md` says so per command |
 
 ## Errors
 

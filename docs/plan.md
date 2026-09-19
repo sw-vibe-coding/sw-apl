@@ -273,7 +273,14 @@ documentation one.
    sw-apl requires the exact spelling, so `)CLEA` and `)ORIG 0`
    answer INCORRECT COMMAND. Add the rule, and a parity row, which
    it has never had.
-3. `save-lock-syntax` -- `)SAVE NAME:PASSWORD` stores a workspace
+3. `copy-replies` -- `)COPY` and `)PCOPY` print nothing. The
+   manual gives both "SAVED, followed by the time of day and the
+   date that the source workspace was last stored", and `)PCOPY`
+   also "NOT COPIED:, followed by the names of objects not
+   copied". A protected copy that quietly skipped the name you
+   asked for cannot be told from one that worked. (Found while
+   writing the reference, 2026-09-18.)
+4. `save-lock-syntax` -- `)SAVE NAME:PASSWORD` stores a workspace
    literally called `NAME:PASSWORD`, because the `[LOCK]` and
    `[KEY]` password forms are not parsed and the colon is taken as
    part of the name. Locks are the multi-user surface again and are

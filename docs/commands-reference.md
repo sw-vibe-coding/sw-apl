@@ -1,0 +1,232 @@
+# System Commands Reference
+
+A line beginning with `)` is a command to the session rather than
+APL to evaluate. Commands act on the workspace and the libraries;
+they are never part of a function, and one typed in definition mode
+is a body line like any other.
+
+`session.md` is the short table and the surrounding prose.
+`parity.md` says which of these is done. This is what each one does,
+what it replies, and what it refuses.
+
+The groups below are the manual's own.
+
+## Terminal control
+
+| Form | |
+|---|---|
+| `)OFF` | End the session |
+| `)CONTINUE` | Save the workspace as CONTINUE, then end the session |
+
+`)OFF` prints the moment, how long the session was connected, and
+how much processor time it used:
+
+```
+      )OFF
+17.00.12 09/18/26
+CONNECTED 0.00.00
+CPU TIME 0.00.00
+```
+
+APL\360 named the port and the user as well, and carried totals to
+date. sw-apl has no accounts and keeps no such records.
+
+`)CONTINUE` saves first, so it prints the `)SAVE` reply and then the
+sign-off. Loading CONTINUE afterwards puts you back where you were,
+except for a suspended function -- see `workspaces.md`.
+
+Ctrl-D at the prompt ends the session as `)OFF` does.
+
+## Workspace control
+
+| Form | |
+|---|---|
+| `)CLEAR` | Replace the workspace with an empty one |
+| `)WSID` | Show the workspace's name |
+| `)WSID name` | Rename the workspace |
+| `)COPY [lib] name [objects]` | Bring names out of a stored workspace |
+| `)PCOPY [lib] name [objects]` | As `)COPY`, but keep any name already here |
+| `)GROUP name [members]` | Gather names under one name; one name alone disperses |
+| `)ERASE names` | Remove global objects |
+| `)ORIGIN n` | Index origin, 0 or 1 |
+| `)DIGITS n` | Print precision, 1 to 16 |
+| `)WIDTH n` | Print width, 30 to 254 (APL\360 stopped at 130) |
+
+`)CLEAR` replies `CLEAR WS`. Everything goes: names, settings, the
+workspace's own name, and the state indicator with them, so a
+suspended function is gone rather than resumed.
+
+`)WSID` on its own reports the name, and `CLEAR WS` when there is
+none. Setting it replies with the name it replaced:
+
+```
+      )WSID
+CLEAR WS
+      )WSID DEMO
+WAS CLEAR WS
+      )WSID OTHER
+WAS DEMO
+```
+
+The three settings reply the same way, and refuse a value outside
+their range:
+
+```
+      )ORIGIN 0
+WAS 1
+      )ORIGIN 2
+INCORRECT COMMAND
+      )DIGITS 5
+WAS 10
+      )WIDTH 40
+WAS 120
+```
+
+They belong to the workspace and are saved with it.
+
+`)COPY` takes the definitions and leaves the settings, which is the
+difference from `)LOAD` that matters: a copied function runs under
+*your* index origin, which may not be the one it was written for.
+See `index-origin-considerations.md`.
+
+```
+      )COPY DEMO              ⍝ everything
+      )COPY DEMO A F          ⍝ these names
+      )COPY 1 EDIT MEAN       ⍝ from library 1
+```
+
+A group among the names brings its members with it. `)PCOPY` is
+`)COPY` that will not overwrite a name you already hold.
+
+Neither prints anything at present. The manual gives both the
+`SAVED` line that `)LOAD` prints, and `)PCOPY` a `NOT COPIED:` list
+of the names it kept; `parity.md` carries the row.
+
+`)GROUP` and `)ERASE` are in `session.md` under **Groups**, with the
+rules for adding to a group and dispersing one.
+
+## Library control
+
+| Form | |
+|---|---|
+| `)SAVE` | Store this workspace under its own name |
+| `)SAVE name` | Name it and store it |
+| `)LOAD [lib] name` | Replace this workspace with a stored one |
+| `)DROP name` | Forget a stored workspace |
+| `)LIB [n]` | List the workspaces in a library |
+
+`)SAVE` replies with the moment and the name it wrote:
+
+```
+      )SAVE
+17.00.12 09/18/26 DEMO
+```
+
+`)LOAD` replies with the moment the workspace was *stored*, and
+nothing else. Typing `DESCRIBE` is the reader's move, not the
+loader's:
+
+```
+      )LOAD DEMO
+SAVED 17.00.12 09/18/26
+```
+
+`)DROP` replies with the moment it dropped, as APL\360's did -- it
+does not echo the name. It takes no library number, because library
+0 is the only one you can write to.
+
+`)LIB` lists library 0, `)LIB 1` library 1: one at a time. An empty
+library prints nothing, which is not the same as one that does not
+exist.
+
+`workspaces.md` has the libraries, the file format, and what a
+workspace holds.
+
+## Inquiry
+
+| Form | |
+|---|---|
+| `)FNS [letter]` | Defined function names, alphabetically, from a letter |
+| `)VARS [letter]` | Global variable names, the same |
+| `)GRPS [letter]` | Group names, the same |
+| `)GRP name` | What a group gathers, in the order it was gathered |
+| `)SI` | The state indicator: each function with the line it stopped on |
+| `)SIV` | As `)SI`, with the names each call made local |
+| `)SYMBOLS` | How many names are held, and how many would fit |
+
+`)VARS` lists *global* variables. Inside a suspended function the
+call's locals are in scope, and the listing is of the globals
+either way.
+
+`)SI` stars the function an error came from -- the one you can take
+up again -- while the callers waiting on it are pendent:
+
+```
+      )SI
+FAILS[1]*
+```
+
+With nothing suspended both print nothing. A bare `→` clears the top
+entry.
+
+`)SYMBOLS` reports `IS n, USED m`. The number cannot be set here:
+sw-apl sets no symbol table aside, so `)SYMBOLS n` is `INCORRECT
+COMMAND`. `session.md` has why.
+
+## What sw-apl does not have
+
+APL\360 ran on a shared machine: accounts signed on at ports, an
+operator watched over them, and users sent each other messages.
+sw-apl runs on yours. These commands are therefore not implemented,
+and answer `INCORRECT COMMAND` like any other name the session does
+not know.
+
+| Form | What it did |
+|---|---|
+| `)NUMBER [key]` | Sign on an account and start a session |
+| `)OFF HOLD` | End the session but hold the dial-up connection |
+| `)CONTINUE HOLD` | Save, end the session, hold the connection |
+| `)MSG port text` | Send a message to another terminal and wait for it to be received |
+| `)MSGN port text` | Send one without waiting |
+| `)OPR text` | Send a message to the operator and wait |
+| `)OPRN text` | Send one without waiting |
+| `)PORTS` | List the ports in use and who is signed on at each |
+
+The locks and keys go with them. `)SAVE WSID LOCK` stored a
+workspace behind a password so that someone else with access to the
+library could not read it, and `)LOAD WSID KEY` gave the password.
+sw-apl has one user and no shared library, so there is nothing to
+lock against.
+
+## What sw-apl has and APL\360 did not
+
+These are not commands. A workspace on a 360 was sized and placed by
+the system you signed on to; here they are yours to set, from the
+command line:
+
+| | |
+|---|---|
+| `--library DIR` | The directory the libraries sit under. Library 0 is `DIR/work`, library 1 is `DIR/ws/lib1` |
+| `--ws-size BYTES` | How much the workspace may hold before `WS FULL` |
+
+`sw-apl --help` has the rest of the command line.
+
+## When a command cannot do it
+
+The manual calls these trouble reports. The distinction it draws:
+**INCORRECT COMMAND is about the command**, not about the workspace.
+
+| Reply | Means |
+|---|---|
+| `INCORRECT COMMAND` | A missing argument, one word too many, or a value out of range |
+| `WS NOT FOUND` | No stored workspace of that name |
+| `OBJECT NOT FOUND` | The workspace is there but holds no such name |
+| `IMPROPER LIBRARY REFERENCE` | That number is not a library |
+| `NOT SAVED, THIS WS IS name` | `)SAVE name` would overwrite a stored workspace that is not this one |
+| `NOT GROUPED, NAME IN USE` | The first name of a `)GROUP` already holds a function or a variable |
+| `NOT ERASED: names` | `)ERASE` left those: they are functions on the state indicator |
+| `WS FULL` | What was asked for does not fit in the workspace |
+
+A comma introduces a reason and a colon introduces a list, which is
+the manual's own convention. `samples/65-trouble-reports.apl` walks
+them.
