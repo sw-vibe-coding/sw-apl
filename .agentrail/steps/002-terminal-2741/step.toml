@@ -1,0 +1,12 @@
+number = 2
+slug = "terminal-2741"
+status = "pending"
+description = """
+Phase 8 step 2 (docs/plan.md). The paper and the overstrikes.
+
+Make the clien..."""
+role = "production"
+context_files = []
+created_at = "2026-09-19T07:15:06"
+task_type = "rust-interpreter"
+commits = []

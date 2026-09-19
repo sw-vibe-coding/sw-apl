@@ -317,12 +317,38 @@ restrictions to be written down rather than closed.
    what this implementation is. Give `parity.md` a Restrictions
    section that says so, and stop carrying them as todo.
 
-### Phase 8: web demo (saga `web-demo`)
+### Phase 8: the 2741 and a local service (saga `terminal`)
 
-1. `wasm-facade` -- session API usable from wasm32.
-2. `yew-terminal` -- printer-style terminal component with glyph
-   keyboard and Espanso-style expansions.
-3. `pages-deploy` -- GitHub Pages build and deploy scripts.
+Owner direction 2026-09-19, replacing the in-browser interpreter
+that was planned here. The browser runs a 2741 terminal; the
+interpreter runs in a local server it talks to.
+
+This is the 1968 architecture. A 2741 talking to a time-sharing
+service is what APL\360 *was*, and the self-contained browser
+interpreter was the anachronism. It also dissolves the hard part:
+`Console::read` is synchronous, and a browser cannot stop and wait
+for a keystroke in the middle of a statement, which would have cost
+us `⎕`, `⍞` and every line of the del editor. On a server the
+blocking read happens where blocking is free. The filesystem seam
+disappears with it -- the server has a real one, so `)SAVE`, `)LOAD`
+and `ws/lib1/` simply work.
+
+Hosting: local only. `just demo` starts the server and opens the
+terminal; the README carries a recording for readers who will not
+clone. No always-on service, no accounts, no ops.
+
+1. `terminal-server` -- `sw-apl-server`: one session per
+   connection, a line protocol, and a blocking read that works
+   because the server may block.
+2. `terminal-2741` -- the browser terminal: overstruck characters
+   formed by backspace, the printing-terminal feel, ATTN as
+   interrupt. The overstrike table belongs in `data/glyphs.toml`
+   with the rest of the glyph data, which is the reason to write
+   the terminal in Rust and compile it rather than writing it in
+   JavaScript with a second copy of the table.
+3. `glyph-keyboard` -- the IBM 2741 APL layout, a clickable board,
+   and the expansions already in `docs/espanso/` and
+   `docs/emacs/`; a first screen worth arriving at.
 
 ## Owner decisions (2026-09-16)
 

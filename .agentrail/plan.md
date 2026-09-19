@@ -1,44 +1,46 @@
-# web-demo
+# terminal
 
-Phase 8 of docs/plan.md: sw-apl in a browser, as a live demo.
+Phase 8 of docs/plan.md, owner direction 2026-09-19: the browser
+runs a 2741 terminal and the interpreter runs in a local server.
 
-The interpreter is already host-independent in two of the three
-places it needs to be. `Console` is a trait the host implements, so
-where a statement reads a line is the host's business; `Clock` is a
-plain function pointer the host installs, and a workspace that has
-not been given one does not move. The CLI implements both, and the
-web build implements them differently.
+This is the architecture APL\360 had. A typewriter terminal talked
+to a time-sharing service; the self-contained browser interpreter
+that was planned here was the anachronism, and it could not have
+done the del editor. `Console::read` is synchronous and a browser
+cannot stop mid-statement to wait for a keystroke. A server can.
 
-The third place is not abstracted: `apl-library` and `apl-commands`
-reach `std::fs` directly. In a browser there is no filesystem, so
-either the workspace commands stop working -- which would take
-`)LOAD 1 LIFE` and the shipped workspaces out of the demo, and they
-are the best thing to show -- or where a workspace lives becomes a
-seam like the other two. `apl-library` exists to answer "which file
-does this command mean", so it is where the seam belongs.
+What each side owns:
 
-Two things the browser cannot do that the terminal can, both to be
-decided rather than discovered:
+- The terminal owns the keyboard and the paper. Overstruck
+  characters are formed there, by backspace, because only the
+  terminal sees the keystrokes; `⍟` is `○` backspace `*` and the
+  server never learns it was typed that way. So are the six-space
+  indent, the `[n]` prompt, and a line `⍞←` left open.
+- The server owns the session. One per connection, holding a
+  `Session`, reading lines from the connection and writing the
+  transcript back. `)SAVE`, `)LOAD` and `ws/lib1/` work because it
+  has a filesystem.
 
-- It cannot block. `Console::read` is synchronous, and a browser
-  has no way to stop and wait for a keystroke in the middle of a
-  statement. Batch mode already faces this and answers INTERRUPT at
-  end of input; whether that is the right answer for a demo is a
-  question for the step, not a default to fall into.
-- There is no `)OFF`. A session that signs off has nowhere to go.
+The interpreter does not change. If a step finds itself altering
+`Session` or anything below it to suit a browser, that is the
+signal to stop and ask. The CLI is the control: its reg-rs suite
+must stay green throughout, and the same input typed at the
+terminal and at the CLI must produce the same transcript.
 
-Nothing about APL changes. The same `Session` answers the same
-lines; what differs is who reads, who keeps the workspaces, and what
-the clock says. If a step finds itself changing the interpreter to
-suit the browser, that is the signal to stop and ask.
+Local only. `just demo` starts the server and opens the terminal.
+No always-on service, no accounts, no ops, nothing sent anywhere
+but to a process on the reader's own machine -- and the page should
+say so, since a terminal talking to a server looks like one that
+might not.
 
 Every step: format first, then tests, clippy, and gates (see
-/mw-cp); TDD; reg-rs for anything run through the CLI binary, which
-keeps working throughout; commit, push, report.
+/mw-cp); TDD; reg-rs for anything run through the CLI binary;
+commit, push, report.
 
 ## Steps
 
-1. wasm-facade -- the session compiled and driven from wasm32,
-   with the library store behind a seam.
-2. yew-terminal -- a printer-style terminal with a glyph keyboard.
-3. pages-deploy -- the build and the deploy.
+1. terminal-server -- the service, the protocol, and a blocking
+   read that works.
+2. terminal-2741 -- the paper and the overstrikes.
+3. glyph-keyboard -- the keyboard, the expansions, and a first
+   screen worth arriving at.

@@ -1,6 +1,6 @@
 number = 1
 slug = "wasm-facade"
-status = "pending"
+status = "in-progress"
 description = """
 Phase 8 step 1 (docs/plan.md). The session, compiled for wasm32 and
 driven fr..."""
