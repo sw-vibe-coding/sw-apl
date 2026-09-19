@@ -128,6 +128,10 @@ Workspace control:
 | `)CONTINUE` | Save as CONTINUE and sign off |
 | `)OFF` | End the session |
 
+Only the first four characters of a command name are significant,
+so `)CLEA`, `)CLEAR` and `)CLEAVER` are one command. A name of four
+characters or fewer must be exact.
+
 `commands-reference.md` is the long version: every command with
 what it replies and what it refuses, including the ones sw-apl does
 not have and why.

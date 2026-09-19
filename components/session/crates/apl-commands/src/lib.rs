@@ -7,4 +7,4 @@ mod command;
 mod load;
 mod save;
 
-pub use command::{Answer, system_command};
+pub use command::{ABBREVIATED, Answer, canonical, system_command};

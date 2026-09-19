@@ -11,6 +11,35 @@ what it replies, and what it refuses.
 
 The groups below are the manual's own.
 
+## How much of a name to type
+
+Only the first four characters of a command name are significant.
+The manual: "Where the first word of a command form is more than
+four characters long, only the first four are significant. The
+others are included only for mnemonic reasons, and may be dropped or
+replaced, as desired. For example, )CLEAR, )CLEA, )CLEAVER, etc.,
+are all equivalent."
+
+```
+      )CLEA
+CLEAR WS
+      )CLEAVER
+CLEAR WS
+      )ORIG 0
+WAS 1
+```
+
+What follows the fourth character is ignored rather than forgiven,
+so `)CLEAVER` is `)CLEAR` and not a near miss that happens to be
+let through.
+
+A name of four characters or fewer has nothing to cut and must be
+exact: `)VARS` is the command and `)VAR` is not, and `)SI` does not
+extend to `)SIX`. The commands that can be shortened are the nine
+longer than four characters: `)CLEAR`, `)CONTINUE`, `)DIGITS`,
+`)ERASE`, `)GROUP`, `)ORIGIN`, `)PCOPY`, `)SYMBOLS`, `)WIDTH`. No
+two of them agree in their first four.
+
 ## Terminal control
 
 | Form | |

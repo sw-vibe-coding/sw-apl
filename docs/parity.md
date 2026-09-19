@@ -167,6 +167,7 @@ the session numeric tests, and sample 67.
 
 | Command | Status |
 |---|---|
+| Only the first four characters of a command name are significant | done; `)CLEA`, `)CLEAR` and `)CLEAVER` are one command, and a name of four characters or fewer must be exact. Name tests, sample 68 |
 | `)OFF` | done |
 | `)ORIGIN` `)DIGITS` `)WIDTH` | done; `)WIDTH` accepts 30 to 254 where the manual's table says 30 to 130. Deliberate: a 360 printed on a terminal 130 columns wide at most, and a window today is wider. The lower bound and the `WAS n` reply are the manual's |
 | `)CLEAR` | done |

@@ -30,7 +30,8 @@ pub struct Answer {
 /// Run one system command: the text after the parenthesis.
 pub fn system_command(ws: &mut Workspace, command: &str) -> Answer {
     let mut words = command.split_whitespace();
-    let name = words.next().unwrap_or("").to_ascii_uppercase();
+    let typed = words.next().unwrap_or("").to_ascii_uppercase();
+    let name = canonical(&typed).to_string();
     let rest: Vec<&str> = words.collect();
     // )OFF signs off, and )CONTINUE saves the workspace first.
     let off = matches!((name.as_str(), rest.as_slice()), ("OFF" | "CONTINUE", []));
@@ -51,18 +52,55 @@ pub fn system_command(ws: &mut Workspace, command: &str) -> Answer {
     ending(ws, lines, off)
 }
 
-/// What a command hands back once it has run: its own lines, and the
-/// sign-off after them when the session is ending. Nothing here feeds
-/// lines back -- `)LOAD` and `)COPY` return before this.
+/// What a command hands back once it has run: its own lines, and
+/// the sign-off after them when the session is ending. Nothing here
+/// feeds lines back -- `)LOAD` and `)COPY` return before this.
+///
+/// The sign-off is the moment, how long the session was connected
+/// and how much processor time it used. APL\360 named the port and
+/// the user as well and carried totals to date; sw-apl has no
+/// accounts and keeps no such records.
 fn ending(ws: &Workspace, mut lines: Vec<String>, off: bool) -> Answer {
     if off {
-        lines.extend(sign_off(ws));
+        let time = (ws.clock)();
+        lines.push(moment(ws));
+        lines.push(format!("CONNECTED {}", hms(time.now - ws.signed_on)));
+        lines.push(format!("CPU TIME {}", hms(time.cpu)));
     }
     Answer {
         lines,
         feed: Vec::new(),
         off,
     }
+}
+
+/// The commands whose names are longer than four characters, which
+/// are therefore the ones that can be cut short.
+pub const ABBREVIATED: [&str; 9] = [
+    "CLEAR", "CONTINUE", "DIGITS", "ERASE", "GROUP", "ORIGIN", "PCOPY", "SYMBOLS", "WIDTH",
+];
+
+/// The command a typed name means.
+///
+/// The manual: "Where the first word of a command form is more than
+/// four characters long, only the first four are significant. The
+/// others are included only for mnemonic reasons, and may be
+/// dropped or replaced, as desired. For example, )CLEAR, )CLEA,
+/// )CLEAVER, etc., are all equivalent."
+///
+/// So what follows the fourth character is ignored rather than
+/// forgiven: `)CLEAVER` is `)CLEAR`, not a near miss. A name of four
+/// characters or fewer has nothing to cut and must be exact, which
+/// is why `)VAR` is not `)VARS`. Four characters, not four bytes: a
+/// name is whatever followed the parenthesis and may be any text.
+#[must_use]
+pub fn canonical(name: &str) -> &str {
+    if name.chars().count() < 4 {
+        return name;
+    }
+    let first: String = name.chars().take(4).collect();
+    let found = ABBREVIATED.iter().find(|long| long.starts_with(&first));
+    found.map_or(name, |long| *long)
 }
 
 /// A command that changes the workspace itself: its settings, the
@@ -90,17 +128,4 @@ fn workspace_command(saved: &mut Saved, name: &str, rest: &[&str]) -> String {
         _ => return INCORRECT.to_string(),
     };
     format!("WAS {}", was.unwrap_or_else(|| CLEAR.to_string()))
-}
-
-/// The APL\360 sign-off: the time and date the session ended, then
-/// how long it was connected and how much processor time it used.
-/// APL\360 also named the port and the user, and carried totals to
-/// date; sw-apl has no accounts and keeps no such records.
-fn sign_off(ws: &Workspace) -> Vec<String> {
-    let time = (ws.clock)();
-    vec![
-        moment(ws),
-        format!("CONNECTED {}", hms(time.now - ws.signed_on)),
-        format!("CPU TIME {}", hms(time.cpu)),
-    ]
 }

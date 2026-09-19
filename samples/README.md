@@ -22,6 +22,10 @@ character matrix for the names, mixed output, and the conditional
 branch idiom driving two functions. Its transcript is reproducible
 because the random link starts from a fixed value.
 
+`68-command-names.apl` shows how much of a command name has to be
+typed: four characters for a long one, and anything after the fourth
+ignored rather than forgiven, while a short name must be exact.
+
 `67-numeric-edges.apl` walks the boundaries: the fuzz and what it
 does to comparison, floor and counting; where a number stops being
 exact; what `)DIGITS` bounds and what it does not; exponential form

@@ -1,6 +1,6 @@
 number = 2
 slug = "command-abbreviation"
-status = "pending"
+status = "in-progress"
 description = """
 Phase 6 step 2 (docs/plan.md). Only the first four characters of a
 command na..."""
