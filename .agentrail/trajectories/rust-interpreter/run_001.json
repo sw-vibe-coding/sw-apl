@@ -1,0 +1,11 @@
+{
+  "task_type": "rust-interpreter",
+  "state": {
+    "number": 1,
+    "step": "commands-reference"
+  },
+  "action": "Ran every command against the binary and built the reference from what it printed, rather than from the existing docs, which is how the two missing )COPY replies surfaced at all; read the manual's normal-response column for each command instead of only its trouble reports, since that is where the silence showed; added a step for each behaviour gap rather than fixing them inside a documentation step; recorded the )WIDTH widening as a deviation with which half is the manual's, matching the provenance habit from the numeric boundaries table",
+  "result": "success",
+  "reward": 1,
+  "timestamp": "2026-09-18T17:29:50"
+}
