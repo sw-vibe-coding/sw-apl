@@ -1,0 +1,11 @@
+number = 8
+slug = "cup-and-cap"
+status = "pending"
+description = '''
+Owner question 2026-09-19: are cup and cap really "not APL\360"?
+
+sw-apl puts...'''
+role = "production"
+context_files = []
+created_at = "2026-09-19T10:19:48"
+commits = []
