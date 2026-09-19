@@ -1,0 +1,11 @@
+{
+  "task_type": "rust-interpreter",
+  "state": {
+    "number": 4,
+    "step": "copy-replies"
+  },
+  "action": "Wrote the four tests first and watched them fail for the right reason before touching the implementation; kept the manual's distinction that an unprotected copy has nothing to report and made that a test rather than leaving it implicit; moved the SAVED moment into the type both commands already share rather than duplicating the directive parsing; split a crate when two budgets were full at once, and said in the commit which four questions justified it",
+  "result": "success",
+  "reward": 1,
+  "timestamp": "2026-09-18T18:54:09"
+}
