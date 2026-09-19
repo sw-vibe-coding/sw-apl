@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-18
 
+- chore(agentrail): complete 004-copy-replies; commands saga done
+- feat(commands): )COPY and )PCOPY say what they did
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 003-save-lock-syntax; advance to 004-copy-replies
 - fix(library): a workspace name is a name, not a path
 - docs(changes): refresh CHANGES.md to HEAD
