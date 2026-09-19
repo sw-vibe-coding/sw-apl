@@ -14,6 +14,10 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-18
 
+- chore(agentrail): complete 001-commands-reference; advance to 002-command-abbreviation
+- docs: a system commands reference, and three gaps it found
+- chore(agentrail): archive numerics; open the commands saga
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 003-ibeam-reference; numerics saga done
 - docs: an I-beam reference, and pin the claims it makes
 - docs(changes): refresh CHANGES.md to HEAD
