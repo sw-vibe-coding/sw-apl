@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-18
 
+- chore(agentrail): complete 002-command-abbreviation; advance to 003-save-lock-syntax
+- feat(commands): only the first four characters of a name matter
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 001-commands-reference; advance to 002-command-abbreviation
 - docs: a system commands reference, and three gaps it found
 - chore(agentrail): archive numerics; open the commands saga
