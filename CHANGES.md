@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-18
 
+- chore(agentrail): complete 002-open-definition-guard; advance to 003-documented-restrictions
+- feat(session): a command is never a body line, and four are refused
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 001-valence-syntax-error; advance to 002-open-definition-guard
 - fix(prims): no such function is a SYNTAX ERROR, and NOT IMPLEMENTED is gone
 - chore(agentrail): archive commands; open the parity saga
