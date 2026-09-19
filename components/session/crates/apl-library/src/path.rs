@@ -6,6 +6,7 @@ use std::path::PathBuf;
 use apl_eval::Workspace;
 use apl_wsfile::{definitions, plain};
 
+use crate::name::valid;
 use crate::report::{IMPROPER_LIBRARY, INCORRECT, OBJECT_NOT_FOUND, WS_NOT_FOUND};
 
 /// The directory a library number names, under the session's library
@@ -28,9 +29,14 @@ pub fn root(ws: &Workspace, number: usize) -> Option<PathBuf> {
 /// `None` -- a missing library and a missing name are not the same
 /// fault and must not read the same.
 ///
+/// A name is checked before it is joined to anything. It becomes a
+/// filename, and one that is not a name could name a directory, a
+/// parent, or a file outside the library entirely.
+///
 /// # Errors
-/// INCORRECT COMMAND when no name was given, and IMPROPER LIBRARY
-/// REFERENCE when the number names no library.
+/// INCORRECT COMMAND when no name was given or what was given is
+/// not a name, and IMPROPER LIBRARY REFERENCE when the number names
+/// no library.
 pub fn file(ws: &Workspace, rest: &[&str]) -> Result<(PathBuf, usize), &'static str> {
     let (number, name, used) = match rest {
         [number, name, ..] if number.parse::<usize>().is_ok() => {
@@ -39,6 +45,9 @@ pub fn file(ws: &Workspace, rest: &[&str]) -> Result<(PathBuf, usize), &'static 
         [name, ..] => (0, *name, 1),
         [] => return Err(INCORRECT),
     };
+    if !valid(name) {
+        return Err(INCORRECT);
+    }
     let dir = root(ws, number).ok_or(IMPROPER_LIBRARY)?;
     Ok((dir.join(format!("{name}.apl.ws")), used))
 }

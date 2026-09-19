@@ -26,6 +26,14 @@ MEAN 1 2 3 4
 ⍝ different thing and says nothing.
 )LIB 9
 )LOAD 9 EDIT
+⍝ A workspace name is an APL name: a letter, then letters and
+⍝ digits. It becomes a filename, so anything else is refused
+⍝ before it reaches one -- including the colon of APL\360's
+⍝ password forms, which sw-apl has no use for.
+)SAVE WS:PASS
+)SAVE A/B
+)SAVE 1DIGIT
+)LOAD ../DONOR
 ⍝ Report 13, NOT SAVED, THIS WS IS name, is the one report this
 ⍝ sample cannot show: it needs a workspace stored in library 0,
 ⍝ which is yours, and a sample must not write there. The session

@@ -2,6 +2,7 @@
 
 use apl_eval::{Saved, Workspace, hms};
 use apl_inquiry::command as inquiry;
+use apl_library::valid;
 
 use crate::load::{copy, lib, load};
 use crate::save::{drop_workspace, moment, save};
@@ -114,7 +115,7 @@ fn workspace_command(saved: &mut Saved, name: &str, rest: &[&str]) -> String {
             return CLEAR.to_string();
         }
         ("WSID", [], _) => return saved.id.clone().unwrap_or_else(|| CLEAR.to_string()),
-        ("WSID", [id], _) => saved.id.replace((*id).to_string()),
+        ("WSID", [id], _) if valid(id) => saved.id.replace((*id).to_string()),
         ("ORIGIN", [_], Some(n @ (0 | 1))) => {
             let io = i64::try_from(n).unwrap_or(1);
             Some(std::mem::replace(&mut saved.env.io, io).to_string())

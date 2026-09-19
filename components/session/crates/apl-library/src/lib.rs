@@ -6,8 +6,10 @@
 //! a workspace needs the same resolution and the same answers when
 //! it fails.
 
+mod name;
 mod path;
 mod report;
 
+pub use name::valid;
 pub use path::{file, holds, root, text};
 pub use report::{IMPROPER_LIBRARY, INCORRECT, OBJECT_NOT_FOUND, WS_NOT_FOUND, not_saved};

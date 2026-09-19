@@ -39,11 +39,23 @@ OBJECT NOT FOUND
 IMPROPER LIBRARY REFERENCE
       )LOAD 9 EDIT
 IMPROPER LIBRARY REFERENCE
+      ⍝ A workspace name is an APL name: a letter, then letters and
+      ⍝ digits. It becomes a filename, so anything else is refused
+      ⍝ before it reaches one -- including the colon of APL\360's
+      ⍝ password forms, which sw-apl has no use for.
+      )SAVE WS:PASS
+INCORRECT COMMAND
+      )SAVE A/B
+INCORRECT COMMAND
+      )SAVE 1DIGIT
+INCORRECT COMMAND
+      )LOAD ../DONOR
+INCORRECT COMMAND
       ⍝ Report 13, NOT SAVED, THIS WS IS name, is the one report this
       ⍝ sample cannot show: it needs a workspace stored in library 0,
       ⍝ which is yours, and a sample must not write there. The session
       ⍝ tests cover it in a directory of their own.
       )OFF
-10.58.04 09/18/26
+18.43.32 09/18/26
 CONNECTED 0.00.00
 CPU TIME 0.00.00

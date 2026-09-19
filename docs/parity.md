@@ -171,7 +171,8 @@ the session numeric tests, and sample 67.
 | `)OFF` | done |
 | `)ORIGIN` `)DIGITS` `)WIDTH` | done; `)WIDTH` accepts 30 to 254 where the manual's table says 30 to 130. Deliberate: a 360 printed on a terminal 130 columns wide at most, and a window today is wider. The lower bound and the `WAS n` reply are the manual's |
 | `)CLEAR` | done |
-| `)WSID` | done |
+| `)WSID` | done; a workspace name must be an APL name, which `)WSID` holds to as `)SAVE` does |
+| A workspace name is an APL name | done; it becomes a filename, so `)SAVE A/B`, `)LOAD ../X` and the `NAME:LOCK` password form are INCORRECT COMMAND. Lower case is accepted, as it is for every other name here and was not in APL\360. Library name tests, sample 65 |
 | `)SAVE` `)LOAD` `)DROP` `)LIB` `)COPY` `)PCOPY` `)CONTINUE` | done; `)DROP` replies with the moment alone, as APL\360's did |
 | `)FNS` `)VARS` `)GRPS` `)GRP` `)GROUP` `)ERASE` | done |
 | `)SI` `)SIV` | done |

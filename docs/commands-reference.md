@@ -168,6 +168,31 @@ does not echo the name. It takes no library number, because library
 library prints nothing, which is not the same as one that does not
 exist.
 
+### What a workspace may be called
+
+A workspace name is an APL name: a letter, `∆` or `⍙`, then letters,
+those two, and digits. Anything else is `INCORRECT COMMAND`, and it
+is refused before it reaches a filename:
+
+```
+      )SAVE WS:PASS
+INCORRECT COMMAND
+      )SAVE A/B
+INCORRECT COMMAND
+      )LOAD ../DONOR
+INCORRECT COMMAND
+```
+
+The rule is APL\360's own, and it is also what keeps a name from
+naming something other than a workspace. `)WSID` holds it to the
+same rule, so a workspace cannot be given a name it could not be
+saved under.
+
+Lower case is a name here, as it is everywhere else in sw-apl,
+though APL\360 had not got it. Take care on a case-insensitive
+filesystem: `ABC` and `abc` are one workspace on macOS and two on
+Linux.
+
 `workspaces.md` has the libraries, the file format, and what a
 workspace holds.
 
@@ -221,11 +246,12 @@ not know.
 | `)OPRN text` | Send one without waiting |
 | `)PORTS` | List the ports in use and who is signed on at each |
 
-The locks and keys go with them. `)SAVE WSID LOCK` stored a
+The locks and keys go with them. `)SAVE WSID:LOCK` stored a
 workspace behind a password so that someone else with access to the
-library could not read it, and `)LOAD WSID KEY` gave the password.
+library could not read it, and `)LOAD WSID:KEY` gave the password.
 sw-apl has one user and no shared library, so there is nothing to
-lock against.
+lock against, and the colon is not a name character: the form is
+refused rather than taken as part of the name.
 
 ## What sw-apl has and APL\360 did not
 

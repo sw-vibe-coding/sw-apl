@@ -105,3 +105,29 @@ fn a_name_not_yet_stored_saves_under_it() {
     assert!(reply[0].ends_with(" FRESH"), "{reply:?}");
     assert_eq!(out(&mut s, ")WSID"), vec!["FRESH"]);
 }
+
+#[test]
+fn a_name_that_is_not_a_name_is_refused_before_it_reaches_a_path() {
+    let (mut s, _g) = with_a_donor("names");
+    // Each of these worked before there was a rule. A/B made a
+    // directory; ../../ESCAPED wrote outside the library.
+    for bad in [
+        ")SAVE WS:PASS",
+        ")SAVE A/B",
+        ")SAVE ../../ESCAPED",
+        ")SAVE .HIDDEN",
+        ")SAVE 1DIGIT",
+        ")LOAD ../DONOR",
+        ")COPY A/B",
+        ")DROP ../DONOR",
+        ")WSID ../X",
+    ] {
+        assert_eq!(out(&mut s, bad), vec!["INCORRECT COMMAND"], "{bad}");
+    }
+    // The workspace was not renamed by the attempt.
+    assert_eq!(out(&mut s, ")WSID"), vec!["CLEAR WS"]);
+    // And a name that is a name still works.
+    out(&mut s, ")WSID GOOD");
+    assert_eq!(out(&mut s, ")SAVE").len(), 1);
+    assert_eq!(out(&mut s, ")LIB"), vec!["DONOR", "GOOD"]);
+}

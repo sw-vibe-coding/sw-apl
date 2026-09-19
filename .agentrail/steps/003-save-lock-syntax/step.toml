@@ -1,6 +1,6 @@
 number = 3
 slug = "save-lock-syntax"
-status = "pending"
+status = "in-progress"
 description = '''
 Phase 6 step 3 (docs/plan.md). A colon in a workspace name.
 

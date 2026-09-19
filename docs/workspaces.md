@@ -29,6 +29,12 @@ reports until you give it a name.
 
 ## Naming one
 
+A workspace name is an APL name -- a letter, `∆` or `⍙`, then
+letters, those two, and digits -- because the name becomes a
+filename and a name that is not one could name something else
+entirely. `)SAVE A/B` and `)LOAD ../OTHER` are `INCORRECT COMMAND`.
+
+
 **There is no default name.** `CLEAR WS` is not one -- it is the
 absence of one, printed where a name would go. A workspace gets its
 name from you, in one of two ways:
