@@ -1,0 +1,895 @@
+<!--
+  apl_evolution_explorer -- a third-party reference, vendored.
+
+  Source: supplied by the owner 2026-09-19 as
+  ~/Downloads/apl_evolution_explorer.html. Kept here because it is
+  what settled the cap/cup question; see the owner decision of
+  2026-09-19 in docs/plan.md.
+
+  THIS FILE IS NOT A SOURCE OF TRUTH FOR sw-apl. data/glyphs.toml
+  is, and every pair in it carries its provenance. This document is
+  someone else's summary, and it disagrees with that table in
+  places. One error was corrected on the way in; the rest are left
+  as they were found, because silently rewriting another document
+  is worse than noting where it is wrong.
+
+  CORRECTED:
+    The NAND and NOR overstrike recipes read "AND + solidus" and
+    "OR + solidus". Both are struck with the TILDE: the glyphs are
+    U+2372 APL FUNCTIONAL SYMBOL UP CARET TILDE and U+2371 DOWN
+    CARET TILDE, and data/glyphs.toml strikes them that way. Six
+    places: the two preset options, the two matrix rows, and the
+    two entries of overstrikePresets.
+
+  LEFT AS FOUND, and disagreeing with sw-apl:
+    - Domino is given as "Not supported" in APL\360 and added in
+      APLSV. sw-apl has it in APL\360, on the Dec 1970 APL\360-OS/DOS
+      manual's own words, quoted in data/glyphs.toml: "where the
+      domino is formed by typing quad, backspace, divide". The
+      disagreement is probably 1968 APL\360 against 1970 APL\360.
+    - Quad is drawn as U+25A1 WHITE SQUARE and stile as U+2223
+      DIVIDES in the recipes. sw-apl uses U+2395 and U+007C, and
+      treats U+2223 as a lookalike that earns a CHARACTER ERROR.
+    - The I-beam, delta, delta-underbar and the lamp have no rows.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APL Evolutionary Comparison Explorer (1966–1984)</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Google Fonts for Mono & Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            mono: ['Fira Code', 'monospace'],
+          },
+          colors: {
+            warmBg: '#FAF8F5',
+            cardBg: '#FFFFFF',
+            accentAmber: '#D97706',
+            accentEmerald: '#059669',
+            accentIndigo: '#4F46E5',
+            slateDark: '#1E293B',
+            slateMuted: '#64748B',
+            slateBorder: '#E2E8F0',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Chart Container Styling as per system requirements */
+    .chart-container {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      height: 300px;
+      max-height: 380px;
+    }
+    @media (min-width: 768px) {
+      .chart-container {
+        height: 350px;
+      }
+    }
+    .apl-symbol {
+      font-family: 'Fira Code', monospace;
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F1F5F9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94A3B8;
+    }
+  </style>
+</head>
+<body class="bg-warmBg text-slateDark fontFamily-sans antialiased min-h-screen flex flex-col selection:bg-accentAmber/20 selection:text-accentAmber">
+
+  <!-- Chosen Palette: Warm Neutral Ivory (#FAF8F5) with Slate, Amber, Indigo, and Emerald Accents -->
+  <!-- Application Structure Plan:
+       1. Hero Header & Overview: Brief historical backdrop and quick statistical highlights.
+       2. Terminal Simulator (2741 Overstrike Composer): An interactive tool demonstrating how APL composite glyphs were created by physical backspacing on Selectric terminals.
+       3. Main Interactive Comparison Matrix: A searchable, filterable table covering all primitives from APL\360, APLSV, and APL2, with category tags and detailed modal popups.
+       4. Visual Dialect Analytics: Responsive Chart.js visualizations tracking feature growth, primitive types, and functional capabilities over time.
+       5. Historical Deep-Dives: Tabbed thematic section focusing on Cap/Cup evolution, System Variables (Quad), and APL2 Nested Arrays.
+       This structure transforms static tabular data into an engaging multi-perspective learning platform.
+  -->
+  <!-- Visualization & Content Choices:
+       - Primitive Distribution: Doughnut Chart (Chart.js) -> Categorization of APL operations (Math, Array Handling, Operators, System).
+       - Language Evolution Timeline: Bar Chart (Chart.js) -> Quantitative growth of primitive glyphs and operators across 1966, 1973, and 1984 dialects.
+       - Terminal Overstrike Composer: Custom Vanilla JS stateful simulator using CSS & HTML blocks -> Demonstrates mechanical overstrikes without raster/SVG icons.
+       - Interactive Matrix: Dynamically rendered HTML table with search/filter JS -> Replaces massive wall of text with structured, inspectable rows.
+  -->
+  <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+  <!-- Top Navigation Header -->
+  <header class="sticky top-0 z-30 bg-warmBg/90 backdrop-blur border-b border-slateBorder px-4 lg:px-8 py-3">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3">
+      <div class="flex items-center space-x-3">
+        <span class="bg-accentAmber/10 text-accentAmber border border-accentAmber/20 font-mono font-bold px-2.5 py-1 rounded text-lg">⍴ APL</span>
+        <div>
+          <h1 class="font-bold text-lg leading-tight text-slateDark">APL Evolution Explorer</h1>
+          <p class="text-xs text-slateMuted">Comparing APL\360 (1966), APLSV (1973), and IBM APL2 (1984)</p>
+        </div>
+      </div>
+      
+      <nav class="flex items-center space-x-1 sm:space-x-4 text-xs sm:text-sm font-medium text-slateMuted">
+        <a href="#matrix" class="hover:text-accentAmber transition px-2 py-1 rounded hover:bg-slate-100">Comparison Matrix</a>
+        <a href="#overstrike" class="hover:text-accentAmber transition px-2 py-1 rounded hover:bg-slate-100">2741 Terminal Composer</a>
+        <a href="#analytics" class="hover:text-accentAmber transition px-2 py-1 rounded hover:bg-slate-100">Dialect Analytics</a>
+        <a href="#deepdives" class="hover:text-accentAmber transition px-2 py-1 rounded hover:bg-slate-100">Key Shifts</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-4 lg:px-8 py-6 space-y-10 flex-grow w-full">
+
+    <!-- Hero Introduction Banner -->
+    <section class="bg-cardBg border border-slateBorder rounded-xl p-6 md:p-8 shadow-sm">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
+        <div class="lg:col-span-2 space-y-3">
+          <div class="inline-flex items-center space-x-2 bg-amber-50 text-accentAmber text-xs font-semibold px-2.5 py-1 rounded-full border border-amber-200">
+            <span>Historical Dialect Timeline</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-bold text-slateDark tracking-tight">The Mathematical Array Notation That Defined High-Density Computing</h2>
+          <p class="text-sm sm:text-base text-slateMuted leading-relaxed">
+            From Ken Iverson’s foundational notation in 1966 to IBM’s APL2 nested-array breakthrough in 1984, explore how glyphs, overstrike mechanics, system environments, and set operators evolved across three generations of IBM mainframe hardware.
+          </p>
+        </div>
+        
+        <!-- Summary Stats Cards -->
+        <div class="grid grid-cols-2 gap-3 font-mono text-center">
+          <div class="bg-warmBg p-3 rounded-lg border border-slateBorder">
+            <span class="block text-2xl font-bold text-accentAmber">48+</span>
+            <span class="text-xs text-slateMuted font-sans">Core Glyphs Tracked</span>
+          </div>
+          <div class="bg-warmBg p-3 rounded-lg border border-slateBorder">
+            <span class="block text-2xl font-bold text-accentIndigo">3</span>
+            <span class="text-xs text-slateMuted font-sans">IBM Dialect Milestones</span>
+          </div>
+          <div class="bg-warmBg p-3 rounded-lg border border-slateBorder">
+            <span class="block text-2xl font-bold text-accentEmerald">18</span>
+            <span class="text-xs text-slateMuted font-sans">Overstrike Glyphs</span>
+          </div>
+          <div class="bg-warmBg p-3 rounded-lg border border-slateBorder">
+            <span class="block text-2xl font-bold text-slateDark">18 Yrs</span>
+            <span class="text-xs text-slateMuted font-sans">Evolutionary Span</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 1: INTERACTIVE OVERSTRIKE COMPOSER SIMULATOR -->
+    <section idoverstrike id="overstrike" class="bg-cardBg border border-slateBorder rounded-xl p-6 shadow-sm space-y-4">
+      <div class="border-b border-slateBorder pb-3">
+        <h3 class="text-xl font-bold text-slateDark flex items-center gap-2">
+          <span class="font-mono text-accentAmber">⍝</span> IBM 2741 Terminal Overstrike Composer
+        </h3>
+        <p class="text-sm text-slateMuted mt-1">
+          In early APL systems, many glyphs were not single keys, but composite symbols created on an IBM Selectric typewriter terminal by typing a character, pressing <kbd class="px-1.5 py-0.5 bg-slate-100 border border-slate-300 rounded text-xs font-mono">Backspace</kbd>, and typing a second character.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
+        <!-- Interactive Controls -->
+        <div class="space-y-4 lg:col-span-1">
+          <div>
+            <label for="preset-select" class="block text-xs font-semibold text-slateMuted uppercase tracking-wider mb-1">Select Preset Overstrike Recipe</label>
+            <select id="preset-select" class="w-full bg-warmBg border border-slateBorder rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accentAmber">
+              <option value="">-- Choose a Glyph Recipe --</option>
+              <option value="lamp">⍝ Lamp / Comment (○ + ∩)</option>
+              <option value="domino">⌹ Domino / Matrix Divide (□ + ÷)</option>
+              <option value="log">⍟ Logarithm (* + ○)</option>
+              <option value="execute">⍎ Execute / Quad Jot (□ + ∘)</option>
+              <option value="format">⍕ Format / Quad Del (□ + ∇)</option>
+              <option value="circle_stile">⌽ Circle Stile / Reverse (○ + ∣)</option>
+              <option value="circle_bar">⊖ Circle Bar / First Axis Rev (○ + -)</option>
+              <option value="grade_up">⍋ Grade Up (∆ + ∣)</option>
+              <option value="grade_down">⍒ Grade Down (∇ + ∣)</option>
+              <option value="nand">⍲ NAND (∧ + ~)</option>
+              <option value="nor">⍱ NOR (∨ + ~)</option>
+              <option value="underscored_a"><u>A</u> Underscored Alpha (A + _)</option>
+            </select>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-slateMuted uppercase tracking-wider mb-1">First Key (A)</label>
+              <input type="text" id="char1-input" maxlength="2" value="○" class="w-full font-mono text-center text-lg bg-warmBg border border-slateBorder rounded-lg py-2 focus:outline-none focus:ring-2 focus:ring-accentAmber">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slateMuted uppercase tracking-wider mb-1">Second Key (B)</label>
+              <input type="text" id="char2-input" maxlength="2" value="∩" class="w-full font-mono text-center text-lg bg-warmBg border border-slateBorder rounded-lg py-2 focus:outline-none focus:ring-2 focus:ring-accentAmber">
+            </div>
+          </div>
+
+          <div class="text-xs text-slateMuted bg-slate-50 p-2.5 rounded border border-slate-200">
+            <strong>Terminal Wire Protocol:</strong> The 2741 terminal sent three raw byte events to the mainframe: <code class="font-mono text-slateDark bg-white px-1 border rounded">Char_A → Backspace (0x08) → Char_B</code>. Order was interchangeable.
+          </div>
+        </div>
+
+        <!-- Terminal Output Screen -->
+        <div class="lg:col-span-2 bg-slateDark text-emerald-400 font-mono p-6 rounded-xl shadow-inner border border-slate-700 flex flex-col justify-between min-h-[220px]">
+          <div class="flex justify-between items-center text-xs text-slate-400 border-b border-slate-700 pb-2 mb-4">
+            <span>IBM 2741 TERMINAL SIMULATION [APL\360 CONSOLE]</span>
+            <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> ONLINE</span>
+          </div>
+
+          <div class="flex flex-col md:flex-row items-center justify-around gap-4 my-2">
+            <!-- Step Breakdown -->
+            <div class="text-center">
+              <span class="text-xs text-slate-400 block mb-1">Stroke 1</span>
+              <div id="sim-char1" class="text-4xl bg-slate-800 border border-slate-600 rounded px-4 py-2 text-white">○</div>
+            </div>
+
+            <div class="text-xs text-amber-400 font-bold uppercase tracking-widest flex flex-col items-center">
+              <span>+ Backspace +</span>
+              <span class="text-lg">⟵</span>
+            </div>
+
+            <div class="text-center">
+              <span class="text-xs text-slate-400 block mb-1">Stroke 2</span>
+              <div id="sim-char2" class="text-4xl bg-slate-800 border border-slate-600 rounded px-4 py-2 text-white">∩</div>
+            </div>
+
+            <div class="text-2xl text-slate-500 font-bold">=</div>
+
+            <div class="text-center">
+              <span class="text-xs text-emerald-400 font-semibold block mb-1">Composite Result</span>
+              <div id="sim-result" class="text-5xl font-bold bg-emerald-950 border border-emerald-500 text-emerald-300 rounded px-5 py-2 shadow-lg shadow-emerald-900/40">⍝</div>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-800 text-xs text-slate-300 flex justify-between items-center">
+            <span id="sim-description">Result: Lamp / Comment Symbol (APL\360 reserved syntax)</span>
+            <span class="text-slate-500">APLSV System Ready</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: COMPARISON MATRIX TABLE -->
+    <section id="matrix" class="bg-cardBg border border-slateBorder rounded-xl p-6 shadow-sm space-y-4">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slateBorder pb-4">
+        <div>
+          <h3 class="text-xl font-bold text-slateDark flex items-center gap-2">
+            <span class="font-mono text-accentIndigo">⌷</span> APL Glyph Evolution Matrix
+          </h3>
+          <p class="text-sm text-slateMuted mt-0.5">
+            Filter, search, and inspect the operational shifts across APL\360, APLSV, and IBM APL2.
+          </p>
+        </div>
+
+        <!-- Filters & Search -->
+        <div class="flex flex-wrap items-center gap-2">
+          <div class="relative">
+            <input type="text" id="search-input" placeholder="Search glyph, name, function..." class="bg-warmBg border border-slateBorder rounded-lg pl-8 pr-3 py-1.5 text-sm w-48 sm:w-64 focus:outline-none focus:ring-2 focus:ring-accentIndigo">
+            <span class="absolute left-2.5 top-2 text-slateMuted text-xs font-mono">🔍</span>
+          </div>
+
+          <select id="dialect-filter" class="bg-warmBg border border-slateBorder rounded-lg px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-accentIndigo">
+            <option value="all">All Dialect Changes</option>
+            <option value="360">Present in APL\360 (1966)</option>
+            <option value="sv">Introduced in APLSV (1973)</option>
+            <option value="apl2">Introduced in APL2 (1984)</option>
+          </select>
+
+          <select id="category-filter" class="bg-warmBg border border-slateBorder rounded-lg px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-accentIndigo">
+            <option value="all">All Categories</option>
+            <option value="scalar">Scalar / Arithmetic</option>
+            <option value="array">Array Manipulation</option>
+            <option value="set">Set & Logic</option>
+            <option value="system">System Variables / Quad</option>
+            <option value="operator">Operators & Higher Order</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Active Filter Tags Display -->
+      <div class="flex items-center justify-between text-xs text-slateMuted px-1">
+        <span id="result-count">Showing 48 glyphs</span>
+        <button id="reset-filters" class="text-accentIndigo hover:underline hidden">Reset Filters</button>
+      </div>
+
+      <!-- Scrollable Table -->
+      <div class="overflow-x-auto rounded-lg border border-slateBorder">
+        <table class="w-full text-left text-sm border-collapse">
+          <thead>
+            <tr class="bg-slate-100/80 text-slateDark border-b border-slateBorder text-xs uppercase font-semibold">
+              <th class="py-3 px-4 w-16 text-center">Glyph</th>
+              <th class="py-3 px-4 w-40">Name / Overstrike</th>
+              <th class="py-3 px-4 min-w-[200px]">APL\360 (1966)</th>
+              <th class="py-3 px-4 min-w-[200px]">APLSV / 51xx (1973)</th>
+              <th class="py-3 px-4 min-w-[220px]">IBM APL2 (1984)</th>
+              <th class="py-3 px-4 w-12 text-center">Info</th>
+            </tr>
+          </thead>
+          <tbody id="matrix-tbody" class="divide-y divide-slateBorder bg-white font-sans">
+            <!-- Table rows populated dynamically via JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION 3: VISUAL DIALECT ANALYTICS (CHART.JS) -->
+    <section id="analytics" class="bg-cardBg border border-slateBorder rounded-xl p-6 shadow-sm space-y-6">
+      <div class="border-b border-slateBorder pb-3">
+        <h3 class="text-xl font-bold text-slateDark flex items-center gap-2">
+          <span class="font-mono text-accentEmerald">⍍</span> Dialect Evolution Analytics
+        </h3>
+        <p class="text-sm text-slateMuted mt-0.5">
+          Introductory Overview: This section presents quantitative trends mapping the functional expansion of APL over 18 years. Observe how APL transitions from a focused array-calculation notation into a fully-featured nested environment with high-order operators.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+        <!-- Chart 1: Primitive Count Evolution -->
+        <div class="bg-warmBg p-4 rounded-xl border border-slateBorder flex flex-col items-center">
+          <h4 class="text-sm font-bold text-slateDark mb-1 text-center">Cumulative Primitive & System Capabilities</h4>
+          <p class="text-xs text-slateMuted mb-4 text-center">Growth of primitives, system functions, and operators across major IBM releases</p>
+          
+          <div class="chart-container">
+            <canvas id="chart-growth"></canvas>
+          </div>
+          <p class="text-xs text-slateMuted mt-3 text-center italic">
+            APLSV introduced I/O and System Control; APL2 expanded domain to Nested Arrays & Dual Operators.
+          </p>
+        </div>
+
+        <!-- Chart 2: Primitive Types Breakdown -->
+        <div class="bg-warmBg p-4 rounded-xl border border-slateBorder flex flex-col items-center">
+          <h4 class="text-sm font-bold text-slateDark mb-1 text-center">Functional Categorization Spectrum</h4>
+          <p class="text-xs text-slateMuted mb-4 text-center">Distribution of primitive glyphs by operational class across the language</p>
+          
+          <div class="chart-container">
+            <canvas id="chart-categories"></canvas>
+          </div>
+          <p class="text-xs text-slateMuted mt-3 text-center italic">
+            Array structural operations and scalar mathematical functions form the backbone of APL.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: HISTORICAL DEEP-DIVES & KEY SHIFTS -->
+    <section id="deepdives" class="bg-cardBg border border-slateBorder rounded-xl p-6 shadow-sm space-y-6">
+      <div class="border-b border-slateBorder pb-3">
+        <h3 class="text-xl font-bold text-slateDark flex items-center gap-2">
+          <span class="font-mono text-accentAmber">⍞</span> Deep-Dive Architectural Transitions
+        </h3>
+        <p class="text-sm text-slateMuted mt-0.5">
+          Introductory Overview: Below are three foundational language shifts that defined APL's maturity from early mainframe terminals to complex nested data modeling.
+        </p>
+      </div>
+
+      <!-- Tab Buttons -->
+      <div class="flex flex-wrap border-b border-slateBorder gap-2" id="deepdive-tabs">
+        <button data-tab="capcup" class="tab-btn border-b-2 border-accentAmber text-accentAmber font-bold px-4 py-2 text-sm">Cap (∩) & Cup (∪) Evolution</button>
+        <button data-tab="quads" class="tab-btn border-b-2 border-transparent text-slateMuted hover:text-slateDark font-bold px-4 py-2 text-sm">System Quad (⎕) & Shared Variables</button>
+        <button data-tab="nested" class="tab-btn border-b-2 border-transparent text-slateMuted hover:text-slateDark font-bold px-4 py-2 text-sm">APL2 Nested Arrays & Shoes (⊂ ⊃)</button>
+      </div>
+
+      <!-- Tab Content Cards -->
+      <div id="deepdive-content">
+        <!-- Content 1: Cap & Cup -->
+        <div id="tab-capcup" class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-warmBg p-4 rounded-lg border border-slateBorder">
+              <span class="text-xs font-bold text-slateMuted uppercase block mb-1">APL\360 (1966)</span>
+              <h5 class="text-base font-bold text-slateDark mb-2">Reserved Overstrike Component</h5>
+              <p class="text-xs text-slateMuted leading-relaxed">
+                Cap (<code class="font-mono text-slateDark">∩</code>) and Cup (<code class="font-mono text-slateDark">∪</code>) were included on the IBM 2741 terminal typing element, but were <strong>not active primitive functions</strong>. Cap was overstruck with <code class="font-mono">∘</code> to form the Comment lamp symbol (<code class="font-mono">⍝</code>).
+              </p>
+            </div>
+
+            <div class="bg-warmBg p-4 rounded-lg border border-slateBorder">
+              <span class="text-xs font-bold text-slateMuted uppercase block mb-1">APLSV / IBM 51xx (1973/75)</span>
+              <h5 class="text-base font-bold text-slateDark mb-2">Reserved Keyboard Character</h5>
+              <p class="text-xs text-slateMuted leading-relaxed">
+                Retained on typing elements for backward workspace compatibility, but minimum (<code class="font-mono">⌊</code>) and maximum (<code class="font-mono">⌈</code>) continued handling rounding and bounds logic.
+              </p>
+            </div>
+
+            <div class="bg-amber-50/60 p-4 rounded-lg border border-amber-200">
+              <span class="text-xs font-bold text-accentAmber uppercase block mb-1">IBM APL2 (1984)</span>
+              <h5 class="text-base font-bold text-slateDark mb-2">Activated Set Operations</h5>
+              <p class="text-xs text-slateMuted leading-relaxed">
+                Cap and Cup were officially activated as primitives!
+                <br>• <code class="font-mono font-bold">A ∩ B</code>: Dyadic <strong>Intersection</strong>.
+                <br>• <code class="font-mono font-bold">∪ B</code>: Monadic <strong>Unique</strong> (removes duplicates).
+                <br>• <code class="font-mono font-bold">A ∪ B</code>: Dyadic <strong>Union</strong>.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Content 2: Quads -->
+        <div id="tab-quads" class="tab-pane hidden space-y-4">
+          <div class="bg-warmBg p-5 rounded-lg border border-slateBorder space-y-3">
+            <h4 class="font-bold text-slateDark text-lg">From Pure Math to OS Operating Environment</h4>
+            <p class="text-sm text-slateMuted leading-relaxed">
+              In APL\360, Quad (<code class="font-mono text-slateDark">⎕</code>) was strictly evaluated for numeric input/output. APLSV introduced <strong>System Variables and System Functions</strong> prefixed with Quad, allowing programmers to inspect and modify system state directly:
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 font-mono text-xs">
+              <div class="bg-white p-2.5 rounded border border-slate200">
+                <span class="text-accentIndigo font-bold block">⎕IO</span> Index Origin (0 or 1 base indexing)
+              </div>
+              <div class="bg-white p-2.5 rounded border border-slate200">
+                <span class="text-accentIndigo font-bold block">⎕RL</span> Random Link (Random number seed generator)
+              </div>
+              <div class="bg-white p-2.5 rounded border border-slate200">
+                <span class="text-accentIndigo font-bold block">⎕LX</span> Latent Expression (Auto-executes on load)
+              </div>
+              <div class="bg-white p-2.5 rounded border border-slate200">
+                <span class="text-accentIndigo font-bold block">⌹ Domino</span> Matrix Inversion & Solve
+              </div>
+              <div class="bg-white p-2.5 rounded border border-slate200">
+                <span class="text-accentIndigo font-bold block">⍎ Execute</span> Dynamic Expression String Parsing
+              </div>
+              <div class="bg-white p-2.5 rounded border border-slate200">
+                <span class="text-accentIndigo font-bold block">⍕ Format</span> Array-to-Character Formatting
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Content 3: Nested Arrays -->
+        <div id="tab-nested" class="tab-pane hidden space-y-4">
+          <div class="bg-warmBg p-5 rounded-lg border border-slateBorder space-y-3">
+            <h4 class="font-bold text-slateDark text-lg">The Shoe Operators & Generalized Array Structures</h4>
+            <p class="text-sm text-slateMuted leading-relaxed">
+              Prior to APL2 (1984), all APL arrays were rectangular and "flat" (scalars, vectors, matrices of homogeneous numbers or characters). APL2 introduced <strong>Nested Arrays</strong>—arrays that can contain other arrays as individual elements—unlocked by the Shoe primitives:
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+              <div class="bg-white p-3 rounded border border-slate200">
+                <span class="font-mono text-base font-bold text-accentAmber block">⊂ Enclose</span>
+                Packs an array into a single scalar item (Left Shoe).
+              </div>
+              <div class="bg-white p-3 rounded border border-slate200">
+                <span class="font-mono text-base font-bold text-accentAmber block">⊃ Disclose</span>
+                Unpacks a nested array or selects items (Right Shoe).
+              </div>
+              <div class="bg-white p-3 rounded border border-slate200">
+                <span class="font-mono text-base font-bold text-accentAmber block">¨ Each</span>
+                Higher-order operator applying a function inside each nested cell.
+              </div>
+              <div class="bg-white p-3 rounded border border-slate200">
+                <span class="font-mono text-base font-bold text-accentAmber block">⍥ Over / Dual</span>
+                Applies transformation function before dyadic operation.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal Dialog for Glyph Details -->
+  <div id="glyph-modal" class="fixed inset-0 z-50 bg-slateDark/50 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-xl max-w-lg w-full border border-slateBorder shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-150">
+      <div class="bg-slate-900 text-white p-4 flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+          <span id="modal-glyph" class="font-mono text-3xl font-bold text-accentAmber bg-slate-800 px-3 py-1 rounded"></span>
+          <div>
+            <h4 id="modal-title" class="font-bold text-base leading-tight">Glyph Name</h4>
+            <span id="modal-overstrike" class="text-xs text-slate-400 font-mono">Overstrike Recipe</span>
+          </div>
+        </div>
+        <button id="modal-close" class="text-slate-400 hover:text-white text-2xl font-bold px-2">&times;</button>
+      </div>
+
+      <div class="p-5 space-y-4 text-xs text-slateDark">
+        <div>
+          <span class="font-semibold text-slateMuted uppercase block mb-1">Category</span>
+          <span id="modal-category" class="inline-block bg-slate-100 px-2.5 py-1 rounded border border-slate-200 font-medium"></span>
+        </div>
+
+        <div class="space-y-2 border-t border-slateBorder pt-3">
+          <div>
+            <span class="font-bold text-slateMuted block">APL\360 (1966):</span>
+            <p id="modal-360" class="text-slate-700 font-mono bg-warmBg p-2 rounded border border-slate-200 mt-0.5"></p>
+          </div>
+          <div>
+            <span class="font-bold text-slateMuted block">APLSV / IBM 51xx (1973):</span>
+            <p id="modal-sv" class="text-slate-700 font-mono bg-warmBg p-2 rounded border border-slate-200 mt-0.5"></p>
+          </div>
+          <div>
+            <span class="font-bold text-accentIndigo block">IBM APL2 (1984):</span>
+            <p id="modal-apl2" class="text-slate-800 font-mono bg-indigo-50/50 p-2 rounded border border-indigo-100 mt-0.5"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-slate-50 px-5 py-3 border-t border-slateBorder text-right">
+        <button id="modal-close-btn" class="bg-slateDark text-white text-xs px-4 py-2 rounded font-medium hover:bg-slate-800 transition">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-cardBg border-t border-slateBorder mt-12 py-6 text-center text-xs text-slateMuted">
+    <div class="max-w-7xl mx-auto px-4 space-y-1">
+      <p>APL Evolutionary Comparison Guide • Compiled from IBM Historical References (1966–1984)</p>
+      <p class="font-mono text-[11px]">APL\360 → APLSV → IBM 5100/5110/5120 → IBM APL2</p>
+    </div>
+  </footer>
+
+  <!-- JavaScript Application Logic -->
+  <script>
+    // --- DATA SOURCE: APL GLYPH COMPARISON DATABASE ---
+    const glyphData = [
+      { glyph: '+', name: 'Plus', overstrike: 'Direct Key', category: 'scalar', apl360: 'Mon: Identity | Dya: Addition', aplsv: 'Unchanged', apl2: 'Unchanged', status: '360' },
+      { glyph: '-', name: 'Minus', overstrike: 'Direct Key', category: 'scalar', apl360: 'Mon: Negation | Dya: Subtraction', aplsv: 'Unchanged', apl2: 'Unchanged', status: '360' },
+      { glyph: '×', name: 'Times', overstrike: 'Direct Key', category: 'scalar', apl360: 'Mon: Direction / Signum | Dya: Multiplication', aplsv: 'Unchanged', apl2: 'Unchanged', status: '360' },
+      { glyph: '÷', name: 'Divide', overstrike: 'Direct Key', category: 'scalar', apl360: 'Mon: Reciprocal (1/B) | Dya: Division', aplsv: 'Unchanged', apl2: 'Unchanged', status: '360' },
+      { glyph: '*', name: 'Power', overstrike: 'Direct Key', category: 'scalar', apl360: 'Mon: Exponential (e^B) | Dya: Power (A^B)', aplsv: 'Unchanged', apl2: 'Unchanged', status: '360' },
+      { glyph: '⍟', name: 'Logarithm', overstrike: '* + ○', category: 'scalar', apl360: 'Mon: Natural Log (ln B) | Dya: Log Base A', aplsv: 'Unchanged', apl2: 'Unchanged', status: '360' },
+      { glyph: '⌈', name: 'Ceiling / Max', overstrike: 'Direct Key', category: 'scalar', apl360: 'Mon: Ceiling | Dya: Maximum', aplsv: 'Unchanged', apl2: 'Unchanged', status: '360' },
+      { glyph: '⌊', name: 'Floor / Min', overstrike: 'Direct Key', category: 'scalar', apl360: 'Mon: Floor | Dya: Minimum', aplsv: 'Unchanged', apl2: 'Unchanged', status: '360' },
+      { glyph: '∩', name: 'Cap', overstrike: '2741 Element (Overstrike)', category: 'set', apl360: 'Reserved character; used in ⍝ overstrike', aplsv: 'Reserved character on 51xx element', apl2: 'Dya: Intersection (common elements)', status: 'apl2' },
+      { glyph: '∪', name: 'Cup', overstrike: '2741 Element (Overstrike)', category: 'set', apl360: 'Reserved character; no primitive function', aplsv: 'Reserved character on 51xx element', apl2: 'Mon: Unique | Dya: Union', status: 'apl2' },
+      { glyph: '∣', name: 'Stile / Modulo', overstrike: 'Direct Key', category: 'scalar', apl360: 'Mon: Absolute Value | Dya: Modulo/Residue', aplsv: 'Unchanged', apl2: 'Unchanged', status: '360' },
+      { glyph: '!', name: 'Factorial', overstrike: 'Direct Key', category: 'scalar', apl360: 'Mon: Factorial (B!) | Dya: Combinations', aplsv: 'Unchanged', apl2: 'Unchanged', status: '360' },
+      { glyph: '?', name: 'Roll / Deal', overstrike: 'Direct Key', category: 'array', apl360: 'Mon: Roll (Random 1..B) | Dya: Deal', aplsv: 'Unchanged', apl2: 'Unchanged', status: '360' },
+      { glyph: '○', name: 'Circle / Pi', overstrike: 'Direct Key', category: 'scalar', apl360: 'Mon: Pi times (π×B) | Dya: Trig functions', aplsv: 'Unchanged', apl2: 'Unchanged', status: '360' },
+      { glyph: '~', name: 'Tilde / Not', overstrike: 'Direct Key', category: 'set', apl360: 'Mon: Logical NOT | Dya: Invalid', aplsv: 'Unchanged', apl2: 'Dya: Without / Set Difference', status: '360' },
+      { glyph: '∧', name: 'Up Caret / And', overstrike: 'Direct Key', category: 'set', apl360: 'Dya: Logical AND', aplsv: 'Unchanged', apl2: 'Mon: Lamination / LCM', status: '360' },
+      { glyph: '∨', name: 'Down Caret / Or', overstrike: 'Direct Key', category: 'set', apl360: 'Dya: Logical OR', aplsv: 'Unchanged', apl2: 'Mon: Greatest Common Divisor', status: '360' },
+      { glyph: '⍲', name: 'Nand', overstrike: '∧ + ~', category: 'set', apl360: 'Dya: Logical NAND', aplsv: 'Unchanged', apl2: 'Unchanged', status: '360' },
+      { glyph: '⍱', name: 'Nor', overstrike: '∨ + ~', category: 'set', apl360: 'Dya: Logical NOR', aplsv: 'Unchanged', apl2: 'Unchanged', status: '360' },
+      { glyph: '⍳', name: 'Iota', overstrike: 'Direct Key', category: 'array', apl360: 'Mon: Index Generator (1..B) | Dya: Index Of', aplsv: 'Unchanged', apl2: 'Unchanged', status: '360' },
+      { glyph: '⍴', name: 'Rho', overstrike: 'Direct Key', category: 'array', apl360: 'Mon: Shape / Dimension | Dya: Reshape', aplsv: 'Unchanged', apl2: 'Unchanged', status: '360' },
+      { glyph: '⌽', name: 'Circle Stile', overstrike: '○ + ∣', category: 'array', apl360: 'Mon: Reverse Last Axis | Dya: Rotate', aplsv: 'Unchanged', apl2: 'Unchanged', status: '360' },
+      { glyph: '⊖', name: 'Circle Bar', overstrike: '○ + -', category: 'array', apl360: 'Mon: Reverse First Axis | Dya: Rotate First', aplsv: 'Unchanged', apl2: 'Unchanged', status: '360' },
+      { glyph: '⍉', name: 'Transpose', overstrike: '○ + \\', category: 'array', apl360: 'Mon: Transpose Matrix | Dya: Dyadic Transpose', aplsv: 'Mon: Reverses all coordinates', apl2: 'Unchanged', status: '360' },
+      { glyph: '↑', name: 'Up Arrow', overstrike: 'Direct Key', category: 'array', apl360: 'Dya: Take', aplsv: 'Unchanged', apl2: 'Mon: Mix / Disclose', status: '360' },
+      { glyph: '↓', name: 'Down Arrow', overstrike: 'Direct Key', category: 'array', apl360: 'Dya: Drop', aplsv: 'Unchanged', apl2: 'Mon: Split / Enclose', status: '360' },
+      { glyph: '⊂', name: 'Left Shoe', overstrike: 'Direct Key', category: 'array', apl360: 'Not supported', aplsv: 'Not supported', apl2: 'Mon: Enclose (Nested Array) | Dya: Partition', status: 'apl2' },
+      { glyph: '⊃', name: 'Right Shoe', overstrike: 'Direct Key', category: 'array', apl360: 'Not supported', aplsv: 'Not supported', apl2: 'Mon: Disclose | Dya: Pick', status: 'apl2' },
+      { glyph: '⊆', name: 'Subset', overstrike: '⊂ + _', category: 'array', apl360: 'Not supported', aplsv: 'Not supported', apl2: 'Dya: Partitioned Enclose', status: 'apl2' },
+      { glyph: '⌷', name: 'Squish / Squad', overstrike: '□ + =', category: 'array', apl360: 'Not supported', aplsv: 'Not supported', apl2: 'Dya: Indexing / Materialize', status: 'apl2' },
+      { glyph: '∈', name: 'Epsilon', overstrike: 'Direct Key', category: 'set', apl360: 'Dya: Membership / Element of', aplsv: 'Unchanged', apl2: 'Mon: Ravel / Enlist', status: '360' },
+      { glyph: '⍷', name: 'Epsilon Underbar', overstrike: '∈ + _', category: 'array', apl360: 'Not supported', aplsv: 'Not supported', apl2: 'Dya: Find / Subarray Search', status: 'apl2' },
+      { glyph: '⍋', name: 'Grade Up', overstrike: '∆ + ∣', category: 'array', apl360: 'Mon: Grade Up (Sort indices ascending)', aplsv: 'Unchanged', apl2: 'Dya: Grade Up with Collating Seq', status: '360' },
+      { glyph: '⍒', name: 'Grade Down', overstrike: '∇ + ∣', category: 'array', apl360: 'Mon: Grade Down (Sort indices descending)', aplsv: 'Unchanged', apl2: 'Dya: Grade Down with Collating Seq', status: '360' },
+      { glyph: '⍞', name: 'Quad Quote', overstrike: '□ + \'', category: 'system', apl360: 'System: Character I/O', aplsv: 'Unchanged', apl2: 'Unchanged', status: '360' },
+      { glyph: '⎕', name: 'Quad', overstrike: 'Direct Key', category: 'system', apl360: 'System: Numeric I/O', aplsv: 'Added: System Variables (⎕IO, ⎕LX)', apl2: 'Added: Native Object Functions', status: 'sv' },
+      { glyph: '⌹', name: 'Domino / Quad Divide', overstrike: '□ + ÷', category: 'system', apl360: 'Not supported', aplsv: 'Added: Mon: Matrix Inverse | Dya: Matrix Divide', apl2: 'Unchanged', status: 'sv' },
+      { glyph: '⍎', name: 'Execute / Quad Jot', overstrike: '□ + ∘', category: 'system', apl360: 'Not supported', aplsv: 'Added: Mon: Dynamic String Evaluation', apl2: 'Unchanged', status: 'sv' },
+      { glyph: '⍕', name: 'Format / Quad Del', overstrike: '□ + ∇', category: 'system', apl360: 'Not supported', aplsv: 'Added: Mon: Array to Char | Dya: Format Width', apl2: 'Unchanged', status: 'sv' },
+      { glyph: '/', name: 'Slash', overstrike: 'Direct Key', category: 'operator', apl360: 'Operator: Compress / Reduce', aplsv: 'Unchanged', apl2: 'Dyadic Operator: Replicate', status: '360' },
+      { glyph: '\\', name: 'Backslash', overstrike: 'Direct Key', category: 'operator', apl360: 'Operator: Expand / Scan', aplsv: 'Unchanged', apl2: 'Unchanged', status: '360' },
+      { glyph: '⌿', name: 'Slash Bar', overstrike: '/ + -', category: 'operator', apl360: 'Operator: First Axis Compress / Reduce', aplsv: 'Unchanged', apl2: 'Unchanged', status: '360' },
+      { glyph: '⍀', name: 'Backslash Bar', overstrike: '\\ + -', category: 'operator', apl360: 'Operator: First Axis Expand / Scan', aplsv: 'Unchanged', apl2: 'Unchanged', status: '360' },
+      { glyph: '¨', name: 'Each / Diaeresis', overstrike: 'Direct Key', category: 'operator', apl360: 'Not supported', aplsv: 'Not supported', apl2: 'Added: Operator for nested array items', status: 'apl2' },
+      { glyph: '⍥', name: 'Over / Dual', overstrike: '∘ + ~', category: 'operator', apl360: 'Not supported', aplsv: 'Not supported', apl2: 'Added: Composition Operator', status: 'apl2' },
+      { glyph: '⍣', name: 'Power Operator', overstrike: '* + ⍺', category: 'operator', apl360: 'Not supported', aplsv: 'Not supported', apl2: 'Added: Function Iteration / Fixed Point', status: 'apl2' }
+    ];
+
+    // Overstrike Preset Database
+    const overstrikePresets = {
+      lamp: { c1: '○', c2: '∩', res: '⍝', desc: 'Lamp / Comment symbol (APL\\360)' },
+      domino: { c1: '□', c2: '÷', res: '⌹', desc: 'Domino / Matrix Divide (Introduced in APLSV)' },
+      log: { c1: '*', c2: '○', res: '⍟', desc: 'Logarithm Primitive' },
+      execute: { c1: '□', c2: '∘', res: '⍎', desc: 'Execute / Dynamic Expression (APLSV)' },
+      format: { c1: '□', c2: '∇', res: '⍕', desc: 'Format / Character Conversion (APLSV)' },
+      circle_stile: { c1: '○', c2: '∣', res: '⌽', desc: 'Circle Stile / Reverse Last Axis' },
+      circle_bar: { c1: '○', c2: '-', res: '⊖', desc: 'Circle Bar / Reverse First Axis' },
+      grade_up: { c1: '∆', c2: '∣', res: '⍋', desc: 'Grade Up / Sort Indices Ascending' },
+      grade_down: { c1: '∇', c2: '∣', res: '⍒', desc: 'Grade Down / Sort Indices Descending' },
+      nand: { c1: '∧', c2: '~', res: '⍲', desc: 'NAND Logical Operator' },
+      nor: { c1: '∨', c2: '~', res: '⍱', desc: 'NOR Logical Operator' },
+      underscored_a: { c1: 'A', c2: '_', res: '<u>A</u>', desc: 'Underscored Alpha (Valid Identifier Name)' }
+    };
+
+    // --- DOM INITIALIZATION ---
+    document.addEventListener('DOMContentLoaded', () => {
+      renderMatrixTable(glyphData);
+      initOverstrikeSimulator();
+      initAnalyticsCharts();
+      initDeepDiveTabs();
+      initModal();
+      
+      // Event Listeners for Filters
+      document.getElementById('search-input').addEventListener('input', filterData);
+      document.getElementById('dialect-filter').addEventListener('change', filterData);
+      document.getElementById('category-filter').addEventListener('change', filterData);
+      document.getElementById('reset-filters').addEventListener('click', resetFilters);
+    });
+
+    // RENDER COMPARISON MATRIX
+    function renderMatrixTable(data) {
+      const tbody = document.getElementById('matrix-tbody');
+      const resultCount = document.getElementById('result-count');
+      tbody.innerHTML = '';
+
+      resultCount.textContent = `Showing ${data.length} glyph${data.length !== 1 ? 's' : ''}`;
+
+      if (data.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" class="py-8 text-center text-slateMuted bg-slate-50">
+              No matching APL glyphs found. Try adjusting your search or dialect filter.
+            </td>
+          </tr>`;
+        return;
+      }
+
+      data.forEach((item, index) => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-amber-50/40 transition-colors group cursor-pointer';
+        
+        let statusBadge = '';
+        if (item.status === '360') statusBadge = '<span class="text-[10px] bg-slate-100 text-slateDark px-1.5 py-0.5 rounded border border-slate-300">360</span>';
+        else if (item.status === 'sv') statusBadge = '<span class="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded border border-emerald-300">APLSV</span>';
+        else if (item.status === 'apl2') statusBadge = '<span class="text-[10px] bg-indigo-100 text-indigo-800 px-1.5 py-0.5 rounded border border-indigo-300 font-semibold">APL2</span>';
+
+        tr.innerHTML = `
+          <td class="py-2.5 px-4 text-center font-mono text-xl font-bold text-accentAmber bg-warmBg/50 group-hover:bg-amber-100/50 rounded-l">
+            ${item.glyph}
+          </td>
+          <td class="py-2.5 px-4 font-medium text-slateDark">
+            <div class="flex flex-col">
+              <span class="font-bold flex items-center gap-1.5">${item.name} ${statusBadge}</span>
+              <span class="text-xs text-slateMuted font-mono">${item.overstrike}</span>
+            </div>
+          </td>
+          <td class="py-2.5 px-4 text-xs font-mono text-slate-600">${item.apl360}</td>
+          <td class="py-2.5 px-4 text-xs font-mono ${item.aplsv.includes('Added') ? 'text-emerald-700 font-semibold bg-emerald-50/40' : 'text-slate-600'}">${item.aplsv}</td>
+          <td class="py-2.5 px-4 text-xs font-mono ${item.apl2.includes('Added') || item.apl2.includes('Mon:') || item.apl2.includes('Dya:') ? 'text-indigo-900 font-semibold bg-indigo-50/30' : 'text-slate-600'}">${item.apl2}</td>
+          <td class="py-2.5 px-4 text-center text-slateMuted group-hover:text-accentIndigo">
+            <button class="text-xs bg-slate-100 hover:bg-accentIndigo hover:text-white px-2 py-1 rounded transition">⌕</button>
+          </td>
+        `;
+
+        tr.addEventListener('click', () => openModal(item));
+        tbody.appendChild(tr);
+      });
+    }
+
+    // FILTER LOGIC
+    function filterData() {
+      const searchVal = document.getElementById('search-input').value.toLowerCase().trim();
+      const dialectVal = document.getElementById('dialect-filter').value;
+      const categoryVal = document.getElementById('category-filter').value;
+      const resetBtn = document.getElementById('reset-filters');
+
+      if (searchVal || dialectVal !== 'all' || categoryVal !== 'all') {
+        resetBtn.classList.remove('hidden');
+      } else {
+        resetBtn.classList.add('hidden');
+      }
+
+      const filtered = glyphData.filter(item => {
+        const matchesSearch = item.glyph.toLowerCase().includes(searchVal) || 
+                              item.name.toLowerCase().includes(searchVal) ||
+                              item.overstrike.toLowerCase().includes(searchVal) ||
+                              item.apl360.toLowerCase().includes(searchVal) ||
+                              item.aplsv.toLowerCase().includes(searchVal) ||
+                              item.apl2.toLowerCase().includes(searchVal);
+
+        let matchesDialect = true;
+        if (dialectVal === '360') matchesDialect = (item.status === '360');
+        else if (dialectVal === 'sv') matchesDialect = (item.status === 'sv');
+        else if (dialectVal === 'apl2') matchesDialect = (item.status === 'apl2');
+
+        let matchesCategory = true;
+        if (categoryVal !== 'all') matchesCategory = (item.category === categoryVal);
+
+        return matchesSearch && matchesDialect && matchesCategory;
+      });
+
+      renderMatrixTable(filtered);
+    }
+
+    function resetFilters() {
+      document.getElementById('search-input').value = '';
+      document.getElementById('dialect-filter').value = 'all';
+      document.getElementById('category-filter').value = 'all';
+      filterData();
+    }
+
+    // INTERACTIVE TERMINAL SIMULATOR LOGIC
+    function initOverstrikeSimulator() {
+      const presetSelect = document.getElementById('preset-select');
+      const c1Input = document.getElementById('char1-input');
+      const c2Input = document.getElementById('char2-input');
+      const simChar1 = document.getElementById('sim-char1');
+      const simChar2 = document.getElementById('sim-char2');
+      const simResult = document.getElementById('sim-result');
+      const simDesc = document.getElementById('sim-description');
+
+      function updateSim(c1, c2, result, desc) {
+        simChar1.textContent = c1;
+        simChar2.textContent = c2;
+        simResult.innerHTML = result;
+        simDesc.textContent = `Result: ${desc}`;
+      }
+
+      presetSelect.addEventListener('change', (e) => {
+        const presetKey = e.target.value;
+        if (presetKey && overstrikePresets[presetKey]) {
+          const p = overstrikePresets[presetKey];
+          c1Input.value = p.c1;
+          c2Input.value = p.c2;
+          updateSim(p.c1, p.c2, p.res, p.desc);
+        }
+      });
+
+      const handleManualInput = () => {
+        const val1 = c1Input.value || ' ';
+        const val2 = c2Input.value || ' ';
+        
+        // Find if matches preset
+        let foundDesc = 'Custom Overstrike Pair';
+        let foundRes = val1 + val2;
+        
+        for (let key in overstrikePresets) {
+          const p = overstrikePresets[key];
+          if ((p.c1 === val1 && p.c2 === val2) || (p.c1 === val2 && p.c2 === val1)) {
+            foundRes = p.res;
+            foundDesc = p.desc;
+            break;
+          }
+        }
+        updateSim(val1, val2, foundRes, foundDesc);
+      };
+
+      c1Input.addEventListener('input', handleManualInput);
+      c2Input.addEventListener('input', handleManualInput);
+    }
+
+    // CHART.JS ANALYTICS INITIALIZATION
+    function initAnalyticsCharts() {
+      // 1. Primitive Growth Bar Chart
+      const ctxGrowth = document.getElementById('chart-growth').getContext('2d');
+      new Chart(ctxGrowth, {
+        type: 'bar',
+        data: {
+          labels: ['APL\\360 (1966)', 'APLSV (1973)', 'IBM APL2 (1984)'],
+          datasets: [
+            {
+              label: 'Core Primitives',
+              data: [32, 36, 46],
+              backgroundColor: '#D97706',
+            },
+            {
+              label: 'System Commands / Quad Variables',
+              data: [2, 12, 24],
+              backgroundColor: '#059669',
+            },
+            {
+              label: 'Operators & Higher-Order Functions',
+              data: [4, 4, 10],
+              backgroundColor: '#4F46E5',
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { font: { size: 10 } } },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return `${context.dataset.label}: ${context.raw} features`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: { stacked: true, grid: { display: false } },
+            y: { stacked: true, beginAtZero: true }
+          }
+        }
+      });
+
+      // 2. Functional Category Doughnut Chart
+      const ctxCat = document.getElementById('chart-categories').getContext('2d');
+      new Chart(ctxCat, {
+        type: 'doughnut',
+        data: {
+          labels: ['Scalar / Math', 'Array Structural', 'Set & Logic', 'System / Quad', 'Operators'],
+          datasets: [{
+            data: [14, 16, 8, 5, 5],
+            backgroundColor: [
+              '#D97706', // Amber
+              '#4F46E5', // Indigo
+              '#059669', // Emerald
+              '#64748B', // Slate
+              '#EC4899'  // Pink
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { font: { size: 10 } } }
+          }
+        }
+      });
+    }
+
+    // TAB CONTROLLER FOR DEEP DIVES
+    function initDeepDiveTabs() {
+      const buttons = document.querySelectorAll('#deepdive-tabs .tab-btn');
+      const panes = document.querySelectorAll('#deepdive-content .tab-pane, #tab-capcup');
+
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = btn.getAttribute('data-tab');
+
+          buttons.forEach(b => {
+            b.classList.remove('border-accentAmber', 'text-accentAmber');
+            b.classList.add('border-transparent', 'text-slateMuted');
+          });
+
+          btn.classList.remove('border-transparent', 'text-slateMuted');
+          btn.classList.add('border-accentAmber', 'text-accentAmber');
+
+          panes.forEach(pane => {
+            if (pane.id === `tab-${target}`) {
+              pane.classList.remove('hidden');
+            } else {
+              pane.classList.add('hidden');
+            }
+          });
+        });
+      });
+    }
+
+    // MODAL DIALOG HANDLER
+    function initModal() {
+      const modal = document.getElementById('glyph-modal');
+      const closeBtn = document.getElementById('modal-close');
+      const closeBtn2 = document.getElementById('modal-close-btn');
+
+      const hide = () => modal.classList.add('hidden');
+      closeBtn.addEventListener('click', hide);
+      closeBtn2.addEventListener('click', hide);
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) hide();
+      });
+    }
+
+    function openModal(item) {
+      document.getElementById('modal-glyph').textContent = item.glyph;
+      document.getElementById('modal-title').textContent = item.name;
+      document.getElementById('modal-overstrike').textContent = `Overstrike Recipe: ${item.overstrike}`;
+      document.getElementById('modal-category').textContent = item.category.toUpperCase();
+      document.getElementById('modal-360').textContent = item.apl360;
+      document.getElementById('modal-sv').textContent = item.aplsv;
+      document.getElementById('modal-apl2').textContent = item.apl2;
+
+      document.getElementById('glyph-modal').classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
