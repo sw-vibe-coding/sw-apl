@@ -22,6 +22,11 @@ character matrix for the names, mixed output, and the conditional
 branch idiom driving two functions. Its transcript is reproducible
 because the random link starts from a fixed value.
 
+`70-open-definition.apl` types eight system commands into an open
+function definition: none becomes a body line, most run at once, and
+the four that would store or copy a half-changed workspace are
+refused. A comment, being an APL statement, does go in.
+
 `69-no-such-function.apl` shows what a glyph used where it has no
 such form answers, and what separates that from a bad argument: a
 function APL\360 has not got is a SYNTAX ERROR, while a function it

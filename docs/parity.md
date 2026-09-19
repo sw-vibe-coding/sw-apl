@@ -180,7 +180,8 @@ the session numeric tests, and sample 67.
 | Library form `)LOAD 1 NAME`, DESCRIBE convention | done; `--library` sets the directory they are under, library 1 is `ws/lib1/`, and LIFE, RACE and EDIT each carry a DESCRIBE; library tests, sample 64 |
 | `)LOAD` prints only the SAVED line, as APL\360 did, and nothing runs on load | done | command tests, sample 61 |
 | Trouble reports: WS NOT FOUND, OBJECT NOT FOUND, IMPROPER LIBRARY REFERENCE, NOT SAVED THIS WS IS | done; INCORRECT COMMAND is kept for a command given an argument it does not take, as the manual's table has it; report tests, sample 65 |
-| WS LOCKED, NOT SAVED WS QUOTA USED UP, NOT WITH OPEN DEFINITION | todo | sw-apl has no accounts, no keys and no disk quota, so the first two cannot arise; the third is a real gap, since a `)COPY` typed in definition mode should be refused |
+| NOT WITH OPEN DEFINITION | done | done; `)SAVE`, `)COPY`, `)PCOPY` and `)CONTINUE` are refused while a definition is open, and no command is ever taken as a body line. Definition tests, sample 70 |
+| WS LOCKED, NOT SAVED WS QUOTA USED UP | todo | sw-apl has no accounts, no keys and no disk quota, so neither can arise |
 | `)COPY` and `)PCOPY` print the SAVED line, and `)PCOPY` a NOT COPIED list | done | the manual's WC3 and WC4: "SAVED, followed by the time of day and the date that the source workspace was last stored", and "NOT COPIED:, followed by the names of objects not copied". Command tests, samples 61 and 65 |
 | `)NUMBER` `)OFF HOLD` `)CONTINUE HOLD` `)MSG` `)MSGN` `)OPR` `)OPRN` `)PORTS`, and the `[LOCK]`/`[KEY]` passwords | not implemented, and not wanted; they answer INCORRECT COMMAND. They are the multi-user surface of a shared machine -- accounts at ports, an operator, other users to message, a library someone else can read -- and sw-apl has one user. `commands-reference.md` says so per command |
 

@@ -1,9 +1,27 @@
 # System Commands Reference
 
 A line beginning with `)` is a command to the session rather than
-APL to evaluate. Commands act on the workspace and the libraries;
-they are never part of a function, and one typed in definition mode
-is a body line like any other.
+APL to evaluate. Commands act on the workspace and the libraries,
+and are never part of a function: the manual says a system command
+entered during function definition "will not be accepted as a
+statement in the definition".
+
+Most run at once, even with a definition open. Four are refused,
+because each would store or copy a workspace in the middle of being
+changed:
+
+```
+      )SAVE
+NOT WITH OPEN DEFINITION
+```
+
+`)SAVE`, `)COPY`, `)PCOPY` and `)CONTINUE`. The definition stays
+open and the next line is still the statement it was going to be.
+
+`)LOAD` is not among them, which is worth knowing rather than
+guessing at: a load replaces the whole workspace, so nothing
+half-written is left to be inconsistent with it. An open definition
+belonged to the workspace being replaced and goes with it.
 
 `session.md` is the short table and the surrounding prose.
 `parity.md` says which of these is done. This is what each one does,

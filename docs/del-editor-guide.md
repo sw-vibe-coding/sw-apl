@@ -230,6 +230,26 @@ later -- the editor does not check that lines are valid APL. A
 line that will not parse fails when the function runs, not when
 you write it.
 
+## System commands while a definition is open
+
+A `)` line is never a body line. Most commands run at once, so
+`)FNS` and `)VARS` answer from inside definition mode and `)ORIGIN`
+takes effect. Four are refused -- `)SAVE`, `)COPY`, `)PCOPY` and
+`)CONTINUE` -- because each would store or copy a workspace in the
+middle of being changed:
+
+```
+[2]   )SAVE
+NOT WITH OPEN DEFINITION
+[2]   
+```
+
+The definition stays open and the prompt does not move. `)LOAD`
+replaces the workspace and takes the open definition with it.
+
+A comment is not a command: `⍝` starts an APL statement, so one
+typed here goes into the function.
+
 ## Quick reference
 
 | Typed | What it does |

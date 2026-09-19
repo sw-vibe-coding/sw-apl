@@ -66,13 +66,18 @@ impl Session {
     }
 
     /// Respond to one input line.
+    ///
+    /// A command is looked for before an open definition takes the
+    /// line, because a system command entered during a definition is
+    /// never a statement in it. `run_command` says which are refused
+    /// outright and which run at once.
     pub fn respond(&mut self, line: &str) -> Reply {
-        if self.defining.is_some() {
-            return definition_line(self, line);
-        }
         let trimmed = line.trim();
         if let Some(command) = trimmed.strip_prefix(')') {
             return run_command(self, command);
+        }
+        if self.defining.is_some() {
+            return definition_line(self, line);
         }
         if let Some(header) = trimmed.strip_prefix('∇') {
             return open_definition(self, header);

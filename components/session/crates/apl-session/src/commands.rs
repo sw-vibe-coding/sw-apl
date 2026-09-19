@@ -2,7 +2,7 @@
 //! the system commands, whose work is in `apl-commands`, and the
 //! lines that drive the del editor.
 
-use apl_commands::system_command;
+use apl_commands::{canonical, system_command};
 use apl_editor::Definition;
 use apl_eval::error_lines;
 use apl_parse::parse_header;
@@ -62,20 +62,50 @@ pub fn definition_line(session: &mut Session, line: &str) -> Reply {
     Reply::from(step.lines)
 }
 
+/// The commands an open definition prevents, which are the ones the
+/// manual's Table 2.1 gives report 6. Each would store or copy a
+/// workspace that is in the middle of being changed.
+const NOT_WITH_OPEN: [&str; 4] = ["COPY", "PCOPY", "SAVE", "CONTINUE"];
+
+/// Whether an open definition refuses this command.
+///
+/// The manual: "A system command entered during function definition
+/// will not be accepted as a statement in the definition. Some
+/// commands, such as )COPY, will be rejected with the message NOT
+/// WITH OPEN DEFINITION; most will be executed immediately." So the
+/// question is never whether to take the line as a body line -- it
+/// is not one -- but only which commands are refused.
+fn refused(command: &str) -> bool {
+    let typed = command.split_whitespace().next().unwrap_or_default();
+    let name = canonical(&typed.to_ascii_uppercase()).to_string();
+    NOT_WITH_OPEN.contains(&name.as_str())
+}
+
 /// Run one system command. `)LOAD` and `)COPY` hand back lines
 /// to run as though they had been typed, which is the only way
 /// the `)` commands and the del definitions in a workspace file
 /// take effect; what they print on the way is not shown.
+///
+/// A refused command answers with its report and not an error: so do
+/// the other trouble reports, and only an error undoes a `)LOAD`.
+///
+/// A workspace put together by running APL is all or nothing. The old
+/// one is put aside first and given back the moment a fed line
+/// reports an error, because a half-loaded workspace is worse than a
+/// refused one -- nothing says which half arrived. A definition still
+/// open is dropped with it: it belonged to the workspace being
+/// replaced, and its lines would otherwise swallow the file's. That
+/// is why `)LOAD` needs no report 6, where `)SAVE` and `)COPY` do.
 pub fn run_command(session: &mut Session, command: &str) -> Reply {
+    if session.defining.is_some() && refused(command) {
+        return Reply::from(vec!["NOT WITH OPEN DEFINITION".to_string()]);
+    }
     let answer = system_command(&mut session.ws, command);
     if answer.feed.is_empty() {
         return Reply::from(answer);
     }
-    // A workspace put together by running APL is all or nothing: the
-    // old one is put aside first, and given back the moment a fed
-    // line reports an error. A half-loaded workspace is worse than a
-    // refused one, because nothing says which half arrived.
     let was = session.ws.saved.clone();
+    session.defining = None;
     for line in &answer.feed {
         let reply = session.respond(line);
         if reply.error {
