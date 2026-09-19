@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-19
 
+- docs(plan): owner decision 2026-09-19, cap and cup are reserved characters
+- chore(agentrail): add 010-iota-one-element-vector
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 003-underscored-alphabet
 - chore(agentrail): add 008-cup-and-cap and 009-base-conversion-sample
 - feat(glyphs): the underscored alphabet A? to Z?
