@@ -12,9 +12,10 @@ not do and will not -- is not a row at all: it is under
 **Restrictions** at the foot of this file, with the decision it
 follows from.
 
-At the time of writing there is **one** `todo` row, and it names
-what is missing. Everything else here is `done`, and everything
-sw-apl will not do is a restriction with a reason.
+At the time of writing there are **no** `todo` rows: everything
+here is `done`, and everything sw-apl will not do is a restriction
+with a reason. The check, matching table rows and not this
+sentence: `grep -c '^|.*| todo |' docs/parity.md` prints 0.
 
 ## How we will know we have parity
 
@@ -50,7 +51,7 @@ and says why each is absent.
 | Quad output `⎕←` | done | session tests, sample 20 |
 | Quad input `⎕`: prompts `⎕:`, evaluates the reply in the current environment, prompts again for a reply with no value | done | eval/cli tests, sample 57 |
 | Quote-quad `⍞`: reads characters without evaluating, and on the left writes with no line ending so a prompt and its answer share a line | done | eval/cli tests, sample 57 |
-| A line `⍞←` left open carries across a statement boundary | todo | it carries inside a function, so `⍞←'P'` and `⍞←'Q'` on two lines print `PQ`; in immediate execution each statement ends the line, because `Reply` carries complete lines and an unterminated one cannot cross that boundary. The one row still open |
+| A line `⍞←` left open carries across a statement boundary | done | `Reply` says its last line is unfinished and both shells honour it: the batch runner writes it without a newline and the reader prompts with it, as a terminal's carriage would sit there. Open-line tests, `tests/scripts/open-line.apl` |
 | Character literals `'...'`, doubled quote, any Unicode inside | done | lex tests, samples 19, 20 |
 | Bracket indexing `A[I;J]`, elided axes, index arrays of any rank | done | index tests, sample 48 |
 | Indexed assignment with scalar extension | done | index tests, sample 48 |

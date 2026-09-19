@@ -62,24 +62,34 @@ pub fn definition_line(session: &mut Session, line: &str) -> Reply {
     Reply::from(step.lines)
 }
 
+/// Where an input line goes: a system command, a line of an open
+/// definition, an opening del, or a statement to evaluate.
+///
+/// A command comes first even in definition mode. The manual: "A
+/// system command entered during function definition will not be
+/// accepted as a statement in the definition. Some commands, such as
+/// )COPY, will be rejected with the message NOT WITH OPEN
+/// DEFINITION; most will be executed immediately." So the question
+/// is never whether to take the line as a body line -- it is not one
+/// -- but only which commands are refused.
+///
+/// `None` when the line is a statement, which the session evaluates.
+pub fn dispatch(session: &mut Session, line: &str) -> Option<Reply> {
+    let trimmed = line.trim();
+    if let Some(command) = trimmed.strip_prefix(')') {
+        return Some(run_command(session, command));
+    }
+    if session.defining.is_some() {
+        return Some(definition_line(session, line));
+    }
+    let header = trimmed.strip_prefix('∇')?;
+    Some(open_definition(session, header))
+}
+
 /// The commands an open definition prevents, which are the ones the
 /// manual's Table 2.1 gives report 6. Each would store or copy a
 /// workspace that is in the middle of being changed.
 const NOT_WITH_OPEN: [&str; 4] = ["COPY", "PCOPY", "SAVE", "CONTINUE"];
-
-/// Whether an open definition refuses this command.
-///
-/// The manual: "A system command entered during function definition
-/// will not be accepted as a statement in the definition. Some
-/// commands, such as )COPY, will be rejected with the message NOT
-/// WITH OPEN DEFINITION; most will be executed immediately." So the
-/// question is never whether to take the line as a body line -- it
-/// is not one -- but only which commands are refused.
-fn refused(command: &str) -> bool {
-    let typed = command.split_whitespace().next().unwrap_or_default();
-    let name = canonical(&typed.to_ascii_uppercase()).to_string();
-    NOT_WITH_OPEN.contains(&name.as_str())
-}
 
 /// Run one system command. `)LOAD` and `)COPY` hand back lines
 /// to run as though they had been typed, which is the only way
@@ -97,7 +107,9 @@ fn refused(command: &str) -> bool {
 /// replaced, and its lines would otherwise swallow the file's. That
 /// is why `)LOAD` needs no report 6, where `)SAVE` and `)COPY` do.
 pub fn run_command(session: &mut Session, command: &str) -> Reply {
-    if session.defining.is_some() && refused(command) {
+    let typed = command.split_whitespace().next().unwrap_or_default();
+    let name = canonical(&typed.to_ascii_uppercase()).to_string();
+    if session.defining.is_some() && NOT_WITH_OPEN.contains(&name.as_str()) {
         return Reply::from(vec!["NOT WITH OPEN DEFINITION".to_string()]);
     }
     let answer = system_command(&mut session.ws, command);

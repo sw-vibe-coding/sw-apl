@@ -26,14 +26,21 @@ pub struct Line {
 }
 
 /// Split a byte stream into lines (LF or CRLF), decoding each. A
-/// final newline does not start an extra empty line, and a leading
-/// `#!` line is dropped.
+/// final newline does not start an extra empty line.
+///
+/// A leading `#!` line is dropped: it belongs to the shell that ran
+/// the file, and the kernel has already acted on it. Only the first
+/// line, and only those two characters -- `#` is not in the APL\360
+/// character set, so it stays a CHARACTER ERROR everywhere else.
 #[must_use]
 pub fn lines(bytes: &[u8]) -> Vec<Line> {
-    if bytes.is_empty() {
-        return Vec::new();
+    // Only at the very start, and only the first line: a `#` after
+    // that is a CHARACTER ERROR like any other.
+    let mut bytes = bytes;
+    if bytes.starts_with(b"#!") {
+        let end = bytes.iter().position(|&b| b == b'\n');
+        bytes = end.map_or(&[][..], |at| &bytes[at + 1..]);
     }
-    let bytes = without_shebang(bytes);
     if bytes.is_empty() {
         return Vec::new();
     }
@@ -45,21 +52,6 @@ pub fn lines(bytes: &[u8]) -> Vec<Line> {
             bad_at: std::str::from_utf8(l).err().map(|e| e.valid_up_to()),
         })
         .collect()
-}
-
-/// The file with a leading `#!` line removed: that line belongs to
-/// the shell that ran the file, and the kernel has already acted on
-/// it. Only the first line, and only those two characters -- `#` is
-/// not in the APL\360 character set, so it stays a CHARACTER ERROR
-/// everywhere else.
-fn without_shebang(bytes: &[u8]) -> &[u8] {
-    if !bytes.starts_with(b"#!") {
-        return bytes;
-    }
-    match bytes.iter().position(|&b| b == b'\n') {
-        Some(at) => &bytes[at + 1..],
-        None => &[],
-    }
 }
 
 /// Run every line of `path` (or of stdin when `None`) in batch mode.
@@ -88,22 +80,44 @@ pub fn run_batch(path: Option<&Path>, echo: bool, ws: (usize, PathBuf)) -> io::R
 /// hold the borrow across the body: a statement that reads borrows
 /// the same queue.
 fn run_lines(session: &mut Session, pending: &Pending, echo: bool) {
+    let mut open = false;
     loop {
         let Some(line) = pending.borrow_mut().pop_front() else {
             break;
         };
         if echo {
-            println!("{}{}", session.prompt(), line.text);
+            // Typing continues an open line rather than starting
+            // one, so the prompt is not printed again, and pressing
+            // return is what ends it.
+            let prompt = if open { "" } else { &session.prompt() };
+            println!("{prompt}{}", line.text);
         }
         let reply = match line.bad_at {
             Some(at) => Reply::from(vec![format!("CHARACTER ERROR: invalid UTF-8 at byte {at}")]),
             None => session.respond(&line.text),
         };
-        for text in &reply.lines {
-            println!("{text}");
-        }
+        open = !show(&reply).is_empty();
         if reply.off {
             break;
         }
     }
+}
+
+/// Print a reply and hand back the line it left open, if any.
+///
+/// The last line of an open reply is written without ending it, so
+/// that what comes next carries on where `⍞←` stopped. Both shells
+/// print replies and both must honour that.
+#[must_use]
+pub fn show(reply: &Reply) -> String {
+    let (finished, carried) = reply.split();
+    for text in finished {
+        println!("{text}");
+    }
+    let Some(text) = carried else {
+        return String::new();
+    };
+    print!("{text}");
+    let _ = io::stdout().flush();
+    text.to_string()
 }

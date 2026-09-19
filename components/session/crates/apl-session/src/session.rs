@@ -2,10 +2,10 @@
 
 use apl_call::{clear, resume, suspend};
 use apl_editor::Definition;
-use apl_eval::{Console, INDENT, Output, Workspace, error_lines, eval_line, render_all, system};
+use apl_eval::{Console, INDENT, Output, Workspace, error_lines, eval_line, system};
 use apl_value::AplResult;
 
-use crate::commands::{definition_line, open_definition, run_command};
+use crate::commands::dispatch;
 use crate::reply::Reply;
 
 /// An interactive APL session.
@@ -71,28 +71,36 @@ impl Session {
     /// line, because a system command entered during a definition is
     /// never a statement in it. `run_command` says which are refused
     /// outright and which run at once.
+    ///
+    /// Anything a read showed comes first. What the statement
+    /// produced goes back into the workspace's pending output rather
+    /// than being rendered on its own, so that one flush decides
+    /// whether the last line was left open -- a statement showing
+    /// nothing must not close a line an earlier one wrote to. An
+    /// error report starts on a line of its own.
     pub fn respond(&mut self, line: &str) -> Reply {
-        let trimmed = line.trim();
-        if let Some(command) = trimmed.strip_prefix(')') {
-            return run_command(self, command);
-        }
-        if self.defining.is_some() {
-            return definition_line(self, line);
-        }
-        if let Some(header) = trimmed.strip_prefix('∇') {
-            return open_definition(self, header);
+        if let Some(reply) = dispatch(self, line) {
+            return reply;
         }
         let result = self.run(line);
-        // Anything a read showed already comes first, then whatever
-        // the statement produced after it.
         let mut lines = self.ws.console.take();
-        lines.extend(self.ws.flush().lines);
-        let mut reply = match result {
-            Ok(out) => Reply::from(render_all(&[out], self.ws.saved.print).lines),
-            Err(err) => Reply::failed(error_lines(&err, line)),
+        let failed = match result {
+            Ok(out) => {
+                self.ws.output.push(out);
+                None
+            }
+            Err(err) => Some(error_lines(&err, line)),
         };
-        lines.append(&mut reply.lines);
-        reply.lines = lines;
-        reply
+        let shown = self.ws.flush();
+        lines.extend(shown.lines);
+        let Some(report) = failed else {
+            return Reply {
+                lines,
+                open: shown.open,
+                ..Reply::default()
+            };
+        };
+        lines.extend(report);
+        Reply::failed(lines)
     }
 }

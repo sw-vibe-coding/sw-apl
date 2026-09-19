@@ -76,8 +76,8 @@ seed apl-cli-quad-from-script \
 seed apl-cli-quote-quad-line \
     "A quote-quad prompt and its answer share a line" \
     "$apl -f tests/scripts/greet.apl"
-seed apl-cli-open-line-ends \
-    "A statement ends the line quote-quad left open, unlike a function" \
+seed apl-cli-open-line-carries \
+    "A line quote-quad left open carries into the next statement" \
     "$apl -f tests/scripts/open-line.apl"
 seed apl-cli-workspace-file \
     "A saved workspace file is a program: running it rebuilds the workspace" \

@@ -16,6 +16,7 @@ use rustyline::error::ReadlineError;
 use rustyline::{DefaultEditor, Result as LineResult};
 
 use crate::host::{Editor, Terminal, catch_interrupt};
+use crate::shell::show;
 
 /// Run the interactive loop until `)OFF` or end of input. `ws` is
 /// the workspace size in bytes and the directory the libraries are
@@ -42,20 +43,24 @@ pub fn run_interactive(ws: (usize, PathBuf)) -> io::Result<()> {
 
 /// Prompt and answer until `)OFF` or end of input.
 fn prompt_loop(session: &mut Session, editor: &Editor) -> io::Result<()> {
+    // A line `⍞←` left open is where the carriage is, so it is what
+    // the reader prompts with: typing continues it, as at a terminal.
+    let mut open = String::new();
     loop {
-        let prompt = session.prompt();
-        // End of input is Ctrl-D, which signs off as `)OFF` does. It
-        // ends the loop either way: in definition mode `)OFF` is a
-        // body line, and there would be nothing left to close it.
+        let prompt = if open.is_empty() {
+            session.prompt()
+        } else {
+            std::mem::take(&mut open)
+        };
+        // End of input is Ctrl-D, which signs off as `)OFF` does, and
+        // ends the loop either way.
         let read = match read_line(&mut editor.borrow_mut(), &prompt) {
             Ok(read) => read,
             Err(err) => return Err(io::Error::other(err)),
         };
         let ending = read.is_none();
         let reply = session.respond(&read.unwrap_or_else(|| ")OFF".to_string()));
-        for text in &reply.lines {
-            println!("{text}");
-        }
+        open = show(&reply);
         if reply.off || ending {
             return Ok(());
         }

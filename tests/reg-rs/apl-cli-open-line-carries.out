@@ -1,10 +1,9 @@
       ⍞←'NAME: '
-NAME: 
-      WHO←⍞
+NAME: WHO←⍞
       MIKE
       WHO
 MIKE
       )OFF
-20.33.27 09/17/26
+19.52.42 09/18/26
 CONNECTED 0.00.00
 CPU TIME 0.00.00

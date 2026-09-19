@@ -164,6 +164,18 @@ carry someone else's console, clock or sign-on time along.
 An unnamed workspace is called `CLEAR WS`, which is what `)WSID`
 reports until it is given a name.
 
+`⍞←` writes without ending the line, so what comes next carries on
+it -- which is the whole of the prompt idiom:
+
+```
+      ⍞←'NAME: '
+NAME: WHO←⍞
+```
+
+The prompt and what you type share a line, and so do two `⍞←`
+statements in a row. Anything else -- a value, an error report, a
+command's reply -- starts a line of its own.
+
 A saved workspace does not keep a suspended function, and
 `)SYMBOLS` reports but cannot be set. Both are in `parity.md` under
 **Restrictions**, with the decision each follows from.

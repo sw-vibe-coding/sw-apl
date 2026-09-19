@@ -1,6 +1,6 @@
 number = 4
 slug = "open-output-line"
-status = "pending"
+status = "in-progress"
 description = """
 Phase 7 step 4 (docs/plan.md). An open output line does not survive
 a stateme..."""
