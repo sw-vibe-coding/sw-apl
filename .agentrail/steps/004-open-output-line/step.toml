@@ -1,11 +1,12 @@
 number = 4
 slug = "open-output-line"
-status = "in-progress"
+status = "completed"
 description = """
 Phase 7 step 4 (docs/plan.md). An open output line does not survive
 a stateme..."""
 role = "production"
 context_files = []
 created_at = "2026-09-18T19:34:57"
+completed_at = "2026-09-18T19:54:14"
 task_type = "rust-interpreter"
-commits = []
+commits = ["93b64a6126623cf7d64e8640b2bfa2b97b04d894"]
