@@ -18,9 +18,12 @@ logo="images/sw-apl-logo.png"
 tmp="$(mktemp -d)"
 trap 'rm -rf "$tmp"' EXIT
 
-# The mark is `∩⊃⌊` turned 33 degrees: three APL glyphs that, turned,
+# The mark is `⍝⊃⌊` turned 33 degrees: three APL glyphs that, turned,
 # read as the letters APL. The owner found it; it says what this is
 # in a way a single glyph cannot, and it survives a 16-pixel tab.
+#
+# The lamp and not cap, which was the first try: turned, cap has no
+# counter and reads as a lower-case n, so the mark said nPL.
 #
 # Bright green on nothing, so it reads on a light tab bar and a dark
 # one alike -- a favicon with a background is a square of somebody
@@ -30,7 +33,7 @@ trap 'rm -rf "$tmp"' EXIT
 # rotation applied, so the mark is trimmed to its ink and re-centred
 # here: an icon is mostly seen small, and the dead corner was most of
 # the tile.
-mark="∩⊃⌊"
+mark="⍝⊃⌊"
 green="#22c55e"
 
 favicon -T -f "$green" -t "$mark" -R 33 --font-size 52 -s 256 \

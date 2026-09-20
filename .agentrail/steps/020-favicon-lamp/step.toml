@@ -1,0 +1,11 @@
+number = 20
+slug = "favicon-lamp"
+status = "in-progress"
+description = """
+Owner correction 2026-09-20: the mark is `⍝⊃⌊`, not `∩⊃⌊`.
+
+Turne..."""
+role = "production"
+context_files = []
+created_at = "2026-09-20T15:51:29"
+commits = []
