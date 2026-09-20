@@ -1,0 +1,16 @@
+[package]
+name = "apl-typing"
+description = "2741 keystrokes: reading one line at the keyboard"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-keyboard = { path = "../apl-keyboard" }
+apl-paper = { path = "../apl-paper" }
+crossterm = "0.29"
+
+[lints]
+workspace = true

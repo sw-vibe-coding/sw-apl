@@ -331,6 +331,32 @@ and correct the quoted heredoc delimiters in the obscured-load and workspace-fil
 regression commands. These three existing fixtures fail on Linux independently
 of the prototype; their baselines remain unchanged in this slice.
 
+Owner direction 2026-09-19, promotion: the prototype is the
+implementation. `experimental/terminal2741` moves into the component
+layout under the ordinary gates -- `components/web` for the protocol,
+the service and the two listeners, `components/term` for the keyboard,
+the paper and `aplterm` -- and `experimental/` goes away. The JSON
+frame the prototype settled on stays the protocol: it is `Reply` on
+the wire, a browser parses it without help, and a client already
+speaks it.
+
+Owner question 2026-09-19, answered: the browser terminal can be Yew
+and WASM, and should be. The blocking read is what made an in-browser
+interpreter impossible, and it now lives in the service; what is left
+in the browser is a terminal. `apl-keyboard` is the whole overstrike
+state machine and depends on nothing but `apl-strike` and a keymap, so
+it compiles to `wasm32-unknown-unknown` as it stands and the browser
+reuses it rather than repeating it in JavaScript. What the browser
+replaces is `apl-paper` and `apl-typing`, the crossterm halves: DOM
+rendering, and `keydown` instead of terminal events. It can key the
+2741 layout off the physical key, which a terminal cannot -- a
+terminal receives characters and so cannot tell Caps Lock from Shift.
+The costs are a wasm toolchain in `just demo`, the chords a browser
+reserves, and IME and touch keyboards, which is why the keyless path
+stays. That is step 3, not step 2; the plain HTML page the service
+ships is the fallback with no build step, and the thing that proves
+the protocol.
+
 Owner direction 2026-09-19, replacing the in-browser interpreter
 that was planned here. The browser runs a 2741 terminal; the
 interpreter runs in a local server it talks to.

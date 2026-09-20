@@ -174,8 +174,32 @@ documents below show real APL glyphs:
 - [Entering glyphs](docs/glyph-entry.md) -- Espanso and Emacs
   keymaps, OS layouts, and every 2741 overstrike with the two
   characters that form it
+- [The 2741 and the service](docs/terminal.md) -- the keyboard, the
+  overstrikes, the protocol, and what a session is
 - [Testing](docs/testing.md), [Architecture](docs/architecture.md),
   [Design decisions](docs/design.md), [Requirements](docs/prd.md)
+
+## A 2741 and a service
+
+sw-apl also runs the way APL\360 ran: a local service holding one
+session per connection, and terminals dialling into it. Everything
+runs on your own machine -- the service binds to the loopback
+address, and nothing typed at a terminal is sent anywhere.
+
+```bash
+just demo
+```
+
+builds the binaries, starts `sw-apl-server`, and opens a terminal in
+your browser at `http://127.0.0.1:8360/`. For a 2741 in a terminal
+window instead, with the keyboard and overstrikes, run
+`target/release/aplterm`. `nc 127.0.0.1 2741` also works, and is the
+emergency client: the protocol is one line each way.
+
+The service is what makes quad, quote-quad and the del editor read
+from a browser at all -- a statement that reads stops until a line
+arrives, and a thread on a socket may stop. See
+[the 2741 and the service](docs/terminal.md).
 
 ## Building
 
@@ -189,7 +213,8 @@ cd components/cli
 cargo test
 cargo build
 
-# Release binary at target/release/sw-apl (from the repo root)
+# Release binaries at target/release (from the repo root):
+# sw-apl, sw-apl-server, aplterm
 just release
 
 # Run
@@ -207,7 +232,8 @@ gates across every workspace. Regression transcripts use
 ## Repository layout
 
 ```
-components/   one cargo workspace per component (cli today)
+components/   one cargo workspace per component: the interpreter,
+              the CLI, the service (web), and the 2741 (term)
 docs/         plan, requirements, architecture, language, session
 samples/      conformance corpus: glyph-form APL programs
 scripts/      change log, sample runner, reg-rs wrappers

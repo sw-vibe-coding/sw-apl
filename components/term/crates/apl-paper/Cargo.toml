@@ -1,0 +1,19 @@
+[package]
+name = "apl-paper"
+description = "2741 paper: what the carriage has put on the page"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-keyboard = { path = "../apl-keyboard" }
+crossterm = "0.29"
+unicode-width = "0.2"
+
+[dev-dependencies]
+apl-keyboard = { path = "../apl-keyboard" }
+
+[lints]
+workspace = true

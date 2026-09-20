@@ -62,7 +62,8 @@ and says why each is absent.
 | Dynamic scoping, recursion | done | eval tests, samples 53, 54. A recursion with no branch to stop it reaches DEPTH ERROR |
 | State indicator: suspension, pendent callers, resumption with `→`n, clearing with a bare `→` | done | call/session tests, sample 56 |
 | Six-space prompt, batch echo | done | cli tests |
-| Standalone `aplterm` prototype: 2741 key translation, immediate overstrikes, circled display of underscored letters, and Unicode lines over TCP | done (experimental) | `experimental/terminal2741`: keyboard, PTY, and socket tests cover punctuation, arithmetic keys, quad input, definitions, and disconnects. Remote interruption and browser integration are not implemented. |
+| `aplterm`, a 2741 terminal: key translation, overstrikes formed at the keyboard, circled display of underscored letters, composed Unicode lines on the wire | done | `components/term`: keyboard tests, display tests, and a PTY test that drives the real binary and checks what it shows and what it sends |
+| A local service: one session per connection, each with its own workspace, over a socket for `aplterm` and over a WebSocket for a browser. `⎕`, `⍞` and the del editor read from the terminal mid-statement | done | `components/web`: link, socket and browser tests, the last driving the real binary over HTTP and a WebSocket. Remote interruption (ATTN while a statement runs) is not implemented |
 | Executable `.apl` file: a leading `#!` line is the shell's and is not read as APL | done | reg-rs CLI tests, `tests/scripts/` |
 | `)OFF` sign-off: time and date, connect time, processor time | done | session tests, sample 59 |
 | Line editing with history (up arrow), Ctrl-C cancels a line, Ctrl-D signs off | done | manual (rustyline); tape |

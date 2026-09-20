@@ -1,0 +1,15 @@
+[package]
+name = "apl-keyboard"
+description = "2741 keyboard: key translation, overstrike composition, the line being typed"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-strike = { path = "../../../lex/crates/apl-strike" }
+serde_json = "1"
+
+[lints]
+workspace = true

@@ -1,0 +1,26 @@
+The keyboard:
+  Unshifted letters echo uppercase; turn Caps Lock off.
+  Ctrl-] holds the cell before the carriage for an overstrike, so a
+  glyph is typed base, Ctrl-], overstrike: Shift-O Ctrl-] Shift-P is
+  the logarithm, and A Ctrl-] Shift-F is underscored A. A pair that
+  forms no glyph rings the bell and keeps the base.
+  Backspace deletes a whole glyph; arrows, Home, End and Delete edit;
+  Up and Down recall.
+  Shift-L is quad, Shift-K is quote, Shift-apostrophe is ) and F4
+  types ) as well.
+  Esc quotes the next key. F2 takes keys as the Unicode they already
+  are. Paste is literal, one line at a time.
+  Ctrl-C and Ctrl-U clear the line. Ctrl-D on an empty line hangs up.
+
+The full key table is docs/terminal.md, and keymap.json holds the map
+itself: copy it, edit it to match your keycaps, and pass --keymap.
+
+AI CODING AGENT INSTRUCTIONS:
+  1. aplterm needs a terminal to type at; it refuses a pipe. To
+     drive it without one, open a pty (see the terminal tests in
+     components/term/crates/aplterm/tests).
+  2. To exercise the service without a terminal at all, speak the
+     protocol directly: nc 127.0.0.1 2741, then type APL lines.
+     Replies are one JSON object per line.
+  3. The keymap is data, not code: copy keymap.json, edit it, pass
+     --keymap. No rebuild.

@@ -58,9 +58,31 @@ gates:
 # The full pre-commit gate, in order: format, test, lint, standards.
 precommit: fmt test clippy fmt-check gates
 
-# Build the release CLI binary into target/release/sw-apl.
+# Build the release binaries: sw-apl, sw-apl-server, aplterm.
 release:
     cd components/cli && cargo build --release -p sw-apl
+    cd components/web && cargo build --release -p sw-apl-server
+    cd components/term && cargo build --release -p aplterm
+
+# Everything runs on this machine: the interpreter is a process here
+# and the page talks to it over the loopback address. Nothing typed
+# is sent anywhere. Library 0 is target/demo/work, so a demo session
+# saves into scratch rather than into the checkout's work/; ws/ is
+# linked through so )LOAD 1 LIFE finds the shipped workspaces.
+#
+# Start the local service and open the terminal in a browser.
+demo: release
+    #!/usr/bin/env bash
+    set -euo pipefail
+    mkdir -p target/demo/work
+    ln -sfn "$PWD/ws" target/demo/ws
+    url=http://127.0.0.1:8360/
+    ( sleep 1
+      if command -v open >/dev/null; then open "$url"
+      elif command -v xdg-open >/dev/null; then xdg-open "$url"
+      else echo "open $url"; fi ) &
+    echo "A 2741 in a terminal instead: target/release/aplterm"
+    exec target/release/sw-apl-server --library target/demo
 
 # Run the conformance corpus against the release binary.
 conformance:

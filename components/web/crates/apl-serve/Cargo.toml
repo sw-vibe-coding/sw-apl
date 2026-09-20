@@ -1,0 +1,18 @@
+[package]
+name = "apl-serve"
+description = "sw-apl service: one session per connection, over any link"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-wire = { path = "../apl-wire" }
+apl-session = { path = "../../../session/crates/apl-session" }
+
+[dev-dependencies]
+apl-wire = { path = "../apl-wire" }
+
+[lints]
+workspace = true

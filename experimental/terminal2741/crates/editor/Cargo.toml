@@ -1,9 +1,0 @@
-[package]
-name = "aplterm-editor"
-version = "0.1.0"
-edition = "2024"
-
-[dependencies]
-aplterm-keyboard = { path = "../keyboard" }
-crossterm = "0.29"
-unicode-width = "0.2"

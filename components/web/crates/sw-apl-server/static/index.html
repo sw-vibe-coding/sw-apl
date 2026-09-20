@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>sw-apl</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root { color-scheme: light dark; --paper: #fbf7ef; --ink: #2b2118; --rule: #d8cdb8; }
+  @media (prefers-color-scheme: dark) {
+    :root { --paper: #17130e; --ink: #e8dfd0; --rule: #3a3229; }
+  }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font: 15px/1.45 "APL385 Unicode", "DejaVu Sans Mono", ui-monospace, monospace;
+    display: flex; flex-direction: column; height: 100vh;
+  }
+  header, footer { padding: .6rem 1rem; border-color: var(--rule); border-style: solid; }
+  header { border-width: 0 0 1px; }
+  footer { border-width: 1px 0 0; opacity: .7; font-size: 13px; }
+  #paper { flex: 1; overflow-y: auto; margin: 0; padding: 1rem; white-space: pre-wrap; }
+  #line { display: flex; padding: 0 1rem 1rem; }
+  #prompt { white-space: pre; }
+  input {
+    flex: 1; border: 0; background: transparent; color: inherit;
+    font: inherit; outline: none; caret-color: currentColor;
+  }
+</style>
+<header>sw-apl &mdash; an APL\360 session on this machine</header>
+<pre id="paper"></pre>
+<div id="line"><span id="prompt"></span><input id="typed" autofocus autocomplete="off"
+  autocapitalize="off" spellcheck="false" aria-label="APL input line"></div>
+<footer>
+  The interpreter runs in a local <code>sw-apl-server</code> process on this
+  computer. Nothing typed here leaves it. Type APL\360 glyphs directly; the
+  keyboard and overstrikes come later.
+</footer>
+<script>
+  const paper = document.getElementById("paper");
+  const prompt = document.getElementById("prompt");
+  const typed = document.getElementById("typed");
+
+  // What the carriage has put on the page. Written as one string so
+  // that a line the terminal has not finished can be carried on.
+  let page = "";
+  const put = (text) => {
+    page += text;
+    paper.textContent = page;
+    paper.scrollTop = paper.scrollHeight;
+  };
+
+  const socket = new WebSocket(`ws://${location.host}/`);
+  socket.onmessage = (event) => {
+    const frame = JSON.parse(event.data);
+    for (const line of frame.lines) put(line + "\n");
+    if (frame.off || frame.prompt === null) return stop("Session ended.");
+    prompt.textContent = frame.prompt;
+    typed.disabled = false;
+    typed.focus();
+  };
+  socket.onclose = () => stop("The service closed the line.");
+  socket.onerror = () => stop("The line to the service failed.");
+
+  const stop = (why) => {
+    typed.disabled = true;
+    prompt.textContent = "";
+    put(why + "\n");
+  };
+
+  typed.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" || typed.disabled) return;
+    // The paper keeps what was typed, exactly as a printing terminal
+    // would: the prompt, then the line, then the answer under it.
+    put(prompt.textContent + typed.value + "\n");
+    socket.send(JSON.stringify(typed.value));
+    typed.value = "";
+    typed.disabled = true;
+    prompt.textContent = "";
+  });
+</script>

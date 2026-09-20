@@ -1,0 +1,38 @@
+THE TWO LISTENERS:
+  --listen carries the line protocol for aplterm and for nc.
+  --http hands a browser the terminal page and then speaks the same
+  protocol over a WebSocket. Both bind to the loopback address by
+  default: a service holding )SAVE and )LOAD writes files for
+  whoever can reach it, and APL\360's own answer to that, sign-on
+  numbers and passwords, is not implemented here. Give an address
+  of your own to open it to a network, and know what you are doing.
+
+THE PROTOCOL:
+  One line each way. The service sends a JSON object per line with
+  lines, prompt and off; the terminal sends the typed line as a JSON
+  string, or as a bare line, which is what makes nc usable. Glyphs
+  arrive already composed: overstrikes are formed at the terminal,
+  because only the terminal sees the keystrokes.
+
+SESSIONS:
+  One session per connection, each with its own workspace, each on
+  its own thread. The thread blocks while a statement waits for a
+  line, which is how quad, quote-quad and the del editor work. A
+  connection that drops releases its session and its workspace; it
+  is not a sign-off, and )CONTINUE is what saves before ending.
+  --sessions bounds how many may be held at once.
+
+LIBRARIES:
+  --library is the directory holding work/ (library 0) and ws/ (the
+  shipped libraries), as it is for sw-apl. Every session saves and
+  loads under it, so point it somewhere of its own rather than at a
+  checkout you care about.
+
+AI CODING AGENT INSTRUCTIONS:
+  1. Start it on ports the kernel picks and read them back:
+       sw-apl-server --listen 127.0.0.1:0 --http 127.0.0.1:0
+     Both addresses are printed on stdout, one per line.
+  2. Drive a session with no terminal: nc 127.0.0.1 2741, then type
+     APL lines. End with )OFF.
+  3. Never point --library at the repository while testing; it
+     writes into work/. Use a scratch directory.

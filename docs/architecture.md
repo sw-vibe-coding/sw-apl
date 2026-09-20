@@ -33,7 +33,19 @@ sw-apl/
                apl-session                 system commands, del editor,
                                            workspace files, libraries
     cli/       sw-apl                      terminal REPL and batch
-    web/       (later) Yew/WASM demo
+    web/       apl-wire                    the terminal protocol: a
+                                           frame out, a typed line in
+               apl-serve                   one session per connection,
+                                           held over a link
+               sw-apl-server               the two listeners, and the
+                                           terminal page
+    term/      apl-keyboard                2741 keys, overstrikes, the
+                                           line being typed
+               apl-paper                   what the carriage put on
+                                           the page
+               apl-typing                  reading one line at the
+                                           keyboard
+               aplterm                     the 2741 itself
   docs/        planning and reference docs
   samples/     conformance corpus (.apl transcripts)
   tests/reg-rs reg-rs regression baselines
@@ -54,7 +66,8 @@ value -> prims (scalar, mixed, ops)
 prims + console -> workspace -> call, quad
 parse + prims + call + quad -> eval
 eval -> session -> cli
-eval -> session -> web
+eval -> session -> web (wire, serve, server)
+lex (strike) -> term (keyboard, paper, typing, aplterm) -> wire
 ```
 
 - `apl-value` has no dependencies inside the repo.
@@ -173,8 +186,36 @@ approaches the gate, the next step splits it (for example
 adding to it. `lib.rs` files are facades that re-export; logic
 lives in named modules (`parse.rs`, `format.rs`, `run.rs`).
 
-## Web build (later)
+## The service, and the terminals on it
 
-`apl-session` must compile for `wasm32-unknown-unknown`: no
-threads, no blocking stdin, file access behind a trait so the
-browser can back workspaces with local storage.
+The interpreter does not run in a browser. It runs in
+`sw-apl-server`, a local process holding one `Session` per
+connection on a thread of its own, and terminals dial in. This is
+the 1968 arrangement, and it is what makes the session work at all:
+`Console::read` is synchronous, so a statement that reads stops
+until a line arrives. A thread waiting on a socket may stop. A
+browser holding the interpreter could not, and `⎕`, `⍞` and every
+line of the del editor would have gone with it.
+
+The seam is `apl_wire::Link`: send a frame, block for a line. Two
+transports implement it and the service cannot tell them apart --
+a raw socket for `aplterm` and for `nc`, and a WebSocket for a
+browser, which cannot open a raw socket. A frame is `Reply` as JSON:
+the transcript lines, the prompt to type the next line at, and
+whether the session has ended. A line `⍞←` left open is carried as
+the prompt, because the carriage stopped there.
+
+Composition belongs to the terminal. Only the terminal sees the
+keystrokes, so `⍟` is formed there from `○` and `*` and the service
+is sent the glyph. That is why `apl-keyboard` holds the whole
+overstrike state machine and depends on nothing but `apl-strike`:
+one table, one state machine, and every terminal reads it. It
+compiles to `wasm32-unknown-unknown` unchanged, which is what a
+browser terminal will use in place of `apl-paper` and `apl-typing`,
+the crossterm halves.
+
+What bounds the service is a fixed number of sessions, refused at
+the door rather than queued. Both listeners bind to the loopback
+address unless told otherwise: a service holding `)SAVE` and
+`)LOAD` writes files for whoever can reach it, and APL\360's answer
+to that -- sign-on numbers and passwords -- is out of scope.
