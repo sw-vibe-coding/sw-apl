@@ -1,0 +1,1 @@
+Removed the 'Nothing typed here leaves your browser' line and its style rule from the footer bar. The sentence remains in Help, which is asked for. The bar is now the Keyboard and Help controls and nothing else.

@@ -1,6 +1,6 @@
 number = 13
 slug = "footer-disclaimer"
-status = "in-progress"
+status = "completed"
 description = """
 Owner direction 2026-09-20, sixth: the footer disclaimer goes.
 
@@ -8,4 +8,5 @@ Owner direction 2026-09-20, sixth: the footer disclaimer goes.
 role = "production"
 context_files = []
 created_at = "2026-09-20T14:11:28"
-commits = []
+completed_at = "2026-09-20T14:12:24"
+commits = ["bb4344079f2c1d90ca6fabc0cb8b504d7d40c186"]
