@@ -599,6 +599,53 @@ to open it to the LAN, and the docs saying which.
    and the expansions already in `docs/espanso/` and
    `docs/emacs/`; a first screen worth arriving at.
 
+## Owner direction (2026-09-20, third): a demo that fits a phone
+
+The owner opened the demo on a simulated phone in Chrome and found
+the page unusable there. The footer prose -- what the interpreter is,
+where a saved workspace goes, the whole of how the keyboard works --
+runs to a dozen lines and takes more of a phone screen than the
+transcript does. The paper is squeezed into the top third and the
+line being typed is pushed off the bottom.
+
+The text is not wrong, it is in the wrong place. A first-time reader
+needs it; a reader who has come back needs the transcript. So it
+belongs behind something asked for -- a help dialog, or links that
+open one -- and the page itself should be paper, prompt, and as
+little else as will do. What stays visible is what a reader cannot
+work without and cannot get back: that nothing leaves the browser is
+a claim worth keeping in sight, and the licence and the keyboard
+picture's attribution have to be reachable wherever they are put.
+
+The owner also wants the demo installable as a PWA, and points at
+`sw-fun/suduko` for how: a `manifest.json` with names, colours,
+scope and icons, the `apple-mobile-web-app-*` meta tags, a viewport
+with `viewport-fit=cover`, and a service worker that caches the
+shell so the page opens offline.
+
+That last part needs care rather than copying. sw-apl's service
+worker exists for one reason -- adding the two headers
+`SharedArrayBuffer` needs -- and deliberately caches nothing. The
+bundle-version step built the page's freshness on exactly that: only
+`index.html` is fetched fresh and everything below is stamped from
+`version.txt`. A cache-first service worker dropped on top of that
+would re-create the bug that step fixed, with a stale shell that no
+reload evicts. Caching and the version stamp have to be designed
+together, and `just check-pages` is where the answer is proved: its
+three cases already fail when the page, the worker and the bundle
+drift apart.
+
+Offline is also a claim about the interpreter, not just the shell.
+The session is WebAssembly and local storage; there is nothing to
+reach for. An installed sw-apl should run with the network off, and
+that is worth saying on the page rather than leaving a reader to
+discover it.
+
+Order: the layout first, because it is what makes the page usable at
+all and it does not depend on anything; then the manifest and icons;
+then offline caching, last, because it is the part that can break
+what is already working.
+
 ## Owner decisions (2026-09-16)
 
 Answers to the questions raised at bootstrap, now policy:
