@@ -1,6 +1,6 @@
 number = 22
 slug = "new-logo"
-status = "in-progress"
+status = "completed"
 description = """
 Owner direction 2026-09-20: the updated logo, with transparent
 corners.
@@ -9,4 +9,5 @@ corners.
 role = "production"
 context_files = []
 created_at = "2026-09-20T16:01:21"
-commits = []
+completed_at = "2026-09-20T16:02:59"
+commits = ["43fb5c86dd35dff9f694e5d3a8a6c5174fbec166"]
