@@ -1,6 +1,6 @@
 number = 16
 slug = "colophon"
-status = "in-progress"
+status = "completed"
 description = """
 Owner direction 2026-09-20, eighth: a colophon below the fold.
 
@@ -8,4 +8,5 @@ The demo says..."""
 role = "production"
 context_files = []
 created_at = "2026-09-20T15:12:55"
-commits = []
+completed_at = "2026-09-20T15:15:58"
+commits = ["d63080be667bc95dbee950568f5fe770376e54fe"]
