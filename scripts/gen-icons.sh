@@ -66,8 +66,12 @@ magick "$tmp/icon.png" -define icon:auto-resize=16,32 pages/favicon.ico
 # paper under it rather than nothing.
 centre 180 "$paper" pages/apple-touch-icon.png
 
-# The install icons, from the logo. Transparent, because the logo is
-# a round badge and a launcher puts its own background behind it.
+# The install icons, from the logo. It is a round badge on nothing --
+# the source is a JPEG with white corners, masked to its circle in
+# `docs/` terms rather than flood-filled, because a JPEG's edge
+# pixels are part white and flood-filling leaves a fringe that is
+# invisible on white and obvious on anything else. Transparent,
+# because a launcher puts its own background behind it.
 magick "$logo" -resize 192x192 -background none -gravity center -extent 192x192 \
     pages/icon-192.png
 magick "$logo" -resize 512x512 -background none -gravity center -extent 512x512 \
