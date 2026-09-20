@@ -44,3 +44,17 @@ commit, push, report.
 2. terminal-2741 -- the paper and the overstrikes.
 3. glyph-keyboard -- the keyboard, the expansions, and a first
    screen worth arriving at.
+
+## Isolated Linux CLI prototype
+
+Before the broader server/browser steps, implement and publish the owner's
+standalone Rust `aplterm` and `aplterm-server` prototype under
+`experimental/terminal2741`. The client composes overstrikes and translates the
+custom keyboard into Unicode lines, with circled capitals used only for display.
+The TCP server reuses the interpreter without changing the existing CLI.
+Keyboard, raw-terminal PTY, and blocking-input socket tests validate this slice.
+The owner has tested it and requested a feature-branch commit and push.
+
+Linux follow-up: repair the three pre-existing regression fixture failures
+(bare-shebang, obscured-load, workspace-file). Keep their baselines untouched in
+the prototype commit and validate portability in its own step.

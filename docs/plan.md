@@ -319,6 +319,18 @@ restrictions to be written down rather than closed.
 
 ### Phase 8: the 2741 and a local service (saga `terminal`)
 
+Owner direction 2026-09-19, Linux prototype: first build and test an
+isolated Rust CLI terminal and TCP server in `experimental/terminal2741`.
+The `aplterm` client translates physical keyboard input and composes
+overstrikes into Unicode before sending complete lines. Keep the existing
+interpreter and CLI unchanged. Publish the tested prototype on a feature
+branch before integrating the broader server and browser work below.
+
+Linux validation follow-up: make the legacy bare-shebang regression portable
+and correct the quoted heredoc delimiters in the obscured-load and workspace-file
+regression commands. These three existing fixtures fail on Linux independently
+of the prototype; their baselines remain unchanged in this slice.
+
 Owner direction 2026-09-19, replacing the in-browser interpreter
 that was planned here. The browser runs a 2741 terminal; the
 interpreter runs in a local server it talks to.

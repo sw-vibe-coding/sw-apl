@@ -1,10 +1,10 @@
 number = 6
-slug = "glyph-keyboard"
+slug = "terminal-2741"
 status = "pending"
 description = """
-Phase 8 step 3 (docs/plan.md). The keyboard, and arriving.
+Phase 8 step 2 (docs/plan.md). The paper and the overstrikes.
 
-Typing APL is the..."""
+Make the clien..."""
 role = "production"
 context_files = []
 created_at = "2026-09-19T07:15:06"
