@@ -6,6 +6,13 @@
   sample transcripts, and the CLI itself -- arguments, the version
   and help blocks, batch and stdin modes, exit codes, executable
   files. It is a CLI regression tool, not only a transcript tool.
+- **`just check-pages`** drives the browser demo in a real browser:
+  a first visit, a visit holding the worker from an older bundle,
+  and a worker that never answers. It needs a Chrome and
+  `playwright-core`, and is deliberately outside `just test` so a
+  checkout without a browser can still run the suite. It skips with
+  a note rather than failing when `playwright-core` is absent.
+
 - **Rust tests** cover the libraries: unit tests inside a crate,
   and the integration tests in each crate's `tests/`, which drive
   a crate's public API rather than a process.

@@ -7,6 +7,11 @@
 # trunk dev build output for the future web app.
 /components/web/dist/
 
+# The version the browser demo's files are fetched at, written by
+# `just pages`. Build output: it is a digest of the build, so it
+# cannot be written before there is one.
+/pages/version.txt
+
 # The browser demo's WebAssembly, built into pages/ by `just pages`.
 # The page, the worker and the service worker beside it are source and
 # are tracked; only the build output is not. Publishing to GitHub Pages

@@ -6,7 +6,15 @@
 // overstrike table and the cells a line is made of. The page sends it
 // keystrokes and draws what it hands back, and never learns what an
 // overstrike is.
-import init, { Board } from "./wasm/apl_wasm.js";
+// The version this page was fetched at, passed on to everything it
+// fetches. index.html reads it from version.txt, which the build
+// writes and the page asks for uncached, so the page, the worker and
+// the WebAssembly are always one build and never three.
+const VERSION = new URL(import.meta.url).searchParams.get("v") ?? "";
+const stamped = (path) =>
+  `${path}${VERSION && `?v=${encodeURIComponent(VERSION)}`}`;
+
+const { default: init, Board } = await import(stamped("./wasm/apl_wasm.js"));
 
 // Must agree with channel.rs, which is where these are documented.
 const SIZE = 64 * 1024;
@@ -129,6 +137,11 @@ async function isolate() {
   return false;
 }
 
+// How long to wait for the session's first frame before saying it is
+// not coming. Starting it is a worker, a fetch and a WebAssembly
+// instantiation, which is slow on a cold cache and not this slow.
+const PATIENCE = 10000;
+
 // Start the session and wire the keyboard to it.
 async function run() {
   if (!(await isolate())) {
@@ -148,14 +161,31 @@ async function run() {
   const channel = new SharedArrayBuffer(SIZE);
   const header = new Int32Array(channel, 0, 2);
   const body = new Uint8Array(channel, BODY);
-  const worker = new Worker("worker.js", { type: "module" });
+  const worker = new Worker(stamped("worker.js"), { type: "module" });
+  // A worker that dies before it says anything leaves a prompt that
+  // ignores typing, and a reader cannot tell that from a slow load
+  // and has no reason to suspect their own cache. So say it.
+  const watchdog = setTimeout(
+    () =>
+      stop(
+        "THE SESSION DID NOT START. THIS BROWSER MAY BE HOLDING AN\n" +
+          "OLDER COPY OF THE PAGE OR OF THE INTERPRETER.\n" +
+          "CLEAR SITE DATA FOR THIS SITE AND RELOAD -- a plain reload\n" +
+          "will not replace a worker that is already cached.",
+      ),
+    PATIENCE,
+  );
   // A frame is a string; library 0 is an object. That is the whole
   // of the difference, because only one of the two is the protocol.
-  worker.onmessage = (event) =>
-    typeof event.data === "string"
-      ? show(JSON.parse(event.data))
-      : keep(event.data.work);
-  worker.onerror = () => stop("The session could not be started.");
+  worker.onmessage = (event) => {
+    clearTimeout(watchdog);
+    if (typeof event.data === "string") return show(JSON.parse(event.data));
+    return keep(event.data.work);
+  };
+  worker.onerror = () => {
+    clearTimeout(watchdog);
+    stop("The session could not be started.");
+  };
   worker.postMessage({ channel, stored: stored() });
   listen(header, body);
   // A tab that goes away is a terminal that hung up.

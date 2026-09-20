@@ -162,6 +162,28 @@ The page's own thread is never blocked -- it is not allowed to be --
 and `Console::read` stays synchronous, so `⎕`, `⍞` and the del editor
 read as they do everywhere else.
 
+The page, the worker and the WebAssembly are one build served as
+three files, and a browser caches them separately. So only
+`index.html` is fetched fresh -- it is the navigation -- and it asks
+for `version.txt` uncached, which the build writes as a digest of
+what a visitor actually runs. Everything below is fetched at that
+version: `apl.js?v=`, then `worker.js?v=`, then the bundle. A cached
+worker cannot meet a newer page, and a rebuild that changed nothing
+leaves a visitor's cache standing.
+
+Two things guard what the stamp cannot. `start` takes the whole
+message the page posted and pulls the channel and library 0 out of
+it, rather than taking them as separate arguments, so a worker from
+an older build still makes a call it understands. And a session that
+has not announced itself within ten seconds is reported on the paper
+rather than left as a prompt that ignores typing: a reader cannot
+tell that from a slow load, and a plain reload does not replace a
+worker a browser has already cached.
+
+`just check-pages` is that check, in a browser: a first visit, a
+visit holding the worker from an older bundle, and a worker that
+never answers.
+
 `SharedArrayBuffer` needs the page to be cross-origin isolated, which
 means two headers a static host will not send. The page installs a
 service worker that adds them to its own responses and then loads

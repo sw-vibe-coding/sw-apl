@@ -44,4 +44,16 @@
   character a key is painted with. See docs/terminal.md for the whole
   board.
 </footer>
-<script type="module" src="apl.js"></script>
+<script type="module">
+  // The page is the one file a browser must fetch fresh: it is the
+  // navigation, and everything else hangs off it. version.txt is
+  // asked for uncached and names the build; every file below is
+  // fetched at that version, so a cached worker or an older bundle
+  // cannot meet a newer page. Without it the page still loads --
+  // unstamped, as it did before there was a build to stamp.
+  const version = await fetch("version.txt", { cache: "no-store" })
+    .then((r) => (r.ok ? r.text() : ""))
+    .catch(() => "");
+  const at = version.trim();
+  await import(`./apl.js${at && `?v=${encodeURIComponent(at)}`}`);
+</script>

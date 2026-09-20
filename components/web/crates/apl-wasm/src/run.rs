@@ -48,6 +48,16 @@ fn kept(shelf: &Shelf) {
     let _ = page.post_message(&message);
 }
 
+/// One field of the message the page sent, if it has one.
+///
+/// A message from an older page is not one: it is the channel
+/// itself, with no fields at all. That reads as `None` here rather
+/// than as a failure, which is what lets `start` take either.
+fn field(message: &JsValue, name: &str) -> Option<JsValue> {
+    let got = js_sys::Reflect::get(message, &JsValue::from_str(name)).ok()?;
+    (!got.is_undefined() && !got.is_null()).then_some(got)
+}
+
 /// The libraries this session starts with: what sw-apl ships, and
 /// what an earlier visit left behind. `stored` is the JSON the page
 /// kept; anything else is an empty library 0.
@@ -80,11 +90,22 @@ fn libraries(stored: &str) -> Memory {
 /// it is the worker's thread, and a statement that reads is allowed
 /// to stop it. The page must therefore call this on a worker and
 /// never on its own thread.
+///
+/// One argument, and it is the whole message the page posted. It was
+/// two for one build, and a browser holding the worker from before
+/// that build called it with one -- so the second arrived as
+/// `undefined`, the session never started, and the page showed a
+/// prompt that ignored typing. A message is one value and travels as
+/// one; taking it apart here rather than at the call means the
+/// worker has nothing to get wrong, and an older worker's call is
+/// still a call this understands.
 #[wasm_bindgen]
-pub fn start(channel: &JsValue, stored: &str) {
+pub fn start(message: &JsValue) {
     console_error_panic_hook::set_once();
-    let link = Shared::new(channel);
-    let store: Box<dyn Store> = Box::new(libraries(stored));
+    let channel = field(message, "channel").unwrap_or_else(|| message.clone());
+    let stored = field(message, "stored").and_then(|v| v.as_string());
+    let link = Shared::new(&channel);
+    let store: Box<dyn Store> = Box::new(libraries(&stored.unwrap_or_default()));
     let ended = serve(Box::new(link), (QUOTA, store));
     if let Err(error) = ended {
         web_sys::console::error_1(&format!("sw-apl: the session ended: {error}").into());

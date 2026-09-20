@@ -94,6 +94,12 @@ pages:
     cd components/web/crates/apl-wasm && \
       wasm-pack build --release --target web --no-pack \
         --out-dir ../../../../pages/wasm
+    # The version every file below index.html is fetched at. It is a
+    # digest of what a visitor actually runs, so a rebuild that
+    # changed nothing does not invalidate a cache, and one that
+    # changed anything invalidates all of it at once. The page asks
+    # for this file uncached; it is build output, like pages/wasm.
+    ./scripts/stamp-pages.sh
     # The keyboard picture is not ours and is share-alike, so it goes
     # into the bundle with the terms it travels under. A page that
     # shows it is a redistribution like any other.
@@ -113,6 +119,18 @@ pages:
 pages-serve: pages
     @echo "sw-apl in a browser: http://127.0.0.1:8361/"
     cd pages && python3 -m http.server 8361 --bind 127.0.0.1
+
+# Check the browser demo in a browser: a first visit, a visit
+# holding the worker from an older bundle, and a worker that never
+# answers. Needs a Chrome and playwright-core:
+#
+#   npm install playwright-core
+#   CHROME_PATH=/path/to/chrome just check-pages   (if not the default)
+#
+# Not part of `just test`: a checkout without a browser must still be
+# able to run the suite.
+check-pages: pages
+    node scripts/check-pages.mjs
 
 # Run the conformance corpus against the release binary.
 conformance:

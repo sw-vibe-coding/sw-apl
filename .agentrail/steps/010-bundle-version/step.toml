@@ -1,6 +1,6 @@
 number = 10
 slug = "bundle-version"
-status = "pending"
+status = "in-progress"
 description = """
 Bug found 2026-09-20 while checking the browser-workspaces step in a
 real bro..."""
