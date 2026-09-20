@@ -7,6 +7,13 @@
 # trunk dev build output for the future web app.
 /components/web/dist/
 
+# The browser demo's WebAssembly, built into pages/ by `just pages`.
+# The page, the worker and the service worker beside it are source and
+# are tracked; only the build output is not. Publishing to GitHub Pages
+# needs these files served from somewhere, so whoever configures it
+# decides: commit this directory, or build it in a workflow.
+/pages/wasm/
+
 # Claude Code local state: per-machine settings + runtime locks.
 # EXCEPTION: .claude/commands/ holds shared slash commands (e.g.
 # /mw-cp) that must travel with the repo.

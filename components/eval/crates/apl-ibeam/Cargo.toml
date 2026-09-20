@@ -16,3 +16,9 @@ libc = "0.2"
 
 [lints]
 workspace = true
+
+# In a browser there is no operating system clock to read, so chrono
+# reads the page's instead. Target-gated: nothing native changes, and
+# cpu() already answers 0 where getrusage does not exist.
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+chrono = { version = "0.4", default-features = false, features = ["clock", "wasmbind"] }

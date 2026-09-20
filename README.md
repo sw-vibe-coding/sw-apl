@@ -198,7 +198,11 @@ emergency client: the protocol is one line each way.
 
 The service is what makes quad, quote-quad and the del editor read
 from a browser at all -- a statement that reads stops until a line
-arrives, and a thread on a socket may stop. See
+arrives, and a thread on a socket may stop.
+
+`just pages-serve` is the same session with no service at all: the
+interpreter compiled to WebAssembly, running on a worker in the tab,
+where a thread may block just as well. See
 [the 2741 and the service](docs/terminal.md).
 
 ## Building
@@ -235,6 +239,8 @@ gates across every workspace. Regression transcripts use
 components/   one cargo workspace per component: the interpreter,
               the CLI, the service (web), and the 2741 (term)
 docs/         plan, requirements, architecture, language, session
+pages/        the browser demo: a page, a worker, and the session
+              compiled to WebAssembly
 samples/      conformance corpus: glyph-form APL programs
 scripts/      change log, sample runner, reg-rs wrappers
 images/       logo

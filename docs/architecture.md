@@ -39,6 +39,8 @@ sw-apl/
                                            held over a link
                sw-apl-server               the two listeners, and the
                                            terminal page
+    web/       apl-wasm                    the session on a worker,
+                                           over a shared channel
     term/      apl-keyboard                2741 keys, overstrikes, the
                                            line being typed
                apl-paper                   what the carriage put on
@@ -197,10 +199,14 @@ until a line arrives. A thread waiting on a socket may stop. A
 browser holding the interpreter could not, and `⎕`, `⍞` and every
 line of the del editor would have gone with it.
 
-The seam is `apl_wire::Link`: send a frame, block for a line. Two
+The seam is `apl_wire::Link`: send a frame, block for a line. Three
 transports implement it and the service cannot tell them apart --
-a raw socket for `aplterm` and for `nc`, and a WebSocket for a
-browser, which cannot open a raw socket. A frame is `Reply` as JSON:
+a raw socket for `aplterm` and for `nc`, a WebSocket for a browser
+talking to the service, and a `SharedArrayBuffer` for a browser with
+no service to talk to, where `apl-serve` itself is compiled to
+WebAssembly and runs on a Web Worker. The worker's thread is allowed
+to block in `Atomics.wait`; the page's is not, which is exactly why
+the session lives on the worker. A frame is `Reply` as JSON:
 the transcript lines, the prompt to type the next line at, and
 whether the session has ended. A line `⍞←` left open is carried as
 the prompt, because the carriage stopped there.

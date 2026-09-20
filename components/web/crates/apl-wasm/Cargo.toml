@@ -1,0 +1,25 @@
+[package]
+name = "apl-wasm"
+description = "sw-apl in a browser: the session in a worker, on a shared channel"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+apl-wire = { path = "../apl-wire" }
+apl-serve = { path = "../apl-serve" }
+apl-session = { path = "../../../session/crates/apl-session" }
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen = "0.2"
+js-sys = "0.3"
+web-sys = { version = "0.3", features = ["DedicatedWorkerGlobalScope", "console"] }
+console_error_panic_hook = "0.1"
+
+[lints]
+workspace = true

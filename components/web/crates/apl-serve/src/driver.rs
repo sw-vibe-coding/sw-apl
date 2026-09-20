@@ -17,7 +17,9 @@ use crate::held::{Held, Terminal};
 /// run it, so no workspace is ever shared between terminals.
 ///
 /// `Session::attached` installs the real clock, so `⌶20` answers with
-/// the time of day and `⌶24` with this connection's sign-on.
+/// the time of day and `⌶24` with this connection's sign-on. In a
+/// browser that clock is the page's, which is what `apl-ibeam` asks
+/// chrono for on wasm.
 ///
 /// # Errors
 /// A transport failure, or a protocol line the terminal should not

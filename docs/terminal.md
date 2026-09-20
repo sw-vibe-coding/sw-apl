@@ -98,6 +98,46 @@ target/release/aplterm --keymap my-keymap.json
 The browser terminal takes APL glyphs typed or pasted directly. Its
 keyboard and overstrikes are not implemented yet.
 
+## A browser on its own
+
+`pages/` is the same session with no service at all: the interpreter
+compiled to WebAssembly and running in the tab.
+
+```bash
+just pages-serve
+```
+
+builds it and serves it at `http://127.0.0.1:8361/`, the way a static
+host would. It needs the wasm toolchain:
+
+```bash
+rustup target add wasm32-unknown-unknown
+cargo install wasm-pack
+```
+
+The blocking read works here too, and that is the whole trick. The
+session runs on a Web Worker and `Link::recv` parks that thread in
+`Atomics.wait` until the page puts a line in a `SharedArrayBuffer`.
+The page's own thread is never blocked -- it is not allowed to be --
+and `Console::read` stays synchronous, so `⎕`, `⍞` and the del editor
+read as they do everywhere else.
+
+`SharedArrayBuffer` needs the page to be cross-origin isolated, which
+means two headers a static host will not send. The page installs a
+service worker that adds them to its own responses and then loads
+once more under it, so the first visit loads twice and later ones do
+not. A browser that refuses service workers gets a page that says so
+rather than a broken prompt.
+
+What does not work yet: `)SAVE` and `)LOAD` have no filesystem under
+them and say so, and the keyboard is whatever your own sends --
+overstrikes and the 2741 layout are not there yet. Type or paste APL
+glyphs directly.
+
+The WebAssembly is about 390 KB. `pages/wasm/` is build output and is
+not tracked; the page, the worker and the service worker beside it
+are.
+
 ## The protocol
 
 One line each way, UTF-8.

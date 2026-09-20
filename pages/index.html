@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>sw-apl</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root { color-scheme: light dark; --paper: #fbf7ef; --ink: #2b2118; --rule: #d8cdb8; }
+  @media (prefers-color-scheme: dark) {
+    :root { --paper: #17130e; --ink: #e8dfd0; --rule: #3a3229; }
+  }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font: 15px/1.45 "APL385 Unicode", "DejaVu Sans Mono", ui-monospace, monospace;
+    display: flex; flex-direction: column; height: 100vh;
+  }
+  header, footer { padding: .6rem 1rem; border-color: var(--rule); border-style: solid; }
+  header { border-width: 0 0 1px; }
+  footer { border-width: 1px 0 0; opacity: .7; font-size: 13px; }
+  #paper { flex: 1; overflow-y: auto; margin: 0; padding: 1rem; white-space: pre-wrap; }
+  #line { display: flex; padding: 0 1rem 1rem; }
+  #prompt { white-space: pre; }
+  input {
+    flex: 1; border: 0; background: transparent; color: inherit;
+    font: inherit; outline: none; caret-color: currentColor;
+  }
+</style>
+<header>sw-apl &mdash; an APL\360 session in this tab</header>
+<pre id="paper"></pre>
+<div id="line"><span id="prompt"></span><input id="typed" autofocus autocomplete="off"
+  autocapitalize="off" spellcheck="false" aria-label="APL input line"></div>
+<footer>
+  The interpreter is compiled to WebAssembly and runs in a worker in this
+  tab. There is no server: nothing typed here leaves your browser, and
+  nothing is sent anywhere. <code>)SAVE</code> and <code>)LOAD</code> have no
+  filesystem to use yet. Type APL\360 glyphs directly; the keyboard and
+  overstrikes come later.
+</footer>
+<script type="module" src="apl.js"></script>

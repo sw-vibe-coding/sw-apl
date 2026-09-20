@@ -84,6 +84,28 @@ demo: release
     echo "A 2741 in a terminal instead: target/release/aplterm"
     exec target/release/sw-apl-server --library target/demo
 
+# Build the browser demo into pages/. Needs wasm-pack and the
+# wasm32-unknown-unknown target:
+#   cargo install wasm-pack
+#   rustup target add wasm32-unknown-unknown
+#
+# Build the WebAssembly session into pages/wasm.
+pages:
+    cd components/web/crates/apl-wasm && \
+      wasm-pack build --release --target web --no-pack \
+        --out-dir ../../../../pages/wasm
+
+# Serve pages/ the way a static host would, so the demo can be tried
+# before anything is published. The page installs a service worker to
+# give itself the headers SharedArrayBuffer needs, which means the
+# first visit loads twice; that is the same thing it will do on
+# GitHub Pages.
+#
+# Serve the browser demo at http://127.0.0.1:8361/.
+pages-serve: pages
+    @echo "sw-apl in a browser: http://127.0.0.1:8361/"
+    cd pages && python3 -m http.server 8361 --bind 127.0.0.1
+
 # Run the conformance corpus against the release binary.
 conformance:
     ./scripts/run-samples.sh
