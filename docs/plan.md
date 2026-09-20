@@ -369,6 +369,27 @@ worse than none. This is the keyless path the sw-tos lesson asks for,
 arriving before the clickable board rather than with it: seeing which
 key carries a glyph is most of the help, and clicking it is the rest.
 
+Owner direction 2026-09-20, fourth, from using the demo: the browser
+page does no key translation and shows no keyboard, and `)LIB 1`
+answers nothing.
+
+Both are known gaps and both are already steps, but the owner met
+them in that order, so they come in that order. The page takes raw
+Unicode: `apl-keyboard` is compiled into `aplterm` and not into the
+page, so the 2741 layout, the overstrikes and the `:` key exist in
+one client and not the other. That is the browser half of
+`terminal-2741`, and it is what the crate was kept free of I/O for.
+
+And the shipped workspaces should be *preloaded into local storage*,
+not baked in read-only as `browser-workspaces` first said. The owner
+asked for the three of them to be there on arrival, which makes
+library 1 and library 0 the same kind of thing in a browser -- one
+store, seeded -- and means a reader can `)LOAD 1 LIFE`, change it,
+and `)SAVE` it without the two halves behaving differently.
+
+Order: these two before the attention key, which nobody is waiting
+on.
+
 Owner direction 2026-09-20, third: the keyboard picture is also how
 you type, without a keyboard at all.
 
