@@ -112,9 +112,13 @@ const remember = (key, value) => {
 /// the transcript still grows against the line being typed rather
 /// than away from it.
 export function place(root, edge) {
-  const body = document.body;
-  if (edge === "top") body.insertBefore(root, document.getElementById("paper"));
-  else body.insertBefore(root, document.querySelector("footer"));
+  // Inside the session, which owns the window: the colophon below it
+  // is a different thing and the board never goes there.
+  const session = document.getElementById("session");
+  const before = edge === "top"
+    ? document.getElementById("paper")
+    : session.querySelector(".bar");
+  session.insertBefore(root, before);
   root.dataset.edge = edge;
   remember(EDGE, edge);
 }

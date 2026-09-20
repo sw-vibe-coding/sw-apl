@@ -1,11 +1,11 @@
-number = 16
-slug = "page-layout"
+number = 24
+slug = "pwa-manifest"
 status = "pending"
 description = """
-Owner direction 2026-09-20, third (docs/plan.md). A demo that fits
-a phone.
+Owner direction 2026-09-20, third (docs/plan.md). The demo is
+installable.
 
-..."""
+A..."""
 role = "production"
 context_files = []
 created_at = "2026-09-20T13:47:35"

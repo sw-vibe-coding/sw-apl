@@ -214,6 +214,14 @@ and draws what it hands back, so `⍟` is `○`, `Ctrl-]`, `*` in a
 browser exactly as it is in a terminal, and there is no second copy
 of the table in JavaScript.
 
+Below the session is a colophon: the copyright, the licence the
+bundle travels under, the repository, and the build the page is
+running -- host, short SHA, timestamp, bundle digest. It reads them
+from `build-info.json`, which `just publish` writes, so there is
+nowhere else for them to go stale. It is below the fold and scrolled
+to: the session owns the window exactly, because the bar under the
+paper has been cut twice for taking room the transcript wanted.
+
 An OS-level expander -- Espanso, or the Emacs input method -- works
 here as it does anywhere else, and needs nothing from sw-apl. It
 sees the keystrokes before the browser does, backtick is not a key

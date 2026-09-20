@@ -28,8 +28,13 @@ commit="$(git rev-parse --short HEAD)"
 dirty=""
 git diff --quiet HEAD -- . ':!pages' || dirty=" (working tree had changes)"
 
+# The host is in here because the owner asked for it, and because a
+# demo built from a laptop and one built from a server are different
+# claims about what a reader is running. It is published: a machine
+# name nobody wants on the open web is a reason to build elsewhere,
+# not a reason to leave the field out.
 cat > pages/build-info.json <<JSON
-{"commit":"${commit}${dirty}","built_at":"$(date -u +%Y-%m-%dT%H:%M:%SZ)","version":"$(cat pages/version.txt)","gates":"just fmt, test, clippy, gates, check-pages"}
+{"commit":"${commit}${dirty}","host":"$(hostname -s)","built_at":"$(date -u +%Y-%m-%dT%H:%M:%SZ)","version":"$(cat pages/version.txt)","gates":"just fmt, test, clippy, gates, check-pages"}
 JSON
 
 echo "publish-pages: built from ${commit}${dirty}, version $(cat pages/version.txt)"

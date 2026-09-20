@@ -277,7 +277,48 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   direct.close();
 }
 
-// 7. Espanso, and any other OS-level expander. It watches the
+// 7. The colophon: below the fold, and not one pixel of the session
+//    given up for it. The build facts come from build-info.json, so
+//    a page that has them proves the whole path.
+{
+  const page = await visit();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.waitForTimeout(500);
+  const fold = await page.evaluate(() => {
+    const session = document.getElementById('session');
+    const foot = document.querySelector('.colophon');
+    return {
+      fills: Math.abs(session.getBoundingClientRect().height - innerHeight) <= 1,
+      below: foot.getBoundingClientRect().top >= innerHeight - 1,
+      scrolls: document.documentElement.scrollHeight > innerHeight,
+    };
+  });
+  check('the session still fills the window exactly', fold.fills, JSON.stringify(fold));
+  check('and the colophon is below the fold', fold.below && fold.scrolls, JSON.stringify(fold));
+
+  await page.evaluate(() => document.querySelector('.colophon').scrollIntoView());
+  await page.waitForTimeout(300);
+  const said = await page.evaluate(() => ({
+    built: document.getElementById('built').textContent,
+    repo: [...document.querySelectorAll('.colophon a')].map((a) => a.href).join(' '),
+  }));
+  check('it names the build it is running',
+    /Built \w+.* at \d{4}-/.test(said.built), said.built);
+  check('and the repository and the licence',
+    said.repo.includes('github.com/sw-vibe-coding/sw-apl') && said.repo.includes('LICENSE'),
+    said.repo);
+
+  // The board pins to the top inside the session, not into the
+  // colophon: its ground moved when the session became a wrapper.
+  await page.click('#show-board');
+  await page.click('#board .key.pin');
+  const inside = await page.evaluate(() =>
+    document.getElementById('board').parentElement.id === 'session');
+  check('and the board still pins inside the session', inside, 'it escaped');
+  await page.context().close();
+}
+
+// 8. Espanso, and any other OS-level expander. It watches the
 //    keystrokes before the browser sees them, so the 2741 map
 //    cannot hide a trigger from it -- but it replaces what was
 //    typed either by sending backspaces and the glyph as a key, or
@@ -306,7 +347,7 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await page.context().close();
 }
 
-// 8. Under a sub-path, which is where GitHub Pages actually serves
+// 9. Under a sub-path, which is where GitHub Pages actually serves
 //    a project page from. Nothing must be fetched from the root.
 {
   const sub = await host(ROOT, false, PREFIX);

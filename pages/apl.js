@@ -192,6 +192,7 @@ async function run() {
   wire = { header, body };
   listen(header, body);
   await keyboard();
+  await built();
   // A tab that goes away is a terminal that hung up.
   addEventListener("pagehide", () => {
     Atomics.store(header, STATE, CLOSED);
@@ -233,6 +234,24 @@ async function keyboard() {
 
   const help = document.getElementById("help");
   document.getElementById("show-help").addEventListener("click", () => help.showModal());
+}
+
+// What this page is running, for the colophon. It comes out of
+// build-info.json, which `just publish` writes, so there is nowhere
+// else for it to be written down and go stale. A page served
+// straight out of a checkout has no such file and says so.
+async function built() {
+  const said = document.getElementById("built");
+  try {
+    const info = await fetch(stamped("build-info.json"), { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null));
+    if (!info) throw new Error("no build-info.json");
+    const host = info.host ? ` on ${info.host}` : "";
+    said.textContent =
+      `Built ${info.commit}${host} at ${info.built_at}, bundle ${info.version}.`;
+  } catch {
+    said.textContent = "Built from a working tree; no build was recorded.";
+  }
 }
 
 // What a tapped key does to the line. The control keys stand for the

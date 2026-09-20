@@ -12,10 +12,11 @@
     font: 15px/1.45 "APL385 Unicode", "DejaVu Sans Mono", ui-monospace, monospace;
     display: flex; flex-direction: column; height: 100vh;
   }
-  header, footer { padding: .4rem 1rem; border-color: var(--rule); border-style: solid; }
+  header { padding: .4rem 1rem; border-color: var(--rule); border-style: solid; }
   header { font-size: 13px; opacity: .8; }
   header { border-width: 0 0 1px; }
-  footer { border-width: 1px 0 0; opacity: .7; font-size: 13px; }
+  footer, .bar { border-color: var(--rule); border-style: solid; }
+  .bar { font-size: 13px; opacity: .8; }
   #paper { flex: 1; overflow-y: auto; margin: 0; padding: 1rem; white-space: pre-wrap; }
   #line { padding: 0 1rem 1rem; white-space: pre-wrap; word-break: break-word; }
   #line.waiting { opacity: .45; }
@@ -29,13 +30,12 @@
 
   /* The bar keeps only what a reader cannot work without; the rest
      is behind Help. A phone has no room for prose it has read. */
-  footer { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; }
-  footer button, dialog button {
+  .bar button, dialog button {
     font: inherit; font-size: 13px; padding: .3rem .7rem;
     color: var(--ink); background: none;
     border: 1px solid var(--rule); border-radius: .3rem; cursor: pointer;
   }
-  footer button[aria-pressed="true"] { background: var(--rule); }
+  .bar button[aria-pressed="true"] { background: var(--rule); }
 
   /* The board a reader taps. It is laid out like the 2741, and it
      shrinks with the window rather than scrolling off it: a keyboard
@@ -94,18 +94,58 @@
   dialog img { max-width: 100%; height: auto; }
   dialog .quiet { opacity: .7; font-size: 12px; }
 
+  /* The session owns the window exactly, and the colophon sits after
+     it -- below the fold, scrolled to by whoever wants it. The bar
+     under the paper has been cut twice for taking room the
+     transcript wanted; this must not give any of it back. */
+  body { height: auto; min-height: 100dvh; display: block; }
+  #session { height: 100vh; display: flex; flex-direction: column; }
   /* A phone gives the page less than 100vh once its own keyboard is
      up, and vh does not know that. */
-  @supports (height: 100dvh) { body { height: 100dvh; } }
+  @supports (height: 100dvh) { #session { height: 100dvh; } }
+
+  .colophon {
+    border-width: 1px 0 0; padding: 1.2rem 1rem 2rem;
+    font-size: 12px; line-height: 1.6; opacity: .75;
+    display: block;
+  }
+  .colophon p { margin: 0 0 .6rem; max-width: 46rem; }
+  .colophon a { color: inherit; }
+  .colophon .quiet { opacity: .8; font-variant-numeric: tabular-nums; }
+
+  /* The controls under the paper. Not a footer: there is a real one
+     now, and this is two buttons. */
+  .bar {
+    display: flex; gap: .5rem; align-items: center; flex-wrap: wrap;
+    padding: .4rem 1rem calc(.4rem + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--rule);
+  }
 </style>
-<header>sw-apl &mdash; APL\360</header>
-<pre id="paper"></pre>
-<div id="line" class="waiting"><span id="prompt"></span><span
-  id="before"></span><span id="caret"></span><span id="after"></span></div>
-<div id="board" class="board" hidden aria-label="APL keyboard"></div>
-<footer>
-  <button type="button" id="show-board" aria-pressed="false">Keyboard</button>
-  <button type="button" id="show-help">Help</button>
+<main id="session">
+  <header>sw-apl &mdash; APL\360</header>
+  <pre id="paper"></pre>
+  <div id="line" class="waiting"><span id="prompt"></span><span
+    id="before"></span><span id="caret"></span><span id="after"></span></div>
+  <div id="board" class="board" hidden aria-label="APL keyboard"></div>
+  <nav class="bar">
+    <button type="button" id="show-board" aria-pressed="false">Keyboard</button>
+    <button type="button" id="show-help">Help</button>
+  </nav>
+</main>
+
+<footer class="colophon">
+  <p>
+    <b>sw-apl</b> &mdash; a clean-room APL\360 interpreter in Rust.
+    <a href="https://github.com/sw-vibe-coding/sw-apl">github.com/sw-vibe-coding/sw-apl</a>
+  </p>
+  <p>
+    Copyright &copy; 2026 Michael A Wright.
+    <a href="https://github.com/sw-vibe-coding/sw-apl/blob/main/LICENSE">MIT License</a>,
+    which is what this page and the interpreter in it travel under.
+    The 2741 keyboard picture under Help is not ours and carries its
+    own terms, which are beside it there.
+  </p>
+  <p id="built" class="quiet">Built: &mdash;</p>
 </footer>
 
 <dialog id="help">
