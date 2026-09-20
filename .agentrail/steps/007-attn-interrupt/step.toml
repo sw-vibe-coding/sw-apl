@@ -1,0 +1,10 @@
+number = 7
+slug = "attn-interrupt"
+status = "pending"
+description = """
+Phase 8 step 4 (docs/plan.md, owner direction 2026-09-19 fourth).
+Escape is A..."""
+role = "production"
+context_files = []
+created_at = "2026-09-20T08:49:26"
+commits = []

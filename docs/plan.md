@@ -331,6 +331,65 @@ and correct the quoted heredoc delimiters in the obscured-load and workspace-fil
 regression commands. These three existing fixtures fail on Linux independently
 of the prototype; their baselines remain unchanged in this slice.
 
+Owner direction 2026-09-19, fourth: a public demo, an attention key,
+and what a workspace library means with no filesystem under it.
+
+**`./pages`, tried locally first.** A static bundle in `pages/`, run
+from a plain file server before GitHub Pages is configured at all.
+Pages is static, so there is no service to dial: the demo runs the
+interpreter in the browser after all. What makes that possible now is
+that the blocking read has a place to block. `apl-serve` runs in a Web
+Worker; `Link` is implemented a third time over a `SharedArrayBuffer`
+with `Atomics.wait`, so `recv` parks the worker until the page posts a
+line. `Console::read` stays synchronous and `Session` is not touched --
+the worker blocks exactly as the service's connection thread blocks.
+The terminal above it is the same terminal: three transports, one
+client, one overstrike table.
+
+Cross-origin isolation is the price. `SharedArrayBuffer` needs COOP
+and COEP headers, which GitHub Pages will not set, so the bundle
+carries `coi-serviceworker` to install them -- at the cost of one
+reload on first visit, and of failing where service workers are
+refused. Trying it locally first is what tells us whether that is
+acceptable before any of it is published.
+
+**ATTN is Escape.** Owner direction: Escape -- which *is* Ctrl-[, the
+same byte, exactly as Ctrl-H is backspace -- stands in for the 2741's
+ATTN key in both clients. Escape already quotes the next key in
+`aplterm`, and the two do not collide, because they are never both
+possible: while a line is being typed the terminal is reading keys and
+Escape quotes; while the service is working the terminal is waiting
+for a frame and Escape is ATTN. The mode decides, and nothing is
+rebound. In the browser Escape is free, and `Ctrl-[` arrives
+distinguishably besides.
+
+Two things have to change under it. The protocol gains a message the
+terminal may send unprompted, which a typed line can never be mistaken
+for; and a connection gains a reader that is listening while the
+session thread is inside `eval`, which is the channel-fed read the
+service was always described as having. The third is below
+`apl-serve` and so is asked for explicitly here: `apl-call` keeps the
+interrupt flag as one process-global `static STOP`, set by the CLI's
+signal handler. A server holding sixteen sessions would interrupt all
+of them, so the flag becomes per-session state that the CLI's handler
+sets for its own session like any other client.
+
+**Libraries without a filesystem.** `)LIB 1` and `)LOAD 1 NAME` work
+in the browser: `ws/lib1/` is baked into the bundle and read-only,
+which is what it already is in spirit. `)SAVE` writes library 0 into
+the browser's local storage rather than being refused -- a saved
+workspace is small UTF-8 text, so there is nothing about it that needs
+a file. That wants a seam under `apl-session` saying where workspaces
+live and how they are listed, read and written, with the native
+implementation being the filesystem it is today: the CLI's behaviour,
+and reg-rs, must not move.
+
+Order: prove the worker and the blocking read with the plain page
+first, since it is the only part nobody has done before; then the
+attention key, which is testable with `aplterm` and `nc` alone; then
+the libraries; then the 2741 in the browser and the keyboard, which
+are presentation on top of all three.
+
 Owner direction 2026-09-19, promotion: the prototype is the
 implementation. `experimental/terminal2741` moves into the component
 layout under the ordinary gates -- `components/web` for the protocol,
@@ -434,17 +493,28 @@ to open it to the LAN, and the docs saying which.
 2. `terminal-server` -- `sw-apl-server` and the CLI client: one
    session per connection, a line protocol over TCP and WebSocket,
    and a blocking read that works because the server may block.
-3. `terminal-2741` -- the browser terminal: the printing-terminal
+3. `wasm-session` -- the interpreter in a Web Worker, `Link` over a
+   `SharedArrayBuffer` with `Atomics.wait`, and `pages/` built and
+   served locally. The plain page is the client; `)SAVE` and `)LOAD`
+   report that there is nowhere to write yet.
+4. `attn-interrupt` -- Escape as ATTN: a per-session interrupt flag,
+   an unprompted message in the protocol, a connection that listens
+   while the session works, and the key in `aplterm` and in the page.
+5. `browser-workspaces` -- a seam under `apl-session` for where
+   workspaces live; the filesystem underneath it natively, library 1
+   baked into the bundle and library 0 in local storage in the
+   browser. `)LIB 1`, `)LOAD 1 NAME`, `)SAVE`.
+6. `terminal-2741` -- the browser terminal: the printing-terminal
    feel, the carriage, ATTN as interrupt, and the overstrike
    sequence sent rather than composed -- the table it needs is
    already in `data/glyphs.toml` by then, which is the reason to
    compile the terminal from Rust rather than write it in
    JavaScript with a second copy.
-5. `del-tilde-opens` -- `⍫` opens a locked definition as well as
+8. `del-tilde-opens` -- `⍫` opens a locked definition as well as
    closing one: "used instead of ∇ to open or close a function
    definition". sw-apl takes it only to close, so `⍫R←SECRET` is a
    SYNTAX ERROR. (Found writing the overstrike sample, 2026-09-19.)
-4. `glyph-keyboard` -- the IBM 2741 APL layout, a clickable board,
+7. `glyph-keyboard` -- the IBM 2741 APL layout, a clickable board,
    and the expansions already in `docs/espanso/` and
    `docs/emacs/`; a first screen worth arriving at.
 
