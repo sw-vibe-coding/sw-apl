@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-19
 
+- chore(agentrail): complete 005-terminal-server
+- feat(web,term): promote the 2741 and its service out of experimental
+- docs(changes): refresh CHANGES.md to HEAD
 - feat(aplterm): add standalone 2741 terminal and TCP server
 - docs(changes): refresh CHANGES.md to HEAD
 - docs(html): vendor the APL evolution explorer, NAND and NOR corrected
