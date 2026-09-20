@@ -1,0 +1,1 @@
+README points at https://sw-apl.softwarewrighter.com/ and pages/CNAME carries the domain in the uploaded artifact so it survives the repository setting being lost. Nothing was made to depend on serving from a root: the github.io address still resolves, so every URL stays relative and check-pages keeps its sub-path case.
