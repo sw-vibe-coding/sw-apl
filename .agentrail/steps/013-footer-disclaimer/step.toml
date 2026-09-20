@@ -1,0 +1,11 @@
+number = 13
+slug = "footer-disclaimer"
+status = "in-progress"
+description = """
+Owner direction 2026-09-20, sixth: the footer disclaimer goes.
+
+"Nothing type..."""
+role = "production"
+context_files = []
+created_at = "2026-09-20T14:11:28"
+commits = []

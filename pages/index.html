@@ -30,7 +30,6 @@
   /* The bar keeps only what a reader cannot work without; the rest
      is behind Help. A phone has no room for prose it has read. */
   footer { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; }
-  footer .quiet { opacity: .75; font-size: 12px; }
   footer button, dialog button {
     font: inherit; font-size: 13px; padding: .3rem .7rem;
     color: var(--ink); background: none;
@@ -94,7 +93,6 @@
 <footer>
   <button type="button" id="show-board" aria-pressed="false">Keyboard</button>
   <button type="button" id="show-help">Help</button>
-  <span class="quiet">Nothing typed here leaves your browser.</span>
 </footer>
 
 <dialog id="help">
