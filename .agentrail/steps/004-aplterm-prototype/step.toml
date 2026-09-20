@@ -1,9 +1,10 @@
 number = 4
 slug = "aplterm-prototype"
-status = "in-progress"
+status = "completed"
 description = "Implement, validate, and publish the standalone Rust aplterm client and aplte..."
 role = "production"
 context_files = []
 created_at = "2026-09-19T18:07:37"
+completed_at = "2026-09-19T18:19:24"
 task_type = "rust-interpreter"
-commits = []
+commits = ["9229f9c919412f574845e3b35f19f74a87c67837"]
