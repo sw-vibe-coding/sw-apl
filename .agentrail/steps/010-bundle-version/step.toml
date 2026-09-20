@@ -1,0 +1,10 @@
+number = 10
+slug = "bundle-version"
+status = "pending"
+description = """
+Bug found 2026-09-20 while checking the browser-workspaces step in a
+real bro..."""
+role = "production"
+context_files = []
+created_at = "2026-09-20T13:11:44"
+commits = []
