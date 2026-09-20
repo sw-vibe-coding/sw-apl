@@ -207,7 +207,47 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await page.context().close();
 }
 
-// 5. A host that sends the isolation headers itself, which is what
+// 5. Where the board sits and how big it is, kept across a reload.
+//    A reader who has made the keys small on a phone must not have
+//    to do it again every visit.
+{
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  await page.goto(url, { waitUntil: 'load' });
+  await page.waitForTimeout(3000);
+  await settle(page);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.click('#show-board');
+  await page.click('#board .key.pin');                       // to the top
+  await page.click('#board .key.small[aria-label="smaller keys"]');
+  const was = await page.evaluate(() => {
+    const board = document.getElementById('board');
+    return { edge: board.dataset.edge, size: board.dataset.size };
+  });
+  check('the board moves to the top', was.edge === 'top', was.edge);
+
+  const again = await context.newPage();
+  await again.goto(url, { waitUntil: 'load' });
+  await again.waitForTimeout(3000);
+  await settle(again);
+  const now = await again.evaluate(() => {
+    const board = document.getElementById('board');
+    return {
+      edge: board.dataset.edge,
+      size: board.dataset.size,
+      shown: !board.hidden,
+      // Pinned to the top means the board really is above the paper.
+      above: board.compareDocumentPosition(document.getElementById('paper'))
+        & Node.DOCUMENT_POSITION_FOLLOWING,
+    };
+  });
+  check('and is found where it was left', now.shown && now.edge === was.edge && now.above > 0,
+    JSON.stringify(now));
+  check('and at the size it was left', now.size === was.size, `${now.size} was ${was.size}`);
+  await context.close();
+}
+
+// 6. A host that sends the isolation headers itself, which is what
 //    `just demo` and `just pages-serve` do. There is nothing for the
 //    service worker to forge, so the page must be isolated on the
 //    first response and must not need a second load.

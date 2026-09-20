@@ -1,6 +1,6 @@
 number = 14
 slug = "keyboard-aid"
-status = "pending"
+status = "in-progress"
 description = """
 Owner direction 2026-09-20, second. The browser offers the keyboard
 as an aid..."""

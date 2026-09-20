@@ -220,6 +220,15 @@ between the glyph each key carries and the letter or digit it is
 painted with; it remembers whether it was up, and it is reachable by
 tab and named for a screen reader out of `data/glyphs.toml`.
 
+It sits at the bottom, or at the top if a reader moves it there, and
+its keys are as big as they were last set. Both are remembered, and
+the controls are on the board itself rather than in the bar under
+the paper. On a narrow window the keys shrink with the width until
+they hit a floor; below that the board keeps its size and the
+transcript gives up the room, because a keyboard too small to hit is
+no use and a shorter transcript still scrolls. A reader who wants
+the paper back puts the board away.
+
 It is drawn from `keymap.json` -- the same file `apl-keyboard`
 compiles in, copied into the bundle by `just pages` -- so a key sends
 here what the same key sends at a terminal, and there is no second

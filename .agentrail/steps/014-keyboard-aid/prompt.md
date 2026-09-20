@@ -1,32 +1,31 @@
-Owner direction 2026-09-20, second. The browser offers the keyboard
-as an aid to typing.
+Owner direction 2026-09-20, second, rewritten after the board
+landed: the board is placeable and sizeable.
 
-The 2741 keyboard picture redistributed in the keyboard-layout step
-is not only reference material. A reader who has not relabelled their
-keycaps cannot type APL at all, so the page should show them the
-board.
+This step was written when the plan was to show the redistributed
+2741 picture as a typing aid, with the clickable board coming
+later. The glyph-keyboard step overtook it: the board a reader taps
+is ours and drawn from the keymap, and the picture is now reference
+under Help with its author and licence beside it. Two of the three
+things asked for here are done -- shown on request and remembered,
+and the attribution reachable wherever the picture is shown.
 
-Offered, not imposed:
+What is left is the part that still matters, and it is now about
+the board and not the picture:
 
-- Shown on request, and remembered, so a reader who wants it does not
-  ask on every visit and a reader who does not is not nagged.
 - Pinnable to the top or the bottom of the window. The owner asked
-  for both, so both.
-- Resizable. A keyboard that cannot be got out of the way is worse
-  than no keyboard, and an SVG scales without going soft, which is
-  part of why it is an SVG.
+  for both, so both, and remember which.
+- Resizable, and remember that too. A keyboard that cannot be got
+  out of the way is worse than no keyboard; a reader on a small
+  phone needs smaller keys than the default and one on a desktop
+  wants bigger targets than a phone's.
 
-It must not take the typing focus, and it must not cost the page its
-layout when it is not shown. Say in the commit what happens on a
-narrow window, where a keyboard picture and a transcript cannot both
-be usable at once.
+It must not take the typing focus, and it must not cost the page
+its layout when it is not shown. The controls belong on the board
+itself: the bar under the paper has two buttons and the owner has
+twice asked for less down there, not more.
 
-This is the keyless path the sw-tos lesson asks for, arriving before
-the clickable board rather than with it: seeing which key carries a
-glyph is most of the help. Clicking the keys is the next step and
-this one should leave it a place to stand -- the keys are already
-separate shapes in the SVG.
+Say in the commit what happens on a narrow window, where the board
+and a readable transcript cannot both have the room they want.
 
-Attribution travels with the picture. Wherever it is shown, the
-reader can reach the author's name and the licence; a demo page is a
-redistribution like any other.
+Check it in a browser at phone width: pin it to the top, make it
+smaller, reload, and find it where it was left.

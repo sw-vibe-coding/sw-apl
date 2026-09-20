@@ -57,6 +57,9 @@ export async function build(root, stamped, tap) {
     root.append(line);
   }
   root.append(controls(tap));
+  root.append(placing(root));
+  size(root, Number(remembered(SIZE, KEYS.default)));
+  place(root, remembered(EDGE, "bottom"));
   return root;
 }
 
@@ -81,6 +84,73 @@ function key(glyph, cap, tap) {
   button.title = `${glyph} ${name(glyph)}`;
   button.setAttribute("aria-label", `${name(glyph)}, or ${cap}`);
   return button;
+}
+
+// How big the keys are, in rem, and where the board sits. Both are
+// remembered: a reader on a small phone needs smaller keys than the
+// default and one at a desk wants bigger targets, and neither should
+// have to say so twice.
+const SIZE = "apl-board-size";
+const EDGE = "apl-board-edge";
+const KEYS = { min: 1.5, max: 3.4, step: 0.35, default: 2.4 };
+
+const remembered = (key, fallback) => {
+  try {
+    return localStorage.getItem(key) ?? fallback;
+  } catch {
+    return fallback;
+  }
+};
+
+const remember = (key, value) => {
+  try {
+    localStorage.setItem(key, value);
+  } catch { /* private mode: it just will not be remembered */ }
+};
+
+/// Put the board where it was left. Top means before the paper, so
+/// the transcript still grows against the line being typed rather
+/// than away from it.
+export function place(root, edge) {
+  const body = document.body;
+  if (edge === "top") body.insertBefore(root, document.getElementById("paper"));
+  else body.insertBefore(root, document.querySelector("footer"));
+  root.dataset.edge = edge;
+  remember(EDGE, edge);
+}
+
+// Set the key size, clamped, and remember it.
+function size(root, rem) {
+  const at = Math.min(KEYS.max, Math.max(KEYS.min, rem));
+  root.style.setProperty("--key", `${at}rem`);
+  root.dataset.size = String(at);
+  remember(SIZE, String(at));
+  return at;
+}
+
+// Where the board sits and how big it is. On the board itself, not
+// in the bar under the paper: that bar has two buttons and is asked
+// to stay that way.
+function placing(root) {
+  const row = document.createElement("div");
+  row.className = "row placing";
+  const add = (label, aria, onclick) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "key small";
+    button.textContent = label;
+    button.setAttribute("aria-label", aria);
+    button.addEventListener("click", onclick);
+    row.append(button);
+    return button;
+  };
+  const pin = add("\u2b0d", "move the keyboard to the other edge", () => {
+    place(root, root.dataset.edge === "top" ? "bottom" : "top");
+  });
+  pin.classList.add("pin");
+  add("\u2212", "smaller keys", () => size(root, Number(root.dataset.size) - KEYS.step));
+  add("+", "bigger keys", () => size(root, Number(root.dataset.size) + KEYS.step));
+  return row;
 }
 
 // Space, the two deletions, the overstrike key and return -- and the
