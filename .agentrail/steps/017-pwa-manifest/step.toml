@@ -1,6 +1,6 @@
-number = 24
+number = 17
 slug = "pwa-manifest"
-status = "pending"
+status = "in-progress"
 description = """
 Owner direction 2026-09-20, third (docs/plan.md). The demo is
 installable.

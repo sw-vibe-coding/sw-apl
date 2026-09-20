@@ -2,6 +2,17 @@
 <meta charset="utf-8">
 <title>sw-apl</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="A clean-room APL\360 interpreter, compiled to WebAssembly and running in this tab.">
+<!-- start_url and scope are relative, so this works at a root and
+     under a GitHub project page's /sw-apl/ alike. -->
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#fbf7ef" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#17130e" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="sw-apl">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <style>
   :root { color-scheme: light dark; --paper: #fbf7ef; --ink: #2b2118; --rule: #d8cdb8; }
   @media (prefers-color-scheme: dark) {

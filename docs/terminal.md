@@ -214,6 +214,20 @@ and draws what it hands back, so `⍟` is `○`, `Ctrl-]`, `*` in a
 browser exactly as it is in a terminal, and there is no second copy
 of the table in JavaScript.
 
+The demo installs. `manifest.json` names it, asks for a standalone
+window, and carries the icons; `start_url` and `scope` are relative,
+so it installs from a project page's sub-path as readily as from a
+root. The favicon is `∇`, which opens a function definition and is
+the most APL thing that survives sixteen pixels; the install icons
+are the project logo the README shows, scaled down, with a maskable
+copy inside the safe zone for a launcher that crops to a circle.
+`scripts/gen-icons.sh` makes all of them and they are tracked, like
+the rest of `pages/`.
+
+Installed, it still needs the network for the first load: offline is
+`offline-shell`'s, and it is last because it is the part that can
+break the version stamp.
+
 Below the session is a colophon: the copyright, the licence the
 bundle travels under, the repository, and the build the page is
 running -- host, short SHA, timestamp, bundle digest. It reads them

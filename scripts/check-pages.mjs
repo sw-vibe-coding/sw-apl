@@ -318,7 +318,52 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await page.context().close();
 }
 
-// 8. Espanso, and any other OS-level expander. It watches the
+// 8. Installable: the manifest a browser reads before it offers to
+//    install, and the icons it shows afterwards. Relative start_url
+//    and scope, so it installs from a project page's sub-path too.
+{
+  const page = await visit();
+  const missed = [];
+  page.on('response', (r) => { if (r.status() >= 400) missed.push(r.url()); });
+  const manifest = await page.evaluate(async () => {
+    const link = document.querySelector('link[rel=manifest]');
+    if (!link) return null;
+    return fetch(link.href).then((r) => (r.ok ? r.json() : null));
+  });
+  check('there is a manifest', manifest !== null, 'none');
+  check('it names the app and installs standalone',
+    manifest?.short_name === 'sw-apl' && manifest?.display === 'standalone',
+    JSON.stringify(manifest && { n: manifest.short_name, d: manifest.display }));
+  check('its start_url and scope are relative',
+    !String(manifest?.start_url).startsWith('/') && !String(manifest?.scope).startsWith('/'),
+    `${manifest?.start_url} ${manifest?.scope}`);
+  check('it offers the sizes an install needs, one of them maskable',
+    ['192x192', '512x512'].every((s) => manifest?.icons?.some((i) => i.sizes === s))
+      && manifest?.icons?.some((i) => i.purpose === 'maskable'),
+    JSON.stringify(manifest?.icons?.map((i) => `${i.sizes} ${i.purpose}`)));
+
+  // Every icon, the favicon and the apple-touch icon must actually
+  // be there: a manifest naming a missing icon installs a blank tile.
+  const icons = [
+    ...(manifest?.icons ?? []).map((i) => i.src),
+    'favicon.ico',
+    'apple-touch-icon.png',
+  ];
+  const got = await page.evaluate(async (list) => {
+    const out = {};
+    for (const src of list) {
+      const r = await fetch(new URL(src, location.href));
+      out[src] = r.ok ? (await r.blob()).size : 0;
+    }
+    return out;
+  }, icons);
+  check('and every icon it names is really there',
+    Object.values(got).every((size) => size > 500), JSON.stringify(got));
+  check('and nothing 404s on the way', missed.length === 0, missed.join(' '));
+  await page.context().close();
+}
+
+// 9. Espanso, and any other OS-level expander. It watches the
 //    keystrokes before the browser sees them, so the 2741 map
 //    cannot hide a trigger from it -- but it replaces what was
 //    typed either by sending backspaces and the glyph as a key, or
@@ -347,7 +392,7 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await page.context().close();
 }
 
-// 9. Under a sub-path, which is where GitHub Pages actually serves
+// 10. Under a sub-path, which is where GitHub Pages actually serves
 //    a project page from. Nothing must be fetched from the root.
 {
   const sub = await host(ROOT, false, PREFIX);

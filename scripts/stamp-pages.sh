@@ -19,7 +19,7 @@ digest() {
 }
 
 files=(pages/apl.js pages/board.js pages/worker.js pages/sw.js
-       pages/keymap.json pages/glyph-names.json
+       pages/keymap.json pages/glyph-names.json pages/manifest.json
        pages/wasm/apl_wasm.js pages/wasm/apl_wasm_bg.wasm)
 for file in "${files[@]}"; do
     if [ ! -f "$file" ]; then
