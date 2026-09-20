@@ -2,7 +2,7 @@
 //! when a workspace is saved, loaded and copied from. Each test that
 //! saves has a library root of its own.
 
-use apl_session::Session;
+use apl_session::{Files, Session};
 
 fn out(s: &mut Session, line: &str) -> Vec<String> {
     s.respond(line).lines
@@ -12,7 +12,7 @@ fn in_own_dir(name: &str) -> (Session, Guard) {
     let dir = std::env::temp_dir().join(format!("sw-apl-{name}-{}", std::process::id()));
     std::fs::remove_dir_all(&dir).ok();
     let mut session = Session::default();
-    session.ws.libraries.clone_from(&dir);
+    session.ws.store = Box::new(Files(dir.clone()));
     (session, Guard(dir))
 }
 

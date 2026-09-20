@@ -6,7 +6,7 @@
 
 use std::path::PathBuf;
 
-use apl_session::Session;
+use apl_session::{Files, Session};
 
 /// What sw-apl ships, and the names each DESCRIBE promises.
 const SHIPPED: [(&str, &[&str]); 3] = [
@@ -28,7 +28,7 @@ fn out(s: &mut Session, line: &str) -> Vec<String> {
 
 fn loaded(name: &str) -> Session {
     let mut session = Session::default();
-    session.ws.libraries = root();
+    session.ws.store = Box::new(Files(root()));
     let reply = out(&mut session, &format!(")LOAD 1 {name}"));
     assert_eq!(reply.len(), 1, "{name}: {reply:?}");
     assert!(reply[0].starts_with("SAVED "), "{name}: {reply:?}");
@@ -38,7 +38,7 @@ fn loaded(name: &str) -> Session {
 #[test]
 fn the_shipped_workspaces_are_what_lib_1_lists() {
     let mut session = Session::default();
-    session.ws.libraries = root();
+    session.ws.store = Box::new(Files(root()));
     let mut names: Vec<&str> = SHIPPED.iter().map(|(n, _)| *n).collect();
     names.sort_unstable();
     assert_eq!(out(&mut session, ")LIB 1"), names);
@@ -69,7 +69,7 @@ fn a_shipped_workspace_is_exactly_what_save_writes() {
     std::fs::remove_dir_all(&dir).ok();
     for (name, _) in SHIPPED {
         let mut session = loaded(name);
-        session.ws.libraries.clone_from(&dir);
+        session.ws.store = Box::new(Files(dir.clone()));
         out(&mut session, ")SAVE");
         let written = std::fs::read_to_string(dir.join(format!("work/{name}.apl.ws")));
         let shipped = std::fs::read_to_string(root().join(format!("ws/lib1/{name}.apl.ws")));

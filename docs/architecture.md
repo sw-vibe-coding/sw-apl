@@ -25,9 +25,11 @@ sw-apl/
                apl-quad                    reading a line mid-statement
                apl-ibeam                   I-beam values and the clock
                apl-space                   what a value costs, and the quota
+               apl-store                   somewhere to keep a saved
+                                           workspace: a disc, a browser
                apl-eval                    interpreter
-    session/   apl-library                 where a workspace file is, and
-                                           what to say when it is not there
+    session/   apl-library                 which workspace a command means,
+                                           and what to say when there is not one
                apl-copy                    taking names out of a stored one
                apl-inquiry                 listing names, groups, erasing
                apl-session                 system commands, del editor,

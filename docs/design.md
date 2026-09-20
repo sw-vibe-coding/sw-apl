@@ -87,9 +87,13 @@ out and `)LOAD` gives a workspace with none, which APL\360 -- whose
 workspaces were binary -- did not have to do. `parity.md` carries
 the row.
 
-Numbered libraries map to directories through a small config
-file so `)LOAD 1 CLASS` works as in APL\360. `)LIB` lists a
-library directory.
+Numbered libraries are somewhere workspaces are kept, reached
+through one small trait -- read one, write one, forget one, list a
+library -- so `)LOAD 1 CLASS` works as in APL\360. The CLI and the
+service keep them in directories under `--library`; a browser has
+no filesystem and keeps library 1 in the bundle and library 0 in
+its own storage. Nothing above the trait knows which, because a
+workspace is text either way.
 
 ## D8. DESCRIBE convention
 

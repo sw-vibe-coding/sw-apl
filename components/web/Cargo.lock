@@ -142,6 +142,7 @@ dependencies = [
  "apl-parse",
  "apl-prims",
  "apl-quad",
+ "apl-store",
  "apl-value",
  "apl-workspace",
 ]
@@ -377,6 +378,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-store"
+version = "0.1.0"
+
+[[package]]
 name = "apl-strike"
 version = "0.1.0"
 dependencies = [
@@ -421,6 +426,7 @@ dependencies = [
  "apl-ibeam",
  "apl-prims",
  "apl-space",
+ "apl-store",
  "apl-value",
 ]
 

@@ -8,10 +8,12 @@
 import init, { start } from "./wasm/apl_wasm.js";
 
 self.onmessage = async (event) => {
-  // One message, ever: the channel. Everything after it arrives
+  // One message, ever: the channel, and what the page kept of
+  // library 0 from an earlier visit. Everything after it arrives
   // through shared memory, because this thread is about to stop
-  // reading messages for good.
+  // reading messages for good. A worker cannot reach local storage
+  // itself, which is why the page reads it and sends it here.
   self.onmessage = null;
   await init();
-  start(event.data);
+  start(event.data.channel, event.data.stored);
 };

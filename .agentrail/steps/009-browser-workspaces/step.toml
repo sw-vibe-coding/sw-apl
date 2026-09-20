@@ -1,6 +1,6 @@
 number = 9
 slug = "browser-workspaces"
-status = "pending"
+status = "in-progress"
 description = """
 Phase 8 step 5 (docs/plan.md, owner direction 2026-09-19 fourth).
 Workspace l..."""

@@ -190,9 +190,28 @@ Only the chords sw-apl claims are taken from the browser: `Ctrl-]`
 overstrikes and `Ctrl-C` clears the line. Copy, paste and reload are
 left alone.
 
-What does not work yet: `)SAVE` and `)LOAD` have no filesystem under
-them and say so. A touch screen has no keyboard to intercept, so
-there is nothing to type with until the board itself is clickable.
+The libraries work here with no filesystem under them. Library 1 is
+baked into the bundle, so `)LIB 1` lists LIFE, RACE and EDIT and
+`)LOAD 1 RACE` loads one. `)SAVE` writes library 0 into the
+browser's local storage, and `)LIB`, `)LOAD NAME` and `)DROP` read
+it back on a later visit.
+
+What a browser keeps is that browser's. A workspace saved in one is
+not in another, not on another machine, and not on any server:
+nothing leaves the tab. A browser with nowhere to keep it -- storage
+full, or refused, as a private window refuses it -- still saves and
+loads for as long as the tab is open, and the page says once that it
+will not last past it.
+
+The session's thread cannot reach local storage: only the page can,
+and the page's own thread is the one that must not block. So the
+workspaces are held in memory on the worker and the page is told
+whenever library 0 changes; it reads what it kept before the session
+starts and hands it over with the channel.
+
+What does not work yet: a touch screen has no keyboard to intercept,
+so there is nothing to type with until the board itself is
+clickable.
 
 The WebAssembly is about 390 KB. `pages/wasm/` is build output and is
 not tracked; the page, the worker and the service worker beside it

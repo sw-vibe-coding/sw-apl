@@ -1,5 +1,5 @@
-//! Workspace libraries: which file a command means, and what to say
-//! when there is not one.
+//! Workspace libraries: which workspace a command means, and what
+//! to say when there is not one.
 //!
 //! Split out of `apl-commands` when the trouble reports arrived:
 //! that crate was at its module budget, and every command that names
@@ -7,9 +7,9 @@
 //! it fails.
 
 mod name;
-mod path;
 mod report;
+mod which;
 
 pub use name::valid;
-pub use path::{Stored, file, holds, root, text};
 pub use report::{IMPROPER_LIBRARY, INCORRECT, OBJECT_NOT_FOUND, WS_NOT_FOUND, not_saved};
+pub use which::{Named, Stored, holds, library, named, text};

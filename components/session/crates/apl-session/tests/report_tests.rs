@@ -4,7 +4,7 @@
 //! it does not take, and a name that is simply not there is a
 //! different answer.
 
-use apl_session::Session;
+use apl_session::{Files, Session};
 
 fn out(s: &mut Session, line: &str) -> Vec<String> {
     s.respond(line).lines
@@ -15,7 +15,7 @@ fn with_a_donor(name: &str) -> (Session, Guard) {
     let dir = std::env::temp_dir().join(format!("sw-apl-{name}-{}", std::process::id()));
     std::fs::remove_dir_all(&dir).ok();
     let mut s = Session::default();
-    s.ws.libraries.clone_from(&dir);
+    s.ws.store = Box::new(Files(dir.clone()));
     for line in [")WSID DONOR", "A\u{2190}1", "B\u{2190}2", ")SAVE", ")CLEAR"] {
         out(&mut s, line);
     }

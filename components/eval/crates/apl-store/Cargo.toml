@@ -1,0 +1,13 @@
+[package]
+name = "apl-store"
+description = "sw-apl workspace libraries: somewhere to keep a saved workspace"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+
+[lints]
+workspace = true

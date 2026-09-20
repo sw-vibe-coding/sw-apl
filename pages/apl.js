@@ -1,4 +1,5 @@
-// The page: a keyboard, a channel, a worker, and a paper to print on.
+// The page: a keyboard, a channel, a worker, a paper to print on,
+// and somewhere to keep what )SAVE writes.
 //
 // The keyboard is the 2741's, and it is the same keyboard aplterm
 // has: apl-keyboard compiled to WebAssembly, holding the keymap, the
@@ -64,6 +65,40 @@ const draw = (state) => {
 // later visit is not still carrying a refusal from an older build.
 const RELOADS = "apl-isolation-reloads";
 
+// Where library 0 lives between visits. A worker cannot reach local
+// storage, so the page reads it before the session starts and writes
+// it back whenever the session says library 0 has changed.
+//
+// It is this browser's, on this machine: a workspace saved here is
+// not in another browser, not on another machine, and not anywhere
+// but the tab it was typed in. Nothing is sent anywhere.
+const LIBRARY = "apl-library-0";
+
+// Whether the reader has already been told there is nowhere to keep
+// a workspace, so they are told once and not after every )SAVE.
+let warned = false;
+
+const stored = () => {
+  try {
+    return localStorage.getItem(LIBRARY) || "{}";
+  } catch {
+    return "{}";
+  }
+};
+
+const keep = (work) => {
+  try {
+    localStorage.setItem(LIBRARY, JSON.stringify(work));
+  } catch {
+    if (warned) return;
+    warned = true;
+    put(
+      "THIS BROWSER WILL NOT KEEP WORKSPACES. )SAVE AND )LOAD WORK\n" +
+        "UNTIL THIS TAB IS CLOSED, AND NOT AFTER IT.\n",
+    );
+  }
+};
+
 async function isolate() {
   if (self.crossOriginIsolated) {
     try { sessionStorage.removeItem(RELOADS); } catch { /* private mode */ }
@@ -114,9 +149,14 @@ async function run() {
   const header = new Int32Array(channel, 0, 2);
   const body = new Uint8Array(channel, BODY);
   const worker = new Worker("worker.js", { type: "module" });
-  worker.onmessage = (event) => show(JSON.parse(event.data));
+  // A frame is a string; library 0 is an object. That is the whole
+  // of the difference, because only one of the two is the protocol.
+  worker.onmessage = (event) =>
+    typeof event.data === "string"
+      ? show(JSON.parse(event.data))
+      : keep(event.data.work);
   worker.onerror = () => stop("The session could not be started.");
-  worker.postMessage(channel);
+  worker.postMessage({ channel, stored: stored() });
   listen(header, body);
   // A tab that goes away is a terminal that hung up.
   addEventListener("pagehide", () => {

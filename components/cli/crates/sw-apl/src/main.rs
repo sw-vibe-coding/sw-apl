@@ -11,6 +11,7 @@ use std::io::IsTerminal;
 use std::path::PathBuf;
 use std::process::ExitCode;
 
+use apl_session::{Files, Store};
 use clap::Parser;
 
 /// Full `-V` / `--version` block: name, copyright, license,
@@ -62,7 +63,10 @@ pub struct Args {
 fn main() -> ExitCode {
     let args = Args::parse();
     let echo = !args.no_echo;
-    let ws = (args.ws_size, args.library);
+    let ws = (
+        args.ws_size,
+        Box::new(Files(args.library)) as Box<dyn Store>,
+    );
     let outcome = match args.file {
         Some(path) => shell::run_batch(Some(&path), echo, ws),
         None if std::io::stdin().is_terminal() => repl::run_interactive(ws),

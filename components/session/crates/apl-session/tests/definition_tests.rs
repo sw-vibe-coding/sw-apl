@@ -11,7 +11,7 @@
 //! which turned a mistyped command into a statement that failed
 //! later, when the function was run.
 
-use apl_session::Session;
+use apl_session::{Files, Session};
 
 fn out(s: &mut Session, line: &str) -> Vec<String> {
     s.respond(line).lines
@@ -95,7 +95,7 @@ fn loading_is_not_refused_and_the_definition_goes_with_the_workspace() {
     let dir = std::env::temp_dir().join(format!("sw-apl-opendef-{}", std::process::id()));
     std::fs::remove_dir_all(&dir).ok();
     let mut s = Session::default();
-    s.ws.libraries.clone_from(&dir);
+    s.ws.store = Box::new(Files(dir.clone()));
     for line in [")WSID STORED", "KEPT\u{2190}5", ")SAVE", ")CLEAR"] {
         out(&mut s, line);
     }

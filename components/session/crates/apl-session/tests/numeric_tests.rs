@@ -2,7 +2,7 @@
 //! accepts a computed length, where a value stops fitting, and what
 //! survives a trip through a saved workspace.
 
-use apl_session::Session;
+use apl_session::{Files, Session};
 
 fn out(s: &mut Session, line: &str) -> Vec<String> {
     s.respond(line).lines
@@ -137,7 +137,7 @@ fn the_edges_survive_a_saved_workspace() {
     let dir = std::env::temp_dir().join(format!("sw-apl-numeric-{}", std::process::id()));
     std::fs::remove_dir_all(&dir).ok();
     let mut s = Session::default();
-    s.ws.libraries.clone_from(&dir);
+    s.ws.store = Box::new(Files(dir.clone()));
     // A workspace file holds literals, so the numbers that are hard
     // to print are the ones that have to survive being written.
     for line in [

@@ -3,7 +3,7 @@
 //! of its own, so nothing is written into the repository and tests
 //! cannot tread on each other.
 
-use apl_session::Session;
+use apl_session::{Files, Session};
 
 fn out(s: &mut Session, line: &str) -> Vec<String> {
     let reply = s.respond(line);
@@ -20,7 +20,7 @@ fn in_own_dir(name: &str) -> (Session, Guard) {
     std::fs::remove_dir_all(&dir).ok();
     std::fs::create_dir_all(&dir).expect("mkdir");
     let mut session = Session::default();
-    session.ws.libraries.clone_from(&dir);
+    session.ws.store = Box::new(Files(dir.clone()));
     (session, Guard(dir))
 }
 

@@ -11,7 +11,7 @@ use std::io;
 use std::path::PathBuf;
 use std::rc::Rc;
 
-use apl_session::{Reply, Session};
+use apl_session::{Reply, Session, Store};
 use apl_strike::{BACK, read as struck};
 use rustyline::error::ReadlineError;
 use rustyline::{
@@ -22,12 +22,11 @@ use crate::host::{Editor, Terminal, catch_interrupt};
 use crate::shell::show;
 
 /// Run the interactive loop until `)OFF` or end of input. `ws` is
-/// the workspace size in bytes and the directory the libraries are
-/// under.
+/// the workspace size in bytes and where the libraries are kept.
 ///
 /// # Errors
 /// Terminal or I/O failures from the line editor.
-pub fn run_interactive(ws: (usize, PathBuf)) -> io::Result<()> {
+pub fn run_interactive(ws: (usize, Box<dyn Store>)) -> io::Result<()> {
     let mut editor = DefaultEditor::new().map_err(io::Error::other)?;
     // The overstrike key inserts the marker that `compose` reads, so
     // rustyline goes on editing an ordinary line and the strike is
@@ -43,7 +42,7 @@ pub fn run_interactive(ws: (usize, PathBuf)) -> io::Result<()> {
         let _ = editor.borrow_mut().load_history(path);
     }
     let mut session = Session::attached(Box::new(Terminal(Rc::clone(&editor))));
-    (session.ws.quota, session.ws.libraries) = ws;
+    (session.ws.quota, session.ws.store) = ws;
     catch_interrupt();
     prompt_loop(&mut session, &editor)?;
     if let Some(path) = &history {

@@ -2,7 +2,7 @@
 //! `nc` use.
 
 use apl_serve::serve;
-use apl_session::QUOTA;
+use apl_session::{Files, QUOTA};
 use apl_wire::{Frame, Socket, receive, send};
 use std::{
     io::{BufReader, Write},
@@ -17,7 +17,11 @@ fn connect() -> (TcpStream, BufReader<TcpStream>, thread::JoinHandle<()>) {
     let worker = thread::spawn(move || {
         let (socket, _) = listener.accept().unwrap();
         let link = Socket::new(socket).unwrap();
-        serve(Box::new(link), (QUOTA, std::env::temp_dir())).unwrap();
+        serve(
+            Box::new(link),
+            (QUOTA, Box::new(Files(std::env::temp_dir()))),
+        )
+        .unwrap();
     });
     let stream = TcpStream::connect(address).unwrap();
     stream

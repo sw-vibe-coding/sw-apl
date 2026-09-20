@@ -1,9 +1,7 @@
-//! Writing a workspace out, and the directories they live in.
-
-use std::fs;
+//! Writing a workspace out, and forgetting one.
 
 use apl_eval::{Workspace, hms};
-use apl_library::{INCORRECT, WS_NOT_FOUND, file, not_saved};
+use apl_library::{INCORRECT, WS_NOT_FOUND, named, not_saved};
 use apl_wsfile::write;
 
 use crate::command::CLEAR;
@@ -11,28 +9,28 @@ use crate::command::CLEAR;
 /// `)SAVE [name]`: write the workspace into library 0, under the name
 /// given or the one it already answers to. The reply is the moment it
 /// was written and the name it was written under, as APL\360 replied.
-/// Library 0 is made if it is not there, rather than refusing.
+/// Library 0 is made if it is not there, rather than refusing, and
+/// what "made" means is the store's business: a directory on a disc,
+/// a key in a browser.
 pub fn save(ws: &mut Workspace, name: Option<&str>) -> Vec<String> {
     let active = ws.saved.id.clone();
     let Some(id) = name.map(ToString::to_string).or_else(|| active.clone()) else {
         return vec![not_saved(CLEAR)];
     };
-    let Ok((path, _)) = file(ws, &[id.as_str()]) else {
+    if named(&[id.as_str()]).is_err() {
         return vec![INCORRECT.to_string()];
-    };
+    }
     // Report 13: naming a stored workspace that is not this one does
     // not overwrite it. `)SAVE` with no name re-stores this one, and
     // that is always allowed.
-    if path.exists() && active.as_deref() != Some(id.as_str()) {
+    let there = ws.store.read(0, &id).is_some();
+    if there && active.as_deref() != Some(id.as_str()) {
         return vec![not_saved(active.as_deref().unwrap_or(CLEAR))];
     }
     ws.saved.id = Some(id.clone());
     let when = moment(ws);
-    let made = path.parent().map_or(Ok(()), fs::create_dir_all);
-    if let Err(err) = made {
-        return vec![format!("NOT SAVED, {err}")];
-    }
-    match fs::write(path, write(&ws.saved, &when)) {
+    let text = write(&ws.saved, &when);
+    match ws.store.write(0, &id, Some(&text)) {
         Ok(()) => vec![format!("{when} {id}")],
         Err(err) => vec![format!("NOT SAVED, {err}")],
     }
@@ -43,16 +41,17 @@ pub fn save(ws: &mut Workspace, name: Option<&str>) -> Vec<String> {
 /// the time and the date, so an echo of the name would be output it
 /// never produced. It takes no library number: library 0 is the only
 /// one you can write to.
-pub fn drop_workspace(ws: &Workspace, rest: &[&str]) -> Vec<String> {
+pub fn drop_workspace(ws: &mut Workspace, rest: &[&str]) -> Vec<String> {
     let [name] = rest else {
         return vec![INCORRECT.to_string()];
     };
-    let path = match file(ws, &[*name]) {
-        Ok((path, _)) => path,
+    let found = match named(&[*name]) {
+        Ok(found) => found,
         Err(report) => return vec![report.to_string()],
     };
-    match fs::remove_file(path) {
-        Ok(()) => vec![moment(ws)],
+    let when = moment(ws);
+    match ws.store.write(0, &found.name, None) {
+        Ok(()) => vec![when],
         Err(_) => vec![WS_NOT_FOUND.to_string()],
     }
 }

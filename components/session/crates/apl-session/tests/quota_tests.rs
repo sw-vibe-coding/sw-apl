@@ -4,7 +4,7 @@
 //! nothing is written into the repository and cargo's parallel test
 //! threads cannot tread on each other.
 
-use apl_session::Session;
+use apl_session::{Files, Session};
 
 fn out(s: &mut Session, line: &str) -> Vec<String> {
     s.respond(line).lines
@@ -97,7 +97,7 @@ fn a_load_that_will_not_fit_leaves_the_workspace_it_found() {
     let dir = std::env::temp_dir().join(format!("sw-apl-quota-{}", std::process::id()));
     std::fs::remove_dir_all(&dir).ok();
     let mut s = Session::default();
-    s.ws.libraries.clone_from(&dir);
+    s.ws.store = Box::new(Files(dir.clone()));
     for line in [")WSID BIG", "A\u{2190}\u{2373}500", ")SAVE"] {
         out(&mut s, line);
     }
@@ -118,7 +118,7 @@ fn a_copy_that_will_not_fit_leaves_the_workspace_it_found() {
     let dir = std::env::temp_dir().join(format!("sw-apl-quota-copy-{}", std::process::id()));
     std::fs::remove_dir_all(&dir).ok();
     let mut s = Session::default();
-    s.ws.libraries.clone_from(&dir);
+    s.ws.store = Box::new(Files(dir.clone()));
     for line in [")WSID DONOR", "A\u{2190}1", "B\u{2190}\u{2373}500", ")SAVE"] {
         out(&mut s, line);
     }

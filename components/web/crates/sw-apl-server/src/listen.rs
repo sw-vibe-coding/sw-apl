@@ -16,6 +16,7 @@ use std::sync::atomic::{AtomicUsize, Ordering};
 use std::thread;
 
 use apl_serve::serve;
+use apl_session::Files;
 use apl_wire::{Link, Socket};
 
 use crate::http::greet;
@@ -31,6 +32,10 @@ pub enum Dialled {
 }
 
 /// What every session is given, and what limits how many there are.
+///
+/// The library root rather than a store: a store belongs to one
+/// session and is built for it in `hold`, so no two terminals share
+/// one.
 #[derive(Clone, Debug)]
 pub struct Service {
     /// The workspace size in bytes and the directory the libraries
@@ -87,5 +92,6 @@ fn hold(socket: TcpStream, service: &Service, over: Dialled) -> io::Result<()> {
             None => return Ok(()),
         },
     };
-    serve(link, service.ws.clone())
+    let (quota, root) = service.ws.clone();
+    serve(link, (quota, Box::new(Files(root))))
 }

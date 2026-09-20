@@ -7,6 +7,7 @@ members = [
     "crates/apl-ibeam",
     "crates/apl-space",
     "crates/apl-wsfile",
+    "crates/apl-store",
     "crates/apl-eval",
 ]
 resolver = "2"

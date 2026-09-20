@@ -6,18 +6,16 @@
 //! runs the definitions and leaves the commands alone. See
 //! `docs/index-origin-considerations.md`.
 
-use std::fs;
-
 use apl_copy::take;
 use apl_eval::Workspace;
-use apl_library::{IMPROPER_LIBRARY, INCORRECT, Stored, root, text};
+use apl_library::{IMPROPER_LIBRARY, INCORRECT, Stored, library, text};
 
 use crate::command::Answer;
 
-/// `)LOAD [lib] name`: replace the workspace with a saved one. The
-/// file is APL, and loading it is typing it, so its lines come back
-/// to be fed through the session -- the evaluator alone would miss
-/// the `)` commands and the del definitions.
+/// `)LOAD [lib] name`: replace the workspace with a saved one. A
+/// stored workspace is APL, and loading it is typing it, so its
+/// lines come back to be fed through the session -- the evaluator
+/// alone would miss the `)` commands and the del definitions.
 ///
 /// The reply is SAVED and the moment the file records, as APL\360
 /// replied, and nothing else: typing DESCRIBE is the reader's move.
@@ -82,21 +80,14 @@ pub fn lib(ws: &Workspace, rest: &[&str]) -> Vec<String> {
     // A word that is not a number is a command `)LIB` does not take;
     // a number naming no library is a reference that is not a
     // library. The manual keeps those apart and so does this.
-    let numbered = |n: usize| root(ws, n).ok_or(IMPROPER_LIBRARY);
+    let numbered = |n: usize| library(n).ok_or(IMPROPER_LIBRARY);
     let found = match rest {
         [] => numbered(0),
         [n] => n.parse().map_err(|_| INCORRECT).and_then(numbered),
         _ => Err(INCORRECT),
     };
-    let dir = match found {
-        Ok(dir) => dir,
-        Err(report) => return vec![report.to_string()],
-    };
-    let Ok(entries) = fs::read_dir(dir) else {
-        return Vec::new();
-    };
-    let stem = |e: fs::DirEntry| Some(e.file_name().to_str()?.strip_suffix(".apl.ws")?.to_string());
-    let mut found: Vec<String> = entries.filter_map(Result::ok).filter_map(stem).collect();
-    found.sort();
-    found
+    match found {
+        Ok(number) => ws.store.list(number),
+        Err(report) => vec![report.to_string()],
+    }
 }

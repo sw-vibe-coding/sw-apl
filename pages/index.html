@@ -33,8 +33,11 @@
 <footer>
   The interpreter is compiled to WebAssembly and runs in a worker in this
   tab. There is no server: nothing typed here leaves your browser, and
-  nothing is sent anywhere. <code>)SAVE</code> and <code>)LOAD</code> have no
-  filesystem to use yet. The keyboard is the IBM 2741's: unshifted letters
+  nothing is sent anywhere. <code>)SAVE</code> writes library 0 into this
+  browser's own storage, so a saved workspace comes back the next time you
+  open this page in this browser, and is in no other browser and on no other
+  machine. <code>)LIB 1</code> lists the workspaces sw-apl ships.
+  The keyboard is the IBM 2741's: unshifted letters
   are capitals, <kbd>Shift</kbd>-L is <code>⎕</code>, and
   <kbd>Ctrl</kbd>-<kbd>]</kbd> overstrikes, so <code>⍟</code> is
   <code>○</code>, that key, <code>*</code>. Hold <kbd>Alt</kbd> for the

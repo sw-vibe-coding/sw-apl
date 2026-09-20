@@ -9,6 +9,7 @@ use apl_console::{Console, Output, Print, Shown, Transcript, render_all};
 use apl_ibeam::{Clock, stopped};
 use apl_prims::Env;
 use apl_space::{Funcs, Groups, Vars, of_value, room, used};
+use apl_store::{Files, Store};
 use apl_value::{AplResult, Array};
 
 use crate::frame::Activation;
@@ -71,14 +72,14 @@ pub struct Workspace {
     /// Sixtieths of a second since midnight when the session began,
     /// which `⌶24` reports. The host sets it with the clock.
     pub signed_on: i64,
-    /// Where the workspace libraries are, which is the directory
-    /// holding `work/` and `ws/`. It belongs to the session, not to
-    /// the workspace: a saved workspace does not carry the machine
-    /// it was saved on.
-    pub libraries: PathBuf,
+    /// Where the workspace libraries are kept: a directory for the
+    /// CLI and the service, the browser's own storage for the demo.
+    /// It belongs to the session, not to the workspace: a saved
+    /// workspace does not carry the machine it was saved on.
+    pub store: Box<dyn Store>,
     /// How many bytes this workspace may hold, and so what the space
     /// available reads against. Session state for the same reason the
-    /// libraries are: a workspace saved under a large quota need not
+    /// store is: a workspace saved under a large quota need not
     /// fit under a small one, exactly as on APL\360.
     pub quota: usize,
 }
@@ -91,7 +92,7 @@ impl Default for Workspace {
             console: Box::new(Transcript::default()),
             clock: stopped,
             signed_on: 0,
-            libraries: PathBuf::from("."),
+            store: Box::new(Files(PathBuf::from("."))),
             quota: apl_space::DEFAULT,
         }
     }

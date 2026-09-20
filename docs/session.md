@@ -313,6 +313,12 @@ Library 1 holds:
 at a time, as APL\360 did. A workspace is `NAME.apl.ws`, UTF-8
 text (see `design.md` D7).
 
+A directory is where the CLI and the service keep them, not what a
+library is. In a browser there is no filesystem: library 1 is baked
+into the page and library 0 is the browser's own storage. The
+commands, the names and the file format are the same either way --
+`terminal.md` says what a browser keeps and for how long.
+
 A saved workspace is APL you could have typed, so it can also be
 run as a program:
 
