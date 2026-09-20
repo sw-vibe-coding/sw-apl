@@ -94,6 +94,14 @@ pages:
     cd components/web/crates/apl-wasm && \
       wasm-pack build --release --target web --no-pack \
         --out-dir ../../../../pages/wasm
+    # The keyboard picture is not ours and is share-alike, so it goes
+    # into the bundle with the terms it travels under. A page that
+    # shows it is a redistribution like any other.
+    mkdir -p pages/redistributed/apl-keyboard
+    cp images/redistributed/apl-keyboard/APL-keybd2.svg \
+       images/redistributed/apl-keyboard/LICENSE \
+       images/redistributed/apl-keyboard/ATTRIBUTION.md \
+       pages/redistributed/apl-keyboard/
 
 # Serve pages/ the way a static host would, so the demo can be tried
 # before anything is published. The page installs a service worker to

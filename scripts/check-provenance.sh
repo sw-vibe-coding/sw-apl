@@ -32,5 +32,28 @@ if [ -n "$untracked" ]; then
     echo "$untracked" | sed 's/^/    /'
     status=1
 fi
-[ "$status" = 0 ] && echo "check-provenance: all workspaces in ws/ are ours"
+# Borrowed material that IS redistributed lives under
+# images/redistributed/, one directory per work, and may not travel
+# without the terms it travels under. A licence file nobody wrote is
+# the whole risk here: copying a file is one command, and finding out
+# afterwards what it was licensed under is not.
+for dir in images/redistributed/*/; do
+    [ -d "$dir" ] || continue
+    for needed in LICENSE ATTRIBUTION.md; do
+        if [ -f "$dir$needed" ]; then
+            echo "  ok   $dir$needed"
+        else
+            echo "  FAIL $dir: no $needed"
+            status=1
+        fi
+    done
+done
+borrowed="$(git ls-files --others --exclude-standard 'images/redistributed/')"
+if [ -n "$borrowed" ]; then
+    echo "  FAIL untracked files under images/redistributed/:"
+    echo "$borrowed" | sed 's/^/    /'
+    status=1
+fi
+
+[ "$status" = 0 ] && echo "check-provenance: ws/ is ours, and what is borrowed says so"
 exit "$status"

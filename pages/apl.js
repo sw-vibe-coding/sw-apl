@@ -31,18 +31,40 @@ const stop = (why) => {
 // Cross-origin isolation, without which there is no SharedArrayBuffer
 // and so no way for the session's thread to block. The service worker
 // adds the headers a static host will not; the page then has to be
-// loaded again under it, once.
+// built again under it, because the response that built this one was
+// fetched before the worker could touch it.
+//
+// The count is what stops a reload loop on a browser that will not
+// isolate whatever we do, and it is cleared on success so that a
+// later visit is not still carrying a refusal from an older build.
+const RELOADS = "apl-isolation-reloads";
+
 async function isolate() {
-  if (self.crossOriginIsolated) return true;
+  if (self.crossOriginIsolated) {
+    try { sessionStorage.removeItem(RELOADS); } catch { /* private mode */ }
+    return true;
+  }
   if (!("serviceWorker" in navigator)) return false;
   try {
     await navigator.serviceWorker.register("sw.js");
     await navigator.serviceWorker.ready;
-  } catch {
+  } catch (error) {
+    console.error("sw-apl: the isolation worker would not install:", error);
     return false;
   }
-  if (sessionStorage.getItem("apl-isolated")) return false;
-  sessionStorage.setItem("apl-isolated", "1");
+  let tries = 0;
+  try {
+    tries = Number(sessionStorage.getItem(RELOADS) || 0);
+    sessionStorage.setItem(RELOADS, String(tries + 1));
+  } catch {
+    // Without session storage there is no way to count, so reload
+    // once and let the load after it decide.
+    tries = navigator.serviceWorker.controller ? 2 : 0;
+  }
+  if (tries >= 2) {
+    console.error("sw-apl: still not isolated after", tries, "reloads");
+    return false;
+  }
   location.reload();
   return false;
 }
@@ -52,8 +74,12 @@ async function run() {
   if (!(await isolate())) {
     stop(
       "This browser will not give the page shared memory, which the " +
-        "interpreter needs in order to wait for a line. Try a window " +
-        "that is not private, or run sw-apl locally instead.",
+        "interpreter needs in order to stop and wait for a line.\n" +
+        "Close the tab and open it again, which is enough if an " +
+        "earlier visit left a stale refusal behind. A private window " +
+        "will not work, because it refuses the service worker that " +
+        "asks for the headers.\n" +
+        "Failing that, run the interpreter locally: just demo.",
     );
     return;
   }

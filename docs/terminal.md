@@ -54,7 +54,14 @@ from Shift.
   Shift-minus.
 - The semicolon and apostrophe keys enter `[` and `]`; shifted, `(`
   and `)`. Shift-apostrophe then `off` and Enter signs off, and F4
-  types `)` as well.
+  types `)` as well. The brackets are on the home row because that is
+  where the 2741 put them -- it has two keys right of `L` and only
+  one right of `P`, where a US keyboard has two and two.
+- That one key right of `P`, which a US keyboard labels `[`, carries
+  both arrows: `→` unshifted and `←` shifted.
+- Shift-A, Shift-W, Shift-Z and Shift-X enter `⍺`, `⍵`, `⊂` and `⊃`,
+  and Shift-1 enters `¨`. They are on the typeball and mean nothing;
+  see below.
 - Shifted number-row keys 2 through 0 enter high minus, less,
   less-or-equal, equal, greater-or-equal, greater, not-equal, or, and
   and.
@@ -62,6 +69,39 @@ from Shift.
   Shift-V enters union.
 - Shift-F is the underbar: `A`, the overstrike key, Shift-F is
   underscored `A`.
+
+### Four keys with nothing behind them
+
+The typeball carries `⍺` on A, `⍵` on W, `⊂` on Z and `⊃` on X, and
+none of the four means anything in APL\360. They are not functions:
+`⍺` and `⍵` became the arguments of a direct definition in Dyalog, and
+`⊂` and `⊃` became enclose and disclose in APL2, all of them years
+later. They are not letters either -- a name is built from `A` to `Z`,
+the underscored alphabet, `∆`, `⍙` and digits, and these are not in
+that alphabet. And unlike `∩`, which exists so that the lamp `⍝` can
+be struck from it and `○`, none of the four is a part of any
+overstrike.
+
+What is left is the one thing every character of the set can do: be
+character data.
+
+```apl
+      ⍴'⍺⍵⊂⊃'
+4
+      'THE ⊂ KEY'
+THE ⊂ KEY
+```
+
+That is their whole use, and it is a real one -- APL\360's character
+set is what a quoted vector may hold, and what `⍞` may print.
+
+Typing one bare is an error, as it should be, because there is no
+function there to apply. sw-apl's message for it is wrong today: it
+says `not APL\360`, which is false of a glyph the 2741 printed.
+Correcting that is the same work as correcting it for `∩` and `∪`,
+which `docs/plan.md` already has as a step; these four join it.
+
+`¨`, on the shifted `1` key, is in the same position.
 
 Ctrl-] is the overstrike key. Backspace cannot be it -- a line editor
 needs backspace for deleting -- and neither can Ctrl-H, which *is*

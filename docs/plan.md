@@ -369,6 +369,28 @@ worse than none. This is the keyless path the sw-tos lesson asks for,
 arriving before the clickable board rather than with it: seeing which
 key carries a glyph is most of the help, and clicking it is the rest.
 
+Owner direction 2026-09-20, third: the keyboard picture is also how
+you type, without a keyboard at all.
+
+The board becomes the input method for a reader with a touch screen
+and no APL keycaps. Caps Lock is the mode, as it was the mode on the
+2741 itself: click it and the shifted glyphs light up while the
+unshifted ones dim; click a key and its lit glyph is typed; click
+Caps Lock again and the letters light instead. The owner's worked
+example is `)WSID` -- Caps Lock, `)`, Caps Lock, W, S, I, D, and the
+big return key -- typed without touching a keyboard.
+
+This is what the picture being an SVG buys, and it is also where
+share-alike starts to bite. The file is all outline paths: no text
+elements, no identified keys, nothing to attach a click to. Two ways
+out, and they are not equal. Overlaying hit-boxes computed from the
+key grid leaves the file untouched and the licence simple. Giving the
+paths identifiers is a change to the work, which CC BY-SA allows and
+which then obliges us to say what we changed and to pass the same
+licence on. Prefer the overlay, and if the grid turns out not to be
+regular enough for it, take the modification deliberately and record
+it -- not by accident.
+
 Owner direction 2026-09-19, fourth: a public demo, an attention key,
 and what a workspace library means with no filesystem under it.
 
@@ -596,6 +618,16 @@ and struck into nothing. Minimum and maximum, floor and ceiling,
 were `⌊` and `⌈` throughout, as they still are. They became
 primitives only in IBM APL2 (1984): dyadic `∩` intersection,
 monadic `∪` unique, dyadic `∪` union.
+
+Found 2026-09-20 while reading the keymap out of the 2741 keyboard
+picture: it is not two glyphs but seven. `⍺` on A, `⍵` on W, `⊂` on
+Z, `⊃` on X and `¨` on shifted 1 are all on the typeball and all
+classified `[[later]]` in `data/glyphs.toml`, so all five earn the
+same false "not APL\360". None of them is a function in APL\360,
+none is a letter a name may use, and none is a part of any overstrike
+-- unlike `∩`, which the lamp is struck from. What they can do is be
+character data, which `docs/terminal.md` now says. The step below
+covers all seven.
 
 So sw-apl's `[[later]]` classification of the two is wrong on its
 face -- a glyph a later APL *introduced* is not one the 2741 had --

@@ -14,6 +14,10 @@
 # decides: commit this directory, or build it in a workflow.
 /pages/wasm/
 
+# Copied into the bundle by `just pages` from images/redistributed/,
+# which is where the tracked original and its licence live.
+/pages/redistributed/
+
 # Claude Code local state: per-machine settings + runtime locks.
 # EXCEPTION: .claude/commands/ holds shared slash commands (e.g.
 # /mw-cp) that must travel with the repo.

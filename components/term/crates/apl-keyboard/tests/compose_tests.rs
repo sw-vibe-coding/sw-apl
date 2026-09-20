@@ -85,3 +85,102 @@ fn paste_is_unicode_and_cursor_edits_cells() {
     k.type_key('{');
     assert_eq!(k.text(), "A\u{332}←2");
 }
+
+/// Every key of the IBM 2741 APL keyboard, transcribed by eye from
+/// `images/redistributed/apl-keyboard/APL-keybd2.svg`, which is the
+/// only place the layout exists -- the article about the 2741 carries
+/// no key table, and the picture is all outline paths, so no program
+/// can read it for us.
+///
+/// The transcription is therefore the thing to check against the
+/// picture when either changes, and this test is what stops the map
+/// drifting away from it quietly.
+const TYPEBALL: [(char, &str); 49] = [
+    // Number row, shifted. Unshifted these are the digits.
+    ('!', "¨"),
+    ('@', "¯"),
+    ('#', "<"),
+    ('$', "≤"),
+    ('%', "="),
+    ('^', "≥"),
+    ('&', ">"),
+    ('*', "≠"),
+    ('(', "∨"),
+    (')', "∧"),
+    // The two keys right of zero carry arithmetic, not punctuation.
+    ('-', "+"),
+    ('_', "-"),
+    ('=', "×"),
+    ('+', "÷"),
+    // Top letter row, shifted, then the one key right of P.
+    ('Q', "?"),
+    ('W', "⍵"),
+    ('E', "∊"),
+    ('R', "⍴"),
+    ('T', "~"),
+    ('Y', "↑"),
+    ('U', "↓"),
+    ('I', "⍳"),
+    ('O', "○"),
+    ('P', "*"),
+    ('[', "→"),
+    ('{', "←"),
+    // Home row, shifted, then the two keys right of L.
+    ('A', "⍺"),
+    ('S', "⌈"),
+    ('D', "⌊"),
+    ('F', "_"),
+    ('G', "∇"),
+    ('H', "∆"),
+    ('J', "∘"),
+    ('K', "'"),
+    ('L', "⎕"),
+    (';', "["),
+    (':', "("),
+    ('\'', "]"),
+    ('"', ")"),
+    // Bottom row, shifted, then comma, full stop and solidus.
+    ('Z', "⊂"),
+    ('X', "⊃"),
+    ('C', "∩"),
+    ('V', "∪"),
+    ('B', "⊥"),
+    ('N', "⊤"),
+    ('M', "|"),
+    ('<', ";"),
+    ('>', ":"),
+    ('?', "\\"),
+];
+
+#[test]
+fn every_key_sends_what_the_2741_typeball_carried() {
+    for (key, expected) in TYPEBALL {
+        let mut keyboard = Keyboard::default();
+        keyboard.type_key(key);
+        assert_eq!(keyboard.text(), expected, "the {key:?} key");
+    }
+}
+
+#[test]
+fn an_unshifted_letter_is_the_capital_the_typeball_printed() {
+    // A 2741's APL element had one alphabet, in italic capitals, and
+    // it was typed with the machine in lower case.
+    let mut keyboard = Keyboard::default();
+    for c in "abcxyz".chars() {
+        keyboard.type_key(c);
+    }
+    assert_eq!(keyboard.text(), "ABCXYZ");
+}
+
+#[test]
+fn the_brackets_are_on_the_home_row_and_the_arrows_are_not() {
+    // The 2741 has one key right of P, carrying both arrows, and two
+    // right of L carrying the brackets and parentheses. A US keyboard
+    // has two and two, so the bracket keys of one are not the bracket
+    // keys of the other.
+    let mut keyboard = Keyboard::default();
+    for c in ";1'{".chars() {
+        keyboard.type_key(c);
+    }
+    assert_eq!(keyboard.text(), "[1]←");
+}
