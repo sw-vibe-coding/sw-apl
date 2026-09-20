@@ -135,6 +135,18 @@ pages-serve: pages
 check-pages: pages
     node scripts/check-pages.mjs
 
+# Build the demo for publishing and record what was built. GitHub
+# Pages serves the tracked pages/ folder, so this is the whole of
+# deployment: run it, commit pages/, and push.
+#
+# Pages sends no headers of its own, so the published page gets its
+# cross-origin isolation from the service worker and loads twice on
+# a first visit. That path is what `just check-pages` covers by
+# serving without the headers.
+publish: pages
+    ./scripts/publish-pages.sh
+    @echo "publish: commit pages/ and push; GitHub Pages serves it"
+
 # Run the conformance corpus against the release binary.
 conformance:
     ./scripts/run-samples.sh

@@ -21,6 +21,12 @@ import process from 'node:process';
 
 const ROOT = process.argv[2] ?? 'pages';
 
+// A GitHub project page is served from /<repo>/, never from the
+// root. Every URL the page and the worker fetch has to be relative
+// for that to work, and the service worker's scope has to cover
+// them -- so the checks run under a prefix as well as at the root.
+const PREFIX = '/sw-apl/';
+
 const TYPES = {
   '.json': 'application/json',
   '.html': 'text/html',
@@ -50,10 +56,14 @@ const ISOLATION = {
   'cross-origin-resource-policy': 'cross-origin',
 };
 
-function host(dir, isolated = false) {
+function host(dir, isolated = false, prefix = '/') {
   const extra = isolated ? ISOLATION : {};
   const server = createServer(async (req, res) => {
-    const path = normalize(new URL(req.url, 'http://x').pathname);
+    let path = normalize(new URL(req.url, 'http://x').pathname);
+    if (prefix !== '/') {
+      if (!path.startsWith(prefix)) return res.writeHead(404).end('not found');
+      path = path.slice(prefix.length - 1) || '/';
+    }
     const held = serving.get(path);
     if (held !== undefined) {
       res.writeHead(200, { 'content-type': 'text/javascript', ...extra });
@@ -265,6 +275,58 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   check('and the session starts', await typing(page), 'the prompt never came');
   await page.context().close();
   direct.close();
+}
+
+// 7. Espanso, and any other OS-level expander. It watches the
+//    keystrokes before the browser sees them, so the 2741 map
+//    cannot hide a trigger from it -- but it replaces what was
+//    typed either by sending backspaces and the glyph as a key, or
+//    by pasting, and the page has to accept both. Backtick is not
+//    in the keymap, so the trigger passes through untouched.
+{
+  const page = await visit();
+  const line = () => page.evaluate(() =>
+    document.getElementById('before').textContent + document.getElementById('after').textContent);
+
+  await page.keyboard.press('`');
+  await page.keyboard.press('r');
+  check('an expander trigger reaches the line untouched', (await line()) === '`R', await line());
+
+  await page.keyboard.press('Backspace');
+  await page.keyboard.press('Backspace');
+  await page.evaluate(() => dispatchEvent(new KeyboardEvent('keydown', { key: '⍴', bubbles: true })));
+  check('a glyph sent as a keystroke arrives as itself', (await line()) === '⍴', await line());
+
+  await page.evaluate(() => {
+    const d = new DataTransfer();
+    d.setData('text', '⍳5');
+    dispatchEvent(new ClipboardEvent('paste', { clipboardData: d, bubbles: true, cancelable: true }));
+  });
+  check('and a glyph pasted in arrives as itself', (await line()) === '⍴⍳5', await line());
+  await page.context().close();
+}
+
+// 8. Under a sub-path, which is where GitHub Pages actually serves
+//    a project page from. Nothing must be fetched from the root.
+{
+  const sub = await host(ROOT, false, PREFIX);
+  const at = `http://127.0.0.1:${sub.address().port}${PREFIX}`;
+  const page = await (await browser.newContext()).newPage();
+  const missed = [];
+  page.on('response', (r) => { if (r.status() >= 400) missed.push(r.url()); });
+  await page.goto(at, { waitUntil: 'load' });
+  await page.waitForTimeout(3500);
+  await settle(page);
+  check('the page works under a sub-path', await typing(page),
+    JSON.stringify((await paper(page)).slice(-200)));
+  check('and fetches nothing from the root',
+    missed.filter((u) => !u.endsWith('favicon.ico')).length === 0, missed.join(' '));
+  await send(page, ')LIB 1');
+  const shown = await paper(page);
+  check('and runs a line there',
+    ['EDIT', 'LIFE', 'RACE'].every((n) => shown.includes(n)), JSON.stringify(shown.slice(-160)));
+  await page.context().close();
+  sub.close();
 }
 
 await browser.close();

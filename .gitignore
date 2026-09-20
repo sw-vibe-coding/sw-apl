@@ -7,27 +7,16 @@
 # trunk dev build output for the future web app.
 /components/web/dist/
 
-# The on-screen board's data, written by `just pages` from the
-# keymap apl-keyboard compiles in and from data/glyphs.toml. Copies,
-# so they are made at build time and never committed.
-/pages/keymap.json
-/pages/glyph-names.json
-
-# The version the browser demo's files are fetched at, written by
-# `just pages`. Build output: it is a digest of the build, so it
-# cannot be written before there is one.
-/pages/version.txt
-
-# The browser demo's WebAssembly, built into pages/ by `just pages`.
-# The page, the worker and the service worker beside it are source and
-# are tracked; only the build output is not. Publishing to GitHub Pages
-# needs these files served from somewhere, so whoever configures it
-# decides: commit this directory, or build it in a workflow.
-/pages/wasm/
-
-# Copied into the bundle by `just pages` from images/redistributed/,
-# which is where the tracked original and its licence live.
-/pages/redistributed/
+# pages/ is tracked in full, build output and all: the demo is
+# published on GitHub Pages the way sw-ml-study/sw-mlpl publishes
+# its own, built locally by `just publish` and pushed. Pages serves
+# the folder as it finds it, so what is not committed is not served.
+#
+# The alternative was a workflow that builds it there, which would
+# keep the repository smaller and make the published page depend on
+# a toolchain nobody can see. A reader can check out this commit and
+# get byte for byte what the demo served; build-info.json says which
+# commit that was.
 
 # Claude Code local state: per-machine settings + runtime locks.
 # EXCEPTION: .claude/commands/ holds shared slash commands (e.g.

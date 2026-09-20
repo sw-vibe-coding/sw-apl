@@ -1,0 +1,10 @@
+number = 15
+slug = "publish-pages"
+status = "in-progress"
+description = """
+Owner direction 2026-09-20, seventh: publish the demo on GitHub
+Pages, the wa..."""
+role = "production"
+context_files = []
+created_at = "2026-09-20T14:43:07"
+commits = []

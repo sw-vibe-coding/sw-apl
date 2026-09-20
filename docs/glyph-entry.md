@@ -4,6 +4,15 @@ sw-apl reads Unicode glyphs and nothing else -- there are no keyword
 aliases -- so you need a way to type them. There are two kinds of
 answer, and they work together:
 
+Espanso and the Emacs input method work in the browser demo too,
+and nothing had to be done to make them: an OS-level expander
+watches the keystrokes before the browser sees them, so the 2741
+map cannot hide a trigger from it, and the backtick it triggers on
+is not a key the map claims. Espanso replaces what was typed either
+by sending backspaces and the glyph as a keystroke or by pasting,
+and the page takes a glyph either way -- a character that is not in
+the map is inserted as itself. `just check-pages` pins all three.
+
 In the browser demo there is a third: a board on the page, drawn from
 the same `keymap.json` the terminal compiles in, whose keys insert
 the glyph they carry. It is the only way in on a touch screen, which

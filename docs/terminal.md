@@ -214,6 +214,12 @@ and draws what it hands back, so `⍟` is `○`, `Ctrl-]`, `*` in a
 browser exactly as it is in a terminal, and there is no second copy
 of the table in JavaScript.
 
+An OS-level expander -- Espanso, or the Emacs input method -- works
+here as it does anywhere else, and needs nothing from sw-apl. It
+sees the keystrokes before the browser does, backtick is not a key
+the 2741 map claims, and a glyph it sends back arrives as itself
+whether it comes as a keystroke or as a paste.
+
 A reader with no APL keycaps, or no keyboard at all, taps the board
 on the page instead. **Keyboard** shows it and **ABC** switches it
 between the glyph each key carries and the letter or digit it is

@@ -54,6 +54,21 @@ if [ -n "$borrowed" ]; then
     echo "$borrowed" | sed 's/^/    /'
     status=1
 fi
+# pages/redistributed/ is the same material again, tracked because
+# the published demo is served from the folder as committed. That
+# makes it a redistribution in the plainest sense, so the terms have
+# to be in the bundle and not only in the repository.
+for dir in pages/redistributed/*/; do
+    [ -d "$dir" ] || continue
+    for needed in LICENSE ATTRIBUTION.md; do
+        if [ -f "$dir$needed" ]; then
+            echo "  ok   $dir$needed"
+        else
+            echo "  FAIL $dir: no $needed (the published bundle must carry the terms)"
+            status=1
+        fi
+    done
+done
 
 [ "$status" = 0 ] && echo "check-provenance: ws/ is ours, and what is borrowed says so"
 exit "$status"

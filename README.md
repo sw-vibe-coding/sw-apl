@@ -11,8 +11,8 @@ terminal: traditional glyphs typed as Unicode, the six-space
 indent prompt, printer-style transcript output, the del editor
 for defining functions, and the APL\360 system commands for
 workspaces (`)CLEAR`, `)WSID`, `)SAVE`, `)LOAD`, `)FNS`,
-`)VARS`, ...). It is a command-line program for macOS and Linux;
-a browser version built with Yew and WebAssembly follows.
+`)VARS`, ...). It is a command-line program for macOS and Linux,
+and the same interpreter runs in a browser.
 
 It is deliberately pure APL\360: not APLSV (no quad-named system
 variables, no execute or format; I-beams instead), not APL2, not
@@ -20,6 +20,16 @@ Dyalog (flat arrays only, no nested arrays, no each). It is also
 not a port. The C interpreter
 `sw-cor24-apl` and GNU APL served only as references for expected
 behaviour and for the conformance corpus in `samples/`.
+
+## Live demo
+
+**[Try it in your browser](https://sw-vibe-coding.github.io/sw-apl/)**
+
+The interpreter compiled to WebAssembly, running in a worker in the
+tab. There is no server: nothing typed there is sent anywhere.
+`)LIB 1` lists the workspaces sw-apl ships and `)LOAD 1 RACE` loads
+one; `)SAVE` writes into the browser's own storage. A keyboard on
+the page gives every glyph a key, so a touch screen works too.
 
 ## A session
 
@@ -146,7 +156,7 @@ web demo.
 | Functions | Del editor, niladic/monadic/dyadic headers, locals, labels, branching, recursion |
 | System | I-beam system functions, quad and quote-quad I/O, the APL\360 system commands (`)ORIGIN`, `)DIGITS`, `)WIDTH`, workspaces on disk), the DESCRIBE convention |
 | Session | Six-space indent prompt, APL\360 error display with caret, batch transcripts |
-| Input | Espanso and Emacs keymaps, and 2741 overstrikes on Ctrl-] (`docs/glyph-entry.md`) |
+| Input | Espanso and Emacs keymaps, 2741 overstrikes on Ctrl-], and an on-screen board in the browser (`docs/glyph-entry.md`) |
 
 This README is plain ASCII so it renders the same everywhere; the
 documents below show real APL glyphs:
