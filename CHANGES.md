@@ -14,6 +14,13 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-20
 
+- chore(agentrail): complete 008-terminal-2741
+- feat(web): the 2741 keyboard in the browser, from the same crate
+- docs(plan): owner direction 2026-09-20, from using the demo
+- chore(agentrail): complete 007-keyboard-layout
+- feat(term): the keymap read out of the 2741's own keyboard, and the picture it came from
+- docs(plan): owner direction 2026-09-20, the 2741 keyboard and its picture
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 006-wasm-session
 - feat(wasm): the session in a browser, on a worker, and a pages bundle
 - docs(plan): owner direction 2026-09-19, the pages demo, ATTN, and libraries
