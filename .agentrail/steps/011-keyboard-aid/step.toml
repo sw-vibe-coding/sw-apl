@@ -1,0 +1,10 @@
+number = 11
+slug = "keyboard-aid"
+status = "pending"
+description = """
+Owner direction 2026-09-20, second. The browser offers the keyboard
+as an aid..."""
+role = "production"
+context_files = []
+created_at = "2026-09-20T10:51:05"
+commits = []

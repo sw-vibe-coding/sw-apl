@@ -1,0 +1,10 @@
+number = 7
+slug = "keyboard-layout"
+status = "pending"
+description = """
+Owner direction 2026-09-20. The keyboard is the 2741's, and the
+picture of it..."""
+role = "production"
+context_files = []
+created_at = "2026-09-20T10:50:06"
+commits = []

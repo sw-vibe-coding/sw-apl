@@ -331,6 +331,44 @@ and correct the quoted heredoc delimiters in the obscured-load and workspace-fil
 regression commands. These three existing fixtures fail on Linux independently
 of the prototype; their baselines remain unchanged in this slice.
 
+Owner direction 2026-09-20: the keyboard is the 2741's, and the
+picture of it comes with a licence.
+
+The owner types on a keyboard relabelled as a 2741's, so the map is
+not a convenience to be chosen -- it is a physical fact to be matched.
+Two keys are wrong today: the semicolon key sends `]` and shifted it
+sends `)`. ATTN is Escape, which is the same byte as Ctrl-[, and
+Ctrl-] is the 2741's backspace, which is the key a glyph is struck
+with. The last two are already what sw-apl does, in the terms the
+manual uses for them.
+
+The authority is the IBM 2741 APL keyboard itself, and the article
+about it carries no key table -- the layout is only in the picture.
+So the picture is the source: the keymap is read out of it rather
+than remembered, and the two are kept together where a reader can
+check one against the other.
+
+That picture is `File:APL-keybd2.svg` by Wikimedia Commons user
+Rursus, under CC BY-SA 3.0. The owner wants it redistributed with
+sw-apl, which the licence allows on its terms: credit the author,
+link the licence, say whether it was changed, and pass the same
+licence on. It goes in `images/redistributed/apl-keyboard/` with the
+licence text beside it, kept apart from sw-apl's own MIT material so
+that what is ours and what is borrowed is never in doubt -- the same
+distinction `ws/` and `work/` already make.
+
+Owner direction 2026-09-20, second: the browser offers the keyboard
+as an aid to typing.
+
+The picture is not only reference material -- a reader who has not
+relabelled their keycaps cannot type APL at all, and the page should
+show them the board. It is offered rather than imposed: shown on
+request, pinnable to the top or the bottom of the window, and
+resizable, because a keyboard that cannot be got out of the way is
+worse than none. This is the keyless path the sw-tos lesson asks for,
+arriving before the clickable board rather than with it: seeing which
+key carries a glyph is most of the help, and clicking it is the rest.
+
 Owner direction 2026-09-19, fourth: a public demo, an attention key,
 and what a workspace library means with no filesystem under it.
 
