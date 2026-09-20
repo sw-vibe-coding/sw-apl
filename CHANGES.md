@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-20
 
+- chore(agentrail): complete 009-browser-workspaces
+- feat(store): workspace libraries with no filesystem under them
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 008-terminal-2741
 - feat(web): the 2741 keyboard in the browser, from the same crate
 - docs(plan): owner direction 2026-09-20, from using the demo
