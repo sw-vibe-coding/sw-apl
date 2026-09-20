@@ -1,0 +1,46 @@
+# Publish the browser demo to GitHub Pages.
+#
+# It builds nothing. `pages/` is committed in full -- the wasm
+# bundle included -- by `just publish`, and this uploads that
+# directory as the site. So what is served is byte for byte what is
+# in the commit `pages/build-info.json` names, and no toolchain
+# nobody can see stands between the two.
+#
+# "Deploy from a branch" cannot do this: it offers the repository
+# root or /docs and nothing else, and the demo is neither.
+name: Deploy the demo to Pages
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time, and never cancel one that is running.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload the demo
+        # Built locally by `just publish` and committed, not built here.
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "./pages"
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

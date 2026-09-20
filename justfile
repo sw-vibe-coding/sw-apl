@@ -145,7 +145,7 @@ check-pages: pages
 # serving without the headers.
 publish: pages
     ./scripts/publish-pages.sh
-    @echo "publish: commit pages/ and push; GitHub Pages serves it"
+    @echo "publish: commit pages/ and push to main; the Pages workflow serves it"
 
 # Run the conformance corpus against the release binary.
 conformance:

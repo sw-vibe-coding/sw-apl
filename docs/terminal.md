@@ -214,6 +214,13 @@ and draws what it hands back, so `⍟` is `○`, `Ctrl-]`, `*` in a
 browser exactly as it is in a terminal, and there is no second copy
 of the table in JavaScript.
 
+The demo is published by `.github/workflows/static.yml`, which
+builds nothing: it uploads the committed `pages/` as the site. So
+what is served is byte for byte what is in the commit
+`build-info.json` names. "Deploy from a branch" cannot do this --
+it offers the repository root or `/docs` and nothing else -- which
+is why the Pages source is GitHub Actions.
+
 The demo installs. `manifest.json` names it, asks for a standalone
 window, and carries the icons; `start_url` and `scope` are relative,
 so it installs from a project page's sub-path as readily as from a
