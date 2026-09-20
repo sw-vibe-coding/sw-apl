@@ -224,7 +224,7 @@ is why the Pages source is GitHub Actions.
 The demo installs. `manifest.json` names it, asks for a standalone
 window, and carries the icons; `start_url` and `scope` are relative,
 so it installs from a project page's sub-path as readily as from a
-root. The favicon is `⍝⊃⌊` turned 33 degrees: three APL glyphs that,
+root. The favicon is `⍝⍴⌊` turned 33 degrees: three APL glyphs that,
 turned, read as the letters APL. Bright green on nothing, because a
 favicon with a background is a square of somebody else's colour in a
 strip of tabs. The install icons are the project logo the README

@@ -1,0 +1,11 @@
+number = 21
+slug = "favicon-rho"
+status = "in-progress"
+description = """
+Owner correction 2026-09-20, and a deprecation warning.
+
+The mark is the lamp..."""
+role = "production"
+context_files = []
+created_at = "2026-09-20T15:54:29"
+commits = []
