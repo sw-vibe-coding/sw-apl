@@ -1,6 +1,6 @@
 number = 5
 slug = "terminal-server"
-status = "in-progress"
+status = "completed"
 description = """
 Phase 8 step 1 (docs/plan.md). The service.
 
@@ -8,5 +8,6 @@ Phase 8 step 1 (docs/plan.md). The service.
 role = "production"
 context_files = []
 created_at = "2026-09-19T07:15:06"
+completed_at = "2026-09-19T20:33:07"
 task_type = "rust-interpreter"
-commits = []
+commits = ["697c8494092c9e8bbff0102319ad4983d4699866"]
