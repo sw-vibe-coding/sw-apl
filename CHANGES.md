@@ -12,8 +12,15 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-09-20
+
+- chore(agentrail): complete 006-wasm-session
+- feat(wasm): the session in a browser, on a worker, and a pages bundle
+- docs(plan): owner direction 2026-09-19, the pages demo, ATTN, and libraries
+
 ## 2026-09-19
 
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 005-terminal-server
 - feat(web,term): promote the 2741 and its service out of experimental
 - docs(changes): refresh CHANGES.md to HEAD
