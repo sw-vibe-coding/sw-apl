@@ -39,7 +39,9 @@ sw-apl/
                                            held over a link
                sw-apl-server               the two listeners, and the
                                            terminal page
-    web/       apl-wasm                    the session on a worker,
+    web/       apl-board                   the 2741 keyboard in a
+                                           browser
+               apl-wasm                    the session on a worker,
                                            over a shared channel
     term/      apl-keyboard                2741 keys, overstrikes, the
                                            line being typed
@@ -216,9 +218,17 @@ keystrokes, so `⍟` is formed there from `○` and `*` and the service
 is sent the glyph. That is why `apl-keyboard` holds the whole
 overstrike state machine and depends on nothing but `apl-strike`:
 one table, one state machine, and every terminal reads it. It
-compiles to `wasm32-unknown-unknown` unchanged, which is what a
-browser terminal will use in place of `apl-paper` and `apl-typing`,
-the crossterm halves.
+compiles to `wasm32-unknown-unknown` unchanged, and the browser uses
+it through `apl-board` in place of `apl-paper` and `apl-typing`, the
+crossterm halves.
+
+`apl-keyboard` and `apl-wire` are shared foundations rather than
+either client's property, which is why the arrows between `term/`
+and `web/` run both ways: `aplterm` takes the protocol from `web/`
+and `apl-board` takes the keyboard from `term/`. No crate depends on
+a crate that depends on it; the pair simply sits under both clients,
+and the directories are named for where each client lives rather
+than for who owns what.
 
 What bounds the service is a fixed number of sessions, refused at
 the door rather than queued. Both listeners bind to the loopback

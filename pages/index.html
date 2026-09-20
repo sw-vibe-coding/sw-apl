@@ -16,22 +16,29 @@
   header { border-width: 0 0 1px; }
   footer { border-width: 1px 0 0; opacity: .7; font-size: 13px; }
   #paper { flex: 1; overflow-y: auto; margin: 0; padding: 1rem; white-space: pre-wrap; }
-  #line { display: flex; padding: 0 1rem 1rem; }
-  #prompt { white-space: pre; }
-  input {
-    flex: 1; border: 0; background: transparent; color: inherit;
-    font: inherit; outline: none; caret-color: currentColor;
+  #line { padding: 0 1rem 1rem; white-space: pre-wrap; word-break: break-word; }
+  #line.waiting { opacity: .45; }
+  #caret {
+    display: inline-block; width: .6em; height: 1.15em; vertical-align: text-bottom;
+    background: currentColor; animation: blink 1.1s step-end infinite;
   }
+  #line.waiting #caret { animation: none; background: none; }
+  #line.pending #caret { background: none; box-shadow: inset 0 0 0 2px currentColor; }
+  @keyframes blink { 50% { background: transparent; } }
 </style>
 <header>sw-apl &mdash; an APL\360 session in this tab</header>
 <pre id="paper"></pre>
-<div id="line"><span id="prompt"></span><input id="typed" autofocus autocomplete="off"
-  autocapitalize="off" spellcheck="false" aria-label="APL input line"></div>
+<div id="line" class="waiting"><span id="prompt"></span><span
+  id="before"></span><span id="caret"></span><span id="after"></span></div>
 <footer>
   The interpreter is compiled to WebAssembly and runs in a worker in this
   tab. There is no server: nothing typed here leaves your browser, and
   nothing is sent anywhere. <code>)SAVE</code> and <code>)LOAD</code> have no
-  filesystem to use yet. Type APL\360 glyphs directly; the keyboard and
-  overstrikes come later.
+  filesystem to use yet. The keyboard is the IBM 2741's: unshifted letters
+  are capitals, <kbd>Shift</kbd>-L is <code>⎕</code>, and
+  <kbd>Ctrl</kbd>-<kbd>]</kbd> overstrikes, so <code>⍟</code> is
+  <code>○</code>, that key, <code>*</code>. Hold <kbd>Alt</kbd> for the
+  character a key is painted with. See docs/terminal.md for the whole
+  board.
 </footer>
 <script type="module" src="apl.js"></script>

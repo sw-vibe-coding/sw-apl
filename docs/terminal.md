@@ -169,10 +169,30 @@ once more under it, so the first visit loads twice and later ones do
 not. A browser that refuses service workers gets a page that says so
 rather than a broken prompt.
 
+The keyboard is the 2741's here too, and it is the same keyboard:
+`apl-keyboard` compiled to WebAssembly, holding the keymap and the
+overstrike table that `aplterm` uses. The page sends it keystrokes
+and draws what it hands back, so `⍟` is `○`, `Ctrl-]`, `*` in a
+browser exactly as it is in a terminal, and there is no second copy
+of the table in JavaScript.
+
+Two differences from the terminal, both because a browser is not one:
+
+- Hold `Alt` for the character a key is painted with, where the
+  terminal uses `Esc`. A browser reports `Alt` on the keystroke
+  itself, so there is nothing to quote ahead of.
+- Underscored capitals are shown as they are, not as circled
+  capitals. The circle is a workaround for terminal fonts that draw a
+  combining low line badly, and a browser with an APL font does not
+  need it.
+
+Only the chords sw-apl claims are taken from the browser: `Ctrl-]`
+overstrikes and `Ctrl-C` clears the line. Copy, paste and reload are
+left alone.
+
 What does not work yet: `)SAVE` and `)LOAD` have no filesystem under
-them and say so, and the keyboard is whatever your own sends --
-overstrikes and the 2741 layout are not there yet. Type or paste APL
-glyphs directly.
+them and say so. A touch screen has no keyboard to intercept, so
+there is nothing to type with until the board itself is clickable.
 
 The WebAssembly is about 390 KB. `pages/wasm/` is build output and is
 not tracked; the page, the worker and the service worker beside it

@@ -1,4 +1,11 @@
-// The page: a channel, a worker, and a paper to print on.
+// The page: a keyboard, a channel, a worker, and a paper to print on.
+//
+// The keyboard is the 2741's, and it is the same keyboard aplterm
+// has: apl-keyboard compiled to WebAssembly, holding the keymap, the
+// overstrike table and the cells a line is made of. The page sends it
+// keystrokes and draws what it hands back, and never learns what an
+// overstrike is.
+import init, { Board } from "./wasm/apl_wasm.js";
 
 // Must agree with channel.rs, which is where these are documented.
 const SIZE = 64 * 1024;
@@ -11,7 +18,13 @@ const CLOSED = 2;
 
 const paper = document.getElementById("paper");
 const prompt = document.getElementById("prompt");
-const typed = document.getElementById("typed");
+const line = document.getElementById("line");
+const before = document.getElementById("before");
+const after = document.getElementById("after");
+
+// The keyboard, and whether it is our turn to type.
+let board = null;
+let typing = false;
 
 // What the carriage has put on the page, as one string, so that a
 // line the terminal has not finished can be carried on.
@@ -23,9 +36,21 @@ const put = (text) => {
 };
 
 const stop = (why) => {
-  typed.disabled = true;
+  typing = false;
+  line.classList.add("waiting");
   prompt.textContent = "";
   put(why + "\n");
+};
+
+// Draw the line being typed, with the carriage where the keyboard
+// says it is.
+const draw = (state) => {
+  before.textContent = state.before;
+  after.textContent = state.text.slice(state.before.length);
+  line.classList.toggle("pending", state.pending);
+  if (state.bell) {
+    line.animate([{ opacity: 1 }, { opacity: 0.3 }, { opacity: 1 }], 140);
+  }
 };
 
 // Cross-origin isolation, without which there is no SharedArrayBuffer
@@ -83,6 +108,8 @@ async function run() {
     );
     return;
   }
+  await init();
+  board = new Board();
   const channel = new SharedArrayBuffer(SIZE);
   const header = new Int32Array(channel, 0, 2);
   const body = new Uint8Array(channel, BODY);
@@ -100,29 +127,46 @@ async function run() {
 
 // Print one frame and take the typing it asks for.
 function show(frame) {
-  for (const line of frame.lines) put(line + "\n");
+  for (const text of frame.lines) put(text + "\n");
   if (frame.off || frame.prompt === null) return stop("Session ended.");
   prompt.textContent = frame.prompt;
-  typed.disabled = false;
-  typed.focus();
+  typing = true;
+  line.classList.remove("waiting");
 }
 
 // Put a typed line in the channel and wake the session.
+function send(header, body, text) {
+  // The paper keeps what was typed, as a printing terminal would:
+  // the prompt, the line, and the answer under it.
+  put(prompt.textContent + text + "\n");
+  const bytes = new TextEncoder().encode(text);
+  const fits = Math.min(bytes.length, body.length);
+  body.set(bytes.subarray(0, fits));
+  Atomics.store(header, LENGTH, fits);
+  Atomics.store(header, STATE, READY);
+  Atomics.notify(header, STATE);
+  typing = false;
+  line.classList.add("waiting");
+  prompt.textContent = "";
+  draw(JSON.parse(board.press("Unidentified", false, false)));
+}
+
+// Every keystroke goes to the keyboard, and only the ones it claims
+// are taken from the browser -- copy still copies, reload still
+// reloads.
 function listen(header, body) {
-  typed.addEventListener("keydown", (event) => {
-    if (event.key !== "Enter" || typed.disabled) return;
-    // The paper keeps what was typed, as a printing terminal would:
-    // the prompt, the line, and the answer under it.
-    put(prompt.textContent + typed.value + "\n");
-    const bytes = new TextEncoder().encode(typed.value);
-    const fits = Math.min(bytes.length, body.length);
-    body.set(bytes.subarray(0, fits));
-    Atomics.store(header, LENGTH, fits);
-    Atomics.store(header, STATE, READY);
-    Atomics.notify(header, STATE);
-    typed.value = "";
-    typed.disabled = true;
-    prompt.textContent = "";
+  addEventListener("keydown", (event) => {
+    if (!typing || event.metaKey) return;
+    const state = JSON.parse(board.press(event.key, event.ctrlKey, event.altKey));
+    if (!state.acted) return;
+    event.preventDefault();
+    if (state.submit) return send(header, body, board.take());
+    draw(state);
+  });
+  addEventListener("paste", (event) => {
+    if (!typing) return;
+    event.preventDefault();
+    draw(JSON.parse(board.paste(event.clipboardData.getData("text"))));
   });
 }
 

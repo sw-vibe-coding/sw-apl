@@ -2,6 +2,7 @@
 members = [
     "crates/apl-wire",
     "crates/apl-serve",
+    "crates/apl-board",
     "crates/apl-wasm",
     "crates/sw-apl-server",
 ]

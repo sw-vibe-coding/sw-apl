@@ -11,6 +11,7 @@ repository.workspace = true
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
+apl-board = { path = "../apl-board" }
 apl-wire = { path = "../apl-wire" }
 apl-serve = { path = "../apl-serve" }
 apl-session = { path = "../../../session/crates/apl-session" }

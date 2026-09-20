@@ -69,6 +69,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-board"
+version = "0.1.0"
+dependencies = [
+ "apl-keyboard",
+ "serde_json",
+ "wasm-bindgen",
+]
+
+[[package]]
 name = "apl-call"
 version = "0.1.0"
 dependencies = [
@@ -161,6 +170,14 @@ dependencies = [
  "apl-eval",
  "apl-library",
  "apl-value",
+]
+
+[[package]]
+name = "apl-keyboard"
+version = "0.1.0"
+dependencies = [
+ "apl-strike",
+ "serde_json",
 ]
 
 [[package]]
@@ -360,6 +377,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-strike"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+]
+
+[[package]]
 name = "apl-value"
 version = "0.1.0"
 dependencies = [
@@ -370,6 +394,7 @@ dependencies = [
 name = "apl-wasm"
 version = "0.1.0"
 dependencies = [
+ "apl-board",
  "apl-serve",
  "apl-session",
  "apl-wire",
