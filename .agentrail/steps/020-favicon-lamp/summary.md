@@ -1,0 +1,1 @@
+Changed the favicon mark from cap-horseshoe-floor to lamp-horseshoe-floor: turned 33 degrees, cap has no counter and read as a lower-case n, so the mark said nPL; the lamp turns into a proper rounded A and it reads APL. One string in gen-icons.sh, icons regenerated, published.
