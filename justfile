@@ -99,6 +99,10 @@ pages:
     # changed nothing does not invalidate a cache, and one that
     # changed anything invalidates all of it at once. The page asks
     # for this file uncached; it is build output, like pages/wasm.
+    # The on-screen board's data: the keymap it draws itself from
+    # and what each glyph is called. Both are copies made here, so
+    # that neither is copied in the repository.
+    ./scripts/gen-board.sh
     ./scripts/stamp-pages.sh
     # The keyboard picture is not ours and is share-alike, so it goes
     # into the bundle with the terms it travels under. A page that

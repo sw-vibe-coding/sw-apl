@@ -4,6 +4,14 @@ sw-apl reads Unicode glyphs and nothing else -- there are no keyword
 aliases -- so you need a way to type them. There are two kinds of
 answer, and they work together:
 
+In the browser demo there is a third: a board on the page, drawn from
+the same `keymap.json` the terminal compiles in, whose keys insert
+the glyph they carry. It is the only way in on a touch screen, which
+has no keyboard to intercept, and it is laid out like the 2741 so
+that tapping `⍴` also shows where Shift-R is. **Keyboard** shows it,
+**ABC** switches it to letters and digits, and it remembers whether
+it was up. See `terminal.md`.
+
 - **Expansion.** Espanso, an Emacs input method, or an OS keyboard
   layout turns a prefix and a letter into the glyph. This is the
   modern convenience, it needs no special hardware, and it is what

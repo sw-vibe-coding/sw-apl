@@ -15,6 +15,7 @@ const stamped = (path) =>
   `${path}${VERSION && `?v=${encodeURIComponent(VERSION)}`}`;
 
 const { default: init, Board } = await import(stamped("./wasm/apl_wasm.js"));
+const { build } = await import(stamped("./board.js"));
 
 // Must agree with channel.rs, which is where these are documented.
 const SIZE = 64 * 1024;
@@ -26,6 +27,7 @@ const READY = 1;
 const CLOSED = 2;
 
 const paper = document.getElementById("paper");
+const boardEl = document.getElementById("board");
 const prompt = document.getElementById("prompt");
 const line = document.getElementById("line");
 const before = document.getElementById("before");
@@ -34,6 +36,11 @@ const after = document.getElementById("after");
 // The keyboard, and whether it is our turn to type.
 let board = null;
 let typing = false;
+
+// The channel, once run() has made it. The board taps through the
+// same send() the physical keyboard does, so there is one path from
+// a finished line to the session and not two.
+let wire = null;
 
 // What the carriage has put on the page, as one string, so that a
 // line the terminal has not finished can be carried on.
@@ -187,12 +194,66 @@ async function run() {
     stop("The session could not be started.");
   };
   worker.postMessage({ channel, stored: stored() });
+  wire = { header, body };
   listen(header, body);
+  await keyboard();
   // A tab that goes away is a terminal that hung up.
   addEventListener("pagehide", () => {
     Atomics.store(header, STATE, CLOSED);
     Atomics.notify(header, STATE);
   });
+}
+
+// Whether the board was up last time. A reader who wants it should
+// not have to ask on every visit, and one who does not must not be
+// nagged.
+const SHOWN = "apl-board-shown";
+
+// Draw the board, wire its keys, and hang the two controls off it.
+// A tap goes through the same Board the physical keyboard does, so
+// an overstrike begun by tapping can be finished by typing.
+async function keyboard() {
+  const tap = (sends) => {
+    if (!typing) return;
+    const state = JSON.parse(strike(sends));
+    if (state.submit) return send(wire.header, wire.body, board.take());
+    draw(state);
+  };
+  await build(boardEl, stamped, tap);
+
+  const button = document.getElementById("show-board");
+  const reveal = (show) => {
+    boardEl.hidden = !show;
+    button.setAttribute("aria-pressed", String(show));
+    try {
+      localStorage.setItem(SHOWN, show ? "1" : "");
+    } catch { /* private mode: it just will not be remembered */ }
+  };
+  button.addEventListener("click", () => reveal(boardEl.hidden));
+  let was = false;
+  try {
+    was = Boolean(localStorage.getItem(SHOWN));
+  } catch { /* as above */ }
+  reveal(was);
+
+  const help = document.getElementById("help");
+  document.getElementById("show-help").addEventListener("click", () => help.showModal());
+}
+
+// What a tapped key does to the line. The control keys stand for the
+// keystrokes they are: the board does not get its own state machine,
+// because then the two could disagree about a pending overstrike.
+function strike(sends) {
+  switch (sends) {
+    case "backspace":
+      return board.press("Backspace", false, false);
+    case "overstrike":
+      return board.press("]", true, false);
+    case "return":
+      return board.press("Enter", false, false);
+    default:
+      return board.paste(sends);
+  }
 }
 
 // Print one frame and take the typing it asks for.

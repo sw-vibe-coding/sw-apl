@@ -198,6 +198,24 @@ and draws what it hands back, so `⍟` is `○`, `Ctrl-]`, `*` in a
 browser exactly as it is in a terminal, and there is no second copy
 of the table in JavaScript.
 
+A reader with no APL keycaps, or no keyboard at all, taps the board
+on the page instead. **Keyboard** shows it and **ABC** switches it
+between the glyph each key carries and the letter or digit it is
+painted with; it remembers whether it was up, and it is reachable by
+tab and named for a screen reader out of `data/glyphs.toml`.
+
+It is drawn from `keymap.json` -- the same file `apl-keyboard`
+compiles in, copied into the bundle by `just pages` -- so a key sends
+here what the same key sends at a terminal, and there is no second
+copy of the map. A tap goes through the same `Board` a keystroke
+does, so an overstrike begun by tapping can be finished by typing.
+Where a 2741 put a glyph is where the board has it: `)` is the quote
+key, as it was on the machine.
+
+The board is ours. The redistributed keyboard picture is reference
+only -- an Inkscape drawing whose keys are not addressable -- and is
+shown under **Help** with its author and licence beside it.
+
 Two differences from the terminal, both because a browser is not one:
 
 - Hold `Alt` for the character a key is painted with, where the

@@ -7,6 +7,12 @@
 # trunk dev build output for the future web app.
 /components/web/dist/
 
+# The on-screen board's data, written by `just pages` from the
+# keymap apl-keyboard compiles in and from data/glyphs.toml. Copies,
+# so they are made at build time and never committed.
+/pages/keymap.json
+/pages/glyph-names.json
+
 # The version the browser demo's files are fetched at, written by
 # `just pages`. Build output: it is a digest of the build, so it
 # cannot be written before there is one.

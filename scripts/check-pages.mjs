@@ -159,6 +159,40 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   serving.delete('/worker.js');
 }
 
+// 4. The board: a reader with no APL keyboard, and no keyboard at
+//    all. Entering a glyph by tapping is the whole point of it.
+{
+  const page = await visit();
+  await page.setViewportSize({ width: 390, height: 844 }); // a phone
+  await page.click('#show-board');
+  check('the board is drawn from the keymap',
+    (await page.locator('#board .key').count()) > 40, 'too few keys');
+
+  // ")LIB 1" by tapping alone, and no physical key touched. ")" is
+  // the quote key's glyph face, where a 2741 put it; the letters and
+  // the digit come from the plain layer.
+  const layer = '#board .controls .key.wide:not([aria-label^="return"])';
+  const tapKey = (cap) => page.click(`#board .key[data-plain="${cap}"]`);
+  await tapKey("'");                 // ) -- the APL layer is the default
+  await page.click(layer);           // ABC
+  for (const cap of ['L', 'I', 'B']) await tapKey(cap);
+  await page.click('#board .key.space');
+  await tapKey('1');
+  await page.click('#board .controls .key[aria-label^="return"]');
+  await page.waitForTimeout(900);
+  const shown = await paper(page);
+  check('a line entered by tapping alone runs',
+    ['EDIT', 'LIFE', 'RACE'].every((n) => shown.includes(n)), JSON.stringify(shown.slice(-200)));
+
+  // The line being typed must never be off screen on a phone.
+  const onscreen = await page.evaluate(() => {
+    const box = document.getElementById('line').getBoundingClientRect();
+    return box.bottom <= innerHeight + 1 && box.top >= 0;
+  });
+  check('the line being typed is on screen at phone width', onscreen, 'it is not');
+  await page.context().close();
+}
+
 await browser.close();
 server.close();
 console.log(failed ? `check-pages: ${failed} failed` : 'check-pages: all passed');
