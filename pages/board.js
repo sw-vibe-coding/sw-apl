@@ -58,6 +58,7 @@ export async function build(root, stamped, tap) {
   }
   root.append(controls(tap));
   root.append(placing(root));
+  root.append(credit());
   size(root, Number(remembered(SIZE, KEYS.default)));
   place(root, remembered(EDGE, "bottom"));
   return root;
@@ -130,6 +131,29 @@ function size(root, rem) {
   root.dataset.size = String(at);
   remember(SIZE, String(at));
   return at;
+}
+
+// Whose keyboard this is a picture of.
+//
+// The layout is the IBM 2741's and the drawing of it that sw-apl
+// redistributes is somebody else's work under a share-alike
+// licence. The obligation is discharged next to the thing it is
+// about rather than in a footer nobody scrolls to: this link is
+// shown exactly when the board is, and goes to the picture, its
+// LICENSE and its ATTRIBUTION together.
+const ATTRIBUTION =
+  "https://github.com/sw-vibe-coding/sw-apl/tree/main/images/redistributed/apl-keyboard";
+
+function credit() {
+  const row = document.createElement("div");
+  row.className = "row credit";
+  const link = document.createElement("a");
+  link.href = ATTRIBUTION;
+  link.target = "_blank";
+  link.rel = "noopener";
+  link.textContent = "2741 keyboard image \u2014 attribution";
+  row.append(link);
+  return row;
 }
 
 // Where the board sits and how big it is. On the board itself, not

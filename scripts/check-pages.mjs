@@ -303,10 +303,31 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
     repo: [...document.querySelectorAll('.colophon a')].map((a) => a.href).join(' '),
   }));
   check('it names the build it is running',
-    /Built \w+.* at \d{4}-/.test(said.built), said.built);
+    /\w+ .*\d{4}-/.test(said.built), said.built);
   check('and the repository and the licence',
-    said.repo.includes('github.com/sw-vibe-coding/sw-apl') && said.repo.includes('LICENSE'),
-    said.repo);
+    said.repo.includes('github.com/sw-vibe-coding/sw-apl'), said.repo);
+  check('and it is one wrapping line, not paragraphs',
+    (await page.evaluate(() => document.querySelectorAll('.colophon p').length)) === 0
+      && (await page.evaluate(() => getComputedStyle(document.querySelector('.colophon')).flexWrap))
+        === 'wrap',
+    'still prose');
+
+  // The keyboard picture is somebody else's work; the credit is
+  // shown exactly when the board is, and points at the licence.
+  await page.click('#show-board');
+  const credit = await page.evaluate(() => {
+    const a = document.querySelector('#board .credit a');
+    const board = document.getElementById('board');
+    return { href: a?.href, visible: !!a && !board.hidden };
+  });
+  check('the keyboard credit shows with the board',
+    credit.visible && credit.href?.includes('images/redistributed/apl-keyboard'),
+    JSON.stringify(credit));
+  const hidden = await page.evaluate(() => {
+    document.getElementById('show-board').click();
+    return document.getElementById('board').hidden;
+  });
+  check('and goes away with it', hidden, 'still shown');
 
   // The board pins to the top inside the session, not into the
   // colophon: its ground moved when the session became a wrapper.

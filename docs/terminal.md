@@ -224,10 +224,12 @@ is why the Pages source is GitHub Actions.
 The demo installs. `manifest.json` names it, asks for a standalone
 window, and carries the icons; `start_url` and `scope` are relative,
 so it installs from a project page's sub-path as readily as from a
-root. The favicon is `∇`, which opens a function definition and is
-the most APL thing that survives sixteen pixels; the install icons
-are the project logo the README shows, scaled down, with a maskable
-copy inside the safe zone for a launcher that crops to a circle.
+root. The favicon is `∩⊃⌊` turned 33 degrees: three APL glyphs that,
+turned, read as the letters APL. Bright green on nothing, because a
+favicon with a background is a square of somebody else's colour in a
+strip of tabs. The install icons are the project logo the README
+shows, scaled down, with a maskable copy inside the safe zone for a
+launcher that crops to a circle.
 `scripts/gen-icons.sh` makes all of them and they are tracked, like
 the rest of `pages/`.
 
@@ -235,11 +237,12 @@ Installed, it still needs the network for the first load: offline is
 `offline-shell`'s, and it is last because it is the part that can
 break the version stamp.
 
-Below the session is a colophon: the copyright, the licence the
-bundle travels under, the repository, and the build the page is
-running -- host, short SHA, timestamp, bundle digest. It reads them
-from `build-info.json`, which `just publish` writes, so there is
-nowhere else for them to go stale. It is below the fold and scrolled
+Below the session is a colophon in the form the other live demos
+use: one line of middot-separated items -- licence, copyright, the
+repository, the Software Wrighter channels, and the build -- wrapping
+on a phone, where a PWA window is a phone. The build facts come from
+`build-info.json`, which `just publish` writes, so there is nowhere
+else for them to go stale. It is below the fold and scrolled
 to: the session owns the window exactly, because the bar under the
 paper has been cut twice for taking room the transcript wanted.
 
@@ -254,6 +257,13 @@ on the page instead. **Keyboard** shows it and **ABC** switches it
 between the glyph each key carries and the letter or digit it is
 painted with; it remembers whether it was up, and it is reachable by
 tab and named for a screen reader out of `data/glyphs.toml`.
+
+The layout is the IBM 2741's, and the drawing of it that sw-apl
+redistributes is somebody else's work under a share-alike licence.
+A link beside the board credits it and goes to the picture, its
+LICENSE and its ATTRIBUTION together; it is shown exactly when the
+board is, which puts the obligation next to the thing it is about
+rather than in a footer nobody scrolls to.
 
 It sits at the bottom, or at the top if a reader moves it there, and
 its keys are as big as they were last set. Both are remembered, and

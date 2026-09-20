@@ -13,15 +13,37 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-ink="#2b2118"
 paper="#fbf7ef"
 logo="images/sw-apl-logo.png"
+tmp="$(mktemp -d)"
+trap 'rm -rf "$tmp"' EXIT
 
-# Del, U+2207. Font size against canvas so the glyph is not clipped.
-favicon --unicode U+2207 --output-path pages/favicon.ico \
-    -s 256 --font-size 170 -f "$ink" -b "$paper" >/dev/null
-favicon --unicode U+2207 --output-path pages/apple-touch-icon.png --png \
-    -s 180 --font-size 120 -f "$ink" -b "$paper" >/dev/null
+# The mark is `∩⊃⌊` turned 33 degrees: three APL glyphs that, turned,
+# read as the letters APL. The owner found it; it says what this is
+# in a way a single glyph cannot, and it survives a 16-pixel tab.
+#
+# Bright green on nothing, so it reads on a light tab bar and a dark
+# one alike -- a favicon with a background is a square of somebody
+# else's colour in a strip of tabs.
+#
+# The `favicon` CLI leaves the string low and left of centre with the
+# rotation applied, so the mark is trimmed to its ink and re-centred
+# here: an icon is mostly seen small, and the dead corner was most of
+# the tile.
+mark="∩⊃⌊"
+green="#22c55e"
+
+favicon -T -f "$green" -t "$mark" -R 33 --font-size 52 -s 256 \
+    --png -o "$tmp/mark.png" >/dev/null
+centre() {
+    magick "$tmp/mark.png" -trim +repage -background none -gravity center \
+        -extent '%[fx:max(w,h)*1.18]x%[fx:max(w,h)*1.18]' \
+        -resize "$1x$1" -background "$2" -gravity center -extent "$1x$1" "$3"
+}
+centre 256 none pages/favicon.ico
+# iOS puts black behind a transparent touch icon, so this one has
+# paper under it rather than nothing.
+centre 180 "$paper" pages/apple-touch-icon.png
 
 # The install icons, from the logo. Transparent, because the logo is
 # a round badge and a launcher puts its own background behind it.

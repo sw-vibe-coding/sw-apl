@@ -92,6 +92,11 @@
     aspect-ratio: auto; font-size: 12px; opacity: .65;
   }
   .board .key.small:hover { opacity: 1; }
+  /* Shown exactly when the board is, because that is what it is
+     about. Small, and never in the way of a key. */
+  .board .credit { justify-content: center; }
+  .board .credit a { font-size: 11px; opacity: .55; color: inherit; }
+  .board .credit a:hover { opacity: 1; }
 
   dialog {
     max-width: 34rem; width: calc(100vw - 2rem);
@@ -115,14 +120,19 @@
      up, and vh does not know that. */
   @supports (height: 100dvh) { #session { height: 100dvh; } }
 
+  /* One line of items, wrapping: a phone will not fit them on one,
+     and a PWA window is a phone. The separators are decoration and
+     are hidden from a screen reader. */
   .colophon {
-    border-width: 1px 0 0; padding: 1.2rem 1rem 2rem;
-    font-size: 12px; line-height: 1.6; opacity: .75;
-    display: block;
+    border-width: 1px 0 0;
+    padding: 1rem 1rem calc(1.4rem + env(safe-area-inset-bottom));
+    font-size: 12px; line-height: 1.9; opacity: .75;
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 0 .5rem; text-align: center;
   }
-  .colophon p { margin: 0 0 .6rem; max-width: 46rem; }
   .colophon a { color: inherit; }
-  .colophon .quiet { opacity: .8; font-variant-numeric: tabular-nums; }
+  .colophon .sep { opacity: .45; }
+  #built { font-variant-numeric: tabular-nums; }
 
   /* The controls under the paper. Not a footer: there is a real one
      now, and this is two buttons. */
@@ -145,18 +155,19 @@
 </main>
 
 <footer class="colophon">
-  <p>
-    <b>sw-apl</b> &mdash; a clean-room APL\360 interpreter in Rust.
-    <a href="https://github.com/sw-vibe-coding/sw-apl">github.com/sw-vibe-coding/sw-apl</a>
-  </p>
-  <p>
-    Copyright &copy; 2026 Michael A Wright.
-    <a href="https://github.com/sw-vibe-coding/sw-apl/blob/main/LICENSE">MIT License</a>,
-    which is what this page and the interpreter in it travel under.
-    The 2741 keyboard picture under Help is not ours and carries its
-    own terms, which are beside it there.
-  </p>
-  <p id="built" class="quiet">Built: &mdash;</p>
+  <span>MIT License</span>
+  <span class="sep" aria-hidden="true">·</span>
+  <span>&copy; 2026 Michael A Wright</span>
+  <span class="sep" aria-hidden="true">·</span>
+  <a href="https://github.com/sw-vibe-coding/sw-apl">sw-apl</a>
+  <span class="sep" aria-hidden="true">·</span>
+  <a href="https://software-wrighter-lab.github.io/">Blog</a>
+  <span class="sep" aria-hidden="true">·</span>
+  <a href="https://discord.com/invite/Ctzk5uHggZ">Discord</a>
+  <span class="sep" aria-hidden="true">·</span>
+  <a href="https://www.youtube.com/@SoftwareWrighter">YouTube</a>
+  <span class="sep" aria-hidden="true">·</span>
+  <span id="built">&mdash;</span>
 </footer>
 
 <dialog id="help">
@@ -165,6 +176,11 @@
     An APL\360 session, compiled to WebAssembly and running in a worker
     in this tab. There is no server: nothing typed here leaves your
     browser, and nothing is sent anywhere.
+  </p>
+  <h3>The keyboard</h3>
+  <p>
+    <img src="redistributed/apl-keyboard/APL-keybd2.svg"
+         alt="An IBM 2741 APL keyboard layout" width="410" height="125">
   </p>
   <h3>Four ways to enter a glyph</h3>
   <ol>
@@ -199,19 +215,6 @@
     it -- and a private window refuses that worker, which is the usual
     reason for the message. Close the tab and open it again, or run it
     locally.
-  </p>
-  <h3>The board this one is drawn from</h3>
-  <p>
-    <img src="redistributed/apl-keyboard/APL-keybd2.svg"
-         alt="An IBM 2741 APL keyboard layout" width="410" height="125">
-  </p>
-  <p class="quiet">
-    The keyboard picture is by Rursus and is redistributed under
-    CC BY-SA; see
-    <a href="redistributed/apl-keyboard/ATTRIBUTION.md">ATTRIBUTION</a>
-    and <a href="redistributed/apl-keyboard/LICENSE">LICENSE</a>.
-    The rest is sw-apl's own. See docs/glyph-entry.md for every way of
-    typing APL, at a terminal as well as here.
   </p>
   <form method="dialog"><button>Close</button></form>
 </dialog>
