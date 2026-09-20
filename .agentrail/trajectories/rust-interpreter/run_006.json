@@ -1,0 +1,11 @@
+{
+  "task_type": "rust-interpreter",
+  "state": {
+    "number": 8,
+    "step": "terminal-2741"
+  },
+  "action": "Put the keystroke meaning and the draw state in their own native modules so the wasm boundary held only the binding, which meant the interesting parts had tests; drove a real browser with dispatched keydown events rather than setting an input value, which is the only way to check a keyboard that composes; kept the crate inside the module and function budgets by moving the draw state out rather than suppressing the warning it caused; said in the docs and the commit what the change costs a touch screen instead of leaving it to be discovered; recorded that the component arrows now run both ways and why that is not a cycle",
+  "result": "success",
+  "reward": 1,
+  "timestamp": "2026-09-20T11:19:59"
+}
