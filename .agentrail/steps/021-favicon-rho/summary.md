@@ -1,0 +1,1 @@
+The favicon mark is lamp-rho-floor, which turned reads as apl; the horseshoe read as a D. Added the standard mobile-web-app-capable meta beside Apple's deprecated one, as Chrome's warning asked. Shrank favicon.ico from 270 KB to 5,430 bytes by writing 16 and 32 pixel frames instead of one 256-pixel frame, and recorded in the script why 48, colour reduction and SVG do not help.
