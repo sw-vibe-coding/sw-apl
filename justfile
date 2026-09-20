@@ -113,16 +113,15 @@ pages:
        images/redistributed/apl-keyboard/ATTRIBUTION.md \
        pages/redistributed/apl-keyboard/
 
-# Serve pages/ the way a static host would, so the demo can be tried
-# before anything is published. The page installs a service worker to
-# give itself the headers SharedArrayBuffer needs, which means the
-# first visit loads twice; that is the same thing it will do on
-# GitHub Pages.
+# Serve pages/ so the demo can be tried before anything is published.
+# This sends the two headers SharedArrayBuffer needs, so the page is
+# isolated on the first response and loads once. A published demo has
+# a static host that will not send them and falls back to the service
+# worker; `just check-pages` serves without them to keep that covered.
 #
 # Serve the browser demo at http://127.0.0.1:8361/.
 pages-serve: pages
-    @echo "sw-apl in a browser: http://127.0.0.1:8361/"
-    cd pages && python3 -m http.server 8361 --bind 127.0.0.1
+    ./scripts/serve-pages.py 8361 pages
 
 # Check the browser demo in a browser: a first visit, a visit
 # holding the worker from an older bundle, and a worker that never

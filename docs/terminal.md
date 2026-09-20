@@ -185,11 +185,27 @@ visit holding the worker from an older bundle, and a worker that
 never answers.
 
 `SharedArrayBuffer` needs the page to be cross-origin isolated, which
-means two headers a static host will not send. The page installs a
-service worker that adds them to its own responses and then loads
-once more under it, so the first visit loads twice and later ones do
-not. A browser that refuses service workers gets a page that says so
-rather than a broken prompt.
+means two headers:
+
+    Cross-Origin-Opener-Policy: same-origin
+    Cross-Origin-Embedder-Policy: require-corp
+
+`sw-apl-server` sends them with the terminal page and
+`just pages-serve` sends them with everything, so a local visit is
+isolated on the first response, loads once, and never registers a
+service worker at all.
+
+A static host will not send them, and that is what `sw.js` is for:
+the published page installs a worker that adds them to its own
+responses and then loads once more under it, so the first visit there
+loads twice and later ones do not. It is the fallback, not the path.
+A browser that refuses service workers -- a private window does --
+gets one line saying there is no shared memory and pointing at Help,
+which carries the reason and what to do.
+
+`just check-pages` serves without the headers on purpose, to keep the
+service-worker path covered, and has one case that serves with them
+and asserts the page is isolated on a single load.
 
 The keyboard is the 2741's here too, and it is the same keyboard:
 `apl-keyboard` compiled to WebAssembly, holding the keymap and the

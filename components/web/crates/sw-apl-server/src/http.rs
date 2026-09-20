@@ -58,8 +58,17 @@ pub fn greet(socket: TcpStream) -> io::Result<Option<Browser>> {
 
 /// Send the page. No caching: the reader restarts the service to get
 /// a new one, and a stale terminal is a confusing thing to debug.
+///
+/// The two isolation headers go out with it. `SharedArrayBuffer`
+/// needs a cross-origin isolated page, and a service is free to say
+/// so in a header -- which is what a static host cannot do, and the
+/// only reason `pages/` installs a service worker to forge them. A
+/// reader served by this one is isolated on the first response and
+/// never meets that machinery.
 fn page(mut socket: TcpStream) -> io::Result<()> {
     let head = "HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=utf-8\r\n\
+        Cross-Origin-Opener-Policy: same-origin\r\n\
+        Cross-Origin-Embedder-Policy: require-corp\r\n\
         Cache-Control: no-store\r\nConnection: close\r\nContent-Length: ";
     write!(socket, "{head}{}\r\n\r\n{PAGE}", PAGE.len())?;
     socket.flush()

@@ -22,6 +22,7 @@ import process from 'node:process';
 const ROOT = process.argv[2] ?? 'pages';
 
 const TYPES = {
+  '.json': 'application/json',
   '.html': 'text/html',
   '.js': 'text/javascript',
   '.mjs': 'text/javascript',
@@ -40,18 +41,31 @@ const TYPES = {
 // script is fetched by the browser and not by the page.
 const serving = new Map();
 
-function host(dir) {
+// `isolated` sends the two headers a real static host will not, as
+// `just pages-serve` does. The default is without them, because that
+// is what a published demo faces and what the service worker is for.
+const ISOLATION = {
+  'cross-origin-opener-policy': 'same-origin',
+  'cross-origin-embedder-policy': 'require-corp',
+  'cross-origin-resource-policy': 'cross-origin',
+};
+
+function host(dir, isolated = false) {
+  const extra = isolated ? ISOLATION : {};
   const server = createServer(async (req, res) => {
     const path = normalize(new URL(req.url, 'http://x').pathname);
     const held = serving.get(path);
     if (held !== undefined) {
-      res.writeHead(200, { 'content-type': 'text/javascript' });
+      res.writeHead(200, { 'content-type': 'text/javascript', ...extra });
       return res.end(held);
     }
     const file = join(dir, path.endsWith('/') ? `${path}index.html` : path);
     try {
       const body = await readFile(file);
-      res.writeHead(200, { 'content-type': TYPES[extname(file)] ?? 'application/octet-stream' });
+      res.writeHead(200, {
+        'content-type': TYPES[extname(file)] ?? 'application/octet-stream',
+        ...extra,
+      });
       res.end(body);
     } catch {
       res.writeHead(404).end('not found');
@@ -191,6 +205,26 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   });
   check('the line being typed is on screen at phone width', onscreen, 'it is not');
   await page.context().close();
+}
+
+// 5. A host that sends the isolation headers itself, which is what
+//    `just demo` and `just pages-serve` do. There is nothing for the
+//    service worker to forge, so the page must be isolated on the
+//    first response and must not need a second load.
+{
+  const direct = await host(ROOT, true);
+  const at = `http://127.0.0.1:${direct.address().port}/`;
+  const page = await (await browser.newContext()).newPage();
+  let loads = 0;
+  page.on('load', () => { loads += 1; });
+  await page.goto(at, { waitUntil: 'load' });
+  await settle(page);
+  check('a host that sends the headers needs no service worker',
+    await page.evaluate(() => self.crossOriginIsolated), 'not isolated');
+  check('and the page loads once', loads === 1, `loaded ${loads} times`);
+  check('and the session starts', await typing(page), 'the prompt never came');
+  await page.context().close();
+  direct.close();
 }
 
 await browser.close();

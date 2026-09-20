@@ -126,6 +126,18 @@
     comes back next time you open this page in this browser -- and is
     in no other browser and on no other machine.
   </p>
+  <h3>If it says there is no shared memory</h3>
+  <p>
+    The interpreter stops and waits for a line, which needs a
+    <code>SharedArrayBuffer</code>, which a browser grants only to an
+    isolated page. Served locally by <code>just demo</code> or
+    <code>just pages-serve</code>, that is two headers and it simply
+    works. A static host will not send them, so the published page
+    installs a service worker to add them and loads once more under
+    it -- and a private window refuses that worker, which is the usual
+    reason for the message. Close the tab and open it again, or run it
+    locally.
+  </p>
   <h3>The board this one is drawn from</h3>
   <p>
     <img src="redistributed/apl-keyboard/APL-keybd2.svg"

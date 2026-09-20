@@ -1,9 +1,11 @@
 number = 21
-slug = "offline-shell"
+slug = "pwa-manifest"
 status = "pending"
 description = """
-Owner direction 2026-09-20, third (docs/plan.md). The demo opens
-with the net..."""
+Owner direction 2026-09-20, third (docs/plan.md). The demo is
+installable.
+
+A..."""
 role = "production"
 context_files = []
 created_at = "2026-09-20T13:47:35"

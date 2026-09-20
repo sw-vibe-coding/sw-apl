@@ -152,15 +152,10 @@ const PATIENCE = 10000;
 // Start the session and wire the keyboard to it.
 async function run() {
   if (!(await isolate())) {
-    stop(
-      "This browser will not give the page shared memory, which the " +
-        "interpreter needs in order to stop and wait for a line.\n" +
-        "Close the tab and open it again, which is enough if an " +
-        "earlier visit left a stale refusal behind. A private window " +
-        "will not work, because it refuses the service worker that " +
-        "asks for the headers.\n" +
-        "Failing that, run the interpreter locally: just demo.",
-    );
+    // One line. A reader who cannot run it needs to know that and
+    // where to look, not an essay on service workers -- the rest is
+    // under Help.
+    stop("NO SHARED MEMORY IN THIS BROWSER. SEE HELP.");
     return;
   }
   await init();
