@@ -1,6 +1,6 @@
 number = 11
 slug = "glyph-keyboard"
-status = "in-progress"
+status = "completed"
 description = """
 Phase 8 step 3 (docs/plan.md). The keyboard, and arriving.
 
@@ -8,5 +8,6 @@ Typing APL is the..."""
 role = "production"
 context_files = []
 created_at = "2026-09-19T07:15:06"
+completed_at = "2026-09-20T14:03:40"
 task_type = "rust-interpreter"
-commits = []
+commits = ["05ed05247c1fbf4dad0eea6d2a7895c8dbe7bfdf"]
