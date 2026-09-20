@@ -1,0 +1,11 @@
+number = 23
+slug = "custom-domain"
+status = "in-progress"
+description = """
+Owner direction 2026-09-20: the demo has a custom domain.
+
+https://sw-apl.sof..."""
+role = "production"
+context_files = []
+created_at = "2026-09-20T16:34:02"
+commits = []

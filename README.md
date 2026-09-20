@@ -23,7 +23,7 @@ behaviour and for the conformance corpus in `samples/`.
 
 ## Live demo
 
-**[Try it in your browser](https://sw-vibe-coding.github.io/sw-apl/)**
+**[Try it in your browser](https://sw-apl.softwarewrighter.com/)**
 
 The interpreter compiled to WebAssembly, running in a worker in the
 tab. There is no server: nothing typed there is sent anywhere.

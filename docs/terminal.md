@@ -214,6 +214,12 @@ and draws what it hands back, so `⍟` is `○`, `Ctrl-]`, `*` in a
 browser exactly as it is in a terminal, and there is no second copy
 of the table in JavaScript.
 
+The demo is at <https://sw-apl.softwarewrighter.com/>, and at
+`sw-vibe-coding.github.io/sw-apl/` as well, which is why nothing the
+page fetches is absolute: it has to work from a domain root and from
+a project sub-path alike. `pages/CNAME` carries the domain in the
+artifact, so it survives whatever happens to the repository setting.
+
 The demo is published by `.github/workflows/static.yml`, which
 builds nothing: it uploads the committed `pages/` as the site. So
 what is served is byte for byte what is in the commit
