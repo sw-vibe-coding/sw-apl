@@ -1,10 +1,11 @@
 number = 32
 slug = "roll-deal-bounds"
-status = "in-progress"
+status = "completed"
 description = """
 Two bugs found 2026-09-21 comparing sw-apl's roll and deal with
 Roger Hui's "..."""
 role = "production"
 context_files = []
 created_at = "2026-09-21T10:54:46"
-commits = []
+completed_at = "2026-09-21T11:11:21"
+commits = ["ae2e05df7ea7b317795120c77cd2c2cc807479c0"]
