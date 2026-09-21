@@ -41,3 +41,42 @@ pin that a line of APL typed at nc cannot be an attention.
 
 The CLI is the control: reg-rs stays green, and Ctrl-C at the CLI
 keeps doing what it does today.
+
+---
+
+Findings from the owner's questions, 2026-09-20, before this step
+was started. Checked against the code, not assumed.
+
+**There is no tight-loop case to test with.** The corpus tops out
+at `+/⍳1000000`, which runs in ten milliseconds because iota is
+lazy. Write one first: a defined function with `→` back to line 1,
+which is where an APL\360 loop lives. It is the fixture the whole
+step needs and nothing in `samples/` can stand in for it.
+
+**The render thread is safe by construction.** The interpreter is
+on a Web Worker and the page's own thread only draws, so a tight
+loop cannot block rendering, and the keystroke handler that has to
+notice ATTN stays live however long the loop runs. Nothing is
+needed here; do not add anything.
+
+**The CPU is not tuned and this step is not where to fix it.** The
+worker spins one core at 100% for the duration, with no yielding
+and no budget -- heat and battery on a phone. Worth its own step;
+note it and leave it.
+
+**ATTN cannot arrive by `postMessage`.** A worker services
+`onmessage` only when its thread returns to the event loop, and a
+synchronous eval never does. So the page cannot tell the worker to
+stop by messaging it, and the listening-reader design in this
+prompt -- which is right for the service, where another thread can
+watch the socket -- does not carry over. In the browser the flag
+must go through the `SharedArrayBuffer` the channel already uses,
+with the interpreter polling it. Decide the slot and say so.
+
+**Polling granularity is a decision, not a detail.** `interrupted()`
+is read in exactly one place, `run_body`, between the lines of a
+defined function; `branch.rs` says a statement that has not finished
+a line "cannot yet be stopped". So `→` loops are interruptible and
+one enormous primitive is not, at the CLI as well as in the browser.
+Either accept that and say so in the docs, or push a check into the
+primitive loops and pay for it there. Do not leave it unstated.
