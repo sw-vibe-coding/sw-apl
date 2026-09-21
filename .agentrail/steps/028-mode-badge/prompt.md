@@ -17,3 +17,11 @@ as "circled Latin capital letter A".
 
 Do not describe other modes anywhere. There is one mode, and the user
 docs say what is, not what is planned.
+
+**Owner clarification, 2026-09-20.** The header is the name and then
+the badge:
+
+    sw-apl  Ⓐ '68
+
+and the tooltip, on the badge, is "APL\360 compatible". The name
+stays; only "-- APL\360" goes, replaced by the badge.
