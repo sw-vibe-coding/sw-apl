@@ -150,18 +150,11 @@ MORE:R←N×FACT N-1
 `FACT 6` is 720. Recursion by name is how APL\360 recurses, and it
 leaves nothing for a fixed-point combinator to do.
 
-## What the workspace holds
+## Reference
 
-| Name | What it is |
-|---|---|
-| `DESCRIBE` | the birds and how to call them |
-| `HOWBIRDS` | every bird, run |
-| `NOTHERE` | the birds that are missing, and why |
-| `I` `K` `KI` | the birds on values |
-| `T` `B` `C` `W` `S` | the birds over the table |
-| `APPLY` | a monadic primitive, by its glyph |
-| `DYAD` | a dyadic primitive, by the glyph in the caller's `FN` |
-| `FACT` | recursion by name, in the Sage's place |
+`combinators.md` is the reference to every function in the workspace:
+how to call it, what it takes and gives back, the glyphs `APPLY` and
+`DYAD` reach, and the errors each can raise.
 
 `samples/72-birds.apl` loads the workspace, flies every bird, shows
 the table's limit, and prints `NOTHERE`.
