@@ -128,3 +128,20 @@ per-session, and the primitives do not obviously have a session to
 read it from. Decide how a primitive reaches it -- a handle passed
 down, or a thread-local the session installs -- before writing the
 polling, because that choice is most of the work.
+
+A candidate for that tension, found by looking: the primitives take
+no session -- `reduce(f: char, r: &Array, k: usize)` and its
+neighbours take arrays and nothing else -- so reaching a per-session
+flag through their arguments means changing every signature in
+`apl-prims-*`, which is most of the crate for a flag.
+
+A thread-local holding a *handle* to the flag avoids that. Each
+session already owns a thread: one per connection at the service,
+the worker in the browser, the process at the CLI. The session
+installs the handle on its own thread when it starts, and
+`interrupted()` reads it from there, so it is per-session by
+construction and no signature moves. The handle is what differs --
+an `Arc<AtomicBool>` natively, a view into the shared channel on
+wasm, which is the only thing the page can write to while the
+worker is busy. Check this before adopting it; it is a suggestion
+from reading the signatures, not a decision.
