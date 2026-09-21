@@ -113,3 +113,38 @@ highlight is drawn in the overlay, never on the picture.
 This is also what keeps the licence simple: the CC BY-SA file is
 served byte for byte as redistributed, and everything interactive is
 in a separate file that is ours.
+
+**Correction, 2026-09-20: the SVG may be edited.** Above says "Do
+not edit the SVG's contents". That was over-cautious and is
+withdrawn. The owner asked whether the licence allows derivative use,
+and it does: CC BY-SA 3.0 permits adaptation. Its condition is
+share-alike, not "no changes" -- an adapted file must itself be
+offered under CC BY-SA 3.0 or a compatible licence, must say what was
+changed, and must keep the credit. It does not pull sw-apl's MIT code
+under share-alike, because the picture stays a separate file.
+
+`images/redistributed/apl-keyboard/ATTRIBUTION.md` already has the
+rules for this, written for exactly this case ("keys given
+identifiers so they can be clicked"). Follow them: state the change
+there, keep the adapted file in that directory beside the original
+and not in `pages/`, and keep the credit wherever it is shown. The
+original stays byte for byte as published beside the adaptation.
+
+So either route is open, and it is a real choice rather than a
+licence question: adapt the SVG (keys given identifiers, the ATTN key
+drawn into it), or keep it untouched and put everything in an overlay.
+An overlay keeps the licensing trivial; an adaptation keeps the
+drawing whole. Pick one and say why.
+
+**The ATTN key** (owner direction, 2026-09-20). The picture has an
+unlabelled key at the top left, left of the 1. Make it ATTN and label
+it so. Widen it -- outdented to the left, beyond where the row starts
+-- so the label fits at a normal size rather than squeezed into one
+key's width. That is where the 2741 had room, it is the corner a
+reader's eye goes to for an escape, and it is where the attention
+step's board key should end up.
+
+Widening a key is an adaptation if it is done in the SVG; drawn in an
+overlay, the overlay's viewBox has to extend left past the picture's
+to hold it. Either is fine. What is not fine is a label that the
+reader cannot read.
