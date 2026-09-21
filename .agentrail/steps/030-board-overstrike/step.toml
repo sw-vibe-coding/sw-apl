@@ -1,10 +1,11 @@
 number = 30
 slug = "board-overstrike"
-status = "in-progress"
+status = "completed"
 description = """
 Bug found by the owner, 2026-09-20: an overstrike made on the board
 does not ..."""
 role = "production"
 context_files = []
 created_at = "2026-09-20T21:39:59"
-commits = []
+completed_at = "2026-09-20T21:46:29"
+commits = ["e162efa1fbdbf8134c6f655872262a0c1247ea39"]
