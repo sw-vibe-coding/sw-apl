@@ -1,10 +1,11 @@
 number = 31
 slug = "inert-keys-grey"
-status = "in-progress"
+status = "completed"
 description = """
 Owner, 2026-09-20: "shift keys are no-ops, should be grayed-out all
 the time ..."""
 role = "production"
 context_files = []
 created_at = "2026-09-20T21:46:49"
-commits = []
+completed_at = "2026-09-21T07:29:23"
+commits = ["10f63ccca8b967e286eeafa227d7fb3f4190f828"]

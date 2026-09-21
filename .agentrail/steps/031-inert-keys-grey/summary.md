@@ -1,0 +1,1 @@
+Tab and both Shift keys on the board are greyed in both modes, since they do nothing: tagged inert in the adaptation by position (fourteen parts), styled at low opacity, with the adaptation still pixel-identical to the original and ATTRIBUTION.md updated. Pushed as 10f63cc.
