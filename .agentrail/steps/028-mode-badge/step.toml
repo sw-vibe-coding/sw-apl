@@ -1,6 +1,6 @@
-number = 29
+number = 28
 slug = "mode-badge"
-status = "pending"
+status = "in-progress"
 description = """
 Owner direction 2026-09-20: the banner names a mode, not a version.
 

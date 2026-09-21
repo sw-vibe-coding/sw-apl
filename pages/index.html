@@ -27,7 +27,20 @@
     display: flex; flex-direction: column; height: 100vh;
   }
   header { padding: .4rem 1rem; border-color: var(--rule); border-style: solid; }
-  header { font-size: 13px; opacity: .8; }
+  header {
+    font-size: 13px; display: flex; align-items: center; gap: .6rem; flex-wrap: wrap;
+  }
+  header .name { opacity: .8; }
+  /* The mode tab. A tooltip for a mouse; a touch screen has no hover,
+     so a tap shows the same words beside it. */
+  .mode-tabs { display: flex; }
+  .mode-tabs [role=tab] {
+    font: inherit; font-size: 13px; cursor: pointer; padding: .1rem .5rem;
+    color: var(--ink); background: none;
+    border: 1px solid var(--rule); border-radius: .3rem;
+  }
+  .mode-tabs [role=tab][aria-selected="true"] { border-color: var(--ink); font-weight: 600; }
+  .mode-about { font-size: 12px; opacity: .7; }
   header { border-width: 0 0 1px; }
   footer, .bar { border-color: var(--rule); border-style: solid; }
   .bar { font-size: 13px; opacity: .8; }
@@ -193,7 +206,19 @@
   }
 </style>
 <main id="session">
-  <header>sw-apl &mdash; APL\360</header>
+  <header>
+    <span class="name">sw-apl</span>
+    <!-- The mode, as a row of tabs holding one: it is the current mode
+         and the only one. The circled A is decoration to a screen
+         reader, which reads the label instead. -->
+    <div class="mode-tabs" role="tablist" aria-label="APL mode">
+      <button type="button" role="tab" aria-selected="true" id="mode-tab"
+              title="APL\360 compatible" aria-label="1968, APL\360 compatible">
+        <span aria-hidden="true">Ⓐ '68</span>
+      </button>
+    </div>
+    <span class="mode-about" id="mode-about" hidden>APL\360 compatible</span>
+  </header>
   <pre id="paper"></pre>
   <div id="line" class="waiting"><span id="prompt"></span><span
     id="before"></span><span id="caret"></span><span id="after"></span></div>

@@ -523,7 +523,39 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   }
 }
 
-// 11. Installable: the manifest a browser reads before it offers to
+// 11. The header: the name, then the mode as a row of tabs holding
+//     one, with its description reachable by mouse, touch and screen
+//     reader alike.
+{
+  const page = await visit();
+  const head = await page.evaluate(() => {
+    const tabs = document.querySelectorAll('header [role=tablist] [role=tab]');
+    const tab = tabs[0];
+    return {
+      name: document.querySelector('header .name')?.textContent,
+      tabs: tabs.length,
+      shows: tab?.textContent.trim(),
+      title: tab?.title,
+      spoken: tab?.getAttribute('aria-label'),
+      selected: tab?.getAttribute('aria-selected'),
+      aboutHidden: document.getElementById('mode-about').hidden,
+    };
+  });
+  check('the header is sw-apl and then the mode', head.name === 'sw-apl' && head.shows === "\u24b6 '68",
+    JSON.stringify(head));
+  check('the mode is a row of tabs holding one, marked current',
+    head.tabs === 1 && head.selected === 'true', JSON.stringify(head));
+  check('its tooltip says APL\\360 compatible', head.title === 'APL\\360 compatible', head.title);
+  check('and a screen reader hears the words, not the circled A',
+    head.spoken.includes('APL\\360 compatible') && !head.spoken.includes('\u24b6'), head.spoken);
+  await page.click('#mode-tab');
+  check('a tap shows the words where there is no hover',
+    head.aboutHidden && !(await page.evaluate(() => document.getElementById('mode-about').hidden)),
+    'the description did not appear');
+  await page.context().close();
+}
+
+// 12. Installable: the manifest a browser reads before it offers to
 //    install, and the icons it shows afterwards. Relative start_url
 //    and scope, so it installs from a project page's sub-path too.
 {
@@ -568,7 +600,7 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await page.context().close();
 }
 
-// 12. Espanso, and any other OS-level expander. It watches the
+// 13. Espanso, and any other OS-level expander. It watches the
 //    keystrokes before the browser sees them, so the 2741 map
 //    cannot hide a trigger from it -- but it replaces what was
 //    typed either by sending backspaces and the glyph as a key, or
@@ -597,7 +629,7 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await page.context().close();
 }
 
-// 13. Under a sub-path, which is where GitHub Pages actually serves
+// 14. Under a sub-path, which is where GitHub Pages actually serves
 //    a project page from. Nothing must be fetched from the root.
 {
   const sub = await host(ROOT, false, PREFIX);

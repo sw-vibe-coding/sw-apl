@@ -274,6 +274,12 @@ async function keyboard() {
   } catch { /* as above */ }
   reveal(was);
 
+  // The mode tab: a tap shows what its tooltip says, because a touch
+  // screen has no hover to show it.
+  const about = document.getElementById("mode-about");
+  document.getElementById("mode-tab")
+    .addEventListener("click", () => { about.hidden = !about.hidden; });
+
   const help = document.getElementById("help");
   document.getElementById("show-help").addEventListener("click", () => help.showModal());
 }
