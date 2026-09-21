@@ -121,6 +121,19 @@ Notes:
   loaded workspace continues its sequence and transcripts that use
   `?` reproduce.
 
+  A link is mapped onto the range as `⌊N×(link-1)÷(P-1)`, with P the
+  modulus. Roger Hui's "Roll" gives J's as `⌊N×link÷P`. The two agree
+  almost always for small N and differ by one at large N -- `?1E9`
+  from a clear workspace is 131537788 here and 131537789 there.
+  Nothing establishes that J's formula was APL\360's, so the sequence
+  a transcript records is this one.
+
+  There are only 2^31-2 distinct links, so `?N` for N larger than
+  that cannot produce every value in its range. It is not refused:
+  each roll is still computed exactly and is always in range. Deal
+  takes memory in proportion to M, not N, so `1?1E9` is as cheap as
+  `1?10`.
+
 ## Mixed functions
 
 - iota: index generator (monadic), index of (dyadic; not found
