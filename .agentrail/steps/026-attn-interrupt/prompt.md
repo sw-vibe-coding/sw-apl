@@ -145,3 +145,28 @@ an `Arc<AtomicBool>` natively, a view into the shared channel on
 wasm, which is the only thing the page can write to while the
 worker is busy. Check this before adopting it; it is a suggestion
 from reading the signatures, not a decision.
+
+**Owner direction, 2026-09-20: both. The app must not kill phone
+batteries and a tight loop must be interruptible.** Neither is
+deferred to a later step.
+
+Be honest about which of these buys what, and measure rather than
+claim:
+
+- *A runaway loop is the battery problem.* Energy is roughly work:
+  throttling a computation that must finish makes it take longer for
+  about the same total energy. What actually drains a phone is a
+  loop nobody can stop, running until the tab is killed. So ATTN is
+  the battery fix, and it is why these are one step and not two.
+- *Idle must cost nothing.* Check that the worker really blocks in
+  `Atomics.wait` between lines and does not spin. If it spins while
+  waiting for a line, that is a battery bug on every visit, not just
+  during a loop, and it is the cheapest win here.
+- *A duty-cycle yield is worth having anyway*, for heat and for the
+  rest of the system, if it is cheap. Measure the throughput it
+  costs on the tight-loop fixture and put the number in the commit.
+  If it is dear, say so and keep the polling, which is the part that
+  matters.
+
+Do not write that yielding makes the page responsive. The page is
+already responsive: its thread is never blocked.
