@@ -1,0 +1,10 @@
+number = 28
+slug = "attn-service"
+status = "pending"
+description = """
+The service half of the attention step, moved out so the board could
+come fir..."""
+role = "production"
+context_files = []
+created_at = "2026-09-20T20:12:04"
+commits = []
