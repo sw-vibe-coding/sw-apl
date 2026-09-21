@@ -174,6 +174,8 @@ documents below show real APL glyphs:
   does not have
 - [Using the del editor](docs/del-editor-guide.md) -- writing and
   changing a function, line by line
+- [BIRDS](docs/birds.md) -- the combinators APL\360 can write, in
+  a library 1 workspace, and why the rest cannot be
 - [I-beam reference](docs/i-beam-reference.md) -- the eight system
   values, their units, and how to read them
 - [Workspaces](docs/workspaces.md) -- what one holds, the libraries,
