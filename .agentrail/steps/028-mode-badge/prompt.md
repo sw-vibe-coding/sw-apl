@@ -25,3 +25,13 @@ the badge:
 
 and the tooltip, on the badge, is "APL\360 compatible". The name
 stays; only "-- APL\360" goes, replaced by the badge.
+
+**Build it as a row, not a label** (owner, 2026-09-20). The badge is
+to become the first of a row of tabs. Make it one from the start: a
+tab row holding a single tab, marked as the current one, with the
+tooltip on the tab. Adding a tab later should be adding an element,
+not restructuring the header.
+
+Ship exactly one tab and name no others -- not in the markup, not in
+a comment, not in the docs. A row with one tab in it is simply the
+current mode.
