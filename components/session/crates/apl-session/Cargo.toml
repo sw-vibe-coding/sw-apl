@@ -19,6 +19,7 @@ apl-wsfile = { path = "../../../eval/crates/apl-wsfile" }
 apl-display = { path = "../../../display/crates/apl-display" }
 
 [dev-dependencies]
+serde_json = "1"
 apl-attn = { path = "../../../value/crates/apl-attn" }
 
 [lints]

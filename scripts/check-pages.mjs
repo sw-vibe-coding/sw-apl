@@ -191,14 +191,30 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await page.click('#show-board');
   check('the board is drawn from the keymap',
     (await page.locator('#board .key').count()) > 40, 'too few keys');
+  check('it is the 2741 picture, with a hit region per key',
+    (await page.locator('#board .picture image').count()) === 1
+      && (await page.locator('#board .hit').count()) === 45,
+    `${await page.locator('#board .hit').count()} hit regions`);
+  const attnAt = await page.evaluate(() => {
+    const a = document.querySelector('#board .attn').getBoundingClientRect();
+    const one = document.querySelector('#board .hit[data-plain="1"]').getBoundingClientRect();
+    return { left: a.left < one.left, top: Math.abs(a.top - one.top) < 3, wider: a.width > one.width };
+  });
+  check('ATTN is top left, and wider than a key', attnAt.left && attnAt.top && attnAt.wider,
+    JSON.stringify(attnAt));
+  const returnBig = await page.evaluate(() => {
+    const r = document.querySelector('#board .controls .return').getBoundingClientRect();
+    const e = document.querySelector('#board .controls .erase').getBoundingClientRect();
+    return r.width > e.width;
+  });
+  check('and Return is the biggest control', returnBig, 'it is not');
 
   // ")LIB 1" by tapping alone, and no physical key touched. ")" is
   // the quote key's glyph face, where a 2741 put it; the letters and
   // the digit come from the plain layer.
-  const layer = '#board .controls .key.wide:not([aria-label^="return"])';
   const tapKey = (cap) => page.click(`#board .key[data-plain="${cap}"]`);
-  await tapKey("'");                 // ) -- the APL layer is the default
-  await page.click(layer);           // ABC
+  await tapKey("'");                 // ) -- the APL face, the default mode
+  await page.click('#board [data-mode=abc]');
   for (const cap of ['L', 'I', 'B']) await tapKey(cap);
   await page.click('#board .key.space');
   await tapKey('1');
@@ -207,6 +223,19 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   const shown = await paper(page);
   check('a line entered by tapping alone runs',
     ['EDIT', 'LIFE', 'RACE'].every((n) => shown.includes(n)), JSON.stringify(shown.slice(-200)));
+
+  // Commands and Idioms insert, and send nothing on their own: a reader
+  // always presses Return.
+  for (const [modeId, text] of [['commands', ')LIB 1'], ['idioms', '+/⍳10']]) {
+    await page.click(`#board [data-mode=${modeId}]`);
+    await page.click(`#board .list[data-kind=${modeId}] .entry[title="${text}"]`);
+    const line = await page.evaluate(() =>
+      document.getElementById('before').textContent + document.getElementById('after').textContent);
+    check(`${modeId} inserts ${text} without sending it`, line === text, JSON.stringify(line));
+    await page.click('#board .controls .key[aria-label^="return"]');
+    await page.waitForTimeout(700);
+  }
+  await page.click('#board [data-mode=apl]');
 
   // The line being typed must never be off screen on a phone.
   const onscreen = await page.evaluate(() => {

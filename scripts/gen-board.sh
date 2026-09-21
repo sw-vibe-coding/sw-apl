@@ -37,3 +37,10 @@ out = pathlib.Path("pages/glyph-names.json")
 out.write_text(json.dumps(names, ensure_ascii=False, indent=0, sort_keys=True))
 print(f"gen-board: {out} has {len(names)} glyphs")
 PY
+
+# Where each key is on the 2741 picture, measured out of the picture
+# so the board cannot drift from the file it is drawn over.
+scripts/board-keys.py > pages/board-keys.json
+
+# Commands and idioms: tracked in data/, where a test runs every one.
+cp data/board.json pages/board.json

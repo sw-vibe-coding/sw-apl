@@ -1,6 +1,6 @@
 number = 27
 slug = "board-modes"
-status = "pending"
+status = "in-progress"
 description = """
 Owner direction 2026-09-20: the board, refactored, with four modes.
 
