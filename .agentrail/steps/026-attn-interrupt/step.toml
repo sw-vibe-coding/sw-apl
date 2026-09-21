@@ -1,6 +1,6 @@
 number = 26
 slug = "attn-interrupt"
-status = "pending"
+status = "in-progress"
 description = """
 Phase 8 step 4 (docs/plan.md, owner direction 2026-09-19 fourth).
 Escape is A..."""
