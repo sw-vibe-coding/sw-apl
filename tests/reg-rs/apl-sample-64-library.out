@@ -2,6 +2,7 @@
       ⍝ library 1 holds the workspaces sw-apl ships. )LIB 1 lists one and
       ⍝ )LOAD 1 NAME reads from it.
       )LIB 1
+BIRDS
 EDIT
 LIFE
 RACE
@@ -53,6 +54,6 @@ DESCRIBE FACT HOWEDIT MEAN
       ⍝ A library workspace is a plain text file you can read in an
       ⍝ editor, so nothing here is hidden.
       )OFF
-22.55.49 09/17/26
+16.23.05 09/21/26
 CONNECTED 0.00.00
 CPU TIME 0.00.00

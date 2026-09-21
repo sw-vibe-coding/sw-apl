@@ -148,7 +148,14 @@ const typing = (page) => page.evaluate(() =>
   await send(page, ')LIB 1');
   const shown = await paper(page);
   check('library 1 lists what sw-apl ships',
-    ['EDIT', 'LIFE', 'RACE'].every((n) => shown.includes(n)), JSON.stringify(shown.slice(-120)));
+    ['BIRDS', 'EDIT', 'LIFE', 'RACE'].every((n) => shown.includes(n)), JSON.stringify(shown.slice(-120)));
+  // BIRDS is baked into the bundle like the rest, and its birds fly
+  // here as they do at the CLI -- the Starling included, which reaches
+  // DYAD through a local of its own by dynamic scope.
+  await send(page, ')LOAD 1 BIRDS');
+  await send(page, "'+⌽' S ⍳5");
+  check('BIRDS loads in the browser and its birds fly',
+    (await paper(page)).trim().endsWith('6 6 6 6 6'), JSON.stringify((await paper(page)).slice(-60)));
   await page.context().close();
 }
 

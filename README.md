@@ -125,8 +125,8 @@ Libraries are numbered as in APL\360: library 0 is yours, where
 `)SAVE` writes, and library 1 holds the workspaces sw-apl ships, each
 carrying a DESCRIBE that says what it holds. `)LOAD 1 NAME` reads a
 numbered library and `)LIB 1` lists one; `--library` sets the
-directory they are under. The shipped workspaces are LIFE, RACE and
-EDIT, and each is a plain text file you can open in an editor.
+directory they are under. The shipped workspaces are LIFE, RACE, EDIT
+and BIRDS, and each is a plain text file you can open in an editor.
 
 `)FNS` and `)VARS` list what a workspace holds, alphabetically and
 from a letter if one is given; `)VARS` reports global variables even

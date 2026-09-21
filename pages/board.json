@@ -5,6 +5,7 @@
     { "insert": ")LOAD 1 LIFE" },
     { "insert": ")LOAD 1 RACE" },
     { "insert": ")LOAD 1 EDIT" },
+    { "insert": ")LOAD 1 BIRDS" },
     { "insert": ")LOAD ", "try": ")LOAD 1 LIFE" },
     { "insert": ")SAVE" },
     { "insert": ")SAVE ", "try": ")SAVE BOARDTEST" },

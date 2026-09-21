@@ -333,7 +333,7 @@ overstrikes and `Ctrl-C` clears the line. Copy, paste and reload are
 left alone.
 
 The libraries work here with no filesystem under them. Library 1 is
-baked into the bundle, so `)LIB 1` lists LIFE, RACE and EDIT and
+baked into the bundle, so `)LIB 1` lists LIFE, RACE, EDIT and BIRDS, and
 `)LOAD 1 RACE` loads one. `)SAVE` writes library 0 into the
 browser's local storage, and `)LIB`, `)LOAD NAME` and `)DROP` read
 it back on a later visit.

@@ -23,7 +23,8 @@ use crate::link::Shared;
 
 /// Library 1: the workspaces sw-apl ships, read out of the
 /// repository when the bundle is built.
-const SHIPPED: [(&str, &str); 3] = [
+const SHIPPED: [(&str, &str); 4] = [
+    ("BIRDS", include_str!("../../../../../ws/lib1/BIRDS.apl.ws")),
     ("EDIT", include_str!("../../../../../ws/lib1/EDIT.apl.ws")),
     ("LIFE", include_str!("../../../../../ws/lib1/LIFE.apl.ws")),
     ("RACE", include_str!("../../../../../ws/lib1/RACE.apl.ws")),

@@ -190,7 +190,7 @@ the session numeric tests, and sample 67.
 | `)FNS` `)VARS` `)GRPS` `)GRP` `)GROUP` `)ERASE` | done |
 | `)SI` `)SIV` | done |
 | `)SYMBOLS` | reports; the number cannot be set -- see Restrictions |
-| Library form `)LOAD 1 NAME`, DESCRIBE convention | done; `--library` sets the directory they are under, library 1 is `ws/lib1/`, and LIFE, RACE and EDIT each carry a DESCRIBE; library tests, sample 64. A library is somewhere workspaces are kept, not a directory: the browser keeps library 1 in the bundle and library 0 in its own storage, and the commands do not change. Store tests |
+| Library form `)LOAD 1 NAME`, DESCRIBE convention | done; `--library` sets the directory they are under, library 1 is `ws/lib1/`, and LIFE, RACE, EDIT and BIRDS each carry a DESCRIBE; library tests, samples 64 and 72. A library is somewhere workspaces are kept, not a directory: the browser keeps library 1 in the bundle and library 0 in its own storage, and the commands do not change. Store tests |
 | `)LOAD` prints only the SAVED line, as APL\360 did, and nothing runs on load | done | command tests, sample 61 |
 | Trouble reports: WS NOT FOUND, OBJECT NOT FOUND, IMPROPER LIBRARY REFERENCE, NOT SAVED THIS WS IS | done; INCORRECT COMMAND is kept for a command given an argument it does not take, as the manual's table has it; report tests, sample 65 |
 | NOT WITH OPEN DEFINITION | done | done; `)SAVE`, `)COPY`, `)PCOPY` and `)CONTINUE` are refused while a definition is open, and no command is ever taken as a body line. Definition tests, sample 70 |

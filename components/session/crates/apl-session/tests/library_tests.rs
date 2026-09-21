@@ -9,10 +9,17 @@ use std::path::PathBuf;
 use apl_session::{Files, Session};
 
 /// What sw-apl ships, and the names each DESCRIBE promises.
-const SHIPPED: [(&str, &[&str]); 3] = [
+const SHIPPED: [(&str, &[&str]); 4] = [
     ("LIFE", &["DESCRIBE", "HOWRUN", "GEN", "RUN", "GLIDER"]),
     ("RACE", &["DESCRIBE", "HOWRACE", "SHOW", "RACE"]),
     ("EDIT", &["DESCRIBE", "HOWEDIT", "FACT", "MEAN"]),
+    (
+        "BIRDS",
+        &[
+            "DESCRIBE", "HOWBIRDS", "NOTHERE", "I", "K", "KI", "T", "B", "C", "W", "S", "APPLY",
+            "DYAD", "FACT",
+        ],
+    ),
 ];
 
 /// The repository root, which is the default library directory: four

@@ -1,6 +1,6 @@
 number = 34
 slug = "birds-workspace"
-status = "pending"
+status = "in-progress"
 description = """
 Owner direction 2026-09-21: a `)LIB 1` workspace, BIRDS, that shows
 the combi..."""

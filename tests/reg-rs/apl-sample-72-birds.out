@@ -1,0 +1,103 @@
+      ⍝ BIRDS: the combinators APL\360 can write, after Smullyan's
+      ⍝ To Mock a Mockingbird. APL\360 cannot hand one function to another,
+      ⍝ so the birds come in three kinds: those on values, which it writes
+      ⍝ in general; those over a fixed table of primitives, each named by
+      ⍝ its glyph; and those it cannot write at all, which NOTHERE names.
+      )LOAD 1 BIRDS
+SAVED 16.21.42 09/21/26
+      DESCRIBE
+BIRDS -- THE COMBINATORS APL\360 CAN WRITE, AFTER THE BIRDS OF
+SMULLYAN'S TO MOCK A MOCKINGBIRD. HOWBIRDS SHOWS THEM ALL.
+
+ON VALUES, WHICH APL\360 CAN WRITE IN GENERAL:
+   I X         IDIOT      X
+   X K Y       KESTREL    X, IGNORING Y
+   X KI Y      KITE       Y, IGNORING X
+
+OVER A FIXED TABLE OF PRIMITIVES, EACH NAMED BY ITS GLYPH:
+   X T F       THRUSH     F X
+   FG B X      BLUEBIRD   F G X
+   F C Y Z     CARDINAL   Z F Y
+   F W X       WARBLER    X F X
+   FG S X      STARLING   X F G X
+
+   F APPLY X   THE MONADIC PRIMITIVE WHOSE GLYPH IS F, ON X
+   X DYAD Y    X FN Y, FOR THE GLYPH IN THE CALLER'S FN
+
+NOTHERE SAYS WHICH BIRDS ARE MISSING, AND WHY.
+      ⍝ Every bird, flying.
+      HOWBIRDS
+      I 42
+42
+      7 K 9
+7
+      7 KI 9
+9
+      5 T '⍳'
+1 2 3 4 5
+      '⌽⍳' B 5
+5 4 3 2 1
+      '-' C 10 3
+¯7
+      '×' W 5
+25
+      '⍴' W 3
+3 3 3
+      '+⌽' S ⍳5
+6 6 6 6 6
+      FACT 6
+720
+      ⍝ The Kestrel keeps its left argument and the Kite its right, whatever
+      ⍝ the other is -- a character vector as happily as a number.
+      'KEEP' K 1 2 3
+KEEP
+      'DROP' KI 1 2 3
+1 2 3
+      ⍝ The Thrush reads as a pipeline: the value first, the function after.
+      ⍳5
+1 2 3 4 5
+      (⍳5) T '⌽'
+5 4 3 2 1
+      ⍝ The Warbler duplicates its argument, the Cardinal flips a pair, the
+      ⍝ Starling feeds a value to a function and to the function's partner.
+      '+' W 2 3 4
+4 6 8
+      '÷' C 2 10
+5
+      '×⍳' S 4
+4 8 12 16
+      ⍝ A glyph outside the tables is an INDEX ERROR: APL\360 has no execute,
+      ⍝ so APPLY and DYAD reach only the primitives they list. The error
+      ⍝ suspends in APPLY, called from B; a bare branch clears it.
+      '⍉⍳' B 5
+INDEX ERROR
+APPLY[4]  →(NEG,REC,MAG,SGN,CEIL,FLR,IOTA,SHAPE,REV,RAV)['-÷|×⌈⌊⍳⍴⌽,'⍳F]
+                                                        ^
+      )SI
+B[1]*
+      →
+      ⍝ What is not here, and why. The Sage and Z are not needed to recurse:
+      ⍝ a function calls itself by name, as FACT does.
+      NOTHERE
+M  MOCKINGBIRD. M X IS X X, A FUNCTION APPLIED TO ITSELF. THE
+   FUNCTIONS HERE ARE NAMED BY A GLYPH, AND NO PRIMITIVE TAKES A
+   GLYPH AS ITS ARGUMENT, SO THERE IS NO X X TO FORM.
+
+Y  SAGE, AND Z, ITS STRICT FORM. EACH TAKES A FUNCTION AND GIVES
+   BACK ITS FIXED POINT: RECURSION WITHOUT A NAME. APL\360 CANNOT
+   GIVE ONE FUNCTION TO ANOTHER, NOR GIVE ONE BACK, SO NEITHER CAN
+   BE WRITTEN. NOR IS EITHER NEEDED: A FUNCTION CALLS ITSELF BY
+   NAME. FACT DOES, AND FACT 6 IS 720.
+
+KI IS SMULLYAN'S K I, K GIVEN THE IDIOT. K CANNOT BE GIVEN A
+   FUNCTION HERE, SO KI IS WRITTEN OUT INSTEAD.
+
+AND T, B, C, W AND S REACH ONLY THE PRIMITIVES IN THE TABLES OF
+APPLY AND DYAD. A DEFINED FUNCTION CANNOT BE NAMED TO THEM:
+APL\360 HAS NO EXECUTE, SO A NAME IS ONLY CHARACTERS.
+      FACT 10
+3628800
+      )OFF
+16.22.44 09/21/26
+CONNECTED 0.00.00
+CPU TIME 0.00.00
