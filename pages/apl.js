@@ -149,8 +149,32 @@ async function isolate() {
 // instantiation, which is slow on a cold cache and not this slow.
 const PATIENCE = 10000;
 
+// Keep the session exactly as tall as the viewport really is.
+//
+// `100dvh` is the viewport with the browser's own UI retracted, which
+// is not the same as the viewport there is right now: the URL bar
+// slides in and out as a page is scrolled, and pinch-zoom changes it
+// again. visualViewport is the one that knows, so the session is
+// sized from it and follows it.
+//
+// Not for an on-screen keyboard, which is the usual reason to reach
+// for this: nothing on this page is focusable -- no input, no
+// textarea, nothing contenteditable, because keystrokes are read off
+// the window -- so a phone cannot raise its keyboard over it. That is
+// what the board on the page is for.
+function viewport() {
+  const seen = window.visualViewport;
+  if (!seen) return;
+  const fit = () =>
+    document.documentElement.style.setProperty("--vh", `${seen.height}px`);
+  seen.addEventListener("resize", fit);
+  seen.addEventListener("scroll", fit);
+  fit();
+}
+
 // Start the session and wire the keyboard to it.
 async function run() {
+  viewport();
   if (!(await isolate())) {
     // One line. A reader who cannot run it needs to know that and
     // where to look, not an essay on service workers -- the rest is

@@ -118,10 +118,12 @@
      under the paper has been cut twice for taking room the
      transcript wanted; this must not give any of it back. */
   body { height: auto; min-height: 100dvh; display: block; }
+  /* As tall as the viewport actually is. --vh is set from
+     visualViewport, which tracks the URL bar sliding in and out and
+     pinch-zoom; dvh is the fallback and vh the fallback to that. */
   #session { height: 100vh; display: flex; flex-direction: column; }
-  /* A phone gives the page less than 100vh once its own keyboard is
-     up, and vh does not know that. */
   @supports (height: 100dvh) { #session { height: 100dvh; } }
+  #session { height: var(--vh, 100dvh); }
 
   /* One line of items, wrapping: a phone will not fit them on one,
      and a PWA window is a phone. The separators are decoration and

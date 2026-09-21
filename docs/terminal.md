@@ -243,6 +243,18 @@ Installed, it still needs the network for the first load: offline is
 `offline-shell`'s, and it is last because it is the part that can
 break the version stamp.
 
+The session is exactly as tall as the viewport really is, sized
+from `visualViewport` and following it: `100dvh` is the viewport
+with the browser's UI retracted, which is not the same as the one
+there is while the URL bar is sliding in and out or a reader has
+pinched. `dvh` is the fallback.
+
+Not for an on-screen keyboard, which is the usual reason to reach
+for that. Nothing on the page is focusable -- no input, no textarea,
+nothing contenteditable, because keystrokes are read off the window
+-- so a phone cannot raise its own keyboard over it at all. That is
+what the board on the page is for.
+
 Below the session is a colophon in the form the other live demos
 use: one line of middot-separated items -- licence, copyright, the
 repository, the Software Wrighter channels, and the build -- wrapping

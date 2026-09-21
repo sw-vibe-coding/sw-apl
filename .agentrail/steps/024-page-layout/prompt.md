@@ -1,38 +1,33 @@
-Owner direction 2026-09-20, third (docs/plan.md). A demo that fits
-a phone.
+Owner direction 2026-09-20, third (docs/plan.md), narrowed after
+most of it shipped: what the viewport does to the page.
 
-The owner opened the demo on a simulated phone in Chrome. The
-footer prose takes more of the screen than the transcript does: the
-paper is squeezed into the top third and the line being typed is
-pushed off the bottom. The text is not wrong, it is in the wrong
-place.
+This step was written from a phone screenshot where footer prose
+took two thirds of the screen. Most of what it asked for has since
+been done by other steps: the prose is behind Help, the bar is two
+buttons, the disclaimer is gone, the colophon is below the fold in
+the house style, and the session owns the window in `dvh`. One
+bullet is superseded outright -- the owner had the "nothing leaves
+your browser" line removed from sight.
 
-Make the page paper and prompt, and as little else as will do.
+What is left is the part its own prompt said mattered most: the
+line being typed must never be off screen.
 
-- The explanation moves behind something asked for -- a help
-  dialog, or links that open one. A first-time reader needs it and
-  must be able to find it without knowing to look; a reader who has
-  come back must not pay for it with two thirds of the screen.
-- What cannot be got back stays reachable wherever it is put: that
-  nothing typed leaves the browser is a claim worth keeping in
-  sight, and the licence and the keyboard picture's attribution are
-  a redistribution obligation, not a nicety.
-- The line being typed is the one thing that must never be off
-  screen. Check it with the on-screen keyboard raised, which is
-  what a phone actually does to the viewport -- dvh units and
-  visualViewport, not vh.
+- Use `visualViewport`, not `dvh` alone. `100dvh` is the viewport
+  with the browser's own UI retracted; it does not track the URL
+  bar sliding in and out, and it does not track pinch-zoom. The
+  session should be exactly as tall as the visual viewport is now,
+  and follow it when it changes. Keep `dvh` as the fallback for
+  anything without `visualViewport`.
+- Note while checking: this page has no input, textarea or
+  contenteditable anywhere -- keystrokes are read off the window --
+  so a phone cannot raise its own keyboard over it at all. That is
+  the reason the on-screen board exists. Say so in the commit,
+  because the original prompt asked for the keyboard-raised case
+  and it is not a case this page can be in.
+- Two checks the original asked for and never got: landscape at
+  phone size, and a long transcript. Run RACE, which fills the
+  paper, and confirm the paper scrolls while the line and the bar
+  stay put.
 
-`sw-fun/suduko` is the owner's pointer for styling: look at its
-`pages/index.html` head and its stylesheet, and take the parts that
-suit a printing terminal rather than the whole look. sw-apl's page
-is paper and a carriage and should stay that.
-
-Keep it to layout. The manifest, the icons and offline caching are
-the next two steps and this one should leave them a place to stand;
-do not start them here.
-
-Check it the way the bug was found: Chrome's device toolbar at
-phone width, portrait and landscape, and the transcript still
-readable with a long RACE run on the paper. `just check-pages`
-must stay green -- add a case for the line being on screen at phone
-width.
+Keep it to layout. No new controls, nothing moved that the owner
+has already placed.

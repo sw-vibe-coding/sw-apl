@@ -339,7 +339,56 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await page.context().close();
 }
 
-// 8. Installable: the manifest a browser reads before it offers to
+// 8. What the viewport does to the page. The session must be the
+//    height the viewport really is, in portrait and in landscape,
+//    and a transcript long enough to overflow must scroll inside
+//    the paper without pushing the line or the bar off screen.
+{
+  const page = await visit();
+  for (const [name, size] of [
+    ['portrait', { width: 390, height: 844 }],
+    ['landscape', { width: 844, height: 390 }],
+  ]) {
+    await page.setViewportSize(size);
+    await page.waitForTimeout(400);
+    const fits = await page.evaluate(() => {
+      const session = document.getElementById('session');
+      const line = document.getElementById('line').getBoundingClientRect();
+      return {
+        height: Math.round(session.getBoundingClientRect().height),
+        want: Math.round(visualViewport?.height ?? innerHeight),
+        lineOn: line.bottom <= innerHeight + 1 && line.top >= 0,
+      };
+    });
+    check(`the session is the viewport's height in ${name}`,
+      Math.abs(fits.height - fits.want) <= 1, JSON.stringify(fits));
+    check(`and the line being typed is on screen in ${name}`, fits.lineOn, JSON.stringify(fits));
+  }
+
+  // A transcript that overflows: RACE fills the paper many times over.
+  await page.setViewportSize({ width: 390, height: 844 });
+  await send(page, ')LOAD 1 RACE');
+  await send(page, 'RACE');
+  await page.waitForTimeout(2500);
+  const long = await page.evaluate(() => {
+    const paper = document.getElementById('paper');
+    const line = document.getElementById('line').getBoundingClientRect();
+    const bar = document.querySelector('.bar').getBoundingClientRect();
+    return {
+      overflows: paper.scrollHeight > paper.clientHeight + 10,
+      scrolled: paper.scrollTop > 0,
+      lineOn: line.bottom <= innerHeight + 1,
+      barOn: bar.bottom <= innerHeight + 1,
+    };
+  });
+  check('a long transcript scrolls inside the paper',
+    long.overflows && long.scrolled, JSON.stringify(long));
+  check('and does not push the line or the bar off screen',
+    long.lineOn && long.barOn, JSON.stringify(long));
+  await page.context().close();
+}
+
+// 9. Installable: the manifest a browser reads before it offers to
 //    install, and the icons it shows afterwards. Relative start_url
 //    and scope, so it installs from a project page's sub-path too.
 {
@@ -384,7 +433,7 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await page.context().close();
 }
 
-// 9. Espanso, and any other OS-level expander. It watches the
+// 10. Espanso, and any other OS-level expander. It watches the
 //    keystrokes before the browser sees them, so the 2741 map
 //    cannot hide a trigger from it -- but it replaces what was
 //    typed either by sending backspaces and the glyph as a key, or
@@ -413,7 +462,7 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await page.context().close();
 }
 
-// 10. Under a sub-path, which is where GitHub Pages actually serves
+// 11. Under a sub-path, which is where GitHub Pages actually serves
 //    a project page from. Nothing must be fetched from the root.
 {
   const sub = await host(ROOT, false, PREFIX);

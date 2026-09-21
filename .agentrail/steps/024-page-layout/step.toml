@@ -1,6 +1,6 @@
 number = 24
 slug = "page-layout"
-status = "pending"
+status = "in-progress"
 description = """
 Owner direction 2026-09-20, third (docs/plan.md). A demo that fits
 a phone.
