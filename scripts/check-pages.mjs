@@ -388,7 +388,56 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await page.context().close();
 }
 
-// 9. Installable: the manifest a browser reads before it offers to
+// 9. History: what the CLI's line editor does, and what the page
+//    could not do until now. Up recalls, down walks back, and down
+//    past the end returns the line that was being typed.
+{
+  const page = await visit();
+  const line = () => page.evaluate(() =>
+    document.getElementById('before').textContent + document.getElementById('after').textContent);
+  const arrow = async (which) => {
+    await page.keyboard.press(which);
+    await page.waitForTimeout(150);
+  };
+
+  await send(page, '2+2');
+  await send(page, '3+3');
+  await page.waitForTimeout(400);
+
+  await arrow('ArrowUp');
+  check('up recalls the last line entered', (await line()) === '3+3', await line());
+  await arrow('ArrowUp');
+  check('and again the one before it', (await line()) === '2+2', await line());
+  await arrow('ArrowUp');
+  check('and stops at the oldest', (await line()) === '2+2', await line());
+  await arrow('ArrowDown');
+  check('down walks back towards the present', (await line()) === '3+3', await line());
+  await arrow('ArrowDown');
+  check('and past the end is an empty line again', (await line()) === '', await line());
+
+  // A half-typed line is kept, not thrown away by a look at history.
+  await page.evaluate(() => {
+    const d = new DataTransfer();
+    d.setData('text', '9+');
+    dispatchEvent(new ClipboardEvent('paste', { clipboardData: d, bubbles: true, cancelable: true }));
+  });
+  await page.waitForTimeout(150);
+  await arrow('ArrowUp');
+  check('looking at history does not lose the line being typed',
+    (await line()) === '3+3', await line());
+  await arrow('ArrowDown');
+  check('and coming back gives it back', (await line()) === '9+', await line());
+
+  // A recalled line really runs.
+  await arrow('ArrowUp');
+  await page.keyboard.press('Enter');
+  await page.waitForTimeout(900);
+  check('a recalled line runs', (await paper(page)).trim().endsWith('6'),
+    JSON.stringify((await paper(page)).slice(-60)));
+  await page.context().close();
+}
+
+// 10. Installable: the manifest a browser reads before it offers to
 //    install, and the icons it shows afterwards. Relative start_url
 //    and scope, so it installs from a project page's sub-path too.
 {
@@ -433,7 +482,7 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await page.context().close();
 }
 
-// 10. Espanso, and any other OS-level expander. It watches the
+// 11. Espanso, and any other OS-level expander. It watches the
 //    keystrokes before the browser sees them, so the 2741 map
 //    cannot hide a trigger from it -- but it replaces what was
 //    typed either by sending backspaces and the glyph as a key, or
@@ -462,7 +511,7 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await page.context().close();
 }
 
-// 11. Under a sub-path, which is where GitHub Pages actually serves
+// 12. Under a sub-path, which is where GitHub Pages actually serves
 //    a project page from. Nothing must be fetched from the root.
 {
   const sub = await host(ROOT, false, PREFIX);

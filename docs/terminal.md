@@ -264,6 +264,20 @@ else for them to go stale. It is below the fold and scrolled
 to: the session owns the window exactly, because the bar under the
 paper has been cut twice for taking room the transcript wanted.
 
+The up arrow recalls the last line entered and the down arrow walks
+back towards the present, as the line editor at the CLI does. Down
+past the end gives back the line that was being typed rather than an
+empty one: a reader half way through a line who looked at history
+has not abandoned it. A blank line, and a repeat of the line just
+entered, are not kept.
+
+It is the page's own, not the keyboard's: `ArrowUp` and `ArrowDown`
+are unclaimed by the 2741 map, so recall is a property of this
+terminal and nothing below it knows about history. It lasts as long
+as the tab; surviving a reload is a different question and is not
+answered yet. The board on the page has no history control -- that
+belongs with the board's own refactoring.
+
 An OS-level expander -- Espanso, or the Emacs input method -- works
 here as it does anywhere else, and needs nothing from sw-apl. It
 sees the keystrokes before the browser does, backtick is not a key

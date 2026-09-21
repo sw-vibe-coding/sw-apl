@@ -33,6 +33,23 @@ const line = document.getElementById("line");
 const before = document.getElementById("before");
 const after = document.getElementById("after");
 
+// Lines entered, and where the reader is looking in them.
+//
+// The CLI has this through rustyline and the page had nothing, which
+// was the one thing the terminal could do that the page could not.
+// It lives here rather than in the keyboard crate because recall is
+// a property of this terminal, not of the 2741 map: `ArrowUp` and
+// `ArrowDown` reach `Act::Ignore` in `act`, so the page may claim
+// them without touching anything below it.
+const history = [];
+
+// Where in `history` the reader is. At `history.length` they are on
+// the line they are typing, which is held in `draft` so that walking
+// down past the end gives it back -- a reader half way through a line
+// who looked at history has not abandoned it.
+let at = 0;
+let draft = "";
+
 // The keyboard, and whether it is our turn to type.
 let board = null;
 let typing = false;
@@ -308,6 +325,11 @@ function send(header, body, text) {
   // The paper keeps what was typed, as a printing terminal would:
   // the prompt, the line, and the answer under it.
   put(prompt.textContent + text + "\n");
+  // Remember it, unless it is blank or the line just entered: a
+  // history full of one repeated line is not worth walking.
+  if (text.trim() && text !== history.at(-1)) history.push(text);
+  at = history.length;
+  draft = "";
   const bytes = new TextEncoder().encode(text);
   const fits = Math.min(bytes.length, body.length);
   body.set(bytes.subarray(0, fits));
@@ -320,12 +342,32 @@ function send(header, body, text) {
   draw(JSON.parse(board.press("Unidentified", false, false)));
 }
 
+// Walk the history. `step` is -1 for up and 1 for down.
+//
+// The line being typed is kept the moment the reader steps off it,
+// so that coming back down returns it rather than an empty line.
+function recall(step) {
+  if (!history.length && step < 0) return;
+  if (at === history.length && step < 0) draft = board.take();
+  const to = Math.min(history.length, Math.max(0, at + step));
+  if (to === at) return;
+  at = to;
+  board.press("c", true, false);
+  draw(JSON.parse(board.paste(at === history.length ? draft : history[at])));
+}
+
 // Every keystroke goes to the keyboard, and only the ones it claims
 // are taken from the browser -- copy still copies, reload still
 // reloads.
 function listen(header, body) {
   addEventListener("keydown", (event) => {
     if (!typing || event.metaKey) return;
+    // The arrows the keyboard does not claim are this terminal's.
+    if (!event.ctrlKey && !event.altKey
+        && (event.key === "ArrowUp" || event.key === "ArrowDown")) {
+      event.preventDefault();
+      return recall(event.key === "ArrowUp" ? -1 : 1);
+    }
     const state = JSON.parse(board.press(event.key, event.ctrlKey, event.altKey));
     if (!state.acted) return;
     event.preventDefault();
