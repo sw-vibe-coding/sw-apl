@@ -1,6 +1,6 @@
 number = 35
 slug = "birds-doc"
-status = "in-progress"
+status = "completed"
 description = """
 Owner, 2026-09-21: "where is the doc for BIRDS?"
 
@@ -8,4 +8,5 @@ There was none. BIRDS was d..."""
 role = "production"
 context_files = []
 created_at = "2026-09-21T16:34:34"
-commits = []
+completed_at = "2026-09-21T16:35:39"
+commits = ["1337d99c8439a1415590fc7673f18a6a82a230d5"]
