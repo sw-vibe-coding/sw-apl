@@ -11,8 +11,6 @@ use tungstenite::WebSocket;
 use tungstenite::handshake::derive_accept_key;
 use tungstenite::protocol::Role;
 
-use crate::socket::Browser;
-
 /// The terminal page. It is the client; there is no build step and
 /// nothing to fetch.
 const PAGE: &str = include_str!("../static/index.html");
@@ -48,7 +46,7 @@ fn key(lines: &mut BufReader<TcpStream>) -> io::Result<Option<String>> {
 ///
 /// # Errors
 /// Whatever the socket reports.
-pub fn greet(socket: TcpStream) -> io::Result<Option<Browser>> {
+pub fn greet(socket: TcpStream) -> io::Result<Option<WebSocket<TcpStream>>> {
     let mut lines = BufReader::new(socket.try_clone()?);
     match key(&mut lines)? {
         Some(key) => upgrade(socket, &key).map(Some),
@@ -75,7 +73,7 @@ fn page(mut socket: TcpStream) -> io::Result<()> {
 }
 
 /// Accept the upgrade and take the socket over as a WebSocket.
-fn upgrade(mut socket: TcpStream, key: &str) -> io::Result<Browser> {
+fn upgrade(mut socket: TcpStream, key: &str) -> io::Result<WebSocket<TcpStream>> {
     let accept = derive_accept_key(key.as_bytes());
     write!(
         socket,
@@ -83,9 +81,5 @@ fn upgrade(mut socket: TcpStream, key: &str) -> io::Result<Browser> {
          Connection: Upgrade\r\nSec-WebSocket-Accept: {accept}\r\n\r\n"
     )?;
     socket.flush()?;
-    Ok(Browser(WebSocket::from_raw_socket(
-        socket,
-        Role::Server,
-        None,
-    )))
+    Ok(WebSocket::from_raw_socket(socket, Role::Server, None))
 }

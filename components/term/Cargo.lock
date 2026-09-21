@@ -62,6 +62,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-attn"
+version = "0.1.0"
+
+[[package]]
 name = "apl-glyphs"
 version = "0.1.0"
 dependencies = [
@@ -113,6 +117,7 @@ dependencies = [
 name = "apl-wire"
 version = "0.1.0"
 dependencies = [
+ "apl-attn",
  "serde",
  "serde_json",
 ]

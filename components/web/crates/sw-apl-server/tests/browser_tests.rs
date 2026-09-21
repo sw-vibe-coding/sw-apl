@@ -129,3 +129,37 @@ fn a_terminal_on_the_socket_and_one_in_a_browser_are_separate_sessions() {
         "each connection has a workspace of its own"
     );
 }
+
+#[test]
+fn attention_over_the_websocket_stops_a_loop() {
+    // The same ATTN as on a raw socket, sent from the browser's end
+    // while a loop is running and the session is reading nothing.
+    let (_service, _line, browser) = start();
+    let url = browser.replace("http://", "ws://");
+    let (mut socket, _) = connect(url.as_str()).expect("the upgrade");
+    frame(&mut socket);
+    for line in ["∇SPIN", "X←1", "→1", "∇"] {
+        typed(&mut socket, line);
+        frame(&mut socket);
+    }
+    typed(&mut socket, "SPIN");
+    std::thread::sleep(std::time::Duration::from_millis(200));
+    socket.send(Message::text(apl_wire::ATTENTION)).unwrap();
+    let stopped = frame(&mut socket);
+    assert!(
+        stopped.lines.iter().any(|l| l.contains("INTERRUPT")),
+        "{:?}",
+        stopped.lines
+    );
+    typed(&mut socket, "2+2");
+    assert_eq!(frame(&mut socket).lines, ["4"]);
+}
+
+#[test]
+fn the_page_sends_attention_on_escape() {
+    // The served page is the client; it has to send the object.
+    let (_service, _line, browser) = start();
+    let page = fetch(&browser);
+    assert!(page.contains("attn: true"), "the page never sends ATTN");
+    assert!(page.contains("\"Escape\""), "and not on Escape");
+}

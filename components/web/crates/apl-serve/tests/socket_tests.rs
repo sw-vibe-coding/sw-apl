@@ -1,9 +1,10 @@
 //! A session over a real socket: the transport the CLI terminal and
 //! `nc` use.
 
+use apl_attn::{Flag, attend};
 use apl_serve::serve;
 use apl_session::{Files, QUOTA};
-use apl_wire::{Frame, Socket, receive, send};
+use apl_wire::{ATTENTION, Frame, Socket, receive, send};
 use std::{
     io::{BufReader, Write},
     net::{TcpListener, TcpStream},
@@ -16,7 +17,10 @@ fn connect() -> (TcpStream, BufReader<TcpStream>, thread::JoinHandle<()>) {
     let address = listener.local_addr().unwrap();
     let worker = thread::spawn(move || {
         let (socket, _) = listener.accept().unwrap();
-        let link = Socket::new(socket).unwrap();
+        // As the service does: the session's flag on the session's thread.
+        let attn = Flag::default();
+        attend(Box::new(attn.clone()));
+        let link = Socket::new(socket, attn).unwrap();
         serve(
             Box::new(link),
             (QUOTA, Box::new(Files(std::env::temp_dir()))),
@@ -88,4 +92,100 @@ fn a_line_that_is_not_json_is_taken_verbatim() {
     socket.write_all(")OFF\n".as_bytes()).unwrap();
     assert!(read(&mut reader).off);
     worker.join().unwrap();
+}
+
+/// Define a loop that never ends, and start it.
+fn spin(socket: &mut TcpStream, reader: &mut BufReader<TcpStream>) {
+    for line in ["∇SPIN", "X←1", "→1", "∇"] {
+        send(socket, &line).unwrap();
+        read(reader);
+    }
+    send(socket, &"SPIN").unwrap();
+}
+
+#[test]
+fn attention_over_the_socket_stops_a_loop() {
+    // The loop is running, so the session is reading nothing; only the
+    // connection's own reading thread can see this line.
+    let (mut socket, mut reader, worker) = connect();
+    read(&mut reader);
+    spin(&mut socket, &mut reader);
+    thread::sleep(Duration::from_millis(200));
+    socket
+        .write_all(format!("{ATTENTION}\n").as_bytes())
+        .unwrap();
+    let stopped = read(&mut reader);
+    assert!(
+        stopped.lines.iter().any(|l| l.contains("INTERRUPT")),
+        "{:?}",
+        stopped.lines
+    );
+    // And the session carries on.
+    send(&mut socket, &"2+2").unwrap();
+    assert_eq!(read(&mut reader).lines, ["4"]);
+    send(&mut socket, &")OFF").unwrap();
+    read(&mut reader);
+    worker.join().unwrap();
+}
+
+#[test]
+fn attention_stops_one_session_on_a_server_and_not_another() {
+    // Two terminals, two sessions, both looping. Only one is sent ATTN,
+    // and the other must still be running afterwards -- which is the
+    // reason the flag stopped being one global.
+    let (mut one, mut one_reader, one_worker) = connect();
+    let (mut two, mut two_reader, two_worker) = connect();
+    read(&mut one_reader);
+    read(&mut two_reader);
+    spin(&mut one, &mut one_reader);
+    spin(&mut two, &mut two_reader);
+    thread::sleep(Duration::from_millis(200));
+    one.write_all(format!("{ATTENTION}\n").as_bytes()).unwrap();
+    let stopped = read(&mut one_reader);
+    assert!(
+        stopped.lines.iter().any(|l| l.contains("INTERRUPT")),
+        "{:?}",
+        stopped.lines
+    );
+    two_reader
+        .get_ref()
+        .set_read_timeout(Some(Duration::from_millis(500)))
+        .unwrap();
+    assert!(
+        receive::<Frame>(&mut two_reader).is_err(),
+        "the session not asked stopped too"
+    );
+    two_reader
+        .get_ref()
+        .set_read_timeout(Some(Duration::from_secs(5)))
+        .unwrap();
+    two.write_all(format!("{ATTENTION}\n").as_bytes()).unwrap();
+    assert!(
+        read(&mut two_reader)
+            .lines
+            .iter()
+            .any(|l| l.contains("INTERRUPT"))
+    );
+    for (socket, reader) in [(&mut one, &mut one_reader), (&mut two, &mut two_reader)] {
+        send(socket, &")OFF").unwrap();
+        read(reader);
+    }
+    one_worker.join().unwrap();
+    two_worker.join().unwrap();
+}
+
+#[test]
+fn the_service_hangs_up_after_off() {
+    // The connection is read on a thread that keeps its own handle, so
+    // the service has to close it on purpose; otherwise nc would wait
+    // forever after )OFF.
+    let (mut socket, mut reader, worker) = connect();
+    read(&mut reader);
+    socket.write_all(")OFF\n".as_bytes()).unwrap();
+    assert!(read(&mut reader).off);
+    worker.join().unwrap();
+    assert!(
+        receive::<Frame>(&mut reader).unwrap().is_none(),
+        "the connection stayed open"
+    );
 }

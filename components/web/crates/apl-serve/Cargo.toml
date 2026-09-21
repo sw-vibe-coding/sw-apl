@@ -12,6 +12,7 @@ apl-wire = { path = "../apl-wire" }
 apl-session = { path = "../../../session/crates/apl-session" }
 
 [dev-dependencies]
+apl-attn = { path = "../../../value/crates/apl-attn" }
 apl-wire = { path = "../apl-wire" }
 
 [lints]

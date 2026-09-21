@@ -12,6 +12,7 @@ name = "sw-apl-server"
 path = "src/main.rs"
 
 [dependencies]
+apl-attn = { path = "../../../value/crates/apl-attn" }
 apl-wire = { path = "../apl-wire" }
 apl-serve = { path = "../apl-serve" }
 apl-session = { path = "../../../session/crates/apl-session" }

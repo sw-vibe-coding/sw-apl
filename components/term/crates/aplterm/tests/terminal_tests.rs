@@ -4,7 +4,7 @@ use apl_wire::{Frame, receive, send};
 use std::{
     fs::File,
     io::{BufReader, Read, Write},
-    net::TcpListener,
+    net::{TcpListener, TcpStream},
     os::fd::FromRawFd,
     process::{Child, Command, Stdio},
     sync::mpsc::{self, Receiver},
@@ -155,4 +155,81 @@ fn actual_terminal_composes_before_enter_and_sends_unicode_only() {
         assert!(Instant::now() < deadline, "client did not exit");
         thread::sleep(Duration::from_millis(10));
     }
+}
+
+/// Accept aplterm's connection on a fake service, as the first test does.
+fn accept(listener: &TcpListener) -> TcpStream {
+    let deadline = Instant::now() + Duration::from_secs(5);
+    let (socket, _) = loop {
+        if let Ok(connection) = listener.accept() {
+            break connection;
+        }
+        assert!(Instant::now() < deadline, "client did not connect");
+        thread::sleep(Duration::from_millis(10));
+    };
+    socket.set_nonblocking(false).unwrap();
+    socket
+        .set_read_timeout(Some(Duration::from_secs(5)))
+        .unwrap();
+    socket
+}
+
+#[test]
+fn a_busy_service_is_sent_attention_by_escape_and_by_ctrl_c() {
+    // The service takes a line and goes quiet, as it does while a loop
+    // runs. aplterm is waiting for a frame, not reading a line, so
+    // Escape is ATTN -- not the quote it is at a prompt -- and goes
+    // straight to the service as the attention object. So does Ctrl-C,
+    // the CLI's interrupt key.
+    let listener = TcpListener::bind("127.0.0.1:0").unwrap();
+    listener.set_nonblocking(true).unwrap();
+    let (mut client, mut keyboard, output) = launch(&listener.local_addr().unwrap().to_string());
+    let mut socket = accept(&listener);
+    let mut input = BufReader::new(socket.try_clone().unwrap());
+    for key in [&b"\x1b"[..], &b"\x03"[..]] {
+        // Anything aplterm drew before this round is not this round's
+        // prompt: drop it, so the prompt below is waited for afresh.
+        thread::sleep(Duration::from_millis(200));
+        while output.try_recv().is_ok() {}
+        let mut transcript = Vec::new();
+        let prompt = "BUSY> ".to_string();
+        let frame = Frame {
+            lines: vec![],
+            prompt: Some(prompt.clone()),
+            off: false,
+        };
+        send(&mut socket, &frame).unwrap();
+        wait_for(&output, &mut transcript, &prompt);
+        // Unshifted: a 2741 types capitals from the plain keys.
+        keyboard.write_all(b"spin\r").unwrap();
+        let typed: String = match receive(&mut input) {
+            Ok(Some(t)) => t,
+            other => {
+                thread::sleep(Duration::from_millis(300));
+                while let Ok(more) = output.try_recv() {
+                    transcript.extend(more);
+                }
+                panic!(
+                    "no line after {key:?}: {other:?}; screen: {:?}",
+                    String::from_utf8_lossy(&transcript)
+                );
+            }
+        };
+        assert_eq!(typed, "SPIN");
+        // The service says nothing now. Let aplterm settle into waiting.
+        thread::sleep(Duration::from_millis(300));
+        keyboard.write_all(key).unwrap();
+        let line = apl_wire::read(&mut input).unwrap().unwrap();
+        assert!(
+            apl_wire::attention(&line),
+            "{key:?} sent {line:?}, not ATTN"
+        );
+    }
+    let bye = Frame {
+        lines: vec![],
+        prompt: None,
+        off: true,
+    };
+    send(&mut socket, &bye).unwrap();
+    let _ = client.0.wait();
 }

@@ -15,11 +15,13 @@ use std::sync::Arc;
 use std::sync::atomic::{AtomicUsize, Ordering};
 use std::thread;
 
+use apl_attn::{Flag, attend};
 use apl_serve::serve;
 use apl_session::Files;
 use apl_wire::{Link, Socket};
 
 use crate::http::greet;
+use crate::socket::Browser;
 
 /// Which terminal is on the other end.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -84,11 +86,18 @@ pub fn accept(listener: &TcpListener, service: &Service, over: Dialled) -> io::R
 }
 
 /// Hold one session until it ends.
+///
+/// The session's attention flag is installed here, on this thread,
+/// which is the one the session runs on -- so an ATTN reaches this
+/// session and no other the service holds. The link is handed a clone
+/// to raise when the terminal sends one.
 fn hold(socket: TcpStream, service: &Service, over: Dialled) -> io::Result<()> {
+    let attn = Flag::default();
+    attend(Box::new(attn.clone()));
     let link: Box<dyn Link> = match over {
-        Dialled::Line => Box::new(Socket::new(socket)?),
+        Dialled::Line => Box::new(Socket::new(socket, attn)?),
         Dialled::Browser => match greet(socket)? {
-            Some(browser) => Box::new(browser),
+            Some(page) => Box::new(Browser::new(page, attn)?),
             None => return Ok(()),
         },
     };

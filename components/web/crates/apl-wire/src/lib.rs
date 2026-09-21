@@ -11,5 +11,5 @@ mod line;
 mod socket;
 
 pub use frame::{Frame, Link, send, text};
-pub use line::{read, receive, typed};
+pub use line::{ATTENTION, attention, read, receive, typed};
 pub use socket::Socket;

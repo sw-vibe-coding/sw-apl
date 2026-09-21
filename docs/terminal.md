@@ -386,6 +386,43 @@ There is no Telnet negotiation. Protocol lines are bounded, and a
 line carrying a control character ends the session -- a 2741 has no
 key for one, so it is a client that has lost its framing.
 
+## ATTN
+
+ATTN stops a statement that is running: a loop of lines, or one long
+statement, since every primitive watches for it as well as the gaps
+between lines. The session reports INTERRUPT, suspends like any other
+error, and carries on.
+
+The terminal may send ATTN at any time, as one protocol line:
+
+```
+{"attn":true}
+```
+
+An object, where a typed line is a string, so the two are never
+mistaken for each other. No line of APL is that object -- `{` and `"`
+are not APL -- so it cannot be sent by accident. At `nc`, type it.
+
+The service reads every connection the whole time, not only when the
+session asks for a line, because a running statement is reading
+nothing and an ATTN would otherwise wait behind it for ever. It acts on
+ATTN the moment it arrives and queues everything else. Each session
+has its own ATTN: sixteen held sessions are sixteen flags, and ATTN
+reaches only the session it was sent to.
+
+- **`aplterm`**: Escape, or Ctrl-[ which is the same byte, or Ctrl-C,
+  while the service is working. While a line is being typed Escape
+  quotes the next key instead; the two never meet, because a line is
+  typed only when the service is waiting for one. While the service
+  works the keyboard is locked, as a 2741's was, with only ATTN live:
+  every other key is read and dropped rather than left to land in the
+  next line.
+- **The terminal page `sw-apl-server` serves**: Escape or Ctrl-[
+  while the service is working.
+- **The browser demo**: Escape, Ctrl-[, or the red ATTN key at the
+  top left of the board -- the only way on a touch screen, which has no
+  Escape key.
+
 ## Sessions
 
 One session per connection, each with its own workspace, each on its

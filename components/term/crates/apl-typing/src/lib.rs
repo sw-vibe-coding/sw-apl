@@ -9,4 +9,4 @@ mod actions;
 mod input;
 mod line;
 
-pub use line::read_line;
+pub use line::{read_line, wait};

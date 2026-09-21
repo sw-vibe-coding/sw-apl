@@ -64,6 +64,20 @@
     put(why + "\n");
   };
 
+  // ATTN: Escape, or Ctrl-[ which is the same byte, stops a statement
+  // in progress. On the window rather than the input, because the input
+  // is disabled while the service is working -- which is exactly when
+  // ATTN is wanted -- and a disabled input hears no keys. At the prompt
+  // there is nothing to stop, so it is not sent. Cmd-[ is left alone:
+  // on a Mac it is Back.
+  addEventListener("keydown", (event) => {
+    const escape = event.key === "Escape"
+      || (event.ctrlKey && !event.metaKey && event.key === "[");
+    if (!escape || !typed.disabled || socket.readyState !== WebSocket.OPEN) return;
+    event.preventDefault();
+    socket.send(JSON.stringify({ attn: true }));
+  });
+
   typed.addEventListener("keydown", (event) => {
     if (event.key !== "Enter" || typed.disabled) return;
     // The paper keeps what was typed, exactly as a printing terminal

@@ -51,3 +51,21 @@ pub fn receive<T: for<'a> Deserialize<'a>>(input: &mut impl BufRead) -> io::Resu
 pub fn typed(line: &str) -> String {
     serde_json::from_str(line).unwrap_or_else(|_| line.trim_end_matches(['\n', '\r']).to_string())
 }
+
+/// What a terminal sends to stop a running statement: the 2741's ATTN
+/// key, as a protocol line. A terminal may send it at any time, typing
+/// or not, and the service acts on it at once rather than queueing it
+/// behind the lines the session has not read yet.
+///
+/// A JSON object, where every typed line is a JSON string or, from
+/// `nc`, raw text. So it is never mistaken for a line, and it cannot
+/// be sent by accident: no line of APL is this object, because `{` and
+/// `"` are not APL. A reader at `nc` who wants it types it.
+pub const ATTENTION: &str = "{\"attn\":true}";
+
+/// Whether a protocol line is ATTN.
+#[must_use]
+pub fn attention(line: &str) -> bool {
+    serde_json::from_str::<serde_json::Value>(line)
+        .is_ok_and(|v| v.get("attn") == Some(&serde_json::Value::Bool(true)))
+}
