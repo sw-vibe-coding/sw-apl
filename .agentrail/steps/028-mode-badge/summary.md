@@ -1,0 +1,1 @@
+The header is the name then the mode: sw-apl followed by a circled A and '68, as a tab row holding one tab marked current. APL\360 compatible is its description, a tooltip for a mouse, shown beside the tab on a tap for a touch screen, and the tab's accessible name for a screen reader, which hears the words rather than the circled A. No other mode is named anywhere.
