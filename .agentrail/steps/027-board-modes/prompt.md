@@ -94,3 +94,22 @@ one, as on the machine, and a separate key erases. Ask the owner
 before building it that way -- it changes what Backspace means on one
 surface only, and a reader who uses both the board and a physical
 keyboard will meet both meanings.
+
+**How to make the picture tappable** (owner asked what the modern
+image map is). Not `<map>` and `<area>`: their coordinates are the
+image's pixels, so they do not follow the picture as the board is
+resized, and every area would need rescaling on each resize. The
+board is resizable, so that is a fight.
+
+Use an SVG overlay in the picture's own `viewBox`. The original goes
+in as an `<img>`, untouched; over it sits an `<svg>` with the same
+`viewBox` holding one transparent `<rect>` per key, copied from the
+46 rectangle pairs' coordinates. Because both share the `viewBox`,
+the hit regions track the keys at every size with no code. Each rect
+is `role="button"`, focusable, and named for a screen reader out of
+`data/glyphs.toml`, which an `<area>` never did well. A pressed-key
+highlight is drawn in the overlay, never on the picture.
+
+This is also what keeps the licence simple: the CC BY-SA file is
+served byte for byte as redistributed, and everything interactive is
+in a separate file that is ours.
