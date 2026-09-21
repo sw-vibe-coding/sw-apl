@@ -221,6 +221,18 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await page.click('#board .hit.caps');
   await page.waitForTimeout(250);
   check('and switches back', (await faces()).mode === 'apl', 'it did not');
+
+  // Tab and the Shifts do nothing, so they look inert in either mode.
+  const inert = () => page.evaluate(() => [...document.querySelectorAll('#board .inert')]
+    .map((el) => Number(getComputedStyle(el).opacity)));
+  const inApl = await inert();
+  await page.click('#board .hit.caps');
+  await page.waitForTimeout(250);
+  const inAbc = await inert();
+  await page.click('#board .hit.caps');
+  check('Tab and the Shifts are greyed in both modes',
+    inApl.length > 0 && [...inApl, ...inAbc].every((o) => o < 0.5),
+    JSON.stringify({ inApl, inAbc }));
   const attnAt = await page.evaluate(() => {
     const a = document.querySelector('#board .attn').getBoundingClientRect();
     const one = document.querySelector('#board .hit[data-plain="1"]').getBoundingClientRect();

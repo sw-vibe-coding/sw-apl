@@ -38,7 +38,8 @@ What was changed:
    `face-normal` on the one below. There are 44 of each.
 2. A `class` attribute was added to the three parts of the Caps Lock
    key -- its edge, its face and its label -- so its state can be
-   shown.
+   shown, and `inert` to the parts of Tab and both Shift keys, which
+   do nothing on the board and are drawn so.
 3. Writing the file back re-serialised it: attribute order and
    whitespace differ from the original. Nothing drawn was moved,
    recoloured, resized or removed. Rendered at 150 dpi, the

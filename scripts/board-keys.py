@@ -228,10 +228,16 @@ def adapt(tree, keys, special, out):
         for el, centre in on:
             mark(el, "face-shifted" if centre[1] < y + h / 2 else "face-normal")
     caps = next(k["box"] for k in special if k["cap"] == "CAPS")
-    parts = sorted((el for el, c, gw, gh in found if within(c, caps)), key=lambda e: 0)
     for el, c, gw, gh in found:
         if within(c, caps):
             mark(el, "caps-lock caps-lock-" + ("edge" if gw > 40 else "face" if gh > 10 else "label"))
+    # Tab and the Shifts do nothing on the board -- Caps Lock is the mode
+    # key -- so they are marked to be drawn as inert, whichever mode.
+    for key in special:
+        if key["cap"] in ("TAB", "SHIFT"):
+            for el, c, gw, gh in found:
+                if within(c, key["box"]):
+                    mark(el, "inert")
     tree.write(out, encoding="unicode", xml_declaration=True)
 
 
