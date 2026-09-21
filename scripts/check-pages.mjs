@@ -191,10 +191,36 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await page.click('#show-board');
   check('the board is drawn from the keymap',
     (await page.locator('#board .key').count()) > 40, 'too few keys');
-  check('it is the 2741 picture, with a hit region per key',
-    (await page.locator('#board .picture image').count()) === 1
-      && (await page.locator('#board .hit').count()) === 45,
-    `${await page.locator('#board .hit').count()} hit regions`);
+  check('it is the 2741 picture, drawn inline, with a hit region per key',
+    (await page.locator('#board .picture .face-shifted').count()) === 44
+      && (await page.locator('#board .hit:not(.wide)').count()) === 45,
+    `${await page.locator('#board .hit:not(.wide)').count()} hit regions`);
+
+  // The face a key sends is drawn boldly and the other dimmed; Caps
+  // Lock is lit in APL and dim in ABC, and switches between them.
+  const faces = () => page.evaluate(() => {
+    const op = (sel) => Number(getComputedStyle(document.querySelector(sel)).opacity);
+    return {
+      mode: document.getElementById('board').dataset.mode,
+      shifted: op('#board .face-shifted'), normal: op('#board .face-normal'),
+      caps: getComputedStyle(document.querySelector('#board .caps-lock-face')).fill,
+      capsOpacity: op('#board .caps-lock-edge'),
+    };
+  });
+  const apl = await faces();
+  check('in APL the glyphs are bold and the letters dim',
+    apl.mode === 'apl' && apl.shifted === 1 && apl.normal < 0.5, JSON.stringify(apl));
+  check('and Caps Lock is lit', apl.caps === 'rgb(245, 179, 1)', apl.caps);
+  await page.click('#board .hit.caps');
+  await page.waitForTimeout(250);
+  const abc = await faces();
+  check('Caps Lock switches to ABC', abc.mode === 'abc', abc.mode);
+  check('where the letters are bold and the glyphs dim',
+    abc.normal === 1 && abc.shifted < 0.5, JSON.stringify(abc));
+  check('and Caps Lock is dim', abc.capsOpacity < 1 && abc.caps !== 'rgb(245, 179, 1)', JSON.stringify(abc));
+  await page.click('#board .hit.caps');
+  await page.waitForTimeout(250);
+  check('and switches back', (await faces()).mode === 'apl', 'it did not');
   const attnAt = await page.evaluate(() => {
     const a = document.querySelector('#board .attn').getBoundingClientRect();
     const one = document.querySelector('#board .hit[data-plain="1"]').getBoundingClientRect();
@@ -223,6 +249,15 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   const shown = await paper(page);
   check('a line entered by tapping alone runs',
     ['EDIT', 'LIFE', 'RACE'].every((n) => shown.includes(n)), JSON.stringify(shown.slice(-200)));
+
+  // The picture's own Return key sends the line, as the button does.
+  await page.click('#board [data-mode=idioms]');
+  await page.click('#board .list[data-kind=idioms] .entry[title="×/⍳5"]');
+  await page.click('#board [data-mode=apl]');
+  await page.click('#board .hit.return');
+  await page.waitForTimeout(800);
+  check("the picture's Return sends the line", (await paper(page)).trim().endsWith('120'),
+    JSON.stringify((await paper(page)).slice(-40)));
 
   // Commands and Idioms insert, and send nothing on their own: a reader
   // always presses Return.

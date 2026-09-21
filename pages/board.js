@@ -17,7 +17,12 @@
 // test runs every entry.
 
 const NS = "http://www.w3.org/2000/svg";
-const PICTURE = "redistributed/apl-keyboard/APL-keybd2.svg";
+
+// The adaptation of the 2741 picture: the original, with a class on
+// every glyph saying which face of its key it is on. Drawn inline, not
+// as an <image>, so that the page can emphasise one face and dim the
+// other. CC BY-SA, like the original; see its ATTRIBUTION.md.
+const PICTURE = "redistributed/apl-keyboard/APL-keybd2-board.svg";
 
 // Room to the left of the picture for ATTN, which is wider than the
 // key it replaces so its label reads at a normal size.
@@ -78,13 +83,14 @@ const KEYS = { min: 1.5, max: 3.4, step: 0.35, default: 2.4 };
 // busy is exactly when ATTN is wanted.
 export async function build(root, stamped, tap, attn) {
   const load = (file) => fetch(stamped(file)).then((r) => r.json());
-  const [map, layout, lists] = await Promise.all([
+  const [map, layout, lists, drawing] = await Promise.all([
     load("keymap.json"), load("board-keys.json"), load("board.json"),
+    fetch(stamped(PICTURE)).then((r) => r.text()),
   ]);
   named = await load("glyph-names.json").catch(() => ({}));
 
   root.append(modes(root));
-  root.append(picture(layout, map, stamped, tap, attn));
+  root.append(picture(layout, map, drawing, tap, attn));
   root.append(list("commands", lists.commands, tap));
   root.append(list("idioms", lists.idioms, tap));
   root.append(controls(tap));
@@ -130,15 +136,15 @@ function mode(root, id) {
     tab.setAttribute("aria-selected", String(tab.dataset.mode === known));
   }
   const face = known === "abc" ? "normal" : "shifted";
-  for (const hit of root.querySelectorAll(".hit")) {
-    hit.setAttribute("aria-label", name(hit.dataset[face]));
+  for (const hit of root.querySelectorAll(".hit:not(.wide)")) {
+    if (hit.dataset[face] !== "backspace") hit.setAttribute("aria-label", name(hit.dataset[face]));
   }
   remember(MODE, known);
 }
 
 // The 2741 itself: the picture, untouched, and a hit region over each
 // key in the picture's own units.
-function picture(layout, map, stamped, tap, attn) {
+function picture(layout, map, drawing, tap, attn) {
   const [w, h] = layout.size;
   const holder = document.createElement("div");
   holder.className = "picture";
@@ -150,9 +156,15 @@ function picture(layout, map, stamped, tap, attn) {
   // A plate under the picture: its keys are drawn dark on nothing, and
   // would vanish on a dark page without one.
   svg.append(shape("rect", { class: "plate", x: -PAD, y: 0, width: w + PAD, height: h, rx: 4 }));
-  svg.append(shape("image", { href: stamped(PICTURE), x: 0, y: 0, width: w, height: h }));
+  svg.append(inline(drawing, w, h));
 
   const root = () => holder.closest(".board");
+  // The wide keys first, so that where Return's box overlaps the key
+  // beside it the ordinary key, drawn after, wins the tap.
+  for (const { cap, box } of layout.wide) {
+    const hit = wideKey(cap, box, root, tap);
+    if (hit) svg.append(hit);
+  }
   for (const { cap, box } of layout.keys) {
     if (cap === "ATTN") {
       svg.append(attention(box, attn));
@@ -181,6 +193,43 @@ function picture(layout, map, stamped, tap, attn) {
   }
   holder.append(svg);
   return holder;
+}
+
+// The picture, drawn inline in its own coordinates.
+function inline(drawing, w, h) {
+  const doc = new DOMParser().parseFromString(drawing, "image/svg+xml");
+  const art = document.importNode(doc.documentElement, true);
+  for (const [k, v] of Object.entries({ x: 0, y: 0, width: w, height: h, viewBox: `0 0 ${w} ${h}` })) {
+    art.setAttribute(k, v);
+  }
+  art.setAttribute("aria-hidden", "true");
+  return art;
+}
+
+// A key the picture draws as an outline rather than a rectangle.
+//
+// Caps Lock is the mode key: a 2741 with shift locked types the glyphs,
+// so Caps Lock down is APL and up is ABC, and it is lit to say which.
+// Return sends the line, as the button below does. Tab and Shift have
+// no meaning at an APL prompt that the modes do not already give, and
+// are left inert rather than given an invented one.
+function wideKey(cap, box, root, tap) {
+  const [x, y, kw, kh] = box;
+  const hit = shape("rect", { class: `key hit wide ${cap.toLowerCase()}`, x, y, width: kw, height: kh, rx: 2 });
+  hit.setAttribute("role", "button");
+  hit.dataset.plain = cap;
+  if (cap === "CAPS") {
+    hit.setAttribute("aria-label", "Caps Lock: switch between APL glyphs and letters");
+    hit.addEventListener("click", () =>
+      press(hit, () => mode(root(), root().dataset.mode === "abc" ? "apl" : "abc")));
+    return hit;
+  }
+  if (cap === "RETURN") {
+    hit.setAttribute("aria-label", "return, send the line");
+    hit.addEventListener("click", () => press(hit, () => tap("return")));
+    return hit;
+  }
+  return null;
 }
 
 // ATTN: the key the picture leaves blank at the top left, made wider

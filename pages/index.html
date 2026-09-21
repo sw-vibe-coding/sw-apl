@@ -105,6 +105,23 @@
   }
   .board .picture .hit:hover { fill-opacity: .1; }
   .board .picture .hit.down { fill-opacity: .3; }
+  /* The face a key sends is drawn boldly and the other is dimmed, so a
+     reader sees which the board is on without reading the tabs. The
+     picture colours its glyphs in inline style attributes, which beat
+     any selector, hence !important: it is the only way to reach them
+     without editing the drawing's colours. */
+  .board .picture .face-normal,
+  .board .picture .face-shifted { transition: opacity .15s; }
+  .board[data-mode="apl"] .picture .face-normal,
+  .board[data-mode="abc"] .picture .face-shifted { opacity: .2; }
+  .board[data-mode="apl"] .picture .face-shifted,
+  .board[data-mode="abc"] .picture .face-normal {
+    fill: #0b3d91 !important; stroke: #0b3d91 !important; stroke-width: .5 !important;
+  }
+  /* Caps Lock down is APL: lit. Up is ABC: dim. */
+  .board[data-mode="apl"] .picture .caps-lock-face { fill: #f5b301 !important; }
+  .board[data-mode="apl"] .picture .caps-lock-label { fill: #000 !important; font-weight: 700; }
+  .board[data-mode="abc"] .picture .caps-lock { opacity: .45; }
   .board .picture .attn { cursor: pointer; }
   .board .picture .attn rect { fill: #c0392b; }
   .board .picture .attn.down rect { fill: #922b21; }

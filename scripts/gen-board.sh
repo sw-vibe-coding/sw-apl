@@ -40,7 +40,8 @@ PY
 
 # Where each key is on the 2741 picture, measured out of the picture
 # so the board cannot drift from the file it is drawn over.
-scripts/board-keys.py > pages/board-keys.json
+scripts/board-keys.py --adapt images/redistributed/apl-keyboard/APL-keybd2-board.svg \
+    > pages/board-keys.json
 
 # Commands and idioms: tracked in data/, where a test runs every one.
 cp data/board.json pages/board.json

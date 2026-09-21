@@ -109,6 +109,7 @@ pages:
     # shows it is a redistribution like any other.
     mkdir -p pages/redistributed/apl-keyboard
     cp images/redistributed/apl-keyboard/APL-keybd2.svg \
+       images/redistributed/apl-keyboard/APL-keybd2-board.svg \
        images/redistributed/apl-keyboard/LICENSE \
        images/redistributed/apl-keyboard/ATTRIBUTION.md \
        pages/redistributed/apl-keyboard/

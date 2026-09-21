@@ -20,7 +20,34 @@ borrowed are never in the same directory.
   full text is in `LICENSE` beside this file. The author also offers
   it under the GNU Free Documentation License 1.2 or later; sw-apl
   takes it under CC BY-SA 3.0.
-- **Changes:** none. The file is byte-for-byte as published.
+- **Changes:** `APL-keybd2.svg` is byte-for-byte as published.
+  `APL-keybd2-board.svg` beside it is an adaptation; see below.
+
+## The adaptation: `APL-keybd2-board.svg`
+
+`APL-keybd2-board.svg` is an adaptation of `APL-keybd2.svg`, made so
+that the on-screen keyboard in sw-apl's browser demo can emphasise
+one face of every key and dim the other. It is written by
+`scripts/board-keys.py --adapt` from the original, never edited by
+hand, so it can be made again from the original at any time.
+
+What was changed:
+
+1. A `class` attribute was added to each glyph: `face-shifted` on the
+   glyph a key carries above, which is its shifted face, and
+   `face-normal` on the one below. There are 44 of each.
+2. A `class` attribute was added to the three parts of the Caps Lock
+   key -- its edge, its face and its label -- so its state can be
+   shown.
+3. Writing the file back re-serialised it: attribute order and
+   whitespace differ from the original. Nothing drawn was moved,
+   recoloured, resized or removed. Rendered at 150 dpi, the
+   adaptation and the original differ in no pixel.
+
+The adaptation is offered under **CC BY-SA 3.0**, the licence of the
+work it adapts, and not under sw-apl's MIT licence. The credit above
+applies to it in full; the adaptation's own additions are too slight
+to claim.
 
 ## Why it is here
 
