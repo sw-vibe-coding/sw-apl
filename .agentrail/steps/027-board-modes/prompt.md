@@ -46,3 +46,51 @@ refactoring; it is not asked for here, but leave it a place.
 `just check-pages` has cases that tap keys by their data attributes
 and by the classes of the control row. They will move; keep what
 they prove, and add a case per mode.
+
+---
+
+**Owner question, 2026-09-20: why is the board not the 2741 SVG,
+shown twice, normal and shifted?** It should be, and the reason it
+was not was wrong.
+
+The glyph-keyboard step dismissed the redistributed picture as "an
+Inkscape drawing whose keys are not addressable". That was said
+without looking. Looked at:
+
+- It has 46 keys, each drawn as a pair of rectangles -- an outer one
+  25.9 by 26.4 and a face 19.4 by 20.0 -- at known coordinates. The
+  keys are addressable by geometry: sort the rectangles into rows by
+  y and columns by x.
+- Its glyphs are outlined paths, not text: no `<text>` element in the
+  file, 112 paths. So the labels cannot be read out of it -- but they
+  do not need to be. The keymap already says what each key sends;
+  what the picture gives is where each key is.
+- The board this repository draws instead lays glyphs on a US
+  keyboard's rows and calls it a 2741. The picture is the 2741. It is
+  the more faithful board and it is the one a reader should tap.
+
+Licence: CC BY-SA. Showing the picture unmodified and laying
+transparent hit regions over it is display, not adaptation, so it
+does not pull the page under share-alike. Do not edit the SVG's
+contents; if a highlight is wanted on a pressed key, draw it in an
+overlay. The attribution link beside the board stays.
+
+"Twice" is the owner's: an unshifted view and a shifted one, which
+is also what makes the APL and ABC modes concrete -- they are the two
+views of one picture rather than two layouts. Commands and Idioms are
+not on a 2741 and are not views of the picture; they are the board's
+own.
+
+**Owner: "The overstrike key is Backspace."** True of a 2741, which
+had no delete key at all -- a mistake was retyped or overstruck.
+sw-apl moved overstrike to `Ctrl-]` at the CLI and in `aplterm` on
+purpose, and `compose.rs` says why: a line editor needs Backspace to
+delete. That reasoning holds wherever there is a line editor, and it
+is not being reopened.
+
+The board is different. It has no line editor's conventions to keep,
+so it can be faithful: Backspace strikes the next glyph over the last
+one, as on the machine, and a separate key erases. Ask the owner
+before building it that way -- it changes what Backspace means on one
+surface only, and a reader who uses both the board and a physical
+keyboard will meet both meanings.
