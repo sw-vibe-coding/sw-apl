@@ -96,3 +96,35 @@ distinguishably. Say in the docs which keys are ATTN, on the page
 under Help and in `terminal.md`, and say what a reader does on a
 touch screen. The board's key needs a name a screen reader can
 read, like every other key on it.
+
+**Owner decision, 2026-09-20: the tight loop should be loose.**
+Asked to choose between polling only between lines (A) and pushing
+a check into the primitive loops (B), the owner chose B and gave
+the reason: this is not time-sensitive production code, and a loop
+that cannot be stopped is worse than a loop that runs slower. So
+poll inside the loops.
+
+Two things that decision covers, and they are not the same thing.
+Do not conflate them, and do not let the second delay the first.
+
+*Stopping.* ATTN works only if the running code polls a flag. The
+interpreter must read it inside the primitive loops -- reduce,
+scan, inner and outer products are where the time goes -- as well
+as between the lines of a body. An atomic read every few thousand
+iterations costs nothing measurable; find the granularity, say what
+was chosen, and keep it in one place rather than spread through the
+primitives.
+
+*Power.* The worker pegs a core for the duration. That is real on a
+phone, and it is a separate matter: the page's own thread is never
+blocked, so key events, taps and drawing all happen already no
+matter how long the loop runs. Yielding buys battery, not
+responsiveness. If a periodic yield is cheap, take it; if it costs
+throughput, leave it and raise it as its own step. Do not claim it
+makes the page responsive -- the page already is.
+
+One tension to resolve rather than discover: the flag is to become
+per-session, and the primitives do not obviously have a session to
+read it from. Decide how a primitive reaches it -- a handle passed
+down, or a thread-local the session installs -- before writing the
+polling, because that choice is most of the work.
