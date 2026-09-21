@@ -1,0 +1,11 @@
+number = 28
+slug = "mode-badge"
+status = "pending"
+description = """
+Owner direction 2026-09-20: the banner names a mode, not a version.
+
+The head..."""
+role = "production"
+context_files = []
+created_at = "2026-09-20T19:22:05"
+commits = []
