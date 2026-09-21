@@ -80,3 +80,19 @@ a line "cannot yet be stopped". So `→` loops are interruptible and
 one enormous primitive is not, at the CLI as well as in the browser.
 Either accept that and say so in the docs, or push a check into the
 primitive loops and pay for it there. Do not leave it unstated.
+
+**The board needs an ATTN key** (owner direction, 2026-09-20). A
+touch screen has no Escape key at all, so without one on the board
+a reader on a phone can start a loop and have no way to stop it.
+That is the worst state this page can be in, and it is reachable
+today. The key goes on the board with the other controls, and it
+must work while the session is busy -- which is the same shared-
+memory path as the physical key, not a tap the worker has to be
+free to receive.
+
+Escape is the physical key, as the owner chose. `Ctrl-[` is the
+same byte and should work too where a browser reports it
+distinguishably. Say in the docs which keys are ATTN, on the page
+under Help and in `terminal.md`, and say what a reader does on a
+touch screen. The board's key needs a name a screen reader can
+read, like every other key on it.
