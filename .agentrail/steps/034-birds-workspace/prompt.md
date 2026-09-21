@@ -35,3 +35,12 @@ Like every workspace in library 1: a DESCRIBE function, the
 tests in `library_tests.rs` that it loads and that DESCRIBE names only
 what the workspace holds. It is ours: no text copied from the post or
 from sw-mlpl beyond names.
+
+**Owner, 2026-09-21: "implement the ones you can and document the ones
+you cannot."** That settles the question above. Each bird APL\360 can
+write is a working function in the workspace; each it cannot is named
+in DESCRIBE or a documenting function, with what it would need that
+APL\360 does not have, stated plainly as a fact about APL\360 -- and
+nowhere as something planned. Do not ask again before building Z: if Z
+cannot be written without a function argument, it is documented, not
+faked.
