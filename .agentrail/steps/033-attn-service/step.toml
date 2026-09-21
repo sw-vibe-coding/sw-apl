@@ -1,6 +1,6 @@
 number = 33
 slug = "attn-service"
-status = "pending"
+status = "in-progress"
 description = """
 The service half of the attention step, moved out so the board could
 come fir..."""
