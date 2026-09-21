@@ -44,7 +44,11 @@ fn special(code: KeyCode, keyboard: &mut Keyboard, state: &mut State) {
             };
             print!("\r\n[{mode} input]\r\n");
         }
-        KeyCode::F(4) => keyboard.paste(")"),
+        // F4 is the `)` a command begins with; whether it struck is the
+        // keyboard's business and needs no answer here.
+        KeyCode::F(4) => {
+            keyboard.paste(")");
+        }
         _ => (),
     }
 }

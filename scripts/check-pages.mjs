@@ -501,6 +501,37 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await page.context().close();
 }
 
+// 9b. An overstrike made on the board strikes, exactly as one made
+//     at a physical keyboard does. The board sends its glyphs by
+//     paste, and paste used to drop a pending strike and put the glyph
+//     beside its base. The owner's own sequence, both ways, compared.
+{
+  const line = (page) => page.evaluate(() =>
+    document.getElementById('before').textContent + document.getElementById('after').textContent);
+
+  const typed = await visit();
+  await typed.keyboard.press('a');
+  await typed.keyboard.press('Control+BracketRight');
+  await typed.keyboard.press('Shift+F');
+  const atKeyboard = await line(typed);
+  await typed.context().close();
+
+  const tapped = await visit();
+  await tapped.click('#show-board');
+  await tapped.click('#board [data-mode=abc]');
+  await tapped.click('#board .hit[data-plain="A"]');
+  await tapped.click('#board .hit[data-plain="BACKSPACE"]');
+  await tapped.click('#board [data-mode=apl]');
+  await tapped.click('#board .hit[data-plain="F"]');
+  const onBoard = await line(tapped);
+  await tapped.context().close();
+
+  check('A, overstrike, _ at the keyboard makes one struck glyph',
+    atKeyboard === 'A\u0332', JSON.stringify(atKeyboard));
+  check('and the same on the board makes the same glyph',
+    onBoard === atKeyboard, `board ${JSON.stringify(onBoard)}, keyboard ${JSON.stringify(atKeyboard)}`);
+}
+
 // 10. ATTN in the browser. A loop that runs forever must stop, by
 //     Escape, by Ctrl-[, and by the board's key -- the last being the
 //     only way on a touch screen, which has no Escape at all. Each

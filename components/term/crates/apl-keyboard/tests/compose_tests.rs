@@ -184,3 +184,43 @@ fn the_brackets_are_on_the_home_row_and_the_arrows_are_not() {
     }
     assert_eq!(keyboard.text(), "[1]←");
 }
+
+/// A character that arrives by paste while a strike is pending strikes,
+/// exactly as a typed key would. The on-screen board sends every glyph
+/// this way, and so does an expander such as Espanso; before this, a
+/// strike begun with the overstrike key was silently dropped and the
+/// glyph put beside its base instead of over it.
+#[test]
+fn a_character_pasted_while_a_strike_is_pending_strikes() {
+    let (mut typed, mut pasted) = (Keyboard::default(), Keyboard::default());
+    typed.type_key('a');
+    typed.overstrike();
+    typed.type_key('F');
+    pasted.paste("A");
+    pasted.overstrike();
+    assert!(pasted.paste("_"), "a pair that forms a glyph does not ring");
+    assert_eq!(pasted.text(), typed.text(), "paste and typing disagree");
+    assert_eq!(pasted.text(), "A\u{332}");
+    assert!(!pasted.pending);
+}
+
+#[test]
+fn a_pasted_character_that_forms_no_glyph_rings_and_leaves_the_base() {
+    let mut k = Keyboard::default();
+    k.paste("A");
+    k.overstrike();
+    assert!(!k.paste("⍴"), "A and rho form nothing, so the bell rings");
+    assert_eq!(k.text(), "A");
+}
+
+#[test]
+fn more_than_one_character_pasted_while_a_strike_is_pending_goes_in_as_typed() {
+    // A paste of a whole expression is not the second key of an
+    // overstrike, so the strike is abandoned and the text goes in.
+    let mut k = Keyboard::default();
+    k.paste("A");
+    k.overstrike();
+    assert!(k.paste("+/⍳5"));
+    assert_eq!(k.text(), "A+/⍳5");
+    assert!(!k.pending);
+}

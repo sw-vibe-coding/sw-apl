@@ -28,8 +28,7 @@ impl Keyboard {
         if self.pending {
             return self.strike(&text);
         }
-        self.paste(&text);
-        true
+        self.paste(&text)
     }
 
     /// Replace the cell before the carriage with the glyph the pair
@@ -51,11 +50,25 @@ impl Keyboard {
         true
     }
 
-    /// Put text in at the carriage, as typed rather than as struck: a
-    /// combining low line joins the cell before it, since an
-    /// underscored letter is one glyph, and control characters are
-    /// dropped because a 2741 has no keys for them.
-    pub fn paste(&mut self, text: &str) {
+    /// Put text in at the carriage: a combining low line joins the cell
+    /// before it, since an underscored letter is one glyph, and control
+    /// characters are dropped because a 2741 has no keys for them.
+    ///
+    /// One character arriving while a strike is pending strikes, as a
+    /// typed key would, and `false` is a pair that forms no glyph -- the
+    /// bell, with the base left as it was. The strike was waiting for
+    /// the next input and this is it, however it came: the on-screen
+    /// board sends every glyph by paste, and so does an expander, and
+    /// both used to drop the strike and put the glyph beside its base.
+    /// More than one character is not the second key of an overstrike,
+    /// so it abandons the strike and goes in as typed.
+    pub fn paste(&mut self, text: &str) -> bool {
+        if self.pending {
+            let mut chars = text.chars();
+            if let (Some(c), None) = (chars.next(), chars.next()) {
+                return self.strike(&c.to_string());
+            }
+        }
         self.pending = false;
         for c in text.chars().filter(|c| !c.is_control()) {
             if c == '\u{332}' && self.cursor > 0 {
@@ -65,5 +78,6 @@ impl Keyboard {
                 self.cursor += 1;
             }
         }
+        true
     }
 }

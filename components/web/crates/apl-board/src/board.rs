@@ -30,7 +30,7 @@ impl Board {
         let mut submit = false;
         match act(key, ctrl, alt) {
             Act::Type(c) => bell = !self.0.type_key(c),
-            Act::Literal(c) => self.0.paste(&c.to_string()),
+            Act::Literal(c) => bell = !self.0.paste(&c.to_string()),
             Act::Overstrike => self.0.overstrike(),
             Act::Backspace => self.0.backspace(),
             Act::Delete => self.0.delete(),
@@ -47,8 +47,8 @@ impl Board {
     /// already, not keystrokes to translate.
     #[must_use]
     pub fn paste(&mut self, text: &str) -> String {
-        self.0.paste(text);
-        state(&self.0, false, false, true)
+        let bell = !self.0.paste(text);
+        state(&self.0, bell, false, true)
     }
 
     /// The finished line, and a fresh one after it.
