@@ -1,15 +1,9 @@
 //! Where a run goes next: the line a branch names, and the flag that
 //! stops a run from outside it.
 
-use std::sync::atomic::{AtomicBool, Ordering};
-
 use apl_ast::Defn;
 use apl_value::{AplError, AplResult, Array, Context, Data, ErrorKind, Number};
 use apl_workspace::Workspace;
-
-/// Set from outside the interpreter -- a signal handler, in the CLI --
-/// and read by a running body between its lines.
-static STOP: AtomicBool = AtomicBool::new(false);
 
 /// The line a branch selects: the first element of its value, or
 /// `None` when the value is empty, which falls through to the next
@@ -33,19 +27,16 @@ pub fn target(value: &Array) -> AplResult<Option<i64>> {
     }
 }
 
-/// Ask a running body to stop. It is safe to call from a signal
-/// handler: it only stores a flag, which the body reads between its
-/// lines.
-pub fn interrupt() {
-    STOP.store(true, Ordering::Relaxed);
-}
-
-/// Whether a stop was asked for since this was last called, which
-/// clears it. A body checks between lines, so a statement that has
-/// not finished a line of its own -- a long reduction over a large
-/// array, say -- cannot yet be stopped.
+/// Whether this session was asked to stop since this was last
+/// called, which answers it.
+///
+/// Read between the lines of a body, where a real read every time
+/// costs nothing. The primitives read it too, strided, inside their
+/// own loops -- so a single long statement stops as well as a loop of
+/// lines does. The flag is this thread's session's: see `apl-attn`.
+#[must_use]
 pub fn interrupted() -> bool {
-    STOP.swap(false, Ordering::Relaxed)
+    apl_attn::asked()
 }
 
 /// Stop activation `at` on the line that failed, and, for the

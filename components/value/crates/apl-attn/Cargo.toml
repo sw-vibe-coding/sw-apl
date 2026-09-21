@@ -1,0 +1,13 @@
+[package]
+name = "apl-attn"
+description = "sw-apl attention: the flag that stops a run, per session"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+
+[lints]
+workspace = true

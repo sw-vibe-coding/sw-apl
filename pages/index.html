@@ -86,6 +86,14 @@
   .board.plain .key .p { position: static; font-size: 1em; opacity: 1; }
   .board .key.wide { flex: 1.6 1 0; aspect-ratio: auto; font-size: 12px; }
   .board .key.space { flex: 4 1 0; aspect-ratio: auto; }
+  /* ATTN is the one key a reader reaches for when something is wrong,
+     so it should look it. Its place on the board is the board-modes
+     step's; its colour is here. */
+  .board .key.attn {
+    flex: 1.6 1 0; aspect-ratio: auto; font-size: 12px; font-weight: 600;
+    color: #fff; background: #c0392b; border-color: #c0392b;
+  }
+  .board .key.attn:active { background: #922b21; }
   .board .controls .key { aspect-ratio: auto; height: calc(var(--key) * .85); }
   /* Where the board sits and how big it is: small, at one end, and
      never mistakable for a key that types something. */

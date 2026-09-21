@@ -3,6 +3,10 @@
 version = 4
 
 [[package]]
+name = "apl-attn"
+version = "0.1.0"
+
+[[package]]
 name = "apl-glyphs"
 version = "0.1.0"
 dependencies = [
@@ -89,6 +93,7 @@ dependencies = [
 name = "apl-prims-scalar"
 version = "0.1.0"
 dependencies = [
+ "apl-attn",
  "apl-scalar-arith",
  "apl-scalar-circ",
  "apl-scalar-logic",

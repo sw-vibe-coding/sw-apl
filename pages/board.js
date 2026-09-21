@@ -42,7 +42,7 @@ export const name = (glyph) => named[glyph] ?? glyph;
 
 // Build the board once, from the map. `tap` is called with the text a
 // key sends, or with one of the words the control keys stand for.
-export async function build(root, stamped, tap) {
+export async function build(root, stamped, tap, attn) {
   const map = await fetch(stamped("keymap.json")).then((r) => r.json());
   named = await fetch(stamped("glyph-names.json"))
     .then((r) => r.json())
@@ -56,7 +56,7 @@ export async function build(root, stamped, tap) {
     }
     root.append(line);
   }
-  root.append(controls(tap));
+  root.append(controls(tap, attn));
   root.append(placing(root));
   root.append(credit());
   size(root, Number(remembered(SIZE, KEYS.default)));
@@ -183,7 +183,7 @@ function placing(root) {
 
 // Space, the two deletions, the overstrike key and return -- and the
 // layer toggle, without which a touch screen cannot reach a letter.
-function controls(tap) {
+function controls(tap, attn) {
   const row = document.createElement("div");
   row.className = "row controls";
   // `sends` of null is a key that types nothing: the layer toggle
@@ -211,5 +211,11 @@ function controls(tap) {
   add("⌫", "backspace", "backspace");
   add("○*", "overstrike the last glyph", "overstrike");
   add("⏎", "return, send the line", "return", "wide");
+  // ATTN stops a run in progress. A touch screen has no Escape key, so
+  // without this a reader on a phone could start a loop and have no way
+  // to stop it. Not wired through `tap`: a tap is ignored while the
+  // session is busy, and busy is exactly when this is wanted.
+  const stop = add("ATTN", "attention, stop what is running", null, "attn");
+  stop.addEventListener("click", () => attn());
   return row;
 }

@@ -69,10 +69,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-attn"
+version = "0.1.0"
+
+[[package]]
 name = "apl-call"
 version = "0.1.0"
 dependencies = [
  "apl-ast",
+ "apl-attn",
  "apl-scan",
  "apl-value",
  "apl-workspace",
@@ -268,6 +273,7 @@ dependencies = [
 name = "apl-prims-scalar"
 version = "0.1.0"
 dependencies = [
+ "apl-attn",
  "apl-scalar-arith",
  "apl-scalar-circ",
  "apl-scalar-logic",
@@ -826,6 +832,7 @@ checksum = "7da8b5736845d9f2fcb837ea5d9e2628564b3b043a70948a3f0b778838c5fb4f"
 name = "sw-apl"
 version = "0.1.0"
 dependencies = [
+ "apl-attn",
  "apl-call",
  "apl-session",
  "apl-strike",

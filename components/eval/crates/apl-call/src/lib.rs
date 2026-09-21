@@ -13,6 +13,6 @@ mod call;
 mod stack;
 
 pub use apl_workspace::Run;
-pub use branch::{interrupt, interrupted, target as branch_target};
+pub use branch::{interrupted, target as branch_target};
 pub use call::{call, value};
 pub use stack::{clear, resume, suspend};

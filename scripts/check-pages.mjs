@@ -437,7 +437,64 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await page.context().close();
 }
 
-// 10. Installable: the manifest a browser reads before it offers to
+// 10. ATTN in the browser. A loop that runs forever must stop, by
+//     Escape, by Ctrl-[, and by the board's key -- the last being the
+//     only way on a touch screen, which has no Escape at all. Each
+//     starts a real `→1` loop and waits for INTERRUPT with a deadline,
+//     because a loop that cannot be stopped would otherwise hang the
+//     check.
+{
+  const LOOP = ['∇SPIN', 'X←1', '→1', '∇'];
+  const stopped = (page) => page.evaluate(() =>
+    document.getElementById('paper').textContent.includes('INTERRUPT'));
+  const until = async (page, test, ms) => {
+    for (let waited = 0; waited < ms; waited += 100) {
+      if (await test(page)) return true;
+      await page.waitForTimeout(100);
+    }
+    return false;
+  };
+  const busy = (page) => page.evaluate(() =>
+    document.getElementById('line').classList.contains('waiting'));
+
+  for (const [how, press] of [
+    ['Escape', (page) => page.keyboard.press('Escape')],
+    ['Ctrl-[', (page) => page.keyboard.press('Control+BracketLeft')],
+    ['the board key', (page) => page.click('#board .key.attn')],
+  ]) {
+    const page = await visit();
+    await page.setViewportSize({ width: 390, height: 844 });
+    if (how === 'the board key') await page.click('#show-board');
+    for (const line of LOOP) await send(page, line);
+    await page.evaluate(() => {
+      const d = new DataTransfer();
+      d.setData('text', 'SPIN');
+      dispatchEvent(new ClipboardEvent('paste', { clipboardData: d, bubbles: true, cancelable: true }));
+      dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    });
+    const running = await until(page, busy, 2000);
+    await page.waitForTimeout(300);
+    await press(page);
+    const ok = running && await until(page, stopped, 8000);
+    check(`${how} stops a loop that runs forever`, ok,
+      JSON.stringify((await paper(page)).slice(-80)));
+    await page.context().close();
+  }
+
+  // An ATTN at the prompt has nothing to stop, and must not linger and
+  // stop the next statement the instant it starts.
+  {
+    const page = await visit();
+    await page.keyboard.press('Escape');
+    await send(page, '2+2');
+    const said = await paper(page);
+    check('an ATTN at the prompt does not stop the next line',
+      !said.includes('INTERRUPT') && said.trim().endsWith('4'), JSON.stringify(said.slice(-40)));
+    await page.context().close();
+  }
+}
+
+// 11. Installable: the manifest a browser reads before it offers to
 //    install, and the icons it shows afterwards. Relative start_url
 //    and scope, so it installs from a project page's sub-path too.
 {
@@ -482,7 +539,7 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await page.context().close();
 }
 
-// 11. Espanso, and any other OS-level expander. It watches the
+// 12. Espanso, and any other OS-level expander. It watches the
 //    keystrokes before the browser sees them, so the 2741 map
 //    cannot hide a trigger from it -- but it replaces what was
 //    typed either by sending backspaces and the glyph as a key, or
@@ -511,7 +568,7 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await page.context().close();
 }
 
-// 12. Under a sub-path, which is where GitHub Pages actually serves
+// 13. Under a sub-path, which is where GitHub Pages actually serves
 //    a project page from. Nothing must be fetched from the root.
 {
   const sub = await host(ROOT, false, PREFIX);

@@ -1,12 +1,15 @@
 //! Stopping a running body from outside it.
 //!
-//! Its own file, and so its own process: the stop flag is global, as
-//! it must be to be set from a signal handler, and cargo runs the
-//! tests within one file on parallel threads. A test that sets the
-//! flag beside a test that calls a function would take its stop.
+//! The stop flag was once one global, which is why this file stands
+//! alone: cargo runs a file's tests on parallel threads, and a test
+//! that set the flag could stop a neighbour's call. It is per-session
+//! now, installed on the session's own thread, so a test that asks
+//! its own flag cannot reach any other -- which is the property a
+//! service holding many sessions needed in the first place.
 
 use apl_ast::Defn;
-use apl_call::{call, clear, interrupt, suspend};
+use apl_attn::{Flag, attend};
+use apl_call::{call, clear, suspend};
 use apl_value::{AplError, AplResult, Array, ErrorKind, Number};
 use apl_workspace::{Output, Workspace};
 
@@ -30,13 +33,15 @@ fn define(ws: &mut Workspace, name: &str, body: &[&str]) {
 
 #[test]
 fn a_stop_asked_for_from_outside_interrupts_the_body() {
+    let flag = Flag::default();
+    attend(Box::new(flag.clone()));
     let mut ws = Workspace::default();
     define(&mut ws, "LOOP", &["quiet", "quiet", "quiet"]);
     // Nothing asked for, so the body runs to the end.
     assert!(call(&mut ws, "LOOP", None, None, run).is_ok());
     assert!(ws.si().is_empty());
     // Asked for, and the body stops between lines with INTERRUPT.
-    interrupt();
+    flag.ask();
     let err = call(&mut ws, "LOOP", None, None, run).unwrap_err();
     assert_eq!(err.kind, ErrorKind::Interrupt);
     let context = err.context.expect("it names where it stopped");

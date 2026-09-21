@@ -17,6 +17,7 @@ pub const DYADIC: &str = "+-×÷⌈⌊|*⍟○!∧∨⍲⍱<≤=≥>≠";
 /// # Errors
 /// DOMAIN ERROR from the function; SYNTAX ERROR for a glyph with no such form.
 pub fn apply_monadic(f: char, r: Number) -> AplResult<Number> {
+    attended()?;
     let a = r.as_f64();
     if let Some(x) = monadic_arith(f, a) {
         return finite(x?);
@@ -34,6 +35,7 @@ pub fn apply_monadic(f: char, r: Number) -> AplResult<Number> {
 /// # Errors
 /// DOMAIN ERROR from the function; SYNTAX ERROR for a glyph with no such form.
 pub fn apply_dyadic(f: char, left: Number, right: Number) -> AplResult<Number> {
+    attended()?;
     if let Some(exact) = Number::exact_int(f, left, right) {
         return Ok(exact);
     }
@@ -61,4 +63,19 @@ fn finite(x: f64) -> AplResult<Number> {
     } else {
         Err(AplError::new(ErrorKind::Domain))
     }
+}
+
+/// INTERRUPT if this session has been asked to stop.
+///
+/// Every primitive's inner loop comes through the two scalar
+/// dispatchers -- reduce, scan, the products, and plain `A+B` over an
+/// array alike -- so this is the one place a long statement notices
+/// ATTN, and the whole cost of the owner's rule that a tight loop be
+/// loose. `polled` really reads the flag once in `apl_attn::STRIDE`
+/// calls; measured on four million products, about seven percent.
+fn attended() -> AplResult<()> {
+    if apl_attn::polled() {
+        return Err(AplError::new(ErrorKind::Interrupt));
+    }
+    Ok(())
 }

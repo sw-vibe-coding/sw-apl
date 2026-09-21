@@ -12,6 +12,7 @@ name = "sw-apl"
 path = "src/main.rs"
 
 [dependencies]
+apl-attn = { path = "../../../value/crates/apl-attn" }
 apl-session = { path = "../../../session/crates/apl-session" }
 apl-strike = { path = "../../../lex/crates/apl-strike" }
 apl-call = { path = "../../../eval/crates/apl-call" }

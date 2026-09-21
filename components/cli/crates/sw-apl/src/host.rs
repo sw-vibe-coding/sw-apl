@@ -7,7 +7,9 @@
 use std::cell::RefCell;
 use std::collections::VecDeque;
 use std::rc::Rc;
+use std::sync::OnceLock;
 
+use apl_attn::Flag;
 use apl_session::{Console, INDENT, Shown};
 use rustyline::DefaultEditor;
 
@@ -77,16 +79,29 @@ impl Console for Script {
 /// reads, so Ctrl-C at a prompt never reaches here: it cancels the
 /// line, as it always did.
 pub fn catch_interrupt() {
+    // This session's flag, installed on this thread, which is the one
+    // the session runs on. The handler keeps a clone: it cannot reach
+    // a thread-local, and does not need to -- asking only stores.
+    let flag = Flag::default();
+    apl_attn::attend(Box::new(flag.clone()));
+    let _ = ASKED.set(flag);
     #[cfg(unix)]
     {
         extern "C" fn stop(_signal: libc::c_int) {
-            apl_call::interrupt();
+            if let Some(flag) = ASKED.get() {
+                flag.ask();
+            }
         }
-        // SAFETY: the handler only stores an atomic flag, which is
-        // async-signal-safe.
+        // SAFETY: the handler only loads a pointer and stores an
+        // atomic flag, both of which are async-signal-safe.
         unsafe {
             let handler = stop as *const () as libc::sighandler_t;
             libc::signal(libc::SIGINT, handler);
         }
     }
 }
+
+/// The flag the signal handler asks. A static because a handler can
+/// take no arguments; there is one CLI session per process, so one
+/// is all there is.
+static ASKED: OnceLock<Flag> = OnceLock::new();

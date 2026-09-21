@@ -18,6 +18,7 @@ use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::{JsCast, JsValue};
 use web_sys::DedicatedWorkerGlobalScope;
 
+use crate::channel::Attn;
 use crate::link::Shared;
 
 /// Library 1: the workspaces sw-apl ships, read out of the
@@ -105,6 +106,10 @@ pub fn start(message: &JsValue) {
     let channel = field(message, "channel").unwrap_or_else(|| message.clone());
     let stored = field(message, "stored").and_then(|v| v.as_string());
     let link = Shared::new(&channel);
+    // This session's attention is the channel's ATTN slot, which the
+    // page can write while this thread is busy running. Installed on
+    // this thread, which is the session's for as long as it lasts.
+    apl_attn::attend(Box::new(Attn::new(&channel)));
     let store: Box<dyn Store> = Box::new(libraries(&stored.unwrap_or_default()));
     let ended = serve(Box::new(link), (QUOTA, store));
     if let Err(error) = ended {

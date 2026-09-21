@@ -155,6 +155,10 @@ function __wbg_get_imports() {
                 wasm.__wbindgen_free(deferred0_0, deferred0_1, 1);
             }
         },
+        __wbg_exchange_7a3f53d11ab9a389: function() { return handleError(function (arg0, arg1, arg2) {
+            const ret = Atomics.exchange(arg0, arg1 >>> 0, arg2);
+            return ret;
+        }, arguments); },
         __wbg_getTime_65922ba0b59d55a7: function(arg0) {
             const ret = arg0.getTime();
             return ret;

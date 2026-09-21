@@ -19,9 +19,10 @@ const { build } = await import(stamped("./board.js"));
 
 // Must agree with channel.rs, which is where these are documented.
 const SIZE = 64 * 1024;
-const BODY = 8;
+const BODY = 12;
 const STATE = 0;
 const LENGTH = 1;
+const ATTN = 2;
 const WAITING = 0;
 const READY = 1;
 const CLOSED = 2;
@@ -202,7 +203,7 @@ async function run() {
   await init();
   board = new Board();
   const channel = new SharedArrayBuffer(SIZE);
-  const header = new Int32Array(channel, 0, 2);
+  const header = new Int32Array(channel, 0, 3);
   const body = new Uint8Array(channel, BODY);
   const worker = new Worker(stamped("worker.js"), { type: "module" });
   // A worker that dies before it says anything leaves a prompt that
@@ -256,7 +257,7 @@ async function keyboard() {
     if (state.submit) return send(wire.header, wire.body, board.take());
     draw(state);
   };
-  await build(boardEl, stamped, tap);
+  await build(boardEl, stamped, tap, attention);
 
   const button = document.getElementById("show-board");
   const reveal = (show) => {
@@ -333,6 +334,9 @@ function send(header, body, text) {
   const bytes = new TextEncoder().encode(text);
   const fits = Math.min(bytes.length, body.length);
   body.set(bytes.subarray(0, fits));
+  // An attention raised as the last run was finishing would otherwise
+  // sit in its slot and stop this line the instant it started.
+  Atomics.store(header, ATTN, 0);
   Atomics.store(header, LENGTH, fits);
   Atomics.store(header, STATE, READY);
   Atomics.notify(header, STATE);
@@ -340,6 +344,20 @@ function send(header, body, text) {
   line.classList.add("waiting");
   prompt.textContent = "";
   draw(JSON.parse(board.press("Unidentified", false, false)));
+}
+
+// ATTN: stop the run in progress.
+//
+// It is a store into the channel's attention slot and nothing else,
+// because nothing else can reach a busy worker: a worker reads its
+// messages only when its thread is idle, and a run never is. The
+// interpreter polls the slot inside every primitive and between the
+// lines of every function, so a loop of lines and one long statement
+// both stop. Only while the session is busy -- at the prompt there is
+// nothing to stop, and a flag left set would stop the next line.
+function attention() {
+  if (typing || !wire) return;
+  Atomics.store(wire.header, ATTN, 1);
 }
 
 // Walk the history. `step` is -1 for up and 1 for down.
@@ -361,6 +379,16 @@ function recall(step) {
 // reloads.
 function listen(header, body) {
   addEventListener("keydown", (event) => {
+    // ATTN, before the guard below: that guard ignores keys while the
+    // session is busy, and busy is exactly when ATTN is wanted. Escape,
+    // and Ctrl-[ which is the same byte. Cmd-[ is left alone: on a Mac
+    // it is Back.
+    const escape = event.key === "Escape"
+      || (event.ctrlKey && !event.metaKey && event.key === "[");
+    if (escape && !typing) {
+      event.preventDefault();
+      return attention();
+    }
     if (!typing || event.metaKey) return;
     // The arrows the keyboard does not claim are this terminal's.
     if (!event.ctrlKey && !event.altKey
