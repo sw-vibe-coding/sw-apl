@@ -13,9 +13,12 @@ It has two modes (owner direction 2026-09-21):
 
 - **(A) '68, APL\360**, as on the IBM 2741. Everything below
   describes this mode unless it says otherwise.
-- **(B) '72, APLSV**, as on the IBM 5100 family: (A) with execute,
-  format, and the quad system variables and functions added, as the
-  APLSV manual has them.
+- **(B) '75**, modelled on the APL of the IBM 5100, 5110 and 5120
+  desktop computers -- APLSV as IBM adapted it for one user and a
+  64-column screen. (A) with execute, format, and the quad system
+  variables and functions added, and the I-beams and the `)ORIGIN`,
+  `)DIGITS`, `)WIDTH` commands removed, as the IBM 5110 APL
+  Reference Manual has it.
 
 The mode is chosen at the CLI and the service with a flag and in the
 browser with a tab, and nothing done for (B) changes (A).
@@ -48,9 +51,11 @@ browser with a tab, and nothing done for (B) changes (A).
   workspace space, state indicator), `)ORIGIN`, `)DIGITS`, and
   `)WIDTH` settings, quad and quote-quad I/O. In (A), no APLSV quad
   system variables or functions, no execute, no format.
-- In (B): execute, format, and the APLSV quad system variables and
-  functions, as the APLSV manual defines them. What APLSV dropped
-  from APL\360 is not in (B); the manual says what that is.
+- In (B): execute, format, and the quad system variables and
+  functions, as the IBM 5110 APL Reference Manual defines them. The
+  I-beams and the settings commands are not in (B); `⎕IO`, `⎕PW`
+  and `⎕PP` replace the commands. `docs/mode-b.md` has the whole
+  list.
 - Domino (matrix divide) in a later phase.
 
 ### Session

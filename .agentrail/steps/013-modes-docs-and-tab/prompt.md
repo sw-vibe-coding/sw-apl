@@ -15,3 +15,11 @@ tests and demos, except format, work in (B) mode.** Format is the
 next step, not this one. Before completing it, check and say in the
 commit that every '72 sample and test is green in (B), and that
 Milestone 1 still holds in (A).
+
+**No IBM names in the interface (owner, 2026-09-21):** the app is
+sw-apl and its modes are (A) '68 and (B) '75, so as not to borrow
+IBM's possibly trademarked names. The (A) tab's tooltip and
+aria-label in pages/index.html read "APL\360 compatible" today;
+reword both, and give (B) a tooltip with no IBM name either. IBM
+names may appear in docs only to say what a mode is modelled on.
+See docs/mode-b.md, decision 5.

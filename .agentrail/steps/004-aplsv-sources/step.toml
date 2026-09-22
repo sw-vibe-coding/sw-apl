@@ -1,6 +1,6 @@
 number = 4
 slug = "aplsv-sources"
-status = "pending"
+status = "in-progress"
 description = """
 Phase 9 step 3 (docs/plan.md). Find the APLSV sources, and record how
 '72 dif..."""

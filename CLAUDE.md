@@ -296,14 +296,18 @@ Phase 9):
   (B) step that changes a '68 transcript is wrong, not rebased. A
   correctness fix to (A) itself may move one, with its source as the
   reason, as any fix may.
-- **(B) '72 -- APLSV**, the IBM 5100 family's. (A) plus execute,
-  format and the quad system variables and functions, as the APLSV
-  manual has them. No shared variables.
+- **(B) '75**, modelled on the APL of the IBM 5100, 5110 and 5120
+  desktop computers (owner: "an IBM 5120 on my phone", not System/370
+  APLSV). APLSV as IBM cut it down for one user: (A) plus execute,
+  format and the quad system variables and functions; no I-beams, no
+  )ORIGIN, )DIGITS, )WIDTH; clear workspace width 64, digits 5. The
+  5110 APL Reference Manual is its source; `docs/mode-b.md` records
+  the differences. No shared variables.
 
 The code is in three parts: the shared core, which is what existed
 before Phase 9 and stays where it is; '68-only crates, pulled out of
-it once the APLSV sources say what APLSV dropped; and '72-only crates
-for what APLSV added. A profile on the workspace decides which
+it for what (B) dropped (the I-beams, )ORIGIN, )DIGITS, )WIDTH);
+and '75-only crates for what (B) added. A profile on the workspace decides which
 mode-only parts are reachable. A workspace names the modes it runs
 in -- (A), (A)(B) or (B) -- and is listed and loaded only there.
 

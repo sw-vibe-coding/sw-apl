@@ -15,8 +15,9 @@ subset), `session.md` (terminal look and feel, system commands),
 ## Goal
 
 A clean-room, from-scratch implementation in Rust of IBM APL as it
-looked on a terminal, in **modes**: the '68 mode is pure APL\360, and
-the '72 mode is APLSV (owner direction 2026-09-21; Phase 9). What
+looked on the machines the owner used it on, in **modes**: the '68
+mode is pure APL\360 on an IBM 2741, and the '75 mode is the APL of
+the IBM 5100, 5110 and 5120 (owner direction 2026-09-21; Phase 9). What
 follows describes the '68 mode, which is the whole of the
 implementation until Phase 9 adds the second.
 
@@ -24,7 +25,7 @@ The '68 mode is pure IBM APL\360: its primitives, its session
 conventions, its I-beam system functions, and its `)ORIGIN`,
 `)DIGITS`, `)WIDTH` settings commands. Quad and quote-quad are the
 I/O forms; there are no quad-named system variables or functions
-(those came with APLSV). Traditional glyphs are the only surface
+(those came with APLSV, and reach sw-apl in the '75 mode). Traditional glyphs are the only surface
 syntax: Unicode input, no Latin keyword aliases, no name-to-glyph
 translation layer.
 
@@ -41,13 +42,13 @@ Two delivery surfaces, in order:
   tilde ("without"), no diamond statement separator.
 - Not a port of `sw-cor24-apl` (C) or of GNU APL. Those are
   references for behaviour and for the conformance corpus only.
-- In the '68 mode, not APLSV: no quad system variables or
+- In the '68 mode, not the 5100's APL: no quad system variables or
   functions (quad-IO, quad-CT, quad-EX, quad-NL, ...), no execute,
   no format. Their APL\360 counterparts are I-beams, `)ORIGIN`,
-  `)DIGITS`, `)WIDTH`, `)ERASE`, `)FNS`, `)VARS`. APLSV is the '72
-  mode, added by Phase 9, and the '68 mode does not change to make
-  room for it.
-- Shared variables, even in the '72 mode: they are APLSV's own
+  `)DIGITS`, `)WIDTH`, `)ERASE`, `)FNS`, `)VARS`. The '75 mode has
+  them, as the IBM 5100 family did, and the '68 mode does not change
+  to make room for it.
+- Shared variables, even in the '75 mode: they are APLSV's own
   subject, but they exist to talk to other processes and devices,
   and sw-apl has one user and no hardware. Revisit only if asked.
 - No embedded targets, no shared variables for hardware I/O.
@@ -609,43 +610,64 @@ to open it to the LAN, and the docs saying which.
    and the expansions already in `docs/espanso/` and
    `docs/emacs/`; a first screen worth arriving at.
 
-## Phase 9 (owner direction 2026-09-21): modes, '68 and '72
+## Phase 9 (owner direction 2026-09-21): modes, '68 and '75
 
 The owner, after BIRDS: sw-apl gains modes. The header already shows
 the current one as a tab, `Ⓐ '68`, built as a row holding one tab so
-another could be added; the second is `Ⓑ '72`, APLSV. This reverses
-the non-goal that kept APLSV out, for APLSV only.
+another could be added; the second is `Ⓑ '75`, modelled on the IBM 5100. This reverses
+the non-goal that kept APLSV's additions out, for that mode only.
 
-Names (owner, 2026-09-21), used interchangeably: (A) '68 is APL\360
-is the IBM 2741; (B) '72 is APLSV is the IBM 5100, 5110 and 5120. The
-tab shows the letter and the year; its tooltip gives the product name
-("APLSV compatible"); the keyboard matches the hardware. The owner has
-named other possible modes -- APL2, and APL\1130 -- as maybe some day;
-they are not planned here.
+Names (owner, 2026-09-21), used interchangeably in conversation: (A)
+'68 is APL\360 is the IBM 2741; (B) '75 is the IBM 5100, 5110 and
+5120. (B) was '72 until the owner set its year to the IBM 5100's
+announcement, September 1975 (2026-09-21, later); the saga's step
+prompts and the `011-lib1-72` slug were written before that and still
+say '72, which means '75. The keyboard matches the hardware. But the names sw-apl shows
+are its own (owner, 2026-09-21, later): the app is sw-apl and its
+modes are (A) '68 and (B) '75, so as not to borrow IBM's possibly
+trademarked names. IBM names appear only as descriptions of what a
+mode is modelled on. The tab shows the letter and the year; its
+tooltip, which today reads "APL\360 compatible", is reworded to
+carry no IBM name (step 013).
+
+What (B) is (owner, 2026-09-21, later): a recreation of the owner's
+two APL experiences -- learning APL on a 2741 connected to APL\360,
+and using it professionally on the IBM 5100 to 5120. "The goal is an
+IBM 5120 on my phone, not a 370 APLSV." APLSV was named only because
+it is what the 5100 family's APL derives from. So (B) follows the IBM
+5110 APL Reference Manual -- the 5120 ran the 5110's APL -- wherever
+it departs from APLSV: no I-beams, no `)ORIGIN`, `)DIGITS` or
+`)WIDTH` (`⎕IO`, `⎕PW`, `⎕PP` instead), a clear workspace 64 wide
+with 5 digits, a screen editor's `[n⎕]` and `[∆n]`. The findings are
+in `docs/mode-b.md`, which replaces the planned `docs/aplsv.md`. The owner has
+named other possible modes -- APL\1130, System/370 APLSV, and APL2,
+or the runtime repackaged as one binary per flavour -- as future
+possibilities; no plan is needed for them yet, and none is made
+here.
 
 What a mode is:
 
-- A language. '68 is APL\360 exactly as sw-apl has it; '72 is APLSV.
-- A pair of libraries. Library 1 differs per mode -- '72 gets its own
+- A language. '68 is APL\360 exactly as sw-apl has it; '75 is the
+  IBM 5110's APL.
+- A pair of libraries. Library 1 differs per mode -- '75 gets its own
   workspaces, and BIRDS there can fly the birds that `NOTHERE` says
   need an execute. Library 0 differs per mode too: a workspace saved
-  in '72 is saved in '72's library 0, and `)LIB` in '68 never sees
+  in '75 is saved in '75's library 0, and `)LIB` in '68 never sees
   it.
-- Recorded in what it saves, so a '72 workspace cannot be loaded into
+- Recorded in what it saves, so a '75 workspace cannot be loaded into
   '68 as though it were one.
 
 How the implementation is arranged, which the owner settled: three
 parts, visible in the code and not only in checks.
 
 - **Shared.** What exists today is the shared core, taken as it
-  stands. APLSV is very nearly a superset of APL\360, so it is most of
-  the code, and it does not move to make room.
-- **'68-only.** What APLSV dropped is pulled out of the shared core
-  into crates of its own, so that it is plainly APL\360's and '72 does
-  not carry it. The list is short and is established from the APLSV
-  manual, not from memory -- the I-beams, and perhaps the `)ORIGIN`,
-  `)DIGITS` and `)WIDTH` commands, are candidates only until then.
-- **'72-only.** What APLSV adds -- execute, format, the quad system
+  stands. The 5100's APL is very nearly a superset of APL\360, so it
+  is most of the code, and it does not move to make room.
+- **'68-only.** What (B) dropped is pulled out of the shared core
+  into crates of its own, so that it is plainly APL\360's and '75 does
+  not carry it. The sources confirm the list: the I-beams, and the
+  `)ORIGIN`, `)DIGITS` and `)WIDTH` commands (`docs/mode-b.md`).
+- **'75-only.** What (B) adds -- execute, format, the quad system
   variables and functions -- is new code in new crates.
 
 A profile on the workspace, set by the host, decides which of the
@@ -653,8 +675,8 @@ mode-only parts are reachable, and it is read at the few places the
 two differ -- from data where it can be, as the glyph table's
 `[[later]]` entries already are.
 
-Nothing done for '72 may move '68. Every existing sample is a '68
-sample and reg-rs is the proof: a '72 step that changes a '68
+Nothing done for '75 may move '68. Every existing sample is a '68
+sample and reg-rs is the proof: a '75 step that changes a '68
 transcript is wrong, not rebased. A correctness fix to '68 itself --
 single-element extension, if the manual says so -- may move one, with
 its source as the reason.
@@ -664,41 +686,43 @@ modes it runs in, and is listed and loaded only there:
 
 - Each workspace says which modes it runs in, on a line of its own
   near the top: `(A)`, `(A)(B)` or `(B)` -- `(A)` for '68, `(B)` for
-  '72, with later modes added as they come.
+  '75, with later modes added as they come.
 - A workspace that uses something only one mode has must be listed and
   loaded in that mode alone. One using only what both share runs in
   both, and is listed in both.
 - Keeping such a workspace once and showing it in both is an
   optimisation the reader never sees; a library is still a mode's.
 - `)SAVE` should decide the line from what the workspace uses, not
-  from the mode it was saved in: a workspace saved in '72 that uses
-  nothing '72 added is `(A)(B)`. So the same name can stand for a
-  '68-only workspace and a different '72-only one -- BIRDS in each, the
-  '72 one flying the birds execute makes possible.
+  from the mode it was saved in: a workspace saved in '75 that uses
+  nothing '75 added is `(A)(B)`. So the same name can stand for a
+  '68-only workspace and a different '75-only one -- BIRDS in each, the
+  '75 one flying the birds execute makes possible.
 - What must differ in what is written, and what can be shared, is a
-  question for the sources. The file format today writes its settings
-  as `)ORIGIN`, `)DIGITS` and `)WIDTH` lines; if APLSV dropped those
-  commands, every workspace ever saved would be '68-only by that rule
-  alone, which is plainly wrong. The settings would have to be written
-  in a form both modes read, as the random link already is, in a `⍝!`
-  directive.
+  question the sources have now answered for the settings. The file
+  format today writes them as `)ORIGIN`, `)DIGITS` and `)WIDTH`
+  lines, and (B) has none of those commands, so every workspace ever
+  saved would be '68-only by that rule alone, which is plainly wrong.
+  Step 005 writes the settings in a form both modes read, as the
+  random link already is, in `⍝!` directives, and still reads the old
+  lines in (A).
 
 The keyboard (owner, 2026-09-21): the same treatment. '68 has the
-2741's; '72 may have the IBM 5100's, if it differs, and only as much
-as it differs. APLSV was used from 2741s as well, so the 5100 keyboard
-is a choice of look for '72, not a historical necessity. Whether the
-5100, 5110 and 5120 keyboards are the same is for the sources to say;
-a picture of one needs its own licence, as the 2741's has.
+2741's; '75 has the IBM 5100's. The 5100 and 5110 share a layout
+(the 5110 adds a lowercase mode and shift+ATTN), and the 5120's is
+reported the same with other keycap colours. A picture of one needs
+its own licence, as the 2741's has; see `docs/mode-b.md`.
 
-The del editor: expected to be the same in both modes, but that is
-also for the sources, and it is checked rather than assumed. APLSV's
+The del editor: the owner expected it to be the same in both modes;
+the 5110 manual says it is not quite. The screen machines replace
+APL\360's character-editing line with `[n⎕]`, editing the line in
+place, and add `[∆n]` to delete a line (`docs/mode-b.md`). APLSV's
 way of defining a function from characters is a second route to the
 same functions, and must agree with the editor.
 
 Sources: the APL\360 User's Manual has been the reference for
-everything so far. '72 needs its own -- the APLSV manual -- and the
-first '72 step finds it and records what differs, before any '72
-behaviour is built. Where the manual is not to hand, a guess is
+everything so far. '75's is the IBM 5110 APL Reference Manual, with
+the 5100's beside it; step 004 found them and recorded what differs,
+in `docs/mode-b.md`, before any '75 behaviour is built. Where the manual is not to hand, a guess is
 labelled as one.
 
 Not in this phase: shared variables (see non-goals), and APL2 -- the
@@ -707,14 +731,14 @@ and nothing is planned for it here.
 
 Priorities and milestones (owner, 2026-09-21): the mode plumbing is
 high priority, and format is the lowest -- it can come after the rest
-of '72.
+of '75.
 
 **Milestone 1: every APL\360 test and demo works in (A) mode.** The
 mode exists, the '68-only parts are pulled out, and the whole of what
 sw-apl has today -- the reg-rs corpus, the unit tests, the browser
 demo -- runs in (A) unchanged.
 
-**Milestone 2: APLSV's own tests and demos, except format, work in (B)
+**Milestone 2: the 5100's own tests and demos, except format, work in (B)
 mode.** Format follows soon after.
 
 Order:
@@ -723,8 +747,9 @@ Order:
    and correctness comes before features. Then deal and rotate, the
    same bug found beside it.
 2. Scope: CLAUDE.md and prd.md say what sw-apl now is. The README and
-   the user docs wait until '72 is something a reader can use.
-3. The APLSV sources, and a record of how '72 differs from '68.
+   the user docs wait until '75 is something a reader can use.
+3. The 5100 family's sources, and a record of how '75 differs from
+   '68 (`docs/mode-b.md`).
 4. The profile, the modes line in a workspace, and listing and
    loading by mode, with '68 unchanged.
 5. The '68-only parts the sources name, pulled out of the shared core
@@ -734,9 +759,9 @@ Order:
 7. The glyph table gains the mode a glyph arrives in; execute.
 8. The quad system variables.
 9. The quad system functions.
-10. Library 1 for '72, BIRDS first.
+10. Library 1 for '75, BIRDS first.
 11. The keyboard per mode.
-12. The docs, the README, and the `Ⓑ '72` tab. **Milestone 2.**
+12. The docs, the README, and the `Ⓑ '75` tab. **Milestone 2.**
 13. Format.
 
 Then the Phase 8 steps still pending: cup and cap, the base
