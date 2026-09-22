@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-21
 
+- chore(agentrail): complete 005-rename-72-to-75
+- docs(modes): '72 becomes '75 everywhere that is not history
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 004-aplsv-sources
 - docs(modes): '75 is the 5100's release as well as its announcement
 - docs(modes): (B) is '75, modelled on the IBM 5100 family
