@@ -1,10 +1,11 @@
 number = 2
 slug = "one-element-arguments"
-status = "in-progress"
+status = "completed"
 description = """
 Found 2026-09-21 checking the iota bug for its siblings, as that step
 asked: ..."""
 role = "production"
 context_files = []
 created_at = "2026-09-21T17:23:48"
-commits = []
+completed_at = "2026-09-21T17:42:33"
+commits = ["19a9cc24efb50701e4366c87644f955ffdcaef2c"]
