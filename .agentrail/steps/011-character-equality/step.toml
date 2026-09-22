@@ -1,4 +1,4 @@
-number = 10
+number = 11
 slug = "character-equality"
 status = "pending"
 description = "Found 2026-09-21 while working step 008: the relations = and ≠ refuse chara..."

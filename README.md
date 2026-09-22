@@ -164,6 +164,8 @@ documents below show real APL glyphs:
 - [Parity checklist](docs/parity.md) -- what works, what does not,
   and how we will know we have APL\360 parity
 - [Master plan](docs/plan.md) -- phases, decisions, what comes next
+- [APL timeline](docs/apl-timeline.md) -- the APLs sw-apl models,
+  and the ones around them, in order
 - [Language reference](docs/language.md) -- the APL\360 subset and
   exactly which Unicode is accepted
 - [Glyph table](docs/glyphs.txt) -- every glyph with its code point

@@ -22,10 +22,13 @@ carry the same files, for example
   in both, and domino is in neither -- and the rules checked against
   both editions so far read the same in each.
   <https://www.bitsavers.org/pdf/ibm/apl/GH20-0683-1_APL_360_Users_Manual_Mar70.pdf>
-- **APL\360-OS and APL\360-DOS User's Manual**, IBM, December 1970.
-  Where domino comes from: it gives the keying of ⌹ that
-  `data/glyphs.toml` quotes. Not yet re-read for this list; its form
-  number is still to be recorded.
+- **APL\360-OS and APL\360-DOS User's Manual**, SH20-0906-0, IBM,
+  December 1970. The Program Product release (5734-XM6, 5736-XM6)
+  that (A) models, and where domino comes from: it gives the keying of
+  ⌹ that `data/glyphs.toml` quotes.
+  <https://www.bitsavers.org/pdf/ibm/apl/SH20-0906-0_APL_360-OS_and_APL_360-DOS_Users_Manual_Dec70.pdf>
+- **IBM APL\360-OS (5734-XM6)**, Computer History Museum catalog.
+  <https://www.computerhistory.org/collections/catalog/102787847>
 
 ## The IBM 5100 family -- the (B) '75 mode
 
@@ -81,6 +84,20 @@ carry the same files, for example
 - **Roll**, Roger Hui, Jsoftware. The Lehmer generator behind roll
   and deal, which sw-apl's matches, and J's mapping of a link onto a
   range, which sw-apl's does not. <https://www.jsoftware.com/papers/roll.htm>
+
+## The timeline
+
+`apl-timeline.md` draws on these, besides the manuals above.
+
+- **Chronology of APL**, ACM SIGAPL.
+  <https://www.sigapl.org/APLChronology.php>
+- **Time-sharing**, **APL\1130**, **APL.SV** and **APL2**, APL Wiki.
+  <https://aplwiki.com/wiki/Time-sharing>,
+  <https://aplwiki.com/wiki/APL%5C1130>,
+  <https://aplwiki.com/wiki/APL.SV>, <https://aplwiki.com/wiki/APL2>
+- **IBM 5110** and **IBM System/370**, Wikipedia.
+  <https://en.wikipedia.org/wiki/IBM_5110>,
+  <https://en.wikipedia.org/wiki/IBM_System/370>
 
 ## The BIRDS workspace
 

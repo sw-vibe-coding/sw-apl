@@ -639,6 +639,10 @@ carry no IBM name. The owner settled the wording (2026-09-21, later):
 "APL\360-inspired" for (A) and "IBM 5100-inspired" for (B), in step
 014.
 
+Where the modes sit among the APLs, and the dates behind their names,
+is in `docs/apl-timeline.md` (owner direction 2026-09-21: four-digit
+years there).
+
 What (B) is (owner, 2026-09-21, later): a recreation of the owner's
 two APL experiences -- learning APL on a 2741 connected to APL\360,
 and using it professionally on the IBM 5100 to 5120. "The goal is an
