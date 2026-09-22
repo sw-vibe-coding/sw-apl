@@ -1,0 +1,1 @@
+CLAUDE.md and prd.md now describe two modes, (A) '68 APL\360 and (B) '72 APLSV, the three-part code arrangement, and workspaces naming their modes. Narrowed the no-move rule to work done for (B), so a sourced (A) correctness fix may still move a transcript, and fixed prd.md's contradiction over I-beams. README and user docs left unchanged until (B) is usable.
