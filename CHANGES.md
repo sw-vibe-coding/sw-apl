@@ -14,6 +14,14 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-22
 
+- chore(agentrail): complete 018-browser-defaults-to-b
+- feat(pages): the browser opens in (B) '75
+- saga: insert 018-browser-defaults-to-b
+- docs(tttml): how the machine learns tic-tac-toe in 64 KB; plan two owner directions
+- chore(agentrail): complete 017-local-function-names
+- fix(names): a local name hides a global function, in both modes
+- plan(tttml): a (B) workspace that learns tic-tac-toe by self-play
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 016-modes-docs-and-tab
 - feat(modes): the (B) '75 tab, and docs for two modes
 - docs(changes): refresh CHANGES.md to HEAD
