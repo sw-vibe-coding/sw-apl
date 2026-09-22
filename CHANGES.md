@@ -12,8 +12,100 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-09-21
+
+- chore(agentrail): complete 004-aplsv-sources
+- docs(modes): '75 is the 5100's release as well as its announcement
+- docs(modes): (B) is '75, modelled on the IBM 5100 family
+- chore(agentrail): complete 003-modes-scope
+- docs(scope): sw-apl has two modes, and (B) never moves (A)
+- docs(plan): milestones, and format last
+- docs(plan): the names a mode goes by
+- chore(agentrail): complete 002-one-element-arguments
+- fix(prims): deal and rotate take a one-element argument as a scalar
+- docs(plan): workspaces and the keyboard follow the mode
+- chore(agentrail): complete 001-iota-one-element-vector
+- fix(iota): the index generator takes a one-element vector
+- saga: archive terminal, begin modes
+- docs(plan): the three parts are visible in the code
+- docs(plan): Phase 9, modes -- '68 APL\\360 and '72 APLSV
+- chore(agentrail): complete 037-del-tilde-opens
+- fix(editor): del-tilde opens a definition as well as closing one
+- chore(agentrail): complete 036-combinators-doc
+- docs(combinators): a reference to every function in BIRDS
+- chore(agentrail): complete 035-birds-doc
+- docs(birds): a page for the BIRDS workspace
+- chore(agentrail): complete 034-birds-workspace
+- feat(ws): BIRDS, the combinators APL\\360 can write
+- chore(agentrail): complete 033-attn-service
+- feat(attn): ATTN from aplterm, from nc, and from the served page
+- saga: BIRDS implements what APL\\360 can and documents the rest
+- saga: a BIRDS workspace of the combinators APL\\360 can implement
+- chore(agentrail): complete 032-roll-deal-bounds
+- fix(random): exact rolls at any size, and a deal that holds only its hand
+- chore(agentrail): complete 031-inert-keys-grey
+
 ## 2026-09-20
 
+- feat(pages): the board's inert keys look inert
+- chore(agentrail): complete 030-board-overstrike
+- fix(keyboard): an overstrike made on the board strikes
+- chore(agentrail): complete 029-picture-special-keys
+- feat(pages): the board shows its mode on every key, and Caps Lock sets it
+- chore(agentrail): complete 028-mode-badge
+- feat(pages): the header names the mode
+- chore(agentrail): complete 027-board-modes
+- feat(pages): the board is the 2741's own keyboard
+- chore(agentrail): complete 026-attn-interrupt, service half moved to 028
+- chore(pages): rebuild the bundle after extracting the attention helper
+- feat(attn): ATTN stops a run, per session, in the browser too
+- saga: build the mode badge as a one-tab row
+- saga: the header is sw-apl followed by the badge
+- saga: the banner names a mode
+- saga: the SVG may be adapted, and the ATTN key goes top left
+- saga: an SVG overlay is the modern image map for the board
+- saga: the board should be the 2741 picture, and backspace on it
+- saga: the board refactored into four modes
+- saga: both -- interruptible and kind to batteries
+- saga: note how a primitive might reach a per-session interrupt flag
+- saga: owner decision, poll for ATTN inside the primitive loops
+- saga: the board needs an ATTN key
+- saga: record ATTN findings on the attn-interrupt step
+- chore(agentrail): complete 025-browser-history
+- feat(pages): up and down walk the history
+- chore(agentrail): complete 024-page-layout
+- fix(pages): the session is the viewport's real height
+- chore(agentrail): complete 023-custom-domain
+- docs(readme): the demo has a custom domain
+- chore(agentrail): complete 022-new-logo
+- feat(images): the updated logo, on nothing
+- chore(agentrail): complete 021-favicon-rho
+- fix(pages): the mark reads apl, and the favicon is 5 KB not 270
+- chore(agentrail): complete 020-favicon-lamp
+- fix(pages): the mark is the lamp, not cap
+- chore(agentrail): complete 019-footer-house-style
+- feat(pages): the footer in the house style, and a mark that says APL
+- chore(agentrail): complete 018-pages-workflow
+- ci(pages): publish with a workflow, not a branch deploy
+- chore(agentrail): complete 017-pwa-manifest
+- feat(pages): the demo installs, with icons
+- chore(agentrail): complete 016-colophon
+- feat(pages): a colophon below the fold
+- chore(agentrail): complete 015-publish-pages
+- feat(pages): publish the demo on GitHub Pages
+- chore(agentrail): complete 014-keyboard-aid
+- feat(pages): the board is placeable and sizeable
+- chore(agentrail): complete 013-footer-disclaimer
+- fix(pages): take the disclaimer out of the bar
+- chore(agentrail): complete 012-isolation-headers
+- fix(pages): send the isolation headers instead of explaining them
+- chore(agentrail): complete 011-glyph-keyboard
+- feat(pages): a board to tap, and three ways to type a glyph
+- docs(plan): owner direction 2026-09-20 third, a demo that fits a phone
+- chore(agentrail): complete 010-bundle-version
+- fix(pages): the page, the worker and the bundle are one build
+- saga: insert 010-bundle-version
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 009-browser-workspaces
 - feat(store): workspace libraries with no filesystem under them
 - docs(changes): refresh CHANGES.md to HEAD
