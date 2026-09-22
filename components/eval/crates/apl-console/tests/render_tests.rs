@@ -98,6 +98,7 @@ fn the_print_settings_reach_the_formatting() {
     let narrow = Print {
         digits: 3,
         width: 120,
+        whole: 0,
     };
     assert_eq!(
         render(

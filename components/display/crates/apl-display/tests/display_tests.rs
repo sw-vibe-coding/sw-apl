@@ -1,6 +1,6 @@
 //! APL\360 output formatting.
 
-use apl_display::{format_array, format_number};
+use apl_display::{Precision, format_array, format_number};
 use apl_value::{Array, Data, Number};
 
 const PP: usize = 10;
@@ -200,4 +200,20 @@ fn a_combining_low_line_takes_no_column() {
         format_array(&text, PP, 3),
         vec!["A\u{332}B\u{332}C\u{332}", "      D\u{332}"]
     );
+}
+
+#[test]
+fn a_whole_number_can_be_shown_in_full_past_the_precision() {
+    // The 5110's rule: five digits, but a whole number of up to ten
+    // is shown in full, and only a longer one in E form.
+    let b = Precision {
+        digits: 5,
+        whole: 10,
+    };
+    assert_eq!(format_number(Number::Int(1_048_576), b), "1048576");
+    assert_eq!(format_number(Number::Int(1_234_567_890), b), "1234567890");
+    assert_eq!(format_number(Number::Int(12_345_678_901), b), "1.2346E10");
+    assert_eq!(format_number(Number::Float(1.0 / 3.0), b), "0.33333");
+    // APL\360's: a whole number longer than the digits is E form.
+    assert_eq!(format_number(Number::Int(1_048_576), 5), "1.0486E6");
 }

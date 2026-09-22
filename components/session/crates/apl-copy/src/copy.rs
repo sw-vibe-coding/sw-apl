@@ -19,7 +19,7 @@ pub struct Taken {
 /// `protect` is `)PCOPY`: a name this workspace already holds is
 /// left alone rather than overwritten. A name not asked for is not
 /// kept -- it was never wanted -- so only a genuine collision is
-/// reported.
+/// reported. A system variable comes only when it is named.
 ///
 /// # Errors
 /// Whatever reading the workspace reports, and OBJECT NOT FOUND
@@ -35,7 +35,10 @@ pub fn take(ws: &Workspace, rest: &[&str], protect: bool) -> Result<(Stored, Tak
         kept: Vec::new(),
     };
     for (name, lines) in definitions(&stored.apl) {
-        if !asked.is_empty() && !wanted.contains(&name) {
+        // Copying every object leaves the latent expression, `⎕LX`,
+        // which is the workspace's and comes only when asked for.
+        let chosen = wanted.contains(&name) || asked.is_empty() && !name.starts_with('⎕');
+        if !chosen {
             continue;
         }
         if protect && held(ws, &name) {

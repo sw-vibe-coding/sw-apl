@@ -1,0 +1,18 @@
+[package]
+name = "apl-sysvars"
+description = "sw-apl system variables: the quad-named settings and values, which only the (B) '75 mode has"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-ast = { path = "../../../parse/crates/apl-ast" }
+apl-modes = { path = "../../../eval/crates/apl-modes" }
+apl-settings = { path = "../../../session/crates/apl-settings" }
+apl-value = { path = "../../../value/crates/apl-value" }
+apl-workspace = { path = "../../../eval/crates/apl-workspace" }
+
+[lints]
+workspace = true

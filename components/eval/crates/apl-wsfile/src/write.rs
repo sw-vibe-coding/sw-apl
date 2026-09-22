@@ -26,8 +26,10 @@ pub const PREAMBLE: [&str; 3] = [
 /// assignments, the functions as del definitions, and what APL cannot
 /// say for itself as directives -- the modes it runs in second, where
 /// a reader and `)LIB` look for them, then when it was saved, its
-/// random link and its settings. `when` is the moment it was saved,
-/// which the loader reports.
+/// random link and its settings. A latent expression is the `⎕LX`
+/// assignment that sets it, which only (B) runs, as only (B) loads a
+/// workspace that has one. `when` is the moment it was saved, which
+/// the loader reports.
 ///
 /// Names come out sorted, so the same workspace writes the same bytes
 /// every time and a saved file is worth keeping in git.
@@ -53,6 +55,9 @@ pub fn write(saved: &Saved, when: &str) -> String {
     ];
     if let Some(id) = &saved.id {
         lines.push(format!(")WSID {id}"));
+    }
+    if let Some(lx) = &saved.latent {
+        lines.push(format!("⎕LX←{}", literal(lx)));
     }
     lines.extend(objects(saved));
     if !saved.funcs.values().any(|f| f.locked) {

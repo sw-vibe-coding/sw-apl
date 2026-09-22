@@ -1,6 +1,6 @@
 number = 14
 slug = "system-variables"
-status = "pending"
+status = "in-progress"
 description = """
 Phase 9 step 8 (docs/plan.md). '72 gains the quad system variables,
 in a new ..."""

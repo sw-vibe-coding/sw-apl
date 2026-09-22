@@ -699,6 +699,15 @@ over = "∘"
 source = "manual"
 mode = "B"
 
+# System names. In the mode given, a quad written directly before a
+# letter begins one name with it -- ⎕IO, ⎕PP -- a system variable or
+# function (IBM 5110 APL Reference Manual, Chapter 5), rather than
+# quad beside a name. APL\360 has no such names: in (A) '70, ⎕IO is
+# still quad beside IO, and a SYNTAX ERROR.
+[system_names]
+glyph = "⎕"
+mode = "B"
+
 # The underscored alphabet: A̲ through Z̲, twenty-six further
 # characters of the APL\360 set. A 2741 struck the underbar over any
 # letter, and APL\360 used every one of them: they are letters, valid

@@ -47,7 +47,8 @@ sw-apl/
                apl-a70-commands            )ORIGIN )DIGITS )WIDTH,     } reaches
                                            )GROUP )GRP )GRPS           } these
     b75/       apl-execute                 execute                     } only (B) '75
-                                                                       } reaches this
+               apl-sysvars                 the system variables        } reaches
+                                                                       } these
     cli/       sw-apl                      terminal REPL and batch
     web/       apl-wire                    the terminal protocol: a
                                            frame out, a typed line in

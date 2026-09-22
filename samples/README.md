@@ -44,6 +44,12 @@ workspace's does -- and shows execute: a line built as characters
 and run, its value used in an expression, an assignment and an empty
 line that show nothing, and a name chosen at run time.
 
+`77-system-variables.apl` runs in (B) '75 and shows the system
+variables: the settings a clear workspace starts with, setting the
+precision, the index origin and the random link by assignment, a
+value a setting refuses, the line counter inside two functions, the
+atomic vector, and the values kept only for compatibility.
+
 `75-character-equality.apl` compares characters: counting and
 finding a letter, matching words with an inner product, and an outer
 product against a set of letters.

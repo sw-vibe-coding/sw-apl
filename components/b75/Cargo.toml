@@ -4,6 +4,7 @@
 [workspace]
 members = [
     "crates/apl-execute",
+    "crates/apl-sysvars",
 ]
 resolver = "2"
 

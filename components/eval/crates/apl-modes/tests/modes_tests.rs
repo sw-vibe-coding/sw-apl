@@ -66,7 +66,7 @@ fn sets_meet_and_subtract() {
 #[test]
 fn each_mode_says_what_it_adds() {
     assert_eq!(Mode::A.glyphs(), "");
-    assert_eq!(Mode::B.glyphs(), "⍎⍕");
+    assert_eq!(Mode::B.glyphs(), "⍎⍕⎕", "quad begins a system name");
     assert!(Mode::A.overstrikes().is_empty());
     let b: Vec<char> = Mode::B.overstrikes().iter().map(|(g, _, _)| *g).collect();
     assert_eq!(b, ['⍎', '⍕']);

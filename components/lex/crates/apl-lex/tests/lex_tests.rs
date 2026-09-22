@@ -253,3 +253,29 @@ fn a_low_line_with_no_letter_before_it_is_a_character_error() {
         assert_eq!(err.caret, Some(caret), "{text:?}");
     }
 }
+
+#[test]
+fn a_quad_before_a_letter_is_a_system_name_only_where_the_mode_says() {
+    let named = |line: &str, also: &str| -> Vec<TokenKind> {
+        let tokens = tokenize(line, also).unwrap();
+        tokens.into_iter().map(|t| t.kind).collect()
+    };
+    let b = apl_value::MODE_B;
+    assert_eq!(
+        named("⎕IO←0", b),
+        vec![TokenKind::Name("⎕IO".into()), TokenKind::Assign, num(0)]
+    );
+    assert_eq!(named("⎕PP2", b), vec![TokenKind::Name("⎕PP2".into())]);
+    // A blank, or anything but a letter, leaves quad as quad.
+    assert_eq!(
+        named("⎕ IO", b),
+        vec![TokenKind::Quad, TokenKind::Name("IO".into())]
+    );
+    assert_eq!(named("⎕←1", b)[0], TokenKind::Quad);
+    assert_eq!(named("⎕∆", b)[0], TokenKind::Quad);
+    // In (A) there are no system names.
+    assert_eq!(
+        named("⎕IO", ""),
+        vec![TokenKind::Quad, TokenKind::Name("IO".into())]
+    );
+}

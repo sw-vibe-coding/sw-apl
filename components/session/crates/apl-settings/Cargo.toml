@@ -1,6 +1,6 @@
 [package]
 name = "apl-settings"
-description = "sw-apl workspace settings: index origin, digits and width, each checked against what it may be"
+description = "sw-apl workspace settings: index origin, digits, width and random link, each checked against what it may be"
 edition.workspace = true
 license.workspace = true
 version.workspace = true
@@ -8,8 +8,8 @@ authors.workspace = true
 repository.workspace = true
 
 [dependencies]
-apl-eval = { path = "../../../eval/crates/apl-eval" }
-apl-library = { path = "../apl-library" }
+apl-modes = { path = "../../../eval/crates/apl-modes" }
+apl-workspace = { path = "../../../eval/crates/apl-workspace" }
 
 [lints]
 workspace = true

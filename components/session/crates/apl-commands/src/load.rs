@@ -83,10 +83,6 @@ pub fn copy(ws: &Workspace, rest: &[&str], protect: bool) -> Answer {
     }
 }
 
-/// Where the random link must lie: a Lehmer generator's state is
-/// never zero and always below its modulus.
-const LINKS: std::ops::Range<u64> = 1..2_147_483_647;
-
 /// Apply `line` if it is a settings directive, and say whether it
 /// was one. A value out of range is ignored exactly as the command
 /// would refuse it, and says nothing: a directive is still a comment.
@@ -96,13 +92,8 @@ pub fn directive(saved: &mut Saved, line: &str) -> bool {
     };
     let mut words = rest.split_whitespace();
     match (words.next(), words.next(), words.next()) {
-        (Some(name @ ("ORIGIN" | "DIGITS" | "WIDTH")), Some(value), None) => {
+        (Some(name @ ("ORIGIN" | "DIGITS" | "WIDTH" | "LINK")), Some(value), None) => {
             setting(saved, name, value);
-            true
-        }
-        (Some("LINK"), Some(value), None) => {
-            let state = value.parse().ok().filter(|n| LINKS.contains(n));
-            saved.env.link = state.unwrap_or(saved.env.link);
             true
         }
         _ => false,

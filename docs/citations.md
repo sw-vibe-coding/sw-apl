@@ -35,7 +35,10 @@ carry the same files, for example
 - **IBM 5110 APL Reference Manual**, SA21-9303-0, IBM, December
   1977. The reference for the (B) mode: its commands, system
   variables and functions, editor, keyboard, and its appendices on
-  how the 5110 differs from the 5100 and from APLSV.
+  how the 5110 differs from the 5100 and from APLSV. The system
+  variables (Chapter 5) and the order of the atomic vector
+  (Appendix B) are built from it; `⎕AV`'s order is facts from the
+  table, not a copy of it.
   <https://www.bitsavers.org/pdf/ibm/5110/SA21-9303-0_IBM_5110_APL_Reference_Manual_Dec1977.pdf>
 - **IBM 5110 APL User's Guide**, SA21-9302-1, IBM, August 1978.
   <https://www.bitsavers.org/pdf/ibm/5110/SA21-9302-1_IBM_5110_APL_Users_Guide_Aug1978.pdf>

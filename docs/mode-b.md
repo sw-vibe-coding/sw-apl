@@ -86,6 +86,62 @@ From the 5110 manual, Chapters 4 and 5:
 - Characters `$ # @ & % "` and others, added for exchange with BASIC.
   The 5110 also accepts lowercase letters from the keyboard.
 
+## The system variables as built
+
+**Done (step 014)**, in `components/b75/crates/apl-sysvars`, from the
+5110 manual's Chapter 5 and Appendix B. In (B) a quad directly before
+a letter is one name (`[system_names]` in `data/glyphs.toml`); in (A)
+`⎕IO` is quad beside a name and a SYNTAX ERROR, as it always was.
+
+- **One state, not two.** `⎕IO`, `⎕PP`, `⎕PW` and `⎕RL` read and set
+  the workspace's own index origin, precision, width and random link,
+  the fields `)ORIGIN`, `)DIGITS`, `)WIDTH` and the `⍝!` directives
+  set, and through the same bounds (`apl-settings`), which now include
+  the link's. A value saved from either mode reads back in the other.
+- **The clear workspace** is per mode: (B) starts with `⎕PP` 5 and
+  `⎕PW` 64, as the manual gives, and shows a whole number of up to ten
+  digits in full whatever `⎕PP` says -- the manual applies the
+  precision only to decimals and to whole numbers of more than ten
+  digits. APL\360's rule, E form past the digits, stays in (A).
+- **Read only.** The manual says assignments to `⎕LC` and `⎕WA` are
+  ignored; sw-apl ignores one to `⎕AV`, `⎕TT` and `⎕UL` too.
+- **Compatibility values.** The manual lists `⎕AI`, `⎕DL`, `⎕TS`,
+  `⎕TT` and `⎕UL` with fixed values, the 5110 having one user and no
+  clock, and lets `⎕AI` and `⎕TS` be assigned. sw-apl follows it:
+  `⎕TS` is 1900 0 0 0 0 0 0 until assigned, and does not read the
+  clock the I-beams read. `⎕AI` is four zeros (the manual's value is
+  illegible in the scan; four is APLSV's length). `⎕TT` is 0; `⎕UL` is
+  1 (the manual gives no value; one user). `⎕DL` is a function in
+  APLSV and is left to the system functions step.
+- **`⎕LX`** is saved as the `⎕LX←` line that sets it, which makes the
+  workspace (B)-only, and a `)LOAD` in (B) runs `⍎⎕LX` once the
+  workspace is in, its output after the SAVED line. `)COPY` of a whole
+  workspace does not bring it; named, it comes.
+- **`⎕AV`** has the 256 positions of Appendix B. Position 63 is named
+  "circle shoe" but pictured as circle and slope, and transpose is
+  listed nowhere else, so sw-apl reads it as `⍉` -- an inference. A
+  position with no character sw-apl can hold as one -- reserved and
+  unused ones, the underscored letters (two code points here), trace
+  and stop, cursor return, backspace and line feed, the maintenance
+  graphics -- holds U+E000 plus its 0-origin index, so every position
+  is distinct. Output control through those three control characters
+  is not implemented.
+
+Decisions where sw-apl differs from the 5110, each labelled:
+
+- A value a setting cannot take is a DOMAIN ERROR at the assignment,
+  as in APLSV; the 5110 took it and reported IMPLICIT ERROR when it
+  was next used.
+- `⎕PW` stops at 254, sw-apl's width limit in both modes; the 5110
+  allows 390.
+- `⎕CT` reads 1E¯13 and takes only that value: sw-apl's comparison
+  tolerance is fixed, and setting another is a NONCE ERROR.
+- Not implemented: a system variable localized in a function header,
+  `⎕PW` 128 while a definition is open, and indexed assignment into a
+  system variable (NONCE ERROR).
+- A quad name the system does not have is a SYNTAX ERROR (a guess:
+  the manual does not say).
+
 ## What (B) drops from APL\360
 
 Sourced, not guessed -- both reference manuals say so in their APLSV

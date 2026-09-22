@@ -1,6 +1,7 @@
 //! What a statement produced, and the settings that decide how much
 //! of a number is printed and how wide a line runs.
 
+use apl_display::Precision;
 use apl_value::Array;
 
 /// What a statement produced: what to display, and where to go next.
@@ -42,6 +43,20 @@ pub struct Print {
     pub digits: usize,
     /// Line width (`)WIDTH`).
     pub width: usize,
+    /// How many digits a whole number is always shown in full with:
+    /// none in (A), ten in (B). See `apl_display::Precision`.
+    pub whole: usize,
+}
+
+impl Print {
+    /// The digits a number is shown with.
+    #[must_use]
+    pub fn precision(self) -> Precision {
+        Precision {
+            digits: self.digits,
+            whole: self.whole,
+        }
+    }
 }
 
 impl Default for Print {
@@ -49,6 +64,7 @@ impl Default for Print {
         Print {
             digits: 10,
             width: 120,
+            whole: 0,
         }
     }
 }

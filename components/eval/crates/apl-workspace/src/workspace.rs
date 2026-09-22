@@ -3,6 +3,7 @@
 //! The boundary is the point of the split -- a later step writes the
 //! first half to a file, and cannot be handed the second by mistake.
 
+use std::collections::BTreeMap;
 use std::path::PathBuf;
 
 use apl_clock::{Clock, stopped};
@@ -54,6 +55,10 @@ pub struct Saved {
     /// The workspace identifier `)WSID` reports. `None` until it is
     /// named, which the session shows as CLEAR WS.
     pub id: Option<String>,
+    /// The latent expression, `⎕LX`: a line run when the workspace is
+    /// loaded. Only (B) can set it, so a workspace that has one runs
+    /// only there. `None` when it is empty.
+    pub latent: Option<Array>,
 }
 
 /// A workspace running on a terminal.
@@ -89,6 +94,10 @@ pub struct Workspace {
     /// workspace says which modes it runs in, not which one it was
     /// saved from.
     pub mode: Mode,
+    /// What has been assigned to (B)'s `⎕AI` and `⎕TS`, which the 5110
+    /// keeps for compatibility only: it has one user and no clock.
+    /// Session state, since neither is saved with a workspace.
+    pub compatible: BTreeMap<String, Array>,
 }
 
 impl Default for Workspace {
@@ -102,6 +111,7 @@ impl Default for Workspace {
             store: Box::new(Files(PathBuf::from("."))),
             quota: apl_space::DEFAULT,
             mode: Mode::default(),
+            compatible: BTreeMap::new(),
         }
     }
 }

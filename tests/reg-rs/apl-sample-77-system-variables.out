@@ -1,0 +1,84 @@
+      ⍝!MODES (B)
+      ⍝ The system variables, in (B) '75: settings and reports named with
+      ⍝ a quad. A clear workspace has the 5110's settings.
+      ⎕IO
+1
+      ⎕CT
+1E¯13
+      ⎕PP
+5
+      ⎕PW
+64
+      ⎕RL
+16807
+      ⍝ Five digits for a fraction, but a whole number of up to ten digits
+      ⍝ is shown in full.
+      ÷3
+0.33333
+      2*20
+1048576
+      2*40
+1.0995E12
+      ⍝ A setting takes a new value by assignment, and the value is the
+      ⍝ same one the directives in a saved workspace set.
+      ⎕PP←10
+      ÷3
+0.3333333333
+      ⎕IO←0
+      ⍳5
+0 1 2 3 4
+      ⎕IO←1
+      ⍝ A value a setting cannot take is refused.
+      ⎕IO←2
+DOMAIN ERROR
+      ⎕IO←2
+      ^
+      ⎕PP←17
+DOMAIN ERROR
+      ⎕PP←17
+      ^
+      ⍝ The random link moves each time a random number is drawn, and
+      ⍝ setting it replays the sequence.
+      ⎕RL←16807
+      ?6 6 6 6
+1 5 3 4
+      ⎕RL←16807
+      ?6 6 6 6
+1 5 3 4
+      ⍝ The line counter: the lines being executed, innermost first.
+      ∇R←INNER
+[1]   R←⎕LC
+[2]   ∇
+      ∇R←OUTER
+[1]   R←0
+[2]   R←INNER
+[3]   ∇
+      OUTER
+1 2
+      ⍝ The atomic vector: 256 characters, in the 5110's order.
+      ⍴⎕AV
+256
+      ⎕AV⍳'APL'
+87 102 98
+      ⎕AV[87+⍳3]
+BCD
+      ⍝ The workspace available, and what reports cannot be set.
+      0<⎕WA
+1
+      ⎕WA←0
+      0<⎕WA
+1
+      ⍝ Kept for compatibility: the 5110 has one user and no clock.
+      ⎕TS
+1900 0 0 0 0 0 0
+      ⎕AI
+0 0 0 0
+      ⍝ The latent expression, run when a saved workspace is loaded.
+      ⎕LX←'''WELCOME'''
+      ⎕LX
+'WELCOME'
+      ⍝ A quad name the system does not have.
+      ⎕XY
+SYNTAX ERROR
+      ⎕XY
+      ^

@@ -15,6 +15,7 @@ struct Tables {
     later: Vec<Later>,
     overstrike: Vec<Overstrike>,
     underscored: Underscored,
+    system_names: SystemNames,
 }
 
 #[derive(Deserialize)]
@@ -67,6 +68,16 @@ struct Overstrike {
     /// The later mode the pair belongs to, by letter: "B" for (B) '75.
     /// Empty for APL\\360's own pairs, which every mode has.
     #[serde(default)]
+    mode: String,
+}
+
+/// Where a quad begins a name: in `mode`, `glyph` written directly
+/// before a letter is one name with it, a system variable or function
+/// such as `⎕IO`, rather than quad beside a name.
+#[derive(Deserialize)]
+struct SystemNames {
+    glyph: String,
+    /// The mode that has them, by letter: "B" for (B) '75.
     mode: String,
 }
 
@@ -127,16 +138,11 @@ fn render(tables: &Tables) -> String {
             .iter()
             .map(|l| [quoted(&l.glyph), text(&l.name)].join(", ")),
     );
-    let in_b: String = tables
-        .later
-        .iter()
-        .filter(|l| l.mode == "B")
-        .map(|l| l.glyph.as_str())
-        .collect();
+    let in_b = mode_glyphs(tables, "B");
     [
         "// Generated from data/glyphs.toml by build.rs. Do not edit.".to_string(),
         konst(
-            "The later glyphs the (B) '75 mode has, beyond APL\\360's: the\n             /// lexer takes them as primitives there and refuses them\n             /// everywhere else, as it refuses every glyph in `LATER`.",
+            "The later glyphs the (B) '75 mode has, beyond APL\\360's: the\n             /// lexer takes them as primitives there and refuses them\n             /// everywhere else, as it refuses every glyph in `LATER`.\n             /// It holds quad as well, which in (B) begins a system name\n             /// when a letter follows it at once.",
             "MODE_B: &str",
             &text(&in_b),
         ),
@@ -186,6 +192,17 @@ fn render(tables: &Tables) -> String {
         underscored(&tables.underscored),
     ]
     .join("\n\n")
+}
+
+/// What `mode` takes beyond APL\360's glyphs: its later glyphs, and
+/// the quad that begins a system name when the mode has them.
+fn mode_glyphs(tables: &Tables, mode: &str) -> String {
+    let later = tables.later.iter().filter(|l| l.mode == mode);
+    let mut glyphs: String = later.map(|l| l.glyph.as_str()).collect();
+    if tables.system_names.mode == mode {
+        glyphs.push_str(&tables.system_names.glyph);
+    }
+    glyphs
 }
 
 /// The four glyph-set consts: every primitive, those with a monadic

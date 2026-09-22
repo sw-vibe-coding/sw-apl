@@ -112,6 +112,7 @@ dependencies = [
  "apl-prims",
  "apl-quad",
  "apl-store",
+ "apl-sysvars",
  "apl-value",
  "apl-workspace",
 ]
@@ -339,6 +340,8 @@ dependencies = [
  "apl-eval",
  "apl-lex",
  "apl-parse",
+ "apl-settings",
+ "apl-sysvars",
  "apl-value",
  "apl-wsfile",
  "serde_json",
@@ -348,8 +351,8 @@ dependencies = [
 name = "apl-settings"
 version = "0.1.0"
 dependencies = [
- "apl-eval",
- "apl-library",
+ "apl-modes",
+ "apl-workspace",
 ]
 
 [[package]]
@@ -371,6 +374,17 @@ dependencies = [
 [[package]]
 name = "apl-store"
 version = "0.1.0"
+
+[[package]]
+name = "apl-sysvars"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-modes",
+ "apl-settings",
+ "apl-value",
+ "apl-workspace",
+]
 
 [[package]]
 name = "apl-uses"

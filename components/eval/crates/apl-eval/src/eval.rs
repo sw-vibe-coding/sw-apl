@@ -70,13 +70,17 @@ fn statement(ws: &mut Workspace, expr: &Expr) -> AplResult<Option<Output>> {
     Ok(Some(got.map_or(Output::Nothing, Output::Value)))
 }
 
-/// Evaluate an expression tree.
+/// Evaluate an expression tree. A system variable, a name only (B)
+/// lexes, is read and assigned by `apl-sysvars`.
 ///
 /// # Errors
 /// VALUE ERROR for unknown names; primitive errors carry the glyph's
 /// position as the caret; SYNTAX ERROR for a branch, which is a
 /// statement and not a value.
 pub fn eval_expr(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
+    if let Some(done) = apl_sysvars::form(ws, expr, eval_expr) {
+        return done;
+    }
     match expr {
         Expr::Literal(a) => Ok(a.clone()),
         Expr::Name(n, pos) if ws.is_function(n) => value(ws, n, *pos, (None, None), eval_line),

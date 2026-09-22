@@ -3,6 +3,7 @@
 use apl_call::{clear, resume, suspend};
 use apl_editor::Definition;
 use apl_eval::{Console, Host, INDENT, Output, Workspace, error_lines, eval_line, system};
+use apl_settings::clear as clear_workspace;
 use apl_value::AplResult;
 
 use crate::commands::dispatch;
@@ -25,7 +26,8 @@ impl Session {
     /// stopped one a bare workspace starts with. Sign-on is the
     /// moment this is called, which is what `⌶24` reports. The host's
     /// decisions -- the quota, where the libraries are kept, the mode
-    /// -- are made here too, once, as the session begins.
+    /// -- are made here too, once, as the session begins, and the
+    /// workspace is the clear one that mode starts with.
     #[must_use]
     pub fn attached(console: Box<dyn Console>, host: Host) -> Session {
         let mut session = Session::default();
@@ -35,6 +37,7 @@ impl Session {
         session.ws.quota = host.quota;
         session.ws.store = host.store;
         session.ws.mode = host.mode;
+        session.ws.saved = clear_workspace(host.mode);
         session
     }
 

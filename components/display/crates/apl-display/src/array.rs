@@ -2,17 +2,17 @@
 
 use apl_value::{Array, Data};
 
-use crate::number::format_number;
+use crate::number::{Precision, format_number};
 use crate::wrap::{CONTINUE, column_blocks, column_widths, wrap_cells};
 
 /// Format an array as the lines the terminal prints, with `digits`
 /// significant digits and lines no wider than `width`.
 #[must_use]
-pub fn format_array(a: &Array, digits: usize, width: usize) -> Vec<String> {
+pub fn format_array(a: &Array, digits: impl Into<Precision>, width: usize) -> Vec<String> {
     if a.data.count() == 0 {
         return vec![String::new()];
     }
-    let (cells, sep) = cells(a, digits);
+    let (cells, sep) = cells(a, digits.into());
     if a.shape.len() <= 1 {
         return wrap_cells(&cells, sep, width);
     }
@@ -27,7 +27,7 @@ pub fn format_array(a: &Array, digits: usize, width: usize) -> Vec<String> {
 }
 
 /// Every element as text, plus the separator between columns.
-fn cells(a: &Array, digits: usize) -> (Vec<String>, &'static str) {
+fn cells(a: &Array, digits: Precision) -> (Vec<String>, &'static str) {
     match &a.data {
         Data::Num(v) => (v.iter().map(|&n| format_number(n, digits)).collect(), " "),
         Data::Char(v) => (v.iter().map(char::to_string).collect(), ""),

@@ -6,6 +6,7 @@ use apl_commands::{canonical, directive, system_command};
 use apl_editor::Definition;
 use apl_eval::error_lines;
 use apl_parse::parse_header;
+use apl_sysvars::latent;
 use apl_value::{AplError, ErrorKind};
 
 use crate::reply::Reply;
@@ -117,6 +118,9 @@ const NOT_WITH_OPEN: [&str; 4] = ["COPY", "PCOPY", "SAVE", "CONTINUE"];
 /// open is dropped with it: it belonged to the workspace being
 /// replaced, and its lines would otherwise swallow the file's. That
 /// is why `)LOAD` needs no report 6, where `)SAVE` and `)COPY` do.
+///
+/// A workspace loaded in (B) with a latent expression runs it once it
+/// is in, and what it shows follows the SAVED line.
 pub fn run_command(session: &mut Session, command: &str) -> Reply {
     let typed = command.split_whitespace().next().unwrap_or_default();
     let name = canonical(&typed.to_ascii_uppercase()).to_string();
@@ -136,5 +140,9 @@ pub fn run_command(session: &mut Session, command: &str) -> Reply {
             return reply;
         }
     }
-    Reply::from(answer)
+    let mut reply = Reply::from(answer);
+    let latent = latent(&session.ws).filter(|_| name == "LOAD");
+    let shown = latent.map(|line| session.respond(line).lines);
+    reply.lines.extend(shown.unwrap_or_default());
+    reply
 }

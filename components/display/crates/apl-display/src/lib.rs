@@ -8,4 +8,4 @@ mod number;
 mod wrap;
 
 pub use array::format_array;
-pub use number::format_number;
+pub use number::{Precision, format_number};

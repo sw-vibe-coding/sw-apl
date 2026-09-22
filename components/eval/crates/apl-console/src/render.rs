@@ -11,7 +11,7 @@ use crate::output::{Output, Print, Shown};
 pub fn render(out: &Output, print: Print) -> Vec<String> {
     match out {
         Output::Nothing | Output::Branch(_) => Vec::new(),
-        Output::Value(value) => format_array(value, print.digits, print.width),
+        Output::Value(value) => format_array(value, print.precision(), print.width),
         Output::Mixed(parts) => mixed_lines(parts, print),
         Output::Bare(text) => vec![text.clone()],
     }
@@ -49,7 +49,7 @@ pub fn render_all(outs: &[Output], print: Print) -> Shown {
 fn mixed_lines(parts: &[Array], print: Print) -> Vec<String> {
     let blocks: Vec<Vec<String>> = parts
         .iter()
-        .map(|p| format_array(p, print.digits, print.width))
+        .map(|p| format_array(p, print.precision(), print.width))
         .collect();
     if blocks.iter().all(|b| b.len() == 1) {
         return vec![blocks.iter().map(|b| b[0].as_str()).collect()];

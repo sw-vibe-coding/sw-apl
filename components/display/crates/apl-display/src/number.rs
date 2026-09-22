@@ -6,14 +6,35 @@ use apl_value::Number;
 /// (matching classic APL's switch at five decimal places).
 const EXP_LOW: i32 = -5;
 
-/// Format `n` with at most `digits` significant digits (`)DIGITS`).
+/// How many digits a number is shown with.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Precision {
+    /// Significant digits (`)DIGITS`, `⎕PP`).
+    pub digits: usize,
+    /// How many digits a whole number is always shown in full with,
+    /// whatever `digits` says. None in (A): APL\360 shows a whole
+    /// number longer than its digits in E form. Ten in (B): the 5110
+    /// applies its precision only to a whole number of more than ten
+    /// digits (IBM 5110 APL Reference Manual, Chapter 5, under `⎕PP`).
+    pub whole: usize,
+}
+
+impl From<usize> for Precision {
+    /// `digits` significant digits, as APL\360 shows them.
+    fn from(digits: usize) -> Self {
+        Precision { digits, whole: 0 }
+    }
+}
+
+/// Format `n` with at most `digits` significant digits, a whole number
+/// in full up to the precision's `whole` digits.
 #[must_use]
-pub fn format_number(n: Number, digits: usize) -> String {
+pub fn format_number(n: Number, precision: impl Into<Precision>) -> String {
+    let Precision { digits, whole } = precision.into();
     let digits = digits.max(1);
+    let full = u32::try_from(digits.max(whole)).unwrap_or(19);
     match n {
-        Number::Int(i)
-            if i.unsigned_abs() < 10u64.saturating_pow(u32::try_from(digits).unwrap_or(19)) =>
-        {
+        Number::Int(i) if i.unsigned_abs() < 10u64.saturating_pow(full) => {
             i.to_string().replace('-', "¯")
         }
         _ => format_float(n.as_f64(), digits),

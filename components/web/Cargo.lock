@@ -172,6 +172,7 @@ dependencies = [
  "apl-prims",
  "apl-quad",
  "apl-store",
+ "apl-sysvars",
  "apl-value",
  "apl-workspace",
 ]
@@ -415,6 +416,8 @@ dependencies = [
  "apl-eval",
  "apl-lex",
  "apl-parse",
+ "apl-settings",
+ "apl-sysvars",
  "apl-value",
  "apl-wsfile",
 ]
@@ -423,8 +426,8 @@ dependencies = [
 name = "apl-settings"
 version = "0.1.0"
 dependencies = [
- "apl-eval",
- "apl-library",
+ "apl-modes",
+ "apl-workspace",
 ]
 
 [[package]]
@@ -452,6 +455,17 @@ name = "apl-strike"
 version = "0.1.0"
 dependencies = [
  "apl-value",
+]
+
+[[package]]
+name = "apl-sysvars"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-modes",
+ "apl-settings",
+ "apl-value",
+ "apl-workspace",
 ]
 
 [[package]]

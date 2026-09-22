@@ -11,6 +11,7 @@ use crate::token::{PRIMITIVES, Token, TokenKind, check_balance, is_name_char};
 ///
 /// `also` is the later glyphs this line may use as primitives beyond
 /// APL\360's: the mode's, which is empty in (A) and `MODE_B` in (B).
+/// Quad among them means a quad before a letter begins a system name.
 ///
 /// # Errors
 /// CHARACTER ERROR for any character outside the accepted set;
@@ -42,9 +43,15 @@ pub fn tokenize(line: &str, also: &str) -> AplResult<Vec<Token>> {
     Ok(tokens)
 }
 
-/// Decide what non-numeric token starts at `i` and where it ends.
+/// Decide what non-numeric token starts at `i` and where it ends. A
+/// quad directly before a letter begins a system name, `⎕IO`, when
+/// the mode's glyphs include quad; otherwise it is quad.
 fn classify(chars: &[char], i: usize, also: &str) -> AplResult<(TokenKind, usize)> {
     let c = chars[i];
+    let named = chars.get(i + 1).is_some_and(char::is_ascii_alphabetic);
+    if c == '⎕' && named && also.contains(c) {
+        return Ok(lex_name(chars, i));
+    }
     if let Some(kind) = TokenKind::punctuation(c) {
         return Ok((kind, i + 1));
     }
@@ -56,8 +63,8 @@ fn classify(chars: &[char], i: usize, also: &str) -> AplResult<(TokenKind, usize
     })
 }
 
-/// A name: a name-start letter followed by letters, digits, and the
-/// low lines that underscore them.
+/// A name: a name-start letter, or a system name's quad, followed by
+/// letters, digits, and the low lines that underscore them.
 fn lex_name(chars: &[char], start: usize) -> (TokenKind, usize) {
     let mut end = start + 1;
     while end < chars.len() && is_name_char(chars[end], Some(chars[end - 1])) {

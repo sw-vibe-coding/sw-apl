@@ -69,6 +69,7 @@ dependencies = [
  "apl-prims",
  "apl-quad",
  "apl-store",
+ "apl-sysvars",
  "apl-value",
  "apl-workspace",
 ]
@@ -267,6 +268,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-settings"
+version = "0.1.0"
+dependencies = [
+ "apl-modes",
+ "apl-workspace",
+]
+
+[[package]]
 name = "apl-shelves"
 version = "0.1.0"
 dependencies = [
@@ -285,6 +294,17 @@ dependencies = [
 [[package]]
 name = "apl-store"
 version = "0.1.0"
+
+[[package]]
+name = "apl-sysvars"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-modes",
+ "apl-settings",
+ "apl-value",
+ "apl-workspace",
+]
 
 [[package]]
 name = "apl-uses"
