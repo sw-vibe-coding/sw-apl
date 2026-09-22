@@ -19,3 +19,6 @@ V1←'FIRST'
 V2←'SECOND'
 N←'2'
 ⍎'V',N
+⍝ Execute is struck from ⊥ and ∘, as on the 5100. This file carries
+⍝ a backspace, 0x08, between the two, as sample 71 does.
+⊥∘'6×7'

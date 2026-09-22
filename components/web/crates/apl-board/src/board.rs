@@ -1,6 +1,7 @@
 //! The keyboard as the page holds it.
 
 use apl_keyboard::Keyboard;
+use apl_modes::Mode;
 use wasm_bindgen::prelude::wasm_bindgen;
 
 use crate::draw::state;
@@ -12,11 +13,16 @@ pub struct Board(Keyboard);
 
 #[wasm_bindgen]
 impl Board {
-    /// A keyboard with the 2741 map and an empty line.
+    /// A keyboard with the 2741 map and an empty line, composing the
+    /// overstrikes of `mode` -- "A" or "70", "B" or "75", anything
+    /// else being (A). A page switching modes starts a new session and
+    /// makes a new board for it.
     #[wasm_bindgen(constructor)]
     #[must_use]
-    pub fn new() -> Board {
-        Board(Keyboard::default())
+    pub fn new(mode: &str) -> Board {
+        let mut keyboard = Keyboard::default();
+        keyboard.also = Mode::parse(mode).unwrap_or_default().overstrikes();
+        Board(keyboard)
     }
 
     /// Take one keystroke and hand back the line.

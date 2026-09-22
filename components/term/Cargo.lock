@@ -78,7 +78,16 @@ name = "apl-keyboard"
 version = "0.1.0"
 dependencies = [
  "apl-strike",
+ "apl-value",
  "serde_json",
+]
+
+[[package]]
+name = "apl-modes"
+version = "0.1.0"
+dependencies = [
+ "apl-store",
+ "apl-value",
 ]
 
 [[package]]
@@ -89,6 +98,10 @@ dependencies = [
  "crossterm",
  "unicode-width",
 ]
+
+[[package]]
+name = "apl-store"
+version = "0.1.0"
 
 [[package]]
 name = "apl-strike"
@@ -127,6 +140,7 @@ name = "aplterm"
 version = "0.1.0"
 dependencies = [
  "apl-keyboard",
+ "apl-modes",
  "apl-paper",
  "apl-typing",
  "apl-wire",

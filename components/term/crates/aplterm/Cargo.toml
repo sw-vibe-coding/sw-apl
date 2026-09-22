@@ -13,6 +13,7 @@ path = "src/main.rs"
 
 [dependencies]
 apl-keyboard = { path = "../apl-keyboard" }
+apl-modes = { path = "../../../eval/crates/apl-modes" }
 apl-paper = { path = "../apl-paper" }
 apl-typing = { path = "../apl-typing" }
 apl-wire = { path = "../../../web/crates/apl-wire" }

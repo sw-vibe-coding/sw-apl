@@ -4,10 +4,9 @@
 //! modes it runs in on a `⍝!MODES` line near its top; `apl-shelves`
 //! lists and loads it only in those. See `docs/workspaces.md`.
 
-mod host;
+mod extra;
 mod line;
 mod mode;
 
-pub use host::Host;
 pub use line::{modes, render, retag};
-pub use mode::{LETTERS, Mode, Modes};
+pub use mode::{Host, LETTERS, Mode, Modes};

@@ -62,3 +62,12 @@ fn sets_meet_and_subtract() {
     assert_eq!(Modes::ALL.minus(a), b);
     assert_eq!(a.minus(a), Modes::NONE);
 }
+
+#[test]
+fn each_mode_says_what_it_adds() {
+    assert_eq!(Mode::A.glyphs(), "");
+    assert_eq!(Mode::B.glyphs(), "⍎⍕");
+    assert!(Mode::A.overstrikes().is_empty());
+    let b: Vec<char> = Mode::B.overstrikes().iter().map(|(g, _, _)| *g).collect();
+    assert_eq!(b, ['⍎', '⍕']);
+}

@@ -1,9 +1,10 @@
-number = 13
-slug = "system-variables"
+number = 18
+slug = "modes-docs-and-tab"
 status = "pending"
 description = """
-Phase 9 step 8 (docs/plan.md). '72 gains the quad system variables,
-in a new ..."""
+Phase 9 step 11 (docs/plan.md). '72 is usable, so the reader is told.
+
+- The ..."""
 role = "production"
 context_files = []
 created_at = "2026-09-21T17:13:13"

@@ -64,6 +64,10 @@ struct Overstrike {
     glyph: String,
     base: String,
     over: String,
+    /// The later mode the pair belongs to, by letter: "B" for (B) '75.
+    /// Empty for APL\\360's own pairs, which every mode has.
+    #[serde(default)]
+    mode: String,
 }
 
 /// The underscored alphabet, as a rule rather than twenty-six rows:
@@ -111,12 +115,12 @@ fn render(tables: &Tables) -> String {
             .iter()
             .map(|l| [quoted(&l.typed), quoted(&l.meant)].join(", ")),
     );
-    let struck = rows(
-        tables
-            .overstrike
-            .iter()
-            .map(|o| [quoted(&o.glyph), quoted(&o.base), quoted(&o.over)].join(", ")),
-    );
+    let pair = |o: &Overstrike| [quoted(&o.glyph), quoted(&o.base), quoted(&o.over)].join(", ");
+    let (own, later): (Vec<&Overstrike>, Vec<&Overstrike>) =
+        tables.overstrike.iter().partition(|o| o.mode.is_empty());
+    let later_b: Vec<&&Overstrike> = later.iter().filter(|o| o.mode == "B").collect();
+    let struck = rows(own.iter().map(|o| pair(o)));
+    let struck_b = rows(later_b.iter().map(|o| pair(o)));
     let later = rows(
         tables
             .later
@@ -169,8 +173,15 @@ fn render(tables: &Tables) -> String {
             "Glyphs struck from two characters on a 2741, as\n             /// `(glyph, base, over)`. Either order forms it: the two\n             /// land on one position, and no two pairs share their\n             /// characters. A pair not here is CHARACTER ERROR, which\n             /// is the manual's own answer -- \"Illegitimate\n             /// overstrike\" is what it gives as the cause.",
             "OVERSTRIKE",
             "(char, char, char)",
-            tables.overstrike.len(),
+            own.len(),
             &struck,
+        ),
+        table(
+            "The overstrikes the (B) '75 mode adds to `OVERSTRIKE`, in the\n             /// same form. Only (B) composes them; elsewhere the pair is an\n             /// illegitimate overstrike, as it always was.",
+            "OVERSTRIKE_B",
+            "(char, char, char)",
+            later_b.len(),
+            &struck_b,
         ),
         underscored(&tables.underscored),
     ]

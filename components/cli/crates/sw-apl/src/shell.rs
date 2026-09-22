@@ -91,7 +91,7 @@ fn run_lines(session: &mut Session, pending: &Pending, echo: bool) {
         let Some(line) = pending.borrow_mut().pop_front() else {
             break;
         };
-        let struck = read(&line.text);
+        let struck = read(&line.text, session.ws.mode.overstrikes());
         if echo {
             let prompt = if open { "" } else { &session.prompt() };
             println!("{prompt}{}", struck.as_deref().unwrap_or(&line.text));

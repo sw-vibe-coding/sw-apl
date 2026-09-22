@@ -31,6 +31,9 @@ pub struct Strike {
     last: Option<char>,
     held: Option<char>,
     refused: Option<(char, char)>,
+    /// The mode's overstrikes beyond APL\360's: none in (A), and
+    /// `OVERSTRIKE_B` in (B).
+    pub also: &'static [(char, char, char)],
 }
 
 impl Strike {
@@ -48,7 +51,7 @@ impl Strike {
             self.last = Some(c);
             return Some(c.to_string());
         };
-        let struck = strike(held, c);
+        let struck = strike(held, c, self.also);
         match &struck {
             Some(glyph) => self.last = glyph.chars().next_back(),
             None => self.refused = Some((held, c)),
@@ -89,11 +92,13 @@ pub const BACKSPACE: char = '\u{8}';
 /// deleting, and `BACKSPACE` itself, which is what a 2741 sent and
 /// what a file written elsewhere will hold.
 ///
+/// `also` is the mode's extra pairs, as for `strike`.
+///
 /// # Errors
 /// The two characters of a strike that forms no glyph -- an
 /// illegitimate overstrike, which the caller reports as a CHARACTER
 /// error.
-pub fn compose(line: &str) -> Result<String, (char, char)> {
+pub fn compose(line: &str, also: &[(char, char, char)]) -> Result<String, (char, char)> {
     if !line.contains(BACK) && !line.contains(BACKSPACE) {
         return Ok(line.to_string());
     }
@@ -107,7 +112,7 @@ pub fn compose(line: &str) -> Result<String, (char, char)> {
         let held = if back { out.pop() } else { None };
         back = false;
         match held {
-            Some(held) => out.push_str(&strike(held, c).ok_or((held, c))?),
+            Some(held) => out.push_str(&strike(held, c, also).ok_or((held, c))?),
             None => out.push(c),
         }
     }

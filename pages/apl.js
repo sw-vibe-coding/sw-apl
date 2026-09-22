@@ -201,7 +201,7 @@ async function run() {
     return;
   }
   await init();
-  board = new Board();
+  board = new Board("A");
   const channel = new SharedArrayBuffer(SIZE);
   const header = new Int32Array(channel, 0, 3);
   const body = new Uint8Array(channel, BODY);

@@ -19,6 +19,9 @@ pub struct Held {
     link: Box<dyn Link>,
     /// Set when a read found the terminal gone.
     pub gone: bool,
+    /// The session's mode, by letter, which every frame carries so
+    /// the terminal composes overstrikes for it.
+    mode: char,
 }
 
 /// The terminal, shared between the prompt loop and the console. One
@@ -28,8 +31,12 @@ pub type Terminal = Rc<RefCell<Held>>;
 impl Held {
     /// A terminal on `link`, with nobody yet gone.
     #[must_use]
-    pub fn new(link: Box<dyn Link>) -> Terminal {
-        Rc::new(RefCell::new(Held { link, gone: false }))
+    pub fn new(link: Box<dyn Link>, mode: char) -> Terminal {
+        Rc::new(RefCell::new(Held {
+            link,
+            gone: false,
+            mode,
+        }))
     }
 
     /// Show `lines`, prompt, and wait for the line typed back.
@@ -47,6 +54,7 @@ impl Held {
             lines,
             prompt: Some(prompt),
             off: false,
+            mode: self.mode.to_string(),
         };
         self.link.send(&frame)?;
         let typed = self.link.recv()?;
@@ -70,6 +78,7 @@ impl Held {
             lines,
             prompt: None,
             off: true,
+            mode: self.mode.to_string(),
         })
     }
 }

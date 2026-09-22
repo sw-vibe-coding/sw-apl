@@ -34,3 +34,9 @@ apl-wasm reads it already and a page that sends none is (A).
 "Ⓐ '70", its tooltip and the tap-to-show text "APL\360-inspired",
 and its aria-label "1970, APL\360-inspired"; scripts/check-pages.mjs
 checks all three. This step adds the (B) tab beside it.
+
+**From step 013 (mode-aware overstrikes):** the browser board is
+built for a mode -- `new Board("A")` today in pages/apl.js. The (B)
+tab must start its session with a new `Board("B")` and send the
+worker a `mode` field ("75"), so the board composes ⍎ and ⍕ from the
+5100's pairs and the session is in (B).

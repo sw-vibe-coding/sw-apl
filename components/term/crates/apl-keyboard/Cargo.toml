@@ -11,5 +11,8 @@ repository.workspace = true
 apl-strike = { path = "../../../lex/crates/apl-strike" }
 serde_json = "1"
 
+[dev-dependencies]
+apl-value = { path = "../../../value/crates/apl-value" }
+
 [lints]
 workspace = true

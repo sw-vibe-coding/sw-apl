@@ -2,9 +2,8 @@
 
 use apl_ast::Expr;
 use apl_call::{branch_target, value};
-use apl_modes::Mode;
 use apl_parse::parse;
-use apl_value::{AplError, AplResult, Array, ErrorKind, MODE_B};
+use apl_value::{AplError, AplResult, Array, ErrorKind};
 use apl_workspace::{Output, Workspace};
 
 use crate::{apply, forms};
@@ -18,8 +17,7 @@ use crate::{apply, forms};
 /// Any lexical, syntax, or evaluation error, with a caret.
 pub fn eval_line(ws: &mut Workspace, line: &str) -> AplResult<Output> {
     let takes_argument = |n: &str| ws.function(n).is_some_and(|d| d.right.is_some());
-    let also = if ws.mode == Mode::B { MODE_B } else { "" };
-    let Some(expr) = parse(line, also, &takes_argument)? else {
+    let Some(expr) = parse(line, ws.mode.glyphs(), &takes_argument)? else {
         return Ok(Output::Nothing);
     };
     // An execute that is the whole statement shows what its line shows.

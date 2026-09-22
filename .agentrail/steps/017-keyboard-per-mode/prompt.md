@@ -20,3 +20,8 @@ overstrike table in data/glyphs.toml is mode-blind today, so those
 two pairs were not added: in (A) they must stay an illegitimate
 overstrike. Add them for (B) with the keyboard, and have composition
 read the mode.
+
+**Done in step 013, not here:** the overstrike table and composition
+are mode aware (OVERSTRIKE_B, Mode::overstrikes); the CLI, aplterm and
+the board all compose for their mode. This step is the keyboard
+picture and keymap per mode.

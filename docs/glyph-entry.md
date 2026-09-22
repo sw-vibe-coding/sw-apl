@@ -256,6 +256,17 @@ parts.
 `!` is on the list because a 2741 had no exclamation mark, but your
 keyboard does; type it directly and save the gesture.
 
+The (B) '75 mode forms two more, as the IBM 5100 did. In (A) '70 each
+pair is an illegitimate overstrike, as it was on APL\360.
+
+| Glyph | Code point | Name | Struck from | Known by |
+|---|---|---|---|---|
+| `⍎` | U+234E | execute | `⊥` U+22A5 and `∘` U+2218 | manual |
+| `⍕` | U+2355 | format | `⊤` U+22A4 and `∘` U+2218 | manual |
+
+At the CLI the mode is `--mode`. `aplterm` composes for the mode of
+the service it dials, which tells it with every line it sends.
+
 Every other glyph is a key. The bar family is the pattern worth
 remembering: `⌿ ⊖ ⍀` are `/ ○ \` struck with a minus, and `⌽ ⍋ ⍒` are
 `○ ∆ ∇` struck with a stile.

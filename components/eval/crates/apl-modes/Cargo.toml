@@ -9,6 +9,7 @@ repository.workspace = true
 
 [dependencies]
 apl-store = { path = "../apl-store" }
+apl-value = { path = "../../../value/crates/apl-value" }
 
 [lints]
 workspace = true

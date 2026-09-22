@@ -30,6 +30,7 @@ impl Link for Typist {
             lines: frame.lines.clone(),
             prompt: frame.prompt.clone(),
             off: frame.off,
+            mode: frame.mode.clone(),
         });
         Ok(())
     }
@@ -42,6 +43,11 @@ impl Link for Typist {
 /// Hold a session for a terminal that types `lines`, and hand back
 /// every frame it was sent.
 fn session(lines: &[&str]) -> Vec<Frame> {
+    session_in(Mode::A, lines)
+}
+
+/// As `session`, in `mode`.
+fn session_in(mode: Mode, lines: &[&str]) -> Vec<Frame> {
     let paper: Paper = Rc::new(RefCell::new(Vec::new()));
     let typed = lines.iter().map(|l| (*l).to_string()).collect();
     let link = Typist(typed, Rc::clone(&paper));
@@ -50,7 +56,7 @@ fn session(lines: &[&str]) -> Vec<Frame> {
         Host {
             quota: QUOTA,
             store: Box::new(Files(PathBuf::from("."))),
-            mode: Mode::A,
+            mode,
         },
     )
     .unwrap();
@@ -124,4 +130,15 @@ fn a_terminal_that_goes_away_releases_the_session() {
         !sent.iter().any(|f| f.off),
         "a dropped line is not a sign-off"
     );
+}
+
+/// Every frame names the session's mode, so a terminal composes the
+/// overstrikes that mode has.
+#[test]
+fn every_frame_names_the_mode() {
+    let a = session_in(Mode::A, &["2+2"]);
+    assert!(a.iter().all(|f| f.mode == "A"), "{a:?}");
+    let b = session_in(Mode::B, &["⍎'2+2'"]);
+    assert!(b.iter().all(|f| f.mode == "B"), "{b:?}");
+    assert_eq!(text(&b), ["4"]);
 }

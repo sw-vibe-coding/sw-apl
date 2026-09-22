@@ -26,7 +26,7 @@ use crate::held::{Held, Terminal};
 /// A transport failure, or a protocol line the terminal should not
 /// have sent.
 pub fn serve(link: Box<dyn Link>, host: Host) -> io::Result<()> {
-    let terminal = Held::new(link);
+    let terminal = Held::new(link, host.mode.letter());
     let mut session = Session::attached(Box::new(Reader(Rc::clone(&terminal))), host);
     run(&mut session, &terminal)
 }

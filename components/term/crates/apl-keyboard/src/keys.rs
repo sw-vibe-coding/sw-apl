@@ -23,6 +23,10 @@ pub struct Keyboard {
     /// What each key sends, which `keymap.json` supplies and a
     /// reader may replace to match their own keycaps.
     pub map: BTreeMap<char, String>,
+    /// The overstrikes the session's mode forms beyond APL\360's:
+    /// none in (A), the 5100's in (B). Set from what the service says
+    /// the mode is; a keyboard does not choose it.
+    pub also: &'static [(char, char, char)],
 }
 
 impl Default for Keyboard {
@@ -35,6 +39,7 @@ impl Default for Keyboard {
             literal: false,
             map: serde_json::from_str(include_str!("../keymap.json"))
                 .expect("the built-in keymap is valid JSON"),
+            also: &[],
         }
     }
 }

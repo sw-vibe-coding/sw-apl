@@ -42,7 +42,7 @@ impl Keyboard {
         let (Some(base), Some(over)) = (base.chars().next(), text.chars().next()) else {
             return false;
         };
-        let Some(glyph) = apl_strike::strike(base, over) else {
+        let Some(glyph) = apl_strike::strike(base, over, self.also) else {
             return false;
         };
         self.cells[self.cursor - 1] = glyph;

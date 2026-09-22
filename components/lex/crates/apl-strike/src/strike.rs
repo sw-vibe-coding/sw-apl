@@ -3,7 +3,9 @@
 use apl_value::{OVERSTRIKE, UNDERBAR, UNDERSCORE, UNDERSCORED};
 
 /// The glyph `base` and `over` form when struck together, in either
-/// order, or `None` when they form none.
+/// order, or `None` when they form none. `also` is the mode's pairs
+/// beyond APL\360's -- empty in (A), `OVERSTRIKE_B` in (B) -- as the
+/// lexer takes the mode's glyphs beyond APL\360's.
 ///
 /// Text rather than a character: the underscored alphabet is a
 /// letter and a combining low line, two code points printing in one
@@ -17,9 +19,12 @@ use apl_value::{OVERSTRIKE, UNDERBAR, UNDERSCORE, UNDERSCORED};
 /// here because no two pairs use the same two characters, which
 /// `no_two_overstrikes_use_the_same_two_characters` checks.
 #[must_use]
-pub fn strike(base: char, over: char) -> Option<String> {
+pub fn strike(base: char, over: char, also: &[(char, char, char)]) -> Option<String> {
     let same = |(a, b): (char, char)| (a == base && b == over) || (a == over && b == base);
-    let found = OVERSTRIKE.iter().find(|(_, a, b)| same((*a, *b)));
+    let found = OVERSTRIKE
+        .iter()
+        .chain(also)
+        .find(|(_, a, b)| same((*a, *b)));
     match found {
         Some((glyph, _, _)) => Some(glyph.to_string()),
         None => underscored(base, over),
@@ -50,12 +55,14 @@ fn underscored(base: char, over: char) -> Option<String> {
 /// CLI's batch runner, and the browser terminal through the same
 /// crate -- so the wording cannot differ between them.
 ///
+/// `also` is the mode's extra pairs, as for `strike`.
+///
 /// # Errors
 /// The CHARACTER ERROR text. The manual gives "Illegitimate
 /// overstrike" as a cause of one, and sw-apl's CHARACTER ERROR
 /// names what it objected to, so this names both characters.
-pub fn read(line: &str) -> Result<String, String> {
-    crate::machine::compose(line).map_err(|(base, over)| {
+pub fn read(line: &str, also: &[(char, char, char)]) -> Result<String, String> {
+    crate::machine::compose(line, also).map_err(|(base, over)| {
         format!(
             "CHARACTER ERROR: U+{:04X} struck over U+{:04X} forms no glyph",
             u32::from(over),

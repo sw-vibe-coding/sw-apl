@@ -87,6 +87,7 @@ name = "apl-board"
 version = "0.1.0"
 dependencies = [
  "apl-keyboard",
+ "apl-modes",
  "serde_json",
  "wasm-bindgen",
 ]
@@ -240,6 +241,7 @@ name = "apl-modes"
 version = "0.1.0"
 dependencies = [
  "apl-store",
+ "apl-value",
 ]
 
 [[package]]

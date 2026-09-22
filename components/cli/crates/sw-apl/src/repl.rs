@@ -72,7 +72,7 @@ fn prompt_loop(session: &mut Session, editor: &Editor) -> io::Result<()> {
         };
         let ending = read.is_none();
         let typed = read.unwrap_or_else(|| ")OFF".to_string());
-        let reply = match struck(&typed) {
+        let reply = match struck(&typed, session.ws.mode.overstrikes()) {
             Ok(line) => session.respond(&line),
             Err(report) => Reply::failed(vec![report]),
         };

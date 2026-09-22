@@ -11,6 +11,7 @@ use std::sync::mpsc::{self, Receiver, TryRecvError};
 use std::thread;
 
 use apl_keyboard::Keyboard;
+use apl_modes::Mode;
 use apl_paper::display;
 use apl_typing::{read_line, wait};
 use apl_wire::{ATTENTION, Frame, receive, send};
@@ -29,6 +30,8 @@ pub fn run(mut socket: TcpStream, mut keyboard: Keyboard) -> io::Result<()> {
     let frames = listen(socket.try_clone()?);
     let mut history = Vec::new();
     while let Some(frame) = next(&frames, &mut socket)? {
+        // The service's mode decides which overstrikes compose.
+        keyboard.also = Mode::parse(&frame.mode).unwrap_or_default().overstrikes();
         for line in &frame.lines {
             println!("{}", display(line));
         }

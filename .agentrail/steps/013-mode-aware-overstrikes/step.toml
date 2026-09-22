@@ -1,0 +1,8 @@
+number = 13
+slug = "mode-aware-overstrikes"
+status = "in-progress"
+description = "Owner, 2026-09-21: the overstruck character table and logic must be mode awar..."
+role = "production"
+context_files = []
+created_at = "2026-09-21T23:26:57"
+commits = []

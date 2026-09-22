@@ -9,6 +9,7 @@ repository.workspace = true
 
 [dependencies]
 apl-keyboard = { path = "../../../term/crates/apl-keyboard" }
+apl-modes = { path = "../../../eval/crates/apl-modes" }
 serde_json = "1"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]

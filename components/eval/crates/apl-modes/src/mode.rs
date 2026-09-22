@@ -1,4 +1,6 @@
-//! A mode, and a set of them.
+//! A mode, a set of them, and what the host decides.
+
+use apl_store::Store;
 
 /// One of sw-apl's languages. (A) is '70, the default and everything
 /// sw-apl was before it had modes; (B) is '75.
@@ -47,4 +49,19 @@ impl Modes {
     pub fn minus(self, other: Modes) -> Modes {
         Modes(self.0 & !other.0)
     }
+}
+
+/// What the host decides and the workspace cannot: how much it may
+/// hold, where its libraries are kept, and which mode it speaks. None
+/// of it is saved with a workspace, and all of it is set once, when a
+/// session is attached to its terminal.
+#[derive(Debug)]
+pub struct Host {
+    /// How many bytes the workspace may hold before WS FULL.
+    pub quota: usize,
+    /// Where the libraries are kept.
+    pub store: Box<dyn Store>,
+    /// Which mode the session is in: `--mode` at the CLI and the
+    /// service, the tab in a browser.
+    pub mode: Mode,
 }

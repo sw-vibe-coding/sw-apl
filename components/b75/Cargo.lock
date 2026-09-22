@@ -67,6 +67,7 @@ name = "apl-modes"
 version = "0.1.0"
 dependencies = [
  "apl-store",
+ "apl-value",
 ]
 
 [[package]]

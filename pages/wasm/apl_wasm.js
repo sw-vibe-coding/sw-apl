@@ -15,10 +15,16 @@ export class Board {
         wasm.__wbg_board_free(ptr, 0);
     }
     /**
-     * A keyboard with the 2741 map and an empty line.
+     * A keyboard with the 2741 map and an empty line, composing the
+     * overstrikes of `mode` -- "A" or "70", "B" or "75", anything
+     * else being (A). A page switching modes starts a new session and
+     * makes a new board for it.
+     * @param {string} mode
      */
-    constructor() {
-        const ret = wasm.board_new();
+    constructor(mode) {
+        const ptr0 = passStringToWasm0(mode, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ret = wasm.board_new(ptr0, len0);
         this.__wbg_ptr = ret;
         BoardFinalization.register(this, this.__wbg_ptr, this);
         return this;

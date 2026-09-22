@@ -681,6 +681,24 @@ base = "'"
 over = "."
 source = "shape"
 
+# (B) '75 only: the IBM 5100 APL Reference Manual forms execute by
+# overstriking ⊥ and ∘, and format by ⊤ and ∘ (Chapter 4). Only (B)
+# composes these; in (A) each is an illegitimate overstrike, as it
+# was on APL\360.
+[[overstrike]]
+glyph = "⍎"
+base = "⊥"
+over = "∘"
+source = "manual"
+mode = "B"
+
+[[overstrike]]
+glyph = "⍕"
+base = "⊤"
+over = "∘"
+source = "manual"
+mode = "B"
+
 # The underscored alphabet: A̲ through Z̲, twenty-six further
 # characters of the APL\360 set. A 2741 struck the underbar over any
 # letter, and APL\360 used every one of them: they are letters, valid

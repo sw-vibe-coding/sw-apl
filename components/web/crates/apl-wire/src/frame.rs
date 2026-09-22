@@ -27,6 +27,12 @@ pub struct Frame {
     pub prompt: Option<String>,
     /// Set by `)OFF`: the session has ended and the link closes.
     pub off: bool,
+    /// The session's mode, by letter: `A` for (A) '70, `B` for (B)
+    /// '75. The terminal composes overstrikes for it -- (B) forms
+    /// execute and format from their 5100 pairs, (A) does not. Empty
+    /// from a service that predates modes, which is (A).
+    #[serde(default)]
+    pub mode: String,
 }
 
 /// Write one JSON value and its newline, and flush it: the terminal

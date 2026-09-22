@@ -224,3 +224,22 @@ fn more_than_one_character_pasted_while_a_strike_is_pending_goes_in_as_typed() {
     assert_eq!(k.text(), "A+/⍳5");
     assert!(!k.pending);
 }
+
+/// The keyboard composes the session's mode's overstrikes: in (B) the
+/// 5100's pair for execute strikes, and on an (A) keyboard it rings.
+#[test]
+fn the_keyboard_strikes_the_modes_pairs_only() {
+    let mut b = Keyboard::default();
+    b.also = &apl_value::OVERSTRIKE_B;
+    b.literal = true;
+    b.type_key('⊥');
+    b.overstrike();
+    assert!(b.type_key('∘'), "(B) forms execute");
+    assert_eq!(b.text(), "⍎");
+    let mut a = Keyboard::default();
+    a.literal = true;
+    a.type_key('⊥');
+    a.overstrike();
+    assert!(!a.type_key('∘'), "(A) rings");
+    assert_eq!(a.text(), "⊥");
+}

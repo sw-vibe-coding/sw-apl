@@ -12,38 +12,42 @@ fn glyph(s: &str) -> String {
 fn the_pairs_the_manual_states() {
     // Each of these is quoted in data/glyphs.toml beside its entry.
     assert_eq!(
-        strike('\u{2395}', '\u{f7}'),
+        strike('\u{2395}', '\u{f7}', &[]),
         Some(glyph("\u{2339}")),
         "quad, divide"
     );
     assert_eq!(
-        strike('\u{2395}', '\''),
+        strike('\u{2395}', '\'', &[]),
         Some(glyph("\u{235e}")),
         "quad, quote"
     );
     assert_eq!(
-        strike('\u{2207}', '~'),
+        strike('\u{2207}', '~', &[]),
         Some(glyph("\u{236b}")),
         "del, tilde"
     );
-    assert_eq!(strike('/', '-'), Some(glyph("\u{233f}")), "slash, minus");
     assert_eq!(
-        strike('\u{25cb}', '-'),
+        strike('/', '-', &[]),
+        Some(glyph("\u{233f}")),
+        "slash, minus"
+    );
+    assert_eq!(
+        strike('\u{25cb}', '-', &[]),
         Some(glyph("\u{2296}")),
         "circle, minus"
     );
     assert_eq!(
-        strike('\u{2206}', '|'),
+        strike('\u{2206}', '|', &[]),
         Some(glyph("\u{234b}")),
         "delta, stile"
     );
     assert_eq!(
-        strike('\u{2229}', '\u{25cb}'),
+        strike('\u{2229}', '\u{25cb}', &[]),
         Some(glyph("\u{235d}")),
         "cap, circle"
     );
     assert_eq!(
-        strike('\u{22a5}', '\u{22a4}'),
+        strike('\u{22a5}', '\u{22a4}', &[]),
         Some(glyph("\u{2336}")),
         "the I-beam"
     );
@@ -54,7 +58,11 @@ fn either_order_forms_the_same_glyph() {
     // On paper there is no difference: backspace only positions the
     // carriage, so both impressions land on one spot.
     for (base, over) in [('\u{2395}', '\''), ('\u{25cb}', '*'), ('\u{2207}', '~')] {
-        assert_eq!(strike(base, over), strike(over, base), "{base}{over}");
+        assert_eq!(
+            strike(base, over, &[]),
+            strike(over, base, &[]),
+            "{base}{over}"
+        );
     }
 }
 
@@ -63,9 +71,9 @@ fn a_pair_that_forms_nothing_is_none() {
     // "Illegitimate overstrike" is the manual's cause for a
     // CHARACTER error, so the caller reports one; this only says
     // there is no glyph.
-    assert_eq!(strike('A', 'B'), None);
-    assert_eq!(strike('\u{2395}', '\u{2395}'), None, "over itself");
-    assert_eq!(strike('+', '-'), None);
+    assert_eq!(strike('A', 'B', &[]), None);
+    assert_eq!(strike('\u{2395}', '\u{2395}', &[]), None, "over itself");
+    assert_eq!(strike('+', '-', &[]), None);
 }
 
 #[test]
@@ -73,9 +81,9 @@ fn a_component_need_not_be_a_glyph_in_its_own_right() {
     // The 2741's keyboard carried ∩ so that ⍝ could be struck, and
     // APL\360 has no intersection function: typing ∩ alone is a
     // CHARACTER ERROR, and striking it over ○ is a comment.
-    assert_eq!(strike('\u{2229}', '\u{25cb}'), Some(glyph("\u{235d}")));
+    assert_eq!(strike('\u{2229}', '\u{25cb}', &[]), Some(glyph("\u{235d}")));
     // The underbar is likewise a component and not a glyph.
-    assert_eq!(strike('\u{2206}', '_'), Some(glyph("\u{2359}")));
+    assert_eq!(strike('\u{2206}', '_', &[]), Some(glyph("\u{2359}")));
 }
 
 #[test]
@@ -166,22 +174,22 @@ fn a_line_is_composed_before_it_is_read() {
     use apl_strike::{BACK, BACKSPACE, compose};
     let plain = "2+2";
     assert_eq!(
-        compose(plain).unwrap(),
+        compose(plain, &[]).unwrap(),
         plain,
         "untouched when there is none"
     );
     let typed = format!("A\u{2190}\u{25cb}{BACK}*3");
-    assert_eq!(compose(&typed).unwrap(), "A\u{2190}\u{235f}3");
+    assert_eq!(compose(&typed, &[]).unwrap(), "A\u{2190}\u{235f}3");
     // A 2741 sent 0x08, and so does a file written elsewhere.
     let sent = format!("\u{2395}{BACKSPACE}'");
-    assert_eq!(compose(&sent).unwrap(), "\u{235e}");
+    assert_eq!(compose(&sent, &[]).unwrap(), "\u{235e}");
 }
 
 #[test]
 fn a_line_with_an_illegitimate_overstrike_says_which_two() {
     use apl_strike::{BACK, compose};
     let bad = format!("A{BACK}B");
-    assert_eq!(compose(&bad), Err(('A', 'B')));
+    assert_eq!(compose(&bad, &[]), Err(('A', 'B')));
 }
 
 #[test]
@@ -189,7 +197,7 @@ fn a_strike_at_the_start_of_a_line_strikes_nothing() {
     use apl_strike::{BACK, compose};
     // The carriage is at the left margin; there is nothing to
     // strike over, so the character stands on its own.
-    assert_eq!(compose(&format!("{BACK}A")).unwrap(), "A");
+    assert_eq!(compose(&format!("{BACK}A"), &[]).unwrap(), "A");
 }
 
 /// The key is named in one place so that no help text can promise a
@@ -213,8 +221,12 @@ fn any_letter_struck_with_the_underbar_is_an_underscored_letter() {
     // twenty-six. It is a rule, not twenty-six table rows.
     for letter in apl_value::UNDERSCORED.chars() {
         let want = Some(format!("{letter}{}", apl_value::UNDERSCORE));
-        assert_eq!(strike(letter, '_'), want, "{letter} struck with underbar");
-        assert_eq!(strike('_', letter), want, "and in the other order");
+        assert_eq!(
+            strike(letter, '_', &[]),
+            want,
+            "{letter} struck with underbar"
+        );
+        assert_eq!(strike('_', letter, &[]), want, "and in the other order");
     }
 }
 
@@ -222,10 +234,10 @@ fn any_letter_struck_with_the_underbar_is_an_underscored_letter() {
 fn only_a_letter_takes_the_underbar() {
     // The rule is "a letter and an underbar"; a digit or a glyph
     // struck with one is still an illegitimate overstrike.
-    assert_eq!(strike('1', '_'), None, "a digit is not a letter");
-    assert_eq!(strike('+', '_'), None, "nor is a primitive");
-    assert_eq!(strike('a', '_'), None, "APL\\360 had no lowercase");
-    assert_eq!(strike('_', '_'), None, "nor the underbar itself");
+    assert_eq!(strike('1', '_', &[]), None, "a digit is not a letter");
+    assert_eq!(strike('+', '_', &[]), None, "nor is a primitive");
+    assert_eq!(strike('a', '_', &[]), None, "APL\\360 had no lowercase");
+    assert_eq!(strike('_', '_', &[]), None, "nor the underbar itself");
 }
 
 #[test]
@@ -246,7 +258,7 @@ fn the_underscored_letters_take_no_pair_the_table_already_uses() {
 fn an_underscored_letter_is_struck_on_a_line_like_any_other() {
     use apl_strike::{BACK, compose};
     let typed = format!("X{BACK}_\u{2190}2");
-    assert_eq!(compose(&typed).unwrap(), "X\u{332}\u{2190}2");
+    assert_eq!(compose(&typed, &[]).unwrap(), "X\u{332}\u{2190}2");
 }
 
 #[test]
@@ -256,5 +268,51 @@ fn striking_over_an_underscored_letter_forms_nothing() {
     // answer to what follows is an illegitimate overstrike.
     use apl_strike::{BACK, compose};
     let typed = format!("A{BACK}_{BACK}B");
-    assert_eq!(compose(&typed), Err(('\u{332}', 'B')));
+    assert_eq!(compose(&typed, &[]), Err(('\u{332}', 'B')));
+}
+
+/// The IBM 5100 manual forms execute from ⊥ and ∘ and format from ⊤
+/// and ∘. Those pairs are (B)'s: given (B)'s extra pairs they strike,
+/// and without them -- (A) -- they are illegitimate, as they were.
+#[test]
+fn the_75_pairs_strike_only_when_given() {
+    use apl_value::OVERSTRIKE_B;
+    assert_eq!(strike('⊥', '∘', &OVERSTRIKE_B), Some(glyph("⍎")));
+    assert_eq!(
+        strike('∘', '⊤', &OVERSTRIKE_B),
+        Some(glyph("⍕")),
+        "either order"
+    );
+    assert_eq!(strike('⊥', '∘', &[]), None);
+    assert_eq!(strike('⊤', '∘', &[]), None);
+    assert_eq!(
+        strike('⎕', '÷', &OVERSTRIKE_B),
+        Some(glyph("⌹")),
+        "APL\\360's pairs stay"
+    );
+}
+
+#[test]
+fn the_machine_and_a_whole_line_compose_with_the_modes_pairs() {
+    use apl_strike::{BACK, compose};
+    use apl_value::OVERSTRIKE_B;
+    let mut s = Strike::default();
+    s.also = &OVERSTRIKE_B;
+    s.typed('⊥');
+    s.back();
+    assert_eq!(s.typed('∘'), Some(glyph("⍎")));
+    let typed = format!("⊥{BACK}∘'1+2'");
+    assert_eq!(compose(&typed, &OVERSTRIKE_B).unwrap(), "⍎'1+2'");
+    assert_eq!(compose(&typed, &[]), Err(('⊥', '∘')));
+}
+
+#[test]
+fn no_75_pair_uses_the_same_two_characters_as_another() {
+    use apl_value::{OVERSTRIKE, OVERSTRIKE_B};
+    for (glyph, a, b) in &OVERSTRIKE_B {
+        let clash = OVERSTRIKE
+            .iter()
+            .any(|(_, x, y)| (x, y) == (a, b) || (x, y) == (b, a));
+        assert!(!clash, "{glyph}");
+    }
 }
