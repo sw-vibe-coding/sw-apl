@@ -11,7 +11,7 @@ carry the same files, for example
 `bitsavers.informatik.uni-stuttgart.de` and
 `bitsavers.trailing-edge.com`.
 
-## APL\360 -- the (A) '68 mode
+## APL\360 -- the (A) '70 mode
 
 - **APL\360 User's Manual**, IBM, August 1968. The reference for
   everything the (A) mode does: the primitives, the del editor, the

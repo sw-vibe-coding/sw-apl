@@ -6,7 +6,7 @@
 //! dispersing a group leaves whatever its members held.
 //!
 //! These are APL\360's. The IBM 5100 family dropped them
-//! (docs/mode-b.md), so they are '68-only.
+//! (docs/mode-b.md), so they are '70-only.
 
 use apl_eval::Saved;
 

@@ -43,8 +43,8 @@ sw-apl/
                                            workspace files, libraries
                apl-settings                index origin, digits, width,
                                            checked; the directives set them
-    a68/       apl-ibeam                   the I-beams                 } only (A) '68
-               apl-a68-commands            )ORIGIN )DIGITS )WIDTH,     } reaches
+    a70/       apl-ibeam                   the I-beams                 } only (A) '70
+               apl-a70-commands            )ORIGIN )DIGITS )WIDTH,     } reaches
                                            )GROUP )GRP )GRPS           } these
     cli/       sw-apl                      terminal REPL and batch
     web/       apl-wire                    the terminal protocol: a

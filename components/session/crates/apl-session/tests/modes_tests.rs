@@ -111,7 +111,7 @@ fn a_workspace_saved_before_modes_is_68_only() {
     std::fs::write(work.join("OLD.apl.ws"), old).unwrap();
     let mut a = session(&dir.0, Mode::A);
     out(&mut a, ")LOAD OLD");
-    assert_eq!(a.ws.saved.env.io, 0, "its )ORIGIN line still works in '68");
+    assert_eq!(a.ws.saved.env.io, 0, "its )ORIGIN line still works in '70");
     assert_eq!(out(&mut a, "X"), vec!["7"]);
     let mut b = session(&dir.0, Mode::B);
     assert!(out(&mut b, ")LIB").is_empty());

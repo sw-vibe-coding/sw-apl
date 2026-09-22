@@ -286,14 +286,14 @@ sw-apl is a clean-room APL interpreter written in Rust from
 scratch, in **modes** (owner direction 2026-09-21, docs/plan.md
 Phase 9):
 
-- **(A) '68 -- APL\360**, the IBM 2741's. Traditional glyphs only
+- **(A) '70 -- APL\360**, the IBM 2741's. Traditional glyphs only
   (Unicode input, no keyword aliases), flat arrays, floating point,
   the del editor, I-beam system functions, and the APL\360 system
   commands ()ORIGIN, )DIGITS, )WIDTH, workspaces). Quad and
   quote-quad I/O only: no quad-named system variables or functions,
   no execute, no format. This is everything built before Phase 9,
   and nothing done for (B) may move it -- reg-rs is the proof, and a
-  (B) step that changes a '68 transcript is wrong, not rebased. A
+  (B) step that changes a '70 transcript is wrong, not rebased. A
   correctness fix to (A) itself may move one, with its source as the
   reason, as any fix may.
 - **(B) '75**, modelled on the APL of the IBM 5100, 5110 and 5120
@@ -305,7 +305,7 @@ Phase 9):
   the differences. No shared variables.
 
 The code is in three parts: the shared core, which is what existed
-before Phase 9 and stays where it is; '68-only crates, pulled out of
+before Phase 9 and stays where it is; '70-only crates, pulled out of
 it for what (B) dropped (the I-beams, )ORIGIN, )DIGITS, )WIDTH);
 and '75-only crates for what (B) added. A profile on the workspace decides which
 mode-only parts are reachable. A workspace names the modes it runs
@@ -428,7 +428,7 @@ The owner keeps stable binaries under `~/.local/softwarewrighter/bin/`.
 - TDD is mandatory; quality gates are mandatory.
 - Glyphs only. No Latin aliases, no name translation, not APL2.
 - Nothing done for (B) moves (A): every existing sample and test is
-  a '68 one, and reg-rs proves it.
+  a '70 one, and reg-rs proves it.
 
 ## Useful Commands
 

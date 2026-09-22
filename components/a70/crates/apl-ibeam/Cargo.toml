@@ -1,6 +1,6 @@
 [package]
 name = "apl-ibeam"
-description = "sw-apl I-beam system functions, which only the (A) '68 mode has"
+description = "sw-apl I-beam system functions, which only the (A) '70 mode has"
 edition.workspace = true
 license.workspace = true
 version.workspace = true

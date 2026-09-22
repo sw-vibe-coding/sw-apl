@@ -46,7 +46,7 @@ pub fn system_command(ws: &mut Workspace, command: &str) -> Answer {
         ("DROP", _) => drop_workspace(ws, &rest),
         ("LIB", _) => lib(ws, &rest),
         ("COPY" | "PCOPY", _) => return copy(ws, &rest, name == "PCOPY"),
-        // The '68-only commands, in (A) only, and the inquiry commands
+        // The '70-only commands, in (A) only, and the inquiry commands
         // answer for themselves, and None for a name they do not know.
         _ => seventy(&mut ws.saved, ws.mode, &name, &rest)
             .or_else(|| inquiry(ws, &name, &rest))

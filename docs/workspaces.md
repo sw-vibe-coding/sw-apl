@@ -161,8 +161,8 @@ and `)WIDTH` lines instead and no `⍝!MODES` line. It still loads in
 
 ## Modes
 
-sw-apl has two modes, (A) '68 and (B) '75, chosen with `--mode 68`
-or `--mode 75` (the default is 68). A workspace is listed and loaded
+sw-apl has two modes, (A) '70 and (B) '75, chosen with `--mode 70`
+or `--mode 75` (the default is 70). A workspace is listed and loaded
 only in the modes its `⍝!MODES` line names, and a file with no such
 line is an (A) workspace.
 

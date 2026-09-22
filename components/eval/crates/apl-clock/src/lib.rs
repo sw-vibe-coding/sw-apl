@@ -2,7 +2,7 @@
 //! a `Clock` the workspace holds so a test or a transcript can give it
 //! one that does not move; and how a span of time reads.
 //!
-//! Every mode has these. The I-beams that report them in '68 are in
+//! Every mode has these. The I-beams that report them in '70 are in
 //! `apl-ibeam`, which only (A) reaches.
 
 mod clock;

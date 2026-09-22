@@ -19,7 +19,7 @@ pub fn render(modes: Modes) -> String {
 }
 
 /// The modes a workspace file runs in. A file with no line was saved
-/// before sw-apl had modes, and is a '68 one.
+/// before sw-apl had modes, and is a '70 one.
 #[must_use]
 pub fn modes(text: &str) -> Modes {
     let mut lines = text.lines().take(NEAR_THE_TOP);
@@ -54,11 +54,11 @@ pub fn retag(text: &str, modes: Modes) -> String {
 
 impl Mode {
     /// The mode a host was asked for: its year or its letter, as
-    /// `--mode 68` or `--mode B`. `None` for anything else.
+    /// `--mode 70` or `--mode B`. `None` for anything else.
     #[must_use]
     pub fn parse(word: &str) -> Option<Mode> {
         match word.to_ascii_uppercase().as_str() {
-            "68" | "A" => Some(Mode::A),
+            "70" | "A" => Some(Mode::A),
             "75" | "B" => Some(Mode::B),
             _ => None,
         }

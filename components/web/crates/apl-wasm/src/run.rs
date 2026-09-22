@@ -111,7 +111,7 @@ pub fn start(message: &JsValue) {
     // page can write while this thread is busy running. Installed on
     // this thread, which is the session's for as long as it lasts.
     apl_attn::attend(Box::new(Attn::new(&channel)));
-    // The page's tab names the mode; a page that names none is '68's.
+    // The page's tab names the mode; a page that names none is '70's.
     let mode = field(message, "mode").and_then(|v| v.as_string());
     let host = Host {
         quota: QUOTA,

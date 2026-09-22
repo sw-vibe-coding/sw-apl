@@ -1,10 +1,10 @@
 //! A mode, and a set of them.
 
-/// One of sw-apl's languages. (A) is '68, the default and everything
+/// One of sw-apl's languages. (A) is '70, the default and everything
 /// sw-apl was before it had modes; (B) is '75.
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
 pub enum Mode {
-    /// '68.
+    /// '70.
     #[default]
     A,
     /// '75.

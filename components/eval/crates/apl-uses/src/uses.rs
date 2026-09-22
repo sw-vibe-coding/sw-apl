@@ -9,7 +9,7 @@ use apl_workspace::Saved;
 /// The modes `saved` runs in: every mode, less the ones it uses
 /// something missing from.
 ///
-/// '68-only: an I-beam, which the 5100 family replaced with system
+/// '70-only: an I-beam, which the 5100 family replaced with system
 /// variables and functions, and a group, whose commands it dropped
 /// (docs/mode-b.md). '75-only: execute, format, and a quad-named
 /// system variable or function. Quad and quote-quad alone are I/O

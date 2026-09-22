@@ -80,14 +80,14 @@ pub struct Args {
     #[arg(long, value_name = "N", default_value_t = 16)]
     pub sessions: usize,
 
-    /// The mode every session is in: 68 for (A), 75 for (B).
-    #[arg(long, value_name = "MODE", default_value = "68", value_parser = mode)]
+    /// The mode every session is in: 70 for (A), 75 for (B).
+    #[arg(long, value_name = "MODE", default_value = "70", value_parser = mode)]
     pub mode: Mode,
 }
 
 /// A mode as `--mode` names it: its year or its letter.
 fn mode(word: &str) -> Result<Mode, String> {
-    Mode::parse(word).ok_or_else(|| format!("{word} is not a mode: 68 or 75"))
+    Mode::parse(word).ok_or_else(|| format!("{word} is not a mode: 70 or 75"))
 }
 
 fn main() -> ExitCode {

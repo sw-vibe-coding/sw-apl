@@ -1,4 +1,4 @@
-//! Each setting's bounds, which the directives and the '68 commands
+//! Each setting's bounds, which the directives and the '70 commands
 //! share. The commands' own tests are in apl-a70-commands.
 
 use apl_eval::Saved;

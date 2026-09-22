@@ -59,15 +59,15 @@ pub struct Args {
     #[arg(long = "library", value_name = "DIR", default_value = ".")]
     pub library: PathBuf,
 
-    /// The mode: 68 for (A), 75 for (B). Each lists and loads only
+    /// The mode: 70 for (A), 75 for (B). Each lists and loads only
     /// the workspaces that run in it.
-    #[arg(long, value_name = "MODE", default_value = "68", value_parser = mode)]
+    #[arg(long, value_name = "MODE", default_value = "70", value_parser = mode)]
     pub mode: Mode,
 }
 
 /// A mode as `--mode` names it: its year or its letter.
 fn mode(word: &str) -> Result<Mode, String> {
-    Mode::parse(word).ok_or_else(|| format!("{word} is not a mode: 68 or 75"))
+    Mode::parse(word).ok_or_else(|| format!("{word} is not a mode: 70 or 75"))
 }
 
 fn main() -> ExitCode {

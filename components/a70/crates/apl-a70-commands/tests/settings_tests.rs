@@ -1,4 +1,4 @@
-//! The settings commands, which only '68 has.
+//! The settings commands, which only '70 has.
 
 use apl_a70_commands::settings_command;
 use apl_eval::Saved;

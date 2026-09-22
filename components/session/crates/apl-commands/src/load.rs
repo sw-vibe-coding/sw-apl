@@ -2,7 +2,7 @@
 //!
 //! A saved workspace carries its settings as directives -- comments to
 //! APL, instructions to sw-apl -- rather than as the commands that set
-//! them, because only '68 has those commands. A workspace file is also
+//! them, because only '70 has those commands. A workspace file is also
 //! a program, so a directive takes effect wherever the line comes
 //! from: a `)LOAD`, a file run with `-f`, or the keyboard.
 //!

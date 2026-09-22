@@ -101,11 +101,11 @@ appendices:
   commands, and the group commands `)GROUP`, `)GRP`, `)GRPS`. Power
   on is sign on.
 
-These are the lists step 006 pulls out into '68-only crates. The
+These are the lists step 006 pulls out into '70-only crates. The
 I-beams and the three settings commands are confirmed.
 
 **Done (step 007):** the I-beams (`apl-ibeam`) and the settings and
-group commands (`apl-a68-commands`) are in `components/a68/`, and the
+group commands (`apl-a70-commands`) are in `components/a70/`, and the
 shared core reaches them only in (A). In (B) an I-beam is a NONCE
 ERROR, as the 5110 manual gives, and the six commands are INCORRECT
 COMMAND, as any command the system does not have is. `)OFF` stays in

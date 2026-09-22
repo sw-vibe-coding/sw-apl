@@ -1,4 +1,4 @@
-# What only the (A) '68 mode has: the parts of APL\360 the IBM 5100
+# What only the (A) '70 mode has: the parts of APL\360 the IBM 5100
 # family dropped (docs/mode-b.md). The shared core reaches them only in
 # (A); see docs/architecture.md.
 [workspace]

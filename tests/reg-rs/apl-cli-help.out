@@ -20,9 +20,9 @@ Options:
           [default: .]
 
       --mode <MODE>
-          The mode: 68 for (A), 75 for (B). Each lists and loads only the workspaces that run in it
+          The mode: 70 for (A), 75 for (B). Each lists and loads only the workspaces that run in it
           
-          [default: 68]
+          [default: 70]
 
   -h, --help
           Print help (see a summary with '-h')

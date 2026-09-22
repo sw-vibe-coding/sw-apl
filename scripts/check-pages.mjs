@@ -626,13 +626,13 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
       aboutHidden: document.getElementById('mode-about').hidden,
     };
   });
-  check('the header is sw-apl and then the mode', head.name === 'sw-apl' && head.shows === "\u24b6 '68",
+  check('the header is sw-apl and then the mode', head.name === 'sw-apl' && head.shows === "\u24b6 '70",
     JSON.stringify(head));
   check('the mode is a row of tabs holding one, marked current',
     head.tabs === 1 && head.selected === 'true', JSON.stringify(head));
-  check('its tooltip says APL\\360 compatible', head.title === 'APL\\360 compatible', head.title);
+  check('its tooltip says APL\\360-inspired', head.title === 'APL\\360-inspired', head.title);
   check('and a screen reader hears the words, not the circled A',
-    head.spoken.includes('APL\\360 compatible') && !head.spoken.includes('\u24b6'), head.spoken);
+    head.spoken.includes('APL\\360-inspired') && !head.spoken.includes('\u24b6'), head.spoken);
   await page.click('#mode-tab');
   check('a tap shows the words where there is no hover',
     head.aboutHidden && !(await page.evaluate(() => document.getElementById('mode-about').hidden)),

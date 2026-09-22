@@ -40,7 +40,7 @@ fn the_settings_are_directives_not_commands() {
     for line in ["⍝!ORIGIN 0", "⍝!DIGITS 3", "⍝!WIDTH 80"] {
         assert!(text.lines().any(|l| l == line), "{line} in {text}");
     }
-    assert!(!text.contains(")ORIGIN"), "no '68-only command: {text}");
+    assert!(!text.contains(")ORIGIN"), "no '70-only command: {text}");
     assert!(!text.contains(")DIGITS") && !text.contains(")WIDTH"));
     assert_eq!(modes(&text), Modes::ALL, "settings alone run anywhere");
 }

@@ -12,7 +12,7 @@
 //! and instructions to sw-apl: the modes the workspace runs in, when
 //! it was saved, where its random link stands, and its index origin,
 //! digits and width. The settings were once written as the commands
-//! that set them, which only '68 has.
+//! that set them, which only '70 has.
 
 mod groups;
 mod literal;

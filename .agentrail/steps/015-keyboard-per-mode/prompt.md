@@ -1,5 +1,5 @@
 Owner direction 2026-09-21: the keyboard gets the same treatment as
-the workspaces -- '68 has the 2741's, and '75 may have the IBM 5100's
+the workspaces -- '70 has the 2741's, and '75 may have the IBM 5100's
 where it differs, and only as much as it differs.
 
 Build from docs/aplsv.md's findings: how the 5100's APL keyboard

@@ -14,11 +14,12 @@ fn ws(line: Option<&str>, body: &str) -> String {
 
 #[test]
 fn a_mode_is_named_by_its_year_or_its_letter() {
-    assert_eq!(Mode::parse("68"), Some(Mode::A));
+    assert_eq!(Mode::parse("70"), Some(Mode::A));
     assert_eq!(Mode::parse("75"), Some(Mode::B));
     assert_eq!(Mode::parse("A"), Some(Mode::A));
     assert_eq!(Mode::parse("b"), Some(Mode::B));
-    assert_eq!(Mode::parse("72"), None, "'72 was the old name");
+    assert_eq!(Mode::parse("72"), None, "'72 was (B)'s old name");
+    assert_eq!(Mode::parse("68"), None, "and '68 (A)'s");
     assert_eq!(Mode::default(), Mode::A);
 }
 

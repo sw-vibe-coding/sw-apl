@@ -6,5 +6,5 @@ written, because a defined function becomes reachable by name. '75's
 BIRDS flies them, and its NOTHERE says what is still missing and why.
 Decide with the owner which of LIFE, RACE and EDIT '75 carries, and
 whether any should use what '75 adds. Each is built by saving a
-session, as '68's are, with the provenance mark and library tests.
+session, as '70's are, with the provenance mark and library tests.
 Update docs/birds.md and docs/combinators.md for both modes.
