@@ -76,12 +76,18 @@ pub fn parse_axis(
 
 /// The defined function named at `at` applied to `right`: dyadic when
 /// an operand ends immediately to its left, monadic otherwise. A
-/// defined function never takes an axis.
+/// defined function never takes an axis. A quad name is a system
+/// function, which `funcs` said takes an argument.
 pub fn apply_defined(tokens: &[Token], lo: usize, at: usize, right: Expr, funcs: Funcs) -> Parsed {
     let TokenKind::Name(name) = &tokens[at].kind else {
         unreachable!("apply_defined is called on a name")
     };
-    let (func, pos) = (Function::Defined(name.clone()), tokens[at].pos);
+    let func = if name.starts_with('⎕') {
+        Function::System(name.clone())
+    } else {
+        Function::Defined(name.clone())
+    };
+    let pos = tokens[at].pos;
     if at == lo || !ends_operand(tokens, at - 1, funcs) {
         return Ok((Expr::monadic(func, pos, None, right), at));
     }

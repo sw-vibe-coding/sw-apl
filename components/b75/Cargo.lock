@@ -39,6 +39,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-console-control"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+]
+
+[[package]]
 name = "apl-display"
 version = "0.1.0"
 dependencies = [
@@ -55,11 +62,29 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-fix"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-lex",
+ "apl-scan",
+ "apl-value",
+ "apl-workspace",
+]
+
+[[package]]
 name = "apl-glyphs"
 version = "0.1.0"
 dependencies = [
  "serde",
  "toml",
+]
+
+[[package]]
+name = "apl-lex"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
 ]
 
 [[package]]
@@ -195,6 +220,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-scan"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-lex",
+ "apl-value",
+]
+
+[[package]]
 name = "apl-settings"
 version = "0.1.0"
 dependencies = [
@@ -213,6 +247,18 @@ dependencies = [
 [[package]]
 name = "apl-store"
 version = "0.1.0"
+
+[[package]]
+name = "apl-sysfns"
+version = "0.1.0"
+dependencies = [
+ "apl-console-control",
+ "apl-fix",
+ "apl-lex",
+ "apl-scan",
+ "apl-value",
+ "apl-workspace",
+]
 
 [[package]]
 name = "apl-sysvars"

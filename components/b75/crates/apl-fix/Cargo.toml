@@ -1,0 +1,18 @@
+[package]
+name = "apl-fix"
+description = "sw-apl canonical representation and fix: a defined function as characters and back, which only the (B) '75 mode has"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-ast = { path = "../../../parse/crates/apl-ast" }
+apl-lex = { path = "../../../lex/crates/apl-lex" }
+apl-scan = { path = "../../../parse/crates/apl-scan" }
+apl-value = { path = "../../../value/crates/apl-value" }
+apl-workspace = { path = "../../../eval/crates/apl-workspace" }
+
+[lints]
+workspace = true

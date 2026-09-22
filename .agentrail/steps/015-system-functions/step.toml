@@ -1,6 +1,6 @@
 number = 15
 slug = "system-functions"
-status = "pending"
+status = "in-progress"
 description = """
 Phase 9 step 9 (docs/plan.md). '72 gains the quad system functions,
 in a new ..."""

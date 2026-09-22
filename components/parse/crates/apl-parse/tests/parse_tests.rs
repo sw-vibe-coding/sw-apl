@@ -442,6 +442,24 @@ fn a_name_that_holds_a_function_is_called() {
 }
 
 #[test]
+fn a_quad_name_that_takes_an_argument_is_a_system_function() {
+    // Only (B) lexes a quad name, so the mode's glyphs are given.
+    let system = |n: &str| n == "⎕NL";
+    let parsed = |line: &str| parse(line, apl_value::MODE_B, &system).unwrap().unwrap();
+    let Expr::Monadic { func, .. } = parsed("⎕NL 2") else {
+        panic!()
+    };
+    assert_eq!(func, Function::System("⎕NL".to_string()));
+    let Expr::Dyadic { func, left, .. } = parsed("'A' ⎕NL 2") else {
+        panic!()
+    };
+    assert_eq!(func, Function::System("⎕NL".to_string()));
+    assert!(matches!(*left, Expr::Literal(_)));
+    // One that takes none is a name, as a system variable is.
+    assert!(matches!(parsed("⎕IO"), Expr::Name(_, 0)));
+}
+
+#[test]
 fn a_function_name_is_not_an_operand() {
     // `FAC FAC 5` is two monadic calls, not a dyadic one.
     let Expr::Monadic { right, .. } = called("FAC FAC 5", &["FAC"]) else {

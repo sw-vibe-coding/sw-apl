@@ -9,7 +9,7 @@ use apl_workspace::Workspace;
 /// A setting takes it only if it is one the setting may take, by the
 /// same bounds the '70 commands use. The 5110 ignores an assignment
 /// to `⎕LC` and `⎕WA` (manual, Chapter 5); sw-apl ignores one to the
-/// other values it only reports, `⎕AV`, `⎕TT` and `⎕UL`, likewise.
+/// other values it only reports, `⎕AV`, `⎕TT`, `⎕UL` and `⎕DL`, likewise.
 /// `⎕AI` and `⎕TS` take any numbers, as the manual allows.
 ///
 /// # Errors
@@ -32,7 +32,7 @@ pub fn assign(ws: &mut Workspace, name: &str, v: &Array) -> AplResult<()> {
             return Ok(());
         }
         "⎕AI" | "⎕TS" => return Err(domain()),
-        "⎕LC" | "⎕WA" | "⎕AV" | "⎕TT" | "⎕UL" => return Ok(()),
+        "⎕LC" | "⎕WA" | "⎕AV" | "⎕TT" | "⎕UL" | "⎕DL" => return Ok(()),
         _ => return Err(AplError::new(ErrorKind::Syntax)),
     };
     let n = whole(v).ok_or_else(domain)?;

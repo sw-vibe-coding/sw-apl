@@ -21,7 +21,8 @@ use crate::eval::{eval_expr, eval_line};
 /// answered only when no bracket was written, since an axis on a
 /// glyph that takes none is a SYNTAX ERROR the dispatch reports. The
 /// lexer lets execute and format through only in (B); format is not
-/// implemented yet, and says so with NONCE ERROR.
+/// implemented yet, and says so with NONCE ERROR. A system function,
+/// which only (B) lexes, is `apl-sysfns`'s.
 ///
 /// # Errors
 /// Evaluation errors, with the glyph's position as the caret.
@@ -38,6 +39,7 @@ pub fn eval_monadic(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
     let r = eval_expr(ws, right)?;
     match func {
         Function::Defined(name) => return value(ws, name, *pos, (None, Some(r)), eval_line),
+        Function::System(name) => return apl_sysfns::monadic(ws, name, &r).map_err(|e| e.at(*pos)),
         Function::Prim('⌶') if axis.is_none() => {
             return system_value(ws, &r).map_err(|e| e.at(*pos));
         }
@@ -66,8 +68,12 @@ pub fn eval_dyadic(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
     };
     let r = eval_expr(ws, right)?;
     let l = eval_expr(ws, left)?;
-    if let Function::Defined(name) = func {
-        return value(ws, name, *pos, (Some(l), Some(r)), eval_line);
+    match func {
+        Function::Defined(name) => return value(ws, name, *pos, (Some(l), Some(r)), eval_line),
+        Function::System(name) => {
+            return apl_sysfns::dyadic(ws, name, &l, &r).map_err(|e| e.at(*pos));
+        }
+        _ => {}
     }
     let axis = axis.as_deref().map(|a| eval_expr(ws, a)).transpose()?;
     dyadic(func, axis.as_ref(), &l, &r, &mut ws.saved.env).map_err(|e| e.at(*pos))

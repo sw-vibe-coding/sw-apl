@@ -1,0 +1,19 @@
+[package]
+name = "apl-sysfns"
+description = "sw-apl system functions: quad-named functions on the workspace's names and definitions, which only the (B) '75 mode has"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-console-control = { path = "../apl-console-control" }
+apl-fix = { path = "../apl-fix" }
+apl-lex = { path = "../../../lex/crates/apl-lex" }
+apl-scan = { path = "../../../parse/crates/apl-scan" }
+apl-value = { path = "../../../value/crates/apl-value" }
+apl-workspace = { path = "../../../eval/crates/apl-workspace" }
+
+[lints]
+workspace = true

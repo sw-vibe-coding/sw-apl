@@ -135,6 +135,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-console-control"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+]
+
+[[package]]
 name = "apl-copy"
 version = "0.1.0"
 dependencies = [
@@ -172,6 +179,7 @@ dependencies = [
  "apl-prims",
  "apl-quad",
  "apl-store",
+ "apl-sysfns",
  "apl-sysvars",
  "apl-value",
  "apl-workspace",
@@ -182,6 +190,17 @@ name = "apl-execute"
 version = "0.1.0"
 dependencies = [
  "apl-ast",
+ "apl-value",
+ "apl-workspace",
+]
+
+[[package]]
+name = "apl-fix"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-lex",
+ "apl-scan",
  "apl-value",
  "apl-workspace",
 ]
@@ -455,6 +474,18 @@ name = "apl-strike"
 version = "0.1.0"
 dependencies = [
  "apl-value",
+]
+
+[[package]]
+name = "apl-sysfns"
+version = "0.1.0"
+dependencies = [
+ "apl-console-control",
+ "apl-fix",
+ "apl-lex",
+ "apl-scan",
+ "apl-value",
+ "apl-workspace",
 ]
 
 [[package]]

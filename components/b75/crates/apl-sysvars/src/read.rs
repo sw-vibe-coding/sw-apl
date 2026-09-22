@@ -67,8 +67,9 @@ pub fn read(ws: &Workspace, name: &str) -> AplResult<Array> {
 
 /// The ones that are one number: the comparison tolerance, index
 /// origin, printing precision and width, random link, the space the
-/// workspace has left, and the terminal type and user load, which the
-/// 5110 fixes. `None` for anything else.
+/// workspace has left, and the terminal type, user load and delay,
+/// which the 5110 fixes. `⎕DL` is a delay function in APLSV; the 5110
+/// keeps it as a variable holding 0, and so does sw-apl. `None` for anything else.
 fn scalar(ws: &Workspace, name: &str) -> Option<Number> {
     let int = |n: usize| i64::try_from(n).unwrap_or(i64::MAX);
     let held = || used(&ws.saved.vars, &ws.saved.funcs, &ws.saved.groups);
@@ -79,7 +80,7 @@ fn scalar(ws: &Workspace, name: &str) -> Option<Number> {
         "⎕PW" => int(ws.saved.print.width),
         "⎕RL" => i64::try_from(ws.saved.env.link).unwrap_or(i64::MAX),
         "⎕WA" => int(free(ws.quota, held())),
-        "⎕TT" => 0,
+        "⎕TT" | "⎕DL" => 0,
         "⎕UL" => 1,
         _ => return None,
     }))

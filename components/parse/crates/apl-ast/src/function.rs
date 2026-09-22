@@ -15,4 +15,7 @@ pub enum Function {
     Outer { f: char },
     /// A function defined with the del form, by name.
     Defined(String),
+    /// A system function, by its quad name: `⎕FX`, `⎕NL`. Only (B)
+    /// lexes one, and the evaluator hands it to `apl-sysfns`.
+    System(String),
 }

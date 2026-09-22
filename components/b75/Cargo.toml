@@ -3,7 +3,10 @@
 # reaches them only in (B); see docs/architecture.md.
 [workspace]
 members = [
+    "crates/apl-console-control",
     "crates/apl-execute",
+    "crates/apl-fix",
+    "crates/apl-sysfns",
     "crates/apl-sysvars",
 ]
 resolver = "2"

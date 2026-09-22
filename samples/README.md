@@ -50,6 +50,14 @@ precision, the index origin and the random link by assignment, a
 value a setting refuses, the line counter inside two functions, the
 atomic vector, and the values kept only for compatibility.
 
+`78-system-functions.apl` runs in (B) '75 and shows the system
+functions: a function taken as a character matrix and fixed back
+into a function after the matrix is changed, a matrix the editor
+could not have made and the line it faults on, a locked function
+whose characters are not to be had, the classification of names,
+the name list by class and by initial letter, expunging a name, and
+the 5110's console control.
+
 `75-character-equality.apl` compares characters: counting and
 finding a letter, matching words with an inner product, and an outer
 product against a set of letters.

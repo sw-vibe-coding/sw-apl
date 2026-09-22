@@ -112,7 +112,7 @@ a letter is one name (`[system_names]` in `data/glyphs.toml`); in (A)
   clock the I-beams read. `⎕AI` is four zeros (the manual's value is
   illegible in the scan; four is APLSV's length). `⎕TT` is 0; `⎕UL` is
   1 (the manual gives no value; one user). `⎕DL` is a function in
-  APLSV and is left to the system functions step.
+  APLSV; step 015 settled it as the 5110's variable, holding 0.
 - **`⎕LX`** is saved as the `⎕LX←` line that sets it, which makes the
   workspace (B)-only, and a `)LOAD` in (B) runs `⍎⎕LX` once the
   workspace is in, its output after the SAVED line. `)COPY` of a whole
@@ -141,6 +141,62 @@ Decisions where sw-apl differs from the 5110, each labelled:
   system variable (NONCE ERROR).
 - A quad name the system does not have is a SYNTAX ERROR (a guess:
   the manual does not say).
+
+## The system functions as built
+
+**Done (step 015)**, in `components/b75/`: `apl-sysfns` says which
+quad names are functions and applies one, `apl-fix` has `⎕CR` and
+`⎕FX`, and `apl-console-control` has `⎕CC`. The 5110 manual's
+Chapter 5 is the source, and the APL/CMS User's Manual for the APLSV
+rules it leaves out. A quad name that takes an argument parses as a
+function, where a system variable is a name.
+
+- **`⎕CR`** gives the function as a character matrix: the header
+  first, every line flush left, no line numbers and no dels, padded
+  with blanks to the longest. Anything else -- a variable, a name
+  that holds nothing, something that is not a name, and a locked
+  function -- gives a matrix of no rows and no columns. A locked
+  function's characters are not to be had by any route.
+- **`⎕FX`** defines the function the rows spell and gives its name.
+  What it will not take is what the del editor would not have taken:
+  a header that does not parse, a line the editor reads as a
+  bracketed command or as a closing del, a line the mode cannot lex
+  (a stray character, an unpaired quote), and a name that holds a
+  variable or a group, that is locked, that is running or waiting on
+  the state indicator, or that a running function has made local. A
+  blank line is an empty line, which sw-apl's editor makes.
+- **`⎕EX`** erases the active referent of each name and says whether
+  the name is then free: 1 for a name that now holds nothing, 0 for a
+  label, a group, a function that is running or waiting, and anything
+  that is not a name.
+- **`⎕NL`** lists the names of the classes asked for, one to a row,
+  restricted to the initial letters of a left argument; **`⎕NC`**
+  classifies names: 0 free, 1 a label, 2 a variable, 3 a function, 4
+  not to be used as a name. One name given as a scalar or vector
+  gives one number back, a matrix of names gives a vector.
+- **`⎕CC`**, the 5110's own, checks the national character set,
+  screen, alarm, keyboard case, scroll and printer tab it is asked
+  for and answers 1 or 0 as the 5110 would. sw-apl has none of those
+  devices, so nothing else happens.
+
+Decisions where the sources are silent or disagree, each labelled:
+
+- The row `⎕FX` reports is the function's line number, the header
+  being 0, which is the 5110 manual's "the number of the row in error
+  minus one" and does not move with `⎕IO`. APLSV's is a row index in
+  the index origin; the two agree at `⎕IO` 0.
+- `⎕DL` is the 5110's compatibility variable holding 0, not APLSV's
+  delay function: (B) follows the 5110 manual, which lists it with
+  `⎕AI` and `⎕TS`. An assignment to it is ignored, as one to `⎕TT` is.
+  This settles the question step 014 carried here.
+- A quad name is not a name `⎕NC` will classify as free: `⎕NC '⎕IO'`
+  is 4, the system's.
+- The order of `⎕NL`'s rows is alphabetical. The manual says the
+  order has no significance.
+- Not implemented: a function fixed under a name a running function
+  has made local is refused (APLSV makes it local, and the 5110
+  manual's CHANGE example turns on it); local function names are a
+  step of their own.
 
 ## What (B) drops from APL\360
 

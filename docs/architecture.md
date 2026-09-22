@@ -48,7 +48,12 @@ sw-apl/
                                            )GROUP )GRP )GRPS           } these
     b75/       apl-execute                 execute                     } only (B) '75
                apl-sysvars                 the system variables        } reaches
-                                                                       } these
+               apl-sysfns                  which quad names are        } these
+                                           functions, and applying one
+               apl-fix                     a function as characters
+                                           and back: ⎕CR and ⎕FX
+               apl-console-control         ⎕CC: the 5110's screen,
+                                           alarm, keyboard and printer
     cli/       sw-apl                      terminal REPL and batch
     web/       apl-wire                    the terminal protocol: a
                                            frame out, a typed line in

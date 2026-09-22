@@ -16,7 +16,8 @@ use crate::{apply, forms};
 /// # Errors
 /// Any lexical, syntax, or evaluation error, with a caret.
 pub fn eval_line(ws: &mut Workspace, line: &str) -> AplResult<Output> {
-    let takes_argument = |n: &str| ws.function(n).is_some_and(|d| d.right.is_some());
+    let takes_argument =
+        |n: &str| apl_sysfns::is_function(n) || ws.function(n).is_some_and(|d| d.right.is_some());
     let Some(expr) = parse(line, ws.mode.glyphs(), &takes_argument)? else {
         return Ok(Output::Nothing);
     };
