@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-21
 
+- chore(agentrail): complete 011-character-equality
+- fix(prims): = and ? compare characters, as APL\360's did
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 010-apl-timeline
 - docs(timeline): the APLs sw-apl models, and the ones around them
 - docs(changes): refresh CHANGES.md to HEAD
