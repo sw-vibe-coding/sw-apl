@@ -173,6 +173,8 @@ the session numeric tests, and sample 67.
 | The workspace as a value: what `)SAVE` writes is separate from the terminal it runs on | done | workspace tests |
 | `)CLEAR` clears the state indicator with everything else | done | session tests, sample 60 |
 | Workspace file: re-executable UTF-8, stable byte-for-byte, round trips through the interpreter | done | wsfile tests, `tests/scripts/saved-workspace.apl.ws` |
+| Workspace file names the modes it runs in (`⍝!MODES`) and carries its settings and random link as directives both modes read | done | wsfile modes tests, session modes tests |
+| Libraries by mode: `)LIB`, `)LOAD`, `)SAVE`, `)DROP`, `)COPY` see only the workspaces that run in the mode (`--mode 68` or `75`) | done | shelves tests, session modes tests |
 | `)SAVE` and `)LOAD` round trip a workspace through a file | done | command tests, sample 61 |
 | `)COPY` takes the definitions and leaves the settings | done | command tests, sample 61; see `index-origin-considerations.md` |
 

@@ -8,3 +8,4 @@ mod load;
 mod save;
 
 pub use command::{ABBREVIATED, Answer, canonical, system_command};
+pub use load::directive;

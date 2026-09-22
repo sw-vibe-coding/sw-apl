@@ -1,6 +1,6 @@
 number = 6
 slug = "profile-libraries"
-status = "pending"
+status = "in-progress"
 description = """
 Phase 9 step 4 (docs/plan.md). A profile on the workspace, libraries
 per mode..."""

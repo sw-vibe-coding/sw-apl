@@ -92,7 +92,7 @@ pub fn text(ws: &Workspace, rest: &[&str]) -> Result<Stored, &'static str> {
         name,
         used,
     } = named(rest)?;
-    let read = ws.store.read(library, &name).ok_or(WS_NOT_FOUND)?;
+    let read = apl_shelves::read(&*ws.store, ws.mode, library, &name).ok_or(WS_NOT_FOUND)?;
     let apl = plain(&read);
     let stamp = format!("{DIRECTIVE}SAVED ");
     let when = apl.lines().find_map(|l| l.strip_prefix(&stamp));

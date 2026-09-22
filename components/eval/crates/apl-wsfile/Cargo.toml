@@ -11,6 +11,8 @@ repository.workspace = true
 apl-ast = { path = "../../../parse/crates/apl-ast" }
 apl-scan = { path = "../../../parse/crates/apl-scan" }
 apl-value = { path = "../../../value/crates/apl-value" }
+apl-modes = { path = "../apl-modes" }
+apl-uses = { path = "../apl-uses" }
 apl-workspace = { path = "../apl-workspace" }
 
 [lints]

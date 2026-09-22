@@ -3,7 +3,7 @@
 
 use apl_attn::{Flag, attend};
 use apl_serve::serve;
-use apl_session::{Files, QUOTA};
+use apl_session::{Files, Host, Mode, QUOTA};
 use apl_wire::{ATTENTION, Frame, Socket, receive, send};
 use std::{
     io::{BufReader, Write},
@@ -23,7 +23,11 @@ fn connect() -> (TcpStream, BufReader<TcpStream>, thread::JoinHandle<()>) {
         let link = Socket::new(socket, attn).unwrap();
         serve(
             Box::new(link),
-            (QUOTA, Box::new(Files(std::env::temp_dir()))),
+            Host {
+                quota: QUOTA,
+                store: Box::new(Files(std::env::temp_dir())),
+                mode: Mode::A,
+            },
         )
         .unwrap();
     });

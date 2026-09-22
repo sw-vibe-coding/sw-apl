@@ -1,11 +1,12 @@
 ⍝ sw-apl workspace. Re-executable APL: loading it runs it.
+⍝!MODES (A)(B)
 ⍝!SOURCE sw-apl -- written for this repository. MIT, (c) 2026 Michael A Wright.
 ⍝!SAVED 22.52.29 09/17/26
 ⍝!LINK 16807
+⍝!ORIGIN 1
+⍝!DIGITS 10
+⍝!WIDTH 120
 )WSID LIFE
-)ORIGIN 1
-)DIGITS 10
-)WIDTH 120
 BOARD←6 6⍴0 1 0 0 0 0 0 0 1 0 0 0 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 ∇DESCRIBE
 'LIFE -- CONWAY''S GAME OF LIFE ON A TORUS.'

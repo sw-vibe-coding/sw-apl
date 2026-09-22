@@ -17,7 +17,7 @@ use std::thread;
 
 use apl_attn::{Flag, attend};
 use apl_serve::serve;
-use apl_session::Files;
+use apl_session::{Files, Host, Mode};
 use apl_wire::{Link, Socket};
 
 use crate::http::greet;
@@ -40,9 +40,9 @@ pub enum Dialled {
 /// one.
 #[derive(Clone, Debug)]
 pub struct Service {
-    /// The workspace size in bytes and the directory the libraries
-    /// are under, as the CLI takes them.
-    pub ws: (usize, PathBuf),
+    /// The workspace size in bytes, the directory the libraries are
+    /// under, and the mode, as the CLI takes them.
+    pub ws: (usize, PathBuf, Mode),
     /// How many sessions are held right now.
     pub held: Arc<AtomicUsize>,
     /// How many may be.
@@ -101,6 +101,7 @@ fn hold(socket: TcpStream, service: &Service, over: Dialled) -> io::Result<()> {
             None => return Ok(()),
         },
     };
-    let (quota, root) = service.ws.clone();
-    serve(link, (quota, Box::new(Files(root))))
+    let (quota, root, mode) = service.ws.clone();
+    let store = Box::new(Files(root));
+    serve(link, Host { quota, store, mode })
 }

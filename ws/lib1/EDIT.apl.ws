@@ -1,11 +1,12 @@
 ⍝ sw-apl workspace. Re-executable APL: loading it runs it.
+⍝!MODES (A)(B)
 ⍝!SOURCE sw-apl -- written for this repository. MIT, (c) 2026 Michael A Wright.
 ⍝!SAVED 22.53.10 09/17/26
 ⍝!LINK 16807
+⍝!ORIGIN 1
+⍝!DIGITS 10
+⍝!WIDTH 120
 )WSID EDIT
-)ORIGIN 1
-)DIGITS 10
-)WIDTH 120
 ∇DESCRIBE
 'EDIT -- A WORKSPACE TO PRACTISE THE DEL EDITOR ON.'
 ''

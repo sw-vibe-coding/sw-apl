@@ -1,0 +1,15 @@
+[package]
+name = "apl-shelves"
+description = "sw-apl libraries as each mode sees them: listing, loading, saving and dropping by mode"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-modes = { path = "../apl-modes" }
+apl-store = { path = "../apl-store" }
+
+[lints]
+workspace = true

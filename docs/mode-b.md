@@ -219,8 +219,12 @@ Guesses and choices the sources do not make:
    use `⎕PW` 64, and leave the screen look to the keyboard step.
 4. **Weak and strong interrupt** -- proposed: ATTN weak and
    shift+ATTN strong in (B); (A) unchanged.
-5. **The tab's tooltip** -- no IBM product names in the user
-   interface (owner, 2026-09-21). The (A) tooltip today reads
-   "APL\360 compatible" and should change too; proposed "1968
-   terminal APL" for (A) and "1970s desktop APL" for (B), wording
-   the owner's to choose.
+5. **The tabs' tooltips** -- settled by the owner (2026-09-21): no
+   IBM product names as the name of anything, so the tooltips read
+   "APL\360-inspired" for (A) and "IBM 5100-inspired" for (B). Step
+   014 changes them.
+6. **Tape and diskette libraries** -- the 5100 kept workspaces in
+   numbered files on a tape cartridge (`)MARK` formatted a tape into
+   files, and `)LIB` listed every file on it with its type and size);
+   the 5110 and 5120 added diskettes. Proposed: (B) keeps sw-apl's
+   libraries 0 and 1, and a device/file number is not implemented.

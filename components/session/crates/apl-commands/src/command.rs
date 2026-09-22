@@ -4,8 +4,8 @@ use apl_eval::{Saved, Workspace, hms};
 use apl_inquiry::command as inquiry;
 use apl_library::valid;
 
-use crate::load::{copy, lib, load};
-use crate::save::{drop_workspace, moment, save};
+use crate::load::{copy, load};
+use crate::save::{drop_workspace, lib, moment, save};
 
 /// What an unnamed workspace is called, as APL\360 named it.
 pub const CLEAR: &str = "CLEAR WS";
@@ -107,7 +107,7 @@ pub fn canonical(name: &str) -> &str {
 /// A command that changes the workspace itself: its settings, the
 /// name it answers to, or clearing it altogether. A setting replies
 /// with the value it replaced, as APL\360 did.
-fn workspace_command(saved: &mut Saved, name: &str, rest: &[&str]) -> String {
+pub(crate) fn workspace_command(saved: &mut Saved, name: &str, rest: &[&str]) -> String {
     let number = rest.first().and_then(|v| v.parse::<usize>().ok());
     let was = match (name, rest, number) {
         ("CLEAR", [], _) => {

@@ -4,14 +4,15 @@
 use std::io;
 use std::rc::Rc;
 
-use apl_session::{Session, Shown, Store};
+use apl_session::{Host, Session, Shown};
 use apl_wire::Link;
 
 use crate::console::Reader;
 use crate::held::{Held, Terminal};
 
-/// Hold a session on `link` until it ends. `ws` is the workspace size
-/// in bytes and where the libraries are kept, as the CLI takes them.
+/// Hold a session on `link` until it ends. `host` is the workspace
+/// size, where the libraries are kept, and the mode, as the CLI takes
+/// them.
 /// The session is built here, inside the thread that will run it, so
 /// no workspace is ever shared between terminals -- and neither is
 /// the store, which is why each terminal is handed its own.
@@ -24,10 +25,9 @@ use crate::held::{Held, Terminal};
 /// # Errors
 /// A transport failure, or a protocol line the terminal should not
 /// have sent.
-pub fn serve(link: Box<dyn Link>, ws: (usize, Box<dyn Store>)) -> io::Result<()> {
+pub fn serve(link: Box<dyn Link>, host: Host) -> io::Result<()> {
     let terminal = Held::new(link);
-    let mut session = Session::attached(Box::new(Reader(Rc::clone(&terminal))));
-    (session.ws.quota, session.ws.store) = ws;
+    let mut session = Session::attached(Box::new(Reader(Rc::clone(&terminal))), host);
     run(&mut session, &terminal)
 }
 

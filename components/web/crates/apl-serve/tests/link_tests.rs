@@ -14,7 +14,7 @@ use std::path::PathBuf;
 use std::rc::Rc;
 
 use apl_serve::serve;
-use apl_session::{Files, QUOTA};
+use apl_session::{Files, Host, Mode, QUOTA};
 use apl_wire::{Frame, Link};
 
 /// Everything the service sent, in order.
@@ -45,7 +45,15 @@ fn session(lines: &[&str]) -> Vec<Frame> {
     let paper: Paper = Rc::new(RefCell::new(Vec::new()));
     let typed = lines.iter().map(|l| (*l).to_string()).collect();
     let link = Typist(typed, Rc::clone(&paper));
-    serve(Box::new(link), (QUOTA, Box::new(Files(PathBuf::from("."))))).unwrap();
+    serve(
+        Box::new(link),
+        Host {
+            quota: QUOTA,
+            store: Box::new(Files(PathBuf::from("."))),
+            mode: Mode::A,
+        },
+    )
+    .unwrap();
     paper.take()
 }
 

@@ -11,7 +11,7 @@ use std::io::IsTerminal;
 use std::path::PathBuf;
 use std::process::ExitCode;
 
-use apl_session::{Files, Store};
+use apl_session::{Files, Host, Mode};
 use clap::Parser;
 
 /// Full `-V` / `--version` block: name, copyright, license,
@@ -58,15 +58,26 @@ pub struct Args {
     /// work/ (library 0) and ws/ (the shipped libraries).
     #[arg(long = "library", value_name = "DIR", default_value = ".")]
     pub library: PathBuf,
+
+    /// The mode: 68 for (A), 75 for (B). Each lists and loads only
+    /// the workspaces that run in it.
+    #[arg(long, value_name = "MODE", default_value = "68", value_parser = mode)]
+    pub mode: Mode,
+}
+
+/// A mode as `--mode` names it: its year or its letter.
+fn mode(word: &str) -> Result<Mode, String> {
+    Mode::parse(word).ok_or_else(|| format!("{word} is not a mode: 68 or 75"))
 }
 
 fn main() -> ExitCode {
     let args = Args::parse();
     let echo = !args.no_echo;
-    let ws = (
-        args.ws_size,
-        Box::new(Files(args.library)) as Box<dyn Store>,
-    );
+    let ws = Host {
+        quota: args.ws_size,
+        store: Box::new(Files(args.library)),
+        mode: args.mode,
+    };
     let outcome = match args.file {
         Some(path) => shell::run_batch(Some(&path), echo, ws),
         None if std::io::stdin().is_terminal() => repl::run_interactive(ws),

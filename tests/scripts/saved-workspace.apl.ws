@@ -1,10 +1,11 @@
 ⍝ sw-apl workspace. Re-executable APL: loading it runs it.
+⍝!MODES (A)(B)
 ⍝!SAVED 20.00.00 09/17/26
 ⍝!LINK 282475249
+⍝!ORIGIN 0
+⍝!DIGITS 3
+⍝!WIDTH 80
 )WSID CLASS
-)ORIGIN 0
-)DIGITS 3
-)WIDTH 80
 A←5
 E←0⍴0
 F←¯1.5

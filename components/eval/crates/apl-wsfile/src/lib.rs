@@ -7,9 +7,12 @@
 //! A workspace file is also a sample, and a sample is also a
 //! workspace. That is the point of the format.
 //!
-//! Two things APL cannot say about itself travel as `⍝!` directives,
-//! which are comments to the interpreter and instructions to `)LOAD`:
-//! when the workspace was saved, and where its random link stands.
+//! What APL cannot say about itself, or cannot say the same way in
+//! every mode, travels as `⍝!` directives, which are comments to APL
+//! and instructions to sw-apl: the modes the workspace runs in, when
+//! it was saved, where its random link stands, and its index origin,
+//! digits and width. The settings were once written as the commands
+//! that set them, which only '68 has.
 
 mod groups;
 mod literal;

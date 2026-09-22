@@ -27,6 +27,12 @@ sw-apl/
                apl-space                   what a value costs, and the quota
                apl-store                   somewhere to keep a saved
                                            workspace: a disc, a browser
+               apl-modes                   the modes, the `⍝!MODES` line,
+                                           and what the host decides
+               apl-shelves                 the libraries as each mode
+                                           sees them
+               apl-uses                    which modes a workspace runs
+                                           in, from what its code uses
                apl-eval                    interpreter
     session/   apl-library                 which workspace a command means,
                                            and what to say when there is not one

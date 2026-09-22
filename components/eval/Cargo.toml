@@ -8,6 +8,9 @@ members = [
     "crates/apl-space",
     "crates/apl-wsfile",
     "crates/apl-store",
+    "crates/apl-modes",
+    "crates/apl-shelves",
+    "crates/apl-uses",
     "crates/apl-eval",
 ]
 resolver = "2"

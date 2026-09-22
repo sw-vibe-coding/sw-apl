@@ -100,6 +100,7 @@ dependencies = [
  "apl-eval",
  "apl-inquiry",
  "apl-library",
+ "apl-shelves",
  "apl-value",
  "apl-wsfile",
 ]
@@ -144,6 +145,7 @@ dependencies = [
  "apl-ast",
  "apl-call",
  "apl-ibeam",
+ "apl-modes",
  "apl-parse",
  "apl-prims",
  "apl-quad",
@@ -198,7 +200,15 @@ name = "apl-library"
 version = "0.1.0"
 dependencies = [
  "apl-eval",
+ "apl-shelves",
  "apl-wsfile",
+]
+
+[[package]]
+name = "apl-modes"
+version = "0.1.0"
+dependencies = [
+ "apl-store",
 ]
 
 [[package]]
@@ -377,6 +387,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-shelves"
+version = "0.1.0"
+dependencies = [
+ "apl-modes",
+ "apl-store",
+]
+
+[[package]]
 name = "apl-space"
 version = "0.1.0"
 dependencies = [
@@ -393,6 +411,14 @@ name = "apl-strike"
 version = "0.1.0"
 dependencies = [
  "apl-value",
+]
+
+[[package]]
+name = "apl-uses"
+version = "0.1.0"
+dependencies = [
+ "apl-modes",
+ "apl-workspace",
 ]
 
 [[package]]
@@ -433,6 +459,7 @@ dependencies = [
  "apl-ast",
  "apl-console",
  "apl-ibeam",
+ "apl-modes",
  "apl-prims",
  "apl-space",
  "apl-store",
@@ -444,7 +471,9 @@ name = "apl-wsfile"
 version = "0.1.0"
 dependencies = [
  "apl-ast",
+ "apl-modes",
  "apl-scan",
+ "apl-uses",
  "apl-value",
  "apl-workspace",
 ]

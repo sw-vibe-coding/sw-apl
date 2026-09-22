@@ -15,7 +15,7 @@ use std::rc::Rc;
 
 use crate::host::{Pending, Script, catch_interrupt};
 
-use apl_session::{Reply, Session, Store};
+use apl_session::{Host, Reply, Session};
 use apl_strike::read;
 
 /// One input line: its text (lossy when invalid) and, when the bytes
@@ -56,12 +56,12 @@ pub fn lines(bytes: &[u8]) -> Vec<Line> {
 }
 
 /// Run every line of `path` (or of stdin when `None`) in batch mode.
-/// `ws` is the workspace size in bytes and where the libraries are
-/// kept.
+/// `host` is the workspace size in bytes, where the libraries are
+/// kept, and the mode.
 ///
 /// # Errors
 /// I/O errors reading the input or writing the transcript.
-pub fn run_batch(path: Option<&Path>, echo: bool, ws: (usize, Box<dyn Store>)) -> io::Result<()> {
+pub fn run_batch(path: Option<&Path>, echo: bool, host: Host) -> io::Result<()> {
     let mut bytes = Vec::new();
     if let Some(p) = path {
         bytes = fs::read(p)?;
@@ -69,8 +69,7 @@ pub fn run_batch(path: Option<&Path>, echo: bool, ws: (usize, Box<dyn Store>)) -
         io::stdin().lock().read_to_end(&mut bytes)?;
     }
     let pending: Pending = Rc::new(RefCell::new(lines(&bytes).into()));
-    let mut session = Session::attached(Box::new(Script(Rc::clone(&pending), echo)));
-    (session.ws.quota, session.ws.store) = ws;
+    let mut session = Session::attached(Box::new(Script(Rc::clone(&pending), echo)), host);
     catch_interrupt();
     run_lines(&mut session, &pending, echo);
     io::stdout().flush()

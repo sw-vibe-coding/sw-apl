@@ -23,3 +23,9 @@ aria-label in pages/index.html read "APL\360 compatible" today;
 reword both, and give (B) a tooltip with no IBM name either. IBM
 names may appear in docs only to say what a mode is modelled on.
 See docs/mode-b.md, decision 5.
+
+**Tooltip wording (owner, 2026-09-21):** the (A) tab's tooltip reads
+"APL\360-inspired" and the (B) tab's "IBM 5100-inspired" -- this
+settles the rewording asked for above. The page passes the mode to
+the worker as a mode field in its start message ("68" or "75");
+apl-wasm reads it already and a page that sends none is (A).

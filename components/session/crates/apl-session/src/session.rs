@@ -2,7 +2,7 @@
 
 use apl_call::{clear, resume, suspend};
 use apl_editor::Definition;
-use apl_eval::{Console, INDENT, Output, Workspace, error_lines, eval_line, system};
+use apl_eval::{Console, Host, INDENT, Output, Workspace, error_lines, eval_line, system};
 use apl_value::AplResult;
 
 use crate::commands::dispatch;
@@ -23,13 +23,18 @@ impl Session {
     /// A session attached to a terminal: statements read through
     /// `console`, and the I-beams read the real clock rather than the
     /// stopped one a bare workspace starts with. Sign-on is the
-    /// moment this is called, which is what `⌶24` reports.
+    /// moment this is called, which is what `⌶24` reports. The host's
+    /// decisions -- the quota, where the libraries are kept, the mode
+    /// -- are made here too, once, as the session begins.
     #[must_use]
-    pub fn attached(console: Box<dyn Console>) -> Session {
+    pub fn attached(console: Box<dyn Console>, host: Host) -> Session {
         let mut session = Session::default();
         session.ws.console = console;
         session.ws.clock = system;
         session.ws.signed_on = system().now;
+        session.ws.quota = host.quota;
+        session.ws.store = host.store;
+        session.ws.mode = host.mode;
         session
     }
 

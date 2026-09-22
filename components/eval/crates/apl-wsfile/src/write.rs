@@ -1,6 +1,8 @@
 //! A saved workspace as the lines that would rebuild it.
 
+use apl_modes::render;
 use apl_scan::header_text;
+use apl_uses::runs_in;
 use apl_workspace::Saved;
 
 use crate::literal::literal;
@@ -20,9 +22,11 @@ pub const PREAMBLE: [&str; 3] = [
     ")OFF",
 ];
 
-/// A saved workspace as APL you could have typed: the settings as the
-/// commands that set them, the variables as assignments, the
-/// functions as del definitions. `when` is the moment it was saved,
+/// A saved workspace as APL you could have typed: the variables as
+/// assignments, the functions as del definitions, and what APL cannot
+/// say for itself as directives -- the modes it runs in second, where
+/// a reader and `)LIB` look for them, then when it was saved, its
+/// random link and its settings. `when` is the moment it was saved,
 /// which the loader reports.
 ///
 /// Names come out sorted, so the same workspace writes the same bytes
@@ -32,26 +36,31 @@ pub const PREAMBLE: [&str; 3] = [
 /// writer has to put a locked body into the file in full -- there is
 /// nowhere else for it -- and a text file would hand it to anyone who
 /// opened it, which is the one thing locking is for. See `rot13`:
-/// this is obscuring and not encryption.
+/// this is obscuring and not encryption. The modes line stays in the
+/// clear, after the preamble, so the workspace is listed in the right
+/// modes without being revealed.
 #[must_use]
 pub fn write(saved: &Saved, when: &str) -> String {
+    let modes = format!("{DIRECTIVE}MODES {}", render(runs_in(saved)));
     let mut lines = vec![
         "⍝ sw-apl workspace. Re-executable APL: loading it runs it.".to_string(),
+        modes.clone(),
         format!("{DIRECTIVE}SAVED {when}"),
         format!("{DIRECTIVE}LINK {}", saved.env.link),
+        format!("{DIRECTIVE}ORIGIN {}", saved.env.io),
+        format!("{DIRECTIVE}DIGITS {}", saved.print.digits),
+        format!("{DIRECTIVE}WIDTH {}", saved.print.width),
     ];
     if let Some(id) = &saved.id {
         lines.push(format!(")WSID {id}"));
     }
-    lines.push(format!(")ORIGIN {}", saved.env.io));
-    lines.push(format!(")DIGITS {}", saved.print.digits));
-    lines.push(format!(")WIDTH {}", saved.print.width));
     lines.extend(objects(saved));
-    let text = lines.join("\n") + "\n";
     if !saved.funcs.values().any(|f| f.locked) {
-        return text;
+        return lines.join("\n") + "\n";
     }
-    PREAMBLE.join("\n") + "\n" + &rot13(&text)
+    lines.remove(1);
+    let hidden = rot13(&(lines.join("\n") + "\n"));
+    PREAMBLE.join("\n") + "\n" + &modes + "\n" + &hidden
 }
 
 /// Letters moved thirteen places, everything else left alone.

@@ -2,7 +2,7 @@
 //! the system commands, whose work is in `apl-commands`, and the
 //! lines that drive the del editor.
 
-use apl_commands::{canonical, system_command};
+use apl_commands::{canonical, directive, system_command};
 use apl_editor::Definition;
 use apl_eval::error_lines;
 use apl_parse::parse_header;
@@ -87,6 +87,11 @@ pub fn dispatch(session: &mut Session, line: &str) -> Option<Reply> {
     }
     if session.defining.is_some() {
         return Some(definition_line(session, line));
+    }
+    // A body line of an open definition is the function's, whatever
+    // it says; outside one, a settings directive takes effect.
+    if directive(&mut session.ws.saved, line) {
+        return Some(Reply::default());
     }
     let del = trimmed.chars().next().filter(|c| *c == '∇' || *c == '⍫')?;
     Some(open_definition(session, &trimmed[del.len_utf8()..], del))

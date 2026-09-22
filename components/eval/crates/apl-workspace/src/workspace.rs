@@ -7,6 +7,7 @@ use std::path::PathBuf;
 
 use apl_console::{Console, Output, Print, Shown, Transcript, render_all};
 use apl_ibeam::{Clock, stopped};
+use apl_modes::Mode;
 use apl_prims::Env;
 use apl_space::{Funcs, Groups, Vars, of_value, room, used};
 use apl_store::{Files, Store};
@@ -82,6 +83,12 @@ pub struct Workspace {
     /// store is: a workspace saved under a large quota need not
     /// fit under a small one, exactly as on APL\360.
     pub quota: usize,
+    /// Which of sw-apl's languages this workspace speaks, and so
+    /// which libraries it sees. Set by the host, like the store and
+    /// the quota, and session state for the same reason: a saved
+    /// workspace says which modes it runs in, not which one it was
+    /// saved from.
+    pub mode: Mode,
 }
 
 impl Default for Workspace {
@@ -94,6 +101,7 @@ impl Default for Workspace {
             signed_on: 0,
             store: Box::new(Files(PathBuf::from("."))),
             quota: apl_space::DEFAULT,
+            mode: Mode::default(),
         }
     }
 }

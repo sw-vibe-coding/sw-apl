@@ -1,0 +1,15 @@
+[package]
+name = "apl-uses"
+description = "sw-apl: which modes a workspace runs in, from what its code uses"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-modes = { path = "../apl-modes" }
+apl-workspace = { path = "../apl-workspace" }
+
+[lints]
+workspace = true

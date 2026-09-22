@@ -15,6 +15,7 @@ apl-ibeam = { path = "../apl-ibeam" }
 apl-parse = { path = "../../../parse/crates/apl-parse" }
 apl-quad = { path = "../apl-quad" }
 apl-prims = { path = "../../../prims/crates/apl-prims" }
+apl-modes = { path = "../apl-modes" }
 apl-store = { path = "../apl-store" }
 apl-workspace = { path = "../apl-workspace" }
 

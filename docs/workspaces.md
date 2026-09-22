@@ -109,12 +109,13 @@ A saved workspace is APL you could have typed:
 
 ```apl
 ⍝ sw-apl workspace. Re-executable APL: loading it runs it.
+⍝!MODES (A)(B)
 ⍝!SAVED 20.00.00 09/17/26
 ⍝!LINK 282475249
+⍝!ORIGIN 0
+⍝!DIGITS 3
+⍝!WIDTH 80
 )WSID CLASS
-)ORIGIN 0
-)DIGITS 3
-)WIDTH 80
 M←2 3⍴0 1 2 3 4 5
 ∇R←A HYP B
 R←((A*2)+B*2)*0.5
@@ -135,11 +136,60 @@ Groups are written after the functions, as the `)GROUP` commands
 that would gather them again. A group is only names, so it does not
 matter whether what it names has been written yet.
 
-Lines beginning `⍝!` are comments to APL and instructions to `)LOAD`.
-There are two, for the things APL has no way of saying about itself:
-`⍝!SAVED` is when it was written, which `)LOAD` reports, and `⍝!LINK`
-is where the random link stands, so a loaded workspace carries on its
-sequence rather than starting over.
+Lines beginning `⍝!` are directives: comments to APL and
+instructions to sw-apl.
+
+| Directive | What it says |
+|---|---|
+| `⍝!MODES` | The modes the workspace runs in: `(A)`, `(B)` or `(A)(B)`. See *Modes* below |
+| `⍝!SAVED` | When it was written, which `)LOAD` reports |
+| `⍝!LINK` | Where the random link stands, so a loaded workspace carries on its sequence rather than starting over |
+| `⍝!ORIGIN` | The index origin |
+| `⍝!DIGITS` | The printing precision |
+| `⍝!WIDTH` | The printing width |
+
+The settings are directives rather than the `)ORIGIN`, `)DIGITS` and
+`)WIDTH` commands because only (A) has those commands; every mode
+reads a directive. A settings directive takes effect wherever the
+line comes from -- a `)LOAD`, a file run with `-f`, or the keyboard --
+and one out of range is ignored, as the command would refuse it.
+Inside a function definition it is a comment line of the function.
+
+A file written before the directives existed has `)ORIGIN`, `)DIGITS`
+and `)WIDTH` lines instead and no `⍝!MODES` line. It still loads in
+(A), which is the only mode it is listed in.
+
+## Modes
+
+sw-apl has two modes, (A) '68 and (B) '75, chosen with `--mode 68`
+or `--mode 75` (the default is 68). A workspace is listed and loaded
+only in the modes its `⍝!MODES` line names, and a file with no such
+line is an (A) workspace.
+
+`)SAVE` writes the line from what the workspace uses, not from the
+mode it was saved in:
+
+- an I-beam or a group makes it (A) only;
+- execute, format, or a quad followed by a name (`⎕IO`, `⎕FX`) makes
+  it (B) only;
+- anything else -- quad and quote-quad included -- runs in both.
+
+A glyph in a character literal or a comment is not a use.
+
+A workspace that runs in both is kept once and listed in both.
+Saving or dropping it in one mode changes it there, and in the other
+mode too only where the other mode was listing the same workspace:
+
+- A save replaces the workspace this mode lists under the name. If
+  the new one no longer runs in a mode that listed the old one, that
+  mode keeps the old one.
+- A save is also listed in any other mode it runs in that has no
+  workspace of that name. A workspace another mode keeps as its own is
+  never touched, so an (A) workspace and a (B) one may share a name.
+  The second is kept in the file `NAME@B.apl.ws` (or `NAME@A.apl.ws`),
+  and both modes still call it `NAME`.
+- `)DROP` in one mode takes the workspace out of that mode only; the
+  file goes when no mode lists it.
 
 ## What a saved file cannot hold
 
@@ -329,6 +379,7 @@ whole file.
 ⍝!OBSCURED sw-apl workspace. Rot-13, not encryption: docs/workspaces.md.
 'OBSCURED WORKSPACE. )LOAD IT -- IT CANNOT BE RUN AS A PROGRAM.'
 )OFF
+⍝!MODES (A)(B)
 ⍝ fj-ncy jbexfcnpr. Er-rkrphgnoyr NCY: ybnqvat vg ehaf vg.
 ...
 ```
@@ -361,7 +412,8 @@ OBSCURED WORKSPACE. )LOAD IT -- IT CANNOT BE RUN AS A PROGRAM.
 ```
 
 Those two lines and the `)OFF` after them are the only plain APL in
-the file. `)LOAD` is the way in.
+the file; the `⍝!MODES` line after them stays in the clear too, so the
+workspace is listed in the right modes without being revealed. `)LOAD` is the way in.
 
 ## Writing a workspace for someone else
 

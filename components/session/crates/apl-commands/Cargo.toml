@@ -9,6 +9,7 @@ repository.workspace = true
 
 [dependencies]
 apl-eval = { path = "../../../eval/crates/apl-eval" }
+apl-shelves = { path = "../../../eval/crates/apl-shelves" }
 apl-library = { path = "../apl-library" }
 apl-copy = { path = "../apl-copy" }
 apl-inquiry = { path = "../apl-inquiry" }

@@ -13,7 +13,7 @@
 //! leaves the tab.
 
 use apl_serve::serve;
-use apl_session::{Memory, QUOTA, Shelf, Store};
+use apl_session::{Host, Memory, Mode, QUOTA, Shelf};
 use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::{JsCast, JsValue};
 use web_sys::DedicatedWorkerGlobalScope;
@@ -111,8 +111,14 @@ pub fn start(message: &JsValue) {
     // page can write while this thread is busy running. Installed on
     // this thread, which is the session's for as long as it lasts.
     apl_attn::attend(Box::new(Attn::new(&channel)));
-    let store: Box<dyn Store> = Box::new(libraries(&stored.unwrap_or_default()));
-    let ended = serve(Box::new(link), (QUOTA, store));
+    // The page's tab names the mode; a page that names none is '68's.
+    let mode = field(message, "mode").and_then(|v| v.as_string());
+    let host = Host {
+        quota: QUOTA,
+        store: Box::new(libraries(&stored.unwrap_or_default())),
+        mode: mode.as_deref().and_then(Mode::parse).unwrap_or_default(),
+    };
+    let ended = serve(Box::new(link), host);
     if let Err(error) = ended {
         web_sys::console::error_1(&format!("sw-apl: the session ended: {error}").into());
     }

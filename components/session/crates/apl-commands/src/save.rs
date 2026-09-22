@@ -1,7 +1,7 @@
-//! Writing a workspace out, and forgetting one.
+//! Writing a workspace out, forgetting one, and listing a library.
 
 use apl_eval::{Workspace, hms};
-use apl_library::{INCORRECT, WS_NOT_FOUND, named, not_saved};
+use apl_library::{IMPROPER_LIBRARY, INCORRECT, WS_NOT_FOUND, library, named, not_saved};
 use apl_wsfile::write;
 
 use crate::command::CLEAR;
@@ -23,14 +23,14 @@ pub fn save(ws: &mut Workspace, name: Option<&str>) -> Vec<String> {
     // Report 13: naming a stored workspace that is not this one does
     // not overwrite it. `)SAVE` with no name re-stores this one, and
     // that is always allowed.
-    let there = ws.store.read(0, &id).is_some();
+    let there = apl_shelves::read(&*ws.store, ws.mode, 0, &id).is_some();
     if there && active.as_deref() != Some(id.as_str()) {
         return vec![not_saved(active.as_deref().unwrap_or(CLEAR))];
     }
     ws.saved.id = Some(id.clone());
     let when = moment(ws);
     let text = write(&ws.saved, &when);
-    match ws.store.write(0, &id, Some(&text)) {
+    match apl_shelves::keep(&mut *ws.store, ws.mode, 0, &id, &text) {
         Ok(()) => vec![format!("{when} {id}")],
         Err(err) => vec![format!("NOT SAVED, {err}")],
     }
@@ -50,7 +50,7 @@ pub fn drop_workspace(ws: &mut Workspace, rest: &[&str]) -> Vec<String> {
         Err(report) => return vec![report.to_string()],
     };
     let when = moment(ws);
-    match ws.store.write(0, &found.name, None) {
+    match apl_shelves::forget(&mut *ws.store, ws.mode, 0, &found.name) {
         Ok(()) => vec![when],
         Err(_) => vec![WS_NOT_FOUND.to_string()],
     }
@@ -69,4 +69,21 @@ pub fn moment(ws: &Workspace) -> String {
         (date / 100) % 100,
         date % 100
     )
+}
+
+/// `)LIB [n]`: the workspaces in one library, by name.
+pub fn lib(ws: &Workspace, rest: &[&str]) -> Vec<String> {
+    // A word that is not a number is a command `)LIB` does not take;
+    // a number naming no library is a reference that is not a
+    // library. The manual keeps those apart and so does this.
+    let numbered = |n: usize| library(n).ok_or(IMPROPER_LIBRARY);
+    let found = match rest {
+        [] => numbered(0),
+        [n] => n.parse().map_err(|_| INCORRECT).and_then(numbered),
+        _ => Err(INCORRECT),
+    };
+    match found {
+        Ok(number) => apl_shelves::list(&*ws.store, ws.mode, number),
+        Err(report) => vec![report.to_string()],
+    }
 }

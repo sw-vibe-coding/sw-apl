@@ -9,6 +9,7 @@ repository.workspace = true
 
 [dependencies]
 apl-eval = { path = "../../../eval/crates/apl-eval" }
+apl-shelves = { path = "../../../eval/crates/apl-shelves" }
 apl-wsfile = { path = "../../../eval/crates/apl-wsfile" }
 
 [lints]

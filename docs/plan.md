@@ -629,7 +629,9 @@ modes are (A) '68 and (B) '75, so as not to borrow IBM's possibly
 trademarked names. IBM names appear only as descriptions of what a
 mode is modelled on. The tab shows the letter and the year; its
 tooltip, which today reads "APL\360 compatible", is reworded to
-carry no IBM name (step 013).
+carry no IBM name. The owner settled the wording (2026-09-21, later):
+"APL\360-inspired" for (A) and "IBM 5100-inspired" for (B), in step
+014.
 
 What (B) is (owner, 2026-09-21, later): a recreation of the owner's
 two APL experiences -- learning APL on a 2741 connected to APL\360,

@@ -1,5 +1,11 @@
 //! Reading a workspace back, and taking names out of one.
 //!
+//! A saved workspace carries its settings as directives -- comments to
+//! APL, instructions to sw-apl -- rather than as the commands that set
+//! them, because only '68 has those commands. A workspace file is also
+//! a program, so a directive takes effect wherever the line comes
+//! from: a `)LOAD`, a file run with `-f`, or the keyboard.
+//!
 //! A workspace file is APL, so loading it is running it. Copying is
 //! not: running the file would apply its settings, and the index
 //! origin would change under code already written. Copying therefore
@@ -7,10 +13,11 @@
 //! `docs/index-origin-considerations.md`.
 
 use apl_copy::take;
+use apl_eval::Saved;
 use apl_eval::Workspace;
-use apl_library::{IMPROPER_LIBRARY, INCORRECT, Stored, library, text};
+use apl_library::{INCORRECT, Stored, text};
 
-use crate::command::Answer;
+use crate::command::{Answer, workspace_command};
 
 /// `)LOAD [lib] name`: replace the workspace with a saved one. A
 /// stored workspace is APL, and loading it is typing it, so its
@@ -75,19 +82,28 @@ pub fn copy(ws: &Workspace, rest: &[&str], protect: bool) -> Answer {
     }
 }
 
-/// `)LIB [n]`: the workspaces in one library, by name.
-pub fn lib(ws: &Workspace, rest: &[&str]) -> Vec<String> {
-    // A word that is not a number is a command `)LIB` does not take;
-    // a number naming no library is a reference that is not a
-    // library. The manual keeps those apart and so does this.
-    let numbered = |n: usize| library(n).ok_or(IMPROPER_LIBRARY);
-    let found = match rest {
-        [] => numbered(0),
-        [n] => n.parse().map_err(|_| INCORRECT).and_then(numbered),
-        _ => Err(INCORRECT),
+/// Where the random link must lie: a Lehmer generator's state is
+/// never zero and always below its modulus.
+const LINKS: std::ops::Range<u64> = 1..2_147_483_647;
+
+/// Apply `line` if it is a settings directive, and say whether it
+/// was one. A value out of range is ignored exactly as the command
+/// would refuse it, and says nothing: a directive is still a comment.
+pub fn directive(saved: &mut Saved, line: &str) -> bool {
+    let Some(rest) = line.trim_start().strip_prefix("⍝!") else {
+        return false;
     };
-    match found {
-        Ok(number) => ws.store.list(number),
-        Err(report) => vec![report.to_string()],
+    let mut words = rest.split_whitespace();
+    match (words.next(), words.next(), words.next()) {
+        (Some(name @ ("ORIGIN" | "DIGITS" | "WIDTH")), Some(value), None) => {
+            workspace_command(saved, name, &[value]);
+            true
+        }
+        (Some("LINK"), Some(value), None) => {
+            let state = value.parse().ok().filter(|n| LINKS.contains(n));
+            saved.env.link = state.unwrap_or(saved.env.link);
+            true
+        }
+        _ => false,
     }
 }

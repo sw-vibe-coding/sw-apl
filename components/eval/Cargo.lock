@@ -55,6 +55,7 @@ dependencies = [
  "apl-ast",
  "apl-call",
  "apl-ibeam",
+ "apl-modes",
  "apl-parse",
  "apl-prims",
  "apl-quad",
@@ -85,6 +86,13 @@ name = "apl-lex"
 version = "0.1.0"
 dependencies = [
  "apl-value",
+]
+
+[[package]]
+name = "apl-modes"
+version = "0.1.0"
+dependencies = [
+ "apl-store",
 ]
 
 [[package]]
@@ -239,6 +247,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-shelves"
+version = "0.1.0"
+dependencies = [
+ "apl-modes",
+ "apl-store",
+]
+
+[[package]]
 name = "apl-space"
 version = "0.1.0"
 dependencies = [
@@ -249,6 +265,14 @@ dependencies = [
 [[package]]
 name = "apl-store"
 version = "0.1.0"
+
+[[package]]
+name = "apl-uses"
+version = "0.1.0"
+dependencies = [
+ "apl-modes",
+ "apl-workspace",
+]
 
 [[package]]
 name = "apl-value"
@@ -264,6 +288,7 @@ dependencies = [
  "apl-ast",
  "apl-console",
  "apl-ibeam",
+ "apl-modes",
  "apl-prims",
  "apl-space",
  "apl-store",
@@ -275,7 +300,9 @@ name = "apl-wsfile"
 version = "0.1.0"
 dependencies = [
  "apl-ast",
+ "apl-modes",
  "apl-scan",
+ "apl-uses",
  "apl-value",
  "apl-workspace",
 ]

@@ -5,7 +5,9 @@
 //! leaves the commands, because running the file would apply its
 //! settings and change the index origin under code already written.
 
-use crate::write::{PREAMBLE, rot13};
+use apl_modes::{modes, retag};
+
+use crate::write::{DIRECTIVE, PREAMBLE, rot13};
 
 /// A workspace file as APL, whichever way it was written. A plain
 /// file is itself; an obscured one -- which is what a workspace
@@ -19,8 +21,16 @@ pub fn plain(text: &str) -> String {
     if !text.starts_with(PREAMBLE[0]) {
         return text.to_string();
     }
-    let body: Vec<&str> = text.lines().skip(PREAMBLE.len()).collect();
-    rot13(&(body.join("\n") + "\n"))
+    // The modes line follows the preamble in the clear, and goes back
+    // where a plain file has it.
+    let mut body = text.lines().skip(PREAMBLE.len()).peekable();
+    let clear = body.next_if(|l| l.starts_with(&format!("{DIRECTIVE}MODES")));
+    let body: Vec<&str> = body.collect();
+    let revealed = rot13(&(body.join("\n") + "\n"));
+    match clear {
+        Some(_) => retag(&revealed, modes(text)),
+        None => revealed,
+    }
 }
 
 /// The file's definitions, each as the name it defines and the lines

@@ -22,6 +22,7 @@ use std::sync::Arc;
 use std::sync::atomic::AtomicUsize;
 use std::thread;
 
+use apl_session::Mode;
 use clap::Parser;
 
 use listen::{Dialled, Service, accept};
@@ -78,6 +79,15 @@ pub struct Args {
     /// How many sessions may be held at once. Each is a thread.
     #[arg(long, value_name = "N", default_value_t = 16)]
     pub sessions: usize,
+
+    /// The mode every session is in: 68 for (A), 75 for (B).
+    #[arg(long, value_name = "MODE", default_value = "68", value_parser = mode)]
+    pub mode: Mode,
+}
+
+/// A mode as `--mode` names it: its year or its letter.
+fn mode(word: &str) -> Result<Mode, String> {
+    Mode::parse(word).ok_or_else(|| format!("{word} is not a mode: 68 or 75"))
 }
 
 fn main() -> ExitCode {
@@ -100,7 +110,7 @@ fn start(args: &Args) -> std::io::Result<()> {
         TcpListener::bind(&args.http)?,
     );
     let service = Service {
-        ws: (args.ws_size, args.library.clone()),
+        ws: (args.ws_size, args.library.clone(), args.mode),
         held: Arc::new(AtomicUsize::new(0)),
         limit: args.sessions,
     };
