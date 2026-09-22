@@ -12,8 +12,14 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-09-22
+
+- chore(agentrail): complete 014-system-variables
+- feat(b75): the system variables, sharing the settings '70 has
+
 ## 2026-09-21
 
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 013-mode-aware-overstrikes
 - feat(modes): overstrikes are mode aware
 - docs(changes): refresh CHANGES.md to HEAD
