@@ -1,6 +1,6 @@
 number = 7
 slug = "extract-68-only"
-status = "pending"
+status = "in-progress"
 description = """
 Phase 9 step 5 (docs/plan.md, owner direction 2026-09-21). Pull the
 '68-only ..."""

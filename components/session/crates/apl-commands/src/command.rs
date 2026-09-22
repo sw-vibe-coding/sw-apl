@@ -3,6 +3,7 @@
 use apl_eval::{Saved, Workspace, hms};
 use apl_inquiry::command as inquiry;
 use apl_library::valid;
+use apl_settings::settings_command;
 
 use crate::load::{copy, load};
 use crate::save::{drop_workspace, lib, moment, save};
@@ -48,6 +49,7 @@ pub fn system_command(ws: &mut Workspace, command: &str) -> Answer {
         // The inquiry commands answer for themselves, and None for
         // a name they do not know.
         _ => inquiry(ws, &name, &rest)
+            .or_else(|| settings_command(&mut ws.saved, &name, &rest).map(|l| vec![l]))
             .unwrap_or_else(|| vec![workspace_command(&mut ws.saved, &name, &rest)]),
     };
     ending(ws, lines, off)
@@ -104,28 +106,17 @@ pub fn canonical(name: &str) -> &str {
     found.map_or(name, |long| *long)
 }
 
-/// A command that changes the workspace itself: its settings, the
-/// name it answers to, or clearing it altogether. A setting replies
-/// with the value it replaced, as APL\360 did.
-pub(crate) fn workspace_command(saved: &mut Saved, name: &str, rest: &[&str]) -> String {
-    let number = rest.first().and_then(|v| v.parse::<usize>().ok());
-    let was = match (name, rest, number) {
-        ("CLEAR", [], _) => {
+/// A command that changes the workspace itself: the name it answers
+/// to, or clearing it altogether. `)WSID name` replies with the name
+/// it replaced, as a setting does.
+fn workspace_command(saved: &mut Saved, name: &str, rest: &[&str]) -> String {
+    let was = match (name, rest) {
+        ("CLEAR", []) => {
             *saved = Saved::default();
             return CLEAR.to_string();
         }
-        ("WSID", [], _) => return saved.id.clone().unwrap_or_else(|| CLEAR.to_string()),
-        ("WSID", [id], _) if valid(id) => saved.id.replace((*id).to_string()),
-        ("ORIGIN", [_], Some(n @ (0 | 1))) => {
-            let io = i64::try_from(n).unwrap_or(1);
-            Some(std::mem::replace(&mut saved.env.io, io).to_string())
-        }
-        ("DIGITS", [_], Some(n @ 1..=16)) => {
-            Some(std::mem::replace(&mut saved.print.digits, n).to_string())
-        }
-        ("WIDTH", [_], Some(n @ 30..=254)) => {
-            Some(std::mem::replace(&mut saved.print.width, n).to_string())
-        }
+        ("WSID", []) => return saved.id.clone().unwrap_or_else(|| CLEAR.to_string()),
+        ("WSID", [id]) if valid(id) => saved.id.replace((*id).to_string()),
         _ => return INCORRECT.to_string(),
     };
     format!("WAS {}", was.unwrap_or_else(|| CLEAR.to_string()))

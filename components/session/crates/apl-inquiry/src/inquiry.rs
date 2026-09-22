@@ -3,30 +3,29 @@
 use apl_eval::{Activation, Workspace, free, used};
 use apl_value::{columns, pad};
 
-use crate::group::{erase, group, members};
-use crate::names::{INCORRECT, functions, globals, groups, listing};
+use crate::group::grouping;
+use crate::names::{INCORRECT, erase, functions, globals, listing};
 
 /// Answer one inquiry command, or `None` when it is not one of
 /// these: the caller then tries the commands it knows itself.
 pub fn command(ws: &mut Workspace, name: &str, rest: &[&str]) -> Option<Vec<String>> {
+    if let Some(lines) = grouping(&mut ws.saved, name, rest) {
+        return Some(lines);
+    }
     let width = ws.saved.print.width;
     Some(match (name, rest) {
         ("FNS", _) => listing(sorted(functions(&ws.saved)), rest, width),
         ("VARS", _) => listing(sorted(globals(ws)), rest, width),
-        ("GRPS", _) => listing(sorted(groups(&ws.saved)), rest, width),
-        ("GRP", [group]) => listing(members(&ws.saved, group), &[], width),
-
-        ("GROUP", _) => group(&mut ws.saved, rest),
         ("ERASE", _) => erase(ws, rest),
         ("SYMBOLS", []) => symbols(ws),
         ("SI" | "SIV", []) => si_lines(ws.si(), name == "SIV"),
-        ("GRP" | "SYMBOLS" | "SI" | "SIV", _) => vec![INCORRECT.to_string()],
+        ("SYMBOLS" | "SI" | "SIV", _) => vec![INCORRECT.to_string()],
         _ => return None,
     })
 }
 
-/// Alphabetically, which is how the manual says `)FNS`, `)VARS` and
-/// `)GRPS` print. A name holds one thing, so there is nothing to
+/// Alphabetically, which is how the manual says `)FNS` and `)VARS`
+/// print. A name holds one thing, so there is nothing to
 /// order two entries of the same name against.
 fn sorted(mut names: Vec<String>) -> Vec<String> {
     names.sort_unstable();

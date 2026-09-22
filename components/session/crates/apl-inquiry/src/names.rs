@@ -1,4 +1,5 @@
-//! What names a workspace holds, and how a list of them prints.
+//! What names a workspace holds, how a list of them prints, and
+//! erasing them.
 
 use apl_eval::{Saved, Workspace};
 use apl_value::columns;
@@ -11,12 +12,6 @@ pub use apl_library::INCORRECT;
 #[must_use]
 pub fn functions(saved: &Saved) -> Vec<String> {
     saved.funcs.keys().cloned().collect()
-}
-
-/// The names that hold a group.
-#[must_use]
-pub fn groups(saved: &Saved) -> Vec<String> {
-    saved.groups.keys().cloned().collect()
 }
 
 /// The names that hold a *global* variable, which is what `)VARS`
@@ -75,4 +70,34 @@ pub fn listing(mut names: Vec<String>, rest: &[&str], width: usize) -> Vec<Strin
         }
     }
     lines
+}
+
+/// `)ERASE names`: expunge the global objects named. A group name
+/// takes its members with it, which is the point of a group. A
+/// function on the state indicator is left alone -- it is waiting to
+/// be taken up again -- and named in the reply.
+pub fn erase(ws: &mut Workspace, rest: &[&str]) -> Vec<String> {
+    if rest.is_empty() {
+        return vec![INCORRECT.to_string()];
+    }
+    let mut wanted: Vec<String> = Vec::new();
+    for name in rest {
+        wanted.extend(ws.saved.groups.get(*name).cloned().unwrap_or_default());
+        wanted.push((*name).to_string());
+    }
+    let running: Vec<String> = ws.si().iter().map(|a| a.name.clone()).collect();
+    let mut refused: Vec<String> = Vec::new();
+    for name in wanted {
+        if running.contains(&name) {
+            refused.push(name);
+            continue;
+        }
+        ws.saved.groups.remove(&name);
+        ws.erase(&name);
+    }
+    if refused.is_empty() {
+        return Vec::new();
+    }
+    refused.dedup();
+    vec![format!("NOT ERASED: {}", refused.join(" "))]
 }

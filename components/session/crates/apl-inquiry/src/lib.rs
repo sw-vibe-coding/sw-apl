@@ -9,6 +9,6 @@ mod group;
 mod inquiry;
 mod names;
 
-pub use group::{erase, group, members};
+pub use group::{group, grouping, groups, members};
 pub use inquiry::command;
-pub use names::{functions, globals, groups, listing};
+pub use names::{INCORRECT, erase, functions, globals, listing};

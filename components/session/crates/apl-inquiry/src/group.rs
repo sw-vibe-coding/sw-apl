@@ -1,13 +1,16 @@
-//! Groups, and erasing.
+//! The group commands: `)GROUP`, `)GRP` and `)GRPS`.
 //!
 //! A group gives one name to a collection of names, so that they can
 //! be copied or erased together, or gathered into a larger group. Its
 //! members are names, not referents: a member need not exist, and
 //! dispersing a group leaves whatever its members held.
+//!
+//! These are APL\360's. The IBM 5100 family dropped them
+//! (docs/mode-b.md), so they are '68-only.
 
-use apl_eval::{Saved, Workspace};
+use apl_eval::Saved;
 
-use crate::names::INCORRECT;
+use crate::names::{INCORRECT, listing};
 
 /// The reply when the first name of a `)GROUP` already holds a
 /// function or a variable, as the manual's trouble-report table
@@ -53,32 +56,26 @@ pub fn members(saved: &Saved, name: &str) -> Vec<String> {
     saved.groups.get(name).cloned().unwrap_or_default()
 }
 
-/// `)ERASE names`: expunge the global objects named. A group name
-/// takes its members with it, which is the point of a group. A
-/// function on the state indicator is left alone -- it is waiting to
-/// be taken up again -- and named in the reply.
-pub fn erase(ws: &mut Workspace, rest: &[&str]) -> Vec<String> {
-    if rest.is_empty() {
-        return vec![INCORRECT.to_string()];
-    }
-    let mut wanted: Vec<String> = Vec::new();
-    for name in rest {
-        wanted.extend(members(&ws.saved, name));
-        wanted.push((*name).to_string());
-    }
-    let running: Vec<String> = ws.si().iter().map(|a| a.name.clone()).collect();
-    let mut refused: Vec<String> = Vec::new();
-    for name in wanted {
-        if running.contains(&name) {
-            refused.push(name);
-            continue;
+/// The names that hold a group.
+#[must_use]
+pub fn groups(saved: &Saved) -> Vec<String> {
+    saved.groups.keys().cloned().collect()
+}
+
+/// Answer one group command, or `None` when it is not one: `)GRPS`,
+/// `)GRP name` and `)GROUP`. Their listings sort and wrap as `)FNS`
+/// does.
+pub fn grouping(saved: &mut Saved, name: &str, rest: &[&str]) -> Option<Vec<String>> {
+    let width = saved.print.width;
+    Some(match (name, rest) {
+        ("GRPS", _) => {
+            let mut names = groups(saved);
+            names.sort_unstable();
+            listing(names, rest, width)
         }
-        ws.saved.groups.remove(&name);
-        ws.erase(&name);
-    }
-    if refused.is_empty() {
-        return Vec::new();
-    }
-    refused.dedup();
-    vec![format!("NOT ERASED: {}", refused.join(" "))]
+        ("GRP", [group]) => listing(members(saved, group), &[], width),
+        ("GRP", _) => vec![INCORRECT.to_string()],
+        ("GROUP", _) => group(saved, rest),
+        _ => return None,
+    })
 }

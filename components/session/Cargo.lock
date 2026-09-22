@@ -41,6 +41,7 @@ dependencies = [
  "apl-eval",
  "apl-inquiry",
  "apl-library",
+ "apl-settings",
  "apl-shelves",
  "apl-value",
  "apl-wsfile",
@@ -310,6 +311,14 @@ dependencies = [
  "apl-value",
  "apl-wsfile",
  "serde_json",
+]
+
+[[package]]
+name = "apl-settings"
+version = "0.1.0"
+dependencies = [
+ "apl-eval",
+ "apl-library",
 ]
 
 [[package]]

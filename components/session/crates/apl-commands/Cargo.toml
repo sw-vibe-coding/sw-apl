@@ -13,6 +13,7 @@ apl-shelves = { path = "../../../eval/crates/apl-shelves" }
 apl-library = { path = "../apl-library" }
 apl-copy = { path = "../apl-copy" }
 apl-inquiry = { path = "../apl-inquiry" }
+apl-settings = { path = "../apl-settings" }
 apl-value = { path = "../../../value/crates/apl-value" }
 apl-wsfile = { path = "../../../eval/crates/apl-wsfile" }
 

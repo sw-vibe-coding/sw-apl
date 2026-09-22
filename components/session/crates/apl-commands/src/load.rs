@@ -13,11 +13,12 @@
 //! `docs/index-origin-considerations.md`.
 
 use apl_copy::take;
-use apl_eval::Saved;
-use apl_eval::Workspace;
+use apl_eval::{Saved, Workspace};
 use apl_library::{INCORRECT, Stored, text};
 
-use crate::command::{Answer, workspace_command};
+use apl_settings::setting;
+
+use crate::command::Answer;
 
 /// `)LOAD [lib] name`: replace the workspace with a saved one. A
 /// stored workspace is APL, and loading it is typing it, so its
@@ -96,7 +97,7 @@ pub fn directive(saved: &mut Saved, line: &str) -> bool {
     let mut words = rest.split_whitespace();
     match (words.next(), words.next(), words.next()) {
         (Some(name @ ("ORIGIN" | "DIGITS" | "WIDTH")), Some(value), None) => {
-            workspace_command(saved, name, &[value]);
+            setting(saved, name, value);
             true
         }
         (Some("LINK"), Some(value), None) => {

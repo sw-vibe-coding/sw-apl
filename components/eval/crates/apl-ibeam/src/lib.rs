@@ -6,7 +6,9 @@
 //! a transcript can give it one that does not move.
 
 mod clock;
+mod hms;
 mod ibeam;
 
 pub use clock::{Clock, Time, stopped, system};
-pub use ibeam::{argument, hms, ibeam};
+pub use hms::hms;
+pub use ibeam::{argument, ibeam};
