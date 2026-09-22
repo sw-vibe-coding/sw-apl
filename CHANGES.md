@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-22
 
+- chore(agentrail): complete 016-modes-docs-and-tab
+- feat(modes): the (B) '75 tab, and docs for two modes
+- docs(changes): refresh CHANGES.md to HEAD
 - plan(modes): the (B) '75 tab moves up, ahead of library 1 and the keyboard
 - docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 015-system-functions
