@@ -45,6 +45,10 @@ struct Lookalike {
 struct Later {
     glyph: String,
     name: String,
+    /// The later mode that has the glyph, by letter: "B" for (B) '75.
+    /// Empty for a glyph no mode of sw-apl has.
+    #[serde(default)]
+    mode: String,
 }
 
 /// A glyph formed by striking one character over another, as on a
@@ -119,8 +123,19 @@ fn render(tables: &Tables) -> String {
             .iter()
             .map(|l| [quoted(&l.glyph), text(&l.name)].join(", ")),
     );
+    let in_b: String = tables
+        .later
+        .iter()
+        .filter(|l| l.mode == "B")
+        .map(|l| l.glyph.as_str())
+        .collect();
     [
         "// Generated from data/glyphs.toml by build.rs. Do not edit.".to_string(),
+        konst(
+            "The later glyphs the (B) '75 mode has, beyond APL\\360's: the\n             /// lexer takes them as primitives there and refuses them\n             /// everywhere else, as it refuses every glyph in `LATER`.",
+            "MODE_B: &str",
+            &text(&in_b),
+        ),
         sets(&tables.primitive),
         table(
             "Each primitive: glyph, name, monadic and dyadic meanings.",

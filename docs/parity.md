@@ -178,6 +178,9 @@ the session numeric tests, and sample 67.
 | Workspace file names the modes it runs in (`⍝!MODES`) and carries its settings and random link as directives both modes read | done | wsfile modes tests, session modes tests |
 | Libraries by mode: `)LIB`, `)LOAD`, `)SAVE`, `)DROP`, `)COPY` see only the workspaces that run in the mode (`--mode 70` or `75`) | done | shelves tests, session modes tests |
 | '70-only parts in their own crates (`components/a70/`), reached only in (A): the I-beams, `)ORIGIN` `)DIGITS` `)WIDTH`, `)GROUP` `)GRP` `)GRPS`. In (B) an I-beam is NONCE ERROR and those commands INCORRECT COMMAND | done | a70 crate tests, session modes tests |
+| (B) '75: the lexer takes execute and format as primitives in (B) only, from `mode = "B"` in `data/glyphs.toml`; in (A) they are the same CHARACTER ERROR as ever | done | execute session tests |
+| (B) '75: execute `⍎`, in `components/b75/`: a character scalar or vector run as a line; as a whole statement it shows what the line shows (nothing for an assignment or an empty line), inside an expression it must give a value (VALUE ERROR otherwise); an error in the line is the statement's, caret on the execute | done | execute session tests, sample 76 |
+| (B) '75: format `⍕` | NONCE ERROR in (B) until implemented | |
 | `)SAVE` and `)LOAD` round trip a workspace through a file | done | command tests, sample 61 |
 | `)COPY` takes the definitions and leaves the settings | done | command tests, sample 61; see `index-origin-considerations.md` |
 

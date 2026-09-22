@@ -39,6 +39,11 @@ APL\360 has no primitive for any of them -- on numbers and on
 characters. Unique is the nub idiom, which needs the index generator
 to take the shape of a vector.
 
+`76-execute.apl` runs in (B) '75 -- its first line says so, as a
+workspace's does -- and shows execute: a line built as characters
+and run, its value used in an expression, an assignment and an empty
+line that show nothing, and a name chosen at run time.
+
 `75-character-equality.apl` compares characters: counting and
 finding a letter, matching words with an inner product, and an outer
 product against a set of letters.

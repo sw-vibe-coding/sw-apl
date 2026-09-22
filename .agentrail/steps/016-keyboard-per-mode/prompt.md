@@ -13,3 +13,10 @@ ATTRIBUTION.md, and the same rules for adapting it. The board and the
 keymap follow the mode the tab selects. APLSV was used from 2741s as
 well, so say in the docs that the 5100 board is '75's look and not a
 claim that APLSV needed it.
+
+**Carried from step 012 (execute):** the IBM 5100 manual forms
+execute by overstriking ⊥ and ∘, and format by ⊤ and ∘. The
+overstrike table in data/glyphs.toml is mode-blind today, so those
+two pairs were not added: in (A) they must stay an illegitimate
+overstrike. Add them for (B) with the keyboard, and have composition
+read the mode.

@@ -434,8 +434,9 @@ typed = "’"
 meant = "'"
 
 # Glyphs introduced by APLs after APL\360, with the name they go by
-# there. sw-apl implements APL\360 only, so these are never valid;
-# CHARACTER ERROR says what they are.
+# there. In (A) '70 they are never valid, and CHARACTER ERROR says what
+# they are. `mode = "B"` marks the ones the (B) '75 mode has, which it
+# takes as primitives; every other one is refused in every mode.
 [[later]]
 glyph = "{"
 name = "dfn brace"
@@ -475,10 +476,12 @@ name = "zilde"
 [[later]]
 glyph = "⍎"
 name = "execute"
+mode = "B"
 
 [[later]]
 glyph = "⍕"
 name = "format"
+mode = "B"
 
 [[later]]
 glyph = "⍨"

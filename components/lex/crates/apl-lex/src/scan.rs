@@ -9,11 +9,14 @@ use crate::token::{PRIMITIVES, Token, TokenKind, check_balance, is_name_char};
 /// right parenthesis is one `SystemCommand` token; a lamp ends the
 /// line; adjacent numbers become one strand token.
 ///
+/// `also` is the later glyphs this line may use as primitives beyond
+/// APL\360's: the mode's, which is empty in (A) and `MODE_B` in (B).
+///
 /// # Errors
 /// CHARACTER ERROR for any character outside the accepted set;
 /// SYNTAX ERROR for a malformed number, an unterminated quote, or
 /// unbalanced brackets. The caret is set.
-pub fn tokenize(line: &str) -> AplResult<Vec<Token>> {
+pub fn tokenize(line: &str, also: &str) -> AplResult<Vec<Token>> {
     let chars: Vec<char> = line.chars().collect();
     if let Some(command) = system_command(&chars) {
         return Ok(vec![command]);
@@ -30,7 +33,7 @@ pub fn tokenize(line: &str) -> AplResult<Vec<Token>> {
             continue;
         }
         join_strands(&mut pending, &mut tokens);
-        let (kind, next) = classify(&chars, i)?;
+        let (kind, next) = classify(&chars, i, also)?;
         tokens.push(Token { kind, pos: i });
         i = next;
     }
@@ -40,7 +43,7 @@ pub fn tokenize(line: &str) -> AplResult<Vec<Token>> {
 }
 
 /// Decide what non-numeric token starts at `i` and where it ends.
-fn classify(chars: &[char], i: usize) -> AplResult<(TokenKind, usize)> {
+fn classify(chars: &[char], i: usize, also: &str) -> AplResult<(TokenKind, usize)> {
     let c = chars[i];
     if let Some(kind) = TokenKind::punctuation(c) {
         return Ok((kind, i + 1));
@@ -48,7 +51,7 @@ fn classify(chars: &[char], i: usize) -> AplResult<(TokenKind, usize)> {
     Ok(match c {
         '\'' => lex_string(chars, i)?,
         _ if is_name_char(c, None) => lex_name(chars, i),
-        _ if PRIMITIVES.contains(c) => (TokenKind::Prim(c), i + 1),
+        _ if PRIMITIVES.contains(c) || also.contains(c) => (TokenKind::Prim(c), i + 1),
         _ => return Err(AplError::new(ErrorKind::Character(c)).at(i)),
     })
 }

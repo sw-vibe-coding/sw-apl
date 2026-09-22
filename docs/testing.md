@@ -53,6 +53,10 @@ scripts/reg.sh run               # run all, summary line
 scripts/reg.sh run -vv -p 06     # full diff for one sample
 ```
 
+A sample runs in (A) '70 unless its first line is `⍝!MODES (B)`, the
+line a workspace names its modes on; `scripts/reg-seed.sh` and
+`scripts/run-samples.sh` then run it with `--mode 75`.
+
 Rebase a baseline only when the change is intentional, and say so
 in the commit message (`reg-rs: rebased 06-reduce, identity of
 empty reduce`).

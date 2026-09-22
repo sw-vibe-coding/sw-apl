@@ -1,0 +1,16 @@
+[package]
+name = "apl-execute"
+description = "sw-apl execute: a character vector run as a line of APL, which only the (B) '75 mode has"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-ast = { path = "../../../parse/crates/apl-ast" }
+apl-value = { path = "../../../value/crates/apl-value" }
+apl-workspace = { path = "../../../eval/crates/apl-workspace" }
+
+[lints]
+workspace = true

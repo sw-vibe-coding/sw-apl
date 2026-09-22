@@ -12,12 +12,13 @@ use crate::operand::{apply_defined, parse_axis, parse_operand, resolve_function}
 pub type Parsed = AplResult<(Expr, usize)>;
 
 /// Parse one statement line. `None` for a blank or comment-only line.
-/// Top-level semicolons make a mixed-output statement.
+/// Top-level semicolons make a mixed-output statement. `also` is the
+/// later glyphs the mode takes as primitives, as `tokenize` takes it.
 ///
 /// # Errors
 /// Lexical errors and SYNTAX ERROR, each with a caret.
-pub fn parse(line: &str, funcs: Funcs) -> AplResult<Option<Expr>> {
-    let tokens = tokenize(line)?;
+pub fn parse(line: &str, also: &str, funcs: Funcs) -> AplResult<Option<Expr>> {
+    let tokens = tokenize(line, also)?;
     if let [
         Token {
             kind: TokenKind::Branch,

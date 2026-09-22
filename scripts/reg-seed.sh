@@ -26,6 +26,10 @@ pattern="${1:-}"
 recreate=""
 [ "$pattern" = "--all" ] && { recreate="yes"; pattern=""; }
 filter="bash scripts/normalize-apl-output.sh"
+# A sample names its mode as a workspace does, on its first line: one
+# that begins `⍝!MODES (B)` runs in (B) '75. Any other runs in the
+# default, (A) '70.
+mode_of() { head -1 "$1" | grep -q '^⍝!MODES (B)$' && echo " --mode 75" || true; }
 for f in samples/*.apl; do
     base="$(basename "$f" .apl)"
     [[ " $skip_seed " == *" $base "* ]] && continue
@@ -36,7 +40,7 @@ for f in samples/*.apl; do
         reg-rs remove -p "$name" >/dev/null
     fi
     echo "  create $name"
-    reg-rs create -t "$name" -c "target/release/sw-apl -f $f" \
+    reg-rs create -t "$name" -c "target/release/sw-apl$(mode_of "$f") -f $f" \
         --timeout 60 --desc "Transcript of $f" --preprocess "$filter"
 done
 reg-rs run -q && echo "ALL PASS" || echo "SOME FAILURES"

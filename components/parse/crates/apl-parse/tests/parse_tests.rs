@@ -10,17 +10,17 @@ fn none(_: &str) -> bool {
     false
 }
 fn one(line: &str) -> Expr {
-    parse(line, &none)
+    parse(line, "", &none)
         .unwrap()
         .unwrap_or_else(|| panic!("nothing parsed for {line}"))
 }
 fn called(line: &str, names: &[&str]) -> Expr {
-    parse(line, &|n: &str| names.contains(&n))
+    parse(line, "", &|n: &str| names.contains(&n))
         .unwrap()
         .unwrap_or_else(|| panic!("nothing parsed for {line}"))
 }
 fn syntax_at(line: &str, caret: usize) {
-    let e = parse(line, &none).unwrap_err();
+    let e = parse(line, "", &none).unwrap_err();
     assert_eq!(e.kind, ErrorKind::Syntax, "{line}");
     assert_eq!(e.caret, Some(caret), "{line}");
 }
@@ -39,8 +39,8 @@ fn lit_ints(e: &Expr) -> Vec<i64> {
 
 #[test]
 fn empty_line_parses_to_nothing() {
-    assert_eq!(parse("", &none).unwrap(), None);
-    assert_eq!(parse("  \u{235d} c", &none).unwrap(), None);
+    assert_eq!(parse("", "", &none).unwrap(), None);
+    assert_eq!(parse("  \u{235d} c", "", &none).unwrap(), None);
 }
 
 #[test]
@@ -463,6 +463,6 @@ fn a_function_name_is_not_an_operand() {
 
 #[test]
 fn a_defined_function_takes_no_axis() {
-    let e = parse("FAC[1] 5", &|n: &str| n == "FAC").unwrap_err();
+    let e = parse("FAC[1] 5", "", &|n: &str| n == "FAC").unwrap_err();
     assert_eq!(e.kind, ErrorKind::Syntax);
 }

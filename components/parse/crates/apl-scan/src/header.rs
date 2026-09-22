@@ -14,7 +14,7 @@ use crate::scan::segments;
 /// # Errors
 /// Lexical errors, and DEFN ERROR for any other shape.
 pub fn parse_header(text: &str) -> AplResult<Defn> {
-    let tokens = tokenize(text)?;
+    let tokens = tokenize(text, "")?;
     let mut ranges = segments(&tokens, 0, tokens.len()).into_iter();
     let (lo, hi) = ranges.next().unwrap_or((0, 0));
     let head = &tokens[lo..hi];

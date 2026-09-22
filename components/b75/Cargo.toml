@@ -1,0 +1,18 @@
+# What only the (B) '75 mode has: the parts of the IBM 5100 family's
+# APL that APL\360 has not got (docs/mode-b.md). The shared core
+# reaches them only in (B); see docs/architecture.md.
+[workspace]
+members = [
+    "crates/apl-execute",
+]
+resolver = "2"
+
+[workspace.package]
+edition = "2024"
+license = "MIT"
+version = "0.1.0"
+authors = ["Michael A Wright"]
+repository = "https://github.com/sw-vibe-coding/sw-apl"
+
+[workspace.lints.clippy]
+pedantic = "warn"

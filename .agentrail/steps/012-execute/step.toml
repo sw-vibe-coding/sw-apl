@@ -1,6 +1,6 @@
 number = 12
 slug = "execute"
-status = "pending"
+status = "in-progress"
 description = """
 Phase 9 step 6 (docs/plan.md). The glyph table learns the mode a glyph
 arrive..."""

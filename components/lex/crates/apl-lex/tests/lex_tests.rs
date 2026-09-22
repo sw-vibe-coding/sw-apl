@@ -12,7 +12,7 @@ fn strand(v: &[Number]) -> TokenKind {
 }
 
 fn kinds(line: &str) -> Vec<TokenKind> {
-    tokenize(line)
+    tokenize(line, "")
         .unwrap()
         .into_iter()
         .map(|t| t.kind)
@@ -56,7 +56,7 @@ fn ascii_minus_is_a_function_not_a_sign() {
 
 #[test]
 fn positions_are_char_indexes() {
-    let toks: Vec<Token> = tokenize("\u{2374} 1 2 +3").unwrap();
+    let toks: Vec<Token> = tokenize("\u{2374} 1 2 +3", "").unwrap();
     assert_eq!(toks[0].pos, 0);
     assert_eq!(toks[1].pos, 2, "a strand sits at its first number");
     assert_eq!(toks[2].pos, 6);
@@ -80,7 +80,7 @@ fn every_glyph_in_the_table_is_a_primitive_token() {
 #[test]
 fn lookalikes_and_controls_are_character_errors() {
     for (text, bad) in [("\u{3c1}5", '\u{3c1}'), ("1\t2", '\t'), ("a#b", '#')] {
-        let err = tokenize(text).unwrap_err();
+        let err = tokenize(text, "").unwrap_err();
         assert_eq!(err.kind, ErrorKind::Character(bad));
         assert_eq!(
             err.caret,
@@ -91,7 +91,7 @@ fn lookalikes_and_controls_are_character_errors() {
 
 #[test]
 fn bad_number_is_a_syntax_error() {
-    let err = tokenize("1.2.3").unwrap_err();
+    let err = tokenize("1.2.3", "").unwrap_err();
     assert_eq!(err.kind, ErrorKind::Syntax);
 }
 
@@ -113,7 +113,7 @@ fn glyphs_from_later_apls_are_character_errors() {
     for bad in [
         '\u{234e}', '\u{2355}', '\u{237a}', '\u{2375}', '\u{2282}', '\u{a8}',
     ] {
-        let err = tokenize(&bad.to_string()).unwrap_err();
+        let err = tokenize(&bad.to_string(), "").unwrap_err();
         assert_eq!(err.kind, ErrorKind::Character(bad), "{bad}");
     }
 }
@@ -152,7 +152,7 @@ fn quoted_literals_with_doubled_quotes_and_any_unicode_inside() {
 
 #[test]
 fn unterminated_quote_is_a_syntax_error_at_the_quote() {
-    let err = tokenize("1 2 'abc").unwrap_err();
+    let err = tokenize("1 2 'abc", "").unwrap_err();
     assert_eq!(err.kind, ErrorKind::Syntax);
     assert_eq!(err.caret, Some(4));
 }
@@ -189,7 +189,7 @@ fn a_line_starting_with_a_right_paren_is_a_system_command() {
         kinds("  )VARS A  "),
         vec![TokenKind::SystemCommand("VARS A".to_string())]
     );
-    assert_eq!(tokenize(")OFF").unwrap()[0].pos, 0);
+    assert_eq!(tokenize(")OFF", "").unwrap()[0].pos, 0);
 }
 
 #[test]
@@ -202,7 +202,7 @@ fn names_may_hold_delta_letters_and_digits() {
             TokenKind::Name("\u{2206}".into()),
         ]
     );
-    assert_eq!(tokenize("1X").unwrap_err().kind, ErrorKind::Syntax);
+    assert_eq!(tokenize("1X", "").unwrap_err().kind, ErrorKind::Syntax);
 }
 
 #[test]
@@ -214,7 +214,7 @@ fn unbalanced_brackets_are_syntax_errors_at_the_offender() {
         ("A[1)]", 3),
         ("(A[1)]", 4),
     ] {
-        let err = tokenize(line).unwrap_err();
+        let err = tokenize(line, "").unwrap_err();
         assert_eq!(err.kind, ErrorKind::Syntax, "{line}");
         assert_eq!(err.caret, Some(caret), "{line}");
     }
@@ -248,7 +248,7 @@ fn a_low_line_with_no_letter_before_it_is_a_character_error() {
     // It underscores a letter; it is not a name start and not a
     // glyph of its own.
     for (text, caret) in [("\u{332}", 0), ("1\u{332}", 1), ("\u{2206}\u{332}", 1)] {
-        let err = tokenize(text).unwrap_err();
+        let err = tokenize(text, "").unwrap_err();
         assert_eq!(err.kind, ErrorKind::Character('\u{332}'), "{text:?}");
         assert_eq!(err.caret, Some(caret), "{text:?}");
     }

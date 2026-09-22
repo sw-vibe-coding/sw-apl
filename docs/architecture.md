@@ -46,6 +46,8 @@ sw-apl/
     a70/       apl-ibeam                   the I-beams                 } only (A) '70
                apl-a70-commands            )ORIGIN )DIGITS )WIDTH,     } reaches
                                            )GROUP )GRP )GRPS           } these
+    b75/       apl-execute                 execute                     } only (B) '75
+                                                                       } reaches this
     cli/       sw-apl                      terminal REPL and batch
     web/       apl-wire                    the terminal protocol: a
                                            frame out, a typed line in

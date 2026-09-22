@@ -2,8 +2,9 @@
 
 use apl_ast::Expr;
 use apl_call::{branch_target, value};
+use apl_modes::Mode;
 use apl_parse::parse;
-use apl_value::{AplError, AplResult, Array, ErrorKind};
+use apl_value::{AplError, AplResult, Array, ErrorKind, MODE_B};
 use apl_workspace::{Output, Workspace};
 
 use crate::{apply, forms};
@@ -17,9 +18,14 @@ use crate::{apply, forms};
 /// Any lexical, syntax, or evaluation error, with a caret.
 pub fn eval_line(ws: &mut Workspace, line: &str) -> AplResult<Output> {
     let takes_argument = |n: &str| ws.function(n).is_some_and(|d| d.right.is_some());
-    let Some(expr) = parse(line, &takes_argument)? else {
+    let also = if ws.mode == Mode::B { MODE_B } else { "" };
+    let Some(expr) = parse(line, also, &takes_argument)? else {
         return Ok(Output::Nothing);
     };
+    // An execute that is the whole statement shows what its line shows.
+    if let Some(done) = apl_execute::whole(ws, &expr, eval_expr, eval_line) {
+        return done;
+    }
     if let Some(shown) = statement(ws, &expr)? {
         return Ok(shown);
     }
@@ -31,11 +37,9 @@ pub fn eval_line(ws: &mut Workspace, line: &str) -> AplResult<Output> {
             | Expr::QuoteQuadOut { .. }
     );
     let value = eval_expr(ws, &expr)?;
-    Ok(if silent {
-        Output::Nothing
-    } else {
-        Output::Value(value)
-    })
+    Ok((!silent)
+        .then_some(value)
+        .map_or(Output::Nothing, Output::Value))
 }
 
 /// The statement shapes that do not evaluate to one value: mixed

@@ -4,6 +4,7 @@
 use std::borrow::Cow;
 
 use apl_lex::{TokenKind, tokenize};
+use apl_value::MODE_B;
 
 /// Every label in a body, with the line number it names. Line numbers
 /// start at 1 and never depend on the index origin.
@@ -31,9 +32,11 @@ pub fn without_label(line: &str) -> Cow<'_, str> {
     Cow::Owned(blanked)
 }
 
-/// The label a line starts with and the position of its colon.
+/// The label a line starts with and the position of its colon. The
+/// line may use any mode's glyphs: finding a label does not depend on
+/// the mode, and whether the rest is valid is for when it runs.
 fn label_end(line: &str) -> Option<(String, usize)> {
-    let tokens = tokenize(line).ok()?;
+    let tokens = tokenize(line, MODE_B).ok()?;
     let name = match tokens.first()?.kind {
         TokenKind::Name(ref n) => n.clone(),
         _ => return None,
