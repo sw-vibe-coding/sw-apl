@@ -515,6 +515,7 @@ name = "apl-uses"
 version = "0.1.0"
 dependencies = [
  "apl-modes",
+ "apl-value",
  "apl-workspace",
 ]
 

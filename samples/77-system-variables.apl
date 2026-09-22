@@ -18,6 +18,13 @@
 ⎕IO←0
 ⍳5
 ⎕IO←1
+⍝ The comparison tolerance: numbers this close are equal only once
+⍝ it is wide enough.
+1=1+1E¯11
+⎕CT←1E¯10
+1=1+1E¯11
+⌊3-1E¯11
+⎕CT←1E¯13
 ⍝ A value a setting cannot take is refused.
 ⎕IO←2
 ⎕PP←17

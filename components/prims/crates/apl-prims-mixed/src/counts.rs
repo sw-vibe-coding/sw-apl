@@ -2,10 +2,12 @@
 //! which of two. Shared by the mixed functions that take one.
 
 use apl_scalar_arith::tolerant_round;
-use apl_value::{AplError, AplResult, Array, Data, ErrorKind, Number};
+use apl_value::{AplError, AplResult, Array, Data, ErrorKind, FUZZ, Number};
 
 /// A number that is a whole number within the fuzz, as the whole
-/// number it is.
+/// number it is. The fuzz is APL\360's fixed one in both modes: `⎕CT`
+/// is the tolerance of the relations, floor and ceiling, not of a
+/// count.
 ///
 /// The manual: "For operations such as floor and ceiling, and in
 /// comparisons, a 'fuzz' of about 1E¯13 is applied in order to avoid
@@ -15,7 +17,7 @@ use apl_value::{AplError, AplResult, Array, Data, ErrorKind, Number};
 /// equal to 3, and `⍳` of it refusing would be exactly the anomaly
 /// that sentence is about.
 fn whole(n: Number) -> Option<i64> {
-    match Number::from_f64(tolerant_round(n.as_f64())?) {
+    match Number::from_f64(tolerant_round(n.as_f64(), FUZZ)?) {
         Number::Int(i) => Some(i),
         Number::Float(_) => None,
     }

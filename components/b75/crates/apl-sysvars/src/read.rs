@@ -2,7 +2,7 @@
 
 use apl_ast::Expr;
 use apl_modes::Mode;
-use apl_value::{AplError, AplResult, Array, Data, ErrorKind, FUZZ, Number};
+use apl_value::{AplError, AplResult, Array, Data, ErrorKind, Number};
 use apl_workspace::{Workspace, free, used};
 
 use crate::assign::assign;
@@ -74,7 +74,7 @@ fn scalar(ws: &Workspace, name: &str) -> Option<Number> {
     let int = |n: usize| i64::try_from(n).unwrap_or(i64::MAX);
     let held = || used(&ws.saved.vars, &ws.saved.funcs, &ws.saved.groups);
     Some(Number::Int(match name {
-        "⎕CT" => return Some(Number::Float(FUZZ)),
+        "⎕CT" => return Some(Number::Float(ws.saved.env.ct)),
         "⎕IO" => ws.saved.env.io,
         "⎕PP" => int(ws.saved.print.digits),
         "⎕PW" => int(ws.saved.print.width),

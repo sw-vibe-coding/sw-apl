@@ -16,10 +16,10 @@ pub const DYADIC: &str = "+-×÷⌈⌊|*⍟○!∧∨⍲⍱<≤=≥>≠";
 ///
 /// # Errors
 /// DOMAIN ERROR from the function; SYNTAX ERROR for a glyph with no such form.
-pub fn apply_monadic(f: char, r: Number) -> AplResult<Number> {
+pub fn apply_monadic(f: char, r: Number, ct: f64) -> AplResult<Number> {
     attended()?;
     let a = r.as_f64();
-    if let Some(x) = monadic_arith(f, a) {
+    if let Some(x) = monadic_arith(f, a, ct) {
         return finite(x?);
     }
     match f {
@@ -31,19 +31,20 @@ pub fn apply_monadic(f: char, r: Number) -> AplResult<Number> {
 }
 
 /// `l f r` for two numbers: exact integers first, then the families.
+/// `ct` is the comparison tolerance.
 ///
 /// # Errors
 /// DOMAIN ERROR from the function; SYNTAX ERROR for a glyph with no such form.
-pub fn apply_dyadic(f: char, left: Number, right: Number) -> AplResult<Number> {
+pub fn apply_dyadic(f: char, left: Number, right: Number, ct: f64) -> AplResult<Number> {
     attended()?;
     if let Some(exact) = Number::exact_int(f, left, right) {
         return Ok(exact);
     }
-    if let Some(truth) = compare(f, left, right) {
+    if let Some(truth) = compare(f, left, right, ct) {
         return Ok(Number::Int(truth.into()));
     }
     let (lhs, rhs) = (left.as_f64(), right.as_f64());
-    if let Some(value) = dyadic_arith(f, lhs, rhs) {
+    if let Some(value) = dyadic_arith(f, lhs, rhs, ct) {
         return finite(value?);
     }
     if let Some(truth) = boolean(f, lhs, rhs) {

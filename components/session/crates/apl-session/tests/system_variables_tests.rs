@@ -116,14 +116,56 @@ fn a_value_a_setting_cannot_take_is_a_domain_error() {
 }
 
 #[test]
-fn the_comparison_tolerance_is_fixed() {
+fn the_comparison_tolerance_can_be_set() {
     let mut b = in_mode(Mode::B);
-    assert!(
-        out(&mut b, "⎕CT←1E¯13").is_empty(),
-        "its own value is taken"
-    );
-    assert_eq!(error(&mut b, "⎕CT←0"), "NONCE ERROR");
-    assert_eq!(out(&mut b, "⎕CT"), vec!["1E¯13"]);
+    let near = "1+1E¯11";
+    // At the clear workspace's 1E¯13 the two differ.
+    assert_eq!(out(&mut b, &format!("1={near}")), vec!["0"]);
+    assert!(out(&mut b, "⎕CT←1E¯10").is_empty());
+    assert_eq!(out(&mut b, "⎕CT"), vec!["1E¯10"]);
+    for (line, want) in [
+        (format!("1={near}"), "1"),
+        (format!("1≠{near}"), "0"),
+        (format!("1<{near}"), "0"),
+        ("⌊3-1E¯11".to_string(), "3"),
+        ("⌈3+1E¯11".to_string(), "3"),
+        ("0=1|3-1E¯11".to_string(), "1"),
+        (format!("({near})∊1 2 3"), "1"),
+        (format!("1 2 3⍳{near}"), "1"),
+        (format!("=/1,{near}"), "1"),
+        (format!("1∘.={near}"), "1"),
+        (format!("1 +.= {near}"), "1"),
+    ] {
+        assert_eq!(out(&mut b, &line), vec![want], "{line}");
+    }
+    // Nothing tolerated: numbers the default would call equal.
+    out(&mut b, "⎕CT←0");
+    assert_eq!(out(&mut b, "1=1+1E¯15"), vec!["0"]);
+}
+
+#[test]
+fn the_comparison_tolerance_is_between_zero_and_one() {
+    let mut b = in_mode(Mode::B);
+    for line in ["⎕CT←¯1E¯13", "⎕CT←1", "⎕CT←'A'", "⎕CT←1 2"] {
+        assert!(b.respond(line).error, "{line}");
+    }
+    assert_eq!(out(&mut b, "⎕CT"), vec!["1E¯13"], "unchanged");
+}
+
+#[test]
+fn a_comparison_tolerance_is_saved_and_makes_the_workspace_75s() {
+    let dir = Dir::new("tolerance");
+    let mut b = in_mode(Mode::B);
+    b.ws.store = Box::new(Files(dir.0.clone()));
+    out(&mut b, "⎕CT←1E¯10");
+    out(&mut b, ")SAVE TOL");
+    out(&mut b, ")CLEAR");
+    assert_eq!(out(&mut b, "⎕CT"), vec!["1E¯13"], "a clear resets it");
+    out(&mut b, ")LOAD TOL");
+    assert_eq!(out(&mut b, "⎕CT"), vec!["1E¯10"]);
+    let mut a = in_mode(Mode::A);
+    a.ws.store = Box::new(Files(dir.0.clone()));
+    assert_eq!(out(&mut a, ")LOAD TOL"), vec!["WS NOT FOUND"]);
 }
 
 #[test]

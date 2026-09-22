@@ -12,16 +12,20 @@ use std::collections::HashMap;
 
 use apl_prims_mixed::non_negative_int;
 use apl_prims_scalar::numbers;
-use apl_value::{AplError, AplResult, Array, Data, ErrorKind, Number};
+use apl_value::{AplError, AplResult, Array, Data, ErrorKind, FUZZ, Number};
 
 /// Workspace state the primitives read or advance.
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Env {
     /// Index origin (`)ORIGIN`), 0 or 1.
     pub io: i64,
     /// The random link: a Lehmer generator state, saved with the
     /// workspace so `?` sequences reproduce.
     pub link: u64,
+    /// The comparison tolerance: APL\360's fixed fuzz, which only
+    /// `⎕CT` in (B) changes. The relations, floor, ceiling, residue,
+    /// membership and index-of use it.
+    pub ct: f64,
 }
 
 /// The multiplier and the initial link of a clear workspace.
@@ -34,6 +38,7 @@ impl Default for Env {
         Env {
             io: 1,
             link: MULTIPLIER,
+            ct: FUZZ,
         }
     }
 }

@@ -32,7 +32,10 @@ fn the_link_starts_at_16807_and_roll_is_reproducible() {
 
 #[test]
 fn roll_honours_the_origin_and_rejects_bad_arguments() {
-    let mut env = Env { io: 0, link: 16807 };
+    let mut env = Env {
+        io: 0,
+        ..Env::default()
+    };
     let r = nums(&roll(&Array::vector(vec![Number::Int(1); 5]), &mut env).unwrap());
     assert_eq!(r, [0; 5]);
     let mut env = Env::default();
@@ -100,7 +103,10 @@ fn deal_picks_distinct_indexes_reproducibly() {
     );
     all.sort_unstable();
     assert_eq!(all, [1, 2, 3, 4, 5]);
-    let mut env = Env { io: 0, link: 16807 };
+    let mut env = Env {
+        io: 0,
+        ..Env::default()
+    };
     let mut all = nums(
         &deal(
             &Array::scalar(Number::Int(3)),

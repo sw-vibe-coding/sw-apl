@@ -1,15 +1,15 @@
 //! Arithmetic scalar functions on f64 (results demoted by the caller).
 
 use apl_scalar_arith::{dyadic_arith, monadic_arith};
-use apl_value::ErrorKind;
+use apl_value::{ErrorKind, FUZZ};
 
 fn m(f: char, a: f64) -> Result<f64, ErrorKind> {
-    monadic_arith(f, a)
+    monadic_arith(f, a, FUZZ)
         .expect("arith glyph")
         .map_err(|e| e.kind)
 }
 fn d(f: char, a: f64, b: f64) -> Result<f64, ErrorKind> {
-    dyadic_arith(f, a, b)
+    dyadic_arith(f, a, b, FUZZ)
         .expect("arith glyph")
         .map_err(|e| e.kind)
 }
@@ -28,7 +28,7 @@ fn monadic_table() {
     assert!((m('\u{235f}', std::f64::consts::E).unwrap() - 1.0).abs() < 1e-12);
     assert_eq!(m('\u{235f}', 0.0), Err(ErrorKind::Domain));
     assert_eq!(m('\u{235f}', -1.0), Err(ErrorKind::Domain));
-    assert_eq!(monadic_arith('!', 1.0), None, "not an arith glyph");
+    assert_eq!(monadic_arith('!', 1.0, FUZZ), None, "not an arith glyph");
 }
 
 #[test]
@@ -57,7 +57,11 @@ fn dyadic_table() {
     assert!((d('\u{235f}', 10.0, 1000.0).unwrap() - 3.0).abs() < 1e-12);
     assert_eq!(d('\u{235f}', 1.0, 5.0), Err(ErrorKind::Domain));
     assert_eq!(d('\u{235f}', 2.0, 0.0), Err(ErrorKind::Domain));
-    assert_eq!(dyadic_arith('=', 1.0, 1.0), None, "not an arith glyph");
+    assert_eq!(
+        dyadic_arith('=', 1.0, 1.0, FUZZ),
+        None,
+        "not an arith glyph"
+    );
 }
 
 #[test]

@@ -1,7 +1,16 @@
 //! Scalar primitives with scalar extension.
 
-use apl_prims_scalar::{dyadic, monadic};
-use apl_value::{Array, Data, ErrorKind, Number};
+use apl_value::{AplResult, Array, Data, ErrorKind, FUZZ, Number};
+
+// At APL\360's fixed tolerance, which is what every test here
+// assumes; `⎕CT` in (B) is pinned by the session tests.
+fn monadic(f: char, r: &Array) -> AplResult<Array> {
+    apl_prims_scalar::monadic(f, r, FUZZ)
+}
+
+fn dyadic(f: char, l: &Array, r: &Array) -> AplResult<Array> {
+    apl_prims_scalar::dyadic(f, l, r, FUZZ)
+}
 
 fn nums(a: &Array) -> Vec<Number> {
     match &a.data {

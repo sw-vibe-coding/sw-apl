@@ -1,7 +1,7 @@
 //! Assigning a system variable.
 
 use apl_settings::setting;
-use apl_value::{AplError, AplResult, Array, Data, ErrorKind, FUZZ, Number};
+use apl_value::{AplError, AplResult, Array, Data, ErrorKind, Number};
 use apl_workspace::Workspace;
 
 /// Give the system variable `name` the value `v`.
@@ -15,9 +15,8 @@ use apl_workspace::Workspace;
 /// # Errors
 /// DOMAIN ERROR for a value a setting cannot take -- where the 5110
 /// took it and gave IMPLICIT ERROR when it was next used, sw-apl
-/// refuses it at once, as APLSV did. NONCE ERROR for a comparison
-/// tolerance other than its own. SYNTAX ERROR for a name the system
-/// does not have.
+/// refuses it at once, as APLSV did. SYNTAX ERROR for a name the
+/// system does not have.
 pub fn assign(ws: &mut Workspace, name: &str, v: &Array) -> AplResult<()> {
     let domain = || AplError::new(ErrorKind::Domain);
     let which = match name {
@@ -25,7 +24,7 @@ pub fn assign(ws: &mut Workspace, name: &str, v: &Array) -> AplResult<()> {
         "⎕PP" => "DIGITS",
         "⎕PW" => "WIDTH",
         "⎕RL" => "LINK",
-        "⎕CT" => return tolerance(v),
+        "⎕CT" => return tolerance(v).map(|ct| ws.saved.env.ct = ct),
         "⎕LX" => return line(v).map(|lx| ws.saved.latent = lx),
         "⎕AI" | "⎕TS" if matches!(v.data, Data::Num(_)) => {
             ws.compatible.insert(name.to_string(), v.clone());
@@ -56,19 +55,18 @@ fn whole(v: &Array) -> Option<i64> {
     }
 }
 
-/// `⎕CT←v`. sw-apl's comparison tolerance is fixed, so it takes only
-/// the value it has.
+/// `⎕CT←v`: one number, at least 0 and less than 1. The 5110 manual
+/// gives no bounds; 1 would make every pair of numbers equal.
 ///
 /// # Errors
-/// NONCE ERROR for any other: a tolerance that can be set is not
-/// implemented.
-fn tolerance(v: &Array) -> AplResult<()> {
+/// DOMAIN ERROR for anything else.
+fn tolerance(v: &Array) -> AplResult<f64> {
     let Data::Num(numbers) = &v.data else {
         return Err(AplError::new(ErrorKind::Domain));
     };
     match numbers.as_slice() {
-        [n] if (n.as_f64() - FUZZ).abs() <= FUZZ * 1e-9 => Ok(()),
-        _ => Err(AplError::new(ErrorKind::Nonce)),
+        [n] if v.shape.len() <= 1 && (0.0..1.0).contains(&n.as_f64()) => Ok(n.as_f64()),
+        _ => Err(AplError::new(ErrorKind::Domain)),
     }
 }
 

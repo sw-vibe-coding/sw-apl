@@ -34,7 +34,7 @@ pub fn apply_monadic(f: char, r: &Array, axis: Option<&Array>, env: &mut Env) ->
         '⌹' => matrix_inverse(r),
         '⍋' => grade(r, false, env.io),
         '⍒' => grade(r, true, env.io),
-        _ => monadic(f, r),
+        _ => monadic(f, r, env.ct),
     }
 }
 
@@ -60,7 +60,7 @@ pub fn apply_dyadic(
         // The I-beam is monadic: its argument selects a system value,
         // and there is nothing for a left one to mean.
         '⌶' => Err(AplError::new(ErrorKind::Domain)),
-        _ => mixed_dyadic(f, l, r, env).unwrap_or_else(|| dyadic(f, l, r)),
+        _ => mixed_dyadic(f, l, r, env).unwrap_or_else(|| dyadic(f, l, r, env.ct)),
     }
 }
 
@@ -81,8 +81,8 @@ fn mixed_dyadic(f: char, l: &Array, r: &Array, env: &mut Env) -> Option<AplResul
         '↑' => take(l, r),
         '↓' => drop(l, r),
         '⍉' => transpose(Some(l), r, env.io),
-        '∊' => Ok(membership(l, r)),
-        '⍳' => index_of(l, r, env.io),
+        '∊' => Ok(membership(l, r, env.ct)),
+        '⍳' => index_of(l, r, env.io, env.ct),
         '⊥' => decode(l, r),
         '⊤' => encode(l, r),
         '?' => deal(l, r, env),

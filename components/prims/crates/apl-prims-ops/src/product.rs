@@ -11,14 +11,14 @@ use crate::reduce::fold;
 /// # Errors
 /// DOMAIN ERROR from `g`, or for character data unless `g` is = or
 /// ≠; SYNTAX ERROR when `g` has no scalar dyadic form.
-pub fn outer(g: char, left: &Array, right: &Array) -> AplResult<Array> {
+pub fn outer(g: char, left: &Array, right: &Array, ct: f64) -> AplResult<Array> {
     if !DYADIC.contains(g) {
         return Err(AplError::new(ErrorKind::Syntax));
     }
     let (lv, rv) = (elements(left, g)?, elements(right, g)?);
     let data = lv
         .iter()
-        .flat_map(|&a| rv.iter().map(move |&b| related(g, a, b)))
+        .flat_map(|&a| rv.iter().map(move |&b| related(g, a, b, ct)))
         .collect::<AplResult<Vec<_>>>()?;
     let shape = [left.shape.as_slice(), right.shape.as_slice()].concat();
     Array::new(shape, Data::Num(data))
@@ -30,7 +30,7 @@ pub fn outer(g: char, left: &Array, right: &Array) -> AplResult<Array> {
 /// # Errors
 /// LENGTH ERROR when the shared axes differ; DOMAIN ERROR from the
 /// functions; SYNTAX ERROR when either lacks a scalar dyadic form.
-pub fn inner(f: char, g: char, left: &Array, right: &Array) -> AplResult<Array> {
+pub fn inner(f: char, g: char, left: &Array, right: &Array, ct: f64) -> AplResult<Array> {
     if !DYADIC.contains(f) || !DYADIC.contains(g) {
         return Err(AplError::new(ErrorKind::Syntax));
     }
@@ -47,7 +47,7 @@ pub fn inner(f: char, g: char, left: &Array, right: &Array) -> AplResult<Array> 
     let rows: usize = lshape[..lshape.len() - 1].iter().product();
     let cols: usize = rshape[1..].iter().product();
     let out = (0..rows * cols)
-        .map(|at| cell(f, g, (&lv, &rv), shared, cols, at))
+        .map(|at| cell((f, g, ct), (&lv, &rv), shared, cols, at))
         .collect::<AplResult<Vec<_>>>()?;
     let shape = [&lshape[..lshape.len() - 1], &rshape[1..]].concat();
     Array::new(shape, Data::Num(out))
@@ -56,8 +56,7 @@ pub fn inner(f: char, g: char, left: &Array, right: &Array) -> AplResult<Array> 
 /// One result element: the `f`-reduction of `g` over the shared axis
 /// for the row and column that `at` names (row-major).
 fn cell(
-    f: char,
-    g: char,
+    (f, g, ct): (char, char, f64),
     (lv, rv): (&[Element], &[Element]),
     shared: usize,
     cols: usize,
@@ -65,9 +64,9 @@ fn cell(
 ) -> AplResult<Number> {
     let (row, col) = (at / cols, at % cols);
     let terms = (0..shared)
-        .map(|i| related(g, lv[row * shared + i], rv[i * cols + col]))
+        .map(|i| related(g, lv[row * shared + i], rv[i * cols + col], ct))
         .collect::<AplResult<Vec<_>>>()?;
-    fold(f, terms.into_iter().map(Element::Num))
+    fold(f, terms.into_iter().map(Element::Num), ct)
 }
 
 /// The shape and elements of an inner-product argument for `g`; a

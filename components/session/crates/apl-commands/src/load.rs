@@ -92,7 +92,7 @@ pub fn directive(saved: &mut Saved, line: &str) -> bool {
     };
     let mut words = rest.split_whitespace();
     match (words.next(), words.next(), words.next()) {
-        (Some(name @ ("ORIGIN" | "DIGITS" | "WIDTH" | "LINK")), Some(value), None) => {
+        (Some(name @ ("ORIGIN" | "DIGITS" | "WIDTH" | "LINK" | "CT")), Some(value), None) => {
             setting(saved, name, value);
             true
         }

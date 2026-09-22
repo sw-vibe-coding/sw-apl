@@ -3,6 +3,7 @@
 use apl_modes::render;
 use apl_scan::header_text;
 use apl_uses::runs_in;
+use apl_value::FUZZ;
 use apl_workspace::Saved;
 
 use crate::literal::literal;
@@ -31,6 +32,11 @@ pub const PREAMBLE: [&str; 3] = [
 /// workspace that has one. `when` is the moment it was saved, which
 /// the loader reports.
 ///
+/// A file holds the globals, so it is written from the workspace
+/// unwound: under a suspension a local sits where the global it hid
+/// belongs. A comparison tolerance other than the fixed one is a
+/// `CT` directive, which only (B) can have set.
+///
 /// Names come out sorted, so the same workspace writes the same bytes
 /// every time and a saved file is worth keeping in git.
 ///
@@ -43,8 +49,6 @@ pub const PREAMBLE: [&str; 3] = [
 /// modes without being revealed.
 #[must_use]
 pub fn write(saved: &Saved, when: &str) -> String {
-    // A file holds the globals: under a suspension a local sits where
-    // the global it hid belongs.
     let saved = &saved.unwound();
     let modes = format!("{DIRECTIVE}MODES {}", render(runs_in(saved)));
     let mut lines = vec![
@@ -56,6 +60,8 @@ pub fn write(saved: &Saved, when: &str) -> String {
         format!("{DIRECTIVE}DIGITS {}", saved.print.digits),
         format!("{DIRECTIVE}WIDTH {}", saved.print.width),
     ];
+    let ct = saved.env.ct;
+    lines.extend((ct.to_bits() != FUZZ.to_bits()).then(|| format!("{DIRECTIVE}CT {ct}")));
     lines.extend(saved.id.iter().map(|id| format!(")WSID {id}")));
     lines.extend(saved.latent.iter().map(|lx| format!("⎕LX←{}", literal(lx))));
     lines.extend(objects(saved));

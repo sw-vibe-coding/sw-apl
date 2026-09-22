@@ -1,8 +1,25 @@
 //! Reduce and scan along an axis.
 
 use apl_prims_mixed::reshape;
-use apl_prims_ops::{reduce, scan};
-use apl_value::{Array, ErrorKind, Number};
+use apl_value::{AplResult, Array, ErrorKind, FUZZ, Number};
+
+// At APL\360's fixed tolerance, which is what every test here
+// assumes; `⎕CT` in (B) is pinned by the session tests.
+fn reduce(f: char, r: &Array, k: usize) -> AplResult<Array> {
+    apl_prims_ops::reduce(f, r, k, FUZZ)
+}
+
+fn scan(f: char, r: &Array, k: usize) -> AplResult<Array> {
+    apl_prims_ops::scan(f, r, k, FUZZ)
+}
+
+fn outer(g: char, l: &Array, r: &Array) -> AplResult<Array> {
+    apl_prims_ops::outer(g, l, r, FUZZ)
+}
+
+fn inner(f: char, g: char, l: &Array, r: &Array) -> AplResult<Array> {
+    apl_prims_ops::inner(f, g, l, r, FUZZ)
+}
 
 fn v(xs: &[i64]) -> Array {
     Array::vector(xs.iter().map(|&x| Number::Int(x)).collect())
@@ -112,7 +129,6 @@ fn scan_gives_running_reductions() {
 
 #[test]
 fn outer_product_pairs_every_element() {
-    use apl_prims_ops::outer;
     assert_eq!(
         outer('+', &v(&[1, 2, 3]), &v(&[10, 20])).unwrap(),
         m(3, 2, &[11, 21, 12, 22, 13, 23])
@@ -138,7 +154,6 @@ fn outer_product_pairs_every_element() {
 
 #[test]
 fn inner_product_reduces_over_the_shared_axis() {
-    use apl_prims_ops::inner;
     assert_eq!(
         inner('+', '×', &v(&[1, 2, 3]), &v(&[4, 5, 6])).unwrap(),
         s(32)
@@ -219,18 +234,18 @@ fn ints(a: &Array) -> Vec<Number> {
 /// inner product and outer product, so = and ≠ on characters do too.
 #[test]
 fn outer_product_compares_characters() {
-    let r = apl_prims_ops::outer('=', &text("ABC"), &text("AB")).unwrap();
+    let r = outer('=', &text("ABC"), &text("AB")).unwrap();
     assert_eq!(r.shape, vec![3, 2]);
     assert_eq!(ints(&r), [1, 0, 0, 1, 0, 0].map(Number::Int));
 }
 
 #[test]
 fn inner_product_matches_strings() {
-    let same = apl_prims_ops::inner('∧', '=', &text("CAT"), &text("CAT")).unwrap();
+    let same = inner('∧', '=', &text("CAT"), &text("CAT")).unwrap();
     assert_eq!(ints(&same), [Number::Int(1)]);
-    let differ = apl_prims_ops::inner('∧', '=', &text("CAT"), &text("COT")).unwrap();
+    let differ = inner('∧', '=', &text("CAT"), &text("COT")).unwrap();
     assert_eq!(ints(&differ), [Number::Int(0)]);
-    let e = apl_prims_ops::inner('+', '×', &text("AB"), &text("AB")).unwrap_err();
+    let e = inner('+', '×', &text("AB"), &text("AB")).unwrap_err();
     assert_eq!(e.kind, ErrorKind::Domain, "only = and ≠ take characters");
 }
 

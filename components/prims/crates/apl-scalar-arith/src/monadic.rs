@@ -1,10 +1,11 @@
 //! Monadic arithmetic.
 
-use apl_value::{AplError, AplResult, ErrorKind, FUZZ};
+use apl_value::{AplError, AplResult, ErrorKind};
 
 /// `f a` for the arithmetic glyphs; `None` when `f` is not one.
+/// Floor and ceiling are tolerant within `ct`.
 #[must_use]
-pub fn monadic_arith(f: char, a: f64) -> Option<AplResult<f64>> {
+pub fn monadic_arith(f: char, a: f64, ct: f64) -> Option<AplResult<f64>> {
     Some(Ok(match f {
         '+' => a,
         '-' => -a,
@@ -16,8 +17,8 @@ pub fn monadic_arith(f: char, a: f64) -> Option<AplResult<f64>> {
             }
         }
         '÷' => return Some(reciprocal(a)),
-        '⌈' => tolerant_round(a).unwrap_or_else(|| a.ceil()),
-        '⌊' => tolerant_round(a).unwrap_or_else(|| a.floor()),
+        '⌈' => tolerant_round(a, ct).unwrap_or_else(|| a.ceil()),
+        '⌊' => tolerant_round(a, ct).unwrap_or_else(|| a.floor()),
         '|' => a.abs(),
         '*' => a.exp(),
         '⍟' => return Some(ln(a)),
@@ -25,11 +26,12 @@ pub fn monadic_arith(f: char, a: f64) -> Option<AplResult<f64>> {
     }))
 }
 
-/// The nearest integer when `a` is within the fuzz of it.
+/// The nearest integer when `a` is within the tolerance `ct` of it,
+/// relative to its magnitude and never less than `ct` itself.
 #[must_use]
-pub fn tolerant_round(a: f64) -> Option<f64> {
+pub fn tolerant_round(a: f64, ct: f64) -> Option<f64> {
     let r = a.round();
-    ((a - r).abs() <= FUZZ * a.abs().max(1.0)).then_some(r)
+    ((a - r).abs() <= ct * a.abs().max(1.0)).then_some(r)
 }
 
 fn reciprocal(a: f64) -> AplResult<f64> {

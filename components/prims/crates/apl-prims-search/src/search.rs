@@ -1,14 +1,14 @@
 //! Element search with the fuzz for numbers.
 
 use apl_prims_scalar::numbers;
-use apl_value::{AplError, AplResult, Array, Data, ErrorKind, FUZZ, Number};
+use apl_value::{AplError, AplResult, Array, Data, ErrorKind, Number};
 
 /// `l∊r`: 1 where an element of `l` occurs anywhere in `r`.
 #[must_use]
-pub fn membership(l: &Array, r: &Array) -> Array {
+pub fn membership(l: &Array, r: &Array, ct: f64) -> Array {
     let count = l.data.count();
     let hits = (0..count)
-        .map(|i| (0..r.data.count()).any(|j| same(&l.data, i, &r.data, j)))
+        .map(|i| (0..r.data.count()).any(|j| same(&l.data, i, &r.data, j, ct)))
         .map(|hit| Number::Int(hit.into()))
         .collect();
     Array {
@@ -22,13 +22,17 @@ pub fn membership(l: &Array, r: &Array) -> Array {
 ///
 /// # Errors
 /// RANK ERROR unless `l` is a vector.
-pub fn index_of(l: &Array, r: &Array, io: i64) -> AplResult<Array> {
+pub fn index_of(l: &Array, r: &Array, io: i64, ct: f64) -> AplResult<Array> {
     if l.shape.len() != 1 {
         return Err(AplError::new(ErrorKind::Rank));
     }
     let n = l.data.count();
     let found = (0..r.data.count())
-        .map(|j| (0..n).find(|&i| same(&l.data, i, &r.data, j)).unwrap_or(n))
+        .map(|j| {
+            (0..n)
+                .find(|&i| same(&l.data, i, &r.data, j, ct))
+                .unwrap_or(n)
+        })
         .map(|i| Number::Int(io + i64::try_from(i).unwrap_or(0)))
         .collect();
     Array::new(r.shape.clone(), Data::Num(found))
@@ -36,9 +40,9 @@ pub fn index_of(l: &Array, r: &Array, io: i64) -> AplResult<Array> {
 
 /// Element `i` of `a` equals element `j` of `b` (tolerantly for
 /// numbers; never across types).
-fn same(left: &Data, i: usize, right: &Data, j: usize) -> bool {
+fn same(left: &Data, i: usize, right: &Data, j: usize, ct: f64) -> bool {
     match (left, right) {
-        (Data::Num(nums), Data::Num(others)) => nums[i].tolerant_eq(others[j], FUZZ),
+        (Data::Num(nums), Data::Num(others)) => nums[i].tolerant_eq(others[j], ct),
         (Data::Char(text), Data::Char(other)) => text[i] == other[j],
         _ => false,
     }

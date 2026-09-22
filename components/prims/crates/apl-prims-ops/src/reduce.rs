@@ -11,7 +11,7 @@ use apl_value::{AplError, AplResult, Array, Data, ErrorKind, Number};
 /// DOMAIN ERROR from the function, for characters unless it is = or
 /// ≠, and for an empty reduction of a function with no identity
 /// element.
-pub fn reduce(f: char, r: &Array, k: usize) -> AplResult<Array> {
+pub fn reduce(f: char, r: &Array, k: usize, ct: f64) -> AplResult<Array> {
     let data = elements(r, f)?;
     if r.shape.is_empty() {
         return Ok(r.clone());
@@ -27,7 +27,7 @@ pub fn reduce(f: char, r: &Array, k: usize) -> AplResult<Array> {
     let out = (0..shape.iter().product::<usize>())
         .map(|o| {
             let base = base_index(o, &shape, &st, k);
-            fold(f, (0..n).map(|i| data[base + i * st[k]]))
+            fold(f, (0..n).map(|i| data[base + i * st[k]]), ct)
         })
         .collect::<AplResult<Vec<_>>>()?;
     Array::new(shape, Data::Num(out))
@@ -52,12 +52,16 @@ pub fn base_index(o: usize, rest: &[usize], st: &[usize], k: usize) -> usize {
 ///
 /// # Errors
 /// DOMAIN ERROR from the function, and for a lone character.
-pub fn fold(f: char, items: impl DoubleEndedIterator<Item = Element>) -> AplResult<Number> {
+pub fn fold(
+    f: char,
+    items: impl DoubleEndedIterator<Item = Element>,
+    ct: f64,
+) -> AplResult<Number> {
     let mut rest = items.rev();
     let Some(start) = rest.next() else {
         return identity(f);
     };
-    let last = rest.try_fold(start, |acc, x| related(f, x, acc).map(Element::Num))?;
+    let last = rest.try_fold(start, |acc, x| related(f, x, acc, ct).map(Element::Num))?;
     match last {
         Element::Num(n) => Ok(n),
         Element::Char(_) => Err(AplError::new(ErrorKind::Domain)),

@@ -1,7 +1,16 @@
 //! Membership and index-of.
 
-use apl_prims_search::{index_of, membership};
-use apl_value::{Array, Data, ErrorKind, Number};
+use apl_value::{AplResult, Array, Data, ErrorKind, FUZZ, Number};
+
+// At APL\360's fixed tolerance, which is what every test here
+// assumes; `⎕CT` in (B) is pinned by the session tests.
+fn membership(l: &Array, r: &Array) -> Array {
+    apl_prims_search::membership(l, r, FUZZ)
+}
+
+fn index_of(l: &Array, r: &Array, io: i64) -> AplResult<Array> {
+    apl_prims_search::index_of(l, r, io, FUZZ)
+}
 
 fn ints(xs: &[i64]) -> Vec<Number> {
     xs.iter().map(|&x| Number::Int(x)).collect()

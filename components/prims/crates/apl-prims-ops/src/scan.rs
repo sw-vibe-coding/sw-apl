@@ -12,7 +12,7 @@ use crate::reduce::{base_index, fold};
 /// # Errors
 /// SYNTAX ERROR for a function with no scalar dyadic form;
 /// DOMAIN ERROR from the function.
-pub fn scan(f: char, r: &Array, k: usize) -> AplResult<Array> {
+pub fn scan(f: char, r: &Array, k: usize, ct: f64) -> AplResult<Array> {
     if !DYADIC.contains(f) {
         return Err(AplError::new(ErrorKind::Syntax));
     }
@@ -28,7 +28,7 @@ pub fn scan(f: char, r: &Array, k: usize) -> AplResult<Array> {
         let base = base_index(o, &rest, &st, k);
         for i in 0..n {
             let prefix = (0..=i).map(|j| Element::Num(data[base + j * st[k]]));
-            out[base + i * st[k]] = fold(f, prefix)?;
+            out[base + i * st[k]] = fold(f, prefix, ct)?;
         }
     }
     Array::new(r.shape.clone(), Data::Num(out))

@@ -4,6 +4,7 @@
 //! glyph in a comment is prose; neither needs a mode to run.
 
 use apl_modes::{Mode, Modes};
+use apl_value::FUZZ;
 use apl_workspace::Saved;
 
 /// The modes `saved` runs in: every mode, less the ones it uses
@@ -22,7 +23,8 @@ pub fn runs_in(saved: &Saved) -> Modes {
     if !saved.groups.is_empty() || code.iter().any(|l| l.contains('⌶')) {
         runs = runs.minus(Modes::only(Mode::B));
     }
-    if saved.latent.is_some() || code.iter().any(|l| added(l)) {
+    let tolerance = saved.env.ct.to_bits() != FUZZ.to_bits();
+    if saved.latent.is_some() || tolerance || code.iter().any(|l| added(l)) {
         runs = runs.minus(Modes::only(Mode::A));
     }
     runs

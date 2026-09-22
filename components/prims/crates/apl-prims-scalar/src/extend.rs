@@ -5,18 +5,19 @@ use apl_value::{AplError, AplResult, Array, Data, ErrorKind, Number};
 use crate::dispatch::{DYADIC, MONADIC, apply_dyadic, apply_monadic};
 use crate::element::{elements, pairs, related};
 
-/// Apply monadic scalar function `f` to every element of `r`.
+/// Apply monadic scalar function `f` to every element of `r`, within
+/// comparison tolerance `ct`.
 ///
 /// # Errors
 /// DOMAIN ERROR from the function; SYNTAX ERROR for a glyph with
 /// no monadic scalar form.
-pub fn monadic(f: char, r: &Array) -> AplResult<Array> {
+pub fn monadic(f: char, r: &Array, ct: f64) -> AplResult<Array> {
     if !MONADIC.contains(f) {
         return Err(AplError::new(ErrorKind::Syntax));
     }
     let out = numbers(r)?
         .iter()
-        .map(|&x| apply_monadic(f, x))
+        .map(|&x| apply_monadic(f, x, ct))
         .collect::<AplResult<Vec<_>>>()?;
     Ok(Array {
         shape: r.shape.clone(),
@@ -24,14 +25,15 @@ pub fn monadic(f: char, r: &Array) -> AplResult<Array> {
     })
 }
 
-/// Apply dyadic scalar function `f` with scalar extension.
+/// Apply dyadic scalar function `f` with scalar extension, within
+/// comparison tolerance `ct`.
 ///
 /// # Errors
 /// DOMAIN ERROR for characters, except with = and ≠; RANK ERROR when
 /// ranks differ and LENGTH ERROR when shapes differ,
 /// unless either side is a scalar or a one-element array; DOMAIN ERROR from the function, and
 /// SYNTAX ERROR for a glyph with no dyadic scalar form.
-pub fn dyadic(f: char, l: &Array, r: &Array) -> AplResult<Array> {
+pub fn dyadic(f: char, l: &Array, r: &Array, ct: f64) -> AplResult<Array> {
     if !DYADIC.contains(f) {
         return Err(AplError::new(ErrorKind::Syntax));
     }
@@ -44,8 +46,10 @@ pub fn dyadic(f: char, l: &Array, r: &Array) -> AplResult<Array> {
     let shape = agree(l, r)?;
     let n = shape.iter().product::<usize>();
     let out = match &held {
-        None => pairs(numbers(l)?, numbers(r)?, n, |a, b| apply_dyadic(f, a, b))?,
-        Some((lc, rc)) => pairs(lc, rc, n, |a, b| related(f, a, b))?,
+        None => pairs(numbers(l)?, numbers(r)?, n, |a, b| {
+            apply_dyadic(f, a, b, ct)
+        })?,
+        Some((lc, rc)) => pairs(lc, rc, n, |a, b| related(f, a, b, ct))?,
     };
     Ok(Array {
         shape,

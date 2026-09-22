@@ -85,8 +85,10 @@ fn monadic(func: &Function, axis: Option<&Array>, r: &Array, env: &mut Env) -> A
     let rank = r.shape.len();
     match func {
         Function::Prim(f) => apply_monadic(*f, r, axis, env),
-        Function::Reduce { f, first } => reduce(*f, r, axis_index(axis, *first, rank, env.io)?),
-        Function::Scan { f, first } => scan(*f, r, axis_index(axis, *first, rank, env.io)?),
+        Function::Reduce { f, first } => {
+            reduce(*f, r, axis_index(axis, *first, rank, env.io)?, env.ct)
+        }
+        Function::Scan { f, first } => scan(*f, r, axis_index(axis, *first, rank, env.io)?, env.ct),
         // An inner or outer product with one argument, or a defined
         // function that got this far: no such monadic function, so
         // the sentence does not parse.
@@ -105,8 +107,8 @@ fn dyadic(
 ) -> AplResult<Array> {
     match func {
         Function::Prim(f) => apply_dyadic(*f, l, r, axis, env),
-        Function::Inner { f, g } if axis.is_none() => inner(*f, *g, l, r),
-        Function::Outer { f } if axis.is_none() => outer(*f, l, r),
+        Function::Inner { f, g } if axis.is_none() => inner(*f, *g, l, r, env.ct),
+        Function::Outer { f } if axis.is_none() => outer(*f, l, r, env.ct),
         _ => Err(AplError::new(ErrorKind::Syntax)),
     }
 }

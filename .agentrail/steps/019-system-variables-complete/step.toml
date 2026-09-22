@@ -1,6 +1,6 @@
 number = 19
 slug = "system-variables-complete"
-status = "pending"
+status = "in-progress"
 description = """
 Found 2026-09-22 building step 014 (system variables): what that step
 left ou..."""

@@ -41,9 +41,9 @@ pub fn elements(a: &Array, f: char) -> AplResult<Vec<Element>> {
 /// # Errors
 /// DOMAIN ERROR for a character with any function but = and ≠, and
 /// whatever the number family reports.
-pub fn related(f: char, left: Element, right: Element) -> AplResult<Number> {
+pub fn related(f: char, left: Element, right: Element, ct: f64) -> AplResult<Number> {
     let same = match (left, right) {
-        (Element::Num(l), Element::Num(r)) => return apply_dyadic(f, l, r),
+        (Element::Num(l), Element::Num(r)) => return apply_dyadic(f, l, r, ct),
         (Element::Char(l), Element::Char(r)) => l == r,
         _ => false,
     };

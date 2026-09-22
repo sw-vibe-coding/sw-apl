@@ -305,7 +305,7 @@ implemented: using it is a NONCE ERROR.
 | `⎕PP` | Print precision, 1 to 16 |
 | `⎕PW` | Print width, 30 to 254 |
 | `⎕RL` | Random link |
-| `⎕CT` | Comparison tolerance: reads `1E¯13`, and takes no other value (NONCE ERROR) |
+| `⎕CT` | Comparison tolerance, 0 to just under 1: the relations, floor, ceiling, residue, membership and index-of use it. `1E¯13` in a clear workspace, APL\360's fixed fuzz |
 | `⎕LC` | Line counter: the lines being executed, innermost first |
 | `⎕WA` | Workspace available, in bytes |
 | `⎕AV` | The atomic vector: 256 characters, in the 5110's order |

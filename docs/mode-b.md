@@ -134,8 +134,20 @@ Decisions where sw-apl differs from the 5110, each labelled:
   was next used.
 - `⎕PW` stops at 254, sw-apl's width limit in both modes; the 5110
   allows 390.
-- `⎕CT` reads 1E¯13 and takes only that value: sw-apl's comparison
-  tolerance is fixed, and setting another is a NONCE ERROR.
+- `⎕CT` can be set, and the relations, floor, ceiling, residue,
+  membership and index-of use it. The 5110 manual gives no bounds;
+  sw-apl takes 0 to just under 1, since 1 would make every pair of
+  numbers equal. The rule is sw-apl's own, the one its fixed fuzz
+  always used, now scaled by `⎕CT`: two numbers are equal when their
+  difference is at most `⎕CT` times the larger magnitude, and never
+  when both are integers; floor and ceiling take the nearest integer
+  within `⎕CT` times the larger of the number and 1. The 5110 measured
+  against a power of 16, an artifact of its hexadecimal arithmetic,
+  and made floor and ceiling add and subtract `⎕CT` absolutely, so
+  with a large `⎕CT` the two differ: at `⎕CT` 0.03 the 5110's `⌊2.96`
+  is 2 and sw-apl's 3. A count -- the argument of `⍳`, a length --
+  keeps APL\360's fixed fuzz. A workspace saved with another
+  tolerance carries it as a `⍝!CT` directive and is (B) only.
 - Not implemented: a system variable localized in a function header,
   `⎕PW` 128 while a definition is open, and indexed assignment into a
   system variable (NONCE ERROR).

@@ -1,7 +1,13 @@
 //! Comparisons with the fuzz and boolean functions.
 
-use apl_scalar_logic::{boolean, compare, not};
-use apl_value::{ErrorKind, Number};
+use apl_scalar_logic::{boolean, not};
+use apl_value::{ErrorKind, FUZZ, Number};
+
+// At APL\360's fixed tolerance, which is what every test here
+// assumes; `⎕CT` in (B) is pinned by the session tests.
+fn compare(f: char, l: Number, r: Number) -> Option<bool> {
+    apl_scalar_logic::compare(f, l, r, FUZZ)
+}
 
 fn i(v: i64) -> Number {
     Number::Int(v)
