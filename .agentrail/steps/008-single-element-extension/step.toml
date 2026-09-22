@@ -1,10 +1,11 @@
 number = 8
 slug = "single-element-extension"
-status = "in-progress"
+status = "completed"
 description = """
 Found 2026-09-21 surveying the one-element-arguments bug, as that step
 asked:..."""
 role = "production"
 context_files = []
 created_at = "2026-09-21T17:32:20"
-commits = []
+completed_at = "2026-09-21T22:02:46"
+commits = ["4da863dc36ca892b83d65675fb390c99d2881c67"]
