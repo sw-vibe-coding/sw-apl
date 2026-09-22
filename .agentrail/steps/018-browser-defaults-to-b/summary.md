@@ -1,0 +1,1 @@
+The browser opens in (B) '75 unless the reader chose (A), which is still remembered. The CLI and service default stays 70. check-pages section 11 now starts in (B) and switches to (A); all passed. Help and README updated.
