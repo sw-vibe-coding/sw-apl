@@ -797,6 +797,24 @@ presentation around it. The tab therefore opens on an empty library
 keyboard per mode (step 20) follow it. Format still comes after the
 tab, so the tab ships without it.
 
+Owner direction 2026-09-22: **the browser opens in (B) '75.** A
+first visit, and any visit that has not chosen a mode, starts in
+(B); a reader who switches to (A) comes back to (A), as the tab
+remembers today. The CLI and the service keep 70 as their default,
+so every transcript and script is unchanged.
+
+Owner direction 2026-09-22: **library 1 per mode.** A shipped
+workspace may differ between the modes -- BIRDS, for one, is simpler
+in (B), where execute can do what (A) needs more functions for.
+`)LIB 1` lists, and `)LOAD 1 NAME` loads, the version for the mode
+the session is in. A workspace that is the same in both keeps one
+file, `NAME.apl.ws` with `⍝!MODES (A)(B)`, and is listed and loaded
+in both. One that differs has one file per mode, named as library 0
+already names a pair: `NAME.apl.ws` for (A) and `NAME@B.apl.ws` for
+(B), each with its own modes line, and both listed as `NAME`
+(`apl-shelves` already finds a pair this way). The browser bundle
+ships every file. This belongs to the library 1 step.
+
 **Milestone 2 moves with the work it names, not with the tab.** The
 tab step's own words -- "APLSV's own tests and demos, except format,
 work in (B)" -- are true only once BIRDS flies in (B)'s library 1, so
@@ -812,6 +830,9 @@ A new library 1 workspace for (B) '75, `TTTML`: the machine plays
 tic-tac-toe against itself, learns from the games, and then plays a
 person with what it learned. It shows that a 1975 desktop APL could
 do a small piece of machine learning, in array code.
+
+`learn-tic-tac-toe-strategy.md` explains the method in full: how it
+learns, and how it fits in 64 KB, with the prototype's listing.
 
 **The owner's starting point** was an AI chat's answer, saved
 untracked as `docs/research.txt` (not ours, so never committed or
