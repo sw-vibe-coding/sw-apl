@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-21
 
+- chore(agentrail): complete 008-single-element-extension
+- fix(prims): extend a one-element argument where APL\360 did
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 007-extract-68-only
 - feat(a68): the '68-only parts are reached only in (A)
 - move(a68): the '68-only parts leave the shared core for components/a68
