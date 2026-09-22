@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-21
 
+- chore(agentrail): complete 010-apl-timeline
+- docs(timeline): the APLs sw-apl models, and the ones around them
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 009-rename-68-to-70
 - docs(a70): (A) '68 becomes (A) '70, the tab first
 - move(a70): components/a68 becomes components/a70
