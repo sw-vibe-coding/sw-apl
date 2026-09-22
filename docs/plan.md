@@ -619,10 +619,11 @@ the non-goal that kept APLSV's additions out, for that mode only.
 
 Names (owner, 2026-09-21), used interchangeably in conversation: (A)
 '68 is APL\360 is the IBM 2741; (B) '75 is the IBM 5100, 5110 and
-5120. (B) was '72 until the owner set its year to the IBM 5100's
-announcement, September 1975 (2026-09-21, later); the saga's step
-prompts and the `011-lib1-72` slug were written before that and still
-say '72, which means '75. The keyboard matches the hardware. But the names sw-apl shows
+5120. (B) is named '75 for the IBM 5100's release, September 1975
+(owner, 2026-09-21, later); every reference was changed from the
+earlier '72. Only records that are history keep '72: completed saga
+steps, the saga's own plan and step descriptions, and commit
+subjects in CHANGES.md. The keyboard matches the hardware. But the names sw-apl shows
 are its own (owner, 2026-09-21, later): the app is sw-apl and its
 modes are (A) '68 and (B) '75, so as not to borrow IBM's possibly
 trademarked names. IBM names appear only as descriptions of what a

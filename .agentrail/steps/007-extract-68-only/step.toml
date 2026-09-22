@@ -1,0 +1,10 @@
+number = 7
+slug = "extract-68-only"
+status = "pending"
+description = """
+Phase 9 step 5 (docs/plan.md, owner direction 2026-09-21). Pull the
+'68-only ..."""
+role = "production"
+context_files = []
+created_at = "2026-09-21T17:12:53"
+commits = []

@@ -1,0 +1,8 @@
+number = 18
+slug = "linux-regression-fixtures"
+status = "pending"
+description = "Repair the existing Linux portability failures found while validating the apl..."
+role = "production"
+context_files = []
+created_at = "2026-09-21T17:13:13"
+commits = []

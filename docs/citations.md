@@ -22,7 +22,7 @@ carry the same files, for example
   take, drop and domino.
   <https://www.bitsavers.org/pdf/ibm/apl/GH20-0683-1_APL_360_Users_Manual_Mar70.pdf>
 
-## The IBM 5100 family -- the (B) '72 mode
+## The IBM 5100 family -- the (B) '75 mode
 
 - **IBM 5110 APL Reference Manual**, SA21-9303-0, IBM, December
   1977. The reference for the (B) mode: its commands, system
