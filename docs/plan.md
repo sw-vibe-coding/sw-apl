@@ -14,8 +14,13 @@ subset), `session.md` (terminal look and feel, system commands),
 
 ## Goal
 
-A clean-room, from-scratch implementation in Rust of pure IBM
-APL\360 as it looked on a terminal: its primitives, its session
+A clean-room, from-scratch implementation in Rust of IBM APL as it
+looked on a terminal, in **modes**: the '68 mode is pure APL\360, and
+the '72 mode is APLSV (owner direction 2026-09-21; Phase 9). What
+follows describes the '68 mode, which is the whole of the
+implementation until Phase 9 adds the second.
+
+The '68 mode is pure IBM APL\360: its primitives, its session
 conventions, its I-beam system functions, and its `)ORIGIN`,
 `)DIGITS`, `)WIDTH` settings commands. Quad and quote-quad are the
 I/O forms; there are no quad-named system variables or functions
@@ -36,10 +41,15 @@ Two delivery surfaces, in order:
   tilde ("without"), no diamond statement separator.
 - Not a port of `sw-cor24-apl` (C) or of GNU APL. Those are
   references for behaviour and for the conformance corpus only.
-- Not APLSV either: no quad system variables or functions
-  (quad-IO, quad-CT, quad-EX, quad-NL, ...), no execute, no
-  format. Their APL\360 counterparts are I-beams, `)ORIGIN`,
-  `)DIGITS`, `)WIDTH`, `)ERASE`, `)FNS`, `)VARS`.
+- In the '68 mode, not APLSV: no quad system variables or
+  functions (quad-IO, quad-CT, quad-EX, quad-NL, ...), no execute,
+  no format. Their APL\360 counterparts are I-beams, `)ORIGIN`,
+  `)DIGITS`, `)WIDTH`, `)ERASE`, `)FNS`, `)VARS`. APLSV is the '72
+  mode, added by Phase 9, and the '68 mode does not change to make
+  room for it.
+- Shared variables, even in the '72 mode: they are APLSV's own
+  subject, but they exist to talk to other processes and devices,
+  and sw-apl has one user and no hardware. Revisit only if asked.
 - No embedded targets, no shared variables for hardware I/O.
 - No file system primitives beyond workspace save/load.
 
@@ -598,6 +608,69 @@ to open it to the LAN, and the docs saying which.
 7. `glyph-keyboard` -- the IBM 2741 APL layout, a clickable board,
    and the expansions already in `docs/espanso/` and
    `docs/emacs/`; a first screen worth arriving at.
+
+## Phase 9 (owner direction 2026-09-21): modes, '68 and '72
+
+The owner, after BIRDS: sw-apl gains modes. The header already shows
+the current one as a tab, `Ⓐ '68`, built as a row holding one tab so
+another could be added; the second is `Ⓑ '72`, APLSV. This reverses
+the non-goal that kept APLSV out, for APLSV only.
+
+What a mode is:
+
+- A language. '68 is APL\360 exactly as sw-apl has it; '72 is APLSV.
+- A pair of libraries. Library 1 differs per mode -- '72 gets its own
+  workspaces, and BIRDS there can fly the birds that `NOTHERE` says
+  need an execute. Library 0 differs per mode too: a workspace saved
+  in '72 is saved in '72's library 0, and `)LIB` in '68 never sees
+  it.
+- Recorded in what it saves, so a '72 workspace cannot be loaded into
+  '68 as though it were one.
+
+How the implementation is arranged, which the owner asked about:
+APLSV is very nearly a superset of APL\360. So the implementation is
+not split three ways. What exists is the shared core and stays where
+it is. What '72 adds -- execute, format, the quad system variables and
+functions -- goes in new crates, which the module budgets would ask
+for anyway. What is '68-only is a short list, to be established from
+the APLSV manual rather than from memory. A profile on the workspace,
+set by the host, is read at the few places the two differ, and those
+places are driven by data where they can be, as the glyph table's
+`[[later]]` entries already are.
+
+The '68 mode must not move. Every existing sample is a '68 sample and
+reg-rs is the proof: a step that changes a '68 transcript is wrong,
+not rebased.
+
+Sources: the APL\360 User's Manual has been the reference for
+everything so far. '72 needs its own -- the APLSV manual -- and the
+first '72 step finds it and records what differs, before any '72
+behaviour is built. Where the manual is not to hand, a guess is
+labelled as one.
+
+Not in this phase: shared variables (see non-goals), and APL2 -- the
+owner mentioned a '84 tab, but where APL2 is to live is not settled,
+and nothing is planned for it here.
+
+Order:
+
+1. The iota bug carried from Phase 8, first: `⍳⍴A` is a RANK ERROR,
+   and correctness comes before features.
+2. Scope: CLAUDE.md and prd.md say what sw-apl now is. The README and
+   the user docs wait until '72 is something a reader can use.
+3. The APLSV sources, and a record of how '72 differs from '68.
+4. The profile, per-mode libraries, and the mode in a saved
+   workspace, with '68 unchanged.
+5. The glyph table gains the mode a glyph arrives in; execute.
+6. Format.
+7. The quad system variables.
+8. The quad system functions.
+9. Library 1 for '72, BIRDS first.
+10. The docs, the README, and the `Ⓑ '72` tab.
+
+Then the Phase 8 steps still pending: cup and cap, the base
+conversion sample, the Linux regression fixtures, and the offline
+shell.
 
 ## Owner direction (2026-09-20, third): a demo that fits a phone
 
