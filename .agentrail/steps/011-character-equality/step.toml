@@ -1,6 +1,6 @@
 number = 11
 slug = "character-equality"
-status = "pending"
+status = "in-progress"
 description = "Found 2026-09-21 while working step 008: the relations = and ≠ refuse chara..."
 role = "production"
 context_files = []

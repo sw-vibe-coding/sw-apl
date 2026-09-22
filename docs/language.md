@@ -109,6 +109,12 @@ nand, nor, the six comparisons, and query.
 
 Notes:
 
+- Equal and not-equal compare characters as well as numbers --
+  element by element, and in reduction and inner and outer products,
+  so `+/W='S'` counts a letter and `'CAT' and-dot-equal 'CAT'` matches
+  a word. A character is never equal to a number. The other scalar
+  functions take numbers only. A scan of characters is DOMAIN ERROR,
+  since its result would mix a character with numbers.
 - Divide by zero: `0 divide 0` is 1; anything else DOMAIN ERROR.
 - Residue is the APL definition: `A stile B` is B minus A times
   floor of B divide A, with tolerance, and `0 stile B` is B.

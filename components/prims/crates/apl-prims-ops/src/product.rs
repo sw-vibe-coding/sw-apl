@@ -1,6 +1,6 @@
 //! Inner product `l f.g r` and outer product `l ∘.g r`.
 
-use apl_prims_scalar::{DYADIC, apply_dyadic, numbers};
+use apl_prims_scalar::{DYADIC, Element, elements, related};
 use apl_value::{AplError, AplResult, Array, Data, ErrorKind, Number};
 
 use crate::reduce::fold;
@@ -9,16 +9,16 @@ use crate::reduce::fold;
 /// shape of `l` followed by the shape of `r`.
 ///
 /// # Errors
-/// DOMAIN ERROR from `g` or for character data; SYNTAX ERROR
-/// when `g` has no scalar dyadic form.
+/// DOMAIN ERROR from `g`, or for character data unless `g` is = or
+/// ≠; SYNTAX ERROR when `g` has no scalar dyadic form.
 pub fn outer(g: char, left: &Array, right: &Array) -> AplResult<Array> {
     if !DYADIC.contains(g) {
         return Err(AplError::new(ErrorKind::Syntax));
     }
-    let (lv, rv) = (numbers(left)?, numbers(right)?);
+    let (lv, rv) = (elements(left, g)?, elements(right, g)?);
     let data = lv
         .iter()
-        .flat_map(|&a| rv.iter().map(move |&b| apply_dyadic(g, a, b)))
+        .flat_map(|&a| rv.iter().map(move |&b| related(g, a, b)))
         .collect::<AplResult<Vec<_>>>()?;
     let shape = [left.shape.as_slice(), right.shape.as_slice()].concat();
     Array::new(shape, Data::Num(data))
@@ -39,8 +39,8 @@ pub fn inner(f: char, g: char, left: &Array, right: &Array) -> AplResult<Array> 
     } else {
         right.shape[0]
     };
-    let (lshape, lv) = extend(left, shared)?;
-    let (rshape, rv) = extend(right, shared)?;
+    let (lshape, lv) = extend(left, shared, g)?;
+    let (rshape, rv) = extend(right, shared, g)?;
     if lshape[lshape.len() - 1] != rshape[0] {
         return Err(AplError::new(ErrorKind::Length));
     }
@@ -58,24 +58,24 @@ pub fn inner(f: char, g: char, left: &Array, right: &Array) -> AplResult<Array> 
 fn cell(
     f: char,
     g: char,
-    (lv, rv): (&[Number], &[Number]),
+    (lv, rv): (&[Element], &[Element]),
     shared: usize,
     cols: usize,
     at: usize,
 ) -> AplResult<Number> {
     let (row, col) = (at / cols, at % cols);
     let terms = (0..shared)
-        .map(|i| apply_dyadic(g, lv[row * shared + i], rv[i * cols + col]))
+        .map(|i| related(g, lv[row * shared + i], rv[i * cols + col]))
         .collect::<AplResult<Vec<_>>>()?;
-    fold(f, terms.into_iter())
+    fold(f, terms.into_iter().map(Element::Num))
 }
 
-/// The shape and elements of an inner-product argument; a scalar
-/// becomes a vector of `n` copies (the shared axis).
-fn extend(x: &Array, n: usize) -> AplResult<(Vec<usize>, Vec<Number>)> {
-    let values = numbers(x)?;
+/// The shape and elements of an inner-product argument for `g`; a
+/// scalar becomes a vector of `n` copies (the shared axis).
+fn extend(x: &Array, n: usize, g: char) -> AplResult<(Vec<usize>, Vec<Element>)> {
+    let values = elements(x, g)?;
     if x.shape.is_empty() {
         return Ok((vec![n], vec![values[0]; n]));
     }
-    Ok((x.shape.clone(), values.to_vec()))
+    Ok((x.shape.clone(), values))
 }

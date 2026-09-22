@@ -1,7 +1,7 @@
 //! `f\r` along an axis: each element is the reduction of the prefix
 //! ending there.
 
-use apl_prims_scalar::{DYADIC, numbers};
+use apl_prims_scalar::{DYADIC, Element, numbers};
 use apl_prims_select::strides;
 use apl_value::{AplError, AplResult, Array, Data, ErrorKind, Number};
 
@@ -27,7 +27,8 @@ pub fn scan(f: char, r: &Array, k: usize) -> AplResult<Array> {
     for o in 0..rest.iter().product::<usize>() {
         let base = base_index(o, &rest, &st, k);
         for i in 0..n {
-            out[base + i * st[k]] = fold(f, (0..=i).map(|j| data[base + j * st[k]]))?;
+            let prefix = (0..=i).map(|j| Element::Num(data[base + j * st[k]]));
+            out[base + i * st[k]] = fold(f, prefix)?;
         }
     }
     Array::new(r.shape.clone(), Data::Num(out))

@@ -1,0 +1,35 @@
+      ⍝ Equal and not-equal compare characters as well as numbers. Every
+      ⍝ other scalar function takes numbers only.
+      W←'MISSISSIPPI'
+      W='S'
+0 0 1 1 0 1 1 0 0 0 0
+      ⍝ How many of a letter, and where they are.
+      +/W='S'
+4
+      (W='S')/⍳⍴W
+3 4 6 7
+      ⍝ Everything but the letter.
+      (W≠'S')/W
+MIIIPPI
+      ⍝ Two words, letter by letter, and whether they match altogether.
+      'CAT'='COT'
+1 0 1
+      'CAT'∧.='CAT'
+1
+      'CAT'∧.='COT'
+0
+      ⍝ Which of a set each letter is: an outer product.
+      'AEIOU'∘.='AUDIO'
+1 0 0 0 0
+0 0 0 0 0
+0 0 0 1 0
+0 0 0 0 1
+0 1 0 0 0
+      ⍝ A character is never equal to a number.
+      '1'=1
+0
+      ⍝ Other functions still refuse characters.
+      'A'<'B'
+DOMAIN ERROR
+      'A'<'B'
+         ^

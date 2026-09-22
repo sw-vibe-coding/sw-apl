@@ -3,7 +3,9 @@
 //! `apl-scalar-*` crates; this crate dispatches and extends.
 
 mod dispatch;
+mod element;
 mod extend;
 
 pub use dispatch::{DYADIC, MONADIC, apply_dyadic, apply_monadic};
+pub use element::{Element, elements, pairs, related};
 pub use extend::{dyadic, monadic, numbers};

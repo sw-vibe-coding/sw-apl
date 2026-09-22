@@ -39,6 +39,10 @@ APL\360 has no primitive for any of them -- on numbers and on
 characters. Unique is the nub idiom, which needs the index generator
 to take the shape of a vector.
 
+`75-character-equality.apl` compares characters: counting and
+finding a letter, matching words with an inner product, and an outer
+product against a set of letters.
+
 `74-single-element-extension.apl` shows which arguments extend: a
 scalar or a one-element array of any rank, with a scalar function;
 a one-element left argument to compression, but not a scalar right

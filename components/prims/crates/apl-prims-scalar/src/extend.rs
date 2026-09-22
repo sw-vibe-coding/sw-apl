@@ -3,6 +3,7 @@
 use apl_value::{AplError, AplResult, Array, Data, ErrorKind, Number};
 
 use crate::dispatch::{DYADIC, MONADIC, apply_dyadic, apply_monadic};
+use crate::element::{elements, pairs, related};
 
 /// Apply monadic scalar function `f` to every element of `r`.
 ///
@@ -26,22 +27,26 @@ pub fn monadic(f: char, r: &Array) -> AplResult<Array> {
 /// Apply dyadic scalar function `f` with scalar extension.
 ///
 /// # Errors
-/// RANK ERROR when ranks differ and LENGTH ERROR when shapes differ,
+/// DOMAIN ERROR for characters, except with = and ≠; RANK ERROR when
+/// ranks differ and LENGTH ERROR when shapes differ,
 /// unless either side is a scalar or a one-element array; DOMAIN ERROR from the function, and
 /// SYNTAX ERROR for a glyph with no dyadic scalar form.
 pub fn dyadic(f: char, l: &Array, r: &Array) -> AplResult<Array> {
     if !DYADIC.contains(f) {
         return Err(AplError::new(ErrorKind::Syntax));
     }
-    let (ln, rn) = (numbers(l)?, numbers(r)?);
+    // Numbers, the usual case, are paired where they lie. Characters,
+    // which only = and ≠ take, are paired as elements; asking for them
+    // before the shapes keeps DOMAIN ERROR ahead of LENGTH ERROR.
+    let chars = [l, r].iter().any(|a| matches!(a.data, Data::Char(_)));
+    let held = chars.then(|| Ok((elements(l, f)?, elements(r, f)?)));
+    let held = held.transpose()?;
     let shape = agree(l, r)?;
     let n = shape.iter().product::<usize>();
-    // After `agree`, each side is either one element, reused, or has
-    // exactly `n` elements.
-    let pick = |v: &[Number], i: usize| v[if v.len() == 1 { 0 } else { i }];
-    let out = (0..n)
-        .map(|i| apply_dyadic(f, pick(ln, i), pick(rn, i)))
-        .collect::<AplResult<Vec<_>>>()?;
+    let out = match &held {
+        None => pairs(numbers(l)?, numbers(r)?, n, |a, b| apply_dyadic(f, a, b))?,
+        Some((lc, rc)) => pairs(lc, rc, n, |a, b| related(f, a, b))?,
+    };
     Ok(Array {
         shape,
         data: Data::Num(out),

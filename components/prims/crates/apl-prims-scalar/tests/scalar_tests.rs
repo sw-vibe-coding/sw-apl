@@ -299,3 +299,51 @@ fn arrays_of_more_than_one_element_must_still_agree() {
     let m = Array::new(vec![1, 2], Data::Num(vec![Number::Int(1), Number::Int(2)])).unwrap();
     assert_eq!(dyadic('+', &m, &two).unwrap_err().kind, ErrorKind::Rank);
 }
+
+fn text(t: &str) -> Array {
+    Array::new(vec![t.chars().count()], Data::Char(t.chars().collect())).unwrap()
+}
+
+/// The APL\360 User's Manual, page 3.8: of the scalar functions,
+/// = and ≠ are defined on characters as well as on numbers.
+#[test]
+fn equal_and_not_equal_compare_characters() {
+    let r = dyadic(
+        '=',
+        &text("MISSISSIPPI"),
+        &Array::new(vec![], Data::Char(vec!['S'])).unwrap(),
+    )
+    .unwrap();
+    assert_eq!(nums(&r).iter().filter(|n| **n == Number::Int(1)).count(), 4);
+    let r = dyadic('≠', &text("AB"), &text("AC")).unwrap();
+    assert_eq!(nums(&r), [Number::Int(0), Number::Int(1)]);
+    let r = dyadic('=', &text("S"), &text("MISS")).unwrap();
+    assert_eq!(r.shape, vec![4], "a one-element vector extends");
+}
+
+/// The manual does not say what a character compared with a number
+/// gives; sw-apl says they are never equal rather than refusing.
+#[test]
+fn a_character_never_equals_a_number() {
+    let r = dyadic('=', &text("1"), &s(1.0)).unwrap();
+    assert_eq!(nums(&r), [Number::Int(0)]);
+    let r = dyadic('≠', &s(1.0), &text("1")).unwrap();
+    assert_eq!(nums(&r), [Number::Int(1)]);
+}
+
+#[test]
+fn the_other_scalar_functions_still_refuse_characters() {
+    for f in ['+', '<', '≤', '∧', '⌈'] {
+        let e = dyadic(f, &text("AB"), &text("AB")).unwrap_err();
+        assert_eq!(e.kind, ErrorKind::Domain, "{f}");
+    }
+    assert_eq!(
+        dyadic('+', &text(""), &v(&[])).unwrap_err().kind,
+        ErrorKind::Domain,
+        "even empty"
+    );
+    assert_eq!(
+        dyadic('=', &text("AB"), &text("ABC")).unwrap_err().kind,
+        ErrorKind::Length
+    );
+}

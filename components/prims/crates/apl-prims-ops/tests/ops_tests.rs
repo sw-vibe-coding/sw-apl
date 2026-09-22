@@ -199,3 +199,74 @@ fn inner_product_reduces_over_the_shared_axis() {
         ErrorKind::Syntax
     );
 }
+
+fn text(t: &str) -> Array {
+    Array::new(
+        vec![t.chars().count()],
+        apl_value::Data::Char(t.chars().collect()),
+    )
+    .unwrap()
+}
+
+fn ints(a: &Array) -> Vec<Number> {
+    match &a.data {
+        apl_value::Data::Num(v) => v.clone(),
+        apl_value::Data::Char(_) => panic!("chars"),
+    }
+}
+
+/// Page 3.33: every scalar function extends to arrays by reduction,
+/// inner product and outer product, so = and ≠ on characters do too.
+#[test]
+fn outer_product_compares_characters() {
+    let r = apl_prims_ops::outer('=', &text("ABC"), &text("AB")).unwrap();
+    assert_eq!(r.shape, vec![3, 2]);
+    assert_eq!(ints(&r), [1, 0, 0, 1, 0, 0].map(Number::Int));
+}
+
+#[test]
+fn inner_product_matches_strings() {
+    let same = apl_prims_ops::inner('∧', '=', &text("CAT"), &text("CAT")).unwrap();
+    assert_eq!(ints(&same), [Number::Int(1)]);
+    let differ = apl_prims_ops::inner('∧', '=', &text("CAT"), &text("COT")).unwrap();
+    assert_eq!(ints(&differ), [Number::Int(0)]);
+    let e = apl_prims_ops::inner('+', '×', &text("AB"), &text("AB")).unwrap_err();
+    assert_eq!(e.kind, ErrorKind::Domain, "only = and ≠ take characters");
+}
+
+#[test]
+fn reduction_by_a_relation_takes_characters() {
+    assert_eq!(
+        ints(&reduce('=', &text("AA"), 0).unwrap()),
+        [Number::Int(1)]
+    );
+    assert_eq!(
+        ints(&reduce('≠', &text("AB"), 0).unwrap()),
+        [Number::Int(1)]
+    );
+    // A B A: B=A is 0, then A=0 compares a character with a number.
+    assert_eq!(
+        ints(&reduce('=', &text("ABA"), 0).unwrap()),
+        [Number::Int(0)]
+    );
+    let one = reduce('=', &text("Q"), 0).unwrap();
+    assert_eq!(
+        one.data,
+        apl_value::Data::Char(vec!['Q']),
+        "one element reduces to itself"
+    );
+    assert_eq!(
+        reduce('+', &text("AB"), 0).unwrap_err().kind,
+        ErrorKind::Domain
+    );
+}
+
+/// A scan of characters would begin with a character and go on with
+/// numbers, which a flat array cannot hold, so it stays refused.
+#[test]
+fn a_scan_of_characters_is_still_a_domain_error() {
+    assert_eq!(
+        scan('=', &text("AAB"), 0).unwrap_err().kind,
+        ErrorKind::Domain
+    );
+}

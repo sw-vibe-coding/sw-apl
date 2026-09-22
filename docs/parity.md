@@ -101,7 +101,7 @@ and says why each is absent.
 | `!` | done | done | exact to 20, gamma beyond |
 | `~` | done | | 0 and 1 only |
 | `∧ ∨ ⍲ ⍱` | | done | 0 and 1 only |
-| `< ≤ = ≥ > ≠` | | done | with fuzz; samples 15, 47 |
+| `< ≤ = ≥ > ≠` | | done | with fuzz; `=` and `≠` compare characters too (APL\360 User's Manual p. 3.8), element by element, in reduction and in inner and outer products; a character never equals a number; the other four take numbers only; a scan of characters is DOMAIN ERROR, since its result would mix characters and numbers; samples 15, 47, 75 |
 | `?` | done | done | roll and deal via the random link (starts at 16807); deal takes a scalar or a one-element vector for each argument, so `A[(⍴A)?⍴A]` shuffles; samples 41, 47 |
 | Scalar extension, RANK and LENGTH agreement | done | done | a scalar or a one-element array of any rank extends (APL\360 User's Manual, 1968 and 1970, p. 3.33); two one-element arrays of different shapes take the higher rank's shape, which the manual does not settle. Prims tests, sample 74 |
 | Exact integers, float promotion, fuzz | done | | value tests |
