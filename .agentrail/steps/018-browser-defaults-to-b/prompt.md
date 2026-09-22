@@ -1,0 +1,3 @@
+Owner direction 2026-09-22 (docs/plan.md, Phase 9): the browser opens in (B) '75. A first visit, and any visit that has not chosen a mode, starts in (B); a reader who switched to (A) comes back to (A), as the tab remembers today. The CLI and the service keep 70 as their default, so no transcript moves.
+
+In pages/apl.js the fallback in chosen() becomes B. scripts/check-pages.mjs: section 11 expects (B) current on a first visit, and the sections that assume (A) on a first visit (library 1 listing, BIRDS, overstrikes on the board, and so on) either still hold in (B) or pin (A) with ?mode=A. Update the Help text and README's live-demo paragraph to say the page opens in (B). just check-pages all passing is the gate.
