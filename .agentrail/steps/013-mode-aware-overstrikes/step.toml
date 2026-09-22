@@ -1,8 +1,9 @@
 number = 13
 slug = "mode-aware-overstrikes"
-status = "in-progress"
+status = "completed"
 description = "Owner, 2026-09-21: the overstruck character table and logic must be mode awar..."
 role = "production"
 context_files = []
 created_at = "2026-09-21T23:26:57"
-commits = []
+completed_at = "2026-09-21T23:51:59"
+commits = ["8d269cfdb20100df6be04a4f94496b1d1ad60876"]
