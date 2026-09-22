@@ -14,6 +14,11 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-21
 
+- chore(agentrail): complete 007-extract-68-only
+- feat(a68): the '68-only parts are reached only in (A)
+- move(a68): the '68-only parts leave the shared core for components/a68
+- refactor(a68): give each '68-only part a file of its own, in place
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 006-profile-libraries
 - feat(modes): a mode on the workspace, and libraries by mode
 - docs(changes): refresh CHANGES.md to HEAD
