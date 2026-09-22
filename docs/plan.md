@@ -616,6 +616,12 @@ the current one as a tab, `Ⓐ '68`, built as a row holding one tab so
 another could be added; the second is `Ⓑ '72`, APLSV. This reverses
 the non-goal that kept APLSV out, for APLSV only.
 
+Names (owner, 2026-09-21), used interchangeably: (A) '68 is APL\360
+is the IBM 2741; (B) '72 is APLSV is the IBM 5100, 5110 and 5120. The
+tab shows the letter and the year; its tooltip gives the product name
+("APLSV compatible"); the keyboard matches the hardware. The owner has
+named other possible modes, which are not planned here.
+
 What a mode is:
 
 - A language. '68 is APL\360 exactly as sw-apl has it; '72 is APLSV.
