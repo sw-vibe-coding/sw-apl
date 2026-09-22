@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-21
 
+- chore(agentrail): complete 006-profile-libraries
+- feat(modes): a mode on the workspace, and libraries by mode
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 005-rename-72-to-75
 - docs(modes): '72 becomes '75 everywhere that is not history
 - docs(changes): refresh CHANGES.md to HEAD
