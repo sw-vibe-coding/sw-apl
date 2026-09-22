@@ -5,8 +5,8 @@
 
 use std::path::PathBuf;
 
+use apl_clock::{Clock, stopped};
 use apl_console::{Console, Output, Print, Shown, Transcript, render_all};
-use apl_ibeam::{Clock, stopped};
 use apl_modes::Mode;
 use apl_prims::Env;
 use apl_space::{Funcs, Groups, Vars, of_value, room, used};

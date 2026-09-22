@@ -1,7 +1,7 @@
 //! The clock the varying system values are read from, and how a
 //! span of time reads.
 
-use apl_ibeam::{Time, hms, stopped, system};
+use apl_clock::{Time, hms, stopped, system};
 
 #[test]
 fn a_stopped_clock_does_not_move() {

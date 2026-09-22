@@ -3,15 +3,11 @@
 use apl_eval::{Activation, Workspace, free, used};
 use apl_value::{columns, pad};
 
-use crate::group::grouping;
 use crate::names::{INCORRECT, erase, functions, globals, listing};
 
 /// Answer one inquiry command, or `None` when it is not one of
 /// these: the caller then tries the commands it knows itself.
 pub fn command(ws: &mut Workspace, name: &str, rest: &[&str]) -> Option<Vec<String>> {
-    if let Some(lines) = grouping(&mut ws.saved, name, rest) {
-        return Some(lines);
-    }
     let width = ws.saved.print.width;
     Some(match (name, rest) {
         ("FNS", _) => listing(sorted(functions(&ws.saved)), rest, width),

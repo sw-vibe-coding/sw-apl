@@ -10,7 +10,7 @@
 
 use apl_eval::Saved;
 
-use crate::names::{INCORRECT, listing};
+use apl_inquiry::{INCORRECT, listing};
 
 /// The reply when the first name of a `)GROUP` already holds a
 /// function or a variable, as the manual's trouble-report table

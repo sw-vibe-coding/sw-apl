@@ -23,7 +23,8 @@ sw-apl/
                apl-workspace               symbol table, frames, env
                apl-call                    defined-function calls
                apl-quad                    reading a line mid-statement
-               apl-ibeam                   I-beam values and the clock
+               apl-clock                   the clock, and how a span of
+                                           time reads
                apl-space                   what a value costs, and the quota
                apl-store                   somewhere to keep a saved
                                            workspace: a disc, a browser
@@ -40,6 +41,11 @@ sw-apl/
                apl-inquiry                 listing names, groups, erasing
                apl-session                 system commands, del editor,
                                            workspace files, libraries
+               apl-settings                index origin, digits, width,
+                                           checked; the directives set them
+    a68/       apl-ibeam                   the I-beams                 } only (A) '68
+               apl-a68-commands            )ORIGIN )DIGITS )WIDTH,     } reaches
+                                           )GROUP )GRP )GRPS           } these
     cli/       sw-apl                      terminal REPL and batch
     web/       apl-wire                    the terminal protocol: a
                                            frame out, a typed line in

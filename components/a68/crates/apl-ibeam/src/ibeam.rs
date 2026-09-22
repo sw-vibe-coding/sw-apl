@@ -2,7 +2,7 @@
 
 use apl_value::{AplError, AplResult, Array, Data, ErrorKind, Number};
 
-use crate::clock::Time;
+use apl_clock::Time;
 
 /// The system value `n` selects: 20 the time of day, 21 the processor
 /// time used, 22 the space available, 23 the terminals connected, 24

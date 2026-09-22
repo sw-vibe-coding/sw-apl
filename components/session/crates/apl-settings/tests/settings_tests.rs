@@ -1,8 +1,8 @@
 //! Each setting's bounds, which the directives and the '68 commands
-//! share.
+//! share. The commands' own tests are in apl-a68-commands.
 
 use apl_eval::Saved;
-use apl_settings::{setting, settings_command};
+use apl_settings::setting;
 
 #[test]
 fn each_setting_takes_its_range_and_gives_back_what_it_was() {
@@ -28,22 +28,4 @@ fn a_value_out_of_range_changes_nothing() {
         assert_eq!(setting(&mut s, name, value), None, "{name} {value}");
     }
     assert_eq!((s.env.io, s.print.digits, s.print.width), (1, 10, 120));
-}
-
-#[test]
-fn the_commands_reply_as_apl_360_did() {
-    let mut s = Saved::default();
-    assert_eq!(
-        settings_command(&mut s, "ORIGIN", &["0"]).as_deref(),
-        Some("WAS 1")
-    );
-    assert_eq!(
-        settings_command(&mut s, "WIDTH", &[]).as_deref(),
-        Some("INCORRECT COMMAND")
-    );
-    assert_eq!(
-        settings_command(&mut s, "WIDTH", &["80", "90"]).as_deref(),
-        Some("INCORRECT COMMAND")
-    );
-    assert_eq!(settings_command(&mut s, "WSID", &[]), None, "not a setting");
 }

@@ -1,6 +1,6 @@
 [package]
-name = "apl-ibeam"
-description = "sw-apl I-beam system functions and the clock they read"
+name = "apl-clock"
+description = "sw-apl clock: the time, the date and the processor time, and how a span of time reads"
 edition.workspace = true
 license.workspace = true
 version.workspace = true
@@ -8,7 +8,6 @@ authors.workspace = true
 repository.workspace = true
 
 [dependencies]
-apl-value = { path = "../../../value/crates/apl-value" }
 chrono = { version = "0.4", default-features = false, features = ["clock"] }
 
 [target.'cfg(unix)'.dependencies]

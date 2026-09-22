@@ -1,9 +1,9 @@
 //! Which command, and what it replies.
 
+use apl_a68_commands::{grouping, settings_command};
 use apl_eval::{Saved, Workspace, hms};
 use apl_inquiry::command as inquiry;
 use apl_library::valid;
-use apl_settings::settings_command;
 
 use crate::load::{copy, load};
 use crate::save::{drop_workspace, lib, moment, save};
@@ -48,7 +48,8 @@ pub fn system_command(ws: &mut Workspace, command: &str) -> Answer {
         ("COPY" | "PCOPY", _) => return copy(ws, &rest, name == "PCOPY"),
         // The inquiry commands answer for themselves, and None for
         // a name they do not know.
-        _ => inquiry(ws, &name, &rest)
+        _ => grouping(&mut ws.saved, &name, &rest)
+            .or_else(|| inquiry(ws, &name, &rest))
             .or_else(|| settings_command(&mut ws.saved, &name, &rest).map(|l| vec![l]))
             .unwrap_or_else(|| vec![workspace_command(&mut ws.saved, &name, &rest)]),
     };

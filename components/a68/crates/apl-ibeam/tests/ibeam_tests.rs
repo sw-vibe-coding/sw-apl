@@ -1,6 +1,7 @@
 //! The eight system values.
 
-use apl_ibeam::{Time, argument, ibeam};
+use apl_clock::Time;
+use apl_ibeam::{argument, ibeam};
 use apl_value::{Array, Data, ErrorKind, Number};
 
 fn at(now: i64, cpu: i64, date: i64) -> Time {

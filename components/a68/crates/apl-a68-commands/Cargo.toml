@@ -1,0 +1,20 @@
+[package]
+name = "apl-a68-commands"
+description = "sw-apl system commands only the (A) '68 mode has: the settings and group commands"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-eval = { path = "../../../eval/crates/apl-eval" }
+apl-inquiry = { path = "../../../session/crates/apl-inquiry" }
+apl-library = { path = "../../../session/crates/apl-library" }
+apl-settings = { path = "../../../session/crates/apl-settings" }
+
+[dev-dependencies]
+apl-value = { path = "../../../value/crates/apl-value" }
+
+[lints]
+workspace = true

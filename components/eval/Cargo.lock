@@ -34,6 +34,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-clock"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "libc",
+]
+
+[[package]]
 name = "apl-console"
 version = "0.1.0"
 dependencies = [
@@ -76,9 +84,8 @@ dependencies = [
 name = "apl-ibeam"
 version = "0.1.0"
 dependencies = [
+ "apl-clock",
  "apl-value",
- "chrono",
- "libc",
 ]
 
 [[package]]
@@ -286,8 +293,8 @@ name = "apl-workspace"
 version = "0.1.0"
 dependencies = [
  "apl-ast",
+ "apl-clock",
  "apl-console",
- "apl-ibeam",
  "apl-modes",
  "apl-prims",
  "apl-space",

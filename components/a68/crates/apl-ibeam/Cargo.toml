@@ -1,0 +1,15 @@
+[package]
+name = "apl-ibeam"
+description = "sw-apl I-beam system functions, which only the (A) '68 mode has"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-clock = { path = "../../../eval/crates/apl-clock" }
+apl-value = { path = "../../../value/crates/apl-value" }
+
+[lints]
+workspace = true

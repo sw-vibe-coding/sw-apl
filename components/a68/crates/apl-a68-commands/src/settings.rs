@@ -5,8 +5,7 @@
 
 use apl_eval::Saved;
 use apl_library::INCORRECT;
-
-use crate::setting::setting;
+use apl_settings::setting;
 
 /// Answer one settings command, or `None` when it is not one. A
 /// setting replies with the value it replaced, as APL\360 did; one

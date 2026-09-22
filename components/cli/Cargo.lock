@@ -62,6 +62,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-a68-commands"
+version = "0.1.0"
+dependencies = [
+ "apl-eval",
+ "apl-inquiry",
+ "apl-library",
+ "apl-settings",
+]
+
+[[package]]
 name = "apl-ast"
 version = "0.1.0"
 dependencies = [
@@ -84,13 +94,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-clock"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "libc",
+]
+
+[[package]]
 name = "apl-commands"
 version = "0.1.0"
 dependencies = [
+ "apl-a68-commands",
  "apl-copy",
  "apl-eval",
  "apl-inquiry",
  "apl-library",
+ "apl-settings",
  "apl-shelves",
  "apl-value",
  "apl-wsfile",
@@ -157,9 +177,8 @@ dependencies = [
 name = "apl-ibeam"
 version = "0.1.0"
 dependencies = [
+ "apl-clock",
  "apl-value",
- "chrono",
- "libc",
 ]
 
 [[package]]
@@ -361,6 +380,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-settings"
+version = "0.1.0"
+dependencies = [
+ "apl-eval",
+ "apl-library",
+]
+
+[[package]]
 name = "apl-shelves"
 version = "0.1.0"
 dependencies = [
@@ -407,8 +434,8 @@ name = "apl-workspace"
 version = "0.1.0"
 dependencies = [
  "apl-ast",
+ "apl-clock",
  "apl-console",
- "apl-ibeam",
  "apl-modes",
  "apl-prims",
  "apl-space",

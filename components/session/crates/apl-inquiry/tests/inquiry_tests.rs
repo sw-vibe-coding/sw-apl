@@ -1,6 +1,7 @@
 //! The inquiry commands against a workspace built by hand, so that
-//! the listing, the group rules and what `)ERASE` refuses are pinned
-//! without going through a session.
+//! the listing and what `)ERASE` refuses are pinned without going
+//! through a session. The group commands' tests are in
+//! apl-a68-commands.
 
 use apl_eval::{Defn, Workspace};
 use apl_inquiry::command;
@@ -51,7 +52,6 @@ fn an_empty_workspace_lists_nothing() {
     let mut ws = Workspace::default();
     assert_eq!(run(&mut ws, ")FNS"), Vec::<String>::new());
     assert_eq!(run(&mut ws, ")VARS"), Vec::<String>::new());
-    assert_eq!(run(&mut ws, ")GRPS"), Vec::<String>::new());
 }
 
 #[test]
@@ -81,40 +81,6 @@ fn vars_lists_globals_not_the_locals_shadowing_them() {
 }
 
 #[test]
-fn a_group_is_a_name_standing_for_names() {
-    let mut ws = with_names(&["A"], &["F"]);
-    assert_eq!(run(&mut ws, ")GROUP G A F MISSING"), Vec::<String>::new());
-    assert_eq!(run(&mut ws, ")GRPS"), vec!["G"]);
-    assert_eq!(run(&mut ws, ")GRP G"), vec!["A F MISSING"]);
-    // A member need not exist: a group holds names, not referents.
-    assert!(ws.get("MISSING").is_none());
-}
-
-#[test]
-fn a_group_name_already_in_use_is_refused() {
-    let mut ws = with_names(&["A"], &["F"]);
-    assert_eq!(run(&mut ws, ")GROUP A B"), vec!["NOT GROUPED, NAME IN USE"]);
-    assert_eq!(run(&mut ws, ")GROUP F B"), vec!["NOT GROUPED, NAME IN USE"]);
-    assert_eq!(run(&mut ws, ")GRPS"), Vec::<String>::new());
-}
-
-#[test]
-fn naming_a_group_again_supersedes_it_and_naming_it_alone_disperses() {
-    let mut ws = with_names(&["A", "B"], &[]);
-    run(&mut ws, ")GROUP G A");
-    run(&mut ws, ")GROUP G B");
-    assert_eq!(run(&mut ws, ")GRP G"), vec!["B"], "superseded, not added");
-    // The group name used twice adds to it instead.
-    run(&mut ws, ")GROUP G G A");
-    assert_eq!(run(&mut ws, ")GRP G"), vec!["B A"]);
-    // One name alone disperses the group and leaves its members.
-    assert_eq!(run(&mut ws, ")GROUP G"), Vec::<String>::new());
-    assert_eq!(run(&mut ws, ")GRPS"), Vec::<String>::new());
-    assert!(ws.get("A").is_some(), "the members are untouched");
-    assert!(ws.get("B").is_some());
-}
-
-#[test]
 fn erasing_takes_variables_functions_and_groups() {
     let mut ws = with_names(&["A", "B"], &["F"]);
     assert_eq!(run(&mut ws, ")ERASE A F"), Vec::<String>::new());
@@ -123,17 +89,6 @@ fn erasing_takes_variables_functions_and_groups() {
     assert!(ws.get("B").is_some(), "only what was named");
     // A name that holds nothing is ignored.
     assert_eq!(run(&mut ws, ")ERASE NOSUCH"), Vec::<String>::new());
-}
-
-#[test]
-fn erasing_a_group_takes_its_members_too() {
-    let mut ws = with_names(&["A", "B"], &["F"]);
-    run(&mut ws, ")GROUP G A F");
-    assert_eq!(run(&mut ws, ")ERASE G"), Vec::<String>::new());
-    assert!(ws.get("A").is_none(), "the member went with the group");
-    assert!(!ws.is_function("F"));
-    assert_eq!(run(&mut ws, ")GRPS"), Vec::<String>::new(), "and the group");
-    assert!(ws.get("B").is_some());
 }
 
 #[test]
@@ -162,7 +117,7 @@ fn symbols_reports_what_is_held_and_cannot_be_set() {
 #[test]
 fn a_command_given_what_it_does_not_take_is_incorrect() {
     let mut ws = with_names(&["A"], &[]);
-    for bad in [")GRP", ")GRP A B", ")GROUP", ")ERASE", ")VARS A B"] {
+    for bad in [")ERASE", ")VARS A B"] {
         assert_eq!(run(&mut ws, bad), vec!["INCORRECT COMMAND"], "{bad}");
     }
 }
@@ -189,15 +144,4 @@ fn a_nested_call_does_not_invent_a_global() {
     ws.leave();
     ws.leave();
     assert_eq!(run(&mut ws, ")VARS"), Vec::<String>::new());
-}
-
-#[test]
-fn a_group_lists_its_members_in_the_order_they_were_gathered() {
-    let mut ws = with_names(&[], &[]);
-    run(&mut ws, ")GROUP G ZED ALPHA MID");
-    assert_eq!(
-        run(&mut ws, ")GRP G"),
-        vec!["ZED ALPHA MID"],
-        "as written; only )GRPS and the name listings sort"
-    );
 }

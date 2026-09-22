@@ -5,10 +5,8 @@
 //! that crate is at its module budget, and listing names has little
 //! to do with reading and writing workspace files.
 
-mod group;
 mod inquiry;
 mod names;
 
-pub use group::{group, grouping, groups, members};
 pub use inquiry::command;
 pub use names::{INCORRECT, erase, functions, globals, listing};
