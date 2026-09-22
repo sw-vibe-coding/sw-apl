@@ -1,6 +1,6 @@
 //! The settings commands, which only '68 has.
 
-use apl_a68_commands::settings_command;
+use apl_a70_commands::settings_command;
 use apl_eval::Saved;
 
 #[test]

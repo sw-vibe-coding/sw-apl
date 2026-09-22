@@ -1,7 +1,7 @@
 //! The group commands, which only '68 has, against a workspace built
 //! by hand: the group rules, and `)ERASE` of a group.
 
-use apl_a68_commands::grouping;
+use apl_a70_commands::grouping;
 use apl_eval::{Defn, Workspace};
 use apl_inquiry::command;
 use apl_value::{Array, Number};

@@ -4,7 +4,7 @@
 [workspace]
 members = [
     "crates/apl-ibeam",
-    "crates/apl-a68-commands",
+    "crates/apl-a70-commands",
 ]
 resolver = "2"
 

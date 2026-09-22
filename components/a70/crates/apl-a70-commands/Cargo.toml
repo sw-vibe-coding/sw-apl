@@ -1,5 +1,5 @@
 [package]
-name = "apl-a68-commands"
+name = "apl-a70-commands"
 description = "sw-apl system commands only the (A) '68 mode has: the settings and group commands"
 edition.workspace = true
 license.workspace = true

@@ -12,7 +12,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "apl-a68-commands"
+name = "apl-a70-commands"
 version = "0.1.0"
 dependencies = [
  "apl-eval",

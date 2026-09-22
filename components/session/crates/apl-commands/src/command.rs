@@ -1,6 +1,6 @@
 //! Which command, and what it replies.
 
-use apl_a68_commands::command as sixty_eight;
+use apl_a70_commands::command as seventy;
 use apl_eval::{Saved, Workspace, hms};
 use apl_inquiry::command as inquiry;
 use apl_library::valid;
@@ -48,7 +48,7 @@ pub fn system_command(ws: &mut Workspace, command: &str) -> Answer {
         ("COPY" | "PCOPY", _) => return copy(ws, &rest, name == "PCOPY"),
         // The '68-only commands, in (A) only, and the inquiry commands
         // answer for themselves, and None for a name they do not know.
-        _ => sixty_eight(&mut ws.saved, ws.mode, &name, &rest)
+        _ => seventy(&mut ws.saved, ws.mode, &name, &rest)
             .or_else(|| inquiry(ws, &name, &rest))
             .unwrap_or_else(|| vec![workspace_command(&mut ws.saved, &name, &rest)]),
     };

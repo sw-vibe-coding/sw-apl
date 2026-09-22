@@ -1,7 +1,7 @@
 //! The inquiry commands against a workspace built by hand, so that
 //! the listing and what `)ERASE` refuses are pinned without going
 //! through a session. The group commands' tests are in
-//! apl-a68-commands.
+//! apl-a70-commands.
 
 use apl_eval::{Defn, Workspace};
 use apl_inquiry::command;
