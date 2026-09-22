@@ -79,10 +79,11 @@ fn definition(ws: &Workspace, rows: &[String]) -> Result<Defn, i64> {
 
 /// True when the editor could define `name`: it holds nothing, or a
 /// function that is not locked. Not a function that is running or
-/// waiting, and not a name a running function has made local --
-/// local function names are not implemented.
+/// waiting. A name a running function has made local may be fixed,
+/// and the function is then local to that call and goes when it
+/// returns.
 fn open(ws: &Workspace, name: &str) -> bool {
-    let busy = |a: &apl_workspace::Activation| a.name == name || a.locals.iter().any(|n| n == name);
+    let busy = |a: &apl_workspace::Activation| a.name == name;
     let unlocked = ws.function(name).is_none_or(|f| !f.locked);
     let free = ws.get(name).is_none() && !ws.saved.groups.contains_key(name);
     unlocked && free && !ws.si().iter().any(busy)

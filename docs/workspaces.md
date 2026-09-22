@@ -196,7 +196,10 @@ mode too only where the other mode was listing the same workspace:
 A **suspended function**. The state indicator is a stack of half-run
 calls, and re-executing a file cannot put execution back in the
 middle of one. `)SAVE` leaves it out and `)LOAD` gives you a
-workspace with an empty state indicator.
+workspace with an empty state indicator. What it writes is the
+globals, as they will be when every call has returned: a local
+that hides a global variable or function is not saved in its
+place.
 
 APL\360 did not have this problem, because its workspaces were binary
 images and `)SAVE` really did preserve a suspension. It is the price

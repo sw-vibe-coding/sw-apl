@@ -13,6 +13,6 @@ pub use apl_console::{
     Console, INDENT, Output, Print, Shown, Transcript, error_lines, render, render_all,
 };
 pub use apl_prims::Env;
+pub use apl_saved::{Activation, Referent, Saved};
 pub use apl_space::{DEFAULT as QUOTA, Groups, free, of_function, of_name, of_value, room, used};
-pub use frame::Activation;
-pub use workspace::{Run, Saved, Workspace};
+pub use workspace::{Run, Workspace};

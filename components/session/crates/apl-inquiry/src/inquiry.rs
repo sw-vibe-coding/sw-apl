@@ -3,14 +3,15 @@
 use apl_eval::{Activation, Workspace, free, used};
 use apl_value::{columns, pad};
 
-use crate::names::{INCORRECT, erase, functions, globals, listing};
+use crate::erase::erase;
+use crate::names::{INCORRECT, functions, globals, listing};
 
 /// Answer one inquiry command, or `None` when it is not one of
 /// these: the caller then tries the commands it knows itself.
 pub fn command(ws: &mut Workspace, name: &str, rest: &[&str]) -> Option<Vec<String>> {
     let width = ws.saved.print.width;
     Some(match (name, rest) {
-        ("FNS", _) => listing(sorted(functions(&ws.saved)), rest, width),
+        ("FNS", _) => listing(sorted(functions(ws)), rest, width),
         ("VARS", _) => listing(sorted(globals(ws)), rest, width),
         ("ERASE", _) => erase(ws, rest),
         ("SYMBOLS", []) => symbols(ws),

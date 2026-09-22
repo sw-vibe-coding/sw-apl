@@ -50,6 +50,10 @@ precision, the index origin and the random link by assignment, a
 value a setting refuses, the line counter inside two functions, the
 atomic vector, and the values kept only for compatibility.
 
+`79-local-names.apl` shows a local name hiding a global function
+for the length of a call, and the listings under a suspension
+naming the global.
+
 `78-system-functions.apl` runs in (B) '75 and shows the system
 functions: a function taken as a character matrix and fixed back
 into a function after the matrix is changed, a matrix the editor

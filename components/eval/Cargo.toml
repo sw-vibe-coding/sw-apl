@@ -1,6 +1,7 @@
 [workspace]
 members = [
     "crates/apl-console",
+    "crates/apl-saved",
     "crates/apl-workspace",
     "crates/apl-call",
     "crates/apl-quad",

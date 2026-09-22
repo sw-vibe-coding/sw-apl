@@ -151,12 +151,6 @@ fn fix_does_not_replace_a_function_that_is_running() {
         out(&mut b, line);
     }
     assert_eq!(out(&mut b, "SELF"), vec!["0"]);
-    // Nor a name that is local, until local function names are built.
-    for line in ["∇R←OUTER;H", "R←⎕FX 1 1⍴'H'", "∇"] {
-        out(&mut b, line);
-    }
-    assert_eq!(out(&mut b, "OUTER"), vec!["0"]);
-    assert_eq!(out(&mut b, "⎕NC 'H'"), vec!["0"]);
 }
 
 #[test]

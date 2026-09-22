@@ -162,10 +162,13 @@ function, where a system variable is a name.
   a header that does not parse, a line the editor reads as a
   bracketed command or as a closing del, a line the mode cannot lex
   (a stray character, an unpaired quote), and a name that holds a
-  variable or a group, that is locked, that is running or waiting on
-  the state indicator, or that a running function has made local. A
-  blank line is an empty line, which sw-apl's editor makes.
-- **`⎕EX`** erases the active referent of each name and says whether
+  variable or a group, that is locked, or that is running or waiting
+  on the state indicator. A blank line is an empty line, which
+  sw-apl's editor makes. A function fixed under a name a running
+  function has made local is local to that call, as in APLSV: it
+  hides a global of the same name and goes when the call returns.
+- **`⎕EX`** erases the active referent of each name -- a local's,
+  not the global it hides -- and says whether
   the name is then free: 1 for a name that now holds nothing, 0 for a
   label, a group, a function that is running or waiting, and anything
   that is not a name.
@@ -193,10 +196,6 @@ Decisions where the sources are silent or disagree, each labelled:
   is 4, the system's.
 - The order of `⎕NL`'s rows is alphabetical. The manual says the
   order has no significance.
-- Not implemented: a function fixed under a name a running function
-  has made local is refused (APLSV makes it local, and the 5110
-  manual's CHANGE example turns on it); local function names are a
-  step of their own.
 
 ## What (B) drops from APL\360
 

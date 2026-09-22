@@ -43,6 +43,9 @@ pub const PREAMBLE: [&str; 3] = [
 /// modes without being revealed.
 #[must_use]
 pub fn write(saved: &Saved, when: &str) -> String {
+    // A file holds the globals: under a suspension a local sits where
+    // the global it hid belongs.
+    let saved = &saved.unwound();
     let modes = format!("{DIRECTIVE}MODES {}", render(runs_in(saved)));
     let mut lines = vec![
         "⍝ sw-apl workspace. Re-executable APL: loading it runs it.".to_string(),
@@ -53,12 +56,8 @@ pub fn write(saved: &Saved, when: &str) -> String {
         format!("{DIRECTIVE}DIGITS {}", saved.print.digits),
         format!("{DIRECTIVE}WIDTH {}", saved.print.width),
     ];
-    if let Some(id) = &saved.id {
-        lines.push(format!(")WSID {id}"));
-    }
-    if let Some(lx) = &saved.latent {
-        lines.push(format!("⎕LX←{}", literal(lx)));
-    }
+    lines.extend(saved.id.iter().map(|id| format!(")WSID {id}")));
+    lines.extend(saved.latent.iter().map(|lx| format!("⎕LX←{}", literal(lx))));
     lines.extend(objects(saved));
     if !saved.funcs.values().any(|f| f.locked) {
         return lines.join("\n") + "\n";

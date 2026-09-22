@@ -20,6 +20,8 @@ sw-apl/
                apl-prims-mixed             structural primitives
                apl-prims-ops               reduce/scan/inner/outer
     eval/      apl-console                 output, rendering, the terminal
+               apl-saved                   what a file holds: names,
+                                           frames, settings
                apl-workspace               symbol table, frames, env
                apl-call                    defined-function calls
                apl-quad                    reading a line mid-statement
@@ -104,7 +106,13 @@ lex (strike) -> term (keyboard, paper, typing, aplterm) -> wire
   stream before it recurses: matching brackets, top-level
   semicolon segments, what ends an operand, and the del header.
 - `apl-workspace` owns the symbol table (variables and defined
-  functions) and the call frames that make scoping dynamic.
+  functions) and the call frames that make scoping dynamic. A local
+  name hides whatever the name holds, a function as well as a
+  variable, and gives it back on return.
+- `apl-saved` is the half of a workspace a file holds, as plain
+  data: the symbol table, the activation stack with what each call's
+  locals hid, and the settings. `unwound` gives it with every call
+  returned, which is what `)SAVE` writes.
 - `apl-call` applies a defined function: valence, frame, body,
   result. It takes "evaluate one line" as a function pointer, so
   it sits below the evaluator rather than inside it.

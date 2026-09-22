@@ -86,3 +86,17 @@ M
       ⍝ The delay is a fixed value, as on the 5110.
       ⎕DL
 0
+      ⍝ A function fixed under a local name is local: it hides a global of
+      ⍝ the same name, and goes when the function that made it local
+      ⍝ returns.
+      ∇R←TWICE X;H
+[1]   R←⎕FX 3 5⍴'R←H YR←Y+Y     '
+[2]   R←H X
+[3]   ∇
+      ∇R←H Y
+[1]   R←0
+[2]   ∇
+      TWICE 4
+8
+      H 4
+0

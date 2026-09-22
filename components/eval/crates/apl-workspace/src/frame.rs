@@ -4,7 +4,8 @@
 //! and the state indicator, since a function that fails stays on the
 //! stack rather than unwinding.
 
-use apl_value::{AplError, AplResult, Array, ErrorKind};
+use apl_saved::Activation;
+use apl_value::{AplError, AplResult, ErrorKind};
 
 use crate::workspace::Workspace;
 
@@ -21,30 +22,9 @@ use crate::workspace::Workspace;
 /// re-measured, never to make a program fit.
 const MAX_DEPTH: usize = 128;
 
-/// One call: what it displaced, where it is, and whether it stopped.
-/// Clonable because a workspace is: `)LOAD` and `)COPY` put a copy
-/// aside so a load that fails part way can be undone.
-#[derive(Debug, Clone)]
-pub struct Activation {
-    /// The function's name.
-    pub name: String,
-    /// The line it is on, or the line it stopped on.
-    pub line: usize,
-    /// The names it made local, for `)SIV`.
-    pub locals: Vec<String>,
-    /// True for the function an error came from; a caller waiting on
-    /// one that stopped is pendent, not suspended.
-    pub suspended: bool,
-    /// The values the locals displaced, to put back on return. It is
-    /// public because `)VARS` lists *global* variables: under a
-    /// suspension a local shadows a global of the same name, and the
-    /// displaced entry is the only record that the global is there.
-    /// Nothing outside the workspace writes it.
-    pub displaced: Vec<(String, Option<Array>)>,
-}
-
 impl Workspace {
-    /// Start a call: shadow `names` (each becomes undefined) and
+    /// Start a call: shadow `names` (each becomes undefined, whatever
+    /// it held -- a function as well as a variable) and
     /// return where the activation sits on the stack.
     ///
     /// # Errors
@@ -55,7 +35,7 @@ impl Workspace {
         }
         let displaced = names
             .iter()
-            .map(|n| (n.clone(), self.saved.vars.remove(n)))
+            .map(|n| (n.clone(), self.saved.swap(n, None)))
             .collect();
         self.saved.stack.push(Activation {
             name: name.to_string(),
@@ -76,16 +56,15 @@ impl Workspace {
         }
     }
 
-    /// End the innermost activation, putting the displaced values back.
+    /// End the innermost activation, putting back what its locals
+    /// displaced. Whatever a local holds goes, a function fixed under
+    /// its name included.
     pub fn leave(&mut self) {
         let Some(activation) = self.saved.stack.pop() else {
             return;
         };
         for (name, was) in activation.displaced {
-            match was {
-                Some(value) => self.saved.vars.insert(name, value),
-                None => self.saved.vars.remove(&name),
-            };
+            self.saved.swap(&name, was);
         }
     }
 

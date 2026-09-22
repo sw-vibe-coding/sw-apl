@@ -5,8 +5,10 @@
 //! that crate is at its module budget, and listing names has little
 //! to do with reading and writing workspace files.
 
+mod erase;
 mod inquiry;
 mod names;
 
+pub use erase::erase;
 pub use inquiry::command;
-pub use names::{INCORRECT, erase, functions, globals, listing};
+pub use names::{INCORRECT, functions, globals, listing};

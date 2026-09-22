@@ -47,3 +47,15 @@ BETA←2
 4 ⎕CC 17
 ⍝ The delay is a fixed value, as on the 5110.
 ⎕DL
+⍝ A function fixed under a local name is local: it hides a global of
+⍝ the same name, and goes when the function that made it local
+⍝ returns.
+∇R←TWICE X;H
+R←⎕FX 3 5⍴'R←H YR←Y+Y     '
+R←H X
+∇
+∇R←H Y
+R←0
+∇
+TWICE 4
+H 4

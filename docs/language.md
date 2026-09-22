@@ -260,7 +260,11 @@ Notes:
   empty and execution falls through. A bare right arrow in
   immediate execution clears the top of the state indicator.
 - Dynamic scoping: locals shadow globals for the duration of the
-  call, including in called functions.
+  call, including in called functions. A local hides whatever the
+  name holds, a global function as well as a global variable, and
+  the global is back when the call returns. Under a suspension
+  `)FNS` and `)VARS` list the globals, and `)SAVE` saves them, not
+  the locals that hide them.
 - Recursion is allowed; calls may nest 128 deep before DEPTH
   ERROR, which also bounds the state indicator.
 - A line that fails suspends the function rather than unwinding
@@ -332,10 +336,10 @@ system variable (NONCE ERROR).
 | `⎕CC V` | The 5110's console control: checks the request and answers 1 or 0 as the 5110 would. sw-apl has no screen, alarm or printer for it to act on |
 
 `⎕FX` refuses what the del editor would refuse, and a name that holds
-a variable, is locked, is running or waiting on the state indicator,
-or that a running function has made local. Not implemented: local
-function names, so a function cannot be fixed under a name a running
-function has made local.
+a variable, is locked, or is running or waiting on the state
+indicator. Under a name a running function has made local, it fixes
+a local function: it hides a global of the same name, `⎕EX` of the
+name erases the local one, and it goes when that function returns.
 
 ### Errors
 

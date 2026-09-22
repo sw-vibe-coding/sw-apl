@@ -260,3 +260,35 @@ fn a_quota_below_what_is_held_reports_nothing_free() {
     ws.quota = 1;
     assert_eq!(free(&ws), 0, "no free space, rather than a negative one");
 }
+
+fn function(name: &str) -> Defn {
+    Defn {
+        name: name.to_string(),
+        ..Defn::default()
+    }
+}
+
+#[test]
+fn a_local_name_displaces_a_function_and_puts_it_back() {
+    let mut ws = Workspace::default();
+    ws.define(function("G")).unwrap();
+    ws.enter("F", &names(&["G"])).unwrap();
+    assert!(!ws.is_function("G"), "the local hides the global function");
+    ws.set("G", n(5)).unwrap();
+    assert_eq!(ws.get("G"), Some(&n(5)));
+    ws.leave();
+    assert!(ws.is_function("G"), "the function came back");
+    assert_eq!(ws.get("G"), None, "and the local's value went");
+}
+
+#[test]
+fn a_function_defined_under_a_local_name_goes_with_the_call() {
+    let mut ws = Workspace::default();
+    ws.set("H", n(1)).unwrap();
+    ws.enter("F", &names(&["H"])).unwrap();
+    ws.define(function("H")).unwrap();
+    assert!(ws.is_function("H"));
+    ws.leave();
+    assert!(!ws.is_function("H"), "the local function is gone");
+    assert_eq!(ws.get("H"), Some(&n(1)), "and the global variable is back");
+}

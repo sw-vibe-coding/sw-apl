@@ -257,6 +257,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-saved"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-console",
+ "apl-prims",
+ "apl-space",
+ "apl-value",
+]
+
+[[package]]
 name = "apl-scalar-arith"
 version = "0.1.0"
 dependencies = [
@@ -361,6 +372,7 @@ dependencies = [
  "apl-console",
  "apl-modes",
  "apl-prims",
+ "apl-saved",
  "apl-space",
  "apl-store",
  "apl-value",

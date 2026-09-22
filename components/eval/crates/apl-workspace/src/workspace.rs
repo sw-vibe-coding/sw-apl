@@ -7,59 +7,18 @@ use std::collections::BTreeMap;
 use std::path::PathBuf;
 
 use apl_clock::{Clock, stopped};
-use apl_console::{Console, Output, Print, Shown, Transcript, render_all};
+use apl_console::{Console, Output, Shown, Transcript, render_all};
 use apl_modes::Mode;
-use apl_prims::Env;
-use apl_space::{Funcs, Groups, Vars, of_value, room, used};
+use apl_space::{of_value, room, used};
 use apl_store::{Files, Store};
 use apl_value::{AplResult, Array};
 
-use crate::frame::Activation;
+use apl_saved::Saved;
 
 /// How to evaluate one line. The evaluator passes its own
 /// `eval_line`; the crates below it take this and stay ignorant of
 /// what evaluation means.
 pub type Run = fn(&mut Workspace, &str) -> AplResult<Output>;
-
-/// Everything `)SAVE` writes and `)LOAD` reads back: the symbol
-/// table, the state indicator, and the settings kept beside them.
-///
-/// What the terminal adds is deliberately not here -- the console,
-/// the clock, the moment the session signed on, and whatever the
-/// current line has displayed. None of it can be written to a file
-/// and read back, and a loaded workspace must not carry someone
-/// else's terminal along with it.
-/// Clonable so that a command which fills a workspace by running APL
-/// -- `)LOAD`, `)COPY` -- can put the old one aside and give it back
-/// if the new one does not fit.
-#[derive(Debug, Default, Clone)]
-pub struct Saved {
-    /// Names that hold a value. A name holds a variable or a
-    /// function, never both, which `define` and `set` keep true.
-    pub vars: Vars,
-    /// Names that hold a defined function.
-    pub funcs: Funcs,
-    /// Names that stand for a list of other names. A group is a
-    /// handle for copying or erasing several things at once; its
-    /// members need not exist, so this holds names, not referents.
-    pub groups: Groups,
-    /// The activation stack: running and stopped calls, outermost
-    /// first. It is the state indicator.
-    pub stack: Vec<Activation>,
-    /// Index origin and random link. The link is saved so a loaded
-    /// workspace carries on its sequence and a transcript that rolls
-    /// still reproduces.
-    pub env: Env,
-    /// Print precision and width.
-    pub print: Print,
-    /// The workspace identifier `)WSID` reports. `None` until it is
-    /// named, which the session shows as CLEAR WS.
-    pub id: Option<String>,
-    /// The latent expression, `⎕LX`: a line run when the workspace is
-    /// loaded. Only (B) can set it, so a workspace that has one runs
-    /// only there. `None` when it is empty.
-    pub latent: Option<Array>,
-}
 
 /// A workspace running on a terminal.
 #[derive(Debug)]
