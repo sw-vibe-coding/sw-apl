@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-22
 
+- chore(agentrail): complete 015-system-functions
+- feat(b75): the system functions, and a function as characters
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 014-system-variables
 - feat(b75): the system variables, sharing the settings '70 has
 
