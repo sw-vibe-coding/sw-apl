@@ -73,12 +73,22 @@ version = "0.1.0"
 dependencies = [
  "apl-ast",
  "apl-call",
+ "apl-execute",
  "apl-ibeam",
  "apl-modes",
  "apl-parse",
  "apl-prims",
  "apl-quad",
  "apl-store",
+ "apl-value",
+ "apl-workspace",
+]
+
+[[package]]
+name = "apl-execute"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
  "apl-value",
  "apl-workspace",
 ]
