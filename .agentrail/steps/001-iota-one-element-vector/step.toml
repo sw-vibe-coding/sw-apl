@@ -1,10 +1,11 @@
 number = 1
 slug = "iota-one-element-vector"
-status = "in-progress"
+status = "completed"
 description = """
 Bug found 2026-09-19 while answering an owner question about set
 operations: ..."""
 role = "production"
 context_files = []
 created_at = "2026-09-21T17:12:53"
-commits = []
+completed_at = "2026-09-21T17:30:06"
+commits = ["2e94c51f8c3b72dc01b6646ce3cc9a817eb8a22c"]
