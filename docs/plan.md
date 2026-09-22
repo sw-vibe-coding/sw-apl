@@ -777,10 +777,25 @@ Order:
 7. The glyph table gains the mode a glyph arrives in; execute.
 8. The quad system variables.
 9. The quad system functions.
-10. Library 1 for '75, BIRDS first.
-11. The keyboard per mode.
-12. The docs, the README, and the `Ⓑ '75` tab. **Milestone 2.**
+10. The docs, the README, and the `Ⓑ '75` tab (moved up,
+    2026-09-22).
+11. Library 1 for '75, BIRDS first. **Milestone 2.**
+12. The keyboard per mode.
 13. Format.
+
+Owner direction 2026-09-22: the `Ⓑ '75` tab moves up, ahead of
+library 1 and the keyboard, and lands straight after the system
+functions. The reader gets the second mode in the demo as soon as
+there is a language to use in it, rather than waiting on the
+presentation around it. The tab therefore opens on an empty library
+1 and the '70 keyboard picture, and library 1 (now step 19) and the
+keyboard per mode (step 20) follow it. Format still comes after the
+tab, so the tab ships without it.
+
+**Milestone 2 moves with the work it names, not with the tab.** The
+tab step's own words -- "APLSV's own tests and demos, except format,
+work in (B)" -- are true only once BIRDS flies in (B)'s library 1, so
+the milestone is claimed at library 1, not at the tab.
 
 Then the Phase 8 steps still pending: cup and cap, the base
 conversion sample, the Linux regression fixtures, and the offline
