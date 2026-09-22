@@ -129,7 +129,7 @@ the session numeric tests, and sample 67.
 
 | Glyph | Monadic | Dyadic | Notes |
 |---|---|---|---|
-| `⍳` | done | done | index of, one past the end when absent; sample 30 |
+| `⍳` | done | done | index of, one past the end when absent; the index generator takes a scalar or a one-element vector, so `⍳⍴V` works; samples 30, 73 |
 | `⍴` | done | done | |
 | `,` | done | done | any rank, axis bracket, laminate, scalar and rank-1 conformance; sample 49. Monadic ravel with an axis is APL2, not implemented |
 | `⌽ ⊖` | done | done | axis bracket; vector shifts; samples 08, 34 |

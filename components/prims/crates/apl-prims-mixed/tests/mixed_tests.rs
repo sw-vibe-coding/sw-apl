@@ -25,9 +25,29 @@ fn iota_counts_from_the_index_origin() {
 }
 
 #[test]
-fn iota_rejects_vectors_negatives_and_fractions() {
-    assert_eq!(iota(&v(&[3]), 1).unwrap_err().kind, ErrorKind::Rank);
+fn iota_takes_a_one_element_vector_as_a_scalar() {
+    // This test once asserted the opposite. APL\360 takes a scalar or a
+    // one-element vector here, and the shape of a vector is a
+    // one-element vector: iota rho V is the idiom it serves.
+    assert_eq!(iota(&v(&[3]), 1).unwrap(), v(&[1, 2, 3]));
+    assert_eq!(iota(&v(&[3]), 0).unwrap(), v(&[0, 1, 2]));
+    assert_eq!(iota(&v(&[0]), 1).unwrap(), v(&[]));
+}
+
+#[test]
+fn iota_refuses_more_than_one_element_or_more_than_one_axis() {
+    // Rank, not count: a 1 by 1 matrix has one element and is still
+    // refused for its rank. An empty vector has no element to count to.
+    let one_by_one = reshape(&v(&[1, 1]), &s(3)).unwrap();
+    assert_eq!(iota(&one_by_one, 1).unwrap_err().kind, ErrorKind::Rank);
+    assert_eq!(iota(&v(&[3, 4]), 1).unwrap_err().kind, ErrorKind::Rank);
+    assert_eq!(iota(&v(&[]), 1).unwrap_err().kind, ErrorKind::Rank);
+}
+
+#[test]
+fn iota_rejects_negatives_and_fractions() {
     assert_eq!(iota(&s(-1), 1).unwrap_err().kind, ErrorKind::Domain);
+    assert_eq!(iota(&v(&[-1]), 1).unwrap_err().kind, ErrorKind::Domain);
     assert_eq!(
         iota(&Array::scalar(Number::Float(2.5)), 1)
             .unwrap_err()

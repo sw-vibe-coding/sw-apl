@@ -930,3 +930,23 @@ fn an_underscored_name_is_one_column_wide_under_the_caret() {
         vec!["LENGTH ERROR", "      A\u{332}+4 5 6", "       ^"]
     );
 }
+
+/// The index generator's most common argument is the shape of a vector,
+/// which is a one-element vector. APL\360 takes it; sw-apl once did not.
+#[test]
+fn iota_of_the_shape_of_a_vector() {
+    let mut s = Session::default();
+    let _ = s.respond("A\u{2190}3 1 4 1 5");
+    assert_eq!(s.respond("\u{2373}\u{2374}A").lines, ["1 2 3 4 5"]);
+    assert_eq!(s.respond("\u{2373},5").lines, ["1 2 3 4 5"]);
+}
+
+/// The nub: how APL\360 does unique, and so union and intersection,
+/// having no primitive for either. It turns on iota rho A.
+#[test]
+fn the_nub_idiom() {
+    let mut s = Session::default();
+    let _ = s.respond("A\u{2190}3 1 4 1 5 9 2 6 5 3");
+    let nub = s.respond("((A\u{2373}A)=\u{2373}\u{2374}A)/A").lines;
+    assert_eq!(nub, ["3 1 4 5 9 2 6"]);
+}

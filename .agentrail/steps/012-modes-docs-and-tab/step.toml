@@ -1,9 +1,10 @@
-number = 7
-slug = "format"
+number = 12
+slug = "modes-docs-and-tab"
 status = "pending"
 description = """
-Phase 9 step 7 (docs/plan.md). '72 gains format, in a new '72-only
-crate: mon..."""
+Phase 9 step 11 (docs/plan.md). '72 is usable, so the reader is told.
+
+- The ..."""
 role = "production"
 context_files = []
 created_at = "2026-09-21T17:13:13"

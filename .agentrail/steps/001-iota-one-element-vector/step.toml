@@ -1,6 +1,6 @@
 number = 1
 slug = "iota-one-element-vector"
-status = "pending"
+status = "in-progress"
 description = """
 Bug found 2026-09-19 while answering an owner question about set
 operations: ..."""

@@ -28,6 +28,17 @@ quad and divide, the lamp from a character that is not an APL\360
 glyph at all. The file carries the backspace a 2741 sent; at a
 terminal the key is Ctrl-].
 
+`72-birds.apl` loads the BIRDS workspace from library 1 and flies
+every combinator APL\360 can write, shows the limit of the table of
+primitives the birds reach, and prints what cannot be written and
+why. See docs/birds.md.
+
+`73-set-operations.apl` builds intersection, difference, union and
+unique from membership, compression and the index generator, since
+APL\360 has no primitive for any of them -- on numbers and on
+characters. Unique is the nub idiom, which needs the index generator
+to take the shape of a vector.
+
 `70-open-definition.apl` types eight system commands into an open
 function definition: none becomes a body line, most run at once, and
 the four that would store or copy a half-changed workspace are

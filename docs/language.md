@@ -137,7 +137,9 @@ Notes:
 ## Mixed functions
 
 - iota: index generator (monadic), index of (dyadic; not found
-  yields one past the last index).
+  yields one past the last index). The index generator takes a
+  non-negative integer that is a scalar or a one-element vector, so
+  iota of the shape of a vector counts its elements.
 - rho: shape (monadic), reshape (dyadic, cycling the data).
 - comma: ravel (monadic), catenate along the last axis (dyadic),
   laminate when the axis is fractional.
