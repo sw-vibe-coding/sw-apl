@@ -1,8 +1,8 @@
 number = 10
-slug = "system-variables"
+slug = "system-functions"
 status = "pending"
 description = """
-Phase 9 step 8 (docs/plan.md). '72 gains the quad system variables,
+Phase 9 step 9 (docs/plan.md). '72 gains the quad system functions,
 in a new ..."""
 role = "production"
 context_files = []

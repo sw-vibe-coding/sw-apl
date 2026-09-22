@@ -620,7 +620,8 @@ Names (owner, 2026-09-21), used interchangeably: (A) '68 is APL\360
 is the IBM 2741; (B) '72 is APLSV is the IBM 5100, 5110 and 5120. The
 tab shows the letter and the year; its tooltip gives the product name
 ("APLSV compatible"); the keyboard matches the hardware. The owner has
-named other possible modes, which are not planned here.
+named other possible modes -- APL2, and APL\1130 -- as maybe some day;
+they are not planned here.
 
 What a mode is:
 
@@ -702,23 +703,39 @@ Not in this phase: shared variables (see non-goals), and APL2 -- the
 owner mentioned a '84 tab, but where APL2 is to live is not settled,
 and nothing is planned for it here.
 
+Priorities and milestones (owner, 2026-09-21): the mode plumbing is
+high priority, and format is the lowest -- it can come after the rest
+of '72.
+
+**Milestone 1: every APL\360 test and demo works in (A) mode.** The
+mode exists, the '68-only parts are pulled out, and the whole of what
+sw-apl has today -- the reg-rs corpus, the unit tests, the browser
+demo -- runs in (A) unchanged.
+
+**Milestone 2: APLSV's own tests and demos, except format, work in (B)
+mode.** Format follows soon after.
+
 Order:
 
 1. The iota bug carried from Phase 8, first: `⍳⍴A` is a RANK ERROR,
-   and correctness comes before features.
+   and correctness comes before features. Then deal and rotate, the
+   same bug found beside it.
 2. Scope: CLAUDE.md and prd.md say what sw-apl now is. The README and
    the user docs wait until '72 is something a reader can use.
 3. The APLSV sources, and a record of how '72 differs from '68.
-4. The profile, per-mode libraries, and the mode in a saved
-   workspace, with '68 unchanged.
+4. The profile, the modes line in a workspace, and listing and
+   loading by mode, with '68 unchanged.
 5. The '68-only parts the sources name, pulled out of the shared core
-   into '68-only crates, still with '68 unchanged.
-6. The glyph table gains the mode a glyph arrives in; execute.
-7. Format.
+   into '68-only crates, still with '68 unchanged. **Milestone 1.**
+6. Single-element extension, once the manual says what APL\360's rule
+   is.
+7. The glyph table gains the mode a glyph arrives in; execute.
 8. The quad system variables.
 9. The quad system functions.
 10. Library 1 for '72, BIRDS first.
-11. The docs, the README, and the `Ⓑ '72` tab.
+11. The keyboard per mode.
+12. The docs, the README, and the `Ⓑ '72` tab. **Milestone 2.**
+13. Format.
 
 Then the Phase 8 steps still pending: cup and cap, the base
 conversion sample, the Linux regression fixtures, and the offline

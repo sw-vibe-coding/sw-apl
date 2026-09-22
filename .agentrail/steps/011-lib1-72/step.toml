@@ -1,9 +1,9 @@
-number = 9
-slug = "format"
+number = 11
+slug = "lib1-72"
 status = "pending"
 description = """
-Phase 9 step 7 (docs/plan.md). '72 gains format, in a new '72-only
-crate: mon..."""
+Phase 9 step 10 (docs/plan.md, owner direction 2026-09-21). Library 1
+for '72..."""
 role = "production"
 context_files = []
 created_at = "2026-09-21T17:13:13"

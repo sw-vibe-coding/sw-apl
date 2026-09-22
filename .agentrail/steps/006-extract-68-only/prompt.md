@@ -17,3 +17,9 @@ The profile decides whether the '68-only crates are reachable: in
 '68 they are, and nothing about '68 changes. reg-rs 81 of 81 with no
 rebase. The sw-checklist budgets hold in the new crates as in the
 old.
+
+**This step completes Milestone 1 (owner, 2026-09-21): every APL\360
+test and demo works in (A) mode.** Before completing it, check that
+and say so in the commit: the whole reg-rs corpus, the unit tests and
+just check-pages, with the mode explicitly (A) where the host takes a
+mode, all green and with no transcript moved.

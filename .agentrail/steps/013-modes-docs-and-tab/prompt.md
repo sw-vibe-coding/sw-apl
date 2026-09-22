@@ -9,3 +9,9 @@ Phase 9 step 11 (docs/plan.md). '72 is usable, so the reader is told.
   commands each mode has. User-facing rules still hold: what and how,
   no plans.
 - The README says sw-apl has two modes and links docs/aplsv.md.
+
+**This step completes Milestone 2 (owner, 2026-09-21): APLSV's own
+tests and demos, except format, work in (B) mode.** Format is the
+next step, not this one. Before completing it, check and say in the
+commit that every '72 sample and test is green in (B), and that
+Milestone 1 still holds in (A).
