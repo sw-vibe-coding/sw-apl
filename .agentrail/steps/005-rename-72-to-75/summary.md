@@ -1,0 +1,1 @@
+Changed every non-historical reference from 72 to 75 for the (B) mode: docs/plan.md, docs/citations.md, pending step prompts 006-015, and the lib1 step slug renamed to lib1-75. Completed step records, saga.toml, step.toml descriptions, the saga plan.md and CHANGES.md commit subjects keep 72 as history, noted in docs/plan.md. Pushed to main.

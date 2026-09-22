@@ -1,8 +1,9 @@
 number = 5
 slug = "rename-72-to-75"
-status = "in-progress"
+status = "completed"
 description = "Owner direction 2026-09-21: change all references to '72 to '75 -- the (B) mo..."
 role = "production"
 context_files = []
 created_at = "2026-09-21T18:55:29"
-commits = []
+completed_at = "2026-09-21T18:58:45"
+commits = ["dd95251fbcf3103d4c8b99be770761068dfd3a4b"]
