@@ -132,9 +132,12 @@ fn deal_picks_distinct_indexes_reproducibly() {
         .kind,
         ErrorKind::Domain
     );
+    // A left argument of more than one element is RANK ERROR. This once
+    // asserted it of a one-element vector, which APL\360 takes as its
+    // scalar -- the shuffle, A[(⍴A)?⍴A], depends on that.
     assert_eq!(
         deal(
-            &Array::vector(vec![Number::Int(1)]),
+            &Array::vector(vec![Number::Int(1), Number::Int(2)]),
             &Array::scalar(Number::Int(3)),
             &mut env
         )

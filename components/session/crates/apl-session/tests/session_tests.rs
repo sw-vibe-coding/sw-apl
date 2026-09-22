@@ -950,3 +950,23 @@ fn the_nub_idiom() {
     let nub = s.respond("((A\u{2373}A)=\u{2373}\u{2374}A)/A").lines;
     assert_eq!(nub, ["3 1 4 5 9 2 6"]);
 }
+
+/// The shuffle: deal a permutation of a vector's own length and index
+/// by it. It deals from a shape, which is a one-element vector.
+#[test]
+fn the_shuffle_idiom() {
+    let mut s = Session::default();
+    let _ = s.respond("A\u{2190}10 20 30 40 50");
+    let shuffled = s.respond("A[(\u{2374}A)?\u{2374}A]").lines.join(" ");
+    let mut got: Vec<i64> = shuffled
+        .split_whitespace()
+        .map(|n| n.parse().unwrap())
+        .collect();
+    assert_eq!(got.len(), 5, "{shuffled}");
+    got.sort_unstable();
+    assert_eq!(
+        got,
+        [10, 20, 30, 40, 50],
+        "a shuffle holds every element once"
+    );
+}

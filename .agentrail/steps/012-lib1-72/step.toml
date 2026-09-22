@@ -1,9 +1,9 @@
-number = 9
-slug = "system-variables"
+number = 12
+slug = "lib1-72"
 status = "pending"
 description = """
-Phase 9 step 8 (docs/plan.md). '72 gains the quad system variables,
-in a new ..."""
+Phase 9 step 10 (docs/plan.md, owner direction 2026-09-21). Library 1
+for '72..."""
 role = "production"
 context_files = []
 created_at = "2026-09-21T17:13:13"

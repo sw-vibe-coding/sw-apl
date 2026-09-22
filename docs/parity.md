@@ -100,7 +100,7 @@ and says why each is absent.
 | `~` | done | | 0 and 1 only |
 | `∧ ∨ ⍲ ⍱` | | done | 0 and 1 only |
 | `< ≤ = ≥ > ≠` | | done | with fuzz; samples 15, 47 |
-| `?` | done | done | roll and deal via the random link (starts at 16807); samples 41, 47 |
+| `?` | done | done | roll and deal via the random link (starts at 16807); deal takes a scalar or a one-element vector for each argument, so `A[(⍴A)?⍴A]` shuffles; samples 41, 47 |
 | Scalar extension, RANK and LENGTH agreement | done | done | prims tests |
 | Exact integers, float promotion, fuzz | done | | value tests |
 
@@ -132,7 +132,7 @@ the session numeric tests, and sample 67.
 | `⍳` | done | done | index of, one past the end when absent; the index generator takes a scalar or a one-element vector, so `⍳⍴V` works; samples 30, 73 |
 | `⍴` | done | done | |
 | `,` | done | done | any rank, axis bracket, laminate, scalar and rank-1 conformance; sample 49. Monadic ravel with an axis is APL2, not implemented |
-| `⌽ ⊖` | done | done | axis bracket; vector shifts; samples 08, 34 |
+| `⌽ ⊖` | done | done | axis bracket; vector shifts; a one-element left argument rotates as a scalar does; samples 08, 34 |
 | `⍉` | done | done | dyadic permutes and takes diagonals; sample 35 |
 | `↑ ↓` | | done | per axis, negatives, overtake fill; samples 07, 10, 44 |
 | `/ ⌿` compress | | done | boolean left, either axis, axis bracket; sample 17 |

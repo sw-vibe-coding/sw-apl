@@ -9,7 +9,13 @@
 20 40
       1 1 0/'abc'
 ab
+      ⍝ The shuffle: deal a permutation of a vector's own length and index
+      ⍝ the vector by it. Deal takes the shape, a one-element vector, as its
+      ⍝ scalar. Last in this file, so the rolls above are not moved.
+      A←'ABCDE'
+      A[(⍴A)?⍴A]
+ECDAB
       )OFF
-20.05.40 09/17/26
+17.34.45 09/21/26
 CONNECTED 0.00.00
 CPU TIME 0.00.00

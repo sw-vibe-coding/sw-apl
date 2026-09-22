@@ -1,6 +1,6 @@
 number = 2
 slug = "one-element-arguments"
-status = "pending"
+status = "in-progress"
 description = """
 Found 2026-09-21 checking the iota bug for its siblings, as that step
 asked: ..."""

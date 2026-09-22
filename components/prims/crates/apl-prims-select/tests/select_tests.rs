@@ -200,3 +200,31 @@ fn axis_index_picks_last_or_first_by_default() {
     );
     assert_eq!(axis_index(None, false, 0, 1).unwrap(), 0);
 }
+
+#[test]
+fn rotate_takes_a_one_element_left_argument_as_a_scalar() {
+    // A one-element vector shifts every row by its one amount, as a
+    // scalar does, whatever the shape of what it rotates.
+    assert_eq!(
+        rotate(&v(&[2]), &v(&[1, 2, 3, 4, 5]), 0).unwrap(),
+        v(&[3, 4, 5, 1, 2])
+    );
+    let matrix = m(&[2, 3], &[1, 2, 3, 4, 5, 6]);
+    assert_eq!(
+        rotate(&v(&[1]), &matrix, 1).unwrap(),
+        rotate(&s(1), &matrix, 1).unwrap()
+    );
+}
+
+#[test]
+fn rotate_still_refuses_a_left_argument_that_does_not_fit() {
+    let matrix = m(&[2, 3], &[1, 2, 3, 4, 5, 6]);
+    assert_eq!(
+        rotate(&v(&[1, 2, 3]), &matrix, 1).unwrap_err().kind,
+        ErrorKind::Length
+    );
+    assert_eq!(
+        rotate(&v(&[1, 2]), &v(&[1, 2, 3]), 0).unwrap_err().kind,
+        ErrorKind::Rank
+    );
+}

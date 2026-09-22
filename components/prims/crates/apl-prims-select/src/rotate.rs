@@ -23,12 +23,15 @@ pub fn rotate(l: &Array, r: &Array, k: usize) -> AplResult<Array> {
     if !r.shape.is_empty() {
         rest.remove(k);
     }
-    if !l.shape.is_empty() && l.shape != rest {
+    // A one-element left argument shifts every row by its one amount,
+    // as a scalar does, whatever the shape of what it rotates.
+    let lone = l.shape.len() <= 1 && l.shape.iter().product::<usize>() == 1;
+    if !lone && l.shape != rest {
         let kind = [ErrorKind::Rank, ErrorKind::Length][usize::from(l.shape.len() == rest.len())];
         return Err(AplError::new(kind));
     }
     Ok(turn(r, k, |row, o, n| {
-        let shift = shifts[if l.shape.is_empty() { 0 } else { row }];
+        let shift = shifts[if lone { 0 } else { row }];
         let turned =
             (i64::try_from(o).unwrap_or(0) + shift).rem_euclid(i64::try_from(n).unwrap_or(1));
         usize::try_from(turned).unwrap_or(0)

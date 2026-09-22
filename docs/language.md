@@ -114,7 +114,8 @@ Notes:
   the APL\360 table (K from high-minus 7 to 7).
 - Shriek on non-integers is the gamma function shifted by one.
 - Roll: `query N` is a random integer in the index range of N.
-  Deal: `M query N` is M distinct random integers from the index
+  Deal: `M query N` (each a scalar or a one-element vector, so a
+  shape will do) is M distinct random integers from the index
   range of N. Both advance the workspace random link, a Lehmer
   generator (multiplier 16807, modulus 2^31 - 1) that starts at
   16807 in a clear workspace and is saved with the workspace, so a

@@ -86,11 +86,15 @@ pub fn roll(r: &Array, env: &mut Env) -> AplResult<Array> {
 /// ceiling, and escaped the workspace quota doing it. The swaps are the
 /// same swaps in the same order, so every deal is the one it was.
 ///
+/// Each argument is a scalar or a one-element vector, as the index
+/// generator's is: `A[(⍴A)?⍴A]`, the shuffle, deals from a shape.
+///
 /// # Errors
-/// RANK ERROR unless both are scalars; DOMAIN ERROR unless both are
-/// non-negative integers with `l` at most `r`.
+/// RANK ERROR unless each is a scalar or a one-element vector; DOMAIN
+/// ERROR unless both are non-negative integers with `l` at most `r`.
 pub fn deal(l: &Array, r: &Array, env: &mut Env) -> AplResult<Array> {
-    if !l.shape.is_empty() || !r.shape.is_empty() {
+    let single = |a: &Array| a.shape.len() <= 1 && a.shape.iter().product::<usize>() == 1;
+    if !single(l) || !single(r) {
         return Err(AplError::new(ErrorKind::Rank));
     }
     let count = usize::try_from(non_negative_int(numbers(l)?[0])?).unwrap_or(usize::MAX);

@@ -1,0 +1,10 @@
+number = 5
+slug = "single-element-extension"
+status = "pending"
+description = """
+Found 2026-09-21 surveying the one-element-arguments bug, as that step
+asked:..."""
+role = "production"
+context_files = []
+created_at = "2026-09-21T17:32:20"
+commits = []

@@ -124,3 +124,26 @@ fn dealing_one_from_a_billion_does_not_build_the_billion() {
         started.elapsed()
     );
 }
+
+fn vector(xs: &[i64]) -> Array {
+    Array::vector(xs.iter().map(|&x| Number::Int(x)).collect())
+}
+
+#[test]
+fn deal_takes_one_element_vectors_as_scalars() {
+    // A[(⍴A)?⍴A] is how APL\360 shuffles, and ⍴A is a one-element vector.
+    let both = nums(&deal(&vector(&[3]), &vector(&[10]), &mut Env::default()).unwrap());
+    let plain = nums(&deal(&scalar(3), &scalar(10), &mut Env::default()).unwrap());
+    assert_eq!(both, plain, "a one-element vector deals as its scalar does");
+    let left = nums(&deal(&vector(&[3]), &scalar(10), &mut Env::default()).unwrap());
+    assert_eq!(left, plain);
+}
+
+#[test]
+fn deal_still_refuses_more_than_one_element() {
+    use apl_value::ErrorKind;
+    let two = deal(&vector(&[3, 4]), &scalar(10), &mut Env::default()).unwrap_err();
+    assert_eq!(two.kind, ErrorKind::Rank);
+    let none = deal(&scalar(3), &vector(&[]), &mut Env::default()).unwrap_err();
+    assert_eq!(none.kind, ErrorKind::Rank);
+}
