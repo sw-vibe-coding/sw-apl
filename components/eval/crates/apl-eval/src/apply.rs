@@ -3,10 +3,10 @@
 
 use apl_ast::{Expr, Function};
 use apl_call::value;
-use apl_ibeam::{argument, ibeam};
+use apl_ibeam::system_value;
 use apl_prims::{Env, apply_dyadic, apply_monadic, axis_index, inner, outer, reduce, scan};
 use apl_value::{AplError, AplResult, Array, ErrorKind};
-use apl_workspace::{Workspace, free, used};
+use apl_workspace::Workspace;
 
 use crate::eval::{eval_expr, eval_line};
 
@@ -36,12 +36,7 @@ pub fn eval_monadic(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
         return value(ws, name, *pos, (None, Some(r)), eval_line);
     }
     if *func == Function::Prim('⌶') && axis.is_none() {
-        let si = ws.si().iter().rev();
-        let lines: Vec<i64> = si.filter_map(|a| a.line.try_into().ok()).collect();
-        let held = used(&ws.saved.vars, &ws.saved.funcs, &ws.saved.groups);
-        let left = i64::try_from(free(ws.quota, held)).unwrap_or(i64::MAX);
-        let got = ibeam(argument(&r)?, (ws.clock)(), ws.signed_on, &lines, left);
-        return got.map_err(|e| e.at(*pos));
+        return system_value(ws, &r).map_err(|e| e.at(*pos));
     }
     let axis = axis.as_deref().map(|a| eval_expr(ws, a)).transpose()?;
     monadic(func, axis.as_ref(), &r, &mut ws.saved.env).map_err(|e| e.at(*pos))

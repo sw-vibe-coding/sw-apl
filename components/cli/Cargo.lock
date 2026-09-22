@@ -178,7 +178,9 @@ name = "apl-ibeam"
 version = "0.1.0"
 dependencies = [
  "apl-clock",
+ "apl-modes",
  "apl-value",
+ "apl-workspace",
 ]
 
 [[package]]

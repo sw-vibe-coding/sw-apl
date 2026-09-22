@@ -19,6 +19,9 @@ pub enum ErrorKind {
     Character(char),
     Depth,
     Interrupt,
+    /// Something this mode does not do, though another does: an
+    /// I-beam in (B) '75, as the IBM 5110 answered one.
+    Nonce,
 }
 
 impl fmt::Display for ErrorKind {
@@ -35,6 +38,7 @@ impl fmt::Display for ErrorKind {
             ErrorKind::Character(c) => write_character(f, *c),
             ErrorKind::Depth => write!(f, "DEPTH ERROR"),
             ErrorKind::Interrupt => write!(f, "INTERRUPT"),
+            ErrorKind::Nonce => write!(f, "NONCE ERROR"),
         }
     }
 }

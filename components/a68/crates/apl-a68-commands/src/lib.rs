@@ -3,8 +3,10 @@
 //! dropped them (docs/mode-b.md); the shared core reaches them only in
 //! (A).
 
+mod gate;
 mod group;
 mod settings;
 
+pub use gate::command;
 pub use group::{group, grouping, groups, members};
 pub use settings::settings_command;

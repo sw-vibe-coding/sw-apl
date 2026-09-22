@@ -1,6 +1,6 @@
 //! Which command, and what it replies.
 
-use apl_a68_commands::{grouping, settings_command};
+use apl_a68_commands::command as sixty_eight;
 use apl_eval::{Saved, Workspace, hms};
 use apl_inquiry::command as inquiry;
 use apl_library::valid;
@@ -46,11 +46,10 @@ pub fn system_command(ws: &mut Workspace, command: &str) -> Answer {
         ("DROP", _) => drop_workspace(ws, &rest),
         ("LIB", _) => lib(ws, &rest),
         ("COPY" | "PCOPY", _) => return copy(ws, &rest, name == "PCOPY"),
-        // The inquiry commands answer for themselves, and None for
-        // a name they do not know.
-        _ => grouping(&mut ws.saved, &name, &rest)
+        // The '68-only commands, in (A) only, and the inquiry commands
+        // answer for themselves, and None for a name they do not know.
+        _ => sixty_eight(&mut ws.saved, ws.mode, &name, &rest)
             .or_else(|| inquiry(ws, &name, &rest))
-            .or_else(|| settings_command(&mut ws.saved, &name, &rest).map(|l| vec![l]))
             .unwrap_or_else(|| vec![workspace_command(&mut ws.saved, &name, &rest)]),
     };
     ending(ws, lines, off)

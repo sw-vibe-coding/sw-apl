@@ -5,6 +5,8 @@
 //! and functions (docs/mode-b.md). What varies between runs is read
 //! through the `Clock` in `apl-clock`, which every mode shares.
 
+mod gate;
 mod ibeam;
 
+pub use gate::system_value;
 pub use ibeam::{argument, ibeam};

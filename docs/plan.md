@@ -757,6 +757,11 @@ Order:
    loading by mode, with '68 unchanged.
 5. The '68-only parts the sources name, pulled out of the shared core
    into '68-only crates, still with '68 unchanged. **Milestone 1.**
+   Reached 2026-09-21 (step 007): `components/a68/` holds the
+   I-beams and the settings and group commands; the whole reg-rs
+   corpus, run as it stands and again with `--mode 68` given, the
+   unit tests and `just check-pages` all pass with no transcript
+   moved.
 6. Single-element extension, once the manual says what APL\360's rule
    is.
 7. The glyph table gains the mode a glyph arrives in; execute.

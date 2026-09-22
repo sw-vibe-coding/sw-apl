@@ -104,6 +104,15 @@ appendices:
 These are the lists step 006 pulls out into '68-only crates. The
 I-beams and the three settings commands are confirmed.
 
+**Done (step 007):** the I-beams (`apl-ibeam`) and the settings and
+group commands (`apl-a68-commands`) are in `components/a68/`, and the
+shared core reaches them only in (A). In (B) an I-beam is a NONCE
+ERROR, as the 5110 manual gives, and the six commands are INCORRECT
+COMMAND, as any command the system does not have is. `)OFF` stays in
+both modes: it is sw-apl's only way to end a session, which on the
+5100 was the power switch. The time-sharing commands were never in
+sw-apl.
+
 ## What (B) changes
 
 - **Clear workspace**: `⎕IO` 1, `⎕CT` 1E¯13, `⎕PW` 64, `⎕PP` 5,

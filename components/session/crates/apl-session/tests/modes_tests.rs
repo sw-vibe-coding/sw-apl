@@ -168,3 +168,51 @@ fn the_host_sets_the_mode_with_the_quota_and_the_store() {
     let s = Session::attached(Box::new(Mute), host);
     assert_eq!((s.ws.quota, s.ws.mode), (12_345, Mode::B));
 }
+
+fn in_mode(mode: Mode) -> Session {
+    let mut s = Session::default();
+    s.ws.mode = mode;
+    s
+}
+
+#[test]
+fn an_i_beam_is_a_nonce_error_in_75() {
+    let mut b = in_mode(Mode::B);
+    let reply = b.respond("⌶25");
+    assert!(reply.error, "{:?}", reply.lines);
+    assert_eq!(reply.lines[0], "NONCE ERROR", "{:?}", reply.lines);
+    let mut a = in_mode(Mode::A);
+    assert!(!a.respond("⌶25").error, "(A) still has the I-beams");
+}
+
+#[test]
+fn the_settings_commands_are_68_only() {
+    let mut b = in_mode(Mode::B);
+    for line in [")ORIGIN 0", ")DIGITS 3", ")WIDTH 80"] {
+        assert_eq!(out(&mut b, line), vec!["INCORRECT COMMAND"], "{line}");
+    }
+    assert_eq!((b.ws.saved.env.io, b.ws.saved.print.digits), (1, 10));
+    let mut a = in_mode(Mode::A);
+    assert_eq!(out(&mut a, ")ORIGIN 0"), vec!["WAS 1"]);
+}
+
+#[test]
+fn the_settings_directives_work_in_both_modes() {
+    let mut b = in_mode(Mode::B);
+    out(&mut b, "⍝!ORIGIN 0");
+    assert_eq!(b.ws.saved.env.io, 0);
+}
+
+#[test]
+fn the_group_commands_are_68_only() {
+    let mut b = in_mode(Mode::B);
+    out(&mut b, "A←1");
+    for line in [")GROUP G A", ")GRP G", ")GRPS"] {
+        assert_eq!(out(&mut b, line), vec!["INCORRECT COMMAND"], "{line}");
+    }
+    assert!(b.ws.saved.groups.is_empty());
+    let mut a = in_mode(Mode::A);
+    out(&mut a, "A←1");
+    assert!(out(&mut a, ")GROUP G A").is_empty());
+    assert_eq!(out(&mut a, ")GRP G"), vec!["A"]);
+}
