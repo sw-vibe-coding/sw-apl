@@ -1,60 +1,75 @@
-# terminal
+# modes
 
-Phase 8 of docs/plan.md, owner direction 2026-09-19: the browser
-runs a 2741 terminal and the interpreter runs in a local server.
+## Phase 9 (owner direction 2026-09-21): modes, '68 and '72
 
-This is the architecture APL\360 had. A typewriter terminal talked
-to a time-sharing service; the self-contained browser interpreter
-that was planned here was the anachronism, and it could not have
-done the del editor. `Console::read` is synchronous and a browser
-cannot stop mid-statement to wait for a keystroke. A server can.
+The owner, after BIRDS: sw-apl gains modes. The header already shows
+the current one as a tab, `Ⓐ '68`, built as a row holding one tab so
+another could be added; the second is `Ⓑ '72`, APLSV. This reverses
+the non-goal that kept APLSV out, for APLSV only.
 
-What each side owns:
+What a mode is:
 
-- The terminal owns the keyboard and the paper. Overstruck
-  characters are formed there, by backspace, because only the
-  terminal sees the keystrokes; `⍟` is `○` backspace `*` and the
-  server never learns it was typed that way. So are the six-space
-  indent, the `[n]` prompt, and a line `⍞←` left open.
-- The server owns the session. One per connection, holding a
-  `Session`, reading lines from the connection and writing the
-  transcript back. `)SAVE`, `)LOAD` and `ws/lib1/` work because it
-  has a filesystem.
+- A language. '68 is APL\360 exactly as sw-apl has it; '72 is APLSV.
+- A pair of libraries. Library 1 differs per mode -- '72 gets its own
+  workspaces, and BIRDS there can fly the birds that `NOTHERE` says
+  need an execute. Library 0 differs per mode too: a workspace saved
+  in '72 is saved in '72's library 0, and `)LIB` in '68 never sees
+  it.
+- Recorded in what it saves, so a '72 workspace cannot be loaded into
+  '68 as though it were one.
 
-The interpreter does not change. If a step finds itself altering
-`Session` or anything below it to suit a browser, that is the
-signal to stop and ask. The CLI is the control: its reg-rs suite
-must stay green throughout, and the same input typed at the
-terminal and at the CLI must produce the same transcript.
+How the implementation is arranged, which the owner settled: three
+parts, visible in the code and not only in checks.
 
-Local only. `just demo` starts the server and opens the terminal.
-No always-on service, no accounts, no ops, nothing sent anywhere
-but to a process on the reader's own machine -- and the page should
-say so, since a terminal talking to a server looks like one that
-might not.
+- **Shared.** What exists today is the shared core, taken as it
+  stands. APLSV is very nearly a superset of APL\360, so it is most of
+  the code, and it does not move to make room.
+- **'68-only.** What APLSV dropped is pulled out of the shared core
+  into crates of its own, so that it is plainly APL\360's and '72 does
+  not carry it. The list is short and is established from the APLSV
+  manual, not from memory -- the I-beams, and perhaps the `)ORIGIN`,
+  `)DIGITS` and `)WIDTH` commands, are candidates only until then.
+- **'72-only.** What APLSV adds -- execute, format, the quad system
+  variables and functions -- is new code in new crates.
 
-Every step: format first, then tests, clippy, and gates (see
-/mw-cp); TDD; reg-rs for anything run through the CLI binary;
-commit, push, report.
+A profile on the workspace, set by the host, decides which of the
+mode-only parts are reachable, and it is read at the few places the
+two differ -- from data where it can be, as the glyph table's
+`[[later]]` entries already are.
 
-## Steps
+The '68 mode must not move. Every existing sample is a '68 sample and
+reg-rs is the proof: a step that changes a '68 transcript is wrong,
+not rebased.
 
-1. terminal-server -- the service, the protocol, and a blocking
-   read that works.
-2. terminal-2741 -- the paper and the overstrikes.
-3. glyph-keyboard -- the keyboard, the expansions, and a first
-   screen worth arriving at.
+Sources: the APL\360 User's Manual has been the reference for
+everything so far. '72 needs its own -- the APLSV manual -- and the
+first '72 step finds it and records what differs, before any '72
+behaviour is built. Where the manual is not to hand, a guess is
+labelled as one.
 
-## Isolated Linux CLI prototype
+Not in this phase: shared variables (see non-goals), and APL2 -- the
+owner mentioned a '84 tab, but where APL2 is to live is not settled,
+and nothing is planned for it here.
 
-Before the broader server/browser steps, implement and publish the owner's
-standalone Rust `aplterm` and `aplterm-server` prototype under
-`experimental/terminal2741`. The client composes overstrikes and translates the
-custom keyboard into Unicode lines, with circled capitals used only for display.
-The TCP server reuses the interpreter without changing the existing CLI.
-Keyboard, raw-terminal PTY, and blocking-input socket tests validate this slice.
-The owner has tested it and requested a feature-branch commit and push.
+Order:
 
-Linux follow-up: repair the three pre-existing regression fixture failures
-(bare-shebang, obscured-load, workspace-file). Keep their baselines untouched in
-the prototype commit and validate portability in its own step.
+1. The iota bug carried from Phase 8, first: `⍳⍴A` is a RANK ERROR,
+   and correctness comes before features.
+2. Scope: CLAUDE.md and prd.md say what sw-apl now is. The README and
+   the user docs wait until '72 is something a reader can use.
+3. The APLSV sources, and a record of how '72 differs from '68.
+4. The profile, per-mode libraries, and the mode in a saved
+   workspace, with '68 unchanged.
+5. The '68-only parts the sources name, pulled out of the shared core
+   into '68-only crates, still with '68 unchanged.
+6. The glyph table gains the mode a glyph arrives in; execute.
+7. Format.
+8. The quad system variables.
+9. The quad system functions.
+10. Library 1 for '72, BIRDS first.
+11. The docs, the README, and the `Ⓑ '72` tab.
+
+Then the Phase 8 steps still pending: cup and cap, the base
+conversion sample, the Linux regression fixtures, and the offline
+shell.
+
