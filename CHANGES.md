@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-21
 
+- chore(agentrail): complete 013-mode-aware-overstrikes
+- feat(modes): overstrikes are mode aware
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 012-execute
 - chore(a70): refresh Cargo.lock for the apl-execute dependency
 - feat(b75): execute, and the glyphs each mode takes
