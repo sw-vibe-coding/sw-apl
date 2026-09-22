@@ -58,7 +58,7 @@ and says why each is absent.
 | Branch `→`, labels as local constants, `→0`, branch off the end, empty branch, the `→LABEL×⍳COND` idiom | done | scan/eval/session tests, samples 50, 54 |
 | Defined functions: del headers (`NAME`, `NAME B`, `A NAME B`, each with or without `R←`), locals, calls, the result at exit | done | eval/session tests, sample 53 |
 | Definition mode: an opening `∇` collects body lines behind the `[n]` prompt until a closing `∇` | done | session/cli tests, sample 53 |
-| Del editor: `[n]`, `[⎕]`, `[n⎕]`, `[∆n]`, fractional insert and renumber on close, header edit and rename `[0]`, reopen `∇NAME`, lock `⍫` | done | session tests, sample 55 |
+| Del editor: `[n]`, `[⎕]`, `[n⎕]`, `[∆n]`, fractional insert and renumber on close, header edit and rename `[0]`, reopen `∇NAME`, lock `⍫` to open or to close, either being enough, and `⍫NAME` reopening an unlocked function to lock it | done | session tests, locked tests, sample 55 |
 | Dynamic scoping, recursion | done | eval tests, samples 53, 54. A recursion with no branch to stop it reaches DEPTH ERROR |
 | State indicator: suspension, pendent callers, resumption with `→`n, clearing with a bare `→` | done | call/session tests, sample 56 |
 | Six-space prompt, batch echo | done | cli tests |

@@ -14,7 +14,12 @@ use crate::session::Session;
 /// An opening del: start a new function, or reopen one for editing.
 /// A command written on the same line takes effect at once, so
 /// `∇NAME[⎕]∇` shows a function and leaves definition mode again.
-pub fn open_definition(session: &mut Session, text: &str) -> Reply {
+///
+/// `del` is the glyph that opened it. Del-tilde opens as del does and
+/// locks the function when it closes, whichever del closes it; that
+/// includes reopening an unlocked function, since reopening is
+/// opening. A function already locked cannot be reopened by either.
+pub fn open_definition(session: &mut Session, text: &str, del: char) -> Reply {
     let at = text.find('[').unwrap_or(text.len());
     let (head, rest) = (text[..at].trim(), text[at..].to_string());
     let opening = match session.ws.function(head) {
@@ -30,8 +35,8 @@ pub fn open_definition(session: &mut Session, text: &str) -> Reply {
         }),
     };
     match opening {
-        Err(err) => return Reply::failed(error_lines(&err, &format!("∇{text}"))),
-        Ok(defn) => session.defining = Some(Definition::start(defn)),
+        Err(err) => return Reply::failed(error_lines(&err, &format!("{del}{text}"))),
+        Ok(defn) => session.defining = Some(Definition::start(defn, del == '⍫')),
     }
     if rest.is_empty() {
         return Reply::default();
@@ -51,6 +56,7 @@ pub fn definition_line(session: &mut Session, line: &str) -> Reply {
     };
     if let Some(locked) = step.closed {
         let open = session.defining.take().expect("a definition is open");
+        let locked = locked || open.locking;
         let (defn, renamed) = open.close(locked);
         if let Some(was) = renamed {
             session.ws.erase(&was);
@@ -82,8 +88,8 @@ pub fn dispatch(session: &mut Session, line: &str) -> Option<Reply> {
     if session.defining.is_some() {
         return Some(definition_line(session, line));
     }
-    let header = trimmed.strip_prefix('∇')?;
-    Some(open_definition(session, header))
+    let del = trimmed.chars().next().filter(|c| *c == '∇' || *c == '⍫')?;
+    Some(open_definition(session, &trimmed[del.len_utf8()..], del))
 }
 
 /// The commands an open definition prevents, which are the ones the

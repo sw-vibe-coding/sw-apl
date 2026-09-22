@@ -122,3 +122,97 @@ fn copying_out_of_an_obscured_workspace_works_and_keeps_the_lock() {
         "and only what was asked"
     );
 }
+
+/// Whether `name` is a locked function, asked the way a reader would:
+/// a locked function cannot be reopened, so opening it to display is
+/// DEFN ERROR. It must exist first -- a function that is not there is
+/// DEFN ERROR to open that way too, and would pass for locked.
+fn is_locked(s: &mut Session, name: &str) -> bool {
+    assert!(s.ws.is_function(name), "{name} was never defined");
+    let shown = out(s, &format!("\u{2207}{name}[\u{2395}]\u{2207}"));
+    shown.first().is_some_and(|l| l.contains("DEFN ERROR"))
+}
+
+// The manual: "If the symbol ⍫ ... is used instead of ∇ to open or
+// close a function definition, the function becomes locked." Open or
+// close -- either one -- so a definition opened with del-tilde is
+// locked however it is closed.
+
+#[test]
+fn del_tilde_opens_a_definition() {
+    let mut s = Session::default();
+    let opened = s.respond("\u{236b}R\u{2190}SECRET");
+    assert!(!opened.error, "{:?}", opened.lines);
+    out(&mut s, "R\u{2190}42");
+    out(&mut s, "\u{2207}");
+    assert_eq!(out(&mut s, "SECRET"), ["42"]);
+}
+
+#[test]
+fn opened_with_del_tilde_and_closed_with_del_it_is_locked() {
+    let mut s = Session::default();
+    for line in ["\u{236b}R\u{2190}SECRET", "R\u{2190}42", "\u{2207}"] {
+        out(&mut s, line);
+    }
+    assert!(is_locked(&mut s, "SECRET"));
+}
+
+#[test]
+fn opened_and_closed_with_del_tilde_it_is_locked() {
+    let mut s = Session::default();
+    for line in ["\u{236b}R\u{2190}SECRET", "R\u{2190}42", "\u{236b}"] {
+        out(&mut s, line);
+    }
+    assert!(is_locked(&mut s, "SECRET"));
+}
+
+#[test]
+fn opened_and_closed_with_del_it_is_not_locked() {
+    let mut s = Session::default();
+    for line in ["\u{2207}R\u{2190}PLAIN", "R\u{2190}7", "\u{2207}"] {
+        out(&mut s, line);
+    }
+    assert!(!is_locked(&mut s, "PLAIN"));
+}
+
+#[test]
+fn del_tilde_reopens_an_unlocked_function_and_locks_it() {
+    // Reopening is opening: the same sentence covers it. The edit made
+    // while it is open is kept.
+    let mut s = Session::default();
+    for line in ["\u{2207}R\u{2190}PLAIN", "R\u{2190}7", "\u{2207}"] {
+        out(&mut s, line);
+    }
+    let reopened = s.respond("\u{236b}PLAIN");
+    assert!(!reopened.error, "{:?}", reopened.lines);
+    out(&mut s, "[1] R\u{2190}8");
+    out(&mut s, "\u{2207}");
+    assert_eq!(out(&mut s, "PLAIN"), ["8"]);
+    assert!(is_locked(&mut s, "PLAIN"));
+}
+
+#[test]
+fn del_tilde_cannot_reopen_a_locked_function() {
+    // "A locked function cannot be revised": the lock is for good,
+    // whichever del is used to try.
+    let mut s = Session::default();
+    for line in ["\u{2207}R\u{2190}SECRET", "R\u{2190}42", "\u{236b}"] {
+        out(&mut s, line);
+    }
+    let refused = out(&mut s, "\u{236b}SECRET");
+    assert!(refused[0].contains("DEFN ERROR"), "{refused:?}");
+}
+
+#[test]
+fn a_bad_header_after_del_tilde_is_echoed_with_del_tilde() {
+    // The line in the error report is the line that was typed.
+    let mut s = Session::default();
+    let refused = out(&mut s, "\u{236b}");
+    assert!(refused[0].contains("DEFN ERROR"), "{refused:?}");
+    assert!(
+        refused
+            .iter()
+            .any(|l| l.trim_start().starts_with('\u{236b}')),
+        "{refused:?}"
+    );
+}

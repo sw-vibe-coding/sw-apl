@@ -1,6 +1,6 @@
 number = 37
 slug = "del-tilde-opens"
-status = "pending"
+status = "in-progress"
 description = """
 Phase 8 (docs/plan.md). Del-tilde opens a definition as well as
 closing one.

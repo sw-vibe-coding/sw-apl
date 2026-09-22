@@ -186,7 +186,9 @@ you move first. After `[0]`, type a del.
 `∇` closes the definition, renumbers the lines from 1, and stores
 the function. Everything you typed takes effect at that moment.
 
-`⍫` (del-tilde) closes it locked. A locked function still runs,
+`⍫` (del-tilde) locks it, used to open the definition or to close
+it -- either one is enough. `⍫NAME` also reopens an unlocked
+function, which is locked when it closes. A locked function still runs,
 but it can never be reopened or displayed again -- both are DEFN
 ERROR -- and there is no way to unlock it. Lock a function only
 when you are certain, and only after you have a copy of the source
@@ -266,4 +268,4 @@ typed here goes into the function.
 | `[0]` | Move to the header |
 | `[0] HEADER` | Replace the header |
 | `∇` | Close, renumbering from 1 |
-| `⍫` | Close locked |
+| `⍫` | Open or close locked: either locks the function |

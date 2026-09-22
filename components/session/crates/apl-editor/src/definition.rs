@@ -22,6 +22,10 @@ pub struct Definition {
     pub(crate) lines: Vec<(i64, String)>,
     /// The number the prompt is offering.
     pub(crate) next: i64,
+    /// Opened with del-tilde, so locked when it closes, whichever del
+    /// closes it. The manual: del-tilde "used instead of ∇ to open or
+    /// close a function definition" locks it -- either one is enough.
+    pub locking: bool,
 }
 
 /// What one input line in definition mode did.
@@ -35,9 +39,10 @@ pub struct Step {
 
 impl Definition {
     /// Begin editing `defn`: its body takes the numbers 1, 2, 3 and
-    /// the prompt offers the line after the last.
+    /// the prompt offers the line after the last. `locking` when it was
+    /// opened with del-tilde, so that it is locked when it closes.
     #[must_use]
-    pub fn start(defn: Defn) -> Definition {
+    pub fn start(defn: Defn, locking: bool) -> Definition {
         let lines: Vec<(i64, String)> = defn
             .body
             .iter()
@@ -51,6 +56,7 @@ impl Definition {
             was,
             lines,
             next,
+            locking,
         }
     }
 

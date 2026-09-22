@@ -299,7 +299,9 @@ following.
 
 ## Locking, and why it cannot be undone
 
-Closing a definition with `⍫` instead of `∇` locks the function. A
+Opening or closing a definition with `⍫` instead of `∇` locks the
+function; either one is enough, and `⍫NAME` reopening an unlocked
+function locks it when it closes. A
 locked function still runs, but it cannot be displayed, cannot be
 reopened, and **cannot be unlocked**. There is no command for it. The
 only way back is to erase it and define it again from source you kept

@@ -15,11 +15,14 @@ fn header(name: &str) -> Defn {
 }
 
 fn open(body: &[&str]) -> Definition {
-    Definition::start(Defn {
-        name: "F".to_string(),
-        body: body.iter().map(|l| (*l).to_string()).collect(),
-        ..Defn::default()
-    })
+    Definition::start(
+        Defn {
+            name: "F".to_string(),
+            body: body.iter().map(|l| (*l).to_string()).collect(),
+            ..Defn::default()
+        },
+        false,
+    )
 }
 
 fn typed(definition: &mut Definition, lines: &[&str]) {
@@ -30,7 +33,7 @@ fn typed(definition: &mut Definition, lines: &[&str]) {
 
 #[test]
 fn the_prompt_offers_the_line_after_the_last() {
-    assert_eq!(Definition::start(header("F")).prompt(), "[1]   ");
+    assert_eq!(Definition::start(header("F"), false).prompt(), "[1]   ");
     assert_eq!(open(&["a", "b"]).prompt(), "[3]   ");
     let mut wide = open(&[]);
     typed(&mut wide, &["[10]"]);
