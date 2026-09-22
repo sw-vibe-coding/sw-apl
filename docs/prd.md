@@ -3,12 +3,22 @@
 ## Summary
 
 sw-apl is a clean-room APL interpreter written in Rust that
-reproduces the experience of classic IBM APL\360 on a terminal:
+reproduces the experience of classic IBM APL on a terminal:
 traditional glyphs, the six-space indent prompt, printer-style
-transcript output, del-editor function definition, and the
-APL\360 system commands for workspaces. It targets macOS and
-Linux first and a browser (Yew/WASM) second, sharing the same
-interpreter crates.
+transcript output, del-editor function definition, and the system
+commands for workspaces. It targets macOS and Linux first and a
+browser (Yew/WASM) second, sharing the same interpreter crates.
+
+It has two modes (owner direction 2026-09-21):
+
+- **(A) '68, APL\360**, as on the IBM 2741. Everything below
+  describes this mode unless it says otherwise.
+- **(B) '72, APLSV**, as on the IBM 5100 family: (A) with execute,
+  format, and the quad system variables and functions added, as the
+  APLSV manual has them.
+
+The mode is chosen at the CLI and the service with a flag and in the
+browser with a tab, and nothing done for (B) changes (A).
 
 ## Who it is for
 
@@ -36,8 +46,11 @@ interpreter crates.
   branching, dynamic scoping, recursion.
 - The APL\360 system interface: I-beam functions (time, date,
   workspace space, state indicator), `)ORIGIN`, `)DIGITS`, and
-  `)WIDTH` settings, quad and quote-quad I/O. No APLSV quad
+  `)WIDTH` settings, quad and quote-quad I/O. In (A), no APLSV quad
   system variables or functions, no execute, no format.
+- In (B): execute, format, and the APLSV quad system variables and
+  functions, as the APLSV manual defines them. What APLSV dropped
+  from APL\360 is not in (B); the manual says what that is.
 - Domino (matrix divide) in a later phase.
 
 ### Session
@@ -51,6 +64,9 @@ interpreter crates.
   control, inquiry, and settings, following the APL\360 names.
 - Workspaces are saved to and loaded from plain text files; a
   numbered library convention maps `)LOAD 1 NAME` to directories.
+- A workspace names the modes it runs in -- (A), (A)(B) or (B) --
+  from what it uses, and is listed and loaded only in those modes.
+  Library 1 differs by mode where the workspaces do.
 - Each shipped workspace carries a DESCRIBE that prints what the
   workspace holds and how to use it. `)LOAD` prints only the line
   saying when the workspace was saved, as APL\360 did; typing
@@ -70,8 +86,11 @@ interpreter crates.
 
 ## What it must not do
 
-- No nested arrays, each, enclose, pick, dfns, or diamonds.
-- No shared variables, no hardware I/O, no I-beams.
+- No nested arrays, each, enclose, pick, dfns, or diamonds, in
+  either mode: they are APL2 and later, and APL2 is not planned.
+- No shared variables, in either mode: they exist to talk to other
+  processes and to devices, and sw-apl has one user and no hardware.
+- No hardware I/O. The I-beams are APL\360's own and no more.
 - No dependency on GNU APL or on the C interpreter at runtime.
 
 ## Quality bar

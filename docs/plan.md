@@ -653,9 +653,11 @@ mode-only parts are reachable, and it is read at the few places the
 two differ -- from data where it can be, as the glyph table's
 `[[later]]` entries already are.
 
-The '68 mode must not move. Every existing sample is a '68 sample and
-reg-rs is the proof: a step that changes a '68 transcript is wrong,
-not rebased.
+Nothing done for '72 may move '68. Every existing sample is a '68
+sample and reg-rs is the proof: a '72 step that changes a '68
+transcript is wrong, not rebased. A correctness fix to '68 itself --
+single-element extension, if the manual says so -- may move one, with
+its source as the reason.
 
 Workspaces and modes (owner, 2026-09-21). A workspace runs in the
 modes it runs in, and is listed and loaded only there:
