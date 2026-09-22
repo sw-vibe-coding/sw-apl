@@ -1,6 +1,6 @@
 number = 37
 slug = "del-tilde-opens"
-status = "in-progress"
+status = "completed"
 description = """
 Phase 8 (docs/plan.md). Del-tilde opens a definition as well as
 closing one.
@@ -8,5 +8,6 @@ closing one.
 role = "production"
 context_files = []
 created_at = "2026-09-19T08:21:28"
+completed_at = "2026-09-21T17:07:23"
 task_type = "rust-interpreter"
-commits = []
+commits = ["02233c6af6d773b1d86a20b1578453f5c5ebd4c9"]

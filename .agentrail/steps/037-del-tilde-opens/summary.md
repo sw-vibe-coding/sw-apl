@@ -1,0 +1,1 @@
+Del-tilde now opens a definition as well as closing one. Concluded from the manual's open-or-close wording that either del-tilde is enough to lock, so a definition opened with it is locked however it closes; and that ⍫NAME reopens an unlocked function and locks it, while an already-locked one stays DEFN ERROR. Seven tests; three docs updated. Pushed.
