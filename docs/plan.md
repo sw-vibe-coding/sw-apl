@@ -627,15 +627,23 @@ What a mode is:
 - Recorded in what it saves, so a '72 workspace cannot be loaded into
   '68 as though it were one.
 
-How the implementation is arranged, which the owner asked about:
-APLSV is very nearly a superset of APL\360. So the implementation is
-not split three ways. What exists is the shared core and stays where
-it is. What '72 adds -- execute, format, the quad system variables and
-functions -- goes in new crates, which the module budgets would ask
-for anyway. What is '68-only is a short list, to be established from
-the APLSV manual rather than from memory. A profile on the workspace,
-set by the host, is read at the few places the two differ, and those
-places are driven by data where they can be, as the glyph table's
+How the implementation is arranged, which the owner settled: three
+parts, visible in the code and not only in checks.
+
+- **Shared.** What exists today is the shared core, taken as it
+  stands. APLSV is very nearly a superset of APL\360, so it is most of
+  the code, and it does not move to make room.
+- **'68-only.** What APLSV dropped is pulled out of the shared core
+  into crates of its own, so that it is plainly APL\360's and '72 does
+  not carry it. The list is short and is established from the APLSV
+  manual, not from memory -- the I-beams, and perhaps the `)ORIGIN`,
+  `)DIGITS` and `)WIDTH` commands, are candidates only until then.
+- **'72-only.** What APLSV adds -- execute, format, the quad system
+  variables and functions -- is new code in new crates.
+
+A profile on the workspace, set by the host, decides which of the
+mode-only parts are reachable, and it is read at the few places the
+two differ -- from data where it can be, as the glyph table's
 `[[later]]` entries already are.
 
 The '68 mode must not move. Every existing sample is a '68 sample and
@@ -661,12 +669,14 @@ Order:
 3. The APLSV sources, and a record of how '72 differs from '68.
 4. The profile, per-mode libraries, and the mode in a saved
    workspace, with '68 unchanged.
-5. The glyph table gains the mode a glyph arrives in; execute.
-6. Format.
-7. The quad system variables.
-8. The quad system functions.
-9. Library 1 for '72, BIRDS first.
-10. The docs, the README, and the `Ⓑ '72` tab.
+5. The '68-only parts the sources name, pulled out of the shared core
+   into '68-only crates, still with '68 unchanged.
+6. The glyph table gains the mode a glyph arrives in; execute.
+7. Format.
+8. The quad system variables.
+9. The quad system functions.
+10. Library 1 for '72, BIRDS first.
+11. The docs, the README, and the `Ⓑ '72` tab.
 
 Then the Phase 8 steps still pending: cup and cap, the base
 conversion sample, the Linux regression fixtures, and the offline
