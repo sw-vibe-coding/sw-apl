@@ -1,0 +1,7 @@
+Owner direction 2026-09-22 (docs/plan.md, "TTTML, a machine that learns tic-tac-toe"). A new library 1 workspace for (B) '75, TTTML: the machine plays tic-tac-toe against itself, learns, then plays a person with what it learned.
+
+Read the plan section first: it lists why the AI-chat code in the untracked docs/research.txt does not run in (B) (diamonds, first, underscores, a strand with a parenthesised value, the exploration test's precedence, grade-up picking the worst move, a wrong two-player update, a 1.4 MB table), and the design that was prototyped and works: afterstate values keyed by canonical base-3 codes under the 8 symmetries, KEYS and VALS grown with iota lookup, backed up from the end of each game, random move one time in ten. About 750 positions, about 12 KB; 6,000 games gave no losses to a random player as X or O.
+
+Never commit or quote docs/research.txt; write the workspace fresh, with the sw-apl SOURCE line. No tape or shared variables: the model fits in the workspace and )SAVE keeps it.
+
+TDD: a sample (fixed quad RL) pinning training and a game against the learned table, plus reg-rs; ship the workspace trained, with TRAIN N, PLAY and DESCRIBE; modes line (B); lines fit 64 columns where they can; TRAIN reports progress. Check it loads and plays in the browser's (B) tab (just check-pages, or a new check). Update samples/README.md, docs/workspaces.md, session.md's library 1 table, and parity.md.

@@ -806,6 +806,82 @@ Then the Phase 8 steps still pending: cup and cap, the base
 conversion sample, the Linux regression fixtures, and the offline
 shell.
 
+## Owner direction (2026-09-22): TTTML, a machine that learns tic-tac-toe
+
+A new library 1 workspace for (B) '75, `TTTML`: the machine plays
+tic-tac-toe against itself, learns from the games, and then plays a
+person with what it learned. It shows that a 1975 desktop APL could
+do a small piece of machine learning, in array code.
+
+**The owner's starting point** was an AI chat's answer, saved
+untracked as `docs/research.txt` (not ours, so never committed or
+quoted; see `docs/citations.md` if anything from it is used). It
+proposed tabular Q-learning: a table of 3*9 states by 9 moves, filled
+by self-play with an epsilon-greedy choice and a Bellman update. It
+was checked in (B) on 2026-09-22, and does not run as written:
+
+- `⋄`, `⊃` and underscores in names are not in the 5100's APL (each
+  is a CHARACTER ERROR), and `⍏` is not a glyph at all.
+- `(3*9) 9⍴0` puts a parenthesised value in a strand, a SYNTAX ERROR
+  in APL\360 and the 5100.
+- `(?1000)÷1000<EPS` divides by the comparison, so it is a DOMAIN
+  ERROR every time, not an exploration test.
+- The greedy move takes the first of `⍋`, the lowest value, not the
+  highest.
+- The update adds the opponent's best next value to the mover's
+  reward. With one table for both players that teaches the wrong
+  thing: in a two-player game it must be the mover's own next
+  position, or the opponent's value negated.
+- The table is 177,147 numbers, about 1.4 MB: WS FULL in sw-apl's
+  default 1 MB workspace, and far beyond a 5110, whose memory went
+  up to 64 KB.
+
+**What to build instead**, prototyped in (B) on 2026-09-22 and found
+to work. It follows Sutton and Barto's tic-tac-toe example, not
+Q-learning:
+
+- One value per position after a move (an "afterstate"), from the
+  point of view of the player who made it: 1 won, 0 lost, 0.5 draw.
+  The machine chooses the move whose afterstate is worth the most.
+- A position is keyed by its base-3 code, `3⊥S+1`, made canonical
+  under the board's 8 symmetries: the least of the 8 codes, all
+  computed at once from an 8 by 9 permutation matrix. The table is
+  two vectors, `KEYS` and `VALS`, grown as positions are met and
+  searched with `⍳`. Self-play meets about 750 positions, so the
+  whole "model" is about 1,500 numbers (roughly 12 KB), well inside
+  a 5110-sized workspace.
+- The candidate afterstates of a move are one matrix,
+  `T+TURN×P∘.=⍳9`, valued in one lookup. A win is found by
+  `WL+.×S`, with `WL` the 8 lines of the board as an 8 by 9 matrix.
+- After each game the values are backed up from the end: each
+  afterstate moves a step (0.2) towards the mover's next afterstate,
+  or towards the result. Exploration is a random move one time in
+  ten.
+- In the prototype, 6,000 self-play games took about 10 seconds
+  natively. The learned player then lost none of 500 games against a
+  random player as X, and none of 500 as O, and greedy self-play
+  drew.
+
+**Swapping the model to tape is not needed.** The owner asked
+whether the 5100's tape could hold the model to stay within 64 KB.
+The table above is about 12 KB, so it fits in the workspace, and
+`)SAVE` keeps it with the workspace, as a 5110 kept a saved
+workspace on tape or diskette. Programs reached a 5100's tape files
+through shared variables, which sw-apl does not have
+(`mode-b.md`, decision 2). If a later model outgrows the workspace,
+that is the time to decide on shared variables.
+
+**The workspace.** Its modes line is `(B)`: it uses `⎕RL` to seed
+the learning, and names like `⎕WA` to show the model's size. It
+ships trained, so that `PLAY` works at once, with `TRAIN N` to learn
+again from nothing and a `DESCRIBE`. Names are APL names (no
+underscores), there are no diamonds, and every line fits the 5110's
+64-column screen where it can. A browser session is slower than the
+CLI, so `TRAIN` reports its progress. A sample pins training with a
+fixed `⎕RL` and a game against the learned table; `samples/README.md`
+and `workspaces.md` list the workspace. It goes after library 1 for
+(B), which it needs.
+
 ## Owner direction (2026-09-20, third): a demo that fits a phone
 
 The owner opened the demo on a simulated phone in Chrome and found

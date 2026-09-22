@@ -1,0 +1,8 @@
+number = 20
+slug = "tttml"
+status = "pending"
+description = 'Owner direction 2026-09-22 (docs/plan.md, "TTTML, a machine that learns tic-t...'
+role = "production"
+context_files = []
+created_at = "2026-09-22T11:48:40"
+commits = []
