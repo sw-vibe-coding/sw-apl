@@ -1,10 +1,11 @@
 number = 14
 slug = "system-variables"
-status = "in-progress"
+status = "completed"
 description = """
 Phase 9 step 8 (docs/plan.md). '72 gains the quad system variables,
 in a new ..."""
 role = "production"
 context_files = []
 created_at = "2026-09-21T17:13:13"
-commits = []
+completed_at = "2026-09-22T08:59:22"
+commits = ["673fc4803d4910421136a01b09048304ba20879a"]
