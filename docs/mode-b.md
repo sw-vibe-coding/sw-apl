@@ -17,7 +17,8 @@ The owner's direction (2026-09-21): (A) recreates learning APL on an
 IBM 2741 connected to APL\360; (B) recreates using APL professionally
 on the IBM 5100 to 5120 desktop computers. The goal is an IBM 5120 on
 a phone, not a System/370 APLSV. The year in the mode's name is the
-5100's: IBM announced it, with APL, in September 1975, and its first
+5100's release: IBM announced it, with APL, in September 1975,
+for delivery the same month, and its first
 APL reference manual is dated August 1975.
 
 IBM described the 5100's APL, and then the 5110's, as APLSV with the

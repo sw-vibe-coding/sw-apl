@@ -36,6 +36,10 @@ carry the same files, for example
   <https://www.bitsavers.org/pdf/ibm/5100/SA21-9213-2_IBM_5100_APL_Reference_Manual_May1976.pdf>
 - **IBM 5100**, Wikipedia: announced September 1975, the year in
   the (B) '75 mode's name. <https://en.wikipedia.org/wiki/IBM_5100>
+- **IBM 5100 Portable Computer**, Datapro report M11-491-201,
+  October 1975: announced 9 September 1975, for delivery beginning
+  that month.
+  <https://bitsavers.org/pdf/datapro/datapro_reports_70s-90s/IBM/M11-491-20_7510_IBM_5100.pdf>
 - **IBM 5120**, Wikipedia: the 5120 as a 5110-class machine.
   <https://en.wikipedia.org/wiki/IBM_5120>
 - **IBM Beam Spring Keyboards**, Deskthority wiki: the 5100 and 5120
