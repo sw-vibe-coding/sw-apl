@@ -1,6 +1,6 @@
 number = 16
 slug = "modes-docs-and-tab"
-status = "in-progress"
+status = "completed"
 description = """
 Phase 9 step 11 (docs/plan.md). '72 is usable, so the reader is told.
 
@@ -8,4 +8,5 @@ Phase 9 step 11 (docs/plan.md). '72 is usable, so the reader is told.
 role = "production"
 context_files = []
 created_at = "2026-09-21T17:13:13"
-commits = []
+completed_at = "2026-09-22T11:39:25"
+commits = ["74d5af044b1948b8ae45f32aed75148f9aad1784"]
