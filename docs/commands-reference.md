@@ -29,6 +29,23 @@ what it replies, and what it refuses.
 
 The groups below are the manual's own.
 
+## Which commands each mode has
+
+Both modes have every command on this page but six, which only
+(A) '70 has:
+
+| Commands | In (A) '70 | In (B) '75 |
+|---|---|---|
+| `)ORIGIN` `)DIGITS` `)WIDTH` | The index origin, print precision and print width | `INCORRECT COMMAND`; the settings are the system variables `⎕IO`, `⎕PP` and `⎕PW` |
+| `)GROUP` `)GRP` `)GRPS` | Groups of names | `INCORRECT COMMAND`; the IBM 5100 family has no groups |
+
+In (B) each of the six answers as any command the session does not
+know. The settings themselves are the same in both modes: a
+workspace saved with `)ORIGIN 0` in (A) loads in (B) with `⎕IO` 0,
+and the other way round. `--mode 70` or `--mode 75` chooses the
+mode at the command line, and the tab does in the browser; the
+tables below mark the six "(A) only".
+
 ## How much of a name to type
 
 Only the first four characters of a command name are significant.
@@ -56,7 +73,8 @@ exact: `)VARS` is the command and `)VAR` is not, and `)SI` does not
 extend to `)SIX`. The commands that can be shortened are the nine
 longer than four characters: `)CLEAR`, `)CONTINUE`, `)DIGITS`,
 `)ERASE`, `)GROUP`, `)ORIGIN`, `)PCOPY`, `)SYMBOLS`, `)WIDTH`. No
-two of them agree in their first four.
+two of them agree in their first four. In (B), which has not got
+`)DIGITS`, `)GROUP`, `)ORIGIN` or `)WIDTH`, it is the other five.
 
 ## Terminal control
 
@@ -93,11 +111,11 @@ Ctrl-D at the prompt ends the session as `)OFF` does.
 | `)WSID name` | Rename the workspace |
 | `)COPY [lib] name [objects]` | Bring names out of a stored workspace |
 | `)PCOPY [lib] name [objects]` | As `)COPY`, but keep any name already here |
-| `)GROUP name [members]` | Gather names under one name; one name alone disperses |
+| `)GROUP name [members]` | Gather names under one name; one name alone disperses. (A) only |
 | `)ERASE names` | Remove global objects |
-| `)ORIGIN n` | Index origin, 0 or 1 |
-| `)DIGITS n` | Print precision, 1 to 16 |
-| `)WIDTH n` | Print width, 30 to 254 (APL\360 stopped at 130) |
+| `)ORIGIN n` | Index origin, 0 or 1. (A) only |
+| `)DIGITS n` | Print precision, 1 to 16. (A) only |
+| `)WIDTH n` | Print width, 30 to 254 (APL\360 stopped at 130). (A) only |
 
 `)CLEAR` replies `CLEAR WS`. Everything goes: names, settings, the
 workspace's own name, and the state indicator with them, so a
@@ -229,8 +247,8 @@ workspace holds.
 |---|---|
 | `)FNS [letter]` | Defined function names, alphabetically, from a letter |
 | `)VARS [letter]` | Global variable names, the same |
-| `)GRPS [letter]` | Group names, the same |
-| `)GRP name` | What a group gathers, in the order it was gathered |
+| `)GRPS [letter]` | Group names, the same. (A) only |
+| `)GRP name` | What a group gathers, in the order it was gathered. (A) only |
 | `)SI` | The state indicator: each function with the line it stopped on |
 | `)SIV` | As `)SI`, with the names each call made local |
 | `)SYMBOLS` | How many names are held, and how many would fit |
@@ -290,6 +308,7 @@ command line:
 |---|---|
 | `--library DIR` | The directory the libraries sit under. Library 0 is `DIR/work`, library 1 is `DIR/ws/lib1` |
 | `--ws-size BYTES` | How much the workspace may hold before `WS FULL` |
+| `--mode 70` or `--mode 75` | The mode, (A) '70 or (B) '75; the default is 70 |
 
 `sw-apl --help` has the rest of the command line.
 

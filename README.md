@@ -4,7 +4,9 @@
 
 # sw-apl
 
-A clean-room APL\360 interpreter written in Rust, from scratch.
+A clean-room APL interpreter written in Rust, from scratch, with two
+modes: (A) '70, modelled on APL\360, and (B) '75, modelled on the
+APL of the IBM 5100 family of desktop computers.
 
 sw-apl brings back classic IBM APL the way it was used on a
 terminal: traditional glyphs typed as Unicode, the six-space
@@ -14,10 +16,16 @@ workspaces (`)CLEAR`, `)WSID`, `)SAVE`, `)LOAD`, `)FNS`,
 `)VARS`, ...). It is a command-line program for macOS and Linux,
 and the same interpreter runs in a browser.
 
-It is deliberately pure APL\360: not APLSV (no quad-named system
-variables, no execute or format; I-beams instead), not APL2, not
-Dyalog (flat arrays only, no nested arrays, no each). It is also
-not a port. The C interpreter
+The two modes share one core language and differ at the edges. (A)
+is pure APL\360: I-beams for system values, `)ORIGIN`, `)DIGITS` and
+`)WIDTH` for the settings, no quad-named system variables, no
+execute. (B) is APLSV as IBM cut it down for a one-user machine:
+execute and the quad system variables and functions, and no
+I-beams or settings commands. Format is not implemented. Each mode
+lists and loads only the workspaces that run in it.
+[The (B) '75 mode](docs/mode-b.md) says what (B) is modelled on
+and how it differs from (A). Neither mode is APL2 or Dyalog (flat
+arrays only, no nested arrays, no each). It is also not a port. The C interpreter
 `sw-cor24-apl` and GNU APL served only as references for expected
 behaviour and for the conformance corpus in `samples/`.
 
@@ -27,8 +35,10 @@ behaviour and for the conformance corpus in `samples/`.
 
 The interpreter compiled to WebAssembly, running in a worker in the
 tab. There is no server: nothing typed there is sent anywhere.
-`)LIB 1` lists the workspaces sw-apl ships and `)LOAD 1 RACE` loads
-one; `)SAVE` writes into the browser's own storage. A keyboard on
+The tabs at the top choose the mode, (A) '70 or (B) '75; switching
+starts a new session in a clear workspace. `)LIB 1` lists the
+workspaces sw-apl ships and `)LOAD 1 RACE` loads one; `)SAVE`
+writes into the browser's own storage. A keyboard on
 the page gives every glyph a key, so a touch screen works too.
 
 ## A session
@@ -154,20 +164,24 @@ web demo.
 | Data | Flat arrays of any rank; one numeric type with integer fast path and floating point; characters |
 | Primitives | The APL\360 scalar and mixed functions; reduce, scan, inner and outer product; indexing |
 | Functions | Del editor, niladic/monadic/dyadic headers, locals, labels, branching, recursion |
-| System | I-beam system functions, quad and quote-quad I/O, the APL\360 system commands (`)ORIGIN`, `)DIGITS`, `)WIDTH`, workspaces on disk), the DESCRIBE convention |
+| Modes | (A) '70 and (B) '75, chosen with `--mode 70` or `--mode 75` and by a tab in the browser |
+| System | Quad and quote-quad I/O, workspaces on disk, the DESCRIBE convention; in (A) the I-beam system functions and `)ORIGIN`, `)DIGITS`, `)WIDTH`; in (B) execute and the quad system variables and functions |
 | Session | Six-space indent prompt, APL\360 error display with caret, batch transcripts |
 | Input | Espanso and Emacs keymaps, 2741 overstrikes on Ctrl-], and an on-screen board in the browser (`docs/glyph-entry.md`) |
 
 This README is plain ASCII so it renders the same everywhere; the
 documents below show real APL glyphs:
 
-- [Parity checklist](docs/parity.md) -- what works, what does not,
-  and how we will know we have APL\360 parity
+- [Parity checklist](docs/parity.md) -- what works in each mode,
+  what does not, and how we will know we have parity
 - [Master plan](docs/plan.md) -- phases, decisions, what comes next
 - [APL timeline](docs/apl-timeline.md) -- the APLs sw-apl models,
   and the ones around them, in order
-- [Language reference](docs/language.md) -- the APL\360 subset and
-  exactly which Unicode is accepted
+- [Language reference](docs/language.md) -- the shared core, what
+  (B) adds, what (A) has that (B) has not, and exactly which Unicode
+  is accepted
+- [The (B) '75 mode](docs/mode-b.md) -- what (B) is modelled on, its
+  sources, and every way it differs from (A)
 - [Glyph table](docs/glyphs.txt) -- every glyph with its code point
 - [Session](docs/session.md) -- prompt, error display, system
   commands, the DESCRIBE convention

@@ -1,13 +1,25 @@
-# sw-apl Language Reference (APL\360 subset)
+# sw-apl Language Reference
 
-This describes the language sw-apl implements. Glyphs are mostly
-named in prose; `glyphs.txt` is the machine-readable table of
-characters and code points, and the "Accepted Unicode" section
-below shows them. Behaviour follows the IBM APL\360 User's Manual
-(1968, and its 1970 edition), with domino from the APL\360-OS/DOS
-manual of December 1970. Nothing from
-APLSV or later is included: no quad-named system variables or
-functions, no execute, no format.
+This describes the language sw-apl implements, in its two modes:
+
+- **(A) '70**, modelled on APL\360. Behaviour follows the IBM
+  APL\360 User's Manual (1968, and its 1970 edition), with domino
+  from the APL\360-OS/DOS manual of December 1970.
+- **(B) '75**, modelled on the APL of the IBM 5100 family, following
+  the IBM 5110 APL Reference Manual. `mode-b.md` records the sources
+  and every decision where sw-apl departs from them.
+
+Most of the language is one shared core, and the sections from
+*Accepted Unicode* to *Defined functions* describe it: they hold in
+both modes except where they say otherwise. Then come what (B) adds
+-- execute and the quad system variables and functions -- and what
+(A) has that (B) has not -- the I-beam functions and the settings
+commands. `--mode 70` or `--mode 75` chooses the mode at the command
+line, and the tab does in the browser.
+
+Glyphs are mostly named in prose; `glyphs.txt` is the
+machine-readable table of characters and code points, and the
+"Accepted Unicode" section below shows them.
 
 ## Accepted Unicode
 
@@ -20,8 +32,8 @@ exactly these characters are valid:
   `}`) are CHARACTER ERROR.
 - The APL glyphs: × ÷ ⌈ ⌊ ⍟ ○ ∧ ∨ ⍲ ⍱ ≤ ≥ ≠ ⍳ ⍴ ⌽ ⊖ ⍉ ↑ ↓ ⌿ ⍀
   ⊥ ⊤ ∊ ⍋ ⍒ ⌹ ⌶ ∘ ← → ∇ ⍫ ⍝ ¯ ⎕ ⍞ ∆ ⍙ (code points in
-  `glyphs.txt`). Glyphs from later APLs (⍎ ⍕ ⍺ ⍵ ⊂ ⊃ ¨ ⋄ ...) are
-  CHARACTER ERROR.
+  `glyphs.txt`). In (B), also execute ⍎ and format ⍕. Glyphs from
+  later APLs (⍺ ⍵ ⊂ ⊃ ¨ ⋄ ..., and ⍎ ⍕ in (A)) are CHARACTER ERROR.
 - Newline ends a line; carriage return before a newline is
   ignored so CRLF files load.
 
@@ -46,10 +58,12 @@ bad sequence; the session continues with the next line.
   letter; elsewhere it is a CHARACTER ERROR. It prints in one
   position and is counted as one column. As character data each
   underscored letter is two elements, so `⍴'X̲'` is 2.
-- A quad followed by letters is quad input followed by a name;
-  there are no quad-named system variables in APL\360. System
-  information comes from the I-beam functions below and settings
-  from `)ORIGIN`, `)DIGITS`, `)WIDTH`.
+- In (A), a quad followed by letters is quad input followed by a
+  name; there are no quad-named system variables in APL\360.
+  System information comes from the I-beam functions and settings
+  from `)ORIGIN`, `)DIGITS`, `)WIDTH`. In (B), a quad directly
+  before a letter is one name, a system variable or function such as
+  `⎕IO` or `⎕FX`.
 - A lamp starts a comment that runs to end of line.
 
 ## Numbers
@@ -71,12 +85,15 @@ bad sequence; the session continues with the next line.
   that has to be a count: `⍳(0.1+0.2)×10` is `1 2 3`, because that
   value prints as 3, floors to 3 and compares equal to 3. Zero has
   no slack: nothing but zero equals zero.
-- Display: up to `)DIGITS` significant digits (default 10),
+- Display: up to the print precision in significant digits,
   exponential form when the magnitude needs it, high minus for
-  negatives, no trailing zeros. `)DIGITS` caps every number and not
+  negatives, no trailing zeros. The precision bounds what is shown
+  and never what is held: `3×1÷3` is 1 at a precision of 1. In (A)
+  it is `)DIGITS` (default 10), and it caps every number and not
   only the fractions, so an exact integer wider than the setting is
-  shown in exponential form. It bounds what is shown and never what
-  is held: `3×1÷3` is 1 at `)DIGITS 1`.
+  shown in exponential form. In (B) it is `⎕PP` (default 5), and a
+  whole number of up to ten digits is shown in full whatever it
+  says.
 
 ## Characters
 
@@ -92,7 +109,8 @@ bad sequence; the session continues with the next line.
 - Numeric literals written side by side form a vector (strand).
 - Empty arrays: `iota 0`, `0 rho X`, `''`. An empty numeric
   vector displays as a blank line.
-- The index origin (`)ORIGIN`, default 1) applies to iota,
+- The index origin (`)ORIGIN` in (A), `⎕IO` in (B), default 1 in
+  both) applies to iota,
   indexing, grade, index-of, deal, roll, and axis specification.
 
 ## Scalar functions
@@ -250,7 +268,88 @@ Notes:
   where it stopped. `session.md` has the display and the
   commands.
 
-## I-beam functions
+## What (B) '75 adds
+
+### Execute
+
+`⍎B` runs a character scalar or vector as a line. As a whole
+statement it shows what the line would show, which is nothing for an
+assignment or an empty line; inside an expression the line must give
+a value, or it is a VALUE ERROR. An error in the line is the
+statement's, with the caret on the execute. Execute is monadic.
+
+```apl
+      ⍎'2+3'
+5
+      X←⍎'⍳3'
+      X
+1 2 3
+```
+
+On the keyboard, execute is `⊥` struck with `∘`.
+
+### Format
+
+Format, `⍕`, is a glyph of (B) -- struck from `⊤` and `∘` -- but not
+implemented: using it is a NONCE ERROR.
+
+### System variables
+
+| Name | |
+|---|---|
+| `⎕IO` | Index origin, 0 or 1 |
+| `⎕PP` | Print precision, 1 to 16 |
+| `⎕PW` | Print width, 30 to 254 |
+| `⎕RL` | Random link |
+| `⎕CT` | Comparison tolerance: reads `1E¯13`, and takes no other value (NONCE ERROR) |
+| `⎕LC` | Line counter: the lines being executed, innermost first |
+| `⎕WA` | Workspace available, in bytes |
+| `⎕AV` | The atomic vector: 256 characters, in the 5110's order |
+| `⎕LX` | Latent expression, run by `)LOAD` once the workspace is in |
+| `⎕AI` `⎕TS` `⎕TT` `⎕UL` `⎕DL` | Fixed values, kept for compatibility: the 5110 had one user and no clock. `⎕TS` is `1900 0 0 0 0 0 0` until assigned |
+
+`⎕IO`, `⎕PP`, `⎕PW` and `⎕RL` are the same settings (A)'s commands
+and directives set: a workspace saved with `)ORIGIN 0` in (A) has
+`⎕IO` 0 in (B). A value a setting cannot take is a DOMAIN ERROR at
+the assignment. An assignment to `⎕LC`, `⎕WA`, `⎕AV`, `⎕TT`, `⎕UL`
+or `⎕DL` is ignored. A clear workspace in (B) has `⎕PP` 5 and `⎕PW`
+64, the 5110's screen. A quad name the system has not got is a
+SYNTAX ERROR.
+
+Not implemented: a system variable localized in a function header,
+`⎕PW` 128 while a definition is open, and indexed assignment into a
+system variable (NONCE ERROR).
+
+### System functions
+
+| Call | Result |
+|---|---|
+| `⎕CR 'F'` | The function as a character matrix: header first, no line numbers or dels, padded with blanks. Anything that is not an unlocked function gives a 0 by 0 matrix |
+| `⎕FX M` | Defines the function the rows of `M` spell and gives its name; or, changing nothing, the number of the first line the del editor would not have taken (the header is 0) |
+| `⎕EX 'NAME'` | Erases what the name holds; 1 if the name is then free, 0 if it could not be freed |
+| `⎕NC 'NAME'` | The name's class: 0 free, 1 label, 2 variable, 3 function, 4 not to be used as a name. A matrix of names gives a vector |
+| `[L] ⎕NL K` | The names of the classes in `K`, one to a row, alphabetically; `L` restricts them to those initial letters |
+| `⎕CC V` | The 5110's console control: checks the request and answers 1 or 0 as the 5110 would. sw-apl has no screen, alarm or printer for it to act on |
+
+`⎕FX` refuses what the del editor would refuse, and a name that holds
+a variable, is locked, is running or waiting on the state indicator,
+or that a running function has made local. Not implemented: local
+function names, so a function cannot be fixed under a name a running
+function has made local.
+
+### Errors
+
+(B) has one error (A) has not: NONCE ERROR, for something the
+language has and sw-apl does not yet do -- format, and an I-beam,
+which the 5110 manual makes a NONCE ERROR.
+
+## What (A) '70 has that (B) '75 does not
+
+The I-beam functions and the settings commands. The 5100 family
+replaced both with system variables and functions; in (B) an I-beam
+is a NONCE ERROR and the commands are INCORRECT COMMAND.
+
+### I-beam functions
 
 The I-beam (U+2336) is a monadic function whose integer argument
 selects a system value, as in APL\360:
@@ -282,18 +381,19 @@ that wants to differ from run to run stirs the random link from
 the clock -- `?(1+60|⌶20)⍴2` throws away a clock-dependent number
 of rolls -- which is what `samples/58-ibeams.apl` shows.
 
-## Settings commands
+### Settings commands
 
 `)ORIGIN n` (0 or 1), `)DIGITS n` (1 to 16), and `)WIDTH n` (30 to
 254) change the index origin, print precision, and print width
 and reply with the previous value as `WAS n`. They are saved with
-the workspace.
+the workspace, and read back in (B) as `⎕IO`, `⎕PP` and `⎕PW`.
 
 ## Errors
 
 SYNTAX ERROR, VALUE ERROR, DOMAIN ERROR, RANK ERROR, LENGTH
 ERROR, INDEX ERROR, WS FULL, DEFN ERROR, CHARACTER ERROR, DEPTH
-ERROR, INTERRUPT. That is the whole vocabulary. Display format is
+ERROR, INTERRUPT, and in (B) NONCE ERROR. That is the whole
+vocabulary. Display format is
 in `session.md`.
 
 A glyph used where it has no such form is a SYNTAX ERROR: `1~0`,

@@ -2,7 +2,7 @@
 <meta charset="utf-8">
 <title>sw-apl</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="A clean-room APL\360 interpreter, compiled to WebAssembly and running in this tab.">
+<meta name="description" content="A clean-room APL interpreter, compiled to WebAssembly and running in this tab.">
 <!-- start_url and scope are relative, so this works at a root and
      under a GitHub project page's /sw-apl/ alike. -->
 <link rel="manifest" href="manifest.json">
@@ -39,6 +39,7 @@
     color: var(--ink); background: none;
     border: 1px solid var(--rule); border-radius: .3rem;
   }
+  .mode-tabs [role=tab] + [role=tab] { margin-left: .3rem; }
   .mode-tabs [role=tab][aria-selected="true"] { border-color: var(--ink); font-weight: 600; }
   .mode-about { font-size: 12px; opacity: .7; }
   header { border-width: 0 0 1px; }
@@ -227,13 +228,17 @@
 <main id="session">
   <header>
     <span class="name">sw-apl</span>
-    <!-- The mode, as a row of tabs holding one: it is the current mode
-         and the only one. The circled A is decoration to a screen
-         reader, which reads the label instead. -->
+    <!-- The mode, as a row of tabs: the current one is marked, and
+         the other starts a session in its mode. The circled letter is
+         decoration to a screen reader, which reads the label instead. -->
     <div class="mode-tabs" role="tablist" aria-label="APL mode">
-      <button type="button" role="tab" aria-selected="true" id="mode-tab"
+      <button type="button" role="tab" aria-selected="true" id="mode-tab-a" data-mode="A"
               title="APL\360-inspired" aria-label="1970, APL\360-inspired">
         <span aria-hidden="true">Ⓐ '70</span>
+      </button>
+      <button type="button" role="tab" aria-selected="false" id="mode-tab-b" data-mode="B"
+              title="IBM 5100-inspired" aria-label="1975, IBM 5100-inspired">
+        <span aria-hidden="true">Ⓑ '75</span>
       </button>
     </div>
     <span class="mode-about" id="mode-about" hidden>APL\360-inspired</span>
@@ -267,7 +272,7 @@
 <dialog id="help">
   <h2>sw-apl</h2>
   <p>
-    An APL\360 session, compiled to WebAssembly and running in a worker
+    An APL session, compiled to WebAssembly and running in a worker
     in this tab. There is no server: nothing typed here leaves your
     browser, and nothing is sent anywhere.
   </p>
@@ -298,6 +303,18 @@
     comes back next time you open this page in this browser -- and is
     in no other browser and on no other machine.
   </p>
+  <h3>Two modes</h3>
+  <p>
+    The tabs at the top are the modes. <b>Ⓐ '70</b> is
+    APL\360-inspired. <b>Ⓑ '75</b> is IBM 5100-inspired: it adds
+    execute <code>⍎</code> and the quad system variables and functions
+    such as <code>⎕IO</code> and <code>⎕FX</code>, and has no I-beams
+    and no <code>)ORIGIN</code>, <code>)DIGITS</code> or
+    <code>)WIDTH</code>.
+    Each mode lists and loads only the workspaces that run in it.
+    Switching starts a new session in a clear workspace, so
+    <code>)SAVE</code> first what you want to keep.
+  </p>
   <h3>If it says there is no shared memory</h3>
   <p>
     The interpreter stops and waits for a line, which needs a
@@ -311,6 +328,19 @@
     locally.
   </p>
   <form method="dialog"><button>Close</button></form>
+</dialog>
+<dialog id="switch" aria-labelledby="switch-title">
+  <h2 id="switch-title">Switch to <span id="switch-to"></span>?</h2>
+  <p>
+    The session starts again in the other mode, in a clear workspace:
+    the workspace in hand is not carried across. <code>)SAVE</code> it
+    first to keep it. A saved workspace is listed in the modes it runs
+    in, so one that runs in both is there in either.
+  </p>
+  <form method="dialog">
+    <button value="switch">Switch</button>
+    <button value="stay" autofocus>Stay</button>
+  </form>
 </dialog>
 <script type="module">
   // The page is the one file a browser must fetch fresh: it is the

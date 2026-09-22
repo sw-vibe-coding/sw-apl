@@ -1,7 +1,7 @@
 {
-  "name": "sw-apl — an APL\\360 session",
+  "name": "sw-apl — an APL session",
   "short_name": "sw-apl",
-  "description": "A clean-room APL\\360 interpreter, compiled to WebAssembly and running in the tab. Nothing typed is sent anywhere.",
+  "description": "A clean-room APL interpreter, compiled to WebAssembly and running in the tab. Nothing typed is sent anywhere.",
   "start_url": ".",
   "scope": ".",
   "display": "standalone",

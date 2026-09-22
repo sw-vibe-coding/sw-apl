@@ -107,6 +107,30 @@ const RELOADS = "apl-isolation-reloads";
 // but the tab it was typed in. Nothing is sent anywhere.
 const LIBRARY = "apl-library-0";
 
+// The modes, by the letter the tab and the board use and the word the
+// session reads. A session is in one mode for as long as it lasts, so
+// changing mode is starting another.
+const MODES = { A: "70", B: "75" };
+
+// Which mode this visit is in: the address says, or else the mode the
+// last visit was in, or else (A). The address is what a switch sets,
+// so it works where nothing can be remembered; the memory is what
+// brings a reader back to the mode they left.
+const CHOSEN = "apl-mode";
+function chosen() {
+  const asked = new URL(location.href).searchParams.get("mode")?.toUpperCase();
+  if (asked in MODES) return asked;
+  try {
+    const kept = localStorage.getItem(CHOSEN);
+    if (kept in MODES) return kept;
+  } catch { /* private mode: (A) */ }
+  return "A";
+}
+const MODE = chosen();
+try {
+  localStorage.setItem(CHOSEN, MODE);
+} catch { /* not remembered; the address still carries it */ }
+
 // Whether the reader has already been told there is nowhere to keep
 // a workspace, so they are told once and not after every )SAVE.
 let warned = false;
@@ -201,7 +225,7 @@ async function run() {
     return;
   }
   await init();
-  board = new Board("A");
+  board = new Board(MODE);
   const channel = new SharedArrayBuffer(SIZE);
   const header = new Int32Array(channel, 0, 3);
   const body = new Uint8Array(channel, BODY);
@@ -230,7 +254,7 @@ async function run() {
     clearTimeout(watchdog);
     stop("The session could not be started.");
   };
-  worker.postMessage({ channel, stored: stored() });
+  worker.postMessage({ channel, stored: stored(), mode: MODES[MODE] });
   wire = { header, body };
   listen(header, body);
   await keyboard();
@@ -274,14 +298,38 @@ async function keyboard() {
   } catch { /* as above */ }
   reveal(was);
 
-  // The mode tab: a tap shows what its tooltip says, because a touch
-  // screen has no hover to show it.
-  const about = document.getElementById("mode-about");
-  document.getElementById("mode-tab")
-    .addEventListener("click", () => { about.hidden = !about.hidden; });
+  tabs();
 
   const help = document.getElementById("help");
   document.getElementById("show-help").addEventListener("click", () => help.showModal());
+}
+
+// The mode tabs. The current one shows, on a tap, what its tooltip
+// says, because a touch screen has no hover to show it. The other
+// asks first, because switching leaves the workspace in hand behind,
+// and then starts its own session by loading the page in its mode.
+function tabs() {
+  const about = document.getElementById("mode-about");
+  const ask = document.getElementById("switch");
+  for (const tab of document.querySelectorAll(".mode-tabs [role=tab]")) {
+    const here = tab.dataset.mode === MODE;
+    tab.setAttribute("aria-selected", String(here));
+    if (here) about.textContent = tab.title;
+    tab.addEventListener("click", () => {
+      if (here) return void (about.hidden = !about.hidden);
+      document.getElementById("switch-to").textContent = tab.textContent.trim();
+      ask.returnValue = "";
+      ask.onclose = () => ask.returnValue === "switch" && go(tab.dataset.mode);
+      ask.showModal();
+    });
+  }
+}
+
+// Load the page again in `mode`.
+function go(mode) {
+  const next = new URL(location.href);
+  next.searchParams.set("mode", mode);
+  location.assign(next);
 }
 
 // What this page is running, for the colophon. It comes out of

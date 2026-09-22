@@ -1,7 +1,10 @@
 # sw-apl Session: terminal look and feel, system commands
 
-sw-apl reproduces the APL\360 terminal session. Everything here is
-observable behaviour the reg-rs transcripts pin down.
+sw-apl reproduces the APL\360 terminal session, in both of its
+modes: (A) '70, modelled on APL\360, and (B) '75, modelled on the APL
+of the IBM 5100 family. The session looks the same in each; where a
+mode differs, this page says so. Everything here is observable
+behaviour the reg-rs transcripts pin down.
 
 ## Prompt and transcript
 
@@ -13,8 +16,8 @@ observable behaviour the reg-rs transcripts pin down.
 - Function definition mode prompts with the bracketed line number
   followed by spaces, for example `[1]   `. A fractional number
   fills the same six columns, for example `[1.5] `.
-- Output wider than `)WIDTH` wraps; continuation lines are indented
-  six spaces.
+- Output wider than the print width (`)WIDTH` in (A), `⎕PW` in (B))
+  wraps; continuation lines are indented six spaces.
 - Batch mode (`-f FILE` or stdin) echoes each input line with the
   six-space indent before its output so the transcript matches an
   interactive session. `--no-echo` suppresses the echo.
@@ -110,23 +113,28 @@ more input to take is INTERRUPT.
 Recognised when the first non-blank character is a right
 parenthesis. Names are case-insensitive. Unknown commands, and
 known ones given an argument they do not take, report INCORRECT
-COMMAND. The tables below say what each command means in
-APL\360; `parity.md` says which of them sw-apl answers yet.
+COMMAND. The tables below say what each command means, and which
+modes have it; `parity.md` says which of them sw-apl answers yet.
+
+Six commands are (A)'s only: `)ORIGIN`, `)DIGITS` and `)WIDTH`,
+whose settings are `⎕IO`, `⎕PP` and `⎕PW` in (B), and the group
+commands `)GROUP`, `)GRP` and `)GRPS`, which the IBM 5100 family
+dropped. In (B) each is INCORRECT COMMAND.
 
 Workspace control:
 
-| Command | Meaning |
-|---|---|
-| `)CLEAR` | Fresh workspace; prints `CLEAR WS` |
-| `)WSID [name]` | Show or set the workspace id; setting replies `WAS` the old one |
-| `)SAVE [name]` | Save; prints the timestamp and id |
-| `)LOAD name` | Load; prints `SAVED` and the timestamp |
-| `)DROP name` | Delete a saved workspace |
-| `)LIB [n]` | List workspaces in a library |
-| `)COPY name [objects]` | Copy objects from a saved workspace |
-| `)PCOPY name [objects]` | Copy without overwriting existing names |
-| `)CONTINUE` | Save as CONTINUE and sign off |
-| `)OFF` | End the session |
+| Command | Meaning | Modes |
+|---|---|---|
+| `)CLEAR` | Fresh workspace; prints `CLEAR WS` | both |
+| `)WSID [name]` | Show or set the workspace id; setting replies `WAS` the old one | both |
+| `)SAVE [name]` | Save; prints the timestamp and id | both |
+| `)LOAD name` | Load; prints `SAVED` and the timestamp | both |
+| `)DROP name` | Delete a saved workspace | both |
+| `)LIB [n]` | List workspaces in a library | both |
+| `)COPY name [objects]` | Copy objects from a saved workspace | both |
+| `)PCOPY name [objects]` | Copy without overwriting existing names | both |
+| `)CONTINUE` | Save as CONTINUE and sign off | both |
+| `)OFF` | End the session | both |
 
 Only the first four characters of a command name are significant,
 so `)CLEA`, `)CLEAR` and `)CLEAVER` are one command. A name of four
@@ -138,19 +146,19 @@ not have and why.
 
 Inquiry and settings:
 
-| Command | Meaning |
-|---|---|
-| `)FNS [letter]` | List defined functions, alphabetically, from a letter |
-| `)VARS [letter]` | List global variables, alphabetically, from a letter |
-| `)GRPS [letter]` | List group names, alphabetically, from a letter |
-| `)GRP name` | List what a group gathers, as it was gathered |
-| `)GROUP name [members]` | Gather names under one name; one name alone disperses it |
-| `)ERASE names` | Remove global objects; a group name takes its members |
-| `)SI`, `)SIV` | State indicator; `)SIV` adds local names |
-| `)ORIGIN n` | Set index origin (0 or 1); replies `WAS n` |
-| `)DIGITS n` | Set print precision (1 to 16); replies `WAS n` |
-| `)WIDTH n` | Set print width (30 to 254); replies `WAS n` |
-| `)SYMBOLS` | How many names are held, and how many would fit |
+| Command | Meaning | Modes |
+|---|---|---|
+| `)FNS [letter]` | List defined functions, alphabetically, from a letter | both |
+| `)VARS [letter]` | List global variables, alphabetically, from a letter | both |
+| `)GRPS [letter]` | List group names, alphabetically, from a letter | (A) |
+| `)GRP name` | List what a group gathers, as it was gathered | (A) |
+| `)GROUP name [members]` | Gather names under one name; one name alone disperses it | (A) |
+| `)ERASE names` | Remove global objects; a group name takes its members | both |
+| `)SI`, `)SIV` | State indicator; `)SIV` adds local names | both |
+| `)ORIGIN n` | Set index origin (0 or 1); replies `WAS n` | (A) |
+| `)DIGITS n` | Set print precision (1 to 16); replies `WAS n` | (A) |
+| `)WIDTH n` | Set print width (30 to 254); replies `WAS n` | (A) |
+| `)SYMBOLS` | How many names are held, and how many would fit | both |
 
 ## What the workspace is
 
@@ -277,8 +285,8 @@ and it falls as the workspace fills. There is nothing to set, so
 
 ## How big a workspace is
 
-A workspace holds a fixed number of bytes. `⌶22` reports how many
-are still free; `--ws-size` sets the size, and the default is
+A workspace holds a fixed number of bytes. `⌶22` in (A) and `⎕WA`
+in (B) report how many are still free; `--ws-size` sets the size, and the default is
 1048576 bytes. Anything that will not fit is `WS FULL`, and
 nothing is stored.
 

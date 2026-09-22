@@ -778,7 +778,12 @@ Order:
 8. The quad system variables.
 9. The quad system functions.
 10. The docs, the README, and the `Ⓑ '75` tab (moved up,
-    2026-09-22).
+    2026-09-22). Done 2026-09-22 (step 016): the tab starts a (B)
+    session with a (B) board, after a dialog that says the workspace
+    in hand is not carried across, and the mode is remembered; the
+    user docs describe a shared core and what each mode has alone,
+    and parity.md has a column per mode. Library 1 was not empty in
+    (B) after all: the four shipped workspaces are `(A)(B)`.
 11. Library 1 for '75, BIRDS first. **Milestone 2.**
 12. The keyboard per mode.
 13. Format.
