@@ -809,11 +809,30 @@ in (B), where execute can do what (A) needs more functions for.
 `)LIB 1` lists, and `)LOAD 1 NAME` loads, the version for the mode
 the session is in. A workspace that is the same in both keeps one
 file, `NAME.apl.ws` with `⍝!MODES (A)(B)`, and is listed and loaded
-in both. One that differs has one file per mode, named as library 0
-already names a pair: `NAME.apl.ws` for (A) and `NAME@B.apl.ws` for
-(B), each with its own modes line, and both listed as `NAME`
-(`apl-shelves` already finds a pair this way). The browser bundle
-ships every file. This belongs to the library 1 step.
+in both. One that differs has one file per mode, each with its own
+modes line and both listed as `NAME`. The browser bundle ships every
+file. This belongs to the library 1 step.
+
+File names (owner, 2026-09-22): a listing of the file tree must show
+at a glance which modes a workspace runs in. The mode goes in the
+name, and is left out when a workspace runs in both:
+
+| Runs in | File |
+|---|---|
+| (A) and (B) | `NAME.apl.ws` |
+| (A) only | `NAME.a-70.apl.ws` |
+| (B) only | `NAME.b-75.apl.ws` |
+
+So TTTML, which is (B) only, is `ws/lib1/TTTML.b-75.apl.ws`, and a
+BIRDS that differs by mode is `BIRDS.a-70.apl.ws` beside
+`BIRDS.b-75.apl.ws`. The `⍝!MODES` line inside stays the authority,
+and a file whose name and modes line disagree is an error for the
+library tests and `scripts/check-provenance.sh` to catch. The same
+scheme replaces library 0's `NAME@B.apl.ws`: `)SAVE` writes the name
+its modes line calls for, and still reads an `@` file it finds. The
+placement of the mode, just before `.apl.ws`, is a guess at the
+owner's words; the extension stays `.apl.ws`, so everything that
+looks for a workspace by its extension still finds it.
 
 **Milestone 2 moves with the work it names, not with the tab.** The
 tab step's own words -- "APLSV's own tests and demos, except format,
