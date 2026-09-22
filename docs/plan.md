@@ -650,6 +650,42 @@ The '68 mode must not move. Every existing sample is a '68 sample and
 reg-rs is the proof: a step that changes a '68 transcript is wrong,
 not rebased.
 
+Workspaces and modes (owner, 2026-09-21). A workspace runs in the
+modes it runs in, and is listed and loaded only there:
+
+- Each workspace says which modes it runs in, on a line of its own
+  near the top: `(A)`, `(A)(B)` or `(B)` -- `(A)` for '68, `(B)` for
+  '72, with later modes added as they come.
+- A workspace that uses something only one mode has must be listed and
+  loaded in that mode alone. One using only what both share runs in
+  both, and is listed in both.
+- Keeping such a workspace once and showing it in both is an
+  optimisation the reader never sees; a library is still a mode's.
+- `)SAVE` should decide the line from what the workspace uses, not
+  from the mode it was saved in: a workspace saved in '72 that uses
+  nothing '72 added is `(A)(B)`. So the same name can stand for a
+  '68-only workspace and a different '72-only one -- BIRDS in each, the
+  '72 one flying the birds execute makes possible.
+- What must differ in what is written, and what can be shared, is a
+  question for the sources. The file format today writes its settings
+  as `)ORIGIN`, `)DIGITS` and `)WIDTH` lines; if APLSV dropped those
+  commands, every workspace ever saved would be '68-only by that rule
+  alone, which is plainly wrong. The settings would have to be written
+  in a form both modes read, as the random link already is, in a `⍝!`
+  directive.
+
+The keyboard (owner, 2026-09-21): the same treatment. '68 has the
+2741's; '72 may have the IBM 5100's, if it differs, and only as much
+as it differs. APLSV was used from 2741s as well, so the 5100 keyboard
+is a choice of look for '72, not a historical necessity. Whether the
+5100, 5110 and 5120 keyboards are the same is for the sources to say;
+a picture of one needs its own licence, as the 2741's has.
+
+The del editor: expected to be the same in both modes, but that is
+also for the sources, and it is checked rather than assumed. APLSV's
+way of defining a function from characters is a second route to the
+same functions, and must agree with the editor.
+
 Sources: the APL\360 User's Manual has been the reference for
 everything so far. '72 needs its own -- the APLSV manual -- and the
 first '72 step finds it and records what differs, before any '72

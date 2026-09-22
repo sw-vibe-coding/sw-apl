@@ -22,3 +22,18 @@ libraries.
 
 No code. docs/ may carry glyphs; this is a planning document and may
 say what is to come.
+
+**Also settle, from the sources (owner, 2026-09-21):**
+
+- The del editor: whether APLSV's differs from APL\360's at all. The
+  owner assumes not; check, and cite either way.
+- What the workspace file must say differently. It writes its
+  settings as `)ORIGIN`, `)DIGITS` and `)WIDTH` lines today. If APLSV
+  dropped those commands, record it: step 005 then has to write the
+  settings in a form both modes read, or every workspace saved so far
+  would be '68-only.
+- The keyboards: how the IBM 5100's APL keyboard differs from the
+  2741's, and whether the 5100, 5110 and 5120 keyboards are the same
+  -- the owner believes they are; confirm or correct with a source.
+  Note what picture of a 5100 keyboard could be used, and under what
+  licence.

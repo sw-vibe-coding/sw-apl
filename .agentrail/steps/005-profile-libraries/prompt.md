@@ -19,3 +19,25 @@ Nothing '72 does differently yet: '72 is '68 with its own libraries.
 reg-rs stays 81 of 81 with no rebase, which is the proof '68 did not
 move. Tests for the store per mode, for the directive, and for
 loading across modes.
+
+**Owner direction, 2026-09-21 -- this replaces "libraries per mode"
+above.** A workspace is listed and loaded in the modes it runs in:
+
+- Each workspace carries a line near the top naming its modes: `(A)`
+  for '68, `(B)` for '72, `(A)(B)` for both, later modes added as they
+  come. Every workspace saved so far, and every shipped one, is given
+  its line; a file with none is `(A)`.
+- A workspace using what only one mode has is listed and loaded in
+  that mode alone. One using only what both share is listed and loaded
+  in both.
+- `)SAVE` decides the line from what the workspace uses, not from the
+  mode it was saved in, so a '72 save that uses nothing '72 added is
+  `(A)(B)`. Two workspaces may share a name when their modes do not
+  overlap.
+- Keeping a workspace that runs in both once, and showing it in both,
+  is an optimisation the reader does not see.
+- The settings: if docs/aplsv.md says APLSV dropped `)ORIGIN`,
+  `)DIGITS` and `)WIDTH`, write them in a form both modes read -- a
+  `⍝!` directive, as the random link already is -- so that a workspace
+  is not '68-only merely for having an index origin. The '68
+  transcripts must not change.
