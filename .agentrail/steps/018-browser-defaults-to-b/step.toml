@@ -1,6 +1,6 @@
 number = 18
 slug = "browser-defaults-to-b"
-status = "pending"
+status = "in-progress"
 description = "Owner direction 2026-09-22 (docs/plan.md, Phase 9): the browser opens in (B) ..."
 role = "production"
 context_files = []

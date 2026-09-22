@@ -113,9 +113,10 @@ const LIBRARY = "apl-library-0";
 const MODES = { A: "70", B: "75" };
 
 // Which mode this visit is in: the address says, or else the mode the
-// last visit was in, or else (A). The address is what a switch sets,
+// last visit was in, or else (B). The address is what a switch sets,
 // so it works where nothing can be remembered; the memory is what
-// brings a reader back to the mode they left.
+// brings a reader back to the mode they left. The page opens in (B),
+// the owner's choice; the CLI and the service keep (A) as theirs.
 const CHOSEN = "apl-mode";
 function chosen() {
   const asked = new URL(location.href).searchParams.get("mode")?.toUpperCase();
@@ -123,8 +124,8 @@ function chosen() {
   try {
     const kept = localStorage.getItem(CHOSEN);
     if (kept in MODES) return kept;
-  } catch { /* private mode: (A) */ }
-  return "A";
+  } catch { /* private mode: (B) */ }
+  return "B";
 }
 const MODE = chosen();
 try {

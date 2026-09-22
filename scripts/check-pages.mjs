@@ -609,8 +609,8 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
 }
 
 // 11. The header: the name, then the modes as a row of tabs, the
-//     current one marked, each described to mouse, touch and screen
-//     reader alike, and neither naming IBM on the tab itself.
+//     current one marked -- (B) on a first visit -- each described to
+//     mouse, touch and screen reader alike.
 {
   const page = await visit();
   const header = () => page.evaluate(() => ({
@@ -629,53 +629,20 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   check('the header is sw-apl and then the modes',
     head.name === 'sw-apl' && a?.shows === "\u24b6 '70" && b?.shows === "\u24b7 '75",
     JSON.stringify(head));
-  check('two tabs, (A) marked current on a first visit',
-    head.tabs.length === 2 && a.selected === 'true' && b.selected === 'false', JSON.stringify(head));
+  check('two tabs, (B) marked current on a first visit',
+    head.tabs.length === 2 && a.selected === 'false' && b.selected === 'true', JSON.stringify(head));
   check("(A)'s tooltip says APL\\360-inspired", a.title === 'APL\\360-inspired', a.title);
   check("(B)'s tooltip says IBM 5100-inspired", b.title === 'IBM 5100-inspired', b.title);
   check('and a screen reader hears the words, not the circled letters',
     a.spoken === '1970, APL\\360-inspired' && b.spoken === '1975, IBM 5100-inspired',
     `${a.spoken} / ${b.spoken}`);
-  await page.click('#mode-tab-a');
+  await page.click('#mode-tab-b');
   check('a tap on the current tab shows its words where there is no hover',
     head.aboutHidden && !(await page.evaluate(() => document.getElementById('mode-about').hidden))
-      && head.about === 'APL\\360-inspired',
+      && head.about === 'IBM 5100-inspired',
     'the description did not appear');
 
-  // The other tab asks first, and says what becomes of the workspace.
-  await send(page, 'X←42');
-  await page.click('#mode-tab-b');
-  const asked = await page.evaluate(() => {
-    const d = document.getElementById('switch');
-    return { open: d.open, said: d.textContent };
-  });
-  check('the other tab asks before it switches', asked.open, JSON.stringify(asked));
-  check('and says the workspace in hand is not carried across',
-    /workspace in hand is not carried across/.test(asked.said) && asked.said.includes(')SAVE'),
-    JSON.stringify(asked.said));
-  await page.click('#switch button[value=stay]');
-  await page.waitForTimeout(300);
-  await send(page, 'X');
-  check('Stay keeps the session and its workspace',
-    (await paper(page)).trim().endsWith('42') && (await header()).tabs[0].selected === 'true',
-    JSON.stringify((await paper(page)).slice(-40)));
-  await send(page, "\u234e'2+3'");
-  check('(A) has no execute', /ERROR/.test((await paper(page)).slice(-60)),
-    JSON.stringify((await paper(page)).slice(-60)));
-
-  // Switch: a new session, in (B), with its own board.
-  await page.click('#mode-tab-b');
-  await Promise.all([page.waitForNavigation(), page.click('#switch button[value=switch]')]);
-  await page.waitForTimeout(1500);
-  await settle(page);
-  const now = await header();
-  check('Switch starts the session in (B)',
-    now.tabs[1].selected === 'true' && now.tabs[0].selected === 'false'
-      && now.about === 'IBM 5100-inspired' && new URL(page.url()).searchParams.get('mode') === 'B',
-    JSON.stringify(now));
-  await send(page, 'X');
-  check('in a clear workspace', /VALUE ERROR/.test(await paper(page)),
-    JSON.stringify((await paper(page)).slice(-60)));
+  // The session is (B): execute and the system variables, no )ORIGIN.
   await send(page, "\u234e'2+3'");
   check('(B) executes', (await paper(page)).trim().endsWith('5'),
     JSON.stringify((await paper(page)).slice(-60)));
@@ -697,12 +664,51 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await page.keyboard.press('Control+BracketRight');
   await page.keyboard.press('Shift+J');
   check("the board composes (B)'s overstrikes", (await line()) === '\u234e', await line());
+  await page.keyboard.press('Backspace');
 
-  // The mode is remembered: the next visit, at the bare address, is (B).
+  // The other tab asks first, and says what becomes of the workspace.
+  await send(page, 'X\u219042');
+  await page.click('#mode-tab-a');
+  const asked = await page.evaluate(() => {
+    const d = document.getElementById('switch');
+    return { open: d.open, said: d.textContent };
+  });
+  check('the other tab asks before it switches', asked.open, JSON.stringify(asked));
+  check('and says the workspace in hand is not carried across',
+    /workspace in hand is not carried across/.test(asked.said) && asked.said.includes(')SAVE'),
+    JSON.stringify(asked.said));
+  await page.click('#switch button[value=stay]');
+  await page.waitForTimeout(300);
+  await send(page, 'X');
+  check('Stay keeps the session and its workspace',
+    (await paper(page)).trim().endsWith('42') && (await header()).tabs[1].selected === 'true',
+    JSON.stringify((await paper(page)).slice(-40)));
+
+  // Switch: a new session, in (A).
+  await page.click('#mode-tab-a');
+  await Promise.all([page.waitForNavigation(), page.click('#switch button[value=switch]')]);
+  await page.waitForTimeout(1500);
+  await settle(page);
+  const now = await header();
+  check('Switch starts the session in (A)',
+    now.tabs[0].selected === 'true' && now.tabs[1].selected === 'false'
+      && now.about === 'APL\\360-inspired' && new URL(page.url()).searchParams.get('mode') === 'A',
+    JSON.stringify(now));
+  await send(page, 'X');
+  check('in a clear workspace', /VALUE ERROR/.test(await paper(page)),
+    JSON.stringify((await paper(page)).slice(-60)));
+  await send(page, "\u234e'2+3'");
+  check('(A) has no execute', /ERROR/.test((await paper(page)).slice(-60)),
+    JSON.stringify((await paper(page)).slice(-60)));
+  await send(page, ')ORIGIN 0');
+  check('(A) has )ORIGIN', (await paper(page)).trim().endsWith('WAS 1'),
+    JSON.stringify((await paper(page)).slice(-60)));
+
+  // The mode is remembered: the next visit, at the bare address, is (A).
   await page.goto(url, { waitUntil: 'load' });
   await page.waitForTimeout(1500);
   await settle(page);
-  check('the next visit comes back in (B)', (await header()).tabs[1].selected === 'true',
+  check('the next visit comes back in (A)', (await header()).tabs[0].selected === 'true',
     JSON.stringify(await header()));
   await page.context().close();
 }

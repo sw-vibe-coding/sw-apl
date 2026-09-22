@@ -232,16 +232,16 @@
          the other starts a session in its mode. The circled letter is
          decoration to a screen reader, which reads the label instead. -->
     <div class="mode-tabs" role="tablist" aria-label="APL mode">
-      <button type="button" role="tab" aria-selected="true" id="mode-tab-a" data-mode="A"
+      <button type="button" role="tab" aria-selected="false" id="mode-tab-a" data-mode="A"
               title="APL\360-inspired" aria-label="1970, APL\360-inspired">
         <span aria-hidden="true">Ⓐ '70</span>
       </button>
-      <button type="button" role="tab" aria-selected="false" id="mode-tab-b" data-mode="B"
+      <button type="button" role="tab" aria-selected="true" id="mode-tab-b" data-mode="B"
               title="IBM 5100-inspired" aria-label="1975, IBM 5100-inspired">
         <span aria-hidden="true">Ⓑ '75</span>
       </button>
     </div>
-    <span class="mode-about" id="mode-about" hidden>APL\360-inspired</span>
+    <span class="mode-about" id="mode-about" hidden>IBM 5100-inspired</span>
   </header>
   <pre id="paper"></pre>
   <div id="line" class="waiting"><span id="prompt"></span><span
@@ -305,7 +305,8 @@
   </p>
   <h3>Two modes</h3>
   <p>
-    The tabs at the top are the modes. <b>Ⓐ '70</b> is
+    The tabs at the top are the modes, and the page opens in
+    <b>Ⓑ '75</b> until you choose the other. <b>Ⓐ '70</b> is
     APL\360-inspired. <b>Ⓑ '75</b> is IBM 5100-inspired: it adds
     execute <code>⍎</code> and the quad system variables and functions
     such as <code>⎕IO</code> and <code>⎕FX</code>, and has no I-beams

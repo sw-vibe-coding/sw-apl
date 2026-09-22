@@ -35,8 +35,9 @@ behaviour and for the conformance corpus in `samples/`.
 
 The interpreter compiled to WebAssembly, running in a worker in the
 tab. There is no server: nothing typed there is sent anywhere.
-The tabs at the top choose the mode, (A) '70 or (B) '75; switching
-starts a new session in a clear workspace. `)LIB 1` lists the
+The tabs at the top choose the mode, (A) '70 or (B) '75. The page
+opens in (B) and remembers the mode you last chose; switching starts
+a new session in a clear workspace. `)LIB 1` lists the
 workspaces sw-apl ships and `)LOAD 1 RACE` loads one; `)SAVE`
 writes into the browser's own storage. A keyboard on
 the page gives every glyph a key, so a touch screen works too.
