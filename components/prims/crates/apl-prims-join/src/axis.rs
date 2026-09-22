@@ -36,9 +36,11 @@ pub fn resolve_axis(axis: Option<&Array>, io: i64, rank: usize) -> AplResult<Axi
     }
 }
 
-/// The single number in a scalar array.
+/// The single number in a scalar, or in a one-element array: the notes
+/// to Table 3.8 of the APL\360 User's Manual let a one-element array
+/// replace any scalar.
 fn scalar_number(a: &Array) -> AplResult<Number> {
-    if !a.shape.is_empty() {
+    if a.shape.iter().product::<usize>() != 1 {
         return Err(AplError::new(ErrorKind::Rank));
     }
     match &a.data {

@@ -91,3 +91,21 @@ fn encode_then_decode_round_trips() {
     let digits = encode(&v(&[2, 2, 2, 2]), &s(13)).unwrap();
     assert_eq!(decode(&v(&[2, 2, 2, 2]), &digits).unwrap(), s(13));
 }
+
+/// The APL\360 User's Manual, page 3.42: the arguments of decode
+/// must be of the same dimension, except that either may be a scalar
+/// or a one-element vector.
+#[test]
+fn decode_takes_a_one_element_vector_as_a_scalar() {
+    let digits = v(&[1, 7, 7, 6]);
+    assert_eq!(decode(&v(&[10]), &digits).unwrap(), s(1776), "on the left");
+    assert_eq!(
+        decode(&v(&[10, 10, 10]), &v(&[5])).unwrap(),
+        s(555),
+        "on the right"
+    );
+    assert_eq!(
+        decode(&v(&[10, 10]), &digits).unwrap_err().kind,
+        ErrorKind::Length
+    );
+}

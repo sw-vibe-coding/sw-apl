@@ -8,11 +8,13 @@ use apl_value::{AplError, AplResult, Array, ErrorKind, Number};
 ///
 /// # Errors
 /// DOMAIN ERROR unless `l` is boolean; RANK ERROR above rank 1;
-/// LENGTH ERROR when its length differs from the axis (a scalar
-/// extends either side).
+/// LENGTH ERROR when its length differs from the axis. A scalar or
+/// one-element left argument extends; a scalar right argument does
+/// not -- the APL\360 User's Manual, page 3.41 -- and is taken as the
+/// one element it is, so the result is a vector in every case.
 pub fn compress(l: &Array, r: &Array, k: usize) -> AplResult<Array> {
     let mask = bool_vector(l)?;
-    let r = extend_scalar(r, mask.len());
+    let r = extend_scalar(r, 1);
     let mask = if mask.len() == 1 {
         vec![mask[0]; r.shape[k]]
     } else {

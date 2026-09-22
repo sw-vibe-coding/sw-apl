@@ -39,6 +39,11 @@ APL\360 has no primitive for any of them -- on numbers and on
 characters. Unique is the nub idiom, which needs the index generator
 to take the shape of a vector.
 
+`74-single-element-extension.apl` shows which arguments extend: a
+scalar or a one-element array of any rank, with a scalar function;
+a one-element left argument to compression, but not a scalar right
+one; either argument of decode; and an axis in brackets.
+
 `70-open-definition.apl` types eight system commands into an open
 function definition: none becomes a body line, most run at once, and
 the four that would store or copy a half-changed workspace are

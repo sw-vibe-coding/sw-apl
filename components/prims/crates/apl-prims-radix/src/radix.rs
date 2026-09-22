@@ -18,7 +18,9 @@ pub fn decode(l: &Array, r: &Array) -> AplResult<Array> {
     }
     let (radix, digits) = (numbers(l)?, numbers(r)?);
     let (rows, cols) = layout(r, radix.len());
-    if !l.shape.is_empty() && radix.len() != rows {
+    // The APL\360 User's Manual, page 3.42: either argument may be a
+    // scalar or a one-element vector; otherwise the lengths agree.
+    if radix.len() != 1 && radix.len() != rows {
         return Err(AplError::new(ErrorKind::Length));
     }
     let base: Vec<f64> = (0..rows).map(|i| radix[i % radix.len()].as_f64()).collect();
@@ -35,11 +37,12 @@ pub fn decode(l: &Array, r: &Array) -> AplResult<Array> {
     Array::new(shape, Data::Num(values))
 }
 
-/// Digit rows and columns of `r`: a scalar supplies `n` equal
+/// Digit rows and columns of `r`: a scalar or a one-element vector
+/// supplies `n` equal
 /// digits, a vector one column, a matrix one column per column.
 fn layout(r: &Array, n: usize) -> (usize, usize) {
     match r.shape.as_slice() {
-        [] => (n.max(1), 1),
+        [] | [1] => (n.max(1), 1),
         [rows] => (*rows, 1),
         [rows, cols] => (*rows, *cols),
         _ => unreachable!("rank checked by the caller"),

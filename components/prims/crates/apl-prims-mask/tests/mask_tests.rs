@@ -31,10 +31,24 @@ fn compress_vectors_and_scalars() {
     assert_eq!(compress(&v(&[0, 0, 0]), &v(&[4, 5, 6]), 0).unwrap(), v(&[]));
     assert_eq!(compress(&s(1), &v(&[4, 5, 6]), 0).unwrap(), v(&[4, 5, 6]));
     assert_eq!(compress(&s(0), &v(&[4, 5, 6]), 0).unwrap(), v(&[]));
+    // The APL\360 User's Manual, page 3.41: a scalar or one-element
+    // left argument extends to the right one, but "a scalar right
+    // argument is not extended" -- it is one element, and the left
+    // argument must be one too.
     assert_eq!(
-        compress(&v(&[1, 1, 0]), &s(7), 0).unwrap(),
-        v(&[7, 7]),
-        "a scalar extends"
+        compress(&v(&[1, 1, 0]), &s(7), 0).unwrap_err().kind,
+        ErrorKind::Length,
+        "a scalar right argument does not extend"
+    );
+    assert_eq!(
+        compress(&s(1), &s(7), 0).unwrap(),
+        v(&[7]),
+        "a vector in every case"
+    );
+    assert_eq!(compress(&v(&[0]), &s(7), 0).unwrap(), v(&[]));
+    assert_eq!(
+        compress(&v(&[1]), &v(&[4, 5, 6]), 0).unwrap(),
+        v(&[4, 5, 6])
     );
     assert_eq!(
         compress(&v(&[1, 1, 0]), &chars(&[3], "abc"), 0).unwrap(),

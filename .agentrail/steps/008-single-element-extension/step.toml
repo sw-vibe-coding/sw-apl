@@ -1,6 +1,6 @@
 number = 8
 slug = "single-element-extension"
-status = "pending"
+status = "in-progress"
 description = """
 Found 2026-09-21 surveying the one-element-arguments bug, as that step
 asked:..."""

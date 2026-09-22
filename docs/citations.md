@@ -18,9 +18,14 @@ carry the same files, for example
   system commands, the trouble reports, and locked functions.
   <https://www.bitsavers.org/pdf/ibm/apl/APL_360_Users_Manual_Aug68.pdf>
 - **APL\360 User's Manual**, GH20-0683-1, IBM, March 1970. The second
-  edition, with the additions the docs call "the 1970 additions":
-  take, drop and domino.
+  edition. Its primitives are the 1968 edition's -- take and drop are
+  in both, and domino is in neither -- and the rules checked against
+  both editions so far read the same in each.
   <https://www.bitsavers.org/pdf/ibm/apl/GH20-0683-1_APL_360_Users_Manual_Mar70.pdf>
+- **APL\360-OS and APL\360-DOS User's Manual**, IBM, December 1970.
+  Where domino comes from: it gives the keying of ⌹ that
+  `data/glyphs.toml` quotes. Not yet re-read for this list; its form
+  number is still to be recorded.
 
 ## The IBM 5100 family -- the (B) '75 mode
 

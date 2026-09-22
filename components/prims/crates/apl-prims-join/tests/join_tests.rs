@@ -193,3 +193,24 @@ fn axis_resolution_honours_the_origin() {
         ErrorKind::Domain
     );
 }
+
+/// The notes to Table 3.8 of the APL\360 User's Manual: a one-element
+/// array may replace any scalar -- the axis in brackets among them.
+#[test]
+fn an_axis_may_be_a_one_element_array() {
+    let one =
+        |shape: Vec<usize>, x: i64| Array::new(shape, Data::Num(vec![Number::Int(x)])).unwrap();
+    assert_eq!(
+        resolve_axis(Some(&one(vec![1], 1)), 1, 2).unwrap(),
+        Axis::At(0)
+    );
+    assert_eq!(
+        resolve_axis(Some(&one(vec![1, 1], 2)), 1, 2).unwrap(),
+        Axis::At(1)
+    );
+    let two = Array::vector(vec![Number::Int(1), Number::Int(2)]);
+    assert_eq!(
+        resolve_axis(Some(&two), 1, 2).unwrap_err().kind,
+        ErrorKind::Rank
+    );
+}

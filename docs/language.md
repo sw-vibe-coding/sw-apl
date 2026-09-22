@@ -4,7 +4,8 @@ This describes the language sw-apl implements. Glyphs are mostly
 named in prose; `glyphs.txt` is the machine-readable table of
 characters and code points, and the "Accepted Unicode" section
 below shows them. Behaviour follows the IBM APL\360 User's Manual
-(1968) with the 1970 additions (take, drop, domino). Nothing from
+(1968, and its 1970 edition), with domino from the APL\360-OS/DOS
+manual of December 1970. Nothing from
 APLSV or later is included: no quad-named system variables or
 functions, no execute, no format.
 
@@ -97,9 +98,11 @@ bad sequence; the session continues with the next line.
 ## Scalar functions
 
 Each scalar function applies element by element with scalar
-extension: a scalar argument pairs with every element of the
-other argument; otherwise shapes must match (LENGTH ERROR on the
-same rank, RANK ERROR otherwise). Monadic and dyadic meanings are
+extension: a scalar or a one-element array of any rank pairs with
+every element of the other argument, and the result has the other
+argument's shape; otherwise shapes must match (LENGTH ERROR on the
+same rank, RANK ERROR otherwise). Two one-element arrays of
+different shapes give the shape of the one of higher rank. Monadic and dyadic meanings are
 listed in `glyphs.txt`: plus, minus, times, divide, upstile,
 downstile, star, log, stile, shriek, circle, tilde, and, or,
 nand, nor, the six comparisons, and query.
@@ -152,8 +155,12 @@ Notes:
   counts from the end, overtake pads with zero or blank.
 - slash and backslash with a boolean left argument: compress and
   expand along the last axis; slash-bar and backslash-bar along
-  the first.
-- up-tack and down-tack: decode and encode in mixed radix.
+  the first. A scalar or one-element left argument to compress
+  applies to every element of the right one; a scalar right
+  argument is one element, so `1 0 1/7` is LENGTH ERROR. A scalar
+  left argument to expand does not extend.
+- up-tack and down-tack: decode and encode in mixed radix. Either
+  argument of decode may be a scalar or a one-element vector.
 - epsilon: membership.
 - grade-up and grade-down: permutation vectors, stable.
 - domino: matrix inverse, and matrix divide, which is the least
@@ -176,7 +183,7 @@ Notes:
 - Outer product: `jot dot f`.
 - Axis: a bracketed axis after a function or operator selects the
   axis for reduce, scan, reverse, rotate, catenate, compress,
-  expand.
+  expand. The axis is a scalar or a one-element array.
 
 ## Indexing and assignment
 

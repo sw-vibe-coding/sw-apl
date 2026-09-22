@@ -20,7 +20,8 @@ sentence: `grep -c '^|.*| todo |' docs/parity.md` prints 0.
 ## How we will know we have parity
 
 We have no running APL\360 to compare against, so the oracle is
-the IBM APL\360 User's Manual (1968) with its 1970 supplement,
+the IBM APL\360 User's Manual (1968, and its 1970 edition), with the
+APL\360-OS/DOS manual of December 1970 for domino,
 and the criterion is:
 
 1. Every row below is `done`.
@@ -78,6 +79,7 @@ and says why each is absent.
 | Lexer: brackets, semicolon, colon, branch arrow, del, del-tilde, quote-quad, system command lines, strands, bracket balance | done | lex tests |
 | Parser: axis brackets `f[k]`, compress vs reduce by context, SYNTAX ERROR carets, multiple assignments | done | parse tests |
 | Axis brackets accepted only where APL\360 allows them (the seven forms); anywhere else a SYNTAX ERROR | done | session audit test; the set is generated from `data/glyphs.toml` |
+| The axis in brackets may be a one-element array: the notes to the manual's Table 3.8 let one replace any scalar | done | join tests, sample 74 |
 | Structural functions on scalars and empty arrays | done | session audit test |
 | Mixed output `'TEXT';X;'MORE'` (semicolon list) | done | session tests, sample 46 |
 | Invalid UTF-8 reported with byte offset, run continues | done | cli tests |
@@ -101,7 +103,7 @@ and says why each is absent.
 | `∧ ∨ ⍲ ⍱` | | done | 0 and 1 only |
 | `< ≤ = ≥ > ≠` | | done | with fuzz; samples 15, 47 |
 | `?` | done | done | roll and deal via the random link (starts at 16807); deal takes a scalar or a one-element vector for each argument, so `A[(⍴A)?⍴A]` shuffles; samples 41, 47 |
-| Scalar extension, RANK and LENGTH agreement | done | done | prims tests |
+| Scalar extension, RANK and LENGTH agreement | done | done | a scalar or a one-element array of any rank extends (APL\360 User's Manual, 1968 and 1970, p. 3.33); two one-element arrays of different shapes take the higher rank's shape, which the manual does not settle. Prims tests, sample 74 |
 | Exact integers, float promotion, fuzz | done | | value tests |
 
 | Overstrikes: a glyph struck from two characters, as on a 2741 | done | every struck glyph is there: the table is in `data/glyphs.toml` with its provenance per pair, and the underscored alphabet A̲ to Z̲ beside it as a rule -- any letter struck with `_` is a further character of the set, a letter in its own right and distinct from the plain one. `Ctrl-]` takes the carriage back, a file may use `0x08`, either order forms the glyph, and a pair that forms none is CHARACTER ERROR -- which is the manual's own answer, "Illegitimate overstrike" being a cause of one. An underscored letter is written as its letter and U+0332 and counted as one column; as character data it is two elements, where APL\360 had one of its 256. Strike, lexer, session and display tests, sample 71. |
@@ -135,9 +137,9 @@ the session numeric tests, and sample 67.
 | `⌽ ⊖` | done | done | axis bracket; vector shifts; a one-element left argument rotates as a scalar does; samples 08, 34 |
 | `⍉` | done | done | dyadic permutes and takes diagonals; sample 35 |
 | `↑ ↓` | | done | per axis, negatives, overtake fill; samples 07, 10, 44 |
-| `/ ⌿` compress | | done | boolean left, either axis, axis bracket; sample 17 |
+| `/ ⌿` compress | | done | boolean left, either axis, axis bracket; a scalar or one-element left argument extends, a scalar right argument does not (manual p. 3.41), so `1 0 1/7` is LENGTH ERROR; samples 17, 74 |
 | `\ ⍀` expand | | done | boolean left, either axis, axis bracket |
-| `⊥ ⊤` | | done | mixed radix, scalar extension, matrix columns; sample 36 |
+| `⊥ ⊤` | | done | mixed radix, scalar extension, matrix columns; either argument of decode may be a one-element vector (manual p. 3.42); samples 36, 74 |
 | `∊` | | done | with the fuzz; sample 30 |
 | `⍋ ⍒` | done | | vectors, stable, origin-aware; sample 32 |
 | `⌹` | done | done | inverse, left inverse, least-squares divide by Householder QR; vectors are one column and scalars one by one; singular, wider than tall, and characters are DOMAIN ERROR; rank 3 is RANK ERROR; sample 66. Not in the Aug 1968 manual: domino was added to APL\360 in 1970, and the rules followed are the APLX Language Manual's for the same lineage |

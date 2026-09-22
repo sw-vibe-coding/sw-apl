@@ -6,7 +6,8 @@ Newest at the bottom.
 ## D1. Clean room, from scratch
 
 The interpreter is written from the APL\360 language description
-(the 1968 User's Manual and the 1970 additions) and from observed
+(the 1968 User's Manual, its 1970 edition, and the December 1970
+APL\360-OS/DOS manual for domino) and from observed
 terminal behaviour, not by
 translating `sw-cor24-apl` (C) or GNU APL. Those projects are
 consulted for test expectations only. Rules out: copying parser
@@ -27,7 +28,8 @@ ERROR by default; see the open question in `plan.md`.
 ## D3. Pure APL\360, I-beams for the system interface
 
 Primitives and session behaviour follow APL\360 (flat arrays, the
-1968 to 1970 primitive set including take, drop, and domino).
+primitives of the 1968 and 1970 User's Manuals, and domino from the
+December 1970 APL\360-OS/DOS manual).
 The system interface is APL\360's too: I-beam functions for time,
 date, workspace space, and the state indicator; `)ORIGIN`,
 `)DIGITS`, `)WIDTH` for settings (replying `WAS n`); `)ERASE`,
