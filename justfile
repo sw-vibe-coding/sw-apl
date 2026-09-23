@@ -70,8 +70,9 @@ release:
 # saves into scratch rather than into the checkout's work/; ws/ is
 # linked through so )LOAD 1 LIFE finds the shipped workspaces.
 #
-# Start the local service and open the terminal in a browser.
-demo: release
+# Start the local service and open the terminal in a browser, in
+# mode 70 or 75: `just demo` or `just demo 75`.
+demo mode="70": release
     #!/usr/bin/env bash
     set -euo pipefail
     mkdir -p target/demo/work
@@ -82,7 +83,7 @@ demo: release
       elif command -v xdg-open >/dev/null; then xdg-open "$url"
       else echo "open $url"; fi ) &
     echo "A 2741 in a terminal instead: target/release/aplterm"
-    exec target/release/sw-apl-server --library target/demo
+    exec target/release/sw-apl-server --library target/demo --mode {{mode}}
 
 # Build the browser demo into pages/. Needs wasm-pack and the
 # wasm32-unknown-unknown target:

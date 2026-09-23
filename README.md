@@ -4,280 +4,201 @@
 
 # sw-apl
 
-A clean-room APL interpreter written in Rust, from scratch, with two
-modes: (A) '70, modelled on APL\360, and (B) '75, modelled on the
-APL of the IBM 5100 family of desktop computers.
+A clean-room APL interpreter, written in Rust from scratch, for the
+terminal, a local service, and the browser. It brings back classic
+APL the way it was used: traditional glyphs typed as Unicode, the
+six-space prompt, a printed transcript, the del editor, and
+workspaces saved and loaded by name.
 
-sw-apl brings back classic IBM APL the way it was used on a
-terminal: traditional glyphs typed as Unicode, the six-space
-indent prompt, printer-style transcript output, the del editor
-for defining functions, and the APL\360 system commands for
-workspaces (`)CLEAR`, `)WSID`, `)SAVE`, `)LOAD`, `)FNS`,
-`)VARS`, ...). It is a command-line program for macOS and Linux,
-and the same interpreter runs in a browser.
+It has two modes:
 
-The two modes share one core language and differ at the edges. (A)
-is pure APL\360: I-beams for system values, `)ORIGIN`, `)DIGITS` and
-`)WIDTH` for the settings, no quad-named system variables, no
-execute. (B) is APLSV as IBM cut it down for a one-user machine:
-execute and the quad system variables and functions, and no
-I-beams or settings commands. Format is not implemented. Each mode
-lists and loads only the workspaces that run in it.
-[The (B) '75 mode](docs/mode-b.md) says what (B) is modelled on
-and how it differs from (A). Neither mode is APL2 or Dyalog (flat
-arrays only, no nested arrays, no each). It is also not a port. The C interpreter
-`sw-cor24-apl` and GNU APL served only as references for expected
-behaviour and for the conformance corpus in `samples/`.
+| Mode | Modelled on | What it has |
+|---|---|---|
+| (A) '70 | APL\360 on an IBM 2741 terminal | The APL\360 language; I-beams for system values; `)ORIGIN`, `)DIGITS` and `)WIDTH` for the settings; groups |
+| (B) '75 | The APL of the IBM 5100 family of desktop computers | The same core, plus execute and the quad system variables and functions; no I-beams, no settings commands, no groups |
 
-## Live demo
+Format is not implemented. Neither mode is APL2 or Dyalog: arrays
+are flat, with no nesting and no each. sw-apl is not a port; the C
+interpreter `sw-cor24-apl` and GNU APL served only as references for
+expected behaviour and for the conformance corpus in `samples/`.
 
-**[Try it in your browser](https://sw-apl.softwarewrighter.com/)**
+## Try it
 
-The interpreter compiled to WebAssembly, running in a worker in the
-tab. There is no server: nothing typed there is sent anywhere.
-The tabs at the top choose the mode, (A) '70 or (B) '75. The page
-opens in (B) and remembers the mode you last chose; switching starts
-a new session in a clear workspace. `)LIB 1` lists the
-workspaces sw-apl ships and `)LOAD 1 RACE` loads one; `)SAVE`
-writes into the browser's own storage. A keyboard on
-the page gives every glyph a key, so a touch screen works too.
+**[sw-apl in your browser](https://sw-apl.softwarewrighter.com/)**
 
-## A session
+The interpreter runs in the tab, compiled to WebAssembly; nothing
+typed is sent anywhere. The page opens in (B) '75, and the tabs at
+the top switch mode (a new session, in a clear workspace). A keyboard
+on the page gives every glyph a key, so a phone works too.
 
-<p align="center">
-  <img src="images/sw-apl-mvp.gif" alt="sw-apl session: scalar arithmetic, iota, reduce, reshape, and a LENGTH ERROR with caret" width="700">
-</p>
+Some things to type:
 
-Recorded with [vhs](https://github.com/charmbracelet/vhs) from
-`docs/tapes/mvp.tape` (`just tape` re-renders it).
-
-## Status
-
-Every APL\360 primitive and operator now works on arrays of any
-rank: the scalar functions (arithmetic, comparison, boolean,
-circular, factorial and binomial, roll), the mixed functions
-(iota, rho, ravel, catenate and laminate, take, drop, reverse,
-rotate, transpose, compress, expand, membership, index-of, grade,
-encode, decode, deal, matrix inverse and least-squares matrix
-divide), the operators (reduce and scan on any axis,
-inner and outer products), bracket indexing and indexed
-assignment, character data, mixed output, and quad output. Display
-follows the APL\360 rules, including `)WIDTH` wrapping and
-higher-rank planes, and errors print with the caret. `)ORIGIN`,
-`)DIGITS`, and `)WIDTH` reply `WAS n`.
-
-Functions are defined the APL\360 way: an opening del and a header
-(`NAME`, `NAME B`, `A NAME B`, each with or without `R left-arrow`),
-body lines typed behind the `[n]` prompt, a closing del. Names after
-semicolons are local for the length of the call, arguments bind into
-a fresh frame, and the result is whatever the header's result
-variable holds at exit.
-
-Labels are local constants holding their line number, and the right
-arrow branches: the first element of its value selects the next line,
-an empty vector falls through, and zero or a line the function does
-not have exits. That is the whole of APL\360 control flow, and it is
-enough for the conditional branch (label times iota of the condition,
-which is empty when the condition is false). The horse race in
-`samples/50-horse-race.apl` runs, and Conway's Life runs as a pair of
-functions in `samples/54-life-function.apl`.
-
-Functions are edited the APL\360 way, in definition mode: a bracketed
-number moves to a line or replaces it, a bracketed quad displays,
-delta deletes, a fractional number inserts between two existing lines
-(the close renumbers from 1), and `[0]` edits the header. Del-tilde
-closes a definition locked.
-
-A line that fails inside a function suspends it rather than unwinding
-it: the error names the function and the line, the locals stay there
-to look at, `)SI` and `)SIV` show where everything stopped, a bare
-right arrow clears the top entry, and a right arrow with a line number
-takes the function up again.
-
-A statement can read a line as it runs: quad prompts and evaluates
-what is typed, quote-quad takes the characters as they are, and a
-prompt written with quote-quad shares a line with its answer. In
-batch the lines come from the script.
-
-The I-beam system functions report the time of day, the processor
-time used, the space still free, the terminals connected, the sign-on
-time, the date, the line now executing, and the state indicator.
-
-A `.apl` file can be executable: a leading `#!` line belongs to the
-shell, so sw-apl drops it and the transcript begins with the program.
-`)OFF` signs off the APL\360 way, with the time, the connect time and
-the processor time. Ctrl-C stops a running function: it reports
-INTERRUPT, names the line it stopped on, and leaves the function
-suspended for `)SI` to show and a branch to take up again.
-
-Workspaces save and load: `)SAVE` writes a plain UTF-8 file that is
-APL you could have typed, `)LOAD` reads it back by running it, and
-`)COPY` takes names out of one without taking its settings.
-
-A command that cannot do what was asked says which thing went wrong:
-INCORRECT COMMAND is about the command, while WS NOT FOUND, OBJECT
-NOT FOUND and IMPROPER LIBRARY REFERENCE are about what was asked
-for. The wording follows the trouble report table in the APL\360
-User's Manual.
-
-A workspace holds a fixed number of bytes, which `--ws-size` sets and
-I-beam 22 reports what is left of. Anything that will not fit -- an
-assignment, a definition, the arguments a call binds, a `)LOAD` or a
-`)COPY` -- is WS FULL, and the workspace is left exactly as it was.
-
-A function closed with del-tilde is locked: it runs, but it cannot be
-displayed, reopened or unlocked. A workspace holding one is not saved
-as plain text -- the file is obscured with rot-13, and `)LOAD` reads
-both forms. That is obscuring and not encryption: it stops a locked
-body being read by accident, which is all a binary workspace ever
-stopped. An obscured file cannot be run as a program and says so.
-
-Libraries are numbered as in APL\360: library 0 is yours, where
-`)SAVE` writes, and library 1 holds the workspaces sw-apl ships, each
-carrying a DESCRIBE that says what it holds. `)LOAD 1 NAME` reads a
-numbered library and `)LIB 1` lists one; `--library` sets the
-directory they are under. The shipped workspaces are LIFE, RACE, EDIT
-and BIRDS, and each is a plain text file you can open in an editor.
-
-`)FNS` and `)VARS` list what a workspace holds, alphabetically and
-from a letter if one is given; `)VARS` reports global variables even
-while a call's locals are in scope. A group gives one name to a
-collection of names so they can be copied or erased together:
-`)GROUP` gathers, `)GRPS` and `)GRP` show, and `)ERASE` of a group
-name takes its members with it. `)SYMBOLS` says how many names are
-held and how many would fit.
-
-Every primitive in the checklist is implemented. A
-glyph from a later APL is a CHARACTER ERROR that names it, so the
-Dyalog Life one-liner answers "dfn brace, not APL\360". See the
-parity checklist for the row-by-row picture. Batch mode, `)OFF`, help, and the
-version block work. Implementation proceeds phase by phase per
-`docs/plan.md`: the full value, display, lexer, parser, and
-scalar-function layers next, then mixed functions and operators,
-defined functions and the session, workspaces, numerics, then the
-web demo.
-
-## Summary
-
-| Area | What sw-apl provides |
-|---|---|
-| Syntax | Traditional glyphs only (see `docs/glyphs.txt`), right-to-left evaluation, strands, axis brackets |
-| Data | Flat arrays of any rank; one numeric type with integer fast path and floating point; characters |
-| Primitives | The APL\360 scalar and mixed functions; reduce, scan, inner and outer product; indexing |
-| Functions | Del editor, niladic/monadic/dyadic headers, locals, labels, branching, recursion |
-| Modes | (A) '70 and (B) '75, chosen with `--mode 70` or `--mode 75` and by a tab in the browser |
-| System | Quad and quote-quad I/O, workspaces on disk, the DESCRIBE convention; in (A) the I-beam system functions and `)ORIGIN`, `)DIGITS`, `)WIDTH`; in (B) execute and the quad system variables and functions |
-| Session | Six-space indent prompt, APL\360 error display with caret, batch transcripts |
-| Input | Espanso and Emacs keymaps, 2741 overstrikes on Ctrl-], and an on-screen board in the browser (`docs/glyph-entry.md`) |
-
-This README is plain ASCII so it renders the same everywhere; the
-documents below show real APL glyphs:
-
-- [Parity checklist](docs/parity.md) -- what works in each mode,
-  what does not, and how we will know we have parity
-- [Master plan](docs/plan.md) -- phases, decisions, what comes next
-- [APL timeline](docs/apl-timeline.md) -- the APLs sw-apl models,
-  and the ones around them, in order
-- [Language reference](docs/language.md) -- the shared core, what
-  (B) adds, what (A) has that (B) has not, and exactly which Unicode
-  is accepted
-- [The (B) '75 mode](docs/mode-b.md) -- what (B) is modelled on, its
-  sources, and every way it differs from (A)
-- [Glyph table](docs/glyphs.txt) -- every glyph with its code point
-- [Session](docs/session.md) -- prompt, error display, system
-  commands, the DESCRIBE convention
-- [System commands reference](docs/commands-reference.md) -- every
-  command, what it replies, what it refuses, and the ones sw-apl
-  does not have
-- [Using the del editor](docs/del-editor-guide.md) -- writing and
-  changing a function, line by line
-- [Learning tic-tac-toe in 64 KB](docs/learn-tic-tac-toe-strategy.md)
-  -- TTTML, a (B) workspace that learns the game by playing itself
-  and then plays you
-- [BIRDS](docs/birds.md) -- combinators in a library 1 workspace
-  with a version for each mode: the ones APL\360 can write in (A),
-  and every one in the list in (B); its functions are in the
-  [combinators reference](docs/combinators.md)
-- [I-beam reference](docs/i-beam-reference.md) -- the eight system
-  values, their units, and how to read them
-- [Workspaces](docs/workspaces.md) -- what one holds, the libraries,
-  saving and loading, DESCRIBE, and locking
-- [Index origin considerations](docs/index-origin-considerations.md)
-  -- what it changes, why a function cannot set it, and why copying
-  is riskier than loading
-- [Entering glyphs](docs/glyph-entry.md) -- Espanso and Emacs
-  keymaps, OS layouts, and every 2741 overstrike with the two
-  characters that form it
-- [The 2741 and the service](docs/terminal.md) -- the keyboard, the
-  overstrikes, the protocol, and what a session is
-- [Testing](docs/testing.md), [Architecture](docs/architecture.md),
-  [Design decisions](docs/design.md), [Requirements](docs/prd.md)
-
-## A 2741 and a service
-
-sw-apl also runs the way APL\360 ran: a local service holding one
-session per connection, and terminals dialling into it. Everything
-runs on your own machine -- the service binds to the loopback
-address, and nothing typed at a terminal is sent anywhere.
-
-```bash
-just demo
+```
+      )LIB 1               the workspaces sw-apl ships
+      )LOAD 1 TTTML        in (B): a machine that learns tic-tac-toe
+      PLAY 1               play it; you move first
+      )LOAD 1 BIRDS        combinators, a version for each mode
+      HOWBIRDS
+      )LOAD 1 LIFE         Conway's Life
+      GLIDER
+      RUN 4
 ```
 
-builds the binaries, starts `sw-apl-server`, and opens a terminal in
-your browser at `http://127.0.0.1:8360/`. For a 2741 in a terminal
-window instead, with the keyboard and overstrikes, run
-`target/release/aplterm`. `nc 127.0.0.1 2741` also works, and is the
-emergency client: the protocol is one line each way.
+`)SAVE` keeps a workspace in the browser's own storage, and Help on
+the page covers the rest.
 
-The service is what makes quad, quote-quad and the del editor read
-from a browser at all -- a statement that reads stops until a line
-arrives, and a thread on a socket may stop.
+## Run it on your machine
 
-`just pages-serve` is the same session with no service at all: the
-interpreter compiled to WebAssembly, running on a worker in the tab,
-where a thread may block just as well. See
-[the 2741 and the service](docs/terminal.md).
-
-## Building
-
-Requires a Rust toolchain (edition 2024, stable). Each directory
-under `components/` is its own cargo workspace and they share one
-`target/` at the repository root.
+Needs a Rust toolchain (edition 2024, stable) and, for the commands
+below, [just](https://github.com/casey/just).
 
 ```bash
-# Debug build and tests for the CLI workspace
-cd components/cli
-cargo test
-cargo build
-
-# Release binaries at target/release (from the repo root):
-# sw-apl, sw-apl-server, aplterm
-just release
-
-# Run
-target/release/sw-apl                    # interactive session
+just release                                  # builds the three binaries
+target/release/sw-apl                         # (A) '70 at the terminal
+target/release/sw-apl --mode 75               # (B) '75
 target/release/sw-apl -f samples/06-reduce.apl
-printf '2+2\n)OFF\n' | target/release/sw-apl
 target/release/sw-apl --help
 ```
 
-With [just](https://github.com/casey/just) installed, `just test`,
-`just clippy`, `just fmt-check`, and `just gates` run the project
-gates across every workspace. Regression transcripts use
-[reg-rs](https://github.com/softwarewrighter) via `scripts/reg.sh`.
+Run it from the repository root, or pass `--library DIR`, so that
+`)LOAD 1 NAME` finds the shipped workspaces in `ws/lib1`.
+
+## A 2741 terminal and a service
+
+sw-apl also runs the way APL\360 ran: a service holding one session
+per connection, and terminals connecting to it. Everything stays on
+your machine -- the service listens on the loopback address only.
+
+`sw-apl-server` is the service, and its mode is every session's
+mode. `aplterm` is a 2741 in a terminal window, with the 2741
+keyboard and its overstrikes; it takes the mode from the service.
+
+```bash
+# (A) '70
+target/release/sw-apl-server --mode 70
+target/release/aplterm                        # connects to 127.0.0.1:2741
+
+# (B) '75
+target/release/sw-apl-server --mode 75
+target/release/aplterm
+```
+
+Both at once, each service on ports of its own:
+
+```bash
+target/release/sw-apl-server --mode 70 --listen 127.0.0.1:2741 --http 127.0.0.1:8360
+target/release/sw-apl-server --mode 75 --listen 127.0.0.1:2775 --http 127.0.0.1:8375
+target/release/aplterm --connect 127.0.0.1:2741    # (A)
+target/release/aplterm --connect 127.0.0.1:2775    # (B)
+```
+
+`just demo` builds everything, starts the service and opens a
+terminal page in your browser at `http://127.0.0.1:8360/`; `just
+demo 75` does the same in (B). `nc 127.0.0.1 2741` works too, as an
+emergency client: the protocol is one line each way.
+
+## Library 1
+
+The workspaces sw-apl ships, in `ws/lib1/`. Each is a plain text
+file, and each has a `DESCRIBE` that says what it holds. A file's
+name says the modes it runs in: `NAME.apl.ws` for both,
+`NAME.a-70.apl.ws` or `NAME.b-75.apl.ws` for one.
+
+| Workspace | Modes | What it is |
+|---|---|---|
+| LIFE | both | Conway's Life on a torus: `GLIDER`, then `RUN 4` |
+| RACE | both | A horse race, written to be read |
+| EDIT | both | A workspace to practise the del editor on; its `FACT` is wrong by one on purpose |
+| BIRDS | a version for each | Combinators, after Smullyan's birds. In (A), the ones APL\360 can write; in (B), every one in the list, by execute |
+| TTTML | (B) | A machine that learns tic-tac-toe by playing itself, then plays you |
+
+## What works
+
+| Area | |
+|---|---|
+| Language | Every APL\360 primitive and operator on arrays of any rank; bracket indexing and indexed assignment; characters; mixed output; quad and quote-quad input and output |
+| (B) additions | Execute; the quad system variables (`IO`, `CT`, `PP`, `PW`, `RL`, `LX` and the rest), which can be made local; the quad system functions (`CR`, `FX`, `EX`, `NL`, `NC`, `CC`) |
+| Functions | The del editor and definition mode, locals (functions as well as variables), labels and branching, recursion, locking with del-tilde |
+| Errors | The APL\360 error display with its caret; a failing function suspends, `)SI` shows where, and a branch takes it up again; Ctrl-C (ATTN) stops a run |
+| Workspaces | `)SAVE`, `)LOAD`, `)COPY`, `)DROP`, `)LIB` over numbered libraries; a saved workspace is plain APL you could have typed |
+| Session | The six-space prompt, a printed transcript, output shown as it is printed, batch runs of a script, `)OFF` |
+| Input | The 2741 keyboard and overstrikes in `aplterm` and the browser; Espanso and Emacs keymaps |
+
+`docs/parity.md` is the row-by-row picture for each mode.
+
+## Documentation
+
+This README is plain ASCII, so it reads the same everywhere; the
+documents show real APL glyphs.
+
+Using sw-apl:
+
+- [Language reference](docs/language.md) -- the shared core, what (B)
+  adds, what (A) has that (B) has not, and exactly which Unicode is
+  accepted
+- [Session](docs/session.md) -- the prompt, error display, system
+  commands, libraries, the DESCRIBE convention
+- [System commands reference](docs/commands-reference.md) -- every
+  command, what it replies and refuses, and which mode has it
+- [Using the del editor](docs/del-editor-guide.md) -- writing and
+  changing a function, line by line
+- [Workspaces](docs/workspaces.md) -- what one holds, the libraries
+  and their file names, saving and loading, locking
+- [Entering glyphs](docs/glyph-entry.md) -- keymaps, OS layouts, and
+  every 2741 overstrike
+- [The 2741 and the service](docs/terminal.md) -- the keyboard, the
+  protocol, and what a session is
+
+The modes and the workspaces:
+
+- [The (B) '75 mode](docs/mode-b.md) -- what (B) is modelled on, its
+  sources, and every way it differs from (A)
+- [APL timeline](docs/apl-timeline.md) -- the APLs sw-apl models,
+  and the ones around them
+- [Learning tic-tac-toe in 64 KB](docs/learn-tic-tac-toe-strategy.md)
+  -- how TTTML learns, and why it fits a 5110
+- [BIRDS](docs/birds.md) and the [combinators
+  reference](docs/combinators.md)
+- [I-beam reference](docs/i-beam-reference.md) and [index origin
+  considerations](docs/index-origin-considerations.md)
+
+The project:
+
+- [Parity checklist](docs/parity.md) -- the definition of done, a
+  column for each mode
+- [Master plan](docs/plan.md) -- phases, decisions, what comes next
+- [Glyph table](docs/glyphs.txt), [Testing](docs/testing.md),
+  [Architecture](docs/architecture.md), [Design decisions](docs/design.md),
+  [Requirements](docs/prd.md)
+
+## Building and testing
+
+Each directory under `components/` is its own cargo workspace; they
+share one `target/` at the repository root.
+
+```bash
+just test            # cargo test in every workspace
+just clippy          # clippy, warnings as errors
+just fmt-check
+just gates           # markdown and code-shape checks
+scripts/reg.sh run   # transcript regressions (reg-rs), one per sample
+just pages           # the browser build, into pages/
+just check-pages     # the browser build, checked in Chrome
+```
 
 ## Repository layout
 
 ```
 components/   one cargo workspace per component: the interpreter,
-              the CLI, the service (web), and the 2741 (term)
-docs/         plan, requirements, architecture, language, session
+              the CLI, the service (web), the 2741 (term), and the
+              parts only one mode has (a70, b75)
+docs/         reference, plan, requirements, architecture
 pages/        the browser demo: a page, a worker, and the session
               compiled to WebAssembly
 samples/      conformance corpus: glyph-form APL programs
-scripts/      change log, sample runner, reg-rs wrappers
-images/       logo
+ws/lib1/      the workspaces sw-apl ships
+scripts/      change log, sample runner, reg-rs wrappers, gates
+images/       logo, and redistributed material
 ```
 
 ## Links
