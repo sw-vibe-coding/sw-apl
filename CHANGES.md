@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-23
 
+- chore(agentrail): complete 025-keyboard-per-mode
+- feat(board): the keyboard per mode -- a shared layout, and (B)'s CMD key
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 024-readme-rewrite
 - docs(readme): rewrite for a reader, with aplterm in both modes
 - chore(agentrail): complete 023-output-as-it-is-written
