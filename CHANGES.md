@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-22
 
+- chore(agentrail): complete 020-lib1-75
+- feat(lib1): library 1 per mode, BIRDS for (B), files named for their modes
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 019-system-variables-complete; add 022-quad-output-settings
 - feat(b75): local settings, indexed assignment into a system variable
 - fix(pages): a spent reload count no longer locks a tab out; say what the browser saw
