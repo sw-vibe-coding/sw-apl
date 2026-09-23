@@ -89,6 +89,7 @@ pub fn resume(ws: &mut Workspace, from: i64, run: Run) -> AplResult<Output> {
         if let Some(value) = result {
             let lines = render(&Output::Value(value), ws.saved.print);
             ws.output.push(Output::Lines(lines));
+            crate::branch::emit(ws);
         }
     }
 }

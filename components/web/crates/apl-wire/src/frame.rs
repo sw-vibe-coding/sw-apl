@@ -33,6 +33,12 @@ pub struct Frame {
     /// from a service that predates modes, which is (A).
     #[serde(default)]
     pub mode: String,
+    /// Lines printed while a statement is still running, with more to
+    /// come: the terminal prints them and waits for the next frame
+    /// rather than prompting. Absent, as from a service that predates
+    /// it, is false.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub more: bool,
 }
 
 /// Write one JSON value and its newline, and flush it: the terminal

@@ -370,6 +370,12 @@ editor, or the line `⍞←` left open -- the carriage stopped on that
 line, so that is where the typing goes. A `prompt` of `null` with
 `off` set is the last frame of a session.
 
+A frame with `more` set carries lines a statement printed while it
+is still running -- `⎕←` in a function, or a line that displays its
+value -- and has no prompt: the terminal prints them and waits for
+the next frame. A long run shows its output as it goes, as a 2741's
+carriage did. A line `⍞←` has left open waits for what finishes it.
+
 The terminal sends the typed line as a JSON string. A line that is
 not JSON is taken verbatim, so `nc` is an emergency client and a
 debugging window:

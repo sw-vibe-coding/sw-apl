@@ -64,6 +64,9 @@ dependencies = [
 [[package]]
 name = "apl-attn"
 version = "0.1.0"
+dependencies = [
+ "libc",
+]
 
 [[package]]
 name = "apl-glyphs"

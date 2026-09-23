@@ -15,6 +15,8 @@
 
 mod attention;
 mod flag;
+mod interrupt;
 
 pub use attention::{Attention, STRIDE, asked, attend, polled};
 pub use flag::Flag;
+pub use interrupt::catch_interrupt;

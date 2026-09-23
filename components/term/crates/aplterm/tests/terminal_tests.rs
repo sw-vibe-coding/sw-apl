@@ -127,6 +127,7 @@ fn actual_terminal_composes_before_enter_and_sends_unicode_only() {
                 prompt: Some(prompt.clone()),
                 off: false,
                 mode: String::new(),
+                more: false,
             },
         )
         .unwrap();
@@ -145,6 +146,7 @@ fn actual_terminal_composes_before_enter_and_sends_unicode_only() {
             prompt: None,
             off: true,
             mode: String::new(),
+            more: false,
         },
     )
     .unwrap();
@@ -200,6 +202,7 @@ fn a_busy_service_is_sent_attention_by_escape_and_by_ctrl_c() {
             prompt: Some(prompt.clone()),
             off: false,
             mode: String::new(),
+            more: false,
         };
         send(&mut socket, &frame).unwrap();
         wait_for(&output, &mut transcript, &prompt);
@@ -233,6 +236,7 @@ fn a_busy_service_is_sent_attention_by_escape_and_by_ctrl_c() {
         prompt: None,
         off: true,
         mode: String::new(),
+        more: false,
     };
     send(&mut socket, &bye).unwrap();
     let _ = client.0.wait();

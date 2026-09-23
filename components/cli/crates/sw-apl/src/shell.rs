@@ -13,7 +13,9 @@ use std::io::{self, Read, Write};
 use std::path::Path;
 use std::rc::Rc;
 
-use crate::host::{Pending, Script, catch_interrupt};
+use apl_attn::catch_interrupt;
+
+use crate::host::{Pending, Script};
 
 use apl_session::{Host, Reply, Session};
 use apl_strike::read;

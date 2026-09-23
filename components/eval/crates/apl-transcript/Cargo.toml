@@ -1,6 +1,6 @@
 [package]
-name = "apl-attn"
-description = "sw-apl attention: the flag that stops a run, per session"
+name = "apl-transcript"
+description = "sw-apl console on paper: keeps what it is shown, answers reads from loaded lines"
 edition.workspace = true
 license.workspace = true
 version.workspace = true
@@ -8,9 +8,7 @@ authors.workspace = true
 repository.workspace = true
 
 [dependencies]
-
-[target.'cfg(unix)'.dependencies]
-libc = "0.2"
+apl-console = { path = "../apl-console" }
 
 [lints]
 workspace = true

@@ -53,8 +53,8 @@ impl Held {
         let frame = Frame {
             lines,
             prompt: Some(prompt),
-            off: false,
             mode: self.mode.to_string(),
+            ..Frame::default()
         };
         self.link.send(&frame)?;
         let typed = self.link.recv()?;
@@ -68,6 +68,20 @@ impl Held {
         }
     }
 
+    /// Send lines a statement printed while it runs: no prompt, and
+    /// more to come. Nothing is read back.
+    ///
+    /// # Errors
+    /// Whatever the transport reports writing.
+    pub fn tell(&mut self, lines: Vec<String>) -> io::Result<()> {
+        self.link.send(&Frame {
+            lines,
+            more: true,
+            mode: self.mode.to_string(),
+            ..Frame::default()
+        })
+    }
+
     /// Send the last frame of a session: what `)OFF` printed, and no
     /// prompt, because nothing more will be typed.
     ///
@@ -76,9 +90,9 @@ impl Held {
     pub fn sign_off(&mut self, lines: Vec<String>) -> io::Result<()> {
         self.link.send(&Frame {
             lines,
-            prompt: None,
             off: true,
             mode: self.mode.to_string(),
+            ..Frame::default()
         })
     }
 }

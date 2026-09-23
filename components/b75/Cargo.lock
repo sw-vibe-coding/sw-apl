@@ -21,6 +21,9 @@ dependencies = [
 [[package]]
 name = "apl-attn"
 version = "0.1.0"
+dependencies = [
+ "libc",
+]
 
 [[package]]
 name = "apl-clock"
@@ -283,6 +286,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-transcript"
+version = "0.1.0"
+dependencies = [
+ "apl-console",
+]
+
+[[package]]
 name = "apl-value"
 version = "0.1.0"
 dependencies = [
@@ -301,6 +311,7 @@ dependencies = [
  "apl-saved",
  "apl-space",
  "apl-store",
+ "apl-transcript",
  "apl-value",
 ]
 

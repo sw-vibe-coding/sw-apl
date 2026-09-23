@@ -500,6 +500,9 @@ function strike(sends) {
 // Print one frame and take the typing it asks for.
 function show(frame) {
   for (const text of frame.lines) put(text + "\n");
+  // Printed while a statement runs: it is still running, and the
+  // next frame follows.
+  if (frame.more) return;
   if (frame.off || frame.prompt === null) return stop("Session ended.");
   prompt.textContent = frame.prompt;
   typing = true;

@@ -22,6 +22,7 @@ pub fn quad(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
             let v = eval_expr(ws, value)?;
             let lines = render(&Output::Value(v.clone()), ws.saved.print);
             ws.output.push(Output::Lines(lines));
+            apl_call::emit(ws);
             Ok(v)
         }
         Expr::QuoteQuadOut { value, .. } => {

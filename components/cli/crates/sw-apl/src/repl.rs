@@ -18,7 +18,9 @@ use rustyline::{
     Cmd, DefaultEditor, EventHandler, KeyCode, KeyEvent, Modifiers, Result as LineResult,
 };
 
-use crate::host::{Editor, Terminal, catch_interrupt};
+use apl_attn::catch_interrupt;
+
+use crate::host::{Editor, Terminal};
 use crate::shell::show;
 
 /// Run the interactive loop until `)OFF` or end of input. `host` is

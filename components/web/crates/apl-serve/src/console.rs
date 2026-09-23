@@ -40,4 +40,12 @@ impl Console for Reader {
             .ok()
             .flatten()
     }
+
+    /// Send what a statement printed while it runs. A terminal that
+    /// has gone takes nothing; the statement runs on, and the next
+    /// read finds it gone.
+    fn show(&mut self, lines: &[String]) -> bool {
+        let _ = Rc::clone(&self.0).borrow_mut().tell(lines.to_vec());
+        true
+    }
 }

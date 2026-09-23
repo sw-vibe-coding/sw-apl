@@ -20,7 +20,6 @@ clap = { version = "4", features = ["derive"] }
 rustyline = "18"
 
 [target.'cfg(unix)'.dependencies]
-libc = "0.2"
 
 [lints]
 workspace = true

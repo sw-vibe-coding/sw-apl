@@ -7,10 +7,11 @@ use std::collections::BTreeMap;
 use std::path::PathBuf;
 
 use apl_clock::{Clock, stopped};
-use apl_console::{Console, Output, Shown, Transcript, render_all};
+use apl_console::{Console, Output, Shown, render_all};
 use apl_modes::Mode;
 use apl_space::{of_value, room, used};
 use apl_store::{Files, Store};
+use apl_transcript::Transcript;
 use apl_value::{AplResult, Array};
 
 use apl_saved::Saved;

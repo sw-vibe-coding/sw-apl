@@ -180,6 +180,22 @@ const typing = (page) => page.evaluate(() =>
   for (const move of ['2', '6', '9']) await send(page, move);
   check('TTTML loads in (B) and plays a game to its end',
     (await paper(page)).trim().endsWith('I WIN.'), JSON.stringify((await paper(page)).slice(-120)));
+
+  // Output appears as it is written: TRAIN's first progress line is on
+  // the paper while TRAIN is still running.
+  await page.evaluate(() => {
+    const data = new DataTransfer();
+    data.setData('text', 'X←TRAIN 3000');
+    dispatchEvent(new ClipboardEvent('paste', { clipboardData: data, bubbles: true, cancelable: true }));
+    dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  });
+  let early = false;
+  for (let i = 0; i < 240 && !early; i++) {
+    await page.waitForTimeout(250);
+    early = (await paper(page)).includes('GAMES 1000') && !(await typing(page));
+  }
+  check('a long statement shows its output while it runs', early,
+    JSON.stringify((await paper(page)).slice(-120)));
   await page.context().close();
 }
 

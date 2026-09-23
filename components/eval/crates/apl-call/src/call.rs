@@ -5,7 +5,7 @@ use apl_scan::without_label;
 use apl_value::{AplError, AplResult, Array, ErrorKind};
 use apl_workspace::{Output, Workspace, render};
 
-use crate::branch::{halt, interrupted};
+use crate::branch::{emit, halt, interrupted};
 use crate::stack::bind;
 
 /// How to evaluate one body line. The evaluator passes its own
@@ -111,6 +111,7 @@ fn advance(ws: &mut Workspace, shown: Output, line: usize, last: usize) -> Optio
         shown => {
             ws.output
                 .push(Output::Lines(render(&shown, ws.saved.print)));
+            emit(ws);
             Some(line + 1)
         }
     }

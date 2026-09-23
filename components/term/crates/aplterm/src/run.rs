@@ -17,7 +17,9 @@ use apl_typing::{read_line, wait};
 use apl_wire::{ATTENTION, Frame, receive, send};
 
 /// Print what the service sent and type what it asks for, until it
-/// signs off or the reader hangs up.
+/// signs off or the reader hangs up. A frame marked `more` is output a
+/// statement printed while it runs: it is printed, and the next frame
+/// follows with no typing.
 ///
 /// The keyboard and the history live here, across the whole session,
 /// so a read part way through a statement recalls the same lines as
@@ -34,6 +36,9 @@ pub fn run(mut socket: TcpStream, mut keyboard: Keyboard) -> io::Result<()> {
         keyboard.also = Mode::parse(&frame.mode).unwrap_or_default().overstrikes();
         for line in &frame.lines {
             println!("{}", display(line));
+        }
+        if frame.more {
+            continue;
         }
         if frame.off {
             break;

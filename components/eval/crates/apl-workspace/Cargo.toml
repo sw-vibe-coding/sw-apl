@@ -10,6 +10,7 @@ repository.workspace = true
 [dependencies]
 apl-ast = { path = "../../../parse/crates/apl-ast" }
 apl-console = { path = "../apl-console" }
+apl-transcript = { path = "../apl-transcript" }
 apl-saved = { path = "../apl-saved" }
 apl-clock = { path = "../apl-clock" }
 apl-value = { path = "../../../value/crates/apl-value" }

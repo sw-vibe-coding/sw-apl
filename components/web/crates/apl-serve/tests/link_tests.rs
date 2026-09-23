@@ -31,6 +31,7 @@ impl Link for Typist {
             prompt: frame.prompt.clone(),
             off: frame.off,
             mode: frame.mode.clone(),
+            more: frame.more,
         });
         Ok(())
     }
@@ -141,4 +142,14 @@ fn every_frame_names_the_mode() {
     let b = session_in(Mode::B, &["⍎'2+2'"]);
     assert!(b.iter().all(|f| f.mode == "B"), "{b:?}");
     assert_eq!(text(&b), ["4"]);
+}
+
+#[test]
+fn what_a_function_prints_goes_out_while_it_runs() {
+    let sent = session(&["∇R←F", "⎕←1", "R←2", "∇", "F"]);
+    let during: Vec<&Frame> = sent.iter().filter(|f| f.more).collect();
+    assert_eq!(during.len(), 1, "{sent:?}");
+    assert_eq!(during[0].lines, ["1"]);
+    assert_eq!(during[0].prompt, None, "no prompt: it is still running");
+    assert_eq!(text(&sent), ["1", "2"], "and the result after it");
 }

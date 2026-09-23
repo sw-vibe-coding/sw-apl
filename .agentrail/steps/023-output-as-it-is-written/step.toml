@@ -1,6 +1,6 @@
 number = 23
 slug = "output-as-it-is-written"
-status = "pending"
+status = "in-progress"
 description = "Owner discussion 2026-09-22 (TTTML): output reaches the terminal only at a re..."
 role = "production"
 context_files = []

@@ -18,6 +18,10 @@ behaviour the reg-rs transcripts pin down.
   fills the same six columns, for example `[1.5] `.
 - Output wider than the print width (`)WIDTH` in (A), `⎕PW` in (B))
   wraps; continuation lines are indented six spaces.
+- What a function prints while it runs -- with `⎕←`, or a line that
+  displays its value -- appears as it is printed, at the CLI, in the
+  browser and through the service, so a long run shows its progress.
+  It is printed with the settings in force at that moment.
 - Batch mode (`-f FILE` or stdin) echoes each input line with the
   six-space indent before its output so the transcript matches an
   interactive session. `--no-echo` suppresses the echo.

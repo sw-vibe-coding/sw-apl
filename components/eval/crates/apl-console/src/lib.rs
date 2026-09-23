@@ -11,6 +11,6 @@ mod console;
 mod output;
 mod render;
 
-pub use console::{Console, INDENT, Transcript};
+pub use console::{Console, INDENT};
 pub use output::{Output, Print, Shown};
 pub use render::{error_lines, render, render_all};

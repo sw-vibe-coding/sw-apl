@@ -1,9 +1,9 @@
-//! Where a run goes next: the line a branch names, and the flag that
-//! stops a run from outside it.
+//! Where a run goes next: the line a branch names, the flag that
+//! stops a run from outside it, and what it has printed so far.
 
 use apl_ast::Defn;
 use apl_value::{AplError, AplResult, Array, Context, Data, ErrorKind, Number};
-use apl_workspace::Workspace;
+use apl_workspace::{Output, Workspace};
 
 /// The line a branch selects: the first element of its value, or
 /// `None` when the value is empty, which falls through to the next
@@ -60,4 +60,21 @@ pub fn halt(
     }
     ws.stop(at, line, false);
     err
+}
+
+/// Offer what the run has printed to a console that shows as it goes,
+/// while the statement is still running: a 2741 printed as the
+/// carriage moved. A console that keeps a transcript declines, and the
+/// lines wait, finished, for the next read or the statement's end.
+///
+/// A line `⍞←` left open waits for what finishes it, so a prompt and
+/// its answer still share a line.
+pub fn emit(ws: &mut Workspace) {
+    if matches!(ws.output.last(), Some(Output::Bare(_)) | None) {
+        return;
+    }
+    let shown = ws.flush();
+    if !shown.lines.is_empty() && !ws.console.show(&shown.lines) {
+        ws.output.push(Output::Lines(shown.lines));
+    }
 }

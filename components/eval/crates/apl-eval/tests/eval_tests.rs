@@ -284,9 +284,8 @@ fn a_body_line_that_displays_reaches_the_pending_output() {
     let mut ws = Workspace::default();
     define(&mut ws, "R\u{2190}NOISY N", &["N+1", "'HI'", "R\u{2190}N"]);
     assert_eq!(nums(&mut ws, "NOISY 4"), [Number::Int(4)]);
-    assert_eq!(ws.output.len(), 2);
-    // Rendered as it was shown, with the settings in force then.
-    assert_eq!(ws.output[0], Output::Lines(vec!["5".to_string()]));
+    // N+1 and 'HI', each rendered as it was shown.
+    assert_eq!(ws.flush().lines, ["5", "HI"]);
 }
 
 /// Also a guard on `MAX_DEPTH` itself: the limit has to fire before
