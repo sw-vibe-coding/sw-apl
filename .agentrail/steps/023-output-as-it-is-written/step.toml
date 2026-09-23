@@ -1,0 +1,8 @@
+number = 23
+slug = "output-as-it-is-written"
+status = "pending"
+description = "Owner discussion 2026-09-22 (TTTML): output reaches the terminal only at a re..."
+role = "production"
+context_files = []
+created_at = "2026-09-22T22:57:49"
+commits = []

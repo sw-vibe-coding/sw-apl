@@ -1,0 +1,1 @@
+Output a function shows while running is rendered as written (Output::Lines) with the settings then in force, so local PP and PW apply. The statement result still renders after return. (A) unmoved: reg-rs 90/90. Live streaming of output left as a new step.
