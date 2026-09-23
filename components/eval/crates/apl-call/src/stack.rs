@@ -4,7 +4,7 @@
 
 use apl_ast::Defn;
 use apl_value::{AplError, AplResult, Array, ErrorKind, Number};
-use apl_workspace::{Output, Workspace};
+use apl_workspace::{Output, Workspace, render};
 
 use crate::call::run_body;
 use apl_scan::labels;
@@ -87,7 +87,8 @@ pub fn resume(ws: &mut Workspace, from: i64, run: Run) -> AplResult<Output> {
         };
         line = caller.line + 1;
         if let Some(value) = result {
-            ws.output.push(Output::Value(value));
+            let lines = render(&Output::Value(value), ws.saved.print);
+            ws.output.push(Output::Lines(lines));
         }
     }
 }

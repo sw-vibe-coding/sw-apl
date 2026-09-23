@@ -1,6 +1,6 @@
 number = 22
 slug = "quad-output-settings"
-status = "pending"
+status = "in-progress"
 description = "Found 2026-09-22 building step 019 (system variables): output written with qu..."
 role = "production"
 context_files = []

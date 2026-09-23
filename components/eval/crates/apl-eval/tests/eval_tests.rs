@@ -2,7 +2,7 @@
 
 use apl_eval::{Output, Transcript, Workspace, eval_line};
 use apl_parse::parse_header;
-use apl_value::{Array, Data, ErrorKind, Number};
+use apl_value::{Data, ErrorKind, Number};
 
 fn nums(ws: &mut Workspace, line: &str) -> Vec<Number> {
     match eval_line(ws, line).unwrap().value().unwrap().data {
@@ -285,7 +285,8 @@ fn a_body_line_that_displays_reaches_the_pending_output() {
     define(&mut ws, "R\u{2190}NOISY N", &["N+1", "'HI'", "R\u{2190}N"]);
     assert_eq!(nums(&mut ws, "NOISY 4"), [Number::Int(4)]);
     assert_eq!(ws.output.len(), 2);
-    assert_eq!(ws.output[0], Output::Value(Array::scalar(Number::Int(5))));
+    // Rendered as it was shown, with the settings in force then.
+    assert_eq!(ws.output[0], Output::Lines(vec!["5".to_string()]));
 }
 
 /// Also a guard on `MAX_DEPTH` itself: the limit has to fire before

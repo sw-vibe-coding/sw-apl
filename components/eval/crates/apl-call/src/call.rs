@@ -3,7 +3,7 @@
 use apl_ast::Defn;
 use apl_scan::without_label;
 use apl_value::{AplError, AplResult, Array, ErrorKind};
-use apl_workspace::{Output, Workspace};
+use apl_workspace::{Output, Workspace, render};
 
 use crate::branch::{halt, interrupted};
 use crate::stack::bind;
@@ -109,7 +109,8 @@ fn advance(ws: &mut Workspace, shown: Output, line: usize, last: usize) -> Optio
         },
         Output::Nothing | Output::Branch(None) => Some(line + 1),
         shown => {
-            ws.output.push(shown);
+            ws.output
+                .push(Output::Lines(render(&shown, ws.saved.print)));
             Some(line + 1)
         }
     }

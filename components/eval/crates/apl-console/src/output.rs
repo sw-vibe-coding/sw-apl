@@ -14,6 +14,10 @@ pub enum Output {
     Value(Array),
     /// Mixed output: the parts are displayed side by side.
     Mixed(Vec<Array>),
+    /// Lines already rendered: what a function showed while it ran,
+    /// with the print settings in force then. A function can change
+    /// them, in (B), before the statement that called it ends.
+    Lines(Vec<String>),
     /// Characters written with `⍞←`, with no line ending: whatever
     /// comes next carries on where these left off, which is how a
     /// prompt and its answer share a line.

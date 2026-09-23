@@ -14,6 +14,7 @@ pub fn render(out: &Output, print: Print) -> Vec<String> {
         Output::Value(value) => format_array(value, print.precision(), print.width),
         Output::Mixed(parts) => mixed_lines(parts, print),
         Output::Bare(text) => vec![text.clone()],
+        Output::Lines(lines) => lines.clone(),
     }
 }
 

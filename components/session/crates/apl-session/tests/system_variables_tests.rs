@@ -420,3 +420,33 @@ fn a_function_with_a_local_setting_makes_its_workspace_75s() {
     out(&mut b, ")LOAD LOC");
     assert_eq!(out(&mut b, "F"), vec!["0 1"]);
 }
+
+#[test]
+fn output_is_shown_with_the_settings_it_was_written_under() {
+    let mut b = in_mode(Mode::B);
+    define(
+        &mut b,
+        &[
+            "∇R←G;⎕PP;⎕PW",
+            "⎕PP←3",
+            "⎕PW←30",
+            "⎕←÷3",
+            "⎕←⍳20",
+            "÷7",
+            "R←÷3",
+            "∇",
+        ],
+    );
+    // Inside, three digits and a width of 30; the result, shown once
+    // G has returned, at the clear workspace's five and 64.
+    assert_eq!(
+        out(&mut b, "G"),
+        vec![
+            "0.333",
+            "1 2 3 4 5 6 7 8 9 10 11 12 13",
+            "      14 15 16 17 18 19 20",
+            "0.143",
+            "0.33333"
+        ]
+    );
+}

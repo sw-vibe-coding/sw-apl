@@ -138,7 +138,8 @@ fn resuming_finishes_the_function_and_returns_through_its_caller() {
     assert_eq!(shown, Output::Nothing, "OUTER declares no result");
     assert!(ws.si().is_empty(), "both activations returned");
     assert_eq!(ws.output.len(), 2, "INNER's value, then OUTER's line 3");
-    assert_eq!(ws.output[0], Output::Value(num(42)));
+    // Rendered as it was shown, with the settings in force then.
+    assert_eq!(ws.output[0], Output::Lines(vec!["42".to_string()]));
 }
 
 #[test]

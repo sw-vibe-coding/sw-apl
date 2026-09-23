@@ -27,7 +27,7 @@ pub fn evaluated(ws: &mut Workspace, run: Run) -> AplResult<Array> {
                 }
             }
             Output::Branch(_) => return Err(AplError::new(ErrorKind::Interrupt)),
-            Output::Nothing | Output::Bare(_) => {}
+            Output::Nothing | Output::Bare(_) | Output::Lines(_) => {}
         }
     }
 }

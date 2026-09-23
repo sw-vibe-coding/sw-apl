@@ -156,6 +156,11 @@ Decisions where sw-apl differs from the 5110, each labelled:
   system variable can be made local (DEFN ERROR). Under a suspension
   `)VARS` does not list it and `)SAVE` writes the global setting. A
   function that makes one local runs in (B) only.
+- Output a function shows while it runs -- with `⎕←`, or a line that
+  displays its value -- is shown with the print settings in force when
+  it is shown, so a function that makes `⎕PP` or `⎕PW` local prints
+  with its own. The statement's result is shown once the function has
+  returned, with the settings then.
 - An indexed assignment into a system variable, `⎕TS[1]←1977` or
   `⎕LX[2]←'X'`, changes the value and assigns it back, through the
   checks a plain assignment makes.
