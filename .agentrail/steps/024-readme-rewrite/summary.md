@@ -1,0 +1,1 @@
+README rewritten for a reader: the two modes as a table, try it, run locally, aplterm and the service in each mode and both at once (verified on two ports), library 1 table, what works table, grouped docs. just demo takes a mode.
