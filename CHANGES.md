@@ -14,6 +14,13 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-22
 
+- chore(agentrail): complete 019-system-variables-complete; add 022-quad-output-settings
+- feat(b75): local settings, indexed assignment into a system variable
+- fix(pages): a spent reload count no longer locks a tab out; say what the browser saw
+- fix(pages): recover when the isolation worker will not install
+- feat(b75): the comparison tolerance can be set
+- plan(modes): workspace file names say their modes
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 018-browser-defaults-to-b
 - feat(pages): the browser opens in (B) '75
 - saga: insert 018-browser-defaults-to-b
