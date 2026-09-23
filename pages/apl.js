@@ -10,9 +10,17 @@
 // fetches. index.html reads it from version.txt, which the build
 // writes and the page asks for uncached, so the page, the worker and
 // the WebAssembly are always one build and never three.
+//
+// `ts` is the moment the page loaded, passed on the same way. It makes
+// every address this visit fetches one no cache has seen, so a browser
+// holding an older copy of anything cannot be handed it again.
 const VERSION = new URL(import.meta.url).searchParams.get("v") ?? "";
-const stamped = (path) =>
-  `${path}${VERSION && `?v=${encodeURIComponent(VERSION)}`}`;
+const LOADED = new URL(import.meta.url).searchParams.get("ts") ?? "";
+const query = (pairs) => {
+  const kept = pairs.filter(([, value]) => value);
+  return kept.length ? "?" + new URLSearchParams(kept).toString() : "";
+};
+const stamped = (path) => `${path}${query([["v", VERSION], ["ts", LOADED]])}`;
 
 const { default: init, Board } = await import(stamped("./wasm/apl_wasm.js"));
 const { build } = await import(stamped("./board.js"));
@@ -157,34 +165,119 @@ const keep = (work) => {
   }
 };
 
+// Why the page could not be isolated, in a few words for the one
+// line the paper shows. Empty until something has gone wrong.
+let refused = "";
+
 async function isolate() {
   if (self.crossOriginIsolated) {
     try { sessionStorage.removeItem(RELOADS); } catch { /* private mode */ }
     return true;
   }
-  if (!("serviceWorker" in navigator)) return false;
-  try {
-    await navigator.serviceWorker.register("sw.js");
-    await navigator.serviceWorker.ready;
-  } catch (error) {
-    console.error("sw-apl: the isolation worker would not install:", error);
+  if (!("serviceWorker" in navigator)) {
+    refused = "no service workers";
     return false;
   }
-  let tries = 0;
-  try {
-    tries = Number(sessionStorage.getItem(RELOADS) || 0);
-    sessionStorage.setItem(RELOADS, String(tries + 1));
-  } catch {
-    // Without session storage there is no way to count, so reload
-    // once and let the load after it decide.
-    tries = navigator.serviceWorker.controller ? 2 : 0;
-  }
-  if (tries >= 2) {
+  const tries = reloads();
+  if (tries >= 3) {
+    refused = "still not isolated after reloading";
     console.error("sw-apl: still not isolated after", tries, "reloads");
     return false;
   }
+  // A worker already in charge of a page that is still not isolated
+  // is not ours as it should be: an older build's, or one an earlier
+  // visit left half installed. Throw it away and install afresh.
+  if (navigator.serviceWorker.controller && tries > 0) await forget();
+  if (!(await install())) return false;
   location.reload();
   return false;
+}
+
+// Count this reload, and say how many came before it in this tab.
+// Without session storage there is no counting, so it reloads once
+// and lets the load after it decide.
+function reloads() {
+  try {
+    const tries = Number(sessionStorage.getItem(RELOADS) || 0);
+    sessionStorage.setItem(RELOADS, String(tries + 1));
+    return tries;
+  } catch {
+    return navigator.serviceWorker.controller ? 3 : 0;
+  }
+}
+
+// Install the isolation worker and wait until it is running. A
+// browser that refuses -- "the operation was aborted" is the usual
+// words -- is most often holding a registration an earlier visit or
+// build left broken, so every registration this site has is thrown
+// away and it is tried again, three times in all.
+//
+// The worker's address carries the build, and is never taken from
+// the HTTP cache, so a new build always installs a new worker rather
+// than a copy of the old one a static host said could be kept.
+async function install() {
+  // The build only, not the moment: a new address for the worker on
+  // every visit would install a new worker on every visit.
+  const script = `sw.js${query([["v", VERSION]])}`;
+  let last = null;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      const registration = await navigator.serviceWorker.register(
+        script, { updateViaCache: "none" });
+      await running(registration);
+      return true;
+    } catch (error) {
+      last = error;
+      console.error(`sw-apl: the isolation worker would not install (try ${attempt}):`, error);
+      await forget();
+      await new Promise((done) => setTimeout(done, 400 * attempt));
+    }
+  }
+  refused = blocked() ? "this browser is blocking site data for this site"
+    : `the isolation worker would not install: ${last?.name ?? "error"}`;
+  return false;
+}
+
+// Resolve once the registration's worker is active, or fail if it
+// is thrown out or does not get there in ten seconds.
+function running(registration) {
+  return new Promise((resolve, reject) => {
+    const check = () => {
+      if (registration.active) return resolve();
+      const worker = registration.installing || registration.waiting;
+      if (!worker) return reject(new Error("no worker"));
+      worker.addEventListener("statechange", () => {
+        if (worker.state === "redundant") return reject(new Error("redundant"));
+        check();
+      }, { once: true });
+    };
+    setTimeout(() => reject(new Error("timed out")), 10000);
+    check();
+  });
+}
+
+// Unregister every service worker this site has, and empty its
+// caches. The isolation worker caches nothing, but an older build or
+// a half-finished install might have left something behind.
+async function forget() {
+  try {
+    for (const r of await navigator.serviceWorker.getRegistrations()) await r.unregister();
+  } catch (error) { console.error("sw-apl: could not unregister:", error); }
+  try {
+    for (const key of await caches.keys()) await caches.delete(key);
+  } catch { /* no caches to clear */ }
+}
+
+// True when the browser will not let this site keep anything, which
+// stops a service worker as surely as it stops local storage.
+function blocked() {
+  try {
+    localStorage.setItem("apl-probe", "1");
+    localStorage.removeItem("apl-probe");
+    return false;
+  } catch {
+    return true;
+  }
 }
 
 // How long to wait for the session's first frame before saying it is
@@ -218,11 +311,12 @@ function viewport() {
 // Start the session and wire the keyboard to it.
 async function run() {
   viewport();
+  controls();
   if (!(await isolate())) {
     // One line. A reader who cannot run it needs to know that and
     // where to look, not an essay on service workers -- the rest is
     // under Help.
-    stop("NO SHARED MEMORY IN THIS BROWSER. SEE HELP.");
+    stop(`NO SHARED MEMORY IN THIS BROWSER: ${refused || "not isolated"}. SEE HELP.`);
     return;
   }
   await init();
@@ -299,8 +393,13 @@ async function keyboard() {
   } catch { /* as above */ }
   reveal(was);
 
-  tabs();
+}
 
+// Help and the mode tabs, which must work before anything else does:
+// the page that cannot start a session sends the reader to Help, and
+// a tab is a way to try again.
+function controls() {
+  tabs();
   const help = document.getElementById("help");
   document.getElementById("show-help").addEventListener("click", () => help.showModal());
 }

@@ -10,8 +10,9 @@
 // a page and a worker that arrived together cannot end up on
 // different builds of the WebAssembly.
 
-const version = new URL(import.meta.url).searchParams.get("v") ?? "";
-const bundle = `./wasm/apl_wasm.js${version && `?v=${encodeURIComponent(version)}`}`;
+const asked = new URL(import.meta.url).searchParams;
+const kept = [...asked].filter(([name]) => name === "v" || name === "ts");
+const bundle = `./wasm/apl_wasm.js${kept.length ? "?" + new URLSearchParams(kept) : ""}`;
 
 // Say on the page's own paper what went wrong here. A worker that
 // dies quietly leaves a prompt that ignores typing, which a reader

@@ -324,10 +324,20 @@
     <code>just pages-serve</code>, that is two headers and it simply
     works. A static host will not send them, so the published page
     installs a service worker to add them and loads once more under
-    it -- and a private window refuses that worker, which is the usual
-    reason for the message. Close the tab and open it again, or run it
-    locally.
+    it. If the browser will not install it, the page clears out what
+    this site left in the browser and tries again before it gives up;
+    the words after the colon say why it stopped.
   </p>
+  <ul>
+    <li><b>A private window</b> refuses the worker. Use an ordinary
+      one.</li>
+    <li><b>Blocking site data</b>: allow this site to save data in the
+      browser's site settings, then reload.</li>
+    <li><b>Anything else</b>: clear this site's data (in Chrome, the
+      icon left of the address, then Site settings, then Delete data)
+      and reload. That removes a worker an earlier visit left broken.
+      Or run it locally.</li>
+  </ul>
   <form method="dialog"><button>Close</button></form>
 </dialog>
 <dialog id="switch" aria-labelledby="switch-title">
@@ -354,5 +364,7 @@
     .then((r) => (r.ok ? r.text() : ""))
     .catch(() => "");
   const at = version.trim();
-  await import(`./apl.js${at && `?v=${encodeURIComponent(at)}`}`);
+  const query = new URLSearchParams({ ts: String(Date.now()) });
+  if (at) query.set("v", at);
+  await import(`./apl.js?${query}`);
 </script>

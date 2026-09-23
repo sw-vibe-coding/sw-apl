@@ -810,6 +810,42 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   sub.close();
 }
 
+// 15. A browser that refuses the isolation worker. Registration that
+//    fails with "the operation was aborted" is cleaned up and tried
+//    again; one that fails every time says why, and Help still opens.
+{
+  const refusing = (times) => `(() => {
+    const real = navigator.serviceWorker.register.bind(navigator.serviceWorker);
+    let left = ${times};
+    navigator.serviceWorker.register = (...args) => left-- > 0
+      ? Promise.reject(new DOMException('The operation was aborted.', 'AbortError'))
+      : real(...args);
+  })()`;
+  const context = await browser.newContext();
+  await context.addInitScript(refusing(1));
+  const once = await context.newPage();
+  await once.goto(url, { waitUntil: 'load' });
+  await once.waitForTimeout(4000);
+  await settle(once);
+  check('a registration aborted once is tried again, and the session starts',
+    await typing(once), JSON.stringify((await paper(once)).slice(-200)));
+  await context.close();
+
+  const stuck = await browser.newContext();
+  await stuck.addInitScript(refusing(99));
+  const never = await stuck.newPage();
+  await never.goto(url, { waitUntil: 'load' });
+  await never.waitForTimeout(5000);
+  await settle(never);
+  const said = await paper(never);
+  check('one aborted every time says why', /NO SHARED MEMORY.*AbortError/.test(said),
+    JSON.stringify(said.slice(-200)));
+  await never.click('#show-help');
+  check('and Help still opens',
+    await never.evaluate(() => document.getElementById('help').open), 'Help did not open');
+  await stuck.close();
+}
+
 await browser.close();
 server.close();
 console.log(failed ? `check-pages: ${failed} failed` : 'check-pages: all passed');
