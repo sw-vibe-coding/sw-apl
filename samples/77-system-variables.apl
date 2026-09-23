@@ -25,6 +25,17 @@
 1=1+1E¯11
 ⌊3-1E¯11
 ⎕CT←1E¯13
+⍝ A setting made local is given back its value on return.
+∇R←ZERO N;⎕IO
+⎕IO←0
+R←⍳N
+∇
+ZERO 3
+⎕IO
+⍝ An indexed assignment changes part of a value.
+⎕TS[1]←1977
+⎕TS
+⎕TS[1]←1900
 ⍝ A value a setting cannot take is refused.
 ⎕IO←2
 ⎕PP←17

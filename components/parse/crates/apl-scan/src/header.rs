@@ -7,14 +7,19 @@ use apl_value::{AplError, AplResult, ErrorKind};
 
 use crate::scan::segments;
 
+/// The system variables a header may make local: the settings. In
+/// (B) only, since only (B) lexes a quad name as one name.
+pub const LOCAL_SETTINGS: [&str; 5] = ["⎕CT", "⎕IO", "⎕PP", "⎕PW", "⎕RL"];
+
 /// The header that follows an opening del: `NAME`, `NAME B`, or
 /// `A NAME B`, each optionally with `R←` in front, then `;LOCAL`
-/// names.
+/// names, one to a segment. `also` is the mode's extra glyphs, as the
+/// lexer takes them: in (B) a local may be one of the settings.
 ///
 /// # Errors
 /// Lexical errors, and DEFN ERROR for any other shape.
-pub fn parse_header(text: &str) -> AplResult<Defn> {
-    let tokens = tokenize(text, "")?;
+pub fn parse_header(text: &str, also: &str) -> AplResult<Defn> {
+    let tokens = tokenize(text, also)?;
     let mut ranges = segments(&tokens, 0, tokens.len()).into_iter();
     let (lo, hi) = ranges.next().unwrap_or((0, 0));
     let head = &tokens[lo..hi];
@@ -26,7 +31,7 @@ pub fn parse_header(text: &str) -> AplResult<Defn> {
     };
     let (name, left, right) = header_names(head)?;
     let locals = ranges
-        .map(|(lo, hi)| Ok(header_names(&tokens[lo..hi])?.0))
+        .map(|(lo, hi)| local(&tokens[lo..hi]))
         .collect::<AplResult<Vec<_>>>()?;
     Ok(Defn {
         name,
@@ -64,13 +69,27 @@ pub fn header_text(defn: &Defn) -> String {
     out
 }
 
+/// One local name: a name, or in (B) a setting.
+fn local(segment: &[Token]) -> AplResult<String> {
+    match segment {
+        [t] => match &t.kind {
+            TokenKind::Name(n) if !n.starts_with('⎕') || LOCAL_SETTINGS.contains(&n.as_str()) => {
+                Ok(n.clone())
+            }
+            _ => Err(AplError::new(ErrorKind::Defn).at(t.pos)),
+        },
+        _ => Err(AplError::new(ErrorKind::Defn)),
+    }
+}
+
 /// The names in a header segment, as `(name, left, right)`: one name
-/// is niladic, two are monadic, three dyadic.
+/// is niladic, two are monadic, three dyadic. A system name is none
+/// of them.
 fn header_names(head: &[Token]) -> AplResult<(String, Option<String>, Option<String>)> {
     let names = head
         .iter()
         .map(|t| match &t.kind {
-            TokenKind::Name(n) => Ok(n.clone()),
+            TokenKind::Name(n) if !n.starts_with('⎕') => Ok(n.clone()),
             _ => Err(AplError::new(ErrorKind::Defn).at(t.pos)),
         })
         .collect::<AplResult<Vec<_>>>()?;

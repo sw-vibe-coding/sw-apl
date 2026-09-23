@@ -201,7 +201,7 @@ fn indexing_and_indexed_assignment_evaluate() {
 
 /// Define a function from a del header and its body lines.
 fn define(ws: &mut Workspace, header: &str, body: &[&str]) {
-    let mut defn = parse_header(header).unwrap();
+    let mut defn = parse_header(header, "").unwrap();
     defn.body = body.iter().map(|&l| l.to_string()).collect();
     ws.define(defn).expect("the definition fits");
 }

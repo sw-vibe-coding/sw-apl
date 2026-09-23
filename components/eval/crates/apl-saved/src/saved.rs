@@ -53,14 +53,35 @@ impl Saved {
     /// global a local is about to hide, or, on return, the local's
     /// value or a function fixed under the local name.
     pub fn swap(&mut self, name: &str, referent: Option<Referent>) -> Option<Referent> {
+        if name.starts_with('⎕') {
+            return Some(self.swap_setting(name, referent));
+        }
         let function = self.funcs.remove(name).map(Referent::Function);
         let held = function.or_else(|| self.vars.remove(name).map(Referent::Value));
         match referent {
             Some(Referent::Value(value)) => self.vars.insert(name.to_string(), value).map(drop),
             Some(Referent::Function(f)) => self.funcs.insert(name.to_string(), f).map(drop),
-            None => None,
+            Some(Referent::Settings(..)) | None => None,
         };
         held
+    }
+
+    /// A setting made local. It keeps the value it had -- the 5110
+    /// left it undefined until assigned, and reported IMPLICIT ERROR
+    /// if it was used first; sw-apl, like APL2, does not -- and on
+    /// return it is given back its value from `back`.
+    fn swap_setting(&mut self, name: &str, back: Option<Referent>) -> Referent {
+        if let Some(Referent::Settings(env, print)) = back {
+            match name {
+                "⎕IO" => self.env.io = env.io,
+                "⎕CT" => self.env.ct = env.ct,
+                "⎕RL" => self.env.link = env.link,
+                "⎕PP" => self.print.digits = print.digits,
+                "⎕PW" => self.print.width = print.width,
+                _ => {}
+            }
+        }
+        Referent::Settings(self.env.clone(), self.print)
     }
 
     /// This workspace as it would be with every call returned: the

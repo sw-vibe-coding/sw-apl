@@ -61,7 +61,7 @@ impl Definition {
     fn text(&mut self, text: &str) -> AplResult<()> {
         if self.next == 0 {
             let body = std::mem::take(&mut self.header.body);
-            self.header = parse_header(text)?;
+            self.header = parse_header(text, self.glyphs)?;
             self.header.body = body;
         } else {
             let line = (self.next, text.to_string());

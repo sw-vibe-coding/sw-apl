@@ -148,9 +148,22 @@ Decisions where sw-apl differs from the 5110, each labelled:
   is 2 and sw-apl's 3. A count -- the argument of `⍳`, a length --
   keeps APL\360's fixed fuzz. A workspace saved with another
   tolerance carries it as a `⍝!CT` directive and is (B) only.
-- Not implemented: a system variable localized in a function header,
-  `⎕PW` 128 while a definition is open, and indexed assignment into a
-  system variable (NONCE ERROR).
+- A setting -- `⎕CT`, `⎕IO`, `⎕PP`, `⎕PW` or `⎕RL` -- may be made local
+  in a function header, `R←F;⎕IO`, and is given back its value when
+  the function returns. It keeps the value it had until the function
+  assigns it: the 5110 left it undefined, and reported IMPLICIT ERROR
+  if it was used first, which sw-apl, like APL2, does not. No other
+  system variable can be made local (DEFN ERROR). Under a suspension
+  `)VARS` does not list it and `)SAVE` writes the global setting. A
+  function that makes one local runs in (B) only.
+- An indexed assignment into a system variable, `⎕TS[1]←1977` or
+  `⎕LX[2]←'X'`, changes the value and assigns it back, through the
+  checks a plain assignment makes.
+- `⎕PW` is not set to 128 while a definition is open. The 5110 did
+  that so a long statement shows whole when the editor displays it;
+  sw-apl's editor never wraps a line it displays, in either mode, so
+  every statement already shows whole. `∇F[⎕]∇`, which the 5110
+  showed at the current width, is not wrapped either.
 - A quad name the system does not have is a SYNTAX ERROR (a guess:
   the manual does not say).
 

@@ -320,9 +320,12 @@ or `⎕DL` is ignored. A clear workspace in (B) has `⎕PP` 5 and `⎕PW`
 64, the 5110's screen. A quad name the system has not got is a
 SYNTAX ERROR.
 
-Not implemented: a system variable localized in a function header,
-`⎕PW` 128 while a definition is open, and indexed assignment into a
-system variable (NONCE ERROR).
+A setting -- `⎕CT`, `⎕IO`, `⎕PP`, `⎕PW` or `⎕RL` -- can be made local
+in a function header, `R←F;⎕IO`: it keeps the value it had until the
+function assigns it, and is given its value back when the function
+returns. No other system variable can be (DEFN ERROR). An indexed
+assignment such as `⎕TS[1]←1977` changes the value and assigns it
+back, checked as a plain assignment is.
 
 ### System functions
 

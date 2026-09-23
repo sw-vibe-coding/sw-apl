@@ -32,7 +32,7 @@ fn stripping_a_label_keeps_every_other_character_in_place() {
 
 #[test]
 fn a_header_names_the_function_its_arguments_and_its_locals() {
-    let defn = parse_header("R\u{2190}A HYP B;T").unwrap();
+    let defn = parse_header("R\u{2190}A HYP B;T", "").unwrap();
     assert_eq!(defn.name, "HYP");
     assert_eq!(defn.names(), ["R", "A", "B", "T"]);
 }

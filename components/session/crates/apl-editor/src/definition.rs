@@ -26,6 +26,10 @@ pub struct Definition {
     /// closes it. The manual: del-tilde "used instead of ∇ to open or
     /// close a function definition" locks it -- either one is enough.
     pub locking: bool,
+    /// The mode's extra glyphs, as the lexer takes them, for a header
+    /// edited at `[0]`: in (B) it may make a setting local. Empty is
+    /// (A).
+    pub(crate) glyphs: &'static str,
 }
 
 /// What one input line in definition mode did.
@@ -41,8 +45,9 @@ impl Definition {
     /// Begin editing `defn`: its body takes the numbers 1, 2, 3 and
     /// the prompt offers the line after the last. `locking` when it was
     /// opened with del-tilde, so that it is locked when it closes.
+    /// `glyphs` is the mode's, as the lexer takes them.
     #[must_use]
-    pub fn start(defn: Defn, locking: bool) -> Definition {
+    pub fn start(defn: Defn, locking: bool, glyphs: &'static str) -> Definition {
         let lines: Vec<(i64, String)> = defn
             .body
             .iter()
@@ -57,6 +62,7 @@ impl Definition {
             lines,
             next,
             locking,
+            glyphs,
         }
     }
 

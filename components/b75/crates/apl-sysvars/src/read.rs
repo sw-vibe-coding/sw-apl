@@ -17,9 +17,9 @@ const STAMP: [i64; 7] = [1900, 0, 0, 0, 0, 0, 0];
 
 /// The expression `expr` when it reads or assigns a system variable:
 /// what it gives, with the caret on the name for an error of its own.
-/// `eval` evaluates what is assigned. `None` for any other expression.
-///
-/// Indexed assignment into one is not implemented: NONCE ERROR.
+/// `eval` evaluates what is assigned. `None` for any other expression,
+/// indexed assignment included, which the evaluator does as it does
+/// for a variable, reading and assigning through here.
 pub fn form(
     ws: &mut Workspace,
     expr: &Expr,
@@ -32,9 +32,6 @@ pub fn form(
             assign(ws, name, &v).map_err(|e| e.at(*pos))?;
             Ok(v)
         }),
-        Expr::IndexedAssign { name, pos, .. } if system(name) => {
-            Err(AplError::new(ErrorKind::Nonce).at(*pos))
-        }
         _ => return None,
     })
 }

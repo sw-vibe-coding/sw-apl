@@ -22,6 +22,7 @@ fn open(body: &[&str]) -> Definition {
             ..Defn::default()
         },
         false,
+        "",
     )
 }
 
@@ -33,7 +34,7 @@ fn typed(definition: &mut Definition, lines: &[&str]) {
 
 #[test]
 fn the_prompt_offers_the_line_after_the_last() {
-    assert_eq!(Definition::start(header("F"), false).prompt(), "[1]   ");
+    assert_eq!(Definition::start(header("F"), false, "").prompt(), "[1]   ");
     assert_eq!(open(&["a", "b"]).prompt(), "[3]   ");
     let mut wide = open(&[]);
     typed(&mut wide, &["[10]"]);

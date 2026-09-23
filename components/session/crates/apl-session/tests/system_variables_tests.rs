@@ -334,3 +334,89 @@ impl Drop for Dir {
         std::fs::remove_dir_all(&self.0).ok();
     }
 }
+
+#[test]
+fn a_system_variable_takes_an_indexed_assignment() {
+    let mut b = in_mode(Mode::B);
+    assert!(out(&mut b, "⎕TS[1]←1977").is_empty());
+    assert_eq!(out(&mut b, "⎕TS"), vec!["1977 0 0 0 0 0 0"]);
+    out(&mut b, "⎕LX←'ABC'");
+    assert_eq!(out(&mut b, "⎕LX[2]←'X'"), Vec::<String>::new());
+    assert_eq!(out(&mut b, "⎕LX"), vec!["AXC"]);
+    // The value it makes goes through the same checks as a plain
+    // assignment, and the index through the same as any variable's.
+    assert_eq!(error(&mut b, "⎕AI[5]←1"), "INDEX ERROR");
+    assert_eq!(error(&mut b, "⎕LX[1]←5"), "DOMAIN ERROR");
+    assert_eq!(error(&mut b, "⎕IO[1]←0"), "RANK ERROR");
+    assert_eq!(out(&mut b, "⎕LX"), vec!["AXC"], "unchanged");
+}
+
+fn define(s: &mut Session, lines: &[&str]) {
+    for line in lines {
+        let reply = s.respond(line);
+        assert!(!reply.error, "{line}: {:?}", reply.lines);
+    }
+}
+
+#[test]
+fn a_setting_made_local_is_given_back_on_return() {
+    let mut b = in_mode(Mode::B);
+    define(&mut b, &["∇R←F;⎕IO", "⎕IO←0", "R←⍳3", "∇"]);
+    assert_eq!(out(&mut b, "F"), vec!["0 1 2"]);
+    assert_eq!(out(&mut b, "⎕IO"), vec!["1"], "the global origin is back");
+    define(
+        &mut b,
+        &["∇R←G;⎕CT;⎕PP", "⎕CT←0.1", "⎕PP←3", "R←(1=1.05),⎕PP", "∇"],
+    );
+    assert_eq!(out(&mut b, "G"), vec!["1 3"]);
+    assert_eq!(out(&mut b, "⎕CT,⎕PP"), vec!["1E¯13 5"]);
+}
+
+#[test]
+fn a_setting_made_local_starts_with_the_value_it_had() {
+    let mut b = in_mode(Mode::B);
+    out(&mut b, "⎕PP←7");
+    define(&mut b, &["∇R←F;⎕PP", "R←⎕PP", "∇"]);
+    assert_eq!(out(&mut b, "F"), vec!["7"]);
+}
+
+#[test]
+fn a_local_setting_under_a_suspension() {
+    let mut b = in_mode(Mode::B);
+    define(&mut b, &["∇H;⎕IO", "⎕IO←0", "NOSUCH", "∇"]);
+    assert_eq!(b.respond("H").lines[0], "VALUE ERROR");
+    assert_eq!(out(&mut b, "⎕IO"), vec!["0"], "the local is in scope");
+    assert_eq!(out(&mut b, ")VARS"), Vec::<String>::new());
+    out(&mut b, "→");
+    assert_eq!(out(&mut b, "⎕IO"), vec!["1"]);
+}
+
+#[test]
+fn only_a_setting_can_be_made_local() {
+    let mut b = in_mode(Mode::B);
+    for header in ["∇F;⎕LC", "∇F;⎕XY", "∇⎕IO", "∇R←F ⎕IO"] {
+        assert_eq!(error(&mut b, header), "DEFN ERROR", "{header}");
+    }
+    assert_eq!(out(&mut b, "⎕FX 2 6⍴'F;⎕IO ⎕IO←0 '"), vec!["F"]);
+    let mut a = in_mode(Mode::A);
+    assert_eq!(
+        error(&mut a, "∇F;⎕IO"),
+        "DEFN ERROR",
+        "no system names in (A)"
+    );
+}
+
+#[test]
+fn a_function_with_a_local_setting_makes_its_workspace_75s() {
+    let dir = Dir::new("local-setting");
+    let mut b = in_mode(Mode::B);
+    b.ws.store = Box::new(Files(dir.0.clone()));
+    define(&mut b, &["∇R←F;⎕IO", "⎕IO←0", "R←⍳2", "∇"]);
+    out(&mut b, ")SAVE LOC");
+    let mut a = in_mode(Mode::A);
+    a.ws.store = Box::new(Files(dir.0.clone()));
+    assert_eq!(out(&mut a, ")LOAD LOC"), vec!["WS NOT FOUND"]);
+    out(&mut b, ")CLEAR");
+    out(&mut b, ")LOAD LOC");
+    assert_eq!(out(&mut b, "F"), vec!["0 1"]);
+}

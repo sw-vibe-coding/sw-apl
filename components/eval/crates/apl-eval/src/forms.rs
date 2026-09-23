@@ -51,11 +51,13 @@ pub fn indexed(
 }
 
 /// `name[indexes]←value`: the value first, then the indexes, then the
-/// variable; yields the value.
+/// variable; yields the value. A system variable is read, changed and
+/// assigned back, so what it may hold is checked as for `⎕IO←v`.
 ///
 /// # Errors
 /// VALUE ERROR at the name when it is undefined; fit and selection
-/// errors carry the bracket's position.
+/// errors, and a value a system variable cannot take, carry the
+/// bracket's position.
 pub fn assign_indexed(
     ws: &mut Workspace,
     name: &str,
@@ -65,12 +67,18 @@ pub fn assign_indexed(
 ) -> AplResult<Array> {
     let v = eval_expr(ws, value)?;
     let idx = eval_indexes(ws, indexes)?;
-    let base = ws
-        .get(name)
-        .cloned()
-        .ok_or_else(|| AplError::new(ErrorKind::Value).at(pos))?;
+    let system = name.starts_with('⎕');
+    let base = match ws.get(name) {
+        _ if system => apl_sysvars::read(ws, name).map_err(|e| e.at(pos))?,
+        Some(held) => held.clone(),
+        None => return Err(AplError::new(ErrorKind::Value).at(pos)),
+    };
     let updated = indexed_assign(&base, &idx, &v, ws.saved.env.io).map_err(|e| e.at(pos))?;
-    ws.set(name, updated)?;
+    if system {
+        apl_sysvars::assign(ws, name, &updated).map_err(|e| e.at(pos))?;
+    } else {
+        ws.set(name, updated)?;
+    }
     Ok(v)
 }
 

@@ -3,6 +3,8 @@
 use std::rc::Rc;
 
 use apl_ast::Defn;
+use apl_console::Print;
+use apl_prims::Env;
 use apl_value::Array;
 
 /// The referent of a name: a variable's value or a function. A name
@@ -13,6 +15,9 @@ pub enum Referent {
     Value(Array),
     /// A defined function.
     Function(Rc<Defn>),
+    /// The settings as they were when a call made one of them local,
+    /// `⎕IO` say, in (B). Only the one it named is given back.
+    Settings(Env, Print),
 }
 
 /// One call: what it displaced, where it is, and whether it stopped.

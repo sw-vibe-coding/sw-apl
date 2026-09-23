@@ -23,21 +23,21 @@ use crate::session::Session;
 pub fn open_definition(session: &mut Session, text: &str, del: char) -> Reply {
     let at = text.find('[').unwrap_or(text.len());
     let (head, rest) = (text[..at].trim(), text[at..].to_string());
+    let glyphs = session.ws.mode.glyphs();
     let opening = match session.ws.function(head) {
         Some(defn) if defn.locked => Err(AplError::new(ErrorKind::Defn)),
         Some(defn) => Ok((*defn).clone()),
-        None => parse_header(head).and_then(|defn| {
+        None => parse_header(head, glyphs).and_then(|defn| {
             let exists = session.ws.is_function(&defn.name) || session.ws.get(&defn.name).is_some();
-            if rest.is_empty() && !exists {
-                Ok(defn)
-            } else {
-                Err(AplError::new(ErrorKind::Defn))
-            }
+            let fresh = rest.is_empty() && !exists;
+            fresh
+                .then_some(defn)
+                .ok_or_else(|| AplError::new(ErrorKind::Defn))
         }),
     };
     match opening {
         Err(err) => return Reply::failed(error_lines(&err, &format!("{del}{text}"))),
-        Ok(defn) => session.defining = Some(Definition::start(defn, del == '⍫')),
+        Ok(defn) => session.defining = Some(Definition::start(defn, del == '⍫', glyphs)),
     }
     if rest.is_empty() {
         return Reply::default();

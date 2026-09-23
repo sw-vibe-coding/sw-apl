@@ -13,8 +13,9 @@ use apl_workspace::Saved;
 /// '70-only: an I-beam, which the 5100 family replaced with system
 /// variables and functions, and a group, whose commands it dropped
 /// (docs/mode-b.md). '75-only: execute, format, a quad-named system
-/// variable or function, and a latent expression, which only `⎕LX`
-/// sets. Quad and quote-quad alone are I/O both modes have.
+/// variable or function, a setting made local in a header, a
+/// comparison tolerance other than the fixed one, and a latent
+/// expression, which only `⎕LX` sets. Quad and quote-quad alone are I/O both modes have.
 #[must_use]
 pub fn runs_in(saved: &Saved) -> Modes {
     let lines = saved.funcs.values().flat_map(|f| f.body.iter());
@@ -24,7 +25,9 @@ pub fn runs_in(saved: &Saved) -> Modes {
         runs = runs.minus(Modes::only(Mode::B));
     }
     let tolerance = saved.env.ct.to_bits() != FUZZ.to_bits();
-    if saved.latent.is_some() || tolerance || code.iter().any(|l| added(l)) {
+    let local = |l: &String| l.starts_with('⎕');
+    let settings = saved.funcs.values().any(|f| f.locals.iter().any(local));
+    if saved.latent.is_some() || tolerance || settings || code.iter().any(|l| added(l)) {
         runs = runs.minus(Modes::only(Mode::A));
     }
     runs

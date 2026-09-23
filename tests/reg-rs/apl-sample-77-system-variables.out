@@ -38,6 +38,20 @@
       ⌊3-1E¯11
 3
       ⎕CT←1E¯13
+      ⍝ A setting made local is given back its value on return.
+      ∇R←ZERO N;⎕IO
+[1]   ⎕IO←0
+[2]   R←⍳N
+[3]   ∇
+      ZERO 3
+0 1 2
+      ⎕IO
+1
+      ⍝ An indexed assignment changes part of a value.
+      ⎕TS[1]←1977
+      ⎕TS
+1977 0 0 0 0 0 0
+      ⎕TS[1]←1900
       ⍝ A value a setting cannot take is refused.
       ⎕IO←2
 DOMAIN ERROR

@@ -394,20 +394,20 @@ fn syntax_error_carets() {
 
 #[test]
 fn del_headers_take_the_six_forms() {
-    let niladic = parse_header("RACE").unwrap();
+    let niladic = parse_header("RACE", "").unwrap();
     assert_eq!(niladic.name, "RACE");
     assert_eq!(
         (niladic.result, niladic.left, niladic.right),
         (None, None, None)
     );
-    let monadic = parse_header("FAC N").unwrap();
+    let monadic = parse_header("FAC N", "").unwrap();
     assert_eq!(
         (monadic.name.as_str(), monadic.right.as_deref()),
         ("FAC", Some("N"))
     );
-    let dyadic = parse_header("A PLUS B").unwrap();
+    let dyadic = parse_header("A PLUS B", "").unwrap();
     assert_eq!(dyadic.left.as_deref(), Some("A"));
-    let with_result = parse_header("R\u{2190}A HYP B;T;U").unwrap();
+    let with_result = parse_header("R\u{2190}A HYP B;T;U", "").unwrap();
     assert_eq!(with_result.result.as_deref(), Some("R"));
     assert_eq!(with_result.name, "HYP");
     assert_eq!(with_result.locals, ["T", "U"]);
@@ -418,7 +418,7 @@ fn del_headers_take_the_six_forms() {
 fn a_malformed_header_is_defn_error() {
     for bad in ["", "A B C D", "R\u{2190}", "1 F", "F B;", "F B;1"] {
         assert_eq!(
-            parse_header(bad).unwrap_err().kind,
+            parse_header(bad, "").unwrap_err().kind,
             ErrorKind::Defn,
             "{bad}"
         );

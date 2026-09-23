@@ -62,7 +62,9 @@ pub fn fix(ws: &mut Workspace, r: &Array) -> AplResult<Array> {
 /// mode, as the 5110 refuses a stray character or an unpaired quote.
 /// A blank row is an empty line, which the editor makes.
 fn definition(ws: &Workspace, rows: &[String]) -> Result<Defn, i64> {
-    let header = rows.first().and_then(|h| parse_header(h).ok());
+    let header = rows
+        .first()
+        .and_then(|h| parse_header(h, ws.mode.glyphs()).ok());
     let header = header.filter(|d| open(ws, &d.name)).ok_or(0)?;
     let body = &rows[1..];
     let bad = |row: &String| {
