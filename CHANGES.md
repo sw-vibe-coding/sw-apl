@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-22
 
+- chore(agentrail): complete 022-quad-output-settings; add 023-output-as-it-is-written
+- fix(output): a function's output shows with the settings it was written under
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 021-tttml
 - feat(lib1): TTTML, a (B) workspace that learns tic-tac-toe
 - docs(changes): refresh CHANGES.md to HEAD
