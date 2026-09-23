@@ -33,6 +33,11 @@ every combinator APL\360 can write, shows the limit of the table of
 primitives the birds reach, and prints what cannot be written and
 why. See docs/birds.md.
 
+`80-birds-75.apl` runs in (B) '75, where )LOAD 1 BIRDS takes (B)'s
+own BIRDS: every bird in the list flies, reaching any function by
+execute, the Mockingbird and the Sage included, and NOTHERE says what
+is still missing.
+
 `73-set-operations.apl` builds intersection, difference, union and
 unique from membership, compression and the index generator, since
 APL\360 has no primitive for any of them -- on numbers and on

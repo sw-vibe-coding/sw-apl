@@ -1,0 +1,79 @@
+      ⍝!MODES (B)
+      ⍝ BIRDS in (B) '75: library 1 has a BIRDS for each mode, and )LOAD 1
+      ⍝ BIRDS takes the one for the mode it is in. With execute a bird is
+      ⍝ given a function by name, primitive or defined, so the birds that
+      ⍝ APL\360 could not write are here.
+      )LOAD 1 BIRDS
+SAVED 20.41.27 09/22/26
+      DESCRIBE
+BIRDS -- COMBINATORS, AFTER THE BIRDS OF SMULLYAN'S
+TO MOCK A MOCKINGBIRD. HOWBIRDS SHOWS THEM ALL. A FUNCTION
+IS GIVEN TO A BIRD BY NAME OR GLYPH, AS CHARACTERS, AND
+EXECUTE CALLS IT: ANY FUNCTION, PRIMITIVE OR DEFINED.
+
+   I X         IDIOT       X
+   X K Y       KESTREL     X, IGNORING Y
+   X KI Y      KITE        Y, IGNORING X: K GIVEN I
+   X T F       THRUSH      F X
+   FG B X      BLUEBIRD    F G X
+   F C Y Z     CARDINAL    Z F Y
+   F W X       WARBLER     X F X
+   FG S X      STARLING    X F G X
+   M F         MOCKINGBIRD F F
+   F Y X       SAGE        THE FIXED POINT OF F, ON X
+
+FG IS TWO FUNCTIONS, 'F G'. FSTEP, SHOUT AND HYP ARE THERE
+TO BE GIVEN TO THE BIRDS. NOTHERE SAYS WHAT IS STILL MISSING.
+      HOWBIRDS
+      I 42
+42
+      7 K 9
+7
+      7 KI 9
+9
+      5 T '⍳'
+1 2 3 4 5
+      '⌽ ⍳' B 5
+5 4 3 2 1
+      'FACT ⌈' B 3.2
+24
+      '-' C 10 3
+¯7
+      'HYP' W 3
+4.2426
+      '+ ⌽' S ⍳5
+6 6 6 6 6
+      M 'SHOUT'
+SHOUT!
+      'FSTEP' Y 6
+720
+      ⍝ The Thrush and the Bluebird reach a defined function as easily as
+      ⍝ a primitive.
+      6 T 'FACT'
+720
+      'FACT ⌈' B 2.5
+6
+      ⍝ The Mockingbird gives a function its own name.
+      M 'SHOUT'
+SHOUT!
+      ⍝ The Sage: FSTEP recurses without naming itself.
+      'FSTEP' Y 5
+120
+      ⍝ What is still missing: a function as a value.
+      NOTHERE
+WITH EXECUTE, EVERY BIRD THAT APL\360 COULD NOT WRITE IS HERE:
+THE MOCKINGBIRD, THE SAGE, AND K GIVEN I. WHAT IS STILL
+MISSING IS A FUNCTION AS A VALUE.
+
+A BIRD IS GIVEN A FUNCTION'S NAME, AND GIVES BACK A VALUE. IT
+CANNOT GIVE BACK A FUNCTION: B RETURNS F G X, NOT THE NEW
+FUNCTION F G, AND K GIVEN A FUNCTION CAN ONLY HAND BACK ITS
+NAME. NOR CAN A DEFINED FUNCTION BE AN OPERAND: / AND ∘. TAKE
+PRIMITIVES ONLY, IN THIS APL AS IN APL\360.
+
+Y HERE IS ALSO Z, ITS STRICT FORM: APL EVALUATES AN ARGUMENT
+BEFORE IT CALLS, SO THE SAGE IT CAN WRITE IS THE STRICT ONE.
+      )OFF
+20.46.32 09/22/26
+CONNECTED 0.00.00
+CPU TIME 0.00.00

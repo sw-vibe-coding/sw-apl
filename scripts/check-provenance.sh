@@ -24,6 +24,24 @@ for f in $tracked; do
         status=1
     fi
 done
+# A workspace's file name says the modes it runs in, so a list of the
+# files shows it (owner, 2026-09-22): NAME.a-70.apl.ws for (A) only,
+# NAME.b-75.apl.ws for (B) only, NAME.apl.ws for both. The modes line
+# inside is the authority, and the two must agree.
+for f in $tracked; do
+    case "$f" in
+        *.a-70.apl.ws) want='(A)' ;;
+        *.b-75.apl.ws) want='(B)' ;;
+        *) want='(A)(B)' ;;
+    esac
+    have="$(grep -m1 '^⍝!MODES ' "$f" | cut -d' ' -f2- || true)"
+    if [ "$have" = "$want" ]; then
+        echo "  ok   $f runs in $want"
+    else
+        echo "  FAIL $f: named for $want, but its modes line says '${have:-nothing}'"
+        status=1
+    fi
+done
 # An untracked workspace under ws/ is the mistake this guards against
 # one step earlier: it is on its way to being added.
 untracked="$(git ls-files --others --exclude-standard 'ws/')"

@@ -1,5 +1,5 @@
 ⍝ sw-apl workspace. Re-executable APL: loading it runs it.
-⍝!MODES (A)(B)
+⍝!MODES (A)
 ⍝!SOURCE sw-apl -- written for this repository. MIT, (c) 2026 Michael A Wright.
 ⍝!SAVED 16.21.42 09/21/26
 ⍝!LINK 16807

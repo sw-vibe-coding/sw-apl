@@ -4,6 +4,10 @@ Every function in the BIRDS workspace -- how to call it, what it takes,
 what it gives back, and what goes wrong. For why the workspace is built
 the way it is, and which birds are missing, see `birds.md`.
 
+BIRDS has a version for each mode, and `)LOAD 1 BIRDS` takes the one
+for the mode the session is in. Most of this page is (A) '70's; *In
+(B) '75* at the end is the other.
+
 ```
       )LOAD 1 BIRDS
 ```
@@ -231,3 +235,52 @@ APPLY[4]  →(NEG,REC,MAG,SGN,CEIL,FLR,IOTA,SHAPE,REV,RAV)['-÷|×⌈⌊⍳⍴�
                                                         ^
       →
 ```
+
+## In (B) '75
+
+(B)'s BIRDS gives a bird a function by its name or glyph, in quotes,
+and calls it with execute: any function, primitive or defined. There
+is no `APPLY` or `DYAD`, and no table.
+
+| Call | Bird | Result |
+|---|---|---|
+| `I X` | Idiot | `X` |
+| `X K Y` | Kestrel | `X` |
+| `X KI Y` | Kite | `Y`, as `'I' K X` applied to `Y` |
+| `X T F` | Thrush | `F X` |
+| `FG B X` | Bluebird | `F G X`, for `FG` the two functions `'F G'` |
+| `F C Y Z` | Cardinal | `Z F Y` |
+| `F W X` | Warbler | `X F X` |
+| `FG S X` | Starling | `X F G X`, for `FG` the two functions `'F G'` |
+| `M F` | Mockingbird | `F` applied to its own name, `'F'` |
+| `F Y X` | Sage | the fixed point of `F`, on `X` |
+| `SELF FSTEP N` | -- | one step of `N` factorial, calling `SELF` for the rest |
+| `SHOUT X` | -- | `X` with `!` after it |
+| `A HYP B` | -- | the hypotenuse, `((A*2)+B*2)*0.5` |
+| `FACT N` | -- | `N` factorial, by recursion by name |
+| `DESCRIBE`, `HOWBIRDS`, `NOTHERE` | -- | as in (A); `NOTHERE` says what is still missing |
+
+```
+      6 T 'FACT'
+720
+      'FACT ⌈' B 3.2
+24
+      'HYP' W 3
+4.2426
+      M 'SHOUT'
+SHOUT!
+      'FSTEP' Y 6
+720
+```
+
+A function given by name must take the arguments the bird gives it:
+the Thrush, the Bluebird and the Mockingbird call it monadically, the
+Cardinal, the Warbler and the Starling's first function dyadically,
+and the Sage calls `F` dyadically, with the way to call itself on the
+left. The line a bird executes runs inside the bird, so a name in it
+means the bird's own argument (`X`, `Y`, `YZ`, `F`) before any global
+of that name.
+
+The errors are whatever the line `⍎` runs reports, with the caret on
+the execute: SYNTAX ERROR for a name that holds no function, as in
+`3 T 'NOSUCH'`, and whatever the function itself refuses.

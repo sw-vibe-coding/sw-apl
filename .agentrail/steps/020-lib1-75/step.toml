@@ -1,6 +1,6 @@
 number = 20
 slug = "lib1-75"
-status = "pending"
+status = "in-progress"
 description = """
 Phase 9 step 10 (docs/plan.md, owner direction 2026-09-21). Library 1
 for '72..."""

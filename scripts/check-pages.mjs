@@ -127,6 +127,15 @@ async function visit() {
   return page;
 }
 
+// A first visit in one mode, by the address a switch sets.
+async function visitIn(mode) {
+  const page = await (await browser.newContext()).newPage();
+  await page.goto(`${url}?mode=${mode}`, { waitUntil: 'load' });
+  await page.waitForTimeout(3000);
+  await settle(page);
+  return page;
+}
+
 async function send(page, text) {
   await page.evaluate((t) => {
     const data = new DataTransfer();
@@ -149,13 +158,20 @@ const typing = (page) => page.evaluate(() =>
   const shown = await paper(page);
   check('library 1 lists what sw-apl ships',
     ['BIRDS', 'EDIT', 'LIFE', 'RACE'].every((n) => shown.includes(n)), JSON.stringify(shown.slice(-120)));
-  // BIRDS is baked into the bundle like the rest, and its birds fly
-  // here as they do at the CLI -- the Starling included, which reaches
-  // DYAD through a local of its own by dynamic scope.
+  // BIRDS is baked into the bundle like the rest, a file for each
+  // mode. The page opens in (B), whose BIRDS reaches any function by
+  // execute: the Mockingbird sings its own name, and the Sage recurses
+  // without one. (A)'s flies over its tables of primitives.
   await send(page, ')LOAD 1 BIRDS');
-  await send(page, "'+⌽' S ⍳5");
-  check('BIRDS loads in the browser and its birds fly',
-    (await paper(page)).trim().endsWith('6 6 6 6 6'), JSON.stringify((await paper(page)).slice(-60)));
+  await send(page, "M 'SHOUT'");
+  check("(B)'s BIRDS loads in the browser and its birds fly",
+    (await paper(page)).trim().endsWith('SHOUT!'), JSON.stringify((await paper(page)).slice(-60)));
+  const inA = await visitIn('A');
+  await send(inA, ')LOAD 1 BIRDS');
+  await send(inA, "'+⌽' S ⍳5");
+  check("and (A)'s, the Starling reaching DYAD by dynamic scope",
+    (await paper(inA)).trim().endsWith('6 6 6 6 6'), JSON.stringify((await paper(inA)).slice(-60)));
+  await inA.context().close();
   await page.context().close();
 }
 

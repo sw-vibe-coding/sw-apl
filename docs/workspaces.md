@@ -166,6 +166,21 @@ or `--mode 75` (the default is 70). A workspace is listed and loaded
 only in the modes its `⍝!MODES` line names, and a file with no such
 line is an (A) workspace.
 
+A file's name says the modes it runs in too, so a list of the files
+shows it, and the mode is left out when a workspace runs in both:
+
+| Runs in | File |
+|---|---|
+| (A) and (B) | `NAME.apl.ws` |
+| (A) only | `NAME.a-70.apl.ws` |
+| (B) only | `NAME.b-75.apl.ws` |
+
+Every mode still calls the workspace `NAME`: `)LOAD CLASS` finds
+`CLASS.b-75.apl.ws` in (B). The modes line inside is the authority;
+`scripts/check-provenance.sh` checks that every shipped workspace's
+name agrees with it. A file named the way an earlier build named a
+pair, `NAME@B.apl.ws`, is still read.
+
 `)SAVE` writes the line from what the workspace uses, not from the
 mode it was saved in:
 
@@ -185,9 +200,10 @@ mode too only where the other mode was listing the same workspace:
   mode keeps the old one.
 - A save is also listed in any other mode it runs in that has no
   workspace of that name. A workspace another mode keeps as its own is
-  never touched, so an (A) workspace and a (B) one may share a name.
-  The second is kept in the file `NAME@B.apl.ws` (or `NAME@A.apl.ws`),
-  and both modes still call it `NAME`.
+  never touched, so an (A) workspace and a (B) one may share a name:
+  `NAME.a-70.apl.ws` and `NAME.b-75.apl.ws`, both called `NAME`.
+- A workspace that stops running in a mode is renamed for the one it
+  still runs in.
 - `)DROP` in one mode takes the workspace out of that mode only; the
   file goes when no mode lists it.
 

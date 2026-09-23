@@ -22,9 +22,18 @@ use crate::channel::Attn;
 use crate::link::Shared;
 
 /// Library 1: the workspaces sw-apl ships, read out of the
-/// repository when the bundle is built.
-const SHIPPED: [(&str, &str); 4] = [
-    ("BIRDS", include_str!("../../../../../ws/lib1/BIRDS.apl.ws")),
+/// repository when the bundle is built. Each is kept under its file's
+/// name, which says the modes it runs in, as a library directory
+/// holds it: a workspace that differs between the modes is two.
+const SHIPPED: [(&str, &str); 5] = [
+    (
+        "BIRDS.a-70",
+        include_str!("../../../../../ws/lib1/BIRDS.a-70.apl.ws"),
+    ),
+    (
+        "BIRDS.b-75",
+        include_str!("../../../../../ws/lib1/BIRDS.b-75.apl.ws"),
+    ),
     ("EDIT", include_str!("../../../../../ws/lib1/EDIT.apl.ws")),
     ("LIFE", include_str!("../../../../../ws/lib1/LIFE.apl.ws")),
     ("RACE", include_str!("../../../../../ws/lib1/RACE.apl.ws")),

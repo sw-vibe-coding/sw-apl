@@ -784,7 +784,14 @@ Order:
     user docs describe a shared core and what each mode has alone,
     and parity.md has a column per mode. Library 1 was not empty in
     (B) after all: the four shipped workspaces are `(A)(B)`.
-11. Library 1 for '75, BIRDS first. **Milestone 2.**
+11. Library 1 for '75, BIRDS first. **Milestone 2.** Reached
+    2026-09-22 (step 020): (B)'s BIRDS flies every bird in the list,
+    the Mockingbird and the Sage by execute; the (B) samples (76, 77,
+    78, 80) and every (B) session test pass in (B), and Milestone 1
+    still holds in (A). Workspace files are named for their modes
+    (`BIRDS.a-70.apl.ws`, `BIRDS.b-75.apl.ws`); LIFE, RACE and EDIT
+    are the same in both modes and stay one file each, as the owner
+    set out for a workspace that does not differ.
 12. The keyboard per mode.
 13. Format.
 

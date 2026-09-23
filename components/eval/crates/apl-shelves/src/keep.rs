@@ -1,9 +1,9 @@
 //! Saving and dropping in one mode without disturbing another.
 
-use apl_modes::{Mode, Modes, modes, render, retag};
+use apl_modes::{Mode, Modes, modes, retag};
 use apl_store::Store;
 
-use crate::find::{APART, Entry, entries};
+use crate::find::{Entry, entries};
 
 /// Keep `text` as `mode`'s workspace `name`.
 ///
@@ -33,10 +33,10 @@ pub fn keep(
     let claimed = theirs.iter().fold(modes(text), held);
     let claimed = Modes::ALL.minus(Modes::ALL.minus(claimed).minus(Modes::only(mode)));
     let mine = mine.into_iter().next();
-    let key = key_for(name, claimed, mine.as_ref(), &theirs);
+    let key = key_for(name, claimed);
     store.write(library, &key, Some(&retag(text, claimed)))?;
     match mine.filter(|e| e.key != key) {
-        Some(e) => narrow(store, library, &e.key, &e.text, e.modes.minus(claimed)),
+        Some(e) => narrow(store, library, name, &e, e.modes.minus(claimed)),
         None => Ok(()),
     }
 }
@@ -53,31 +53,39 @@ pub fn forget(store: &mut dyn Store, mode: Mode, library: usize, name: &str) -> 
         .find(|e| e.modes.has(mode));
     let entry = found.ok_or("there is no such workspace")?;
     let left = entry.modes.minus(Modes::only(mode));
-    narrow(store, library, &entry.key, &entry.text, left)
+    narrow(store, library, name, &entry, left)
 }
 
-/// What is under `key` keeps only the modes `left`, or goes.
+/// `entry` keeps only the modes `left`, under the key that says so,
+/// or goes.
 fn narrow(
     store: &mut dyn Store,
     library: usize,
-    key: &str,
-    text: &str,
+    name: &str,
+    entry: &Entry,
     left: Modes,
 ) -> Result<(), String> {
     if left == Modes::NONE {
-        return store.write(library, key, None);
+        return store.write(library, &entry.key, None);
     }
-    store.write(library, key, Some(&retag(text, left)))
+    let key = key_for(name, left);
+    store.write(library, &key, Some(&retag(&entry.text, left)))?;
+    if key == entry.key {
+        return Ok(());
+    }
+    store.write(library, &entry.key, None)
 }
 
-/// The key a save claiming `claimed` goes under: the name itself when
-/// nothing that stays is there, and the name marked with its modes
-/// when something is. What stays is another mode's own workspace, and
-/// this mode's old one where it keeps modes of its own.
-fn key_for(name: &str, claimed: Modes, mine: Option<&Entry>, theirs: &[Entry]) -> String {
-    let stays = mine.filter(|e| e.modes.minus(claimed) != Modes::NONE);
-    if theirs.iter().chain(stays).all(|e| e.key != name) {
-        return name.to_string();
+/// The key a workspace running in `modes` is kept under: the name
+/// alone when it runs in both, and the name marked with its one mode
+/// when not, so a list of the files shows which mode each is for
+/// (owner, 2026-09-22).
+fn key_for(name: &str, modes: Modes) -> String {
+    if modes == Modes::only(Mode::A) {
+        format!("{name}.a-70")
+    } else if modes == Modes::only(Mode::B) {
+        format!("{name}.b-75")
+    } else {
+        name.to_string()
     }
-    format!("{name}{APART}{}", render(claimed).replace(['(', ')'], ""))
 }
