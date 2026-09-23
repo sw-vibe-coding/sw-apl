@@ -1,0 +1,3 @@
+Found 2026-09-22 building step 019 (system variables): output written with quad (⎕←) inside a function is rendered when the statement ends, with the print settings in force then, not when it was written. In (B), ⎕PP←3 then ⎕←÷3 inside a function that makes ⎕PP local shows 0.33333 once the function has returned, where it should show 0.333. (A) cannot meet it, since no statement changes )DIGITS or )WIDTH mid-run.
+
+Workspace.output holds Output values and flush() renders them all with saved.print. Render each with the Print in force when it was pushed (store the Print with each entry, or render at push time), keeping ⍞'s open-line joining. TDD: a session test in (B) for ⎕← under a local ⎕PP and ⎕PW; reg-rs proves (A) unmoved.
