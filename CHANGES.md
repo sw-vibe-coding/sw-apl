@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-22
 
+- chore(agentrail): complete 021-tttml
+- feat(lib1): TTTML, a (B) workspace that learns tic-tac-toe
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 020-lib1-75
 - feat(lib1): library 1 per mode, BIRDS for (B), files named for their modes
 - docs(changes): refresh CHANGES.md to HEAD
