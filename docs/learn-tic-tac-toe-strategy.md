@@ -3,9 +3,14 @@
 How an APL program in (B) '75 can learn to play tic-tac-toe by playing
 itself, and then play a person with what it learned, inside the
 memory of an IBM 5110 (at most 64 KB). The method was prototyped in
-sw-apl's (B) mode, and the listing below is that prototype. It is the
-design for the library 1 workspace `TTTML`; `plan.md` has the plan for
-the workspace itself.
+sw-apl's (B) mode, and the listing below is that prototype. The
+library 1 workspace `TTTML` is built on it, with one refinement,
+described under *In the workspace*:
+
+```
+      )LOAD 1 TTTML
+      PLAY 1
+```
 
 ## The short answer
 
@@ -113,6 +118,34 @@ Speed is the one thing a real 5110 would not match. It interpreted
 APL far more slowly than a phone does, so it could not play 6,000
 training games in seconds. A workspace that ships with its model
 already trained, and a `TRAIN` that reports its progress, cover both.
+
+## In the workspace
+
+`TTTML`, in library 1 for (B), is the prototype with a person to play
+and one change to how it learns.
+
+The prototype's values do not care how soon a win comes: a win now and
+a fork that wins a move later are both worth about 1. So, holding two
+in a line with the third square free, it could play the fork instead
+of the win. A person watching sees it miss a win. The workspace
+discounts a backed-up value -- the target for an earlier move is 0.9
+times the mover's next afterstate -- so a sooner win is worth more,
+and it takes the win on the spot. The table above is the prototype's;
+the workspace, trained the same way, won 492 and drew 8 of 500 games
+as X, and won 435 and drew 65 as O, losing none.
+
+| Call | |
+|---|---|
+| `PLAY 1` | Play it, you moving first, as X. Each move is read with `⎕` |
+| `PLAY 2` | Play it, it moving first |
+| `TRIAL N` | `N` games each side against a random player: won, lost and drawn, as X then as O |
+| `TRAIN N` | Forget, and learn again from `N` games, saying every 1000 how many positions it knows and the bytes still free (`⎕WA`) |
+| `CHOOSE S` | The square it would take on board `S` |
+| `SHOW S` | A board: `S` is 9 squares, 1 X, `¯1` O, 0 empty |
+
+The squares are numbered 1 to 9, row by row. `samples/81-tttml.apl`
+plays two games, one drawn and one it wins with a fork, and trains it
+again.
 
 ## The prototype
 

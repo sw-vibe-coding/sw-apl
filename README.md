@@ -191,6 +191,9 @@ documents below show real APL glyphs:
   does not have
 - [Using the del editor](docs/del-editor-guide.md) -- writing and
   changing a function, line by line
+- [Learning tic-tac-toe in 64 KB](docs/learn-tic-tac-toe-strategy.md)
+  -- TTTML, a (B) workspace that learns the game by playing itself
+  and then plays you
 - [BIRDS](docs/birds.md) -- combinators in a library 1 workspace
   with a version for each mode: the ones APL\360 can write in (A),
   and every one in the list in (B); its functions are in the

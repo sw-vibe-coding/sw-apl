@@ -25,7 +25,7 @@ use crate::link::Shared;
 /// repository when the bundle is built. Each is kept under its file's
 /// name, which says the modes it runs in, as a library directory
 /// holds it: a workspace that differs between the modes is two.
-const SHIPPED: [(&str, &str); 5] = [
+const SHIPPED: [(&str, &str); 6] = [
     (
         "BIRDS.a-70",
         include_str!("../../../../../ws/lib1/BIRDS.a-70.apl.ws"),
@@ -37,6 +37,10 @@ const SHIPPED: [(&str, &str); 5] = [
     ("EDIT", include_str!("../../../../../ws/lib1/EDIT.apl.ws")),
     ("LIFE", include_str!("../../../../../ws/lib1/LIFE.apl.ws")),
     ("RACE", include_str!("../../../../../ws/lib1/RACE.apl.ws")),
+    (
+        "TTTML.b-75",
+        include_str!("../../../../../ws/lib1/TTTML.b-75.apl.ws"),
+    ),
 ];
 
 /// Tell the page what library 0 holds now, as an object rather than

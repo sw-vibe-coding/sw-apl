@@ -172,6 +172,14 @@ const typing = (page) => page.evaluate(() =>
   check("and (A)'s, the Starling reaching DYAD by dynamic scope",
     (await paper(inA)).trim().endsWith('6 6 6 6 6'), JSON.stringify((await paper(inA)).slice(-60)));
   await inA.context().close();
+
+  // TTTML, (B)'s alone: it loads trained and plays a game, reading
+  // each move with quad as a 5110 did. A fork left open, it takes.
+  await send(page, ')LOAD 1 TTTML');
+  await send(page, 'PLAY 2');
+  for (const move of ['2', '6', '9']) await send(page, move);
+  check('TTTML loads in (B) and plays a game to its end',
+    (await paper(page)).trim().endsWith('I WIN.'), JSON.stringify((await paper(page)).slice(-120)));
   await page.context().close();
 }
 

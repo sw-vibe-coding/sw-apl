@@ -321,6 +321,7 @@ Library 1 holds:
 | `RACE` | A horse race, written to be read: character matrix, mixed output, the conditional branch idiom |
 | `EDIT` | A workspace to practise the del editor on. `FACT` is wrong by one on purpose |
 | `BIRDS` | Combinators, after Smullyan's birds, with a version for each mode: `HOWBIRDS` flies them all, and `NOTHERE` says what cannot be written and why. In (A), the birds APL\360 can write, over a table of primitives; in (B), every bird in the list, the Mockingbird and the Sage included, reaching any function by execute. See `birds.md`, and `combinators.md` for its functions |
+| `TTTML` | (B) only. A machine that learns tic-tac-toe by playing itself, and plays you with what it learned: `PLAY 1` to move first, `PLAY 2` to let it begin, `TRIAL N` against a random player, `TRAIN N` to learn again. See `learn-tic-tac-toe-strategy.md` |
 
 `)LIB` lists library 0 and `)LIB 1` lists library 1; one library
 at a time, as APL\360 did. A workspace is `NAME.apl.ws`, UTF-8

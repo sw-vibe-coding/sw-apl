@@ -33,6 +33,12 @@ every combinator APL\360 can write, shows the limit of the table of
 primitives the birds reach, and prints what cannot be written and
 why. See docs/birds.md.
 
+`81-tttml.apl` runs in (B) '75: TTTML, a machine that learns
+tic-tac-toe by playing itself, loads trained, beats a random player
+without a loss, plays two games read move by move with quad, and
+learns again from nothing, reporting as it goes. See
+docs/learn-tic-tac-toe-strategy.md.
+
 `80-birds-75.apl` runs in (B) '75, where )LOAD 1 BIRDS takes (B)'s
 own BIRDS: every bird in the list flies, reaching any function by
 execute, the Mockingbird and the Sage included, and NOTHERE says what

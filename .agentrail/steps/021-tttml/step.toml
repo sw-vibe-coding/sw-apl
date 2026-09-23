@@ -1,6 +1,6 @@
 number = 21
 slug = "tttml"
-status = "pending"
+status = "in-progress"
 description = 'Owner direction 2026-09-22 (docs/plan.md, "TTTML, a machine that learns tic-t...'
 role = "production"
 context_files = []

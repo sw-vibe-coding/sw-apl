@@ -1,0 +1,5 @@
+command = "target/release/sw-apl --mode 75 -f samples/81-tttml.apl"
+timeout = 60
+preprocess = "bash scripts/normalize-apl-output.sh"
+exit_code = 0
+desc = "Transcript of samples/81-tttml.apl"

@@ -11,7 +11,7 @@ use apl_session::{Files, Mode, Session};
 /// What sw-apl ships: the name, the file, the mode it is read in, and
 /// the names its DESCRIBE promises. A workspace that differs between
 /// the modes has a file for each, named for its mode.
-const SHIPPED: [(&str, &str, Mode, &[&str]); 5] = [
+const SHIPPED: [(&str, &str, Mode, &[&str]); 6] = [
     (
         "LIFE",
         "LIFE",
@@ -48,6 +48,14 @@ const SHIPPED: [(&str, &str, Mode, &[&str]); 5] = [
             "FSTEP", "SHOUT", "HYP", "FACT",
         ],
     ),
+    (
+        "TTTML",
+        "TTTML.b-75",
+        Mode::B,
+        &[
+            "DESCRIBE", "PLAY", "TRIAL", "TRAIN", "SHOW", "CHOOSE", "GAME", "LEARN",
+        ],
+    ),
 ];
 
 /// The repository root, which is the default library directory: four
@@ -79,12 +87,33 @@ fn loaded(name: &str, mode: Mode) -> Session {
 
 #[test]
 fn each_mode_lists_the_shipped_workspaces_that_run_in_it() {
-    for mode in [Mode::A, Mode::B] {
-        let mut session = in_mode(mode);
-        let mut names: Vec<&str> = SHIPPED.iter().map(|(n, ..)| *n).collect();
-        names.sort_unstable();
-        names.dedup();
-        assert_eq!(out(&mut session, ")LIB 1"), names, "{mode:?}");
+    let mut a = in_mode(Mode::A);
+    assert_eq!(out(&mut a, ")LIB 1"), ["BIRDS", "EDIT", "LIFE", "RACE"]);
+    let mut b = in_mode(Mode::B);
+    assert_eq!(
+        out(&mut b, ")LIB 1"),
+        ["BIRDS", "EDIT", "LIFE", "RACE", "TTTML"]
+    );
+}
+
+#[test]
+fn tttml_comes_trained_and_plays_to_win() {
+    let mut b = loaded("TTTML", Mode::B);
+    let known: usize = out(&mut b, "⍴KEYS")[0].parse().expect("a count");
+    assert!(known > 700, "trained: {known} positions");
+    // A win on the spot is taken, and a threat is blocked.
+    assert_eq!(out(&mut b, "CHOOSE 1 ¯1 0 ¯1 1 0 0 0 0"), vec!["9"]);
+    assert_eq!(out(&mut b, "CHOOSE 1 1 0 ¯1 0 0 0 0 0"), vec!["3"]);
+    // Against a random player it does not lose, as X or as O.
+    let rows = out(&mut b, "TRIAL 50");
+    for row in &rows {
+        let lost: i64 = row
+            .split_whitespace()
+            .nth(1)
+            .expect("lost")
+            .parse()
+            .expect("n");
+        assert_eq!(lost, 0, "{rows:?}");
     }
 }
 

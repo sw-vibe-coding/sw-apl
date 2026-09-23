@@ -77,9 +77,11 @@ sets the directory they are all under, so a script or a test can work
 somewhere other than your own `work/`.
 
 Library 1 holds `LIFE` (Conway's Life on a torus), `RACE` (a horse
-race written to be read) and `EDIT` (a workspace to practise the del
-editor on, whose `FACT` is wrong by one on purpose). Each is a plain
-text file you can open in an editor.
+race written to be read), `EDIT` (a workspace to practise the del
+editor on, whose `FACT` is wrong by one on purpose), `BIRDS`
+(combinators, a version for each mode), and, in (B) only, `TTTML` (a
+machine that learns tic-tac-toe; `learn-tic-tac-toe-strategy.md`).
+Each is a plain text file you can open in an editor.
 
 ### Tracked, or not
 

@@ -1,0 +1,122 @@
+      ⍝!MODES (B)
+      ⍝ TTTML: a machine that learns tic-tac-toe by playing itself, and
+      ⍝ then plays you with what it learned. It comes trained.
+      )LOAD 1 TTTML
+SAVED 21.39.13 09/22/26
+      DESCRIBE
+TTTML -- A MACHINE THAT LEARNS TIC-TAC-TOE BY PLAYING
+ITSELF, THEN PLAYS YOU WITH WHAT IT LEARNED. IT COMES
+TRAINED.
+
+   PLAY 1       PLAY IT, YOU MOVING FIRST, AS X
+   PLAY 2       PLAY IT, IT MOVING FIRST
+   TRIAL N      N GAMES EACH SIDE AGAINST A RANDOM PLAYER:
+                WON, LOST AND DRAWN, AS X THEN AS O
+   TRAIN N      FORGET, AND LEARN AGAIN FROM N GAMES
+   SHOW S       A BOARD OF 9 SQUARES, 1 X, ¯1 O, 0 EMPTY
+
+THE SQUARES ARE NUMBERED 1 TO 9, ROW BY ROW. WHAT IT LEARNS
+IS A VALUE FOR EACH POSITION IT HAS MET, KEYS AND VALS, A
+POSITION AND ITS 7 ROTATIONS AND REFLECTIONS COUNTED AS ONE:
+ABOUT 750 OF THEM, AND 12,000 BYTES.
+      ⍝ What it knows: a value for each position it has met.
+      ⍴KEYS
+757
+      ⍝ Against a random player it wins most and loses none, as X and as
+      ⍝ O. The rows are won, lost and drawn.
+      TRIAL 50
+49 0 1
+45 0 5
+      ⍝ A game, you first, as X. A reply that is not an empty square is
+      ⍝ asked for again. Played well on both sides, it is a draw.
+      PLAY 1
+ . . .
+ . . .
+ . . .
+YOUR MOVE, 1 TO 9:
+⎕:
+      5
+I TAKE 1
+ O . .
+ . X .
+ . . .
+YOUR MOVE, 1 TO 9:
+⎕:
+      1
+THAT IS NOT AN EMPTY SQUARE.
+YOUR MOVE, 1 TO 9:
+⎕:
+      3
+I TAKE 7
+ O . X
+ . X .
+ O . .
+YOUR MOVE, 1 TO 9:
+⎕:
+      4
+I TAKE 6
+ O . X
+ X X O
+ O . .
+YOUR MOVE, 1 TO 9:
+⎕:
+      8
+I TAKE 2
+ O O X
+ X X O
+ O X .
+YOUR MOVE, 1 TO 9:
+⎕:
+      9
+ O O X
+ X X O
+ O X X
+A DRAW.
+      ⍝ A game it begins. Leave it a fork and it takes it.
+      PLAY 2
+I TAKE 5
+ . . .
+ . X .
+ . . .
+YOUR MOVE, 1 TO 9:
+⎕:
+      2
+I TAKE 4
+ . O .
+ X X .
+ . . .
+YOUR MOVE, 1 TO 9:
+⎕:
+      4
+THAT IS NOT AN EMPTY SQUARE.
+YOUR MOVE, 1 TO 9:
+⎕:
+      6
+I TAKE 1
+ X O .
+ X X O
+ . . .
+YOUR MOVE, 1 TO 9:
+⎕:
+      9
+I TAKE 7
+ X O .
+ X X O
+ X . O
+I WIN.
+      ⍝ Learning again from nothing: every 1000 games it says how many
+      ⍝ positions it knows and how many bytes are still free, and at the
+      ⍝ end how many X won, O won and were drawn.
+      ⎕RL←16807
+      TRAIN 3000
+GAMES 1000  POSITIONS 755  FREE 1030658
+GAMES 2000  POSITIONS 757  FREE 1030626
+GAMES 3000  POSITIONS 757  FREE 1030626
+847 309 1844
+      TRIAL 50
+48 0 2
+43 0 7
+      )OFF
+21.49.08 09/22/26
+CONNECTED 0.00.05
+CPU TIME 0.00.05
