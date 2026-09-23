@@ -21,6 +21,14 @@ that tapping `⍴` also shows where Shift-R is. **Keyboard** shows it,
 **ABC** switches it to letters and digits, and it remembers whether
 it was up. See `terminal.md`.
 
+Both modes share the board: the IBM 5100 family put every APL symbol
+on the key a 2741 did. In (B) the board has one mode more, **CMD**:
+the 5110's CMD key, with a letter key, typed what is engraved on the
+key's front, and the CMD mode holds those legends -- system names such
+as `⎕NC` and `⎕FX`, and characters the 2741 overstruck, such as `⍎`,
+`⍟` and `⍱`. Its **Commands** list holds only the commands the mode
+has.
+
 - **Expansion.** Espanso, an Emacs input method, or an OS keyboard
   layout turns a prefix and a letter into the glyph. This is the
   modern convenience, it needs no special hardware, and it is what

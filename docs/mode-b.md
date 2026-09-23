@@ -345,11 +345,30 @@ history.**
   system command keywords engraved above it and with other keys gives
   the characters not engraved on any key; ATTN, HOLD, EXECUTE (in
   place of Return), scroll keys, and COPY DISPLAY.
+- **The APL keys are the 2741's.** The 5110 manual's keyboard figure
+  (Chapter 1, Figure 3) puts every APL symbol on the key a 2741 does:
+  `¨ ¯ < ≤ = ≥ > ≠ ∨ ∧` over the digits, `? ⍵ ∊ ⍴ ~ ↑ ↓ ⍳ ○ *` over Q to
+  P, `⍺ ⌈ ⌊ _ ∇ ∆ ∘ ' ⎕` over A to L, `⊂ ⊃ ∩ ∪ ⊥ ⊤ |` over Z to M, and
+  the same bracket, arrow and punctuation keys. So (B) shares the 2741
+  board and keymap: there is no key a reader types that differs.
+- **What (B)'s board adds** (step 025): the CMD key's legends. On the
+  5110, CMD with a letter key types what is engraved on the key's
+  front -- a system name or a character the 2741 overstruck. The board
+  in (B) has a CMD mode holding the legends the manual's figure shows
+  clearly: `⎕NC` (Q), `⎕NL` (W), `⍱` (Y), `⍲` (U), `⎕CC` (I), `⍟` (P),
+  `→⎕LC` (the arrow key), `⎕WA` (A), `⎕PW` (S), `⍝` (C), `⎕CR` (Z),
+  `⎕FX` (X), `⍎` (B) and `⌽` (M). `⍕` (N) joins them with format.
+  The legends on D, F, G, H, J, K and L, the `)SINL` and trace and
+  stop legends on E, R and T, and `⎕SVO` on V are left off: the scan
+  is not clear enough to read them, or sw-apl has not got them. Each
+  mode's Commands list holds only the commands it has.
+- **The look is (B)'s, not APLSV's.** APLSV was used from 2741s as
+  well; the CMD legends are how the 5100 family's keyboard offered
+  what it offered, and not a claim that APLSV needed them.
 - **A picture**: Marcin Wichary's photograph of an IBM 5100 keyboard
-  is on Wikimedia Commons (`File:Ibm5100_(2297950254).jpg`). Its
-  licence is to be checked on the file page before anything is carried;
-  a photograph is not an adaptable drawing as the 2741 SVG is, so a
-  (B) board may have to be drawn from scratch from the layout.
+  is on Wikimedia Commons (`File:Ibm5100_(2297950254).jpg`). It is
+  not carried: the layout is the 2741's, which sw-apl already draws,
+  and a photograph is not an adaptable drawing as the 2741 SVG is.
 
 ## Decisions for the owner
 

@@ -753,6 +753,40 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await page.context().close();
 }
 
+// 11b. The board per mode. Every APL symbol sits on the same key on a
+//     2741 and on the 5100 family, so both modes share the picture;
+//     (B) adds a CMD mode, the 5110's key-front legends, and each
+//     mode's Commands list holds only commands it has.
+{
+  const board = async (page) => {
+    await page.click('#show-board');
+    return page.evaluate(() => ({
+      tabs: [...document.querySelectorAll('#board .modes [role=tab]')].map((t) => t.dataset.mode),
+      commands: [...document.querySelectorAll('#board .list[data-kind=commands] .entry')].map((e) => e.title),
+      cmd: [...document.querySelectorAll('#board .list[data-kind=cmd] .entry')].map((e) => e.title),
+    }));
+  };
+  const b = await visit();
+  const inB = await board(b);
+  check("(B)'s board has a CMD mode, the 5110's key-front legends",
+    inB.tabs.includes('cmd') && inB.cmd.includes('⎕NC') && inB.cmd.includes('⍎'), JSON.stringify(inB));
+  check("and its commands are (B)'s: TTTML, and no )ORIGIN",
+    inB.commands.includes(')LOAD 1 TTTML') && !inB.commands.some((c) => c.startsWith(')ORIGIN')),
+    JSON.stringify(inB.commands));
+  await b.click('#board [data-mode=cmd]');
+  await b.click('#board .list[data-kind=cmd] .entry[title="⍎"]');
+  const typed = await b.evaluate(() =>
+    document.getElementById('before').textContent + document.getElementById('after').textContent);
+  check('a CMD key types its legend', typed === '⍎', JSON.stringify(typed));
+  await b.context().close();
+  const a = await visitIn('A');
+  const inA = await board(a);
+  check("(A)'s board has no CMD mode, and has )ORIGIN",
+    !inA.tabs.includes('cmd') && inA.commands.some((c) => c.startsWith(')ORIGIN'))
+      && !inA.commands.includes(')LOAD 1 TTTML'), JSON.stringify(inA));
+  await a.context().close();
+}
+
 // 12. Installable: the manifest a browser reads before it offers to
 //    install, and the icons it shows afterwards. Relative start_url
 //    and scope, so it installs from a project page's sub-path too.

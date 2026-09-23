@@ -10,11 +10,18 @@
 // each key sends comes from keymap.json, the same file apl-keyboard
 // compiles in, so a key sends here what it sends at a terminal.
 //
-// Four modes. APL and ABC are the two faces every 2741 key carries --
-// the picture shows both on each key -- so they are the two shift
-// states of one picture, not two layouts. Commands and Idioms were
-// never on a 2741; they are the board's own, from board.json, where a
-// test runs every entry.
+// Four modes, and a fifth in (B). APL and ABC are the two faces every
+// 2741 key carries -- the picture shows both on each key -- so they
+// are the two shift states of one picture, not two layouts. Commands
+// and Idioms were never on a 2741; they are the board's own, from
+// board.json, where a test runs every entry, in each language mode
+// only what that mode has.
+//
+// The IBM 5100 family's keyboard puts every APL symbol on the key a
+// 2741 does (5110 APL Reference Manual, Figure 3), so (B) shares this
+// board. What the 5110 adds is a CMD key, which with a letter key types
+// what is engraved on its front -- a system name, or a character the
+// 2741 overstruck -- and CMD is (B)'s fifth mode: those legends.
 
 const NS = "http://www.w3.org/2000/svg";
 
@@ -42,6 +49,7 @@ const MODES = [
   ["abc", "ABC", "the letter or digit each key carries"],
   ["commands", "Commands", "system commands"],
   ["idioms", "Idioms", "short APL expressions"],
+  ["cmd", "CMD", "what the 5110's CMD key types with a letter key"],
 ];
 
 // What sw-apl calls a glyph, for a screen reader and for a hover.
@@ -77,11 +85,12 @@ const EDGE = "apl-board-edge";
 const MODE = "apl-board-mode";
 const KEYS = { min: 1.5, max: 3.4, step: 0.35, default: 2.4 };
 
-// Build the board once. `tap` is given the text a key sends, or one of
-// the words a control key stands for; `attn` stops a run, and is apart
-// from `tap` because a tap is ignored while the session is busy and
-// busy is exactly when ATTN is wanted.
-export async function build(root, stamped, tap, attn) {
+// Build the board once, for the language mode `letter`, A or B. `tap`
+// is given the text a key sends, or one of the words a control key
+// stands for; `attn` stops a run, and is apart from `tap` because a
+// tap is ignored while the session is busy and busy is exactly when
+// ATTN is wanted.
+export async function build(root, stamped, tap, attn, letter = "A") {
   const load = (file) => fetch(stamped(file)).then((r) => r.json());
   const [map, layout, lists, drawing] = await Promise.all([
     load("keymap.json"), load("board-keys.json"), load("board.json"),
@@ -89,10 +98,13 @@ export async function build(root, stamped, tap, attn) {
   ]);
   named = await load("glyph-names.json").catch(() => ({}));
 
-  root.append(modes(root));
+  const here = (entry) => !entry.modes || entry.modes.includes(letter);
+  const kinds = MODES.filter(([id]) => id !== "cmd" || letter === "B");
+  root.append(modes(root, kinds));
   root.append(picture(layout, map, drawing, tap, attn));
-  root.append(list("commands", lists.commands, tap));
-  root.append(list("idioms", lists.idioms, tap));
+  for (const kind of ["commands", "idioms", "cmd"]) {
+    if (kinds.some(([id]) => id === kind)) root.append(list(kind, lists[kind].filter(here), tap));
+  }
   root.append(controls(tap));
   root.append(placing(root));
   root.append(credit());
@@ -104,12 +116,12 @@ export async function build(root, stamped, tap, attn) {
 
 // The mode switch: one segment per mode, the current one marked, so a
 // reader can see where they are going rather than cycle to find out.
-function modes(root) {
+function modes(root, kinds) {
   const bar = document.createElement("div");
   bar.className = "modes";
   bar.setAttribute("role", "tablist");
   bar.setAttribute("aria-label", "keyboard mode");
-  for (const [id, label, about] of MODES) {
+  for (const [id, label, about] of kinds) {
     const tab = document.createElement("button");
     tab.type = "button";
     tab.dataset.mode = id;
@@ -125,7 +137,7 @@ function modes(root) {
 // Switch mode: which panel shows, which tab is marked, and what each
 // key says it sends.
 function mode(root, id) {
-  const known = MODES.some(([m]) => m === id) ? id : "apl";
+  const known = root.querySelector(`.modes [data-mode="${id}"]`) ? id : "apl";
   root.dataset.mode = known;
   const keyboard = known === "apl" || known === "abc";
   root.querySelector(".picture").hidden = !keyboard;

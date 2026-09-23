@@ -407,7 +407,7 @@ async function keyboard() {
     if (state.submit) return send(wire.header, wire.body, board.take());
     draw(state);
   };
-  await build(boardEl, stamped, tap, attention);
+  await build(boardEl, stamped, tap, attention, MODE);
 
   const button = document.getElementById("show-board");
   const reveal = (show) => {
