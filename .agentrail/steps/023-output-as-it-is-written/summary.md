@@ -1,0 +1,1 @@
+Output appears as it is written. The Console trait has a show method; the CLI terminal and batch script, the service Reader (more frames), aplterm and the browser page all print a running function's output at once. Transcript consoles still batch, so reg-rs is 90/90 unchanged. Transcript moved to the apl-transcript crate, catch_interrupt to apl-attn.

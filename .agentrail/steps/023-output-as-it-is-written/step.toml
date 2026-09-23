@@ -1,8 +1,9 @@
 number = 23
 slug = "output-as-it-is-written"
-status = "in-progress"
+status = "completed"
 description = "Owner discussion 2026-09-22 (TTTML): output reaches the terminal only at a re..."
 role = "production"
 context_files = []
 created_at = "2026-09-22T22:57:49"
-commits = []
+completed_at = "2026-09-23T00:12:44"
+commits = ["0701d314610b6c650d8f8ab8d39a87ff50871227"]
