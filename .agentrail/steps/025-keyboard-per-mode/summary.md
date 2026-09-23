@@ -1,0 +1,1 @@
+Keyboard per mode. The 5110 manual's Figure 3 shows every APL key where the 2741 has it, so B shares the board. B adds a CMD mode with the legible key-front legends, and each mode's Commands list holds only its own commands. Board tests run per mode; check-pages covers both boards.
