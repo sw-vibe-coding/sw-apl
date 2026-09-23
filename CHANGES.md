@@ -12,8 +12,16 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-09-23
+
+- chore(agentrail): complete 024-readme-rewrite
+- docs(readme): rewrite for a reader, with aplterm in both modes
+- chore(agentrail): complete 023-output-as-it-is-written
+- feat(output): output appears as it is written
+
 ## 2026-09-22
 
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 022-quad-output-settings; add 023-output-as-it-is-written
 - fix(output): a function's output shows with the settings it was written under
 - docs(changes): refresh CHANGES.md to HEAD
