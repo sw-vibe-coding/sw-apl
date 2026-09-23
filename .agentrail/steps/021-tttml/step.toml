@@ -1,8 +1,9 @@
 number = 21
 slug = "tttml"
-status = "in-progress"
+status = "completed"
 description = 'Owner direction 2026-09-22 (docs/plan.md, "TTTML, a machine that learns tic-t...'
 role = "production"
 context_files = []
 created_at = "2026-09-22T11:48:40"
-commits = []
+completed_at = "2026-09-22T21:59:41"
+commits = ["3c6007e323820df4deb7eb287bc4b908cef85c21"]

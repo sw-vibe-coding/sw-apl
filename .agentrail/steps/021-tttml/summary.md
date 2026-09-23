@@ -1,0 +1,1 @@
+TTTML in library 1 for B, shipped trained: the afterstate TD learner from the prototype with a 0.9 discount so it takes an immediate win. PLAY 1 and 2, TRIAL, TRAIN with progress and WA, SHOW, CHOOSE. No losses to a random player. Library tests, a check-pages game in the B tab, sample 81. reg-rs 90/90.
