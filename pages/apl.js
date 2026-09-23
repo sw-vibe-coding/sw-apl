@@ -182,15 +182,46 @@ async function isolate() {
   if (tries >= 3) {
     refused = "still not isolated after reloading";
     console.error("sw-apl: still not isolated after", tries, "reloads");
+    // Start the count again, so that a reload by hand -- after the
+    // reader has changed something -- gets every try again.
+    try { sessionStorage.removeItem(RELOADS); } catch { /* private mode */ }
+    await diagnose();
     return false;
   }
-  // A worker already in charge of a page that is still not isolated
-  // is not ours as it should be: an older build's, or one an earlier
-  // visit left half installed. Throw it away and install afresh.
-  if (navigator.serviceWorker.controller && tries > 0) await forget();
-  if (!(await install())) return false;
+  // A worker in charge of a page that is still not isolated after a
+  // reload of its own is not ours as it should be: an older build's,
+  // or one an earlier visit left half installed. Throw it away and
+  // install afresh -- once, not on every load.
+  if (navigator.serviceWorker.controller && tries === 1) await forget();
+  if (!(await install())) {
+    await diagnose();
+    return false;
+  }
   location.reload();
   return false;
+}
+
+// What this browser says about isolation, when it has not given it:
+// logged to the console and shown under Help, so a reader can send
+// it. Nothing here changes anything.
+async function diagnose() {
+  const seen = { url: location.href, isolated: self.crossOriginIsolated,
+    shared: typeof SharedArrayBuffer, secure: self.isSecureContext,
+    controller: navigator.serviceWorker?.controller?.scriptURL ?? null,
+    agent: navigator.userAgent };
+  try {
+    const all = await navigator.serviceWorker.getRegistrations();
+    seen.workers = all.map((r) => ({ scope: r.scope,
+      active: r.active?.state ?? null, script: r.active?.scriptURL ?? null,
+      waiting: Boolean(r.waiting), installing: Boolean(r.installing) }));
+    const page = await fetch(location.href, { cache: "no-store" });
+    seen.headers = { coop: page.headers.get("cross-origin-opener-policy"),
+      coep: page.headers.get("cross-origin-embedder-policy") };
+  } catch (error) { seen.error = String(error); }
+  const text = JSON.stringify(seen, null, 1);
+  console.error("sw-apl: diagnosis", text);
+  const shown = document.getElementById("diagnosis");
+  if (shown) { shown.textContent = text; shown.hidden = false; }
 }
 
 // Count this reload, and say how many came before it in this tab.

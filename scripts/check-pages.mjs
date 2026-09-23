@@ -843,7 +843,21 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await never.click('#show-help');
   check('and Help still opens',
     await never.evaluate(() => document.getElementById('help').open), 'Help did not open');
+  const told = await never.evaluate(() => document.getElementById('diagnosis').textContent);
+  check('with what the browser said, to send', /"isolated": false/.test(told), JSON.stringify(told));
   await stuck.close();
+
+  // A tab whose count of reloads is already used up -- by earlier
+  // attempts, or a build before this one -- still tries again when
+  // it is reloaded: giving up starts the count afresh.
+  const spent = await browser.newContext();
+  await spent.addInitScript(() => sessionStorage.setItem('apl-isolation-reloads', '9'));
+  const again = await spent.newPage();
+  await again.goto(url, { waitUntil: 'load' });
+  await again.waitForTimeout(1500);
+  const count = await again.evaluate(() => sessionStorage.getItem('apl-isolation-reloads'));
+  check('a spent count of reloads is started again', count === null || Number(count) < 9, count);
+  await spent.close();
 }
 
 await browser.close();

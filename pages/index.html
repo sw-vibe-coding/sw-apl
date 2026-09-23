@@ -186,6 +186,7 @@
     border: 1px solid var(--rule); border-radius: .4rem; padding: 1rem;
   }
   dialog::backdrop { background: #0009; }
+  #diagnosis { font-size: 11px; white-space: pre-wrap; word-break: break-all; user-select: all; }
   dialog h2 { margin: 0 0 .5rem; font-size: 1.1rem; }
   dialog h3 { margin: 1rem 0 .3rem; font-size: .95rem; }
   dialog img { max-width: 100%; height: auto; }
@@ -338,6 +339,8 @@
       and reload. That removes a worker an earlier visit left broken.
       Or run it locally.</li>
   </ul>
+  <p>What this browser said, to send with a report:</p>
+  <pre id="diagnosis" hidden></pre>
   <form method="dialog"><button>Close</button></form>
 </dialog>
 <dialog id="switch" aria-labelledby="switch-title">
