@@ -918,6 +918,46 @@ otherwise: the config file's name and places (above); a library
 beyond 1 is numbered by the config, not named in `)LOAD`; the browser
 learns its extra libraries from `pages/libraries.json`.
 
+Owner direction 2026-09-24, second:
+
+- **Short term**: LEARN, the three commands, and a documented and
+  tested way to configure, list and load compatible (A), (B) or
+  both-mode workspaces kept in directories outside this repository --
+  the owner's or a third party's.
+- **The owner's other repository** will hold original COURSE, DRILL,
+  STATS and other mathematics workspaces. Writing them is out of scope
+  here; the mechanism for using them is in scope.
+- **Importing classic workspaces** is deferred: low priority, a
+  possible future goal, not planned.
+- **The clock** keeps its historical default -- `⎕TS` is 1900 in (B).
+  A flag to use the host's clock is low priority; plan it, document
+  how it would be enabled, and test it, later (the last step).
+- **LEARN is a subset.** The research gives LEARN's opening -- where
+  you are, with `)DIALECT`, `)WSID`, `)LIBS`, `)LIB 1` and `)HELP` --
+  and a short note on the host environment; it does not lay out
+  COURSE or DRILL. So LEARN is the orientation and the essentials, and
+  exercise generators belong to DRILL and a full curriculum to COURSE,
+  in the other repository. LEARN's lessons:
+
+  1. Where you are: system commands begin with `)`; `)DIALECT`,
+     `)WSID`, `)LIBS`, `)LIB 1`, `)HELP`.
+  2. Numbers and arithmetic: `+ - × ÷`, the high minus, right to left.
+  3. Vectors: strands, scalar extension, `⍳`, `⍴`, reshape.
+  4. Reduction and a few mixed functions; indexing.
+  5. Names: assignment, `)VARS`, `)ERASE`.
+  6. Errors: reading a report -- the name, the statement, the caret --
+     and the common ones, SYNTAX, VALUE, DOMAIN, LENGTH, RANK, INDEX.
+  7. Functions: the del, a header, a result, locals, `)FNS`; a failing
+     function suspends, and `→` clears it.
+  8. Saving work: `)SAVE`, `)LOAD`, `)CLEAR`, library 0 and library 1.
+  9. Where next: the two modes and how they differ, the host
+     environment (the 5110 had no clock), and other libraries --
+     COURSE, DRILL and more -- reached through `)LIBS` when
+     configured.
+
+  One file, both modes; each lesson prints its text and a few
+  expressions to try, and says what the next lesson is.
+
 Order, recommended (owner may reorder):
 
 1. The Linux regression fixtures, carried from Phase 8: a test that
