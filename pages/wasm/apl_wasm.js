@@ -195,6 +195,10 @@ function __wbg_get_imports() {
             const ret = result;
             return ret;
         },
+        __wbg_isArray_5674713bb7b79043: function(arg0) {
+            const ret = Array.isArray(arg0);
+            return ret;
+        },
         __wbg_length_31bdaf014f5fbde2: function(arg0) {
             const ret = arg0.length;
             return ret;

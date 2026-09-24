@@ -1,0 +1,5 @@
+{"name": "EXTENDED",
+ "workspaces": [
+  {"name": "GREET", "file": "GREET.apl.ws", "modes": "(A)(B)"},
+  {"name": "NEWER", "file": "NEWER.b-75.apl.ws", "modes": "(B)"}
+ ]}

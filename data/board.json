@@ -10,23 +10,10 @@
       "insert": ")LIB"
     },
     {
+      "insert": ")LIBS"
+    },
+    {
       "insert": ")LIB 1"
-    },
-    {
-      "insert": ")LOAD 1 LIFE"
-    },
-    {
-      "insert": ")LOAD 1 RACE"
-    },
-    {
-      "insert": ")LOAD 1 EDIT"
-    },
-    {
-      "insert": ")LOAD 1 BIRDS"
-    },
-    {
-      "insert": ")LOAD 1 TTTML",
-      "modes": "B"
     },
     {
       "insert": ")LOAD ",

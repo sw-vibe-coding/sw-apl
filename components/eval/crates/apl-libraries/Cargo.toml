@@ -1,0 +1,14 @@
+[package]
+name = "apl-libraries"
+description = "sw-apl libraries beyond 0 and 1: configured, read-only, from a directory or from fetched text"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-store = { path = "../apl-store" }
+
+[lints]
+workspace = true

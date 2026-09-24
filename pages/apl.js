@@ -327,6 +327,49 @@ function blocked() {
   }
 }
 
+// Libraries beyond 0 and 1, named in libraries.json beside the page:
+// each a number, a name, and the URL of an index -- a static site's
+// library.json, listing its workspace files and their modes. Every
+// file is fetched before the session starts and handed to it, as
+// library 1 is baked in; the session then lists and loads them by
+// mode, read-only. The owner's workspaces repository is library 2,
+// EXTENDED. A library that will not load is said so on the paper, and
+// the session starts without it.
+const LIBRARY_WAIT = 8000;
+async function libraries() {
+  let wanted = [];
+  try {
+    const found = await fetch(stamped("libraries.json"), { cache: "no-store" });
+    wanted = found.ok ? await found.json() : [];
+  } catch { return []; }
+  const got = await Promise.all(wanted.map(library));
+  return got.filter(Boolean);
+}
+
+// One library: its index, then every file it lists, by key -- the
+// file's name less .apl.ws, which says the modes it runs in.
+async function library({ number, name, index }) {
+  const signal = AbortSignal.timeout(LIBRARY_WAIT);
+  const get = async (url, as) => {
+    const r = await fetch(url, { signal, cache: "no-cache" });
+    if (!r.ok) throw new Error(`${r.status} ${url}`);
+    return as === "json" ? r.json() : r.text();
+  };
+  try {
+    const at = new URL(index, location.href);
+    const list = await get(at, "json");
+    const work = {};
+    await Promise.all(list.workspaces.map(async ({ file }) => {
+      work[file.replace(/\.apl\.ws$/, "")] = await get(new URL(file, at), "text");
+    }));
+    return { number: String(number), name, place: at.href, work };
+  } catch (error) {
+    console.error(`sw-apl: library ${number} (${name}) would not load:`, error);
+    put(`LIBRARY ${number} (${name}) COULD NOT BE LOADED.\n`);
+    return null;
+  }
+}
+
 // How long to wait for the session's first frame before saying it is
 // not coming. Starting it is a worker, a fetch and a WebAssembly
 // instantiation, which is slow on a cold cache and not this slow.
@@ -367,6 +410,7 @@ async function run() {
     return;
   }
   await init();
+  const extra = await libraries();
   board = new Board(MODE);
   const channel = new SharedArrayBuffer(SIZE);
   const header = new Int32Array(channel, 0, 3);
@@ -396,7 +440,7 @@ async function run() {
     clearTimeout(watchdog);
     stop("The session could not be started.");
   };
-  worker.postMessage({ channel, stored: stored(), mode: MODES[MODE] });
+  worker.postMessage({ channel, stored: stored(), mode: MODES[MODE], libraries: extra });
   wire = { header, body };
   listen(header, body);
   await keyboard();

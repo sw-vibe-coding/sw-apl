@@ -141,6 +141,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-libraries"
+version = "0.1.0"
+dependencies = [
+ "apl-store",
+]
+
+[[package]]
 name = "apl-modes"
 version = "0.1.0"
 dependencies = [

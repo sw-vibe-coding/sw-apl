@@ -76,7 +76,7 @@ pub fn lib(ws: &Workspace, rest: &[&str]) -> Vec<String> {
     // A word that is not a number is a command `)LIB` does not take;
     // a number naming no library is a reference that is not a
     // library. The manual keeps those apart and so does this.
-    let numbered = |n: usize| library(n).ok_or(IMPROPER_LIBRARY);
+    let numbered = |n: usize| library(&*ws.store, n).ok_or(IMPROPER_LIBRARY);
     let found = match rest {
         [] => numbered(0),
         [n] => n.parse().map_err(|_| INCORRECT).and_then(numbered),

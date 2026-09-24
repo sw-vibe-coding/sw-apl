@@ -16,6 +16,7 @@ apl-board = { path = "../apl-board" }
 apl-wire = { path = "../apl-wire" }
 apl-serve = { path = "../apl-serve" }
 apl-session = { path = "../../../session/crates/apl-session" }
+apl-wasm-store = { path = "../apl-wasm-store" }
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 wasm-bindgen = "0.2"

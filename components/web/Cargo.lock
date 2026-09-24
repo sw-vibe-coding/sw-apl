@@ -131,6 +131,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-config"
+version = "0.1.0"
+dependencies = [
+ "apl-libraries",
+ "apl-store",
+ "serde",
+ "toml",
+]
+
+[[package]]
 name = "apl-console"
 version = "0.1.0"
 dependencies = [
@@ -266,6 +276,13 @@ name = "apl-lex"
 version = "0.1.0"
 dependencies = [
  "apl-value",
+]
+
+[[package]]
+name = "apl-libraries"
+version = "0.1.0"
+dependencies = [
+ "apl-store",
 ]
 
 [[package]]
@@ -473,6 +490,7 @@ dependencies = [
  "apl-editor",
  "apl-eval",
  "apl-lex",
+ "apl-libraries",
  "apl-parse",
  "apl-settings",
  "apl-sysvars",
@@ -569,8 +587,19 @@ dependencies = [
  "apl-board",
  "apl-serve",
  "apl-session",
+ "apl-wasm-store",
  "apl-wire",
  "console_error_panic_hook",
+ "js-sys",
+ "wasm-bindgen",
+ "web-sys",
+]
+
+[[package]]
+name = "apl-wasm-store"
+version = "0.1.0"
+dependencies = [
+ "apl-session",
  "js-sys",
  "wasm-bindgen",
  "web-sys",
@@ -1114,6 +1143,7 @@ name = "sw-apl-server"
 version = "0.1.0"
 dependencies = [
  "apl-attn",
+ "apl-config",
  "apl-serve",
  "apl-session",
  "apl-wire",

@@ -201,6 +201,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-libraries"
+version = "0.1.0"
+dependencies = [
+ "apl-store",
+]
+
+[[package]]
 name = "apl-library"
 version = "0.1.0"
 dependencies = [
@@ -397,6 +404,7 @@ dependencies = [
  "apl-editor",
  "apl-eval",
  "apl-lex",
+ "apl-libraries",
  "apl-parse",
  "apl-settings",
  "apl-sysvars",

@@ -1,0 +1,17 @@
+[package]
+name = "apl-config"
+description = "sw-apl library configuration: --lib N=DIR[,NAME] and sw-apl.toml, for the CLI and the service"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-libraries = { path = "../../../eval/crates/apl-libraries" }
+apl-store = { path = "../../../eval/crates/apl-store" }
+serde = { version = "1", features = ["derive"] }
+toml = "0.9"
+
+[lints]
+workspace = true

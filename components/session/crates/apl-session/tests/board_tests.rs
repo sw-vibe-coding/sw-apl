@@ -154,5 +154,8 @@ fn a_mode_is_offered_only_what_it_has() {
         .map(|e| e["insert"].to_string())
         .collect();
     assert!(a.iter().any(|c| c.contains(")ORIGIN")) && !b.iter().any(|c| c.contains(")ORIGIN")));
-    assert!(b.iter().any(|c| c.contains("TTTML")) && !a.iter().any(|c| c.contains("TTTML")));
+    assert!(b.iter().any(|c| c.contains(")LIBS")) && a.iter().any(|c| c.contains(")LIBS")));
+    // One )LOAD that leaves room for a library and a name, not a
+    // button for each workspace.
+    assert!(!a.iter().chain(&b).any(|c| c.contains(")LOAD 1 ")));
 }

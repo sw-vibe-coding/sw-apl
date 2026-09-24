@@ -1,0 +1,1162 @@
+consider 
+sw-vibe-coding/sw-apl.  I use text files (or browser local storage) to store workspaces (I cannot store workspaces with suspended functions yet, and locked functions are simply obscured).  I want to add a utility to import classic APL workspacess.  Someone commented "... I think StatPack (StatPak?)  is available at some Canadian repository?" in my query for interesting workspaces.  Can you find this in bitsavers or in some place/form I could possibly import from.  I realize it may be difficult to decode some binary workspace format but one way to do it (which I cannot get to for a while) is to fire up Hercules mainframe emulator on one of my Arch systems, boot a 360 O/S, install APL\360, and use it to load a binary workspace, and then print the contents.  Hurdles: workspaces probably contain locked definitions, workspaces are tied to different (newer) dialects of APL, newer OS and APL may not be installable/runnable.   Worse case, I could reconstruct clean-room implementations of my own workspaces given a detailed-enougj description of what functions they provide.  I am especiall interested in APLCOURSE or similar workspaces so a new person could learn APL from scratch in my project.
+
+Yes. There are two very promising preservation paths, and one of them largely eliminates the need to reverse-engineer a binary APL\360 workspace format before you can get useful historical material into sw-apl.
+
+1. APLCOURSE is effectively found
+
+The best discovery is that a historical copy of APLCOURSE survives on the Michigan Terminal System distributions, and people have already demonstrated it running under Hercules.
+
+Try MTS documents exactly this sequence:
+
+)LIB 1
+ADVANCEDE
+APLCOURSE
+CLASS
+NEWS
+PLOTFORMA
+TYPEDRILL
+WSFNS
+...
+
+)LOAD 1 APLCOURSE
+
+and the loaded workspace contains:
+
+B1X
+CHECK
+DESCRIBE
+DIM
+DRILL
+DYAD1
+DYAD2
+EASY
+EASYDRILL
+FORM
+FUNDRILL
+GET
+INPUT
+QUES
+RANDOM
+REDSCAPATCH
+REPP
+TEACH
+
+The two user-facing functions are TEACH and EASYDRILL.
+
+That is extremely close to the original IBM library-1 workspace documented in the APL\360 User's Manual:
+
+)LOAD 1 APLCOURSE
+APLCOURSE SAVED 07/19/68
+
+)FNS
+B1X CHECK DESCRIBE DIM DRILL DYAD1 DYAD2
+EASY EASYDRILL FORM FUNDRILL GET INPUT
+INTER LOG QUES RANDOM REDSCAPATCH REPP
+SETPARAMETERS TEACH TRACE
+
+The small differences in function set are probably version/platform differences rather than a fundamentally different course.
+
+And the contemporary description confirms its purpose: TEACH generates APL expressions using scalars and vectors, while EASYDRILL restricts the generated exercises to simpler cases.
+
+So your stated goal — “a new person could learn APL from scratch in my project” — has a historically authentic target rather than requiring you to invent an APLCOURSE-like system from descriptions.
+
+2. You don't need to start with OS/360
+
+Your Hercules idea is sound, but I would change one major architectural choice:
+
+Use MTS D6.0 + the MTS D5 APL tapes first, not OS/360 + APL\360.
+
+The recipe already exists.
+
+Try MTS says to take a standard MTS D6.0 Hercules installation, download the D5 tapes from Bitsavers, attach d5.0t1.aws and d5.0t2.aws, restore APL, and then APLCOURSE is sitting in library 1.
+
+That means your pipeline can be:
+
+Bitsavers D5 tape
+        │
+        ▼
+Hercules
+        │
+        ▼
+MTS
+        │
+        ▼
+*APL
+        │
+        ├── )LOAD 1 APLCOURSE
+        │
+        ├── )FNS
+        │
+        ├── display each function
+        │
+        ├── )VARS
+        │
+        └── print/export variable values
+        │
+        ▼
+host text files
+        │
+        ▼
+APL\360 text normalizer
+        │
+        ▼
+sw-apl workspace
+
+This is far easier than understanding the serialized workspace representation.
+
+And it neatly fits your existing design: sw-apl can remain text/local-storage based. The emulator becomes a one-time archaeological converter, not a runtime dependency.
+
+3. There's an even more interesting clue: VS APL distribution tapes
+
+Bitsavers documentation for IBM VS APL explicitly lists individual workspace files on its distribution tape:
+
+tape file	contents
+8	Workspace 1 NEWS
+9	Workspace 1 WSFNS
+10	Workspace 1 CONVERT
+11	Workspace 1 TYPEDRILL
+12	Workspace 1 APLCOURSE
+13	PLOT
+14	EXAMPLES
+15	FORMAT
+
+And critically:
+
+RECFM F
+LRECL 800
+BLKSIZE 800
+
+for these workspace records.
+
+That is a very useful reverse-engineering lead.
+
+It means an eventual direct importer doesn't necessarily face an opaque filesystem blob. You potentially have a tape consisting of clearly delimited 800-byte workspace records, with APLCOURSE isolated as file 12.
+
+So I would keep two tracks:
+
+Track A — semantic extraction
+
+Do this first.
+
+binary WS → genuine APL interpreter → textual functions/data → sw-apl
+
+Lowest risk and immediately valuable.
+
+Track B — binary archaeology
+
+Later:
+
+.aws tape
+  ↓
+tape-file extractor
+  ↓
+file 12, fixed 800-byte records
+  ↓
+workspace decoder
+  ↓
+Workspace IR
+  ↓
+sw-apl
+
+If Track B succeeds, your utility becomes genuinely interesting in its own right:
+
+sw-apl-import classic-workspace.ws
+
+But it shouldn't block historical workspace preservation.
+
+4. STATPAK is real too
+
+The comment you received appears to be pointing at a genuine historical package, although probably not quite the provenance implied by “Canadian repository.”
+
+The Computer History Museum's APL History Collection has:
+
+APL PLUS STATPAK, Scientific Time Sharing Corporation, September 1969.
+
+It's listed alongside the APL*PLUS materials.
+
+An APL bibliography from 1972 identifies a suite approximately as:
+
+EDITPAK
+FINANCEPAK
+MATHPAK
+PLOTPAK
+STATPAK
+Scientific Time-Sharing Corp., 1969
+
+More importantly, the SHARP APL Utility Library Catalogue contains functions documented as originating in IBM's “old STATPACK”; for example its CHOLESKY routine says that it originated in IBM STATPACK and names Jack Prins as the author/supporter.
+
+So there seem to be at least related historical lineages around the STATPAK / STATPACK name:
+
+IBM STATPACK
+       │
+       ├── statistical APL functions
+       │
+       └── some later migrated into SHARP libraries
+       
+Scientific Time Sharing Corp.
+       │
+       └── APL PLUS STATPAK (1969)
+
+Whether STSC STATPAK descends directly from IBM STATPACK isn't something I'd assume without stronger evidence.
+
+5. The “Canadian repository” comment may be conflating several things
+
+There are several Canadian APL preservation threads that could explain the recollection.
+
+SHARP APL was Canadian, developed by I. P. Sharp Associates, and its utility libraries contain functions descended from IBM STATPACK. The Computer History Museum preservation collection has the SHARP APL Utility Library Catalogue and surviving SHARP APL source.
+
+There was also substantial Canadian university APL activity, including York University, whose York APL documentation is preserved in the same collection.
+
+And there are historical systems such as McGill's MUSIC that supported APL and separately had packages called STATPAK, but that doesn't establish that those were the STSC/IBM APL workspaces you're looking for.
+
+So I suspect your correspondent remembers something real but may have compressed:
+
+Canadian APL archive + SHARP + statistical libraries + STATPACK
+
+into “StatPak is at a Canadian repository.”
+
+6. STATPAK documentation alone may already be enough for clean-room work
+
+This is the other important part of the find.
+
+Even if we can't locate a surviving loadable STATPAK workspace immediately, the APL PLUS STATPAK manual survives.
+
+That changes the fallback from:
+
+“reconstruct something vaguely similar”
+
+to:
+
+“implement a functionally compatible clean-room statistical workspace from its documented API and examples.”
+
+That would actually fit sw-apl very nicely.
+
+For example:
+
+classic/
+    aplcourse/
+    typedrill/
+    plotformat/
+    statpak/
+
+with provenance:
+
+statpak/
+    README.md
+    PROVENANCE.md
+    functions.apl
+    examples.apl
+
+and an explicit distinction:
+
+APLCOURSE
+  preservation/import of historical source
+
+STATPAK
+  clean-room implementation from historical documentation
+
+That's cleaner legally and technically than pretending reconstructed source is the recovered historical workspace.
+
+7. I would make the importer operate on an intermediate representation
+
+Rather than teaching sw-apl about five binary workspace formats, I'd define something like:
+
+struct ImportedWorkspace {
+    name: String,
+    dialect: Dialect,
+    functions: Vec<ImportedFunction>,
+    variables: Vec<ImportedVariable>,
+    metadata: WorkspaceMetadata,
+}
+
+where a function preserves useful archaeology:
+
+struct ImportedFunction {
+    name: String,
+    source: Option<String>,
+    locked: bool,
+    source_dialect: Dialect,
+}
+
+Then:
+
+APL\360 emulator transcript ─┐
+VS APL binary decoder ───────┤
+APL*PLUS converter ──────────┼─> Workspace IR ─> sw-apl
+Dyalog converter ────────────┘
+
+This lets you solve the hard compatibility problems independently.
+
+Especially for locked functions
+
+I'd model:
+
+locked = true
+source = None
+
+as a legitimate imported artifact.
+
+Don't make “cannot recover definition” synonymous with “cannot import workspace.”
+
+For an emulator-assisted conversion you could still record:
+
+function: FOO
+locked: true
+callable-in-source-system: true
+source: unavailable
+
+Later you can decide whether to:
+
+omit it,
+stub it,
+clean-room it,
+or retain just metadata.
+
+That matches your existing conception of locked definitions much better than attempting to defeat the lock.
+
+8. Suspended functions aren't important for this job
+
+I'd explicitly discard the SI stack during historical imports.
+
+A preserved teaching/library workspace is interesting because of:
+
+functions
+variables
+⎕IO / other relevant system settings
+workspace identity
+documentation
+
+not because somebody happened to save it while stopped inside:
+
+TEACH[37]
+
+So define the historical interchange format as:
+
+Workspace State
+├── definitions
+├── data
+├── relevant system variables
+└── provenance
+
+NOT:
+└── suspended execution state
+
+That conveniently avoids one of the features sw-apl doesn't support yet.
+
+9. APL dialect compatibility is the larger problem
+
+This is likely to consume more work than the file format.
+
+For APLCOURSE, however, you've chosen almost the best possible test case because it is old APL\360 code. Your project intentionally tracks that language fairly closely.
+
+The compatibility workflow should therefore be:
+
+import verbatim
+      ↓
+parse
+      ↓
+report unsupported constructs
+      ↓
+apply named compatibility rewrites
+      ↓
+run regression transcript
+
+Not:
+
+import → silently modernize
+
+For preservation I would retain both:
+
+original.apl
+ported.apl
+
+Then your repo can show exactly what it took to run a 1968 workspace in sw-apl.
+
+That itself would make a very good historical-computing demo.
+
+10. APLCOURSE should be your Rosetta Stone
+
+Before STATPAK, I'd use these historical library-1 workspaces progressively:
+
+PLOTFORMAT — straightforward utility functions.
+ADVANCEDEX — many small programming examples.
+TYPEDRILL — interaction/state.
+APLCOURSE — substantial interactive application.
+STATPAK — numeric/statistical compatibility.
+
+The APLSV operations guide describes all three instructional workspaces and even notes that some ADVANCEDEX algorithms became obsolete after later primitives were introduced.
+
+That's useful educational content in itself:
+
+1968 implementation of matrix inverse
+             ↓
+        inspect algorithm
+             ↓
+compare with later primitive ⌹
+
+Very much in the spirit of what you're doing elsewhere.
+
+11. There may be no need even to “print” everything manually
+
+Try MTS documents that its APL provides:
+
+)SOURCE
+
+for reading text into APL, and MTS itself provides mechanisms for moving output back to host files/card punch/tape.
+
+So I'd write one APL extraction workspace/function whose job is approximately:
+
+EXPORT 'APLCOURSE'
+
+and emits a machine-readable transcript such as:
+
+@@WORKSPACE APLCOURSE
+@@FUNCTION TEACH
+∇ TEACH
+...
+∇
+@@END
+
+@@FUNCTION EASYDRILL
+...
+@@END
+
+rather than screen-scraping an interactive terminal.
+
+Even if the historical APL lacks convenient file I/O, routing printer/punch output to a Hercules host file is sufficient.
+
+Thus Hercules becomes an automated golden-reference test fixture:
+
+Hercules APL:
+    TEACH with deterministic/random inputs
+          ↓
+    transcript
+
+sw-apl:
+    imported TEACH with same inputs
+          ↓
+    transcript
+
+diff
+
+That's much more useful than merely recovering the source.
+
+12. I think this deserves a dedicated utility in sw-apl
+
+Something conceptually like:
+
+tools/wsimport/
+
+or commands:
+
+sw-apl import transcript aplcourse.txt
+sw-apl import vsapl aplcourse.ws
+sw-apl import aplplus statpak.ws
+
+and:
+
+sw-apl export canonical APLCOURSE
+
+The canonical representation could stay intentionally boring text:
+
+workspace APLCOURSE
+dialect apl360
+origin "IBM Library 1"
+
+function TEACH
+∇ TEACH
+...
+∇
+
+variable FOO
+...
+
+The architectural distinction matters:
+
+Binary formats belong to import adapters, not the workspace implementation.
+
+That protects your pleasant text-file/local-storage model from accumulating forty years of APL serialization baggage.
+
+My proposed first milestone
+
+I would make the historical preservation project extremely concrete:
+
+Milestone 001 — Run the original APLCOURSE
+
+[ ] Download MTS D6.0 turnkey distribution
+[ ] Obtain D5 APL tapes from Bitsavers
+[ ] Restore *APL under Hercules
+[ ] Verify )LOAD 1 APLCOURSE
+[ ] Capture )FNS and DESCRIBE
+[ ] Export every unlocked function
+[ ] Export required variables
+[ ] Preserve exact original source
+[ ] Add APL360 → sw-apl compatibility pass
+[ ] Import into sw-apl
+[ ] Run EASYDRILL
+[ ] Run TEACH
+[ ] Compare transcripts against MTS APL
+
+The success criterion is wonderfully simple:
+
+      )LOAD APLCOURSE
+      TEACH
+
+in your browser.
+
+Once that works, the project has demonstrated considerably more than “we can load another workspace”: a 1968 interactive APL teaching program survives and runs in a modern Rust/WASM implementation without a mainframe emulator.
+
+That seems like exactly the artifact you were hoping to find.
+
+Useful sources
+
+The most useful starting points I found are the live MTS recipe for restoring its historical APL installation and loading APLCOURSE; the original APL\360 documentation showing the workspace contents; IBM's VS APL installation manual proving APLCOURSE exists as a discrete distribution-tape file; and the Computer History Museum collection containing the 1969 APL PLUS STATPAK documentation.
+
+Try MTS APL installation and APLCOURSE instructions
+Computer History Museum APL preservation collection
+
+If I were choosing what to attack first, it would unequivocally be extracting APLCOURSE from the MTS D5 tapes through the historical interpreter, while keeping direct 800-byte VS-APL-workspace decoding as the subsequent archaeology project.
+
+Yes, I would add )DIALECT as a small sw-apl extension, rather than make )HELP the only way to discover the current mode.
+
+I checked the APL\360 command table: there was no historical )DIALECT; the system commands included things such as )CLEAR, )LOAD, )COPY, )ORIGIN, )DIGITS, )WIDTH, )WSID, )SAVE, )FNS, )VARS, )SI, and )LIB. So )DIALECT would clearly be an intentional extension, just as your proposed )LIBS is.
+
+I'd make it an inquiry, not a mode switch
+
+Given your rule that selecting a dialect is a conscious session-level decision, I would initially implement only:
+
+      )DIALECT
+(A) '70
+
+or:
+
+      )DIALECT
+(B) '75
+
+Possibly slightly more descriptive:
+
+      )DIALECT
+(A) '70  APL\360
+
+and:
+
+      )DIALECT
+(B) '75  APLSV
+
+I would not initially support:
+
+)DIALECT 75
+
+because that turns an inquiry command into a runtime mode switch, which has some awkward consequences: what happens to the active workspace, its functions, system settings, library visibility, and definitions using dialect-specific facilities?
+
+Your existing:
+
+sw-apl --mode 70
+sw-apl --mode 75
+
+makes the boundary much cleaner.
+
+And yes, )HELP should mention it
+
+The two features serve different purposes:
+
+      )HELP
+...
+DIALECT     Show the active APL dialect
+LIBS        Show configured workspace libraries
+...
+
+versus:
+
+      )DIALECT
+(B) '75  APLSV
+
+So )HELP provides discovery, while )DIALECT provides inquiry.
+
+That is particularly useful when someone sends you a transcript:
+
+      )DIALECT
+(B) '75  APLSV
+      )WSID
+FOO
+      )LIB 1
+...
+
+You immediately know the execution environment.
+
+I agree about avoiding ⎕DIALECT
+
+For the project you're building, ⎕DIALECT would be conceptually wrong.
+
+APL\360 did have quad input/output, but the later proliferation of quad-named system variables/functions belongs to later APL development. APLSV explicitly introduced facilities such as ⎕FX and ⎕LX; its documentation describes these as additions relative to APL\360.
+
+So inventing:
+
+      ⎕DIALECT
+
+would make your supposedly circa-1970 environment look anachronistically like a later APL.
+
+Whereas:
+
+      )DIALECT
+
+is visibly a system/environment command, outside the APL language proper. That's exactly where an emulator/interpreter-specific inquiry belongs.
+
+I'd use the same philosophy for extensions generally
+
+Keep language emulation conservative:
+
+APL language
+    ↓
+historically appropriate primitives,
+system variables/functions, semantics
+
+but allow a small, clearly documented set of useful host commands:
+
+sw-apl system-command extensions
+
+)HELP       discover sw-apl
+)DIALECT    identify current dialect
+)LIBS       inspect library configuration
+
+Those don't contaminate programs or workspaces with non-period APL constructs.
+
+I'd even have )HELP DIALECT eventually say something like:
+
+      )HELP DIALECT
+
+)DIALECT
+
+Reports the active sw-apl dialect.
+
+(A) '70  APL\360
+(B) '75  APLSV
+
+This is a sw-apl extension, not an original
+APL\360 or APLSV system command.
+
+Select the dialect when starting sw-apl with
+--mode 70 or --mode 75.
+
+That establishes a useful convention for )HELP generally: clearly identify which facilities are historical and which are sw-apl conveniences. Given that historical fidelity is one of the interesting things about this interpreter, I'd make that distinction quite visible rather than avoiding useful extensions altogether.
+
+well, we have other anachronisms, like )LIBS and possibly )HELP and definitely )DIALECT.
+
+Exactly. So I wouldn't use “anachronistic” as a reason against )DIALECT. The better distinction is language/dialect compatibility vs. environment conveniences.
+
+I'd explicitly define a third layer
+
+You effectively have:
+
+┌─────────────────────────────────────────┐
+│ sw-apl convenience commands             │
+│   )HELP   )LIBS   )DIALECT              │
+├─────────────────────────────────────────┤
+│ selected historical environment         │
+│                                         │
+│ (A) '70                 (B) '75          │
+│ APL\360-ish             APLSV-ish       │
+├─────────────────────────────────────────┤
+│ shared interpreter/runtime              │
+└─────────────────────────────────────────┘
+
+The important constraint is that the convenience commands don't make an otherwise historical workspace depend on modern APL language features.
+
+Thus this is harmless:
+
+      )DIALECT
+(A) '70
+
+while introducing ⎕DIALECT would be materially different because a workspace could contain:
+
+→(⎕DIALECT='75')/USE75
+
+Now you've extended the programming language, and a supposedly APL\360-compatible workspace is no longer APL\360-compatible.
+
+That's the stronger reason to prefer ) commands.
+
+I'd make all three official sw-apl extensions
+
+Something like:
+
+Command	Purpose	Historical?
+)HELP	Discover commands/help	sw-apl extension
+)LIBS	Show library mappings	sw-apl extension
+)DIALECT	Show active dialect	sw-apl extension
+
+And have:
+
+      )HELP
+
+distinguish them, perhaps minimally:
+
+SW-APL EXTENSIONS
+
+)HELP [topic]       Help
+)DIALECT            Show selected dialect
+)LIBS               Show workspace libraries
+
+No need to apologize for them. They're terminal/environment facilities, not additions pretending to be period APL primitives.
+
+)DIALECT is particularly justified
+
+With your architecture, knowing the mode affects:
+
+available language facilities;
+system commands/functions;
+which BIRDS gets loaded;
+what )LIB 1 and )LIB 2 show;
+how saved workspaces are classified;
+what source will execute successfully.
+
+So asking the environment:
+
+      )DIALECT
+
+is quite reasonable.
+
+I'd probably output your terminology exactly:
+
+      )DIALECT
+(A) '70
+
+and:
+
+      )DIALECT
+(B) '75
+
+rather than embellishing it with APL\360/APLSV, because (A) '70 and (B) '75 are already concepts you've established throughout the project.
+
+Then )HELP DIALECT can explain what those mean.
+
+I would reconsider one thing from my previous answer
+
+I now think a controlled switching form could eventually be useful:
+
+      )DIALECT
+(A) '70
+
+      )DIALECT 75
+CLEAR WS
+(B) '75
+
+But only if switching is defined as essentially starting a fresh APL environment.
+
+Never reinterpret the current workspace in another dialect.
+
+So:
+
+)DIALECT 75
+
+would conceptually be:
+
+confirm/require CLEAR WS
+        ↓
+destroy current session state
+        ↓
+select B '75
+        ↓
+new CLEAR WS
+        ↓
+switch library views
+
+If the current workspace has state, perhaps:
+
+      )DIALECT 75
+WS NOT CLEAR
+
+requiring the user to )SAVE/)CLEAR first.
+
+That preserves your strong isolation between modes.
+
+But that's optional. For now I'd implement only the inquiry.
+
+This gives LEARN a nice opening
+
+Very early:
+
+      )DIALECT
+(A) '70
+
+You are using sw-apl's (A) '70 dialect.
+
+System commands begin with a right parenthesis.
+
+Try:
+
+      )WSID
+
+Then:
+
+      )LIBS
+0 USER
+1 CORE
+2 EXTENDED
+
+and:
+
+      )LIB 1
+BIRDS EDIT LEARN LIFE RACE
+
+So the three modern conveniences actually support your educational goal nicely: )HELP tells me how to get help, )DIALECT tells me what APL I'm using, and )LIBS tells me where my workspace universe comes from.
+
+I'd treat those as deliberately documented sw-apl terminal extensions, while keeping the actual APL language of (A) '70 and (B) '75 as historically constrained as practical.
+
+where can I document the broken or unimplemented features? e.g. the multiuser APL commands from running on a S/360 O/S, or the fact that the time quad var on our APSVS returns 1900 since the IBM 5100 had no clock, or should we add an anachronism and have the local system time reported?  Also, should this be configurable, and if so how?  At mode selection time via TOML or flag, or at runtime via )COMMAND or []FN?
+
+Looking at docs/parity.md, you already have the right authoritative place for much of this. I would formalize a distinction among parity status, deliberate restrictions, and emulation policy rather than putting everything into one “unimplemented” bucket.
+
+1. Three kinds of deviation
+
+Your current parity.md already says:
+
+done, part, todo; things sw-apl intentionally will not do belong under Restrictions.
+
+I'd extend that idea slightly:
+
+Category	Meaning	Example
+TODO/PART	Intended historical behavior isn't finished	missing B-mode format behavior
+RESTRICTION	Deliberately not implementing it	S/360 multiuser )MSG, )OPR, )PORTS
+HOST POLICY	Historical behavior depends on hardware/environment	clock/date, terminal population, processor time
+EXTENSION	Deliberate sw-apl addition	)HELP, )LIBS, )DIALECT
+
+The third category is the one you're now running into.
+
+2. Add a dedicated docs/emulation-policy.md
+
+parity.md answers:
+
+How closely have we implemented the dialect?
+
+A new document should answer:
+
+When historical behavior depends on the original machine/environment, what does sw-apl emulate?
+
+For example:
+
+# Emulation Policy
+
+sw-apl emulates two historical APL environments while running on
+modern hosts. Some observable behavior belonged to the historical
+host rather than to the APL language.
+
+## Policy classes
+
+HISTORICAL
+    Reproduce documented historical behavior.
+
+HOST
+    Expose an equivalent facility supplied by the modern host.
+
+FIXED
+    Return a deterministic historically plausible value.
+
+UNAVAILABLE
+    Historical facility intentionally not emulated.
+
+EXTENSION
+    sw-apl facility absent from the historical system.
+
+Then document individual cases.
+
+That prevents parity.md from becoming a philosophical essay.
+
+3. Multiuser commands: keep them unavailable
+
+I agree with what parity.md already says about:
+
+)MSG
+)OPR
+)PORTS
+sign-on numbers
+)CONTINUE HOLD
+
+These aren't really missing APL language features.
+
+They're artifacts of:
+
+APL
+ │
+ ▼
+APL service
+ │
+ ▼
+multiuser mainframe environment
+
+Your local CLI/browser doesn't have that environment.
+
+So:
+
+      )MSG ...
+INCORRECT COMMAND
+
+is a reasonable deliberate restriction.
+
+If you eventually create an authentic multiuser server environment, that decision could be revisited.
+
+4. The clock is different
+
+Here I'd distinguish language compatibility from machine simulation.
+
+If B '75 models the IBM 5100-family APL and the relevant time/date facility returns a value reflecting the machine's lack of a real-time clock, then that is historically interesting.
+
+But a modern user may reasonably expect:
+
+      <time facility>
+
+to tell them the time.
+
+I wouldn't silently choose one interpretation.
+
+I'd make host-dependent facilities configurable through an emulation profile.
+
+Suggested profiles
+
+Perhaps:
+
+historical
+host
+deterministic
+
+For example:
+
+Facility	historical	host	deterministic
+wall clock	period behavior	local system time	fixed time
+date	period behavior	local system date	fixed date
+processor time	emulated semantics	measured	fixed/test clock
+terminal count	period approximation	actual sessions	fixed
+sign-on	historical/fixed	session-derived	fixed
+
+deterministic is especially useful for regression tests and demos.
+
+5. But don't make this ⎕ configuration
+
+I would not add things like:
+
+⎕CLOCKMODE←'HOST'
+
+That contaminates the emulated language in exactly the way we discussed with ⎕DIALECT.
+
+A historical workspace could start depending on a system variable that never existed.
+
+I'd keep configuration outside the APL language.
+
+6. Prefer startup configuration over runtime commands
+
+I'd use three levels:
+
+TOML default
+     ↓
+CLI override
+     ↓
+APL inquiry command
+
+For example:
+
+[emulation]
+environment = "historical"
+
+or more explicitly:
+
+[emulation]
+clock = "historical"
+processor_time = "host"
+multiuser = "unavailable"
+
+CLI:
+
+sw-apl --mode 75 --clock historical
+sw-apl --mode 75 --clock host
+
+Then perhaps:
+
+      )ENV
+CLOCK       HISTORICAL
+MULTIUSER   UNAVAILABLE
+
+although I wouldn't rush to add )ENV; )HELP/documentation may be enough initially.
+
+The key rule I'd use is:
+
+Configuration that changes the emulated machine belongs at session creation, not inside the APL workspace.
+
+That's analogous to your existing:
+
+--mode 70
+--mode 75
+--ws-size ...
+
+A workspace shouldn't secretly change what machine it is running on.
+
+7. Don't tie clock policy to dialect
+
+This is subtle but useful.
+
+Avoid:
+
+A70 → historical clock
+B75 → 1900
+
+as an inseparable implementation choice.
+
+Instead:
+
+Dialect
+   +
+Environment policy
+
+So you can run:
+
+sw-apl --mode 75 --clock historical
+
+for historical demonstrations, and:
+
+sw-apl --mode 75 --clock host
+
+when someone actually wants to use the interpreter.
+
+That separates two independent questions:
+
+What APL language am I running?
+
+from:
+
+How faithfully am I simulating its original host environment?
+
+8. I would default to historical behavior
+
+Given the purpose of sw-apl, I'd make:
+
+--clock historical
+
+the default.
+
+So if the documented IBM-5100-family behavior really implies the 1900 result you're currently producing, preserve that.
+
+That's not a bug. It's an interesting observable property of the machine being modeled.
+
+Then:
+
+sw-apl --mode 75 --clock host
+
+becomes an explicitly requested convenience.
+
+That is much better than silently making the historical emulator “helpful” and thereby losing a behavior you're deliberately trying to demonstrate.
+
+9. LEARN can explain this
+
+This is exactly the sort of thing your introductory workspace should briefly teach:
+
+sw-apl distinguishes the APL language from its host environment.
+
+Some historical APL facilities reflected the machine they ran on.
+
+For example, the IBM 5100 had no real-time clock. sw-apl normally
+reproduces that historical behavior.
+
+Your sw-apl installation can instead expose its host clock.
+
+See:
+
+      )HELP ENVIRONMENT
+
+That is interesting computer-history material rather than an embarrassing limitation.
+
+COURSE doesn't need to belabor it.
+
+10. Documentation hierarchy
+
+I'd organize the information like this:
+
+README
+ │
+ ├── What sw-apl is
+ ├── (A) '70 / (B) '75
+ └── links
+       │
+       ├── docs/parity.md
+       │      What is implemented?
+       │      What is partial?
+       │      What is intentionally absent?
+       │
+       ├── docs/emulation-policy.md
+       │      Historical host vs modern host
+       │      clock/date
+       │      processor timing
+       │      multiuser environment
+       │      deterministic testing
+       │
+       ├── docs/commands-reference.md
+       │      Exact ) command behavior
+       │
+       ├── docs/mode-a.md
+       │      A '70 specifics
+       │
+       └── docs/mode-b.md
+              B '75 specifics
+
+And )HELP becomes the user-facing doorway into the same taxonomy:
+
+      )HELP DIALECT
+      )HELP CLOCK
+      )HELP RESTRICTIONS
+      )HELP EXTENSIONS
+
+It doesn't need to contain all the historical discussion.
+
+One refinement: call it --environment, then allow overrides
+
+Instead of accumulating:
+
+--clock
+--date
+--terminal-count
+--processor-time
+--...
+
+I'd define profiles first:
+
+sw-apl --mode 75 --environment historical
+sw-apl --mode 75 --environment host
+
+TOML:
+
+[emulation]
+environment = "historical"
+
+Then permit expert overrides only where useful:
+
+[emulation]
+environment = "historical"
+clock = "host"
+
+Internally something like:
+
+EmulationPolicy
+├── clock
+├── date
+├── cpu_time
+├── terminal
+└── multiuser
+
+That gives you room for future cases without adding a command-line flag for every historical oddity.
+
+My rule of thumb
+
+Dialect selection determines language semantics. Emulation policy determines historically host-dependent behavior. Workspaces determine application state.
+
+Keep those three orthogonal:
+
+       DIALECT                 ENVIRONMENT
+     --mode 70/75          --environment ...
+          │                       │
+          └──────────┬────────────┘
+                     ▼
+                  SESSION
+                     │
+                     ▼
+                 WORKSPACE
+
+And keep both dialect and emulation policy outside saved workspaces. That way loading BIRDS, LEARN, or eventually COURSE never changes the machine underneath the user's session.
+

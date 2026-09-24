@@ -83,6 +83,17 @@ pub struct Args {
     /// The mode every session is in: 70 for (A), 75 for (B).
     #[arg(long, value_name = "MODE", default_value = "70", value_parser = mode)]
     pub mode: Mode,
+
+    /// A library beyond 0 and 1, for every session: its number, the
+    /// directory of its workspaces, and the name )LIBS gives it. May
+    /// be given again for another. Read-only.
+    #[arg(long = "lib", value_name = "N=DIR[,NAME]", value_parser = apl_config::parse_lib)]
+    pub libs: Vec<apl_config::LibrarySpec>,
+
+    /// The configuration file to read libraries from, in place of
+    /// ./sw-apl.toml or the user's sw-apl/config.toml.
+    #[arg(long, value_name = "FILE")]
+    pub config: Option<PathBuf>,
 }
 
 /// A mode as `--mode` names it: its year or its letter.
@@ -109,8 +120,11 @@ fn start(args: &Args) -> std::io::Result<()> {
         TcpListener::bind(&args.listen)?,
         TcpListener::bind(&args.http)?,
     );
+    let libraries = apl_config::configured(args.config.as_deref(), &args.libs)
+        .map_err(std::io::Error::other)?;
     let service = Service {
         ws: (args.ws_size, args.library.clone(), args.mode),
+        libraries,
         held: Arc::new(AtomicUsize::new(0)),
         limit: args.sessions,
     };

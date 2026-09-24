@@ -1,0 +1,705 @@
+
+Gemini
+New chat
+Search chats
+Images
+Library
+The Mathematical Roots of APL
+IBM 2741 Terminal Speed and Operation
+AI-Discovered Lung Disease Drug
+APL\360 vs. APL\1130: Key Differences
+Verifying Ray Polivka's Union College Classes
+Learning Raymond Smullyan's Combinator Birds
+Setting Up Passkeys in Chromium on Arch Linux
+Repairing Arch Linux Pacman Keys
+Control Bracket Shortcuts in Systems and Tools
+Open-Source Alternatives to Jev
+APL\360 Self-Study Workspace Name
+Understanding Differentiable Operations in AI
+Idiomatic APL Expressions for Logos
+Infineon PSOC Edge E84 Evaluation Board
+FreeToken MoE Memory and Execution
+Best Coding Models for 16GB VRAM
+Understanding Lenses Across Programming Languages
+Global Tech Jobs for Grads
+LinkedIn Technical Carousel PDF Guide
+Xeon Vector Extensions vs. RISC-V
+Low-Cost S-100 Bus Alternative for MCUs and FPGAs
+BeagleBoard PRU Capabilities and Comparison
+Introduction to Machine Learning
+Visualizing CNNs, Training, and Windowing
+Custom PCIe FPGA Accelerator Design
+Visual Symbols and Art of Forth
+Finding Collaborators for Multi-Disciplinary Tech
+Submitting an Ask HN Post
+Choosing Emacs Keybindings for TUI
+IBM OS/360 and OS/VS Lineage
+Comparing Three NVIDIA RTX GPUs
+Solar PPA vs. HELOC Financial Analysis
+NPUs, Hardware Additions, and FPGAs
+OWON Function Generator Model Comparison
+Airport Options for Hyde Park
+Modern Clock Generation Explained
+FPGA Emulation Project Planning
+Vintage Scope Cart Solutions
+Male Pin to Female Socket Adapters
+SkyTrain Connected Hotels: Vancouver & Bangkok
+Python ML and Math Libraries
+Exploring sw-MLPL GitHub Repositories
+Happiest Roofs for Home Insurance
+Conversation with Gemini
+key differences between APL\360 (developed first) and APL\1130 (released first)?
+
+The relationship between APL\360 and APL\1130 is one of the most interesting chapters in early interactive computing history.
+
+Although APL\360 was designed and implemented first (1966), APL\1130 became the first publicly released distribution of APL by IBM in 1968. The core differences between the two systems stem from hardware scale, system architecture, performance optimization, and early language limitations.  
+Wikipedia
+
+Key Technical & Architectural Differences
+Dimension	APL\360 (Developed 1966, Distributed ~1969)	APL\1130 (Implemented 1967, Released 1968)
+Target Hardware	IBM System/360 (Mainframe, e.g., Model 50)	IBM 1130 (16-bit standalone desk/minicomputer)
+System Model	Multi-user time-sharing system with multiple terminals	Dedicated single-user desktop environment
+Primary Delivery Media	Mainframe disk storage / Dedicated OS partition	A 3-inch thick self-loading card deck (Distributed free)
+Operating Model	Took over machine to act as language + timesharing OS	Overlay interpreter relying heavily on disk swaps
+Memory Footprint	Decidedly large (Megabyte-scale mainframes)	Extremely constrained (Ran in as little as 8K 16-bit words)
+Detailed Key Differences
+1. Hardware Scale & Operating Environment
+APL\360 was built for IBM’s flagship mainframes. It wasn't just an interpreter; it served as a complete, custom time-sharing operating system. Multiple users on IBM Selectric terminals could connect to a central machine simultaneously to write and execute code in parallel.  
+Computer History Museum
+
+APL\1130 was created to run on the inexpensive IBM 1130 minicomputer (popular in universities and technical labs). It was built for a single user sitting directly at the computer console.  
+Wikipedia
+
+2. Origin & Implementation Strategy
+APL\360: Written in 360 Assembly language from scratch by Larry Breed, Roger Moore, and Philip Abrams. It directly addressed System/360 architecture and provided high execution speeds for the era.  
+Computer History Museum
+
+APL\1130: Born out of a quick hack known as the "Elsie" project. Larry Breed built an emulator and cross-assembler on top of APL\360 to target a tiny 2K 16-bit word memory limit. Early versions relied heavily on overlays swapping in and out of a 1130 magnetic disk drive, making early execution notoriously slow (e.g., evaluating 2+2 could take several seconds of disk thrashing). Over time, performance-critical routines were rewritten into native 1130 assembly to make it usable.  
+Computer History Museum - Archive Server
++ 1
+
+3. Language & Primitive Feature Sets
+Version 1 Restrictions (APL\1130): Because APL\1130 was rushed out first as a free, unsupported "Type III" software package, Version 1 lacked several core features found in APL\360:  
+Computer History Museum - Archive Server
+
+Variable identifiers were limited to a single alphabetic character (only 52 variable names available).  
+Computer History Museum - Archive Server
+
+Data arrays were limited to rank-2 or lower (matrices and vectors only).  
+Computer History Museum - Archive Server
+
+Numerical data only supported two-word floating-point numbers (character data was stored using float representations).  
+Computer History Museum - Archive Server
+
+Parity (Version 2): After APL\1130 became wildly popular on campuses, IBM funded Version 2 (released in 1969), which added multi-character identifiers and aligned its language dialect much more closely with APL\360.  
+Computer History Museum - Archive Server
+
+4. Terminal & Typing Differences
+APL\360 used standard 1052/2741 terminals equipped with the iconic 88-character APL Selectric typeball (featuring special mathematical notation symbols).
+
+APL\1130 used the console typewriter of the 1130 (which was adapted from a 029 keypunch mechanism). Because it had physical keyboard layout limitations, typing certain APL characters required a tricky "triple-shift" key sequence or overstriking two characters with backspaces.  
+Computer History Museum - Archive Server
++ 1
+
+Why was APL\1130 released first?
+While Ken Iverson and his team developed APL\360 first at IBM Research starting in 1966, IBM kept it for internal use across their own research centers and timesharing networks for several years before distributing it commercially (~1969).  
+Computer History Museum - Archive Server
+
+Meanwhile, IBM's Hartford branch office wanted an interactive language to boost flagging sales of the low-cost IBM 1130. The development team ported the core interpreter logic to the 1130, registered it as a "Type III Program" (free, unsupported software contributed to the IBM user community), and shipped it to customers in late 1968.  
+Computer History Museum - Archive Server
+
+what kind of licensing was there on APL\1130? could users re-distribute it, modify it, document it, derive works from it?
+
+When APL\1130 was distributed in late 1968, the modern concepts of open-source licenses (like GPL or BSD) and formal Software License Agreements (SLAs) did not exist yet.
+
+IBM distributed APL\1130 as an IBM Type-III Library Program (Catalog ID 1130-03.3.001). This specific classification governed what users could and could not do with the code.  
+Wikipedia
+
+Key Rights & Limitations for Users
+1. Redistribution: Permitted (Informally)
+Because IBM provided Type-III programs "as-is" to serve their hardware customers, they did not restrict customers from sharing decks of punched cards or tapes with one another.  
+Wikipedia
+
+Universities, research labs, and SHARE/GUIDE user groups frequently copied, traded, and mailed APL\1130 card decks across institutions.
+
+There was no "license key" or strictly enforced copyright prohibition stopping a user from copying the card deck and giving it to someone else with an IBM 1130.
+
+2. Modification & Source Code Access: Fully Allowed (and Expected)
+Type-III programs were routinely distributed in source code format (or accompanied by full assembly listings and memory maps).
+
+IBM provided no official technical support or bug fixes for Type-III software, so users were expected to inspect, patch, and debug the code themselves.  
+Wikipedia
+
+Users freely modified the APL\1130 assembly code to optimize performance, add custom memory routines, or tweak keypress handshakes for local terminal setups.
+
+3. Documentation: Free to Duplicate & Expand
+IBM provided a standard Program Description Manual with APL\1130.
+
+Users and university departments were completely free to write their own user guides, cheat sheets, and reference manuals.
+
+Much of the early educational material teaching APL to students was independently authored and printed by universities running APL\1130.
+
+4. Derivative Works: Allowed, but IBM Retained Trademarks/Ownership
+Users could build derivative versions of the interpreter or create custom applications and libraries inside it.
+
+However, because software wasn't "unbundled" or strictly patented under standard commercial contracts at the time, derivative works remained informal.  
+CREATe
+
+You could modify APL\1130 to create a customized local dialect, but you could not commercialize or brand it as an official IBM product.
+
+The "Type-III" Catch: No Support or Warranty
+The biggest legal caveat of the Type-III program designation was IBM’s complete disavowal of liability:
+
+"Type III Programs are provided by the IBM Corporation as part of its service to customers... There is no committed maintenance for Type III Programs, nor does IBM make any warranty, expressed or implied, as to the documentation, function, or performance of such programs."  
+Wikipedia
+
+No Warranties: If APL\1130 crashed, corrupted data, or gave an incorrect mathematical result, IBM held zero liability.
+
+No Official Maintenance: Bug fixes were entirely community-driven. If a user fixed a critical bug in the interpreter, they would often mail the patch to IBM’s Program Information Department (PID) or share it directly with other 1130 operators through user group newsletters.
+
+Historical Context: The Pre-Unbundling Era
+Until June 1969, IBM "bundled" hardware, software, and services together—software was effectively treated as a free accessory to sell hardware leases. APL\1130 was created specifically to make the IBM 1130 computer more attractive to academic and engineering customers. As a result, IBM encouraged users to modify, share, and improve APL\1130 to drive hardware usage, operating in a spirit very similar to modern open-source software.  
+Wikipedia
+
+Is it possible to find any source code for any version or derivative of APL\1130? say at bitsavers in digitized card deck or tape formats? I have an 1130 emulator (and I want to build an FPGA 1130 soft cpu) and I want to run APL there without re-writing from scratch if possible. Was HLASM or PL/S used?
+
+Yes, source code and binary card images for APL\1130 exist in digitized form today, and you can use them directly on your IBM 1130 emulator or FPGA soft CPU.
+
+1. Where to Find the Source Code and Artifacts
+The primary hub for IBM 1130 preservation is ibm1130.org (maintained in part by Brian Knittel) and associated Software Preservation Group archives.  
+IBM 1130
+
+Binary Deck Images: You can download pre-packaged APL\1130 card images (often bundled as aplpreview.zip) from ibm1130.org/sim/downloads/. These contain the object decks used to load and run APL\1130 on 1130 emulators (like the SIMH 1130 simulator).  
+IBM 1130
++ 1
+
+Source Code Decks: A physical APL\1130 source deck was preserved and digitized by Robert Marinelli. The digitized card image files are hosted alongside the simulator software downloads at ibm1130.org and archived in computer history software repos.  
+IBM 1130
++ 1
+
+Documentation & Reference: Detailed documentation—including the original IBM APL\1130 User's Manual (Form 1130-03.3.001) and the APL\1130 Primer—is available on Bitsavers.org under /pdf/ibm/1130/.
+
+A Note on Assembling from Source
+While the complete assembly source deck exists, building the load deck completely from raw source can require specific cold-start routines and system parameters. Most retro-computing developers use the binary load decks or pre-built Disk Monitor System (DMS) disk images (which have APL\1130 pre-installed in the user area) to get it running immediately on new CPU cores.  
+IBM 1130
++ 1
+
+2. Languages Used: Was HLASM or PL/S Used?
+Neither HLASM nor PL/S was used.
+
+Why HLASM and PL/S were not used:
+HLASM (High Level Assembler): HLASM is a System/390 and z/Architecture assembler developed much later in IBM's history.
+
+PL/S (Programming Language for Systems): PL/S (and its predecessor PL/360) was designed by IBM exclusively for System/360 mainframes to write operating systems like OS/360 and VM/370.
+
+What was ACTUALLY used for APL\1130:
+APL\1130 was written entirely in IBM 1130 Assembler (1130 Assembly Language).
+
+The Architecture: The IBM 1130 was a lightweight 16-bit word-addressed computer with a single accumulator (ACC), an Extension register (EXT), and three index registers (XR1–XR3) mapped directly into core memory locations /0001–/0003.  
+GitHub
+
+Implementation Details: Because the IBM 1130 typically had only 8K to 16K words (16 KB to 32 KB) of RAM, the interpreter relied on dense assembly code. It made heavy use of memory overlays swapped off the IBM 2310 single-platter disk drive.  
+GitHub
++ 1
+
+The "Elsie" Origins: When Larry Breed originally implemented APL\1130, he started by building an emulator for a internal experimental architecture called "Elsie". Over time, performance-critical routines were replaced line-by-line with native IBM 1130 Assembly.
+
+3. Advice for your FPGA 1130 Soft CPU
+If you are developing an FPGA soft core for the IBM 1130:
+
+Test Core I/O Dependencies: APL\1130 relies heavily on two specific peripherals:
+
+Console Keyboard/Printer (1053-style): APL\1130 uses a specialized character mapping for the Selectric APL typeball. It captures raw keypress codes and outputs mechanical tilt/rotate commands.  
+Rescue 1130
+
+IBM 2310 Disk Controller: APL\1130 uses direct disk sector access for swapping workspace memory and overlays.
+
+Booting Strategy: Instead of attempting to re-assemble the raw source deck, load the pre-built DMS Version 2 disk image (dms.dsk) from SIMH into your FPGA’s storage interface (e.g., SD card mapped to a simulated 2310 disk controller). Booting DMS V2 allows you to execute // XEQ APL right away.
+
+So, was PL/360 ever released, or redistributed on card decks or tape itself? Are there documents for how to program in PL/360?
+
+Yes, PL/360 was released and distributed, though not as an official commercial IBM product.
+
+Designed in 1966 by Niklaus Wirth (who later created Pascal) along with Joseph W. Wells Jr. at Stanford University, PL/360 was a landmark machine-oriented high-level language. It bridged the gap between high-level ALGOL-like syntax and the raw control of System/360 assembly language.
+
+Was PL/360 Redistributed on Card Decks or Tape?
+Format and Access: PL/360 was distributed primarily as punched card decks and magnetic tapes.
+
+User Group Distribution: It was shared widely through academic channels and user group exchanges like SHARE (the IBM user group). Because Wirth designed the language at Stanford, it spread rapidly across universities and computing centers running System/360 hardware.
+
+Modern Availability: Digital card images, tape archives, and source code for the original PL/360 compiler are archived on Bitsavers.org under /pdf/stanford/cs_techreports/ and /bits/IBM/360/. You can also find modern ports, modern cross-compilers, and reconstructed tape images on GitHub and retro-computing repositories.
+
+Are There Documents for Programming in PL/360?
+Yes, several original manuals and technical reports detail the language syntax, instruction mappings, and compiler implementation:
+
+"PL360, A Programming Language for the 360 Computers" (Journal of the ACM, 1968): Niklaus Wirth’s definitive paper introducing the language structure, grammar, and design goals.
+
+Stanford Technical Report CS-TR-66-38 (1966): The initial specification and user manual produced at Stanford University.
+
+Stanford Technical Report CS-TR-68-111 (1968): The updated reference manual describing the finalized version of the language.
+
+Bitsavers Archive: PDF scans of technical notes and compiler listings are preserved on Bitsavers.org (search for Wirth PL360 or look under Stanford Computer Science Technical Reports).
+
+Key Characteristics of PL/360
+PL/360 was designed to provide the control of assembly language with the structural clarity of ALGOL:
+
+Direct Register Control: Unlike C or Pascal, where registers are managed by the compiler, PL/360 explicitly exposes System/360 General Purpose Registers (R0 through R15) and Floating-Point Registers (F0, F2, F4, F6) directly in the syntax.
+
+Structured Flow Control: It replaced GOTO spaghettification with structured statements like IF...THEN...ELSE, WHILE...DO, and FOR.
+
+One-to-One Instruction Mapping: Almost every expression maps directly to one or two System/360 machine instructions, keeping compilation blazingly fast and generation transparent.
+
+Example PL/360 Code Snippet:
+Delphi
+BEGIN
+    INTEGER R1, R2;
+    R1 := 10;
+    R2 := 20;
+    IF R1 < R2 THEN
+        R1 := R1 + R2;
+END.
+PL/360 vs. PL/S and PL/I (Avoiding Common Confusion)
+It is easy to confuse PL/360 with IBM's other "PL" named languages:
+
+Language	Author/Origin	Primary Purpose	Relationship to Machine Architecture
+PL/360	Niklaus Wirth (Stanford)	System programming for S/360	High-level macro assembler exposing hardware registers
+PL/I	IBM (1964)	General application programming	High-level application language (combining FORTRAN & COBOL)
+PL/S	IBM Internal (1968)	OS/360 system programming	IBM-proprietary systems language (inspired by PL/I)
+Did PL/360 have procedural macros?
+
+No, the original PL/360 designed by Niklaus Wirth did not have procedural macros (or compile-time metaprogramming macros in the modern sense like those in Rust or PL/I).  
+Wikipedia
+
+Wirth deliberately kept PL/360's design lean and single-pass to ensure ultra-fast compilation speeds and total transparency between the written source code and the generated System/360 machine instructions.  
+Pascal for small machines
+
+PL/360 handled code abstraction and machine-level definition through three specific features instead:
+
+1. FUNCTION Statements (Inline Instruction Definitions)
+Rather than a macro processor, PL/360 offered a built-in mechanism called FUNCTION statements to generate inline, arbitrary System/360 machine instructions. This allowed programmers to define un-implemented or custom opcodes without needing an assembler or macro preprocessor:  
+Pascal for small machines
+
+Delphi
+/* Define the UNPK (Unpack) and EX (Execute) opcodes manually */
+FUNCTION UNPK = #F3;
+FUNCTION EX   = #44;
+
+/* Call them directly with registers or memory operands */
+UNPK(10, #F300);
+EX(R1, MVC(0, lines, buffer));
+2. Standard Procedures (PROCEDURE)
+PL/360 supported standard subroutines (PROCEDURE), but because it was a structured assembly language, these mapped directly to low-level linkage conventions:  
+Pascal for small machines
+
+Parameters were passed manually through registers.
+
+Call and return sequences emitted simple branch-and-link (BALR) or branch-on-condition (BCR) machine instructions.
+
+3. How Macro Functionality Was Handled
+For programmers who desperately needed macro expansions or metaprogramming while working in PL/360, two external workarounds were commonly used:
+
+Preprocessors: Projects using PL/360 that required complex code generation ran external macro preprocessors (such as general-purpose macro tools like TTM or STAGE2) over the source files before passing the generated .PL360 text into the PL/360 compiler.
+
+Standard IBM Assembler (HLASM/BAL): Programmers who needed heavy macro metaprogramming (e.g., conditional assembly, string manipulation at compile-time) typically reverted to standard IBM High-Level Assembler (HLASM/BAL), which possessed one of the most powerful procedural macro processors of that era.
+
+Summary
+Niklaus Wirth explicitly avoided macro processors in PL/360 because he believed complex compile-time macro expansion obscured what the hardware was actually doing—a philosophy he maintained throughout his career when designing ALGOL W, Pascal, Modula-2, and Oberon.  
+Pascal for small machines
+
+What years were the IBM 5100, 5110, and 5120 released?
+
+The release years for the IBM 5100 series desktop/portable computer family are:
+
+IBM 5100: Released in September 1975  
+bitsavers.trailing-edge.com
+
+IBM 5110: Released in January 1978  
+Wikipedia
+
+IBM 5120: Released in February 1980  
+Wikipedia
+
+(Note: The series eventually led up to the famous IBM 5150, which was launched in August 1981 and became better known simply as the original IBM PC.)
+
+APL2 was released when?
+
+IBM APL2 was first commercially released in 1984.  
+Wikipedia
+
+Key Milestones in APL2's History:
+Internal Development (1971–1983): Led by Jim Brown at IBM, development on the successor to APL\360 began in the early 1970s. It was initially tested internally and made available as an experimental product (IUP - Installed User Program) in the late 1970s and early 1980s.  
+Wikipedia
+
+First Commercial Release (1984): IBM officially launched APL2 for mainframes (VM/CMS and MVS) in 1984 as the official replacement for previous IBM APL systems.  
+Wikipedia
+
+Expanded Platforms (1990s): IBM expanded APL2 across workstation platforms, releasing versions for OS/2, AIX (UNIX), and Windows throughout the 1990s.  
+www.edm2.com
+
+The major innovation of APL2 over earlier versions (like APL\360 or APLSV) was its support for nested, non-rectangular arrays, allowing array elements to contain other arrays of arbitrary depth.  
+Wikipedia
+
+How is the domino operator in APLSV used to solve a system of algebraic expressions?
+
+The Domino operator (⌹), introduced with APLSV in 1973, is APL's dedicated primitive operator for matrix inversion and solving systems of linear equations.
+
+When used as a dyadic operator (with both a left and right argument), it directly solves the matrix equation A⋅x=B for the unknown vector or matrix x.
+
+Syntax and Equation Mapping
+In standard algebra, a system of linear equations is represented as:
+
+Ax=B
+Where:
+
+A is the coefficient matrix (known values on the left side of the variables).
+
+B is the constant vector (known values on the right side of the equals sign).
+
+x is the unknown variable vector we are solving for.
+
+To solve for x in APLSV, you use the dyadic syntax:
+
+Code snippet
+X ← B ⌹ A
+Note on Argument Order: The right side constants vector B goes on the left of ⌹, and the coefficient matrix A goes on the right. Think of B ⌹ A as conceptually performing A 
+−1
+ B (or B÷A).
+
+Step-by-Step Example
+Consider the following system of linear expressions:
+
+2x+1y−1z
+−3x−1y+2z
+−2x+1y+2z
+​
+  
+=8
+=−11
+=−3
+​
+ 
+1. Define the Coefficient Matrix (A)
+Extract the coefficients into a 3×3 matrix:
+
+Code snippet
+      A ← 3 3 ⍴ 2 1 ¯1  ¯3 ¯1 2  ¯2 1 2
+2. Define the Constant Vector (B)
+Extract the right-hand constants into a 3-element vector:
+
+Code snippet
+      B ← 8 ¯11 ¯3
+3. Solve for x,y,z using Domino (⌹)
+Code snippet
+      B ⌹ A
+2 3 ¯1
+The result tells us:
+
+x=2
+
+y=3
+
+z=−1
+
+Key Features of Monadic vs. Dyadic Domino
+Form	Expression	Meaning	Mathematical Equivalent
+Dyadic	B ⌹ A	Solves Ax=B for x	x=A 
+−1
+ B (using optimized algorithms)
+Monadic	⌹ A	Inverts matrix A	A 
+−1
+ 
+Why use B ⌹ A instead of B +.× ⌹A?
+While you can technically invert the matrix explicitly and perform matrix multiplication (B +.× ⌹A), using dyadic B ⌹ A is both faster and numerically more accurate:
+
+Numerical Stability: Dyadic ⌹ uses Gaussian elimination / QR factorization techniques directly rather than computing explicit inverses, avoiding floating-point precision loss.
+
+Overdetermined Systems (Least Squares): If A is non-square (more equations than unknowns, m>n), dyadic ⌹ automatically calculates the least-squares solution using the Moore-Penrose pseudoinverse.
+
+What ML operations can be concisely done with APLVS operators. e.g., how could an APL program "learn" a winning or draw strategy for tic-tac-toe
+
+APL's array-first paradigm makes mathematical transformations on multi-dimensional data extraordinarily compact. Operations that require nested loops or tensor libraries in Python translate into single-line APL expressions.
+
+Machine Learning Operations via Native APL Operators
+Because primitive operations implicitly loop over arrays of any dimension (rank), fundamental linear algebra and neural network building blocks collapse into brief expressions:
+
+ML Operation	APL Expression	Mechanism / Explanation
+Matrix Multiplication / Linear Layer	W +.× X	Inner product: multiplies and sums along matching dimensions (W⋅X).
+Dot Product / Similarity	A +.× B	Inner product on 1D vectors (A⋅B).
+Euclidean Distance	(.5)*⍨ +/ (A - B)*2	Sum of squared differences powered by 0.5 ( 
+∑(A−B) 
+2
+ 
+
+​
+ ).
+Cosine Similarity	(A +.× B) ÷ (⌹A) × (⌹B)	Normalized inner product.
+ReLU Activation	0 ⌈ X	Element-wise maximum between 0 and each array value.
+Softmax	E ÷ +/ E ← * X	Exponentiates array, assigns to E, and divides by total sum ( 
+∑e 
+x
+ 
+e 
+x
+ 
+​
+ ).
+Mean Squared Error (MSE)	(+/ (Y - Ŷ)*2) ÷ ⍴Y	Sum of squared errors divided by vector length ( 
+N
+1
+​
+ ∑(y− 
+y
+^
+​
+ ) 
+2
+ ).
+One-Hot Encoding	X ∘.= ⍳N	Outer product equality creating a binary indicator matrix for vector X over N classes.
+Linear Regression / Weights Solve	Y ⌹ X	Solves X⋅w=Y via least-squares pseudoinverse using the domino operator (⌹).
+Learning Tic-Tac-Toe via Q-Learning in APL
+Using Q-learning (Temporal Difference Reinforcement Learning), an APL agent can learn an optimal play or draw strategy.
+
+We represent the state board S as a length-9 vector (0 = Empty, 1 = X, ¯1 = O), with 9 potential action values per state stored in a Q-table Q.
+
+1. Checking Valid Moves
+Given a state vector S, valid empty spots are found via a boolean mask:
+
+Code snippet
+      S ← 1 0 ¯1  0 0 1  0 ¯1 0   ⍝ Board state
+      S = 0                        ⍝ Valid move mask
+1 0 0  1 1 0  1 0 1
+2. Action Selection (Epsilon-Greedy)
+To balance exploration (random valid move) and exploitation (choosing the max Q-value among valid moves):
+
+Mask invalid actions with negative infinity:
+
+Code snippet
+ValidQ ← Q[S_idx;] - 1E9 × (S ≠ 0)
+Exploit (Pick best move): Find index of the maximum Q-value:
+
+Code snippet
+Action ← ValidQ ⍳ ⌈/ ValidQ
+3. Win/Draw Evaluation via Inner Product
+Rather than writing multiple IF conditions for rows, columns, and diagonals, APL evaluates game states in a single line using a 8×9 winning lines matrix M:
+
+Code snippet
+⍝ 8 lines × 9 board positions matrix M
+M ← 8 9 ⍴ 1 1 1 0 0 0 0 0 0  0 0 0 1 1 1 0 0 0  0 0 0 0 0 0 1 1 1  ⍝ Rows
+          1 0 0 1 0 0 1 0 0  0 1 0 0 1 0 0 1 0  0 0 1 0 0 1 0 0 1  ⍝ Columns
+          1 0 0 0 1 0 0 0 1  0 0 1 0 1 0 1 0 0                     ⍝ Diagonals
+
+⍝ Check Win Condition for Player 1:
+WinP1 ← 3 ∊ M +.× S
+M +.× S calculates the line sums across all 8 winning paths simultaneously. If any result equals 3, Player 1 (1) won; if ¯3, Player 2 (¯1) won.
+
+4. The Q-Learning Bellman Update
+When a transition occurs from state S to S 
+′
+  receiving reward R:
+
+Q(S,A)←Q(S,A)+α⋅[R+γ⋅ 
+a 
+′
+ 
+max
+​
+ Q(S 
+′
+ ,a 
+′
+ )−Q(S,A)]
+In APL, updating state index i and action a with learning rate α=0.1 and discount factor γ=0.9:
+
+Code snippet
+⍝ Max future reward in next state S'
+MaxQNext ← ⌈/ Q[S_next_idx;] × (S_next = 0)
+
+⍝ TD Error computation
+TD ← R + (0.9 × MaxQNext) - Q[i; a]
+
+⍝ Single Bellman Update
+Q[i; a] ← Q[i; a] + 0.1 × TD
+By training through self-play (e.g., repeating game episodes using S_next loops), the 2D Q-matrix updates iteratively. Over several thousand iterations, Q converges, ensuring the agent always selects optimal actions that force a win or guarantee a draw.
+
+can you write the function (with helper functions as needed) to train on tic-tac-toe and then play.
+
+Below is a complete, self-contained APL workspace program that trains a Q-learning agent through self-play and lets you play against it directly in the session.
+
+1. The APL Functions
+Copy and paste these function definitions into your APL workspace.
+
+Core Helper Functions
+Code snippet
+⍝ 8 Lines × 9 Positions Matrix for Win Checking
+WIN_LINES ← 8 9 ⍴ 1 1 1 0 0 0 0 0 0  0 0 0 1 1 1 0 0 0  0 0 0 0 0 0 1 1 1  1 0 0 1 0 0 1 0 0  0 1 0 0 1 0 0 1 0  0 0 1 0 0 1 0 0 1  1 0 0 0 1 0 0 0 1  0 0 1 0 1 0 1 0 0
+
+∇ R ← CHECK_WIN S
+  ⍝ Returns 1 (X won), ¯1 (O won), 0.5 (Draw), or 0 (Game ongoing)
+  L ← WIN_LINES +.× S
+  →(3 ∊ L)/X_WON
+  →(¯3 ∊ L)/O_WON
+  →(~0 ∊ S)/DRAW
+  R ← 0 ⋄ →0
+X_WON: R ← 1 ⋄ →0
+O_WON: R ← ¯1 ⋄ →0
+DRAW: R ← 0.5
+∇
+
+∇ R ← PRINT_BOARD S
+  ⍝ Formats a 9-element vector into a 3x3 display grid
+  CHARS ← 'O . X'
+  R ← 3 3 ⍴ CHARS[S + 2]
+∇
+Training Function (Self-Play Q-Learning)
+Code snippet
+∇ Q ← TRAIN_TTT EPISODES;E;S;TURN;OVER;VALIDS;Q_S;A;MAX_NEXT;R;NEXT_S;TD;LR;GAMMA;EPS
+  ⍝ Trains a Q-table over EPISODES games of self-play
+  Q ← (3*9) 9 ⍴ 0             ⍝ Initialize Q-table: 19,683 states × 9 actions
+  POWERS ← 3 * 0 1 2 3 4 5 6 7 8
+  LR ← 0.1 ⋄ GAMMA ← 0.9 ⋄ EPS ← 0.2
+
+  E ← 1
+LOOP:
+  →(E > EPISODES)/DONE
+  S ← 9 ⍴ 0                  ⍝ Reset board (0 = Empty, 1 = X, ¯1 = O)
+  TURN ← 1                   ⍝ 1 = X's turn, ¯1 = O's turn
+  OVER ← 0
+
+GAME_LOOP:
+  →(OVER ≠ 0)/NEXT_EPISODE
+  S_IDX ← 1 + POWERS +.× (S + 1)
+  VALIDS ← (S = 0) / ⍳9
+
+  ⍝ Epsilon-Greedy Action Selection
+  →((?1000) ÷ 1000 < EPS)/RANDOM
+  Q_S ← Q[S_IDX;]
+  A ← VALIDS[⊃⍋Q_S[VALIDS]]  ⍝ Choose valid move with highest Q-value
+  →PLAY_MOVE
+
+RANDOM:
+  A ← VALIDS[?⍴VALIDS]       ⍝ Pick random valid move
+
+PLAY_MOVE:
+  NEXT_S ← S
+  NEXT_S[A] ← TURN
+  OVER ← CHECK_WIN NEXT_S
+  
+  NEXT_S_IDX ← 1 + POWERS +.× (NEXT_S + 1)
+
+  ⍝ Compute Reward & TD Update
+  →(OVER = TURN)/WIN_REWARD
+  →(OVER = (¯1 × TURN))/LOSS_REWARD
+  →(OVER = 0.5)/DRAW_REWARD
+  R ← 0
+  MAX_NEXT ← ⌈/ Q[NEXT_S_IDX; (NEXT_S = 0) / ⍳9]
+  →UPDATE
+
+WIN_REWARD: R ← 1 ⋄ MAX_NEXT ← 0 ⋄ →UPDATE
+LOSS_REWARD: R ← ¯1 ⋄ MAX_NEXT ← 0 ⋄ →UPDATE
+DRAW_REWARD: R ← 0.2 ⋄ MAX_NEXT ← 0
+
+UPDATE:
+  TD ← R + (GAMMA × MAX_NEXT) - Q[S_IDX; A]
+  Q[S_IDX; A] ← Q[S_IDX; A] + LR × TD
+
+  S ← NEXT_S
+  TURN ← ¯1 × TURN
+  →GAME_LOOP
+
+NEXT_EPISODE:
+  E ← E + 1
+  →LOOP
+
+DONE:
+∇
+Play Interactive Game Function
+Code snippet
+∇ PLAY_TTT Q;S;TURN;OVER;S_IDX;VALIDS;A;INPUT;POWERS
+  ⍝ Play interactively against the trained Q-table
+  POWERS ← 3 * 0 1 2 3 4 5 6 7 8
+  S ← 9 ⍴ 0
+  TURN ← 1                   ⍝ Player = X (1), Trained AI = O (¯1)
+  
+GAME:
+  PRINT_BOARD S
+  OVER ← CHECK_WIN S
+  →(OVER ≠ 0)/END_GAME
+
+  →(TURN = 1)/HUMAN_TURN
+
+AI_TURN:
+  ⎕ ← 'AI is thinking...'
+  S_IDX ← 1 + POWERS +.× (S + 1)
+  VALIDS ← (S = 0) / ⍳9
+  Q_S ← Q[S_IDX;]
+  
+  ⍝ Pick best valid action for O (min value, since O optimizes for negative outcome)
+  A ← VALIDS[⊃⍏Q_S[VALIDS]]
+  S[A] ← ¯1
+  TURN ← 1
+  →GAME
+
+HUMAN_TURN:
+  ⎕ ← 'Enter move (1-9, top-left to bottom-right):'
+  INPUT ← ⎕
+  →(S[INPUT] ≠ 0)/INVALID
+  S[INPUT] ← 1
+  TURN ← ¯1
+  →GAME
+
+INVALID:
+  ⎕ ← 'Invalid spot! Try again.'
+  →HUMAN_TURN
+
+END_GAME:
+  →(OVER = 1)/X_WINS
+  →(OVER = ¯1)/O_WINS
+  ⎕ ← 'It is a draw!' ⋄ →0
+X_WINS:
+  ⎕ ← 'You Win!' ⋄ →0
+O_WINS:
+  ⎕ ← 'AI Wins!'
+∇
+2. How to Run & Play
+Step 1: Train the Agent
+Train the Q-table for 10,000 self-play iterations. This generates state transitions and populates Q_TABLE:
+
+Code snippet
+      Q_TABLE ← TRAIN_TTT 10000
+Step 2: Start a Game
+Call PLAY_TTT using the generated table:
+
+Code snippet
+      PLAY_TTT Q_TABLE
+. . .
+. . .
+. . .
+Enter move (1-9, top-left to bottom-right):
+      5
+. . .
+. X .
+. . .
+AI is thinking...
+O . .
+. X .
+. . .
+Enter move (1-9, top-left to bottom-right):
+How the APL Code Works
+State Space Encoding (POWERS +.× (S + 1)): Tic-Tac-Toe has 3 
+9
+ =19,683 theoretically possible board configurations. We convert any 9-element state vector S∈{−1,0,1} into a single unique index row in the Q-table via base-3 dot product encoding.
+
+Win State Inner Product (WIN_LINES +.× S): Checks all 8 win lines simultaneously without conditional logic. If any resulting element equals 3 or -3, a winner is identified immediately.
+
+Array Index Masking ((S = 0) / ⍳9): Extracts valid unoccupied positions by masking array indices directly without running a FOR loop.
+
+Where would you like to go next?
+
+Add a visual display of Q-values for the current board state
+
+Optimize training speed using parallel state matrix updates
+
+
+
+Your Michael A. Wright chats aren’t used to improve our models. Gemini is AI and can make mistakes. Your privacy & GeminiOpens in a new window
+

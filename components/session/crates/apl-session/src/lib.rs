@@ -9,5 +9,6 @@ mod session;
 pub use apl_eval::{
     Console, Files, Host, INDENT, Memory, Mode, QUOTA, Shelf, Shown, Store, system,
 };
+pub use apl_libraries::{Added, Source};
 pub use reply::Reply;
 pub use session::Session;

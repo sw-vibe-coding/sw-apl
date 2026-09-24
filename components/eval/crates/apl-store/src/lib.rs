@@ -13,4 +13,4 @@ mod store;
 
 pub use files::Files;
 pub use memory::{Memory, READ_ONLY, Shelf};
-pub use store::{SUFFIX, Store};
+pub use store::{Library, SUFFIX, Store};

@@ -7,9 +7,11 @@
 
 mod dialect;
 mod help;
+mod libs;
 
 pub use dialect::dialect;
 pub use help::help;
+pub use libs::libs;
 
 use apl_eval::Workspace;
 
@@ -22,9 +24,10 @@ const INCORRECT: &str = "INCORRECT COMMAND";
 pub fn command(ws: &Workspace, name: &str, rest: &[&str]) -> Option<Vec<String>> {
     Some(match (name, rest) {
         ("DIALECT", []) => vec![dialect(ws.mode).to_string()],
+        ("LIBS", []) => libs(&*ws.store),
         ("HELP", []) => help(ws.mode, None),
         ("HELP", [name]) => help(ws.mode, Some(name)),
-        ("DIALECT" | "HELP", _) => vec![INCORRECT.to_string()],
+        ("DIALECT" | "HELP" | "LIBS", _) => vec![INCORRECT.to_string()],
         _ => return None,
     })
 }

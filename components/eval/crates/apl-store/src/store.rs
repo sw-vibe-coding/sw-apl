@@ -10,11 +10,24 @@ use std::fmt::Debug;
 /// apart from it.
 pub const SUFFIX: &str = ".apl.ws";
 
+/// One library a store keeps: its number, the name `)LIBS` gives it,
+/// and where it comes from.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Library {
+    /// The number `)LIB` and `)LOAD` take.
+    pub number: usize,
+    /// Its name, as `)LIBS` lists it: USER, CORE, or the configured one.
+    pub name: String,
+    /// Where it comes from: a directory, a URL, a browser's storage.
+    pub place: String,
+}
+
 /// Somewhere workspaces are kept, by library number and name.
 ///
 /// Library 0 is yours, where `)SAVE` writes; library 1 is the public
-/// one sw-apl ships. There is no other, and a store says so by
-/// finding nothing there and refusing to write.
+/// one sw-apl ships; 2 and up are configured, and read-only. A store
+/// says which it keeps; one it does not keep finds nothing and
+/// refuses to write.
 ///
 /// Errors are the words to print after `NOT SAVED, `, which is why
 /// they are owned strings: a browser refusing to keep something says
@@ -42,4 +55,18 @@ pub trait Store: Debug {
     /// no names either way, and the distinction is drawn above this,
     /// where a library number is checked before it is used.
     fn list(&self, library: usize) -> Vec<String>;
+
+    /// The libraries this store keeps, by number. Every store keeps 0
+    /// and 1; one that keeps more says so.
+    fn libraries(&self) -> Vec<Library> {
+        let library = |number, name: &str, place: &str| Library {
+            number,
+            name: name.to_string(),
+            place: place.to_string(),
+        };
+        vec![
+            library(0, "USER", "yours"),
+            library(1, "CORE", "what sw-apl ships"),
+        ]
+    }
 }

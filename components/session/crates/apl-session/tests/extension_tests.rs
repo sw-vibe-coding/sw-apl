@@ -2,7 +2,7 @@
 //! system commands, never quad names, so no program or saved
 //! workspace can come to depend on them.
 
-use apl_session::{Mode, Session};
+use apl_session::{Added, Files, Mode, Session, Source};
 
 fn in_mode(mode: Mode) -> Session {
     let mut s = Session::default();
@@ -35,9 +35,9 @@ fn dialect_does_not_switch() {
 }
 
 /// Every command each mode has, historical and sw-apl's own.
-const SHARED: [&str; 18] = [
+const SHARED: [&str; 19] = [
     "CLEAR", "WSID", "COPY", "PCOPY", "ERASE", "SAVE", "LOAD", "DROP", "LIB", "FNS", "VARS", "SI",
-    "SIV", "SYMBOLS", "OFF", "CONTINUE", "DIALECT", "HELP",
+    "SIV", "SYMBOLS", "OFF", "CONTINUE", "DIALECT", "HELP", "LIBS",
 ];
 const ONLY_A: [&str; 6] = ["ORIGIN", "DIGITS", "WIDTH", "GROUP", "GRP", "GRPS"];
 
@@ -135,4 +135,58 @@ fn every_help_page_tries_a_command_its_modes_have() {
             }
         }
     }
+}
+
+/// A session whose library 2 is the fixture standing in for a
+/// repository of workspaces kept elsewhere.
+fn with_extended(mode: Mode) -> Session {
+    let root = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../../..");
+    let dir = root.join("tests/libs/extended");
+    let mut s = in_mode(mode);
+    let place = dir.to_string_lossy().to_string();
+    let store = Added::new(Box::new(Files(root.clone())));
+    s.ws.store = Box::new(store.with(2, "EXTENDED", &place, Source::Dir(dir)));
+    s
+}
+
+#[test]
+fn libs_lists_the_libraries_a_session_reaches() {
+    assert_eq!(
+        out(&mut in_mode(Mode::A), ")LIBS"),
+        vec!["0 USER", "1 CORE"]
+    );
+    let mut s = with_extended(Mode::B);
+    assert_eq!(out(&mut s, ")LIBS"), vec!["0 USER", "1 CORE", "2 EXTENDED"]);
+    assert_eq!(out(&mut s, ")LIBS 2"), vec!["INCORRECT COMMAND"]);
+}
+
+#[test]
+fn a_configured_library_is_listed_and_loaded_by_mode() {
+    let mut a = with_extended(Mode::A);
+    assert_eq!(
+        out(&mut a, ")LIB 2"),
+        vec!["GREET"],
+        "(B)'s own is not listed"
+    );
+    let mut b = with_extended(Mode::B);
+    assert_eq!(out(&mut b, ")LIB 2"), vec!["GREET", "NEWER"]);
+    assert!(out(&mut b, ")LOAD 2 GREET")[0].starts_with("SAVED "));
+    assert_eq!(out(&mut b, "HELLO"), vec!["HELLO FROM LIBRARY 2"]);
+    assert!(out(&mut b, ")LOAD 2 NEWER")[0].starts_with("SAVED "));
+    assert_eq!(out(&mut b, "RUN"), vec!["5"]);
+    assert_eq!(out(&mut a, ")LOAD 2 NEWER"), vec!["WS NOT FOUND"]);
+}
+
+#[test]
+fn a_configured_library_is_read_only_and_others_are_not_there() {
+    let mut s = with_extended(Mode::A);
+    out(&mut s, ")LOAD 2 GREET");
+    assert_eq!(out(&mut s, ")DROP 2 GREET"), vec!["INCORRECT COMMAND"]);
+    let copied = out(&mut with_extended(Mode::A), ")COPY 2 GREET HELLO");
+    assert!(copied[0].starts_with("SAVED "), "{copied:?}");
+    assert_eq!(out(&mut s, ")LIB 3"), vec!["IMPROPER LIBRARY REFERENCE"]);
+    assert_eq!(
+        out(&mut s, ")LOAD 3 GREET"),
+        vec!["IMPROPER LIBRARY REFERENCE"]
+    );
 }

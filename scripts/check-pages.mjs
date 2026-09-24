@@ -66,7 +66,8 @@ function host(dir, isolated = false, prefix = '/') {
     }
     const held = serving.get(path);
     if (held !== undefined) {
-      res.writeHead(200, { 'content-type': 'text/javascript', ...extra });
+      const type = path.endsWith('.json') ? 'application/json' : 'text/javascript';
+      res.writeHead(200, { 'content-type': type, ...extra });
       return res.end(held);
     }
     const file = join(dir, path.endsWith('/') ? `${path}index.html` : path);
@@ -74,6 +75,9 @@ function host(dir, isolated = false, prefix = '/') {
       const body = await readFile(file);
       res.writeHead(200, {
         'content-type': TYPES[extname(file)] ?? 'application/octet-stream',
+        // A static host of a library, as GitHub Pages and raw GitHub
+        // answer: any origin may fetch it.
+        'access-control-allow-origin': '*',
         ...extra,
       });
       res.end(body);
@@ -95,6 +99,11 @@ try {
 
 const CHROME = process.env.CHROME_PATH
   ?? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+
+// The published page names its libraries in libraries.json, which
+// reaches GitHub; the checks here stand a local one in for it, and
+// none at all except where a library is what is checked.
+serving.set('/libraries.json', '[]');
 
 const server = await host(ROOT);
 const url = `http://127.0.0.1:${server.address().port}/`;
@@ -786,8 +795,8 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   const inB = await board(b);
   check("(B)'s board has a CMD mode, the 5110's key-front legends",
     inB.tabs.includes('cmd') && inB.cmd.includes('⎕NC') && inB.cmd.includes('⍎'), JSON.stringify(inB));
-  check("and its commands are (B)'s: TTTML, and no )ORIGIN",
-    inB.commands.includes(')LOAD 1 TTTML') && !inB.commands.some((c) => c.startsWith(')ORIGIN')),
+  check("and its commands are (B)'s: )LIBS, and no )ORIGIN",
+    inB.commands.includes(')LIBS') && !inB.commands.some((c) => c.startsWith(')ORIGIN')),
     JSON.stringify(inB.commands));
   await b.click('#board [data-mode=cmd]');
   await b.click('#board .list[data-kind=cmd] .entry[title="⍎"]');
@@ -799,8 +808,44 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   const inA = await board(a);
   check("(A)'s board has no CMD mode, and has )ORIGIN",
     !inA.tabs.includes('cmd') && inA.commands.some((c) => c.startsWith(')ORIGIN'))
-      && !inA.commands.includes(')LOAD 1 TTTML'), JSON.stringify(inA));
+      && inA.commands.includes(')LIBS'), JSON.stringify(inA));
   await a.context().close();
+}
+
+// 11c. A library from another repository, fetched by URL: library 2,
+//     EXTENDED, from a second server standing in for the owner's
+//     workspaces repository on GitHub. It is listed, loaded and run,
+//     by mode; one that will not load is said so, and the session
+//     starts without it.
+{
+  const other = await host('tests/libs/extended');
+  const index = `http://127.0.0.1:${other.address().port}/library.json`;
+  serving.set('/libraries.json', JSON.stringify([
+    { number: 2, name: 'EXTENDED', index },
+    { number: 3, name: 'NOPE', index: `http://127.0.0.1:${other.address().port}/missing.json` },
+  ]));
+  const b = await visit();
+  await send(b, ')LIBS');
+  const said = await paper(b);
+  check('a library that will not load is said so', said.includes('LIBRARY 3 (NOPE) COULD NOT BE LOADED.'),
+    JSON.stringify(said.slice(0, 200)));
+  check(')LIBS lists 0, 1 and the library fetched as 2',
+    said.trimEnd().endsWith('0 USER\n1 CORE\n2 EXTENDED'), JSON.stringify(said.slice(-60)));
+  await send(b, ')LIB 2');
+  check("(B)'s )LIB 2 lists what runs in (B)", (await paper(b)).trimEnd().endsWith('GREET\nNEWER'),
+    JSON.stringify((await paper(b)).slice(-40)));
+  await send(b, ')LOAD 2 GREET');
+  await send(b, 'HELLO');
+  check(')LOAD 2 loads it, and it runs', (await paper(b)).trimEnd().endsWith('HELLO FROM LIBRARY 2'),
+    JSON.stringify((await paper(b)).slice(-60)));
+  await b.context().close();
+  const a = await visitIn('A');
+  await send(a, ')LIB 2');
+  check("(A)'s )LIB 2 lists only what runs in (A)", (await paper(a)).trimEnd().endsWith('GREET'),
+    JSON.stringify((await paper(a)).slice(-40)));
+  await a.context().close();
+  other.close();
+  serving.set('/libraries.json', '[]');
 }
 
 // 12. Installable: the manifest a browser reads before it offers to

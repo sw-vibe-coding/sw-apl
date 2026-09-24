@@ -43,6 +43,9 @@ pub struct Service {
     /// The workspace size in bytes, the directory the libraries are
     /// under, and the mode, as the CLI takes them.
     pub ws: (usize, PathBuf, Mode),
+    /// The libraries beyond 0 and 1, from `--lib` and the
+    /// configuration file.
+    pub libraries: Vec<apl_config::LibrarySpec>,
     /// How many sessions are held right now.
     pub held: Arc<AtomicUsize>,
     /// How many may be.
@@ -102,6 +105,9 @@ fn hold(socket: TcpStream, service: &Service, over: Dialled) -> io::Result<()> {
         },
     };
     let (quota, root, mode) = service.ws.clone();
-    let store = Box::new(Files(root));
+    let store = Box::new(apl_config::attach(
+        Box::new(Files(root)),
+        &service.libraries,
+    ));
     serve(link, Host { quota, store, mode })
 }

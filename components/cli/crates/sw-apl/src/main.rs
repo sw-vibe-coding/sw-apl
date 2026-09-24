@@ -63,6 +63,17 @@ pub struct Args {
     /// the workspaces that run in it.
     #[arg(long, value_name = "MODE", default_value = "70", value_parser = mode)]
     pub mode: Mode,
+
+    /// A library beyond 0 and 1: its number, the directory of its
+    /// workspaces, and the name )LIBS gives it. May be given again for
+    /// another. Read-only.
+    #[arg(long = "lib", value_name = "N=DIR[,NAME]", value_parser = apl_config::parse_lib)]
+    pub libs: Vec<apl_config::LibrarySpec>,
+
+    /// The configuration file to read libraries from, in place of
+    /// ./sw-apl.toml or the user's sw-apl/config.toml.
+    #[arg(long, value_name = "FILE")]
+    pub config: Option<PathBuf>,
 }
 
 /// A mode as `--mode` names it: its year or its letter.
@@ -70,12 +81,23 @@ fn mode(word: &str) -> Result<Mode, String> {
     Mode::parse(word).ok_or_else(|| format!("{word} is not a mode: 70 or 75"))
 }
 
+/// The libraries: `--library`'s 0 and 1, and any `--lib` and the
+/// configuration file add.
+fn store(args: &Args) -> Result<Box<dyn apl_session::Store>, String> {
+    let libraries = apl_config::configured(args.config.as_deref(), &args.libs)?;
+    let files = Box::new(Files(args.library.clone()));
+    Ok(Box::new(apl_config::attach(files, &libraries)))
+}
+
 fn main() -> ExitCode {
     let args = Args::parse();
     let echo = !args.no_echo;
+    let Ok(store) = store(&args).map_err(|err| eprintln!("sw-apl: {err}")) else {
+        return ExitCode::FAILURE;
+    };
     let ws = Host {
         quota: args.ws_size,
-        store: Box::new(Files(args.library)),
+        store,
         mode: args.mode,
     };
     let outcome = match args.file {

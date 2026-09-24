@@ -24,6 +24,12 @@ Options:
           
           [default: 70]
 
+      --lib <N=DIR[,NAME]>
+          A library beyond 0 and 1: its number, the directory of its workspaces, and the name )LIBS gives it. May be given again for another. Read-only
+
+      --config <FILE>
+          The configuration file to read libraries from, in place of ./sw-apl.toml or the user's sw-apl/config.toml
+
   -h, --help
           Print help (see a summary with '-h')
 

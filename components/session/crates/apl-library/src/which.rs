@@ -1,29 +1,27 @@
 //! Which workspace a command means, and what to say when there is
 //! not one.
 
-use apl_eval::Workspace;
+use apl_eval::{Store, Workspace};
 use apl_wsfile::{DIRECTIVE, definitions, plain};
 
 use crate::name::valid;
 use crate::report::{IMPROPER_LIBRARY, INCORRECT, OBJECT_NOT_FOUND, WS_NOT_FOUND};
 
-/// The library a number names. Library 0 is yours, where `)SAVE`
-/// writes; library 1 is the public one sw-apl ships. `None` when
-/// there is no such library, which is a different thing from an
-/// empty one.
-///
-/// Which libraries exist is the interpreter's rule and not the
-/// store's: a browser and a filesystem keep the same two.
+/// The library a number names, if `store` keeps one. Library 0 is
+/// yours, where `)SAVE` writes; library 1 is the public one sw-apl
+/// ships; 2 and up are configured. `None` when there is no such
+/// library, which is a different thing from an empty one.
 #[must_use]
-pub fn library(number: usize) -> Option<usize> {
-    match number {
-        0 | 1 => Some(number),
-        _ => None,
-    }
+pub fn library(store: &dyn Store, number: usize) -> Option<usize> {
+    store
+        .libraries()
+        .iter()
+        .any(|l| l.number == number)
+        .then_some(number)
 }
 
 /// A library and a name, and how many words of the command they
-/// took.
+/// took. The number is not yet checked against a store.
 pub struct Named {
     /// The library number, 0 when the command did not give one.
     pub library: usize,
@@ -45,8 +43,7 @@ pub struct Named {
 ///
 /// # Errors
 /// INCORRECT COMMAND when no name was given or what was given is
-/// not a name, and IMPROPER LIBRARY REFERENCE when the number names
-/// no library.
+/// not a name.
 pub fn named(rest: &[&str]) -> Result<Named, &'static str> {
     let (number, name, used) = match rest {
         [number, name, ..] if number.parse::<usize>().is_ok() => {
@@ -58,9 +55,8 @@ pub fn named(rest: &[&str]) -> Result<Named, &'static str> {
     if !valid(name) {
         return Err(INCORRECT);
     }
-    let library = library(number).ok_or(IMPROPER_LIBRARY)?;
     Ok(Named {
-        library,
+        library: number,
         name: name.to_string(),
         used,
     })
@@ -84,14 +80,16 @@ pub struct Stored {
 /// kept.
 ///
 /// # Errors
-/// As `named`, and WS NOT FOUND when no workspace of that name is
-/// stored there.
+/// As `named`, IMPROPER LIBRARY REFERENCE when the number names no
+/// library the store keeps, and WS NOT FOUND when no workspace of
+/// that name is stored there.
 pub fn text(ws: &Workspace, rest: &[&str]) -> Result<Stored, &'static str> {
     let Named {
         library,
         name,
         used,
     } = named(rest)?;
+    let library = self::library(&*ws.store, library).ok_or(IMPROPER_LIBRARY)?;
     let read = apl_shelves::read(&*ws.store, ws.mode, library, &name).ok_or(WS_NOT_FOUND)?;
     let apl = plain(&read);
     let stamp = format!("{DIRECTIVE}SAVED ");
