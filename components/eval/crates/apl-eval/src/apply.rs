@@ -5,9 +5,9 @@ use apl_ast::{Expr, Function};
 use apl_call::value;
 use apl_execute as execute;
 use apl_ibeam::system_value;
-use apl_prims::{Env, apply_dyadic, apply_monadic, axis_index, inner, outer, reduce, scan};
+use apl_prims::{apply_dyadic, apply_monadic, axis_index, inner, outer, reduce, scan};
 use apl_value::{AplError, AplResult, Array, ErrorKind};
-use apl_workspace::Workspace;
+use apl_workspace::{Saved, Workspace};
 
 use crate::eval::{eval_expr, eval_line};
 
@@ -44,11 +44,10 @@ pub fn eval_monadic(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
             return system_value(ws, &r).map_err(|e| e.at(*pos));
         }
         Function::Prim('⍎') if axis.is_none() => return execute::value(ws, &r, *pos, eval_line),
-        Function::Prim('⍕') => return Err(AplError::new(ErrorKind::Nonce).at(*pos)),
         _ => {}
     }
     let axis = axis.as_deref().map(|a| eval_expr(ws, a)).transpose()?;
-    monadic(func, axis.as_ref(), &r, &mut ws.saved.env).map_err(|e| e.at(*pos))
+    monadic(func, axis.as_ref(), &r, &mut ws.saved).map_err(|e| e.at(*pos))
 }
 
 /// `left f right`: right, then left, then the axis.
@@ -76,14 +75,21 @@ pub fn eval_dyadic(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
         _ => {}
     }
     let axis = axis.as_deref().map(|a| eval_expr(ws, a)).transpose()?;
-    dyadic(func, axis.as_ref(), &l, &r, &mut ws.saved.env).map_err(|e| e.at(*pos))
+    dyadic(func, axis.as_ref(), &l, &r, &mut ws.saved).map_err(|e| e.at(*pos))
 }
 
-/// `func right`, with the evaluated axis: a primitive, or a reduce
-/// or scan along the last axis, the first axis, or the bracket.
-fn monadic(func: &Function, axis: Option<&Array>, r: &Array, env: &mut Env) -> AplResult<Array> {
-    let rank = r.shape.len();
+/// `func right`, with the evaluated axis: a primitive, (B)'s format,
+/// or a reduce or scan along the last axis, the first axis, or the
+/// bracket.
+fn monadic(
+    func: &Function,
+    axis: Option<&Array>,
+    r: &Array,
+    saved: &mut Saved,
+) -> AplResult<Array> {
+    let (rank, env) = (r.shape.len(), &mut saved.env);
     match func {
+        Function::Prim('⍕') if axis.is_none() => apl_format::monadic(r, saved.print.precision()),
         Function::Prim(f) => apply_monadic(*f, r, axis, env),
         Function::Reduce { f, first } => {
             reduce(*f, r, axis_index(axis, *first, rank, env.io)?, env.ct)
@@ -96,16 +102,19 @@ fn monadic(func: &Function, axis: Option<&Array>, r: &Array, env: &mut Env) -> A
     }
 }
 
-/// `left func right`, with the evaluated axis: a primitive, an inner
-/// product, or an outer product (the products take no axis).
+/// `left func right`, with the evaluated axis: a primitive, (B)'s
+/// format, an inner product, or an outer product (the products take
+/// no axis).
 fn dyadic(
     func: &Function,
     axis: Option<&Array>,
     l: &Array,
     r: &Array,
-    env: &mut Env,
+    saved: &mut Saved,
 ) -> AplResult<Array> {
+    let env = &mut saved.env;
     match func {
+        Function::Prim('⍕') if axis.is_none() => apl_format::dyadic(l, r),
         Function::Prim(f) => apply_dyadic(*f, l, r, axis, env),
         Function::Inner { f, g } if axis.is_none() => inner(*f, *g, l, r, env.ct),
         Function::Outer { f } if axis.is_none() => outer(*f, l, r, env.ct),

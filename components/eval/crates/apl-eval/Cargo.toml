@@ -12,6 +12,7 @@ apl-ast = { path = "../../../parse/crates/apl-ast" }
 apl-call = { path = "../apl-call" }
 apl-value = { path = "../../../value/crates/apl-value" }
 apl-execute = { path = "../../../b75/crates/apl-execute" }
+apl-format = { path = "../../../b75/crates/apl-format" }
 apl-sysfns = { path = "../../../b75/crates/apl-sysfns" }
 apl-sysvars = { path = "../../../b75/crates/apl-sysvars" }
 apl-ibeam = { path = "../../../a70/crates/apl-ibeam" }

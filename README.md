@@ -15,10 +15,10 @@ It has two modes:
 | Mode | Modelled on | What it has |
 |---|---|---|
 | (A) '70 | APL\360 on an IBM 2741 terminal | The APL\360 language; I-beams for system values; `)ORIGIN`, `)DIGITS` and `)WIDTH` for the settings; groups |
-| (B) '75 | The APL of the IBM 5100 family of desktop computers | The same core, plus execute and the quad system variables and functions; no I-beams, no settings commands, no groups |
+| (B) '75 | The APL of the IBM 5100 family of desktop computers | The same core, plus execute, format, and the quad system variables and functions; no I-beams, no settings commands, no groups |
 
-Format is not implemented. Neither mode is APL2 or Dyalog: arrays
-are flat, with no nesting and no each. sw-apl is not a port; the C
+Neither mode is APL2 or Dyalog: arrays are flat, with no nesting and
+no each. sw-apl is not a port; the C
 interpreter `sw-cor24-apl` and GNU APL served only as references for
 expected behaviour and for the conformance corpus in `samples/`.
 
@@ -117,7 +117,7 @@ name says the modes it runs in: `NAME.apl.ws` for both,
 | Area | |
 |---|---|
 | Language | Every APL\360 primitive and operator on arrays of any rank; bracket indexing and indexed assignment; characters; mixed output; quad and quote-quad input and output |
-| (B) additions | Execute; the quad system variables (`IO`, `CT`, `PP`, `PW`, `RL`, `LX` and the rest), which can be made local; the quad system functions (`CR`, `FX`, `EX`, `NL`, `NC`, `CC`) |
+| (B) additions | Execute and format; the quad system variables (`IO`, `CT`, `PP`, `PW`, `RL`, `LX` and the rest), which can be made local; the quad system functions (`CR`, `FX`, `EX`, `NL`, `NC`, `CC`) |
 | Functions | The del editor and definition mode, locals (functions as well as variables), labels and branching, recursion, locking with del-tilde |
 | Errors | The APL\360 error display with its caret; a failing function suspends, `)SI` shows where, and a branch takes it up again; Ctrl-C (ATTN) stops a run |
 | Workspaces | `)SAVE`, `)LOAD`, `)COPY`, `)DROP`, `)LIB` over numbered libraries; a saved workspace is plain APL you could have typed |

@@ -294,8 +294,35 @@ On the keyboard, execute is `⊥` struck with `∘`.
 
 ### Format
 
-Format, `⍕`, is a glyph of (B) -- struck from `⊤` and `∘` -- but not
-implemented: using it is a NONCE ERROR.
+Format, `⍕`, struck from `⊤` and `∘`, gives a number as characters.
+
+Monadic, `⍕B` is the display of `B` as a character array: what `B`
+would print, at `⎕PP`, with no wrapping. A scalar or a vector gives a
+vector, a matrix a matrix; characters are themselves.
+
+Dyadic, `A⍕B` lays each number of `B` out in a field. `A` is a pair,
+width and precision, for every column, or a pair for each column, or
+a precision alone, which is a width of 0:
+
+- A precision of 0 or more is decimal form with that many places,
+  and a whole part of 0 is left out: `.26`, `.00`. A precision of 0
+  has no point.
+- A negative precision is scaled form with that many digits: one
+  before the point, and a power of ten of at least two digits,
+  `1.2E01`, `¯2.6E¯01`.
+- A width of 0 is the narrowest that leaves a space between numbers.
+
+```apl
+      B←3 2⍴12.34 ¯34.567 0 12 ¯0.26 ¯123.45
+      9 2⍕B
+    12.34   ¯34.57
+      .00    12.00
+     ¯.26  ¯123.45
+```
+
+The sign is kept even when no digit is: `4 2⍕¯.0004` is `¯.00`. A
+number too wide for its field is a DOMAIN ERROR, and characters are
+a DOMAIN ERROR on the right of dyadic format.
 
 ### System variables
 
@@ -347,8 +374,9 @@ name erases the local one, and it goes when that function returns.
 ### Errors
 
 (B) has one error (A) has not: NONCE ERROR, for something the
-language has and sw-apl does not yet do -- format, and an I-beam,
-which the 5110 manual makes a NONCE ERROR.
+language has and sw-apl does not do -- an I-beam, which the 5110
+manual makes a NONCE ERROR, and the system-variable forms under
+*System variables* above.
 
 ## What (A) '70 has that (B) '75 does not
 

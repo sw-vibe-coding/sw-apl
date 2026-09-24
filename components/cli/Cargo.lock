@@ -166,6 +166,7 @@ dependencies = [
  "apl-ast",
  "apl-call",
  "apl-execute",
+ "apl-format",
  "apl-ibeam",
  "apl-modes",
  "apl-parse",
@@ -196,6 +197,15 @@ dependencies = [
  "apl-scan",
  "apl-value",
  "apl-workspace",
+]
+
+[[package]]
+name = "apl-format"
+version = "0.1.0"
+dependencies = [
+ "apl-display",
+ "apl-numeral",
+ "apl-value",
 ]
 
 [[package]]
@@ -246,6 +256,13 @@ name = "apl-modes"
 version = "0.1.0"
 dependencies = [
  "apl-store",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-numeral"
+version = "0.1.0"
+dependencies = [
  "apl-value",
 ]
 

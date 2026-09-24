@@ -95,9 +95,13 @@ fn in_70_execute_is_refused_as_it_always_was() {
 }
 
 #[test]
-fn format_is_not_there_yet() {
+fn format_is_75s_and_not_70s() {
     let mut b = in_mode(Mode::B);
-    assert_eq!(b.respond("⍕1 2").lines[0], "NONCE ERROR");
+    assert_eq!(
+        b.respond("⍕1 2").lines[0],
+        "1 2",
+        "format_tests has the rest"
+    );
     let mut a = in_mode(Mode::A);
     assert!(a.respond("⍕1 2").lines[0].starts_with("CHARACTER ERROR: U+2355"));
 }

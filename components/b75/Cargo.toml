@@ -6,6 +6,8 @@ members = [
     "crates/apl-console-control",
     "crates/apl-execute",
     "crates/apl-fix",
+    "crates/apl-format",
+    "crates/apl-numeral",
     "crates/apl-sysfns",
     "crates/apl-sysvars",
 ]

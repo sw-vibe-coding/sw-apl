@@ -172,6 +172,11 @@
       "insert": "⎕WA",
       "label": "bytes free",
       "modes": "B"
+    },
+    {
+      "insert": "8 2⍕3.14159 2.71828",
+      "label": "format",
+      "modes": "B"
     }
   ],
   "cmd": [
@@ -236,6 +241,11 @@
       "insert": "⍎",
       "label": "CMD B",
       "try": "⍎'2+3'"
+    },
+    {
+      "insert": "⍕",
+      "label": "CMD N",
+      "try": "⍕2 3"
     },
     {
       "insert": "⌽",

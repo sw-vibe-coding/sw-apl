@@ -172,6 +172,32 @@ Decisions where sw-apl differs from the 5110, each labelled:
 - A quad name the system does not have is a SYNTAX ERROR (a guess:
   the manual does not say).
 
+## Format as built
+
+**Done (step 026)**, in `components/b75/crates/apl-format`, from the
+5110 manual's "The ⍕ Function: Format", whose examples are the tests.
+Monadic format is the display crate's own formatting, as characters,
+with no wrapping. Dyadic format takes one pair for every column, a
+pair for each column, or a precision alone (width 0).
+
+Decisions where the manual is silent or its machine is not sw-apl's,
+each labelled:
+
+- **Rounding** starts from the number as written, its shortest
+  decimal form, and goes half to even. The manual rounds `¯123.45` to
+  one place as `¯123.4`; the binary double nearest 123.45 is a little
+  above it and would round to `¯123.5`. The 5110's arithmetic was not
+  binary, and rounding the written form gives what its manual shows.
+- **Width 0** with one pair for every column is one more than the
+  widest number in the whole array, as the manual's example is; with
+  a pair for each column it is the widest in that column.
+- **Zero in scaled form** is `0.0E¯01` for two digits, as the manual's
+  figure shows it, and the same pattern for other counts.
+- **A precision of 0** is a whole number with no point. The manual's
+  examples do not show one; APLSV's is the same.
+- A number too wide for its field is a DOMAIN ERROR, as the manual
+  says ("increase the width").
+
 ## The system functions as built
 
 **Done (step 015)**, in `components/b75/`: `apl-sysfns` says which
@@ -357,7 +383,7 @@ history.**
   in (B) has a CMD mode holding the legends the manual's figure shows
   clearly: `⎕NC` (Q), `⎕NL` (W), `⍱` (Y), `⍲` (U), `⎕CC` (I), `⍟` (P),
   `→⎕LC` (the arrow key), `⎕WA` (A), `⎕PW` (S), `⍝` (C), `⎕CR` (Z),
-  `⎕FX` (X), `⍎` (B) and `⌽` (M). `⍕` (N) joins them with format.
+  `⎕FX` (X), `⍎` (B), `⍕` (N) and `⌽` (M).
   The legends on D, F, G, H, J, K and L, the `)SINL` and trace and
   stop legends on E, R and T, and `⎕SVO` on V are left off: the scan
   is not clear enough to read them, or sw-apl has not got them. Each

@@ -1,0 +1,16 @@
+[package]
+name = "apl-format"
+description = "sw-apl (B) '75: format, monadic and dyadic"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-display = { path = "../../../display/crates/apl-display" }
+apl-numeral = { path = "../apl-numeral" }
+apl-value = { path = "../../../value/crates/apl-value" }
+
+[lints]
+workspace = true

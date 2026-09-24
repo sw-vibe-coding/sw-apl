@@ -689,6 +689,9 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await send(page, '\u2395IO');
   check('(B) has the quad system variables', (await paper(page)).trim().endsWith('1'),
     JSON.stringify((await paper(page)).slice(-60)));
+  await send(page, '8 2\u23553.14159');
+  check('(B) formats', (await paper(page)).trimEnd().endsWith('    3.14'),
+    JSON.stringify((await paper(page)).slice(-60)));
   await send(page, ')ORIGIN 0');
   check("(B) has no )ORIGIN", /INCORRECT COMMAND/.test((await paper(page)).slice(-60)),
     JSON.stringify((await paper(page)).slice(-60)));

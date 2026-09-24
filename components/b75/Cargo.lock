@@ -76,6 +76,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-format"
+version = "0.1.0"
+dependencies = [
+ "apl-display",
+ "apl-numeral",
+ "apl-value",
+]
+
+[[package]]
 name = "apl-glyphs"
 version = "0.1.0"
 dependencies = [
@@ -95,6 +104,13 @@ name = "apl-modes"
 version = "0.1.0"
 dependencies = [
  "apl-store",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-numeral"
+version = "0.1.0"
+dependencies = [
  "apl-value",
 ]
 
