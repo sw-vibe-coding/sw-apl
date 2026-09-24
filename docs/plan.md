@@ -926,7 +926,12 @@ Owner direction 2026-09-24, second:
   the owner's or a third party's.
 - **The owner's other repository** will hold original COURSE, DRILL,
   STATS and other mathematics workspaces. Writing them is out of scope
-  here; the mechanism for using them is in scope.
+  here; the mechanism for using them is in scope. The convention, from
+  the research's `)LIBS` (0 USER, 1 CORE, 2 EXTENDED): library 2 is
+  that repository's directory, configured, so `)LIB 2` lists what in
+  it runs in the mode -- COURSE, DRILL, MATH, STATISTICS -- and
+  `)LOAD 2 COURSE` loads one. The docs and tests use that layout as
+  their example, with a fixture standing in for the repository.
 - **Importing classic workspaces** is deferred: low priority, a
   possible future goal, not planned.
 - **The clock** keeps its historical default -- `⎕TS` is 1900 in (B).
