@@ -1,0 +1,1 @@
+Linux regressions fixed. Two heredocs used a quoted delimiter that never matched; now plain. The bare shebang had two arguments, which Linux passes as one; now one argument, so it echoes, and the baseline is rebased for that only. Verified in Docker: all 91 transcripts pass with no stderr. Added scripts/reg-portable.py and just reg-linux; corrected docs/session.md.

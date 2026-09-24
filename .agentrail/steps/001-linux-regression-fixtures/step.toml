@@ -1,8 +1,9 @@
 number = 1
 slug = "linux-regression-fixtures"
-status = "in-progress"
+status = "completed"
 description = "Repair the existing Linux portability failures found while validating the apl..."
 role = "production"
 context_files = []
 created_at = "2026-09-24T11:51:09"
-commits = []
+completed_at = "2026-09-24T12:56:13"
+commits = ["a91302ba7aaeb44942659a04db4c85ecd2eb9f4c"]
