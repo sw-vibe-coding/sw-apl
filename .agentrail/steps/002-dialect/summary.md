@@ -1,0 +1,1 @@
+DIALECT answers (A) '70 or (B) '75 and does not switch. New apl-extensions crate for sw-apl's own commands. Samples 83 and 84 (one per mode), board entry, docs with a What sw-apl adds section. reg-rs 93/93.
