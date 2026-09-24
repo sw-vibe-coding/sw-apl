@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-24
 
+- chore(agentrail): complete 003-help; insert 004-av-display-and-font
+- feat(extensions): )HELP, the commands a mode has and a page for each
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 002-dialect
 - feat(extensions): )DIALECT, the first of sw-apl's own commands
 - chore(agentrail): complete 001-linux-regression-fixtures
