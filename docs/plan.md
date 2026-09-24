@@ -850,6 +850,87 @@ Then the Phase 8 steps still pending: cup and cap, the base
 conversion sample, the Linux regression fixtures, and the offline
 shell.
 
+## Phase 10 (owner direction 2026-09-24): help, libraries, and LEARN
+
+Phase 9 is done: both modes, the (B) tab, library 1 per mode,
+TTTML, live output, the keyboard per mode, and format. The owner,
+after reading an AI chat's answers saved untracked as
+`docs/research2.txt` (not ours; never committed or quoted), directs:
+
+- **Three sw-apl commands the historical systems never had**:
+  `)LIBS`, `)DIALECT` and `)HELP`. They are system commands, never
+  quad names, so a program or a saved workspace cannot come to
+  depend on them and stays APL\360's or the 5110's.
+- **A LEARN workspace** in this repository: an introduction for a
+  newcomer to APL, from nothing, in sw-apl.
+- **Workspaces from another repository.** The owner starts a
+  separate repository for the other workspaces (converted or
+  clean-room classics, and the rest). sw-apl needs a way to
+  configure, find and use a library kept there -- at the CLI, the
+  service and the browser. Importing classic binary workspaces
+  (APLCOURSE from the MTS tapes, STATPAK and so on) belongs to that
+  repository, not this one.
+
+The design, from the owner's discussion and this repository's rules:
+
+- `)DIALECT` is an inquiry: it answers `(A) '70` or `(B) '75`. It does
+  not switch; the mode is chosen when a session starts (`--mode`, the
+  browser's tab). A switching form, if ever, would start a clear
+  workspace and is not planned.
+- `)HELP` is discovery: with no argument, the commands grouped as the
+  manuals group them, each marked historical or an sw-apl extension;
+  with a topic (`)HELP LIBS`, `)HELP DIALECT`, a command's name, and
+  topics such as EXTENSIONS and RESTRICTIONS), a short page. The text
+  is data, shared by the CLI, the service and the browser, and says
+  only what the current mode has.
+- `)LIBS` lists the libraries a session can reach: number, name,
+  where it comes from, and whether it can be written (only library 0
+  can). Library numbers stay APL\360's: 0 is yours, 1 is what sw-apl
+  ships, and 2 and up are configured.
+- **Configuring a library** is outside the language, at session
+  start: a TOML file (`--config FILE`, else `./sw-apl.toml`, else the
+  user's config directory) mapping library numbers to directories,
+  with names; and `--lib N=DIR` to add or override one. The service
+  takes the same. A library outside the repository is read-only and
+  keeps the file naming and modes lines of library 1.
+- **In the browser**, a library is fetched from a URL -- the other
+  repository published as a static site, whose GitHub Pages answer
+  with `Access-Control-Allow-Origin: *` -- through an index file
+  listing its workspaces. The page reads its library list from a
+  file beside it, and the session starts with those libraries
+  loaded, as library 1 is baked in today.
+- **LEARN**, in library 1, runs in both modes (a version per mode
+  only where one must differ). Lessons a reader moves through at
+  their own pace, a few drills that make exercises and check the
+  answers read with quad (in the spirit of APLCOURSE's TEACH and
+  EASYDRILL, written fresh), and an opening that uses `)DIALECT`,
+  `)LIBS` and `)HELP`, so a newcomer learns where they are and how to
+  find out more.
+- **Emulation policy**, a document: `docs/emulation-policy.md` sets
+  out what sw-apl does where the historical machine decided -- the
+  5110's clock (`⎕TS` is 1900, kept), processor time, the multiuser
+  commands of a time-shared 360 (absent) -- beside `parity.md`, which
+  keeps what is done and what is restricted. An `--environment
+  historical|host` switch is the owner's to decide, and not planned.
+
+Decisions for the owner, with the defaults the steps take until told
+otherwise: the config file's name and places (above); a library
+beyond 1 is numbered by the config, not named in `)LOAD`; the browser
+learns its extra libraries from `pages/libraries.json`.
+
+Order, recommended (owner may reorder):
+
+1. The Linux regression fixtures, carried from Phase 8: a test that
+   fails on Linux is a correctness debt, and cheap.
+2. `)DIALECT`.
+3. `)HELP`, with its text as data.
+4. Library configuration and `)LIBS`, at the CLI and the service.
+5. Libraries by URL in the browser.
+6. LEARN.
+7. `docs/emulation-policy.md`.
+8. Then the rest of Phase 8's carried steps: cup and cap, the base
+   conversion sample, and the offline shell.
+
 ## Owner direction (2026-09-22): TTTML, a machine that learns tic-tac-toe
 
 A new library 1 workspace for (B) '75, `TTTML`: the machine plays
