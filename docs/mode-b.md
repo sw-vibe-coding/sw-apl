@@ -125,7 +125,10 @@ a letter is one name (`[system_names]` in `data/glyphs.toml`); in (A)
   and stop, cursor return, backspace and line feed, the maintenance
   graphics -- holds U+E000 plus its 0-origin index, so every position
   is distinct. Output control through those three control characters
-  is not implemented.
+  is not implemented. No font draws those placeholders, so the browser
+  and `aplterm` show each as a dim dot (the browser gives its code
+  point on hover); the characters themselves are unchanged, and the
+  CLI prints them as they are.
 
 Decisions where sw-apl differs from the 5110, each labelled:
 

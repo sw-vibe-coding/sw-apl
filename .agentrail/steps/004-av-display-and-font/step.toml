@@ -1,6 +1,6 @@
 number = 4
 slug = "av-display-and-font"
-status = "pending"
+status = "in-progress"
 description = "Owner report 2026-09-24: in (B) the browser shows missing-glyph boxes for qua..."
 role = "production"
 context_files = []

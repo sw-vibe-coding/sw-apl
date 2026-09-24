@@ -68,12 +68,28 @@ let typing = false;
 // a finished line to the session and not two.
 let wire = null;
 
-// What the carriage has put on the page, as one string, so that a
-// line the terminal has not finished can be carried on.
-let page = "";
+// What the carriage puts on the page, appended as it comes, so that a
+// line the terminal has not finished is carried on.
+//
+// A Private Use Area character is drawn as a dim dot, its code point
+// on hover. (B)'s atomic vector holds U+E000 plus its index where the
+// 5110 had a character sw-apl cannot hold as one -- a control code, a
+// reserved position -- and no font draws those. Only the drawing
+// changes: the characters themselves are what the session holds.
+const PUA = /[\uE000-\uF8FF]/;
 const put = (text) => {
-  page += text;
-  paper.textContent = page;
+  for (const piece of text.split(/([\uE000-\uF8FF])/)) {
+    if (!piece) continue;
+    if (!PUA.test(piece)) {
+      paper.append(piece);
+      continue;
+    }
+    const dot = document.createElement("span");
+    dot.className = "pua";
+    dot.textContent = "\u00b7";
+    dot.title = `U+${piece.codePointAt(0).toString(16).toUpperCase()}`;
+    paper.append(dot);
+  }
   paper.scrollTop = paper.scrollHeight;
 };
 

@@ -689,6 +689,19 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await send(page, '\u2395IO');
   check('(B) has the quad system variables', (await paper(page)).trim().endsWith('1'),
     JSON.stringify((await paper(page)).slice(-60)));
+  // ⎕AV's placeholders -- U+E000 plus the position, where the 5110 had
+  // a character sw-apl cannot hold as one -- are drawn as dim dots.
+  await send(page, '\u2395AV');
+  const shown = await page.evaluate(() => {
+    const paperEl = document.getElementById('paper');
+    return {
+      pua: /[\uE000-\uF8FF]/.test(paperEl.textContent),
+      dots: paperEl.querySelectorAll('.pua').length,
+      title: paperEl.querySelector('.pua')?.title,
+    };
+  });
+  check("(B)'s \u2395AV shows no Private Use Area character on the paper",
+    !shown.pua && shown.dots > 0 && /^U\+E0[0-9A-F]{2}$/.test(shown.title ?? ''), JSON.stringify(shown));
   await send(page, '8 2\u23553.14159');
   check('(B) formats', (await paper(page)).trimEnd().endsWith('    3.14'),
     JSON.stringify((await paper(page)).slice(-60)));
