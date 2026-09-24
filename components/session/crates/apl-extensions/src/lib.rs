@@ -6,8 +6,10 @@
 //! sw-apl adds", lists them.
 
 mod dialect;
+mod help;
 
 pub use dialect::dialect;
+pub use help::help;
 
 use apl_eval::Workspace;
 
@@ -20,7 +22,9 @@ const INCORRECT: &str = "INCORRECT COMMAND";
 pub fn command(ws: &Workspace, name: &str, rest: &[&str]) -> Option<Vec<String>> {
     Some(match (name, rest) {
         ("DIALECT", []) => vec![dialect(ws.mode).to_string()],
-        ("DIALECT", _) => vec![INCORRECT.to_string()],
+        ("HELP", []) => help(ws.mode, None),
+        ("HELP", [name]) => help(ws.mode, Some(name)),
+        ("DIALECT" | "HELP", _) => vec![INCORRECT.to_string()],
         _ => return None,
     })
 }

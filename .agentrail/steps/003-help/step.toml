@@ -1,6 +1,6 @@
 number = 3
 slug = "help"
-status = "pending"
+status = "in-progress"
 description = "Phase 10 step 3 (docs/plan.md). )HELP, an sw-apl extension, for discovery. Wi..."
 role = "production"
 context_files = []

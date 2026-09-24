@@ -6,4 +6,11 @@
 )DIALECT
 )DIAL
 )DIALECT 75
+⍝ Help: the commands this mode has, by group, and a page for each
+⍝ command and topic.
+)HELP
+)HELP DIALECT
+)HELP )LOAD
+)HELP TOPICS
+)HELP EXTENSIONS
 )OFF

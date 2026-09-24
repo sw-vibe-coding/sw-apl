@@ -121,7 +121,7 @@ name says the modes it runs in: `NAME.apl.ws` for both,
 | Functions | The del editor and definition mode, locals (functions as well as variables), labels and branching, recursion, locking with del-tilde |
 | Errors | The APL\360 error display with its caret; a failing function suspends, `)SI` shows where, and a branch takes it up again; Ctrl-C (ATTN) stops a run |
 | Workspaces | `)SAVE`, `)LOAD`, `)COPY`, `)DROP`, `)LIB` over numbered libraries; a saved workspace is plain APL you could have typed |
-| Session | The six-space prompt, a printed transcript, output shown as it is printed, batch runs of a script, `)OFF` |
+| Session | The six-space prompt, a printed transcript, output shown as it is printed, batch runs of a script, `)OFF`; `)HELP` and `)DIALECT`, sw-apl's own |
 | Input | The 2741 keyboard and overstrikes in `aplterm` and the browser; Espanso and Emacs keymaps |
 
 `docs/parity.md` is the row-by-row picture for each mode.

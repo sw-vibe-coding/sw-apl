@@ -164,6 +164,7 @@ Inquiry and settings:
 | `)WIDTH n` | Set print width (30 to 254); replies `WAS n` | (A) |
 | `)SYMBOLS` | How many names are held, and how many would fit | both |
 | `)DIALECT` | The session's mode, `(A) '70` or `(B) '75`; an sw-apl command no historical system had (see `commands-reference.md`, "What sw-apl adds") | both |
+| `)HELP [NAME]` | The commands the mode has, by group; with a name, a page on a command or a topic; an sw-apl command | both |
 
 ## What the workspace is
 

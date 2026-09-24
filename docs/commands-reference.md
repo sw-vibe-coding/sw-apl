@@ -309,6 +309,7 @@ historical system could run.
 | Form | |
 |---|---|
 | `)DIALECT` | The session's mode: `(A) '70` or `(B) '75` |
+| `)HELP [NAME]` | The commands this mode has, by group; with a name, a page on a command or a topic |
 
 ```
       )DIALECT
@@ -319,6 +320,27 @@ historical system could run.
 `--mode` at the command line and the service, the tab in a browser --
 and `)DIALECT 70` is `INCORRECT COMMAND`. Like any command longer
 than four characters, it can be cut short: `)DIAL`.
+
+`)HELP` lists the commands the session's mode has, grouped as the
+manual groups them, with sw-apl's own on a line of their own:
+
+```
+      )HELP
+SYSTEM COMMANDS IN (B) '75. )HELP NAME FOR ONE.
+WORKSPACE    )CLEAR )WSID )COPY )PCOPY )ERASE
+LIBRARY      )SAVE )LOAD )DROP )LIB
+INQUIRY      )FNS )VARS )SI )SIV )SYMBOLS
+TERMINAL     )OFF )CONTINUE
+SW-APL'S OWN )DIALECT )HELP
+)HELP TOPICS FOR MORE: THE MODES, AND SW-APL'S OWN.
+```
+
+`)HELP NAME` shows a page: a command, with or without its
+parenthesis (`)HELP LOAD`, `)HELP )LOAD`), or a topic -- `TOPICS`,
+`MODES`, `EXTENSIONS`, `RESTRICTIONS`. A command the mode has not got
+says so (`(B) '75 HAS NO )ORIGIN.`), and a name with no page says to
+ask `)HELP TOPICS`. The pages are `data/help.txt` in the repository,
+and every line fits the 64 columns of the (B) screen.
 
 ## What sw-apl has and APL\360 did not
 
