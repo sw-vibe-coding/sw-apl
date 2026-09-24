@@ -14,6 +14,15 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-24
 
+- chore(agentrail): complete 002-dialect
+- feat(extensions): )DIALECT, the first of sw-apl's own commands
+- chore(agentrail): complete 001-linux-regression-fixtures
+- fix(tests): the regressions pass on Linux
+- plan: library 2 is the other repository, by convention
+- plan: LEARN's scope, the short-term goal, clock and import priorities
+- saga: archive modes (Phase 9 complete); start help-and-libraries (Phase 10)
+- plan: Phase 10 -- )DIALECT, )HELP, )LIBS, libraries from another repo, LEARN
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 026-format
 - feat(b75): format, monadic and dyadic
 
