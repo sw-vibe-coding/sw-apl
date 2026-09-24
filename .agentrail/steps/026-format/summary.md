@@ -1,0 +1,1 @@
+Format in B, monadic and dyadic, from the 5110 manual with its examples as tests. Rounding is half-even on the shortest decimal form, which reproduces the manual's ¯123.4. New crates apl-format and apl-numeral. CMD N added to the board. Sample 82 is new. parity.md has no todo cells.
