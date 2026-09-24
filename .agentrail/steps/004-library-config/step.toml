@@ -1,0 +1,8 @@
+number = 4
+slug = "library-config"
+status = "pending"
+description = "Phase 10 step 4 (docs/plan.md). Libraries kept outside the repository, and )L..."
+role = "production"
+context_files = []
+created_at = "2026-09-24T11:51:09"
+commits = []

@@ -1,0 +1,1 @@
+Phase 9 complete: both modes, the (B) tab, library 1 per mode, TTTML, live output, the keyboard per mode, format. Milestones 1 and 2 reached. The four Phase 8 steps still pending carry into the help-and-libraries saga.

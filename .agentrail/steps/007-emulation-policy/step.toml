@@ -1,0 +1,8 @@
+number = 7
+slug = "emulation-policy"
+status = "pending"
+description = "Phase 10 step 7 (docs/plan.md). docs/emulation-policy.md: what sw-apl does wh..."
+role = "production"
+context_files = []
+created_at = "2026-09-24T11:51:09"
+commits = []

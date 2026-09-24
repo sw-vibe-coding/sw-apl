@@ -1,0 +1,3 @@
+Phase 10 step 2 (docs/plan.md). )DIALECT, an sw-apl extension: an inquiry that answers the session's mode as the project writes it, (A) '70 or (B) '75, in both modes, at the CLI, the service and the browser. It does not switch: the mode is chosen when a session starts (--mode, the browser's tab), and )DIALECT with an argument is INCORRECT COMMAND. Never a quad name: a program must not be able to depend on it.
+
+TDD: session tests in each mode; a sample line. Docs: commands-reference.md and session.md say it is an sw-apl extension (a new "What sw-apl adds" section is the place for all three new commands); parity.md gains the row; the command table and the four-letter rule (DIAL) hold.
