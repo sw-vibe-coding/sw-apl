@@ -4,6 +4,7 @@ members = [
     "crates/apl-library",
     "crates/apl-copy",
     "crates/apl-inquiry",
+    "crates/apl-extensions",
     "crates/apl-settings",
     "crates/apl-commands",
     "crates/apl-session",

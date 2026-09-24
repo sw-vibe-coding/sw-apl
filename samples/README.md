@@ -33,6 +33,10 @@ every combinator APL\360 can write, shows the limit of the table of
 primitives the birds reach, and prints what cannot be written and
 why. See docs/birds.md.
 
+`83-sw-apl-commands.apl` and `84-sw-apl-commands-75.apl`, one for
+each mode, show the commands sw-apl adds, which no historical system
+had: )DIALECT, which names the session's mode and does not switch it.
+
 `81-tttml.apl` runs in (B) '75: TTTML, a machine that learns
 tic-tac-toe by playing itself, loads trained, beats a random player
 without a loss, plays two games read move by move with quad, and

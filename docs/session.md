@@ -163,6 +163,7 @@ Inquiry and settings:
 | `)DIGITS n` | Set print precision (1 to 16); replies `WAS n` | (A) |
 | `)WIDTH n` | Set print width (30 to 254); replies `WAS n` | (A) |
 | `)SYMBOLS` | How many names are held, and how many would fit | both |
+| `)DIALECT` | The session's mode, `(A) '70` or `(B) '75`; an sw-apl command no historical system had (see `commands-reference.md`, "What sw-apl adds") | both |
 
 ## What the workspace is
 

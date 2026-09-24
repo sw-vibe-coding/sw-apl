@@ -220,6 +220,7 @@ the session numeric tests, and sample 67.
 | `)GRPS` `)GRP` `)GROUP` | done | INCORRECT COMMAND | a group is a time-sharing command the 5100 family dropped |
 | `)SI` `)SIV` | done | done |  |
 | `)SYMBOLS` | reports | reports | the number cannot be set -- see Restrictions |
+| `)DIALECT`, an sw-apl command: the session's mode; it does not switch | done | done | extension tests, sample 83 |
 | Library form `)LOAD 1 NAME`, DESCRIBE convention | done | done | `--library` sets the directory they are under, library 1 is `ws/lib1/`, and LIFE, RACE, EDIT and BIRDS each carry a DESCRIBE, and so does TTTML, (B)'s alone; library tests, samples 64, 72, 80 and 81. A library is somewhere workspaces are kept, not a directory: the browser keeps library 1 in the bundle and library 0 in its own storage, and the commands do not change. Store tests |
 | `)LOAD` prints only the SAVED line, as APL\360 did, and nothing runs on load | done | done | command tests, sample 61 |
 | Trouble reports: WS NOT FOUND, OBJECT NOT FOUND, IMPROPER LIBRARY REFERENCE, NOT SAVED THIS WS IS | done | done | INCORRECT COMMAND is kept for a command given an argument it does not take, as the manual's table has it; report tests, sample 65 |

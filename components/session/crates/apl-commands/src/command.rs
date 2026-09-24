@@ -2,6 +2,7 @@
 
 use apl_a70_commands::command as seventy;
 use apl_eval::{Mode, Saved, Workspace, hms};
+use apl_extensions::command as extension;
 use apl_inquiry::command as inquiry;
 use apl_library::valid;
 use apl_settings::clear;
@@ -47,10 +48,11 @@ pub fn system_command(ws: &mut Workspace, command: &str) -> Answer {
         ("DROP", _) => drop_workspace(ws, &rest),
         ("LIB", _) => lib(ws, &rest),
         ("COPY" | "PCOPY", _) => return copy(ws, &rest, name == "PCOPY"),
-        // The '70-only commands, in (A) only, and the inquiry commands
-        // answer for themselves, and None for a name they do not know.
+        // The '70-only, inquiry and sw-apl commands answer for
+        // themselves, and None for a name they do not know.
         _ => seventy(&mut ws.saved, ws.mode, &name, &rest)
             .or_else(|| inquiry(ws, &name, &rest))
+            .or_else(|| extension(ws, &name, &rest))
             .unwrap_or_else(|| vec![workspace_command(&mut ws.saved, ws.mode, &name, &rest)]),
     };
     ending(ws, lines, off)
@@ -80,8 +82,9 @@ fn ending(ws: &Workspace, mut lines: Vec<String>, off: bool) -> Answer {
 
 /// The commands whose names are longer than four characters, which
 /// are therefore the ones that can be cut short.
-pub const ABBREVIATED: [&str; 9] = [
-    "CLEAR", "CONTINUE", "DIGITS", "ERASE", "GROUP", "ORIGIN", "PCOPY", "SYMBOLS", "WIDTH",
+pub const ABBREVIATED: [&str; 10] = [
+    "CLEAR", "CONTINUE", "DIALECT", "DIGITS", "ERASE", "GROUP", "ORIGIN", "PCOPY", "SYMBOLS",
+    "WIDTH",
 ];
 
 /// The command a typed name means.

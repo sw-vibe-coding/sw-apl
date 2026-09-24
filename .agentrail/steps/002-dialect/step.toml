@@ -1,6 +1,6 @@
 number = 2
 slug = "dialect"
-status = "pending"
+status = "in-progress"
 description = "Phase 10 step 2 (docs/plan.md). )DIALECT, an sw-apl extension: an inquiry tha..."
 role = "production"
 context_files = []

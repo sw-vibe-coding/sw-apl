@@ -70,11 +70,12 @@ let through.
 
 A name of four characters or fewer has nothing to cut and must be
 exact: `)VARS` is the command and `)VAR` is not, and `)SI` does not
-extend to `)SIX`. The commands that can be shortened are the nine
-longer than four characters: `)CLEAR`, `)CONTINUE`, `)DIGITS`,
-`)ERASE`, `)GROUP`, `)ORIGIN`, `)PCOPY`, `)SYMBOLS`, `)WIDTH`. No
-two of them agree in their first four. In (B), which has not got
-`)DIGITS`, `)GROUP`, `)ORIGIN` or `)WIDTH`, it is the other five.
+extend to `)SIX`. The commands that can be shortened are the ten
+longer than four characters: `)CLEAR`, `)CONTINUE`, `)DIALECT`,
+`)DIGITS`, `)ERASE`, `)GROUP`, `)ORIGIN`, `)PCOPY`, `)SYMBOLS`,
+`)WIDTH`. No two of them agree in their first four. In (B), which has
+not got `)DIGITS`, `)GROUP`, `)ORIGIN` or `)WIDTH`, it is the other
+six.
 
 ## Terminal control
 
@@ -297,6 +298,27 @@ library could not read it, and `)LOAD WSID:KEY` gave the password.
 sw-apl has one user and no shared library, so there is nothing to
 lock against, and the colon is not a name character: the form is
 refused rather than taken as part of the name.
+
+## What sw-apl adds
+
+Commands no historical system had, in both modes. They are system
+commands, never quad names, so a program or a saved workspace cannot
+depend on them, and a workspace written for either mode stays one its
+historical system could run.
+
+| Form | |
+|---|---|
+| `)DIALECT` | The session's mode: `(A) '70` or `(B) '75` |
+
+```
+      )DIALECT
+(B) '75
+```
+
+`)DIALECT` only asks. The mode is chosen when a session starts --
+`--mode` at the command line and the service, the tab in a browser --
+and `)DIALECT 70` is `INCORRECT COMMAND`. Like any command longer
+than four characters, it can be cut short: `)DIAL`.
 
 ## What sw-apl has and APL\360 did not
 

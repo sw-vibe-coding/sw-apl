@@ -111,6 +111,7 @@ dependencies = [
  "apl-a70-commands",
  "apl-copy",
  "apl-eval",
+ "apl-extensions",
  "apl-inquiry",
  "apl-library",
  "apl-settings",
@@ -186,6 +187,13 @@ dependencies = [
  "apl-ast",
  "apl-value",
  "apl-workspace",
+]
+
+[[package]]
+name = "apl-extensions"
+version = "0.1.0"
+dependencies = [
+ "apl-eval",
 ]
 
 [[package]]

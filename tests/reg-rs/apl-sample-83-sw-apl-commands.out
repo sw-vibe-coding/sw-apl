@@ -1,0 +1,15 @@
+      ⍝ The commands sw-apl adds, which no historical system had. They are
+      ⍝ system commands, never quad names, so no program can depend on
+      ⍝ them.
+      ⍝ Which mode this session is in. It only asks: the mode is chosen
+      ⍝ when the session starts.
+      )DIALECT
+(A) '70
+      )DIAL
+(A) '70
+      )DIALECT 75
+INCORRECT COMMAND
+      )OFF
+13.17.36 09/24/26
+CONNECTED 0.00.00
+CPU TIME 0.00.00
