@@ -168,3 +168,17 @@ changes:
 _select component:
     #!/usr/bin/env bash
     if [ -n "{{component}}" ]; then echo "{{component}}"; else ls -1 components; fi
+
+# The reg-rs transcripts on Linux, in Docker, without reg-rs: a fresh
+# release build of sw-apl and scripts/reg-portable.py. macOS and Linux
+# differ where a test leans on the shell -- a shebang's arguments, a
+# heredoc -- and this is where that shows. Needs Docker.
+reg-linux:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    docker run --rm -v "$PWD":/src:ro rust:1 bash -c '
+      set -e
+      mkdir /work && cd /src
+      tar --exclude=./target --exclude=./node_modules -cf - . | tar -xf - -C /work
+      cd /work/components/cli && cargo build --release -q -p sw-apl
+      cd /work && python3 scripts/reg-portable.py'

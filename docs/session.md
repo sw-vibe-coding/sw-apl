@@ -471,9 +471,11 @@ so the transcript begins with the program:
 
 Two things about that line. The flags come before `-f`, because
 `-f` would otherwise take `--no-echo` as its filename. And the
-`env -S` form is the portable one: a bare `#!/path/sw-apl -f`
-works on macOS, which splits a shebang's arguments, but not on
-Linux, which passes them as a single argument.
+`env -S` form is the portable one for more than one argument: Linux
+passes everything after the interpreter as a single argument, where
+macOS splits it, so a bare `#!/path/sw-apl --no-echo -f` works on
+macOS only. A bare line with one argument, `#!/path/sw-apl -f`,
+works on both, and echoes the input as batch mode does.
 
 Only the first line, and only those two characters: `#` is not an
 APL\360 character, so it is a CHARACTER ERROR anywhere else.

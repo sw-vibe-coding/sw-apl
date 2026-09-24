@@ -57,6 +57,12 @@ A sample runs in (A) '70 unless its first line is `⍝!MODES (B)`, the
 line a workspace names its modes on; `scripts/reg-seed.sh` and
 `scripts/run-samples.sh` then run it with `--mode 75`.
 
+The same transcripts run on Linux with `just reg-linux`: a Docker
+container builds sw-apl and runs `scripts/reg-portable.py`, which does
+what reg-rs does without reg-rs, and also fails a test that writes to
+stderr -- a shell warning is a portability bug even when the
+transcript matches.
+
 Rebase a baseline only when the change is intentional, and say so
 in the commit message (`reg-rs: rebased 06-reduce, identity of
 empty reduce`).

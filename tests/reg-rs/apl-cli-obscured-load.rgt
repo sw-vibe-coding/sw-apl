@@ -1,5 +1,5 @@
 command = """
-target/release/sw-apl --library tests/scripts --no-echo <<'"APL"'
+target/release/sw-apl --library tests/scripts --no-echo <<'APL'
 )LOAD VAULT
 SECRET
 OPEN 4

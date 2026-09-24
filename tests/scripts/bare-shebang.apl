@@ -1,6 +1,8 @@
-#!target/release/sw-apl --no-echo -f
-⍝ The bare form. It works here because macOS splits a shebang's
-⍝ arguments; Linux passes them as one string, so use the env -S form
-⍝ in anything that has to run on both. See docs/session.md.
+#!target/release/sw-apl -f
+⍝ The bare form, with one argument. A shebang line is the interpreter
+⍝ and at most one argument on Linux, which passes everything after the
+⍝ interpreter as one string; macOS splits it. One argument works on
+⍝ both. For more than one -- --no-echo -f, say -- use the env -S form,
+⍝ as hello.apl does. See docs/session.md.
 2+2
 )OFF

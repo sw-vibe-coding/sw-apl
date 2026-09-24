@@ -1,5 +1,5 @@
 command = """
-cat tests/scripts/saved-workspace.apl.ws - <<'"APL"' | target/release/sw-apl --no-echo
+cat tests/scripts/saved-workspace.apl.ws - <<'APL' | target/release/sw-apl --no-echo
 SUM 10
 3 HYP 4
 M
