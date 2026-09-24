@@ -12,8 +12,14 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-09-24
+
+- chore(agentrail): complete 026-format
+- feat(b75): format, monadic and dyadic
+
 ## 2026-09-23
 
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 025-keyboard-per-mode
 - feat(board): the keyboard per mode -- a shared layout, and (B)'s CMD key
 - docs(changes): refresh CHANGES.md to HEAD
