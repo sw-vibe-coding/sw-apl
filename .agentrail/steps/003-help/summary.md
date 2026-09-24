@@ -1,0 +1,1 @@
+HELP lists the mode's commands by group, with a page for each command and topic from data/help.txt; only what the mode has, 64 columns, no IBM names. Tests check completeness, line widths and that every page's try line runs. Samples 83 and 84 rebased with added lines only; board and Help dialog updated.

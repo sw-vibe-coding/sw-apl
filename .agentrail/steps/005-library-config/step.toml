@@ -1,4 +1,4 @@
-number = 4
+number = 5
 slug = "library-config"
 status = "pending"
 description = "Phase 10 step 4 (docs/plan.md). Libraries kept outside the repository, and )L..."

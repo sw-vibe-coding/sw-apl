@@ -1,0 +1,8 @@
+number = 4
+slug = "av-display-and-font"
+status = "pending"
+description = "Owner report 2026-09-24: in (B) the browser shows missing-glyph boxes for qua..."
+role = "production"
+context_files = []
+created_at = "2026-09-24T15:14:17"
+commits = []
