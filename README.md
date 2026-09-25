@@ -220,7 +220,7 @@ One directory is not, and deliberately so. `images/redistributed/`
 holds material sw-apl did not write and redistributes under the terms
 it came with, one directory per work, each with its own `LICENSE` and
 an `ATTRIBUTION.md` naming the author and saying whether the file was
-changed. Today that is the IBM 2741 APL keyboard layout
+changed. One is the IBM 2741 APL keyboard layout
 ([images/redistributed/apl-keyboard](images/redistributed/apl-keyboard)),
 by the Wikimedia Commons user Rursus, under CC BY-SA 3.0 -- a
 share-alike licence, so any modified version of it stays under CC
@@ -228,3 +228,8 @@ BY-SA and lives in that same directory rather than becoming MIT by
 moving. A build or a page that ships the picture ships its licence
 with it. `scripts/check-provenance.sh` is the gate: borrowed material
 cannot be committed there without the terms it travels under.
+
+The other is the APL385 Unicode font the browser demo draws its
+glyphs in, so they look the same on every machine
+([images/redistributed/apl385-font](images/redistributed/apl385-font)),
+by Adrian Smith, who placed it in the public domain.

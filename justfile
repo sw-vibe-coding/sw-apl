@@ -114,6 +114,13 @@ pages:
        images/redistributed/apl-keyboard/LICENSE \
        images/redistributed/apl-keyboard/ATTRIBUTION.md \
        pages/redistributed/apl-keyboard/
+    # The font is public domain, but it is still not ours: it goes in
+    # with the same two files, so the bundle says whose it is.
+    mkdir -p pages/redistributed/apl385-font
+    cp images/redistributed/apl385-font/APL385.woff2 \
+       images/redistributed/apl385-font/LICENSE \
+       images/redistributed/apl385-font/ATTRIBUTION.md \
+       pages/redistributed/apl385-font/
 
 # Serve pages/ so the demo can be tried before anything is published.
 # This sends the two headers SharedArrayBuffer needs, so the page is

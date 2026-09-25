@@ -120,3 +120,8 @@ carry the same files, for example
   adaptation beside it; the licence, the credit and what was changed
   are in `images/redistributed/apl-keyboard/`.
   <https://commons.wikimedia.org/wiki/File:APL-keybd2.svg>
+- **APL385 Unicode**, Adrian Smith, 2016: the font the browser demo
+  draws its glyphs in. Public domain, by the author's dedication;
+  carried as WOFF2, converted and otherwise unchanged, with its terms
+  and credit in `images/redistributed/apl385-font/`.
+  <https://www.apl385.com/fonts/>

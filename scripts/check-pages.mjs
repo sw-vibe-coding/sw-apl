@@ -711,6 +711,25 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   });
   check("(B)'s \u2395AV shows no Private Use Area character on the paper",
     !shown.pua && shown.dots > 0 && /^U\+E0[0-9A-F]{2}$/.test(shown.title ?? ''), JSON.stringify(shown));
+  // The glyphs are drawn in the page's own APL385 Unicode: the face
+  // is declared, the file is served with its terms beside it, and the
+  // browser can draw an APL glyph in it.
+  const font = await page.evaluate(async () => {
+    await document.fonts.load('15px "APL385 Unicode"', '\u2374');
+    const base = 'redistributed/apl385-font/';
+    const size = async (f) => {
+      const r = await fetch(new URL(base + f, location.href));
+      return r.ok ? (await r.blob()).size : 0;
+    };
+    return {
+      declared: [...document.fonts].some((f) => f.family.replace(/"/g, '') === 'APL385 Unicode'),
+      drawn: document.fonts.check('15px "APL385 Unicode"', '\u2374\u2395\u234e'),
+      woff2: await size('APL385.woff2'),
+      terms: (await size('LICENSE')) > 0 && (await size('ATTRIBUTION.md')) > 0,
+    };
+  });
+  check('the page draws its glyphs in its own APL385 Unicode, with its terms',
+    font.declared && font.drawn && font.woff2 > 50000 && font.terms, JSON.stringify(font));
   await send(page, '8 2\u23553.14159');
   check('(B) formats', (await paper(page)).trimEnd().endsWith('    3.14'),
     JSON.stringify((await paper(page)).slice(-60)));

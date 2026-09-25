@@ -17,6 +17,14 @@
 <meta name="apple-mobile-web-app-title" content="sw-apl">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <style>
+  /* APL385 Unicode, public domain, by Adrian Smith: an installed copy
+     first, then the page's own. Text shows at once in the next font
+     in the list and changes when this one arrives. */
+  @font-face {
+    font-family: "APL385 Unicode";
+    src: local("APL385 Unicode"), url("redistributed/apl385-font/APL385.woff2") format("woff2");
+    font-display: swap;
+  }
   :root { color-scheme: light dark; --paper: #fbf7ef; --ink: #2b2118; --rule: #d8cdb8; }
   @media (prefers-color-scheme: dark) {
     :root { --paper: #17130e; --ink: #e8dfd0; --rule: #3a3229; }
@@ -305,6 +313,14 @@
     comes back next time you open this page in this browser -- and is
     in no other browser and on no other machine.
   </p>
+  <h3>Other libraries</h3>
+  <p>
+    <code>)LIBS</code> lists the libraries this page reaches: 0 is
+    yours, 1 is what sw-apl ships, and 2 is EXTENDED, the workspaces
+    kept in the sw-apl-workspaces repository. <code>)LIB 2</code> lists
+    them and <code>)LOAD 2 COURSE</code> loads one. Only library 0 can
+    be saved to.
+  </p>
   <h3>Help at the prompt</h3>
   <p>
     <code>)HELP</code> lists the commands this mode has, and
@@ -346,6 +362,14 @@
       and reload. That removes a worker an earlier visit left broken.
       Or run it locally.</li>
   </ul>
+  <h3>Credits</h3>
+  <p>
+    The keyboard picture is by Rursus, under CC BY-SA 3.0; the glyphs
+    are drawn in APL385 Unicode, by Adrian Smith, public domain. The
+    terms travel with them, in
+    <a href="redistributed/apl-keyboard/ATTRIBUTION.md">apl-keyboard</a>
+    and <a href="redistributed/apl385-font/ATTRIBUTION.md">apl385-font</a>.
+  </p>
   <p>What this browser said, to send with a report:</p>
   <pre id="diagnosis" hidden></pre>
   <form method="dialog"><button>Close</button></form>

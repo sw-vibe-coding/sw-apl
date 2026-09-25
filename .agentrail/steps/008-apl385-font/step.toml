@@ -1,6 +1,6 @@
 number = 8
 slug = "apl385-font"
-status = "pending"
+status = "in-progress"
 description = "Font half of the atomic-vector report (step 004). Vendor APL385 Unicode (Adri..."
 role = "production"
 context_files = []
