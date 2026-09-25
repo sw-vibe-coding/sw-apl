@@ -37,21 +37,42 @@ pub fn take(ws: &Workspace, rest: &[&str], protect: bool) -> Result<(Stored, Tak
     for (name, lines) in definitions(&stored.apl) {
         // Copying every object leaves the latent expression, `⎕LX`,
         // which is the workspace's and comes only when asked for.
-        let chosen = wanted.contains(&name) || asked.is_empty() && !name.starts_with('⎕');
-        if !chosen {
-            continue;
-        }
-        if protect && held(ws, &name) {
-            taken.kept.push(name);
-        } else {
-            taken.feed.extend(lines);
+        if wanted.contains(&name) || asked.is_empty() && !name.starts_with('⎕') {
+            place(ws, &mut taken, (name, lines), protect);
         }
     }
     Ok((stored, taken))
+}
+
+/// Put one object the copy chose into what it takes: kept back by a
+/// protected copy when the name is here, fed otherwise.
+///
+/// What is here goes first. Fed as it stands, a definition over a
+/// function here is refused, or -- when its header is the name alone
+/// -- reopens that function and adds its lines to the end; an
+/// assignment over a function is refused too. Erasing is fed like
+/// the rest, so a copy that fails later gives the erased name back
+/// with everything else.
+fn place(ws: &Workspace, taken: &mut Taken, (name, lines): (String, Vec<String>), protect: bool) {
+    if protect && held(ws, &name) {
+        taken.kept.push(name);
+        return;
+    }
+    if replaced(ws, &name) {
+        taken.feed.push(format!(")ERASE {name}"));
+    }
+    taken.feed.extend(lines);
 }
 
 /// Whether this workspace already holds the name, as a variable, a
 /// function or a group.
 fn held(ws: &Workspace, name: &str) -> bool {
     ws.saved.groups.contains_key(name) || ws.get(name).is_some() || ws.is_function(name)
+}
+
+/// Whether a copy of the name must first take away what this
+/// workspace holds under it: a variable or a function. A group of the
+/// same name is left, since erasing a group erases its members.
+fn replaced(ws: &Workspace, name: &str) -> bool {
+    ws.get(name).is_some() || ws.is_function(name)
 }

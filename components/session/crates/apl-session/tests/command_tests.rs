@@ -226,3 +226,79 @@ fn a_command_given_what_it_does_not_take_is_incorrect() {
         assert_eq!(out(&mut s, bad), vec!["INCORRECT COMMAND"], "{bad}");
     }
 }
+
+/// A donor holding two functions, one niladic -- whose header is its
+/// name alone, which typed on its own reopens a function -- and a
+/// variable. Saved, and the workspace cleared.
+fn donor(s: &mut Session) {
+    for line in [
+        ")WSID DONOR",
+        "∇HELLO",
+        "'FROM DONOR'",
+        "∇",
+        "∇R←TWICE X",
+        "R←2×X",
+        "∇",
+        "V←7",
+        ")SAVE",
+        ")CLEAR",
+    ] {
+        assert!(!s.respond(line).error, "{line}");
+    }
+}
+
+/// `)COPY` replaces a function this workspace holds, whatever its
+/// header: it neither refuses (DEFN ERROR) nor adds the donor's lines
+/// to the end of the one here.
+#[test]
+fn copy_replaces_a_function_already_here() {
+    let (mut s, _dir) = in_own_dir("copy-fns");
+    donor(&mut s);
+    for line in ["∇HELLO", "'FROM HERE'", "∇", "∇R←TWICE X", "R←X", "∇"] {
+        assert!(!s.respond(line).error, "{line}");
+    }
+    let reply = s.respond(")COPY DONOR");
+    assert!(!reply.error, "{:?}", reply.lines);
+    assert_eq!(
+        out(&mut s, "HELLO"),
+        vec!["FROM DONOR"],
+        "replaced, not added to"
+    );
+    assert_eq!(out(&mut s, "TWICE 4"), vec!["8"]);
+    let named = s.respond(")COPY DONOR HELLO");
+    assert!(!named.error, "{:?}", named.lines);
+    assert_eq!(
+        out(&mut s, "HELLO"),
+        vec!["FROM DONOR"],
+        "twice is still once"
+    );
+}
+
+/// It replaces across kinds too: a variable here by a function there,
+/// and a function here by a variable there.
+#[test]
+fn copy_replaces_a_name_of_the_other_kind() {
+    let (mut s, _dir) = in_own_dir("copy-kinds");
+    donor(&mut s);
+    for line in ["TWICE←0", "∇V", "'A FUNCTION'", "∇"] {
+        assert!(!s.respond(line).error, "{line}");
+    }
+    let reply = s.respond(")COPY DONOR");
+    assert!(!reply.error, "{:?}", reply.lines);
+    assert_eq!(out(&mut s, "TWICE 4"), vec!["8"]);
+    assert_eq!(out(&mut s, "V"), vec!["7"]);
+}
+
+/// `)PCOPY` still keeps the function here, and says so.
+#[test]
+fn pcopy_keeps_a_function_already_here() {
+    let (mut s, _dir) = in_own_dir("pcopy-fns");
+    donor(&mut s);
+    for line in ["∇HELLO", "'FROM HERE'", "∇"] {
+        assert!(!s.respond(line).error, "{line}");
+    }
+    let reply = out(&mut s, ")PCOPY DONOR");
+    assert!(reply.iter().any(|l| l.contains("HELLO")), "{reply:?}");
+    assert_eq!(out(&mut s, "HELLO"), vec!["FROM HERE"]);
+    assert_eq!(out(&mut s, "TWICE 4"), vec!["8"], "the rest came");
+}

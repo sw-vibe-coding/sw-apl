@@ -205,6 +205,7 @@ the session numeric tests, and sample 67.
 | (B) '75: a setting (`⎕CT` `⎕IO` `⎕PP` `⎕PW` `⎕RL`) made local in a function header, keeping its value until assigned and given it back on return; indexed assignment into a system variable, checked as a plain one is. `⎕PW` 128 while a definition is open is not needed: the editor never wraps a displayed line | -- | done | system variables session tests, sample 77 |
 | `)SAVE` and `)LOAD` round trip a workspace through a file | done | done | command tests, sample 61 |
 | `)COPY` takes the definitions and leaves the settings | done | done | command tests, sample 61; see `index-origin-considerations.md` |
+| `)COPY` replaces a variable or function already here, of either kind, whatever its header; `)PCOPY` keeps it | done | done | the name is erased as part of the copy, so a copy that fails gives it back. Command tests |
 
 ## System commands
 
