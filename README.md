@@ -57,6 +57,12 @@ Some things to type:
       )LOAD 2 COURSE       a longer course, from that repository
 ```
 
+Library 2 is the workspaces of
+**[sw-apl-workspaces](https://github.com/sw-vibe-coding/sw-apl-workspaces)**,
+a repository of its own: `)LIB 2` lists them and `)LOAD 2 COURSE`
+loads the course. The page reaches it over the network, and at the
+terminal it is one flag (see Libraries, below).
+
 `)SAVE` keeps a workspace in the browser's own storage, and Help on
 the page covers the rest.
 
