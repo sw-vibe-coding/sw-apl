@@ -14,6 +14,10 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-24
 
+- feat(lib1): LEARN, an introduction to APL in nine lessons
+- chore(agentrail): complete 008-apl385-font; LEARN before the copy fix (owner asks for LEARN)
+- feat(pages): the demo draws its glyphs in its own APL385 Unicode
+- docs(changes): refresh CHANGES.md to HEAD; complete 007-quad-input-commands
 - fix(quad): a system command or an error in reply to quad input asks again
 - chore(agentrail): complete 004-006; insert quad input, font and copy steps
 - feat(libraries): library 2 from another repository -- )LIBS, --lib, sw-apl.toml, and in the browser

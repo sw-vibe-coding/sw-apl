@@ -1,0 +1,1 @@
+LEARN in library 1, both modes: DESCRIBE, START, LESSON N, nine lessons per plan.md (subset; drills are DRILL in sw-apl-workspaces). Library tests, sample 87, check-pages, browser bundle, docs. reg-rs 64 rebased for the LEARN line. Pushed.
