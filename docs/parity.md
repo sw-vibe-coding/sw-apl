@@ -8,7 +8,10 @@ mode. "done" means implemented and locked by a unit test or a reg-rs
 transcript (`tests/reg-rs`, seeded from `samples/`); `--` means the
 mode does not have the feature at all, and the other mode's column
 says what it has instead where there is something. Update this file
-in the same step that changes a row.
+in the same step that changes a row. Where the machine rather than
+the language decided an answer -- the clock, the terminals, the
+workspace size -- `emulation-policy.md` says what sw-apl does and
+why.
 
 Status: `done`, `part` (partly there; the note says what is
 missing), `todo`. A row that is none of these -- something sw-apl

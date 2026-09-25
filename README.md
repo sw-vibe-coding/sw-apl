@@ -191,7 +191,10 @@ name says the modes it runs in: `NAME.apl.ws` for both,
 | Session | The six-space prompt, a printed transcript, output shown as it is printed, batch runs of a script, `)OFF`; `)HELP`, `)DIALECT` and `)LIBS`, sw-apl's own |
 | Input | The 2741 keyboard and overstrikes in `aplterm` and the browser; Espanso and Emacs keymaps |
 
-`docs/parity.md` is the row-by-row picture for each mode.
+`docs/parity.md` is the row-by-row picture for each mode, and
+[docs/emulation-policy.md](docs/emulation-policy.md) says what sw-apl
+does where the machine, not the language, decided: the clock, the
+terminals, the workspace size.
 
 ## Documentation
 
@@ -220,6 +223,8 @@ The modes and the workspaces:
 
 - [The (B) '75 mode](docs/mode-b.md) -- what (B) is modelled on, its
   sources, and every way it differs from (A)
+- [Emulation policy](docs/emulation-policy.md) -- the clock, the
+  terminals, the workspace size: what each mode answers, and why
 - [APL timeline](docs/apl-timeline.md) -- the APLs sw-apl models,
   and the ones around them
 - [Learning tic-tac-toe in 64 KB](docs/learn-tic-tac-toe-strategy.md)

@@ -1,6 +1,6 @@
 number = 12
 slug = "emulation-policy"
-status = "pending"
+status = "in-progress"
 description = "Phase 10 step 7 (docs/plan.md). docs/emulation-policy.md: what sw-apl does wh..."
 role = "production"
 context_files = []

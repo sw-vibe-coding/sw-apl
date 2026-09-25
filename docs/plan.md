@@ -912,6 +912,11 @@ The design, from the owner's discussion and this repository's rules:
   commands of a time-shared 360 (absent) -- beside `parity.md`, which
   keeps what is done and what is restricted. An `--environment
   historical|host` switch is the owner's to decide, and not planned.
+  Written (step 012): the classes historical, host, fixed,
+  unavailable and extension, and every machine-decided case. The
+  switch is documented as not implemented; the owner is asked whether
+  it should replace the planned host-clock flag (last step) or not be
+  built.
 
 Decisions for the owner, with the defaults the steps take until told
 otherwise: the config file's name and places (above); a library
