@@ -1,8 +1,9 @@
 number = 11
 slug = "readme-refresh"
-status = "in-progress"
+status = "completed"
 description = "Owner 2026-09-24: the README is out of date; it does not cover APLSV, the 510..."
 role = "production"
 context_files = []
 created_at = "2026-09-24T22:16:00"
-commits = []
+completed_at = "2026-09-24T22:19:30"
+commits = ["21caa1b6b33c3ec93c225f1ad63c9ecb2fc2941c"]

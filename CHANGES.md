@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-24
 
+- docs(readme): the two modes and what they model, libraries 0 to 2, sw-apl's commands
+- fix(copy): )COPY replaces a function already in the workspace
+- docs(changes): refresh CHANGES.md to HEAD; complete 009-learn
 - feat(lib1): LEARN, an introduction to APL in nine lessons
 - chore(agentrail): complete 008-apl385-font; LEARN before the copy fix (owner asks for LEARN)
 - feat(pages): the demo draws its glyphs in its own APL385 Unicode

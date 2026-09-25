@@ -1,0 +1,1 @@
+README brought up to date: modes and their models (APL 360 on the 2741; the 5100 family APL, APLSV cut down for one user), LEARN, sw-apl commands, libraries 0 1 2 with --lib and sw-apl.toml. Library docs owed from 005 and 006 in workspaces.md, session.md, commands-reference.md, terminal.md. sw-apl --help about and LIBRARIES; reg-rs apl-cli-help rebased. Pushed.
