@@ -21,6 +21,14 @@ use apl_saved::Saved;
 /// what evaluation means.
 pub type Run = fn(&mut Workspace, &str) -> AplResult<Output>;
 
+/// How to run a system command typed in reply to quad input: the text
+/// after its parenthesis in, the lines it shows out. `None` when the
+/// command replaces the workspace or ends the session, which abandons
+/// the read; the command is then left in `abandoned` for the session
+/// to run once the statement has unwound. The session installs its
+/// own; a workspace with none evaluates the line as it would any.
+pub type Command = fn(&mut Workspace, &str) -> Option<Vec<String>>;
+
 /// A workspace running on a terminal.
 #[derive(Debug)]
 pub struct Workspace {
@@ -58,6 +66,11 @@ pub struct Workspace {
     /// keeps for compatibility only: it has one user and no clock.
     /// Session state, since neither is saved with a workspace.
     pub compatible: BTreeMap<String, Array>,
+    /// What runs a system command typed in reply to quad input.
+    pub command: Option<Command>,
+    /// A command typed in reply to quad input that abandoned the
+    /// read, waiting for the statement to unwind before it runs.
+    pub abandoned: Option<String>,
 }
 
 impl Default for Workspace {
@@ -72,6 +85,8 @@ impl Default for Workspace {
             quota: apl_space::DEFAULT,
             mode: Mode::default(),
             compatible: BTreeMap::new(),
+            command: None,
+            abandoned: None,
         }
     }
 }

@@ -353,6 +353,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-reply"
+version = "0.1.0"
+dependencies = [
+ "apl-commands",
+]
+
+[[package]]
 name = "apl-saved"
 version = "0.1.0"
 dependencies = [
@@ -406,6 +413,7 @@ dependencies = [
  "apl-lex",
  "apl-libraries",
  "apl-parse",
+ "apl-reply",
  "apl-settings",
  "apl-sysvars",
  "apl-value",

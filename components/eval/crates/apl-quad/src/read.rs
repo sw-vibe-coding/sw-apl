@@ -3,6 +3,8 @@
 use apl_value::{AplError, AplResult, Array, Data, ErrorKind};
 use apl_workspace::{Output, Run, Workspace};
 
+use crate::reply::{command, report};
+
 /// The APL\360 prompt for evaluated input. Quote-quad has none: it
 /// carries on wherever the last `⍞←` left the line.
 const QUAD: &str = "⎕:";
@@ -12,22 +14,33 @@ const QUAD: &str = "⎕:";
 /// that yields no value -- blank, a comment, an assignment -- prompts
 /// again, as APL\360 does.
 ///
+/// The manuals, APL\360's and the 5110's alike: an invalid entry
+/// gets its error report and the request is made again, and a system
+/// command is executed and the request is made again, unless it
+/// replaces the workspace.
+///
 /// # Errors
-/// INTERRUPT when there is no more input, or when a branch is typed,
-/// which is how the reader is escaped. Anything the typed line
-/// raises is raised here.
+/// INTERRUPT when there is no more input, when a branch is typed,
+/// which is how the reader is escaped, when a stop was asked for, and
+/// when a command abandoned the read.
 pub fn evaluated(ws: &mut Workspace, run: Run) -> AplResult<Array> {
     loop {
         let typed = read(ws, QUAD)?;
-        match run(ws, &typed)? {
-            Output::Value(value) => return Ok(value),
-            Output::Mixed(parts) => {
+        if command(ws, &typed)? {
+            continue;
+        }
+        let depth = ws.si().len();
+        match run(ws, &typed) {
+            Ok(Output::Value(value)) => return Ok(value),
+            Ok(Output::Mixed(parts)) => {
                 if let Some(value) = parts.into_iter().next() {
                     return Ok(value);
                 }
             }
-            Output::Branch(_) => return Err(AplError::new(ErrorKind::Interrupt)),
-            Output::Nothing | Output::Bare(_) | Output::Lines(_) => {}
+            Ok(Output::Branch(_)) => return Err(AplError::new(ErrorKind::Interrupt)),
+            Ok(_) => {}
+            Err(err) if err.kind == ErrorKind::Interrupt => return Err(err),
+            Err(err) => report(ws, depth, &err, &typed),
         }
     }
 }

@@ -1,0 +1,45 @@
+      ⍝ A reply to quad input that is not an answer. A system command is
+      ⍝ executed and the request for input is made again; an invalid
+      ⍝ entry gets its error report and the request is made again, with
+      ⍝ nothing left suspended. Quote-quad takes a command as characters.
+      ∇R←ASK
+[1]   'HOW MANY?'
+[2]   R←⎕
+[3]   ∇
+      ∇T
+[1]   N←ASK
+[2]   N⍴'*'
+[3]   ∇
+      T
+HOW MANY?
+⎕:
+      )SI
+ASK[2]
+T[1]
+⎕:
+      )FNS
+ASK T
+⎕:
+      1 2 3+4 5
+LENGTH ERROR
+      1 2 3+4 5
+           ^
+⎕:
+      3
+***
+      )SI
+      ⍝ Quote-quad input: the parenthesis is only a character.
+      Y←⍞
+      )SI
+      Y
+)SI
+      ⍴Y
+3
+      ⍝ A command that replaces the workspace gives the request up.
+      T
+HOW MANY?
+⎕:
+      )CLEAR
+CLEAR WS
+      )SI
+      )FNS

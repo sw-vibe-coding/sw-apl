@@ -7,10 +7,11 @@ use apl_settings::clear as clear_workspace;
 use apl_value::AplResult;
 
 use crate::commands::dispatch;
-use crate::reply::Reply;
+use crate::quad::abandon;
+use apl_reply::Reply;
 
 /// An interactive APL session.
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct Session {
     /// The workspace this session owns: its variables, functions,
     /// print settings, and the console it reads a line through.
@@ -91,24 +92,21 @@ impl Session {
             return reply;
         }
         let result = self.run(line);
+        if let Some(command) = self.ws.abandoned.take() {
+            return abandon(self, &command);
+        }
         let mut lines = self.ws.console.take();
-        let failed = match result {
-            Ok(out) => {
-                self.ws.output.push(out);
-                None
-            }
-            Err(err) => Some(error_lines(&err, line)),
-        };
+        let failed = result.map(|out| self.ws.output.push(out)).err();
         let shown = self.ws.flush();
         lines.extend(shown.lines);
-        let Some(report) = failed else {
+        let Some(err) = failed else {
             return Reply {
                 lines,
                 open: shown.open,
                 ..Reply::default()
             };
         };
-        lines.extend(report);
+        lines.extend(error_lines(&err, line));
         Reply::failed(lines)
     }
 }

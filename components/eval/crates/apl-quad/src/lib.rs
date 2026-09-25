@@ -4,5 +4,6 @@
 //! shown so far so the prompt lands after it and not before it.
 
 mod read;
+mod reply;
 
 pub use read::{characters, evaluated};

@@ -37,6 +37,11 @@ why. See docs/birds.md.
 each mode, show the commands sw-apl adds, which no historical system
 had: )DIALECT, which names the session's mode and does not switch it.
 
+`85-quad-input-replies.apl` and `86-quad-input-replies-75.apl` show
+a reply to quad input that is not an answer: a system command runs
+and the request is made again, an error is reported and the request
+is made again, and )CLEAR gives the request up.
+
 `81-tttml.apl` runs in (B) '75: TTTML, a machine that learns
 tic-tac-toe by playing itself, loads trained, beats a random player
 without a loss, plays two games read move by move with quad, and

@@ -1,0 +1,30 @@
+      ⍝!MODES (B)
+      ⍝ Quad input in (B) '75, as the 5100 and 5110 manuals give it: a
+      ⍝ system command typed as the reply is executed and the request is
+      ⍝ made again, and an invalid entry is reported and asked again.
+      ∇R←ASK
+[1]   'HOW MANY?'
+[2]   R←⎕
+[3]   ∇
+      ∇T
+[1]   N←ASK
+[2]   N⍴'*'
+[3]   ∇
+      T
+HOW MANY?
+⎕:
+      )DIALECT
+(B) '75
+⎕:
+      )SI
+ASK[2]
+T[1]
+⎕:
+      2÷0
+DOMAIN ERROR
+      2÷0
+       ^
+⎕:
+      ⍎'2+1'
+***
+      )SI

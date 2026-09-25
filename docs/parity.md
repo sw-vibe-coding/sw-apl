@@ -61,6 +61,7 @@ its samples (76, 77, 78) reproducing the manual's behaviour.
 | Assignment, variables | done | done | sample 02 |
 | Quad output `⎕←` | done | done | session tests, sample 20 |
 | Quad input `⎕`: prompts `⎕:`, evaluates the reply in the current environment, prompts again for a reply with no value | done | done | eval/cli tests, sample 57 |
+| A reply to `⎕` that is not an answer: a system command runs and the request is made again (`)LOAD`, `)CLEAR`, `)OFF` and `)CONTINUE` give the request up); an error is reported and the request is made again, nothing left suspended; `⍞` takes either as characters | done | done | `quad_input_tests`, samples 85, 86 |
 | Quote-quad `⍞`: reads characters without evaluating, and on the left writes with no line ending so a prompt and its answer share a line | done | done | eval/cli tests, sample 57 |
 | A line `⍞←` left open carries across a statement boundary | done | done | `Reply` says its last line is unfinished and both shells honour it: the batch runner writes it without a newline and the reader prompts with it, as a terminal's carriage would sit there. Open-line tests, `tests/scripts/open-line.apl` |
 | Character literals `'...'`, doubled quote, any Unicode inside | done | done | lex tests, samples 19, 20 |

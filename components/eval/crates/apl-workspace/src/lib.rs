@@ -14,4 +14,4 @@ pub use apl_prims::Env;
 pub use apl_saved::{Activation, Referent, Saved};
 pub use apl_space::{DEFAULT as QUOTA, Groups, free, of_function, of_name, of_value, room, used};
 pub use apl_transcript::Transcript;
-pub use workspace::{Run, Workspace};
+pub use workspace::{Command, Run, Workspace};

@@ -112,6 +112,39 @@ script, taken from the same place the run takes its own, so the
 run carries on after whatever the read consumed. A read with no
 more input to take is INTERRUPT.
 
+A reply to `⎕` need not be an answer:
+
+- **A system command** is run, and `⎕:` asks again. So `)SI`,
+  `)FNS`, `)VARS`, `)LIBS`, `)HELP` and the rest can be used to look
+  around before answering. A command that replaces the workspace
+  (`)LOAD`, `)CLEAR`) or ends the session (`)OFF`, `)CONTINUE`) gives
+  the request up instead: the statement that asked is abandoned,
+  nothing is left on the state indicator, and then the command runs.
+- **A reply in error** gets its report, and `⎕:` asks again. Nothing
+  is suspended, a function the reply called included; the function
+  that asked is still waiting for its answer.
+- **A bare branch** `→` abandons the read.
+
+```
+      T
+HOW MANY?
+⎕:
+      )SI
+ASK[2]
+T[1]
+⎕:
+      1 2 3+4 5
+LENGTH ERROR
+      1 2 3+4 5
+           ^
+⎕:
+      3
+***
+```
+
+Quote-quad reads characters, so a command or an arrow typed in reply
+to `⍞` is just those characters.
+
 ## System commands
 
 Recognised when the first non-blank character is a right

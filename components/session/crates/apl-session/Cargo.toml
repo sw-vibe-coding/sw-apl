@@ -14,6 +14,7 @@ apl-lex = { path = "../../../lex/crates/apl-lex" }
 apl-parse = { path = "../../../parse/crates/apl-parse" }
 apl-call = { path = "../../../eval/crates/apl-call" }
 apl-commands = { path = "../apl-commands" }
+apl-reply = { path = "../apl-reply" }
 apl-editor = { path = "../apl-editor" }
 apl-eval = { path = "../../../eval/crates/apl-eval" }
 apl-settings = { path = "../apl-settings" }

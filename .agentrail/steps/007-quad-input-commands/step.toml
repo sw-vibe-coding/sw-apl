@@ -1,6 +1,6 @@
 number = 7
 slug = "quad-input-commands"
-status = "pending"
+status = "in-progress"
 description = "Owner bug report 2026-09-24, from the sw-apl-workspaces agent; blocks LEARN, ..."
 role = "production"
 context_files = []

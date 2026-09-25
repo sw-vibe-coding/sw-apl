@@ -9,8 +9,8 @@ use apl_parse::parse_header;
 use apl_sysvars::latent;
 use apl_value::{AplError, ErrorKind};
 
-use crate::reply::Reply;
 use crate::session::Session;
+use apl_reply::Reply;
 
 /// An opening del: start a new function, or reopen one for editing.
 /// A command written on the same line takes effect at once, so

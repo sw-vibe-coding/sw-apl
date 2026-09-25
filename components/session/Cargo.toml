@@ -7,6 +7,7 @@ members = [
     "crates/apl-extensions",
     "crates/apl-settings",
     "crates/apl-commands",
+    "crates/apl-reply",
     "crates/apl-session",
 ]
 resolver = "2"
