@@ -14,6 +14,8 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-24
 
+- fix(quad): a system command or an error in reply to quad input asks again
+- chore(agentrail): complete 004-006; insert quad input, font and copy steps
 - feat(libraries): library 2 from another repository -- )LIBS, --lib, sw-apl.toml, and in the browser
 - fix(pages): the atomic vector's placeholders show as dim dots, not boxes
 - docs(changes): refresh CHANGES.md to HEAD
