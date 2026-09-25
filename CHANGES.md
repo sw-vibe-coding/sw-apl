@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-24
 
+- docs(emulation): what sw-apl answers where the machine, not the language, decided
+- docs(readme): link sw-apl-workspaces from Try it, beside )LIB 2 and )LOAD 2 COURSE
+- docs(changes): refresh CHANGES.md to HEAD; complete 010 and 011
 - docs(readme): the two modes and what they model, libraries 0 to 2, sw-apl's commands
 - fix(copy): )COPY replaces a function already in the workspace
 - docs(changes): refresh CHANGES.md to HEAD; complete 009-learn

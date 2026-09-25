@@ -1,0 +1,1 @@
+docs/emulation-policy.md: five classes and every machine-decided case, values checked against the binary; linked from parity.md, README and )HELP RESTRICTIONS; environment switch documented as not implemented, owner asked. Pushed.
