@@ -13,6 +13,7 @@ struct Tables {
     syntax: Vec<Syntax>,
     lookalike: Vec<Lookalike>,
     later: Vec<Later>,
+    reserved: Vec<Reserved>,
     overstrike: Vec<Overstrike>,
     underscored: Underscored,
     system_names: SystemNames,
@@ -50,6 +51,14 @@ struct Later {
     /// Empty for a glyph no mode of sw-apl has.
     #[serde(default)]
     mode: String,
+}
+
+/// A character the 2741 carried that APL\\360 gave no meaning. The
+/// TOML's `source` says where it sat, for whoever reads the table.
+#[derive(Deserialize)]
+struct Reserved {
+    glyph: String,
+    name: String,
 }
 
 /// A glyph formed by striking one character over another, as on a
@@ -138,6 +147,12 @@ fn render(tables: &Tables) -> String {
             .iter()
             .map(|l| [quoted(&l.glyph), text(&l.name)].join(", ")),
     );
+    let reserved = rows(
+        tables
+            .reserved
+            .iter()
+            .map(|r| [quoted(&r.glyph), text(&r.name)].join(", ")),
+    );
     let in_b = mode_glyphs(tables, "B");
     [
         "// Generated from data/glyphs.toml by build.rs. Do not edit.".to_string(),
@@ -174,6 +189,13 @@ fn render(tables: &Tables) -> String {
             "(char, &str)",
             tables.later.len(),
             &later,
+        ),
+        table(
+            "Characters of the APL\\360 set with no meaning in the\n             /// language: on the 2741's typing element, so character data,\n             /// but a SYNTAX ERROR anywhere else.",
+            "RESERVED",
+            "(char, &str)",
+            tables.reserved.len(),
+            &reserved,
         ),
         table(
             "Glyphs struck from two characters on a 2741, as\n             /// `(glyph, base, over)`. Either order forms it: the two\n             /// land on one position, and no two pairs share their\n             /// characters. A pair not here is CHARACTER ERROR, which\n             /// is the manual's own answer -- \"Illegitimate\n             /// overstrike\" is what it gives as the cause.",

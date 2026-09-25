@@ -1,6 +1,6 @@
 //! The scanner: one pass over the characters of a line.
 
-use apl_value::{AplError, AplResult, ErrorKind};
+use apl_value::{AplError, AplResult, ErrorKind, RESERVED};
 
 use crate::literal::{join_strands, lex_number, lex_string};
 use crate::token::{PRIMITIVES, Token, TokenKind, check_balance, is_name_char};
@@ -15,7 +15,7 @@ use crate::token::{PRIMITIVES, Token, TokenKind, check_balance, is_name_char};
 ///
 /// # Errors
 /// CHARACTER ERROR for any character outside the accepted set;
-/// SYNTAX ERROR for a malformed number, an unterminated quote, or
+/// SYNTAX ERROR for a reserved character outside quotes, a malformed number, an unterminated quote, or
 /// unbalanced brackets. The caret is set.
 pub fn tokenize(line: &str, also: &str) -> AplResult<Vec<Token>> {
     let chars: Vec<char> = line.chars().collect();
@@ -59,6 +59,11 @@ fn classify(chars: &[char], i: usize, also: &str) -> AplResult<(TokenKind, usize
         '\'' => lex_string(chars, i)?,
         _ if is_name_char(c, None) => lex_name(chars, i),
         _ if PRIMITIVES.contains(c) || also.contains(c) => (TokenKind::Prim(c), i + 1),
+        // A character of the set with no meaning: not a character
+        // error, which is for one outside the set.
+        _ if RESERVED.iter().any(|(r, _)| *r == c) => {
+            return Err(AplError::new(ErrorKind::Syntax).at(i));
+        }
         _ => return Err(AplError::new(ErrorKind::Character(c)).at(i)),
     })
 }

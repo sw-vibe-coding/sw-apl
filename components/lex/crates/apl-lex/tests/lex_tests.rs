@@ -110,12 +110,32 @@ fn quad_is_always_a_bare_token() {
 
 #[test]
 fn glyphs_from_later_apls_are_character_errors() {
-    for bad in [
-        '\u{234e}', '\u{2355}', '\u{237a}', '\u{2375}', '\u{2282}', '\u{a8}',
-    ] {
+    for bad in ['\u{234e}', '\u{2355}', '\u{236c}', '\u{2368}', '{'] {
         let err = tokenize(&bad.to_string(), "").unwrap_err();
         assert_eq!(err.kind, ErrorKind::Character(bad), "{bad}");
     }
+}
+
+/// The seven on the 2741's typing element that APL\\360 gave no
+/// meaning -- cap, cup, alpha, omega, the two shoes and the dieresis --
+/// are characters of the set, not glyphs a later APL brought. Outside
+/// quotes each is a SYNTAX ERROR at its place, in either mode (the
+/// 5110 manual: a symbol that is not a valid built-in function); in
+/// quotes each is character data.
+#[test]
+fn the_reserved_characters_are_syntax_errors_and_character_data() {
+    for c in [
+        '\u{2229}', '\u{222a}', '\u{237a}', '\u{2375}', '\u{2282}', '\u{2283}', '\u{a8}',
+    ] {
+        for also in ["", apl_value::MODE_B] {
+            let err = tokenize(&format!("2{c}3"), also).unwrap_err();
+            assert_eq!(err.kind, ErrorKind::Syntax, "{c}");
+            assert_eq!(err.caret, Some(1), "{c}");
+        }
+        let quoted = tokenize(&format!("'{c}'"), "").unwrap();
+        assert_eq!(chars_of(&quoted[0].kind), c.to_string(), "{c}");
+    }
+    assert_eq!(apl_value::RESERVED.len(), 7);
 }
 
 fn chars_of(kind: &TokenKind) -> String {

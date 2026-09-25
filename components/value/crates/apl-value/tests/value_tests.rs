@@ -153,12 +153,12 @@ fn character_error_names_later_apl_glyphs() {
         "CHARACTER ERROR: U+007B (dfn brace, not APL\\360)"
     );
     assert_eq!(
-        ErrorKind::Character('\u{a8}').to_string(),
-        "CHARACTER ERROR: U+00A8 (each, not APL\\360)"
+        ErrorKind::Character('\u{2368}').to_string(),
+        "CHARACTER ERROR: U+2368 (commute, not APL\\360)"
     );
     assert_eq!(
-        ErrorKind::Character('\u{2282}').to_string(),
-        "CHARACTER ERROR: U+2282 (enclose, not APL\\360)"
+        ErrorKind::Character('\u{236c}').to_string(),
+        "CHARACTER ERROR: U+236C (zilde, not APL\\360)"
     );
 }
 

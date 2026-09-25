@@ -295,9 +295,12 @@ made from two of them, and none of them is itself struck.
 Two of them are components only, which surprises people printing
 keycaps:
 
-- `∩` U+2229, intersection, is **not** an APL\360 function. Typing it
-  alone is a CHARACTER ERROR. It is on the keyboard only so that the
-  lamp `⍝` can be struck from it and `○`.
+- `∩` U+2229, the cap, is **not** an APL\360 function. It is on the
+  keyboard so that the lamp `⍝` can be struck from it and `○`. It is
+  a character of the set, so in quotes it is character data, and
+  alone it is a SYNTAX ERROR, as the cup `∪`, `⍺`, `⍵`, `⊂`, `⊃` and
+  `¨` are: all seven are on the 2741 and mean nothing in APL\360
+  (`glyphs.txt`, reserved characters).
 - `_` U+005F, underbar, is likewise a component: it makes `⍙` and
   the underscored alphabet of the next section, and alone it is a
   CHARACTER ERROR.
@@ -384,16 +387,20 @@ The transcript shows `QZ` -- the two characters side by side -- rather
 than a struck glyph, because none was formed. The message names the
 character struck over the first, then the first.
 
-A character that is a component but not a glyph in its own right, or
-a lookalike from the wrong Unicode block, is a different and shorter
-report naming just the one code point:
+A lookalike from the wrong Unicode block, or a glyph a later APL
+brought, is a different and shorter report naming just the one code
+point:
 
 ```
-      ∩
-CHARACTER ERROR: U+2229 (intersection, not APL\360)
-      ∩
+      ⍬
+CHARACTER ERROR: U+236C (zilde, not APL\360)
+      ⍬
       ^
 ```
+
+A character of the set with no meaning, such as the cap `∩` alone,
+is not a character error at all but a SYNTAX ERROR: the character is
+fine, and there is no sentence.
 
 ## Checking your setup
 

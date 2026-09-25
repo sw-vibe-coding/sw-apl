@@ -33,7 +33,10 @@ exactly these characters are valid:
 - The APL glyphs: × ÷ ⌈ ⌊ ⍟ ○ ∧ ∨ ⍲ ⍱ ≤ ≥ ≠ ⍳ ⍴ ⌽ ⊖ ⍉ ↑ ↓ ⌿ ⍀
   ⊥ ⊤ ∊ ⍋ ⍒ ⌹ ⌶ ∘ ← → ∇ ⍫ ⍝ ¯ ⎕ ⍞ ∆ ⍙ (code points in
   `glyphs.txt`). In (B), also execute ⍎ and format ⍕. Glyphs from
-  later APLs (⍺ ⍵ ⊂ ⊃ ¨ ⋄ ..., and ⍎ ⍕ in (A)) are CHARACTER ERROR.
+  later APLs (⋄ ⍬ ⍨ ..., and ⍎ ⍕ in (A)) are CHARACTER ERROR.
+- Seven characters were on the 2741 but mean nothing in APL\360:
+  ∩ ∪ ⍺ ⍵ ⊂ ⊃ ¨. In quotes each is character data; anywhere else it
+  is a SYNTAX ERROR, in both modes.
 - Newline ends a line; carriage return before a newline is
   ignored so CRLF files load.
 

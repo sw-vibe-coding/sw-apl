@@ -5,7 +5,8 @@
 # else may hold a copy of this data.
 #
 # APL\360 only. A glyph that a later APL introduced belongs in
-# [[later]], not here.
+# [[later]], not here; a character the 2741 carried that APL\360 gave
+# no meaning belongs in [[reserved]].
 
 # Primitive functions and operators: the glyphs the lexer accepts as
 # a Prim token. `monadic` and `dyadic` are the traditional names;
@@ -446,26 +447,6 @@ glyph = "}"
 name = "dfn brace"
 
 [[later]]
-glyph = "⍺"
-name = "alpha"
-
-[[later]]
-glyph = "⍵"
-name = "omega"
-
-[[later]]
-glyph = "⊂"
-name = "enclose"
-
-[[later]]
-glyph = "⊃"
-name = "disclose"
-
-[[later]]
-glyph = "¨"
-name = "each"
-
-[[later]]
 glyph = "⋄"
 name = "diamond"
 
@@ -490,14 +471,6 @@ name = "commute"
 [[later]]
 glyph = "⍣"
 name = "power operator"
-
-[[later]]
-glyph = "∪"
-name = "union"
-
-[[later]]
-glyph = "∩"
-name = "intersection"
 
 [[later]]
 glyph = "⊆"
@@ -553,6 +526,53 @@ name = "over operator"
 # An overstrike that is not in this table is CHARACTER ERROR, which
 # is the manual's own answer: Table 3.1 gives "Illegitimate
 # overstrike" as the cause of a CHARACTER error.
+
+# Characters of the APL\360 set that have no meaning in the language:
+# they were on the 2741's typing element (and the 5100 family's
+# keyboards), so a line can hold them as character data, but none is
+# a function, a name or punctuation. Outside quotes each is a SYNTAX
+# ERROR at its place, in both modes. Sources: the 2741 APL keyboard
+# (images/redistributed/apl-keyboard) shows all seven on the
+# typeball; the APL\360 User's Manual (1970), Table 3.1, gives
+# CHARACTER ERROR only for an illegitimate overstrike and SYNTAX ERROR
+# for invalid syntax; the IBM 5110 APL Reference Manual has no
+# CHARACTER ERROR and gives SYNTAX ERROR when "the symbol used for the
+# APL built-in function is not a valid symbol". They became functions
+# only in APL2 (owner decision 2026-09-19, docs/plan.md).
+[[reserved]]
+glyph = "∩"
+name = "cap"
+source = "on the C key, shifted; struck with the circle to make the lamp, the one use APL\\360 made of it"
+
+[[reserved]]
+glyph = "∪"
+name = "cup"
+source = "on the V key, shifted; struck into nothing"
+
+[[reserved]]
+glyph = "⍺"
+name = "alpha"
+source = "on the A key, shifted"
+
+[[reserved]]
+glyph = "⍵"
+name = "omega"
+source = "on the W key, shifted"
+
+[[reserved]]
+glyph = "⊂"
+name = "left shoe"
+source = "on the Z key, shifted"
+
+[[reserved]]
+glyph = "⊃"
+name = "right shoe"
+source = "on the X key, shifted"
+
+[[reserved]]
+glyph = "¨"
+name = "dieresis"
+source = "on the 1 key, shifted"
 
 # "The symbol ⌿ is formed by overstriking the solidus with the
 # minus sign." (1968, 1970)

@@ -12,11 +12,15 @@ A
 ⍝ Either order forms the same glyph: on paper there is no
 ⍝ difference, since both impressions land on one spot.
 ∧/,(÷⎕2 2⍴4 7 2 6)=⎕÷2 2⍴4 7 2 6
-⍝ Some components are not glyphs in their own right. Intersection
-⍝ is not APL\360 and is a CHARACTER ERROR alone, but the 2741
-⍝ keyboard carried it so that the lamp could be struck.
+⍝ Some characters on the 2741 have no meaning of their own. The cap
+⍝ is there so the lamp can be struck from it and the circle; the cup
+⍝ is struck into nothing. Each is a character of the set, so alone
+⍝ it is a SYNTAX ERROR, not a CHARACTER ERROR, and in quotes it is
+⍝ character data like any other.
 ∩
+2∪3
 ∩○ this is a comment
+⍴'∩∪'
 ⍝ A pair that forms no glyph is what the manual calls an
 ⍝ illegitimate overstrike, and gives as a cause of CHARACTER ERROR.
 QZ

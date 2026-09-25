@@ -55,6 +55,13 @@ for l in tables["later"]:
     print(row(l["glyph"], "", l["name"]))
 
 print("""
+Reserved characters: on the 2741, no meaning in APL\\360
+--------------------------------------------------------
+Character data in quotes; anywhere else a SYNTAX ERROR.""")
+for r in tables["reserved"]:
+    print(row(r["glyph"], r["name"], r["source"]))
+
+print("""
 Overstrikes: struck from two characters, as on a 2741
 -----------------------------------------------------
 Type the base, press the overstrike key, type the other over it.

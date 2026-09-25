@@ -99,25 +99,29 @@ Later-APL glyphs NOT accepted (APL\360 only)
 --------------------------------------------
 {   U+007B                  dfn brace
 }   U+007D                  dfn brace
-⍺   U+237A                  alpha
-⍵   U+2375                  omega
-⊂   U+2282                  enclose
-⊃   U+2283                  disclose
-¨   U+00A8                  each
 ⋄   U+22C4                  diamond
 ⍬   U+236C                  zilde
 ⍎   U+234E                  execute
 ⍕   U+2355                  format
 ⍨   U+2368                  commute
 ⍣   U+2363                  power operator
-∪   U+222A                  union
-∩   U+2229                  intersection
 ⊆   U+2286                  partition
 ⊇   U+2287                  partition
 ⌸   U+2338                  key operator
 ⌺   U+233A                  stencil operator
 ⍤   U+2364                  rank operator
 ⍥   U+2365                  over operator
+
+Reserved characters: on the 2741, no meaning in APL\360
+--------------------------------------------------------
+Character data in quotes; anywhere else a SYNTAX ERROR.
+∩   U+2229  cap             on the C key, shifted; struck with the circle to make the lamp, the one use APL\360 made of it
+∪   U+222A  cup             on the V key, shifted; struck into nothing
+⍺   U+237A  alpha           on the A key, shifted
+⍵   U+2375  omega           on the W key, shifted
+⊂   U+2282  left shoe       on the Z key, shifted
+⊃   U+2283  right shoe      on the X key, shifted
+¨   U+00A8  dieresis        on the 1 key, shifted
 
 Overstrikes: struck from two characters, as on a 2741
 -----------------------------------------------------
@@ -146,6 +150,8 @@ two parts.
 ⍱   U+2371                  ∨ U+2228 over ~ U+007E shape
 ⍙   U+2359                  ∆ U+2206 over _ U+005F shape
 !   U+0021                  ' U+0027 over . U+002E shape
+⍎   U+234E                  ⊥ U+22A5 over ∘ U+2218 manual
+⍕   U+2355                  ⊤ U+22A4 over ∘ U+2218 manual
 
 The underscored alphabet: a letter struck with the underbar
 -----------------------------------------------------------
@@ -200,6 +206,7 @@ _   U+005F
 ÷   U+00F7
 ∆   U+2206
 ∇   U+2207
+∘   U+2218
 ∧   U+2227
 ∨   U+2228
 ∩   U+2229

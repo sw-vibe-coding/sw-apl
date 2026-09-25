@@ -9,7 +9,7 @@ mod number;
 
 pub use apl_glyphs::{
     AXIS, DYADIC, LATER, LOOKALIKE, MODE_B, MONADIC, OVERSTRIKE, OVERSTRIKE_B, PRIMITIVE_NAMES,
-    PRIMITIVES, SYNTAX, UNDERBAR, UNDERSCORE, UNDERSCORED, columns, pad,
+    PRIMITIVES, RESERVED, SYNTAX, UNDERBAR, UNDERSCORE, UNDERSCORED, columns, pad,
 };
 pub use array::{Array, Data};
 pub use error::{AplError, Context, ErrorKind};

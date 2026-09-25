@@ -92,6 +92,7 @@ its samples (76, 77, 78) reproducing the manual's behaviour.
 | `)WIDTH` wrapping with six-space continuation | done | -- (`⎕PW`) | display tests, sample 45 |
 | `)DIGITS` precision, `)ORIGIN`, `WAS n` reply | done | -- (`⎕PP`, `⎕IO`) | session tests, sample 22 |
 | Strict Unicode acceptance, CHARACTER ERROR with lookalike hint | done | done | lex, value, session tests |
+| The 2741's characters with no meaning -- ∩ ∪ ⍺ ⍵ ⊂ ⊃ ¨ -- are character data in quotes and a SYNTAX ERROR elsewhere, not a CHARACTER ERROR | done | done | APL\360's Table 3.1 keeps CHARACTER ERROR for an illegitimate overstrike; the 5110 manual gives SYNTAX ERROR for a symbol that is no valid function. `[[reserved]]` in `data/glyphs.toml`; lex tests, sample 71 |
 | Lexer: brackets, semicolon, colon, branch arrow, del, del-tilde, quote-quad, system command lines, strands, bracket balance | done | done | lex tests |
 | Parser: axis brackets `f[k]`, compress vs reduce by context, SYNTAX ERROR carets, multiple assignments | done | done | parse tests |
 | Axis brackets accepted only where APL\360 allows them (the seven forms); anywhere else a SYNTAX ERROR | done | done | session audit test; the set is generated from `data/glyphs.toml` |

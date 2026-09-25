@@ -96,13 +96,10 @@ THE ⊂ KEY
 That is their whole use, and it is a real one -- APL\360's character
 set is what a quoted vector may hold, and what `⍞` may print.
 
-Typing one bare is an error, as it should be, because there is no
-function there to apply. sw-apl's message for it is wrong today: it
-says `not APL\360`, which is false of a glyph the 2741 printed.
-Correcting that is the same work as correcting it for `∩` and `∪`,
-which `docs/plan.md` already has as a step; these four join it.
-
-`¨`, on the shifted `1` key, is in the same position.
+Typing one bare is a SYNTAX ERROR, because there is no function
+there to apply; the character itself is fine, so it is not a
+CHARACTER ERROR. `¨`, on the shifted `1` key, and the cap and cup on
+C and V are in the same position.
 
 Ctrl-] is the overstrike key. Backspace cannot be it -- a line editor
 needs backspace for deleting -- and neither can Ctrl-H, which *is*
