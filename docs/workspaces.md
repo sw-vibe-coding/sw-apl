@@ -70,6 +70,7 @@ numbered ones are public.
 |---|---|---|
 | 0 | `work/` | Yours. `)SAVE` writes here and `)LOAD NAME` reads here. Not tracked by git; the first `)SAVE` creates it |
 | 1 | `ws/lib1/` | The workspaces sw-apl ships, each with a DESCRIBE function |
+| 2 and up | configured | Any directory of workspaces; read-only. See below |
 
 `)LIB` lists library 0, `)LIB 1` lists library 1 -- one at a time, as
 APL\360 did. A workspace is the file `NAME.apl.ws`. `--library DIR`
@@ -83,6 +84,38 @@ editor on, whose `FACT` is wrong by one on purpose), `BIRDS`
 (combinators, a version for each mode), and, in (B) only, `TTTML` (a
 machine that learns tic-tac-toe; `learn-tic-tac-toe-strategy.md`).
 Each is a plain text file you can open in an editor.
+
+### Libraries from elsewhere
+
+A library numbered 2 or more is any directory of workspace files,
+configured when the session starts and read-only. By convention
+library 2 is EXTENDED, the workspaces of the sw-apl-workspaces
+repository; the browser demo reaches it already. At the terminal,
+name one with a flag, which may be given again for another:
+
+```
+sw-apl --mode 75 --lib 2=../sw-apl-workspaces/ws,EXTENDED
+```
+
+or list them in a file: the one `--config FILE` names, else
+`./sw-apl.toml`, else `~/.config/sw-apl/config.toml` (or under
+`$XDG_CONFIG_HOME`), whichever is there first:
+
+```toml
+[[library]]
+number = 2
+name = "EXTENDED"
+path = "../sw-apl-workspaces/ws"
+```
+
+A relative path is from the file's own directory, and a flag wins
+over the file for its number. The name is letters and digits, and
+without one `--lib` names it `LIBN`. `sw-apl-server` takes the same
+flags. `)LIBS` lists what the session reaches, and `)LIB 2`,
+`)LOAD 2 NAME` and `)COPY 2 NAME` use it; `)SAVE` and `)DROP` never
+do. Its files are named as library 1's are, so each mode sees only
+the workspaces that run in it. A directory that is not there is
+warned about when the session starts, and lists nothing.
 
 ### Tracked, or not
 

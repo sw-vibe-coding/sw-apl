@@ -21,6 +21,11 @@ LIBRARIES:
   reads a numbered library and )LIB 1 lists one. --library sets the
   directory they are all under; the default is the current one, so
   running sw-apl from a checkout finds the shipped workspaces.
+  Libraries 2 and up are any directories of workspaces, read-only:
+  --lib 2=../sw-apl-workspaces/ws,EXTENDED names one, and a file
+  lists them -- --config FILE, else ./sw-apl.toml, else
+  ~/.config/sw-apl/config.toml -- as [[library]] tables with a
+  number, a name and a path. )LIBS lists what the session reaches.
 
 WORKSPACE SIZE:
   A workspace holds a fixed number of bytes, and a value that will

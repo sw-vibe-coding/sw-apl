@@ -1,0 +1,1 @@
+)COPY replaces an existing variable or function: fed ERASE ahead of the definition (rolls back with the copy). Fixed DEFN ERROR and silent doubling of niladic functions. Tests, parity row. Pushed.

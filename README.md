@@ -10,17 +10,29 @@ APL the way it was used: traditional glyphs typed as Unicode, the
 six-space prompt, a printed transcript, the del editor, and
 workspaces saved and loaded by name.
 
-It has two modes:
+## Two modes
+
+sw-apl runs in one of two modes, chosen when a session starts. Each
+is modelled on an APL IBM shipped, and each lists and loads only the
+workspaces that run in it.
 
 | Mode | Modelled on | What it has |
 |---|---|---|
-| (A) '70 | APL\360 on an IBM 2741 terminal | The APL\360 language; I-beams for system values; `)ORIGIN`, `)DIGITS` and `)WIDTH` for the settings; groups |
-| (B) '75 | The APL of the IBM 5100 family of desktop computers | The same core, plus execute, format, and the quad system variables and functions; no I-beams, no settings commands, no groups |
+| (A) '70 | APL\360, IBM's time-sharing APL for the System/360, used from an IBM 2741 terminal | The APL\360 language; I-beams for system values; `)ORIGIN`, `)DIGITS` and `)WIDTH` for the settings; groups |
+| (B) '75 | The APL of the IBM 5100 family of desktop computers (the 5100, 5110 and 5120) | The same core, plus execute, format, and the quad system variables and functions (quad IO, quad FX and the rest); no I-beams, no settings commands, no groups |
+
+The 5100's APL is APLSV -- the APL that followed APL\360 at IBM,
+adding shared variables, execute, format and the quad names -- cut
+down by IBM for a machine with one user: no shared
+variables, no time-sharing commands, a 64-column screen, and no
+clock (in (B), the date is in 1900). (B) follows the 5110 APL
+Reference Manual; [docs/mode-b.md](docs/mode-b.md) lists every way it
+differs from (A). It is not System/370 APLSV.
 
 Neither mode is APL2 or Dyalog: arrays are flat, with no nesting and
-no each. sw-apl is not a port; the C
-interpreter `sw-cor24-apl` and GNU APL served only as references for
-expected behaviour and for the conformance corpus in `samples/`.
+no each. sw-apl is not a port; the C interpreter `sw-cor24-apl` and
+GNU APL served only as references for expected behaviour and for the
+conformance corpus in `samples/`.
 
 ## Try it
 
@@ -34,20 +46,66 @@ on the page gives every glyph a key, so a phone works too.
 Some things to type:
 
 ```
+      )LOAD 1 LEARN        new to APL? an introduction in nine lessons
+      START                lesson 1; each lesson names the next
+      )HELP                the commands this mode has
+      )LIBS                the libraries: 0 yours, 1 CORE, 2 EXTENDED
       )LIB 1               the workspaces sw-apl ships
-      )LOAD 1 LEARN        new to APL? an introduction
-      START                lesson 1; each names the next
       )LOAD 1 TTTML        in (B): a machine that learns tic-tac-toe
       PLAY 1               play it; you move first
-      )LOAD 1 BIRDS        combinators, a version for each mode
-      HOWBIRDS
-      )LOAD 1 LIFE         Conway's Life
-      GLIDER
-      RUN 4
+      )LIB 2               the workspaces in sw-apl-workspaces
+      )LOAD 2 COURSE       a longer course, from that repository
 ```
 
 `)SAVE` keeps a workspace in the browser's own storage, and Help on
 the page covers the rest.
+
+## Commands sw-apl adds
+
+Three system commands no historical system had. They are commands,
+never quad names, so no program or saved workspace can come to
+depend on them.
+
+| Command | What it does |
+|---|---|
+| `)DIALECT` | Says which mode the session is in: `(A) '70` or `(B) '75`. It only asks; the mode is chosen at the start |
+| `)LIBS` | Lists the libraries the session reaches, by number and name |
+| `)HELP` | Lists the commands this mode has; `)HELP LOAD`, or any command, or `)HELP TOPICS`, shows a page |
+
+## Libraries
+
+Workspaces are kept in numbered libraries, as on APL\360: `)LIB N`
+lists one, `)LOAD N NAME` and `)COPY N NAME` read from one.
+
+| Library | `)LIBS` name | What it is |
+|---|---|---|
+| 0 | USER | Yours: `)SAVE` writes here, `)LOAD NAME` reads here. A directory `work/` at the terminal; the browser's own storage in the page |
+| 1 | CORE | What sw-apl ships, in `ws/lib1/` (below). Read-only |
+| 2 and up | as configured | Any directory of workspaces, configured when the session starts. Read-only |
+
+By convention library 2 is EXTENDED, the workspaces of the
+[sw-apl-workspaces](https://github.com/sw-vibe-coding/sw-apl-workspaces)
+repository (COURSE and more). The browser demo reaches it already.
+At the terminal, name it with a flag:
+
+```bash
+target/release/sw-apl --mode 75 --lib 2=../sw-apl-workspaces/ws,EXTENDED
+```
+
+or in a file, `sw-apl.toml` in the current directory, or
+`~/.config/sw-apl/config.toml`, or one named with `--config FILE`:
+
+```toml
+[[library]]
+number = 2
+name = "EXTENDED"
+path = "../sw-apl-workspaces/ws"
+```
+
+A relative path is from the file's own directory, and a `--lib`
+flag wins over the file for its number. `sw-apl-server` takes the
+same flags. A library directory holds workspace files named as
+library 1's are, and each mode sees only those that run in it.
 
 ## Run it on your machine
 
@@ -119,12 +177,12 @@ name says the modes it runs in: `NAME.apl.ws` for both,
 
 | Area | |
 |---|---|
-| Language | Every APL\360 primitive and operator on arrays of any rank; bracket indexing and indexed assignment; characters; mixed output; quad and quote-quad input and output |
+| Language | Every APL\360 primitive and operator on arrays of any rank; bracket indexing and indexed assignment; characters; mixed output; quad and quote-quad input and output, where a system command typed in reply runs and the question is asked again, and an error in the reply is reported and asked again |
 | (B) additions | Execute and format; the quad system variables (`IO`, `CT`, `PP`, `PW`, `RL`, `LX` and the rest), which can be made local; the quad system functions (`CR`, `FX`, `EX`, `NL`, `NC`, `CC`) |
 | Functions | The del editor and definition mode, locals (functions as well as variables), labels and branching, recursion, locking with del-tilde |
 | Errors | The APL\360 error display with its caret; a failing function suspends, `)SI` shows where, and a branch takes it up again; Ctrl-C (ATTN) stops a run |
-| Workspaces | `)SAVE`, `)LOAD`, `)COPY`, `)DROP`, `)LIB` over numbered libraries; a saved workspace is plain APL you could have typed |
-| Session | The six-space prompt, a printed transcript, output shown as it is printed, batch runs of a script, `)OFF`; `)HELP` and `)DIALECT`, sw-apl's own |
+| Workspaces | `)SAVE`, `)LOAD`, `)COPY`, `)PCOPY`, `)DROP`, `)LIB` over numbered libraries, library 2 and up configured from outside; a saved workspace is plain APL you could have typed |
+| Session | The six-space prompt, a printed transcript, output shown as it is printed, batch runs of a script, `)OFF`; `)HELP`, `)DIALECT` and `)LIBS`, sw-apl's own |
 | Input | The 2741 keyboard and overstrikes in `aplterm` and the browser; Espanso and Emacs keymaps |
 
 `docs/parity.md` is the row-by-row picture for each mode.

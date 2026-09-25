@@ -29,15 +29,17 @@ pub const VERSION: &str = concat!(
     env!("BUILD_TIMESTAMP"),
 );
 
-/// A clean-room APL\360 interpreter with traditional glyphs.
+/// A clean-room APL interpreter with traditional glyphs, in two modes.
 #[derive(Parser, Debug)]
 #[command(
     name = "sw-apl",
     version = VERSION,
     about,
-    long_about = "A clean-room APL\\360 interpreter with traditional glyphs, \
-                  written in Rust from scratch. Flat arrays, floating point, \
-                  the del editor, and the APL\\360 system commands.",
+    long_about = "A clean-room APL interpreter with traditional glyphs, \
+                  written in Rust from scratch, in two modes: (A) '70, \
+                  modelled on APL\\360, and (B) '75, modelled on the APL \
+                  of the IBM 5100 family. Flat arrays, floating point, the \
+                  del editor, and workspaces in numbered libraries.",
     after_long_help = include_str!("cli_help.txt")
 )]
 pub struct Args {

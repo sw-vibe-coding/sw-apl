@@ -210,7 +210,8 @@ SAVED 17.00.12 09/18/26
 does not echo the name. It takes no library number, because library
 0 is the only one you can write to.
 
-`)LIB` lists library 0, `)LIB 1` library 1: one at a time. An empty
+`)LIB` lists library 0, `)LIB 1` library 1, `)LIB 2` a configured
+one: one at a time. An empty
 library prints nothing, which is not the same as one that does not
 exist.
 
@@ -309,6 +310,7 @@ historical system could run.
 | Form | |
 |---|---|
 | `)DIALECT` | The session's mode: `(A) '70` or `(B) '75` |
+| `)LIBS` | The libraries the session reaches, by number and name |
 | `)HELP [NAME]` | The commands this mode has, by group; with a name, a page on a command or a topic |
 
 ```
@@ -321,6 +323,16 @@ historical system could run.
 and `)DIALECT 70` is `INCORRECT COMMAND`. Like any command longer
 than four characters, it can be cut short: `)DIAL`.
 
+`)LIBS` lists the libraries: 0 and 1 always, and any configured
+beyond them. Only library 0 is written to.
+
+```
+      )LIBS
+0 USER
+1 CORE
+2 EXTENDED
+```
+
 `)HELP` lists the commands the session's mode has, grouped as the
 manual groups them, with sw-apl's own on a line of their own:
 
@@ -331,7 +343,7 @@ WORKSPACE    )CLEAR )WSID )COPY )PCOPY )ERASE
 LIBRARY      )SAVE )LOAD )DROP )LIB
 INQUIRY      )FNS )VARS )SI )SIV )SYMBOLS
 TERMINAL     )OFF )CONTINUE
-SW-APL'S OWN )DIALECT )HELP
+SW-APL'S OWN )DIALECT )LIBS )HELP
 )HELP TOPICS FOR MORE: THE MODES, AND SW-APL'S OWN.
 ```
 
@@ -351,6 +363,8 @@ command line:
 | | |
 |---|---|
 | `--library DIR` | The directory the libraries sit under. Library 0 is `DIR/work`, library 1 is `DIR/ws/lib1` |
+| `--lib N=DIR[,NAME]` | Library N (2 and up) is the workspaces in DIR, read-only; again for another |
+| `--config FILE` | Read libraries from FILE's `[[library]]` tables, in place of `./sw-apl.toml` or `~/.config/sw-apl/config.toml`. See `workspaces.md` |
 | `--ws-size BYTES` | How much the workspace may hold before `WS FULL` |
 | `--mode 70` or `--mode 75` | The mode, (A) '70 or (B) '75; the default is 70 |
 

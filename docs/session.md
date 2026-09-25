@@ -342,6 +342,7 @@ the numbered ones are public.
 |---|---|---|
 | 0 | `work/` | Yours. `)SAVE` writes here, and `)LOAD NAME` reads here. Not tracked; the first `)SAVE` creates it |
 | 1 | `ws/lib1/` | The workspaces sw-apl ships, each with a DESCRIBE function |
+| 2 and up | configured | Any directory of workspaces, read-only: `--lib 2=DIR,NAME`, or a `sw-apl.toml`. `)LIBS` lists them; `workspaces.md` has the details |
 
 `--library DIR` sets the directory they are all under; the default
 is the current one, so running sw-apl from a checkout finds the
@@ -387,9 +388,9 @@ put execution back in the middle of a call, so `)LOAD` gives a
 workspace with an empty state indicator.
 
 Library form: `)LOAD 1 CLASS` loads workspace CLASS from library
-1. Libraries map to directories through a small configuration
-file; library 0 (the default) is the current working directory
-or `--lib DIR`. Workspace names follow APL rules and the file on
+1. Library 0 (the default) is `work/` under `--library DIR`, library
+1 is `ws/lib1/` there, and libraries 2 and up are configured with
+`--lib` or a `sw-apl.toml`. Workspace names follow APL rules and the file on
 disk is `NAME.apl.ws` (UTF-8 text, see `design.md` D7).
 
 ## The del editor
