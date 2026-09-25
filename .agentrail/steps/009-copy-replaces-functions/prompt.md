@@ -1,0 +1,1 @@
+Bug found in step 006: )COPY of a workspace whose function already exists in the active workspace gives DEFN ERROR instead of replacing it (for example )LOAD 1 LIFE then )COPY 1 LIFE GEN). )COPY replaces a global name; )PCOPY keeps it. TDD in apl-session tests for functions and variables, both modes; fix; reg-rs.

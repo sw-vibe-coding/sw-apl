@@ -976,6 +976,24 @@ Order, recommended (owner may reorder):
 8. Then the rest of Phase 8's carried steps: cup and cap, the base
    conversion sample, and the offline shell.
 
+Owner report 2026-09-24, from the other repository's first lessons:
+quad input is not what the manuals describe, and LEARN, COURSE and
+DRILL all read answers with it. So before LEARN:
+
+- **A system command in reply to `⎕`** runs, and the input request
+  repeats -- today it is a SYNTAX ERROR against the reading line.
+  The inquiries (`)SI`, `)FNS`, `)LIBS`, `)HELP` and the rest) run
+  and the prompt returns; `)LOAD`, `)CLEAR` and `)OFF` may abandon
+  the request. The 5110 manual is checked for (B).
+- **An error in the reply to `⎕`**: today the report names the
+  reading function's line while `)SI` shows the caller suspended.
+  What the manuals do (repeat the request, or suspend) decides which
+  is right, and the two are made to agree.
+- Then the APL385 Unicode font for the page (the other half of the
+  atomic vector report), and the `)COPY` bug found while testing
+  library 2: copying a function the workspace already holds is a
+  DEFN ERROR, where `)COPY` replaces it.
+
 ## Owner direction (2026-09-22): TTTML, a machine that learns tic-tac-toe
 
 A new library 1 workspace for (B) '75, `TTTML`: the machine plays

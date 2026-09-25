@@ -1,0 +1,1 @@
+Atomic vector placeholders shown as dim dots in the page and aplterm; data unchanged. The font half (APL385 Unicode, public domain, owner chose a vendored copy) moves to its own step.

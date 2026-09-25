@@ -1,0 +1,1 @@
+Browser libraries: pages/libraries.json, index and file fetch before the session starts, apl-wasm-store; the live demo's library 2 is sw-apl-workspaces via raw.githubusercontent.com. check-pages covers it with a second server. Board: )LIBS added, the )LOAD 1 NAME buttons removed.

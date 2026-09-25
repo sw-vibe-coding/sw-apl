@@ -1,0 +1,8 @@
+number = 8
+slug = "apl385-font"
+status = "pending"
+description = "Font half of the atomic-vector report (step 004). Vendor APL385 Unicode (Adri..."
+role = "production"
+context_files = []
+created_at = "2026-09-24T16:44:26"
+commits = []

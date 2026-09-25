@@ -1,4 +1,4 @@
-number = 8
+number = 11
 slug = "emulation-policy"
 status = "pending"
 description = "Phase 10 step 7 (docs/plan.md). docs/emulation-policy.md: what sw-apl does wh..."

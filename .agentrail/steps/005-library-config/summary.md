@@ -1,0 +1,1 @@
+Library configuration: Store::libraries; apl-libraries (read-only 2 and up); apl-config (--lib, --config, sw-apl.toml) for the CLI and the server; )LIBS. Tested with a fixture and against ../sw-apl-workspaces. In commit a718f19 together with the browser libraries.

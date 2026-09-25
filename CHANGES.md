@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-24
 
+- feat(libraries): library 2 from another repository -- )LIBS, --lib, sw-apl.toml, and in the browser
+- fix(pages): the atomic vector's placeholders show as dim dots, not boxes
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(agentrail): complete 003-help; insert 004-av-display-and-font
 - feat(extensions): )HELP, the commands a mode has and a page for each
 - docs(changes): refresh CHANGES.md to HEAD

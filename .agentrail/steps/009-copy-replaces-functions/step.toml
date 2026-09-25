@@ -1,0 +1,8 @@
+number = 9
+slug = "copy-replaces-functions"
+status = "pending"
+description = "Bug found in step 006: )COPY of a workspace whose function already exists in ..."
+role = "production"
+context_files = []
+created_at = "2026-09-24T16:44:26"
+commits = []
