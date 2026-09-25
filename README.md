@@ -35,6 +35,8 @@ Some things to type:
 
 ```
       )LIB 1               the workspaces sw-apl ships
+      )LOAD 1 LEARN        new to APL? an introduction
+      START                lesson 1; each names the next
       )LOAD 1 TTTML        in (B): a machine that learns tic-tac-toe
       PLAY 1               play it; you move first
       )LOAD 1 BIRDS        combinators, a version for each mode
@@ -106,6 +108,7 @@ name says the modes it runs in: `NAME.apl.ws` for both,
 
 | Workspace | Modes | What it is |
 |---|---|---|
+| LEARN | both | An introduction to APL, from nothing: `START`, then `LESSON 2` to `LESSON 9` |
 | LIFE | both | Conway's Life on a torus: `GLIDER`, then `RUN 4` |
 | RACE | both | A horse race, written to be read |
 | EDIT | both | A workspace to practise the del editor on; its `FACT` is wrong by one on purpose |

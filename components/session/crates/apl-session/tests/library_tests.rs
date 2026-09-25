@@ -11,7 +11,7 @@ use apl_session::{Files, Mode, Session};
 /// What sw-apl ships: the name, the file, the mode it is read in, and
 /// the names its DESCRIBE promises. A workspace that differs between
 /// the modes has a file for each, named for its mode.
-const SHIPPED: [(&str, &str, Mode, &[&str]); 6] = [
+const SHIPPED: [(&str, &str, Mode, &[&str]); 8] = [
     (
         "LIFE",
         "LIFE",
@@ -48,6 +48,8 @@ const SHIPPED: [(&str, &str, Mode, &[&str]); 6] = [
             "FSTEP", "SHOUT", "HYP", "FACT",
         ],
     ),
+    ("LEARN", "LEARN", Mode::A, &["DESCRIBE", "START", "LESSON"]),
+    ("LEARN", "LEARN", Mode::B, &["DESCRIBE", "START", "LESSON"]),
     (
         "TTTML",
         "TTTML.b-75",
@@ -88,11 +90,14 @@ fn loaded(name: &str, mode: Mode) -> Session {
 #[test]
 fn each_mode_lists_the_shipped_workspaces_that_run_in_it() {
     let mut a = in_mode(Mode::A);
-    assert_eq!(out(&mut a, ")LIB 1"), ["BIRDS", "EDIT", "LIFE", "RACE"]);
+    assert_eq!(
+        out(&mut a, ")LIB 1"),
+        ["BIRDS", "EDIT", "LEARN", "LIFE", "RACE"]
+    );
     let mut b = in_mode(Mode::B);
     assert_eq!(
         out(&mut b, ")LIB 1"),
-        ["BIRDS", "EDIT", "LIFE", "RACE", "TTTML"]
+        ["BIRDS", "EDIT", "LEARN", "LIFE", "RACE", "TTTML"]
     );
 }
 
@@ -215,4 +220,43 @@ fn the_practice_function_is_wrong_in_the_way_its_describe_says() {
         out(&mut session, line);
     }
     assert_eq!(out(&mut session, "FACT 5"), vec!["120"]);
+}
+
+/// LEARN's lessons, in both modes: each runs without an error, fits
+/// the 64 columns of the (B) screen, and names the one after it.
+#[test]
+fn every_learn_lesson_runs_fits_and_leads_on() {
+    for mode in [Mode::A, Mode::B] {
+        let mut s = loaded("LEARN", mode);
+        assert_eq!(out(&mut s, "START"), out(&mut s, "LESSON 1"), "{mode:?}");
+        for n in 1..=9 {
+            let reply = s.respond(&format!("LESSON {n}"));
+            assert!(!reply.error, "{mode:?} lesson {n}: {:?}", reply.lines);
+            assert!(
+                reply.lines[0].starts_with(&format!("LESSON {n}: ")),
+                "{:?}",
+                reply.lines
+            );
+            for line in &reply.lines {
+                assert!(line.chars().count() <= 64, "{mode:?} lesson {n}: {line}");
+            }
+            let next = format!("LESSON {}", n + 1);
+            let last = reply.lines.last().expect("a line");
+            assert!(
+                n == 9 || last.contains(&next),
+                "{mode:?} lesson {n} ends: {last}"
+            );
+        }
+    }
+}
+
+/// A lesson LEARN does not have is named, not an error.
+#[test]
+fn learn_says_which_lessons_there_are() {
+    let mut s = loaded("LEARN", Mode::A);
+    for bad in ["LESSON 10", "LESSON 0", "LESSON 1 2", "LESSON 'A'"] {
+        let reply = s.respond(bad);
+        assert!(!reply.error, "{bad}: {:?}", reply.lines);
+        assert_eq!(reply.lines, ["THE LESSONS ARE 1 TO 9."], "{bad}");
+    }
 }

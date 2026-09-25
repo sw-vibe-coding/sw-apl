@@ -356,6 +356,7 @@ Library 1 holds:
 
 | Workspace | |
 |---|---|
+| `LEARN` | An introduction to APL for someone who has never used it: `START`, then `LESSON 2` and on to `LESSON 9`. Where you are, numbers, vectors, reduction and indexing, names, errors, defining a function, saving, and where to go next. Each lesson shows lines to try and names the next |
 | `LIFE` | Conway's Life on a torus: `GLIDER` then `RUN 4` |
 | `RACE` | A horse race, written to be read: character matrix, mixed output, the conditional branch idiom |
 | `EDIT` | A workspace to practise the del editor on. `FACT` is wrong by one on purpose |

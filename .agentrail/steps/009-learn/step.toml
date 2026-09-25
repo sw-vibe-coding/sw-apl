@@ -1,6 +1,6 @@
 number = 9
 slug = "learn"
-status = "pending"
+status = "in-progress"
 description = "Phase 10 step 6 (docs/plan.md). A LEARN workspace in library 1: an introducti..."
 role = "production"
 context_files = []

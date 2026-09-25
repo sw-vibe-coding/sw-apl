@@ -42,6 +42,10 @@ a reply to quad input that is not an answer: a system command runs
 and the request is made again, an error is reported and the request
 is made again, and )CLEAR gives the request up.
 
+`87-learn.apl` loads LEARN, the introduction in library 1, and
+walks its DESCRIBE, its first and last lessons, a line one of them
+suggests, and a lesson it does not have.
+
 `81-tttml.apl` runs in (B) '75: TTTML, a machine that learns
 tic-tac-toe by playing itself, loads trained, beats a random player
 without a loss, plays two games read move by move with quad, and

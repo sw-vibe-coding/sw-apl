@@ -166,7 +166,12 @@ const typing = (page) => page.evaluate(() =>
   await send(page, ')LIB 1');
   const shown = await paper(page);
   check('library 1 lists what sw-apl ships',
-    ['BIRDS', 'EDIT', 'LIFE', 'RACE'].every((n) => shown.includes(n)), JSON.stringify(shown.slice(-120)));
+    ['BIRDS', 'EDIT', 'LEARN', 'LIFE', 'RACE'].every((n) => shown.includes(n)), JSON.stringify(shown.slice(-120)));
+  // LEARN, the introduction, starts where a newcomer starts.
+  await send(page, ')LOAD 1 LEARN');
+  await send(page, 'START');
+  check('LEARN loads and its first lesson shows',
+    (await paper(page)).includes('LESSON 1: WHERE YOU ARE'), JSON.stringify((await paper(page)).slice(-160)));
   // BIRDS is baked into the bundle like the rest, a file for each
   // mode. The page opens in (B), whose BIRDS reaches any function by
   // execute: the Mockingbird sings its own name, and the Sage recurses
