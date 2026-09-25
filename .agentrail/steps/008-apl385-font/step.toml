@@ -1,8 +1,9 @@
 number = 8
 slug = "apl385-font"
-status = "in-progress"
+status = "completed"
 description = "Font half of the atomic-vector report (step 004). Vendor APL385 Unicode (Adri..."
 role = "production"
 context_files = []
 created_at = "2026-09-24T16:44:26"
-commits = []
+completed_at = "2026-09-24T21:20:33"
+commits = ["ca225dae4ccd3a5b55b4bc3c33766085849eac70"]

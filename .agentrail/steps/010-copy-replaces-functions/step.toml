@@ -1,4 +1,4 @@
-number = 9
+number = 10
 slug = "copy-replaces-functions"
 status = "pending"
 description = "Bug found in step 006: )COPY of a workspace whose function already exists in ..."

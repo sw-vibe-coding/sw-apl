@@ -1,0 +1,1 @@
+APL385 Unicode vendored as woff2 in images/redistributed/apl385-font with LICENSE (public domain per apl385.com) and ATTRIBUTION.md; copied into pages by just pages; font-face with local first and swap; Help gains Other libraries and Credits; check-pages checks the font. Pushed.
