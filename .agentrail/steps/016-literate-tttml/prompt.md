@@ -1,0 +1,1 @@
+Owner direction 2026-09-25, docs/plan.md. docs/literate/tttml.org: TTTML annotated WEB/weave style -- the board, the learning, the 64 KB budget (docs/learn-tic-tac-toe-strategy.md is the prose to draw on) -- tangling byte for byte to ws/lib1/TTTML.b-75.apl.ws, with runnable examples and recorded results, exported beside BIRDS and listed on the index. Same gates.

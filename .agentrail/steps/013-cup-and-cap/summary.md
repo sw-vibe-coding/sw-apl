@@ -1,0 +1,1 @@
+Seven 2741 characters with no APL 360 meaning (cap cup alpha omega shoes dieresis) moved to a reserved table: SYNTAX ERROR outside quotes in both modes, per APL 360 Table 3.1 and the 5110 manual; character data in quotes. Tests, sample 71 rebased, glyphs.txt, docs. Pushed.

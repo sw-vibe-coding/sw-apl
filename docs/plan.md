@@ -999,6 +999,44 @@ DRILL all read answers with it. So before LEARN:
   library 2: copying a function the workspace already holds is a
   DEFN ERROR, where `)COPY` replaces it.
 
+## Owner direction (2026-09-25): literate APL, with Org Babel
+
+"I want to add a literate programming example using an Emacs org-mode
+document with babel. So first we need to implement ob-sw-apl and use
+it in some worked examples. The footer in the live-demo should link
+to an index page with several .org files published as html with
+color syntax htmlize." The worked examples: BIRDS, its (B) '75
+version, and TTTML, annotated in WEB/weave style. The model is the
+sw-ml-study demos' literate documents (demo-decision-model): colours
+from htmlize faces set in the document's HTML head, a nav bar, and a
+gate that the tangled code equals the committed files.
+
+Design, the defaults the steps take:
+
+- **`ob-sw-apl`** (`emacs/ob-sw-apl.el`), with a small major mode
+  `sw-apl-mode` (`emacs/sw-apl-mode.el`) whose font-lock faces are
+  what htmlize colours: primitives, system names and commands,
+  numbers, strings, comments, the del. A source block runs through
+  `sw-apl --no-echo` in batch; `:mode 70` or `:mode 75` chooses the
+  mode (default 75); `:session` is not supported. ERT tests under
+  `emacs --batch`, as a just recipe that is skipped where there is
+  no Emacs.
+- **The documents** live in `docs/literate/`. Each is WEB in spirit:
+  prose and code in the order a reader understands, and the code
+  tangles to the shipped workspace file, byte for byte -- BIRDS to
+  `ws/lib1/BIRDS.b-75.apl.ws`, TTTML to `ws/lib1/TTTML.b-75.apl.ws`.
+  Runnable examples are blocks with recorded results, which a gate
+  re-runs.
+- **Published** by `emacs --batch` export with htmlize (css classes),
+  into `pages/literate/` with an index page; the demo's footer links
+  to it. The HTML is committed, as the pages are, and a gate checks
+  it equals a fresh export where Emacs is present.
+
+Order: `ob-sw-apl` and the mode; then BIRDS with the export, the index
+and the footer link, so the link lands with the first document; then
+TTTML. They come before the steps still carried (the base-conversion
+sample, the offline shell, the host-clock flag).
+
 ## Owner direction (2026-09-22): TTTML, a machine that learns tic-tac-toe
 
 A new library 1 workspace for (B) '75, `TTTML`: the machine plays
