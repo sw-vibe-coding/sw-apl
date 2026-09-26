@@ -1,0 +1,1 @@
+docs/emacs/sw-apl-mode.el (faces per kind for htmlize, primitives by exclusion) and ob-sw-apl.el (batch run per block, :mode :echo :library :lib, no session). 8 ERT tests via just test-emacs (in precommit). docs/literate.md. Verified an htmlize css export gives org-sw-apl classes. Pushed.

@@ -14,6 +14,8 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-26
 
+- feat(emacs): sw-apl-mode and ob-sw-apl, an Org Babel language for APL
+- docs(changes): refresh CHANGES.md to HEAD; complete 014-pages-serve-port
 - fix(serve): a port already in use is said plainly, and pages-serve takes a port
 - docs(changes): refresh CHANGES.md to HEAD
 - plan: literate APL with Org Babel (owner 2026-09-25); complete 013; insert ob-sw-apl, literate-birds, literate-tttml
