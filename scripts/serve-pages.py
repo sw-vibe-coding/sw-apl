@@ -13,6 +13,7 @@ The service-worker path is still what a published demo uses, and
 it stays covered.
 """
 
+import errno
 import functools
 import http.server
 import sys
@@ -50,7 +51,18 @@ def main():
     port = int(sys.argv[1]) if len(sys.argv) > 1 else 8361
     root = sys.argv[2] if len(sys.argv) > 2 else "pages"
     handler = functools.partial(Isolated, directory=root)
-    with http.server.ThreadingHTTPServer(("127.0.0.1", port), handler) as httpd:
+    try:
+        httpd = http.server.ThreadingHTTPServer(("127.0.0.1", port), handler)
+    except OSError as err:
+        if err.errno != errno.EADDRINUSE:
+            raise
+        # Most often a server left running from an earlier session.
+        sys.exit(
+            f"serve-pages: port {port} is in use. Stop what holds it "
+            f"(lsof -nP -iTCP:{port} -sTCP:LISTEN shows it), or serve "
+            f"on another: just pages-serve {port + 1}"
+        )
+    with httpd:
         print(f"sw-apl in a browser: http://127.0.0.1:{port}/")
         httpd.serve_forever()
 

@@ -101,6 +101,19 @@ fn mode(word: &str) -> Result<Mode, String> {
     Mode::parse(word).ok_or_else(|| format!("{word} is not a mode: 70 or 75"))
 }
 
+/// Listen on `addr`, which the flag `flag` set. A port already in use
+/// -- most often an earlier service still running -- is said so, with
+/// what to do about it, rather than as the bare system message.
+fn bind(addr: &str, flag: &str) -> std::io::Result<TcpListener> {
+    TcpListener::bind(addr).map_err(|err| match err.kind() {
+        std::io::ErrorKind::AddrInUse => std::io::Error::other(format!(
+            "{addr} is in use; is another sw-apl-server still running? \
+             Stop it, or give {flag} another address."
+        )),
+        _ => err,
+    })
+}
+
 fn main() -> ExitCode {
     let args = Args::parse();
     match start(&args) {
@@ -116,10 +129,7 @@ fn main() -> ExitCode {
 /// taken is an error rather than half a service. The browser
 /// listener is run on this thread and the line listener on another.
 fn start(args: &Args) -> std::io::Result<()> {
-    let (line, web) = (
-        TcpListener::bind(&args.listen)?,
-        TcpListener::bind(&args.http)?,
-    );
+    let (line, web) = (bind(&args.listen, "--listen")?, bind(&args.http, "--http")?);
     let libraries = apl_config::configured(args.config.as_deref(), &args.libs)
         .map_err(std::io::Error::other)?;
     let service = Service {

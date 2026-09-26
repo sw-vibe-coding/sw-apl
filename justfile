@@ -53,6 +53,7 @@ gates:
     sw-markdown-checker -f CHANGES.md
     sw-markdown-checker -f "samples/*.md"
     ./scripts/check-provenance.sh
+    ./scripts/check-serve-pages.sh
     sw-checklist
 
 # The full pre-commit gate, in order: format, test, lint, standards.
@@ -128,9 +129,10 @@ pages:
 # a static host that will not send them and falls back to the service
 # worker; `just check-pages` serves without them to keep that covered.
 #
-# Serve the browser demo at http://127.0.0.1:8361/.
-pages-serve: pages
-    ./scripts/serve-pages.py 8361 pages
+# Serve the browser demo at http://127.0.0.1:8361/, or on another port:
+# `just pages-serve 8362`.
+pages-serve port="8361": pages
+    ./scripts/serve-pages.py {{port}} pages
 
 # Check the browser demo in a browser: a first visit, a visit
 # holding the worker from an older bundle, and a worker that never

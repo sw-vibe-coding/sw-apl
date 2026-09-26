@@ -161,7 +161,10 @@ target/release/aplterm --connect 127.0.0.1:2775    # (B)
 `just demo` builds everything, starts the service and opens a
 terminal page in your browser at `http://127.0.0.1:8360/`; `just
 demo 75` does the same in (B). `nc 127.0.0.1 2741` works too, as an
-emergency client: the protocol is one line each way.
+emergency client: the protocol is one line each way. If a port is
+already in use, the service says so and names the flag to change;
+most often an older service is still running, and `aplterm` would
+otherwise be talking to that older build.
 
 ## Library 1
 

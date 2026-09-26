@@ -36,8 +36,22 @@ target/release/aplterm --connect 127.0.0.1:2741
 
 `sw-apl-server --help` describes both listeners, `--library`,
 `--lib` and `--config` (libraries 2 and up, as for `sw-apl`; see
-`workspaces.md`), `--ws-size` and `--sessions`. `sw-apl` with no service, holding its
-session in process, is unchanged and is still the daily interpreter.
+`workspaces.md`), `--ws-size` and `--sessions`. `sw-apl` with no
+service, holding its session in process, is unchanged and is still
+the daily interpreter.
+
+A port already in use stops the service before it starts, with the
+address, the flag that sets it, and what to do -- most often an
+earlier service is still running:
+
+```
+sw-apl-server: 127.0.0.1:2741 is in use; is another sw-apl-server
+still running? Stop it, or give --listen another address.
+```
+
+`aplterm` reaches whichever service holds its port, so after a
+rebuild stop the old service before starting the new one, or the
+terminal talks to the old build.
 
 ## The keyboard
 
@@ -146,7 +160,9 @@ just pages-serve
 ```
 
 builds it and serves it at `http://127.0.0.1:8361/`, the way a static
-host would. It needs the wasm toolchain:
+host would; `just pages-serve 8362` serves on another port. A port
+already in use is said so in one line, with the command that shows
+what holds it. It needs the wasm toolchain:
 
 ```bash
 rustup target add wasm32-unknown-unknown

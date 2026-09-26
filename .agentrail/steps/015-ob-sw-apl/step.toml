@@ -1,4 +1,4 @@
-number = 14
+number = 15
 slug = "ob-sw-apl"
 status = "pending"
 description = "Owner direction 2026-09-25, docs/plan.md (literate APL, with Org Babel). Writ..."
