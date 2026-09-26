@@ -12,8 +12,17 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-09-26
+
+- plan: literate APL with Org Babel (owner 2026-09-25); complete 013; insert ob-sw-apl, literate-birds, literate-tttml
+
+## 2026-09-25
+
+- fix(glyphs): cap, cup and the 2741's other meaningless characters are SYNTAX ERROR
+
 ## 2026-09-24
 
+- docs(changes): refresh CHANGES.md to HEAD; complete 012-emulation-policy
 - docs(emulation): what sw-apl answers where the machine, not the language, decided
 - docs(readme): link sw-apl-workspaces from Try it, beside )LIB 2 and )LOAD 2 COURSE
 - docs(changes): refresh CHANGES.md to HEAD; complete 010 and 011
