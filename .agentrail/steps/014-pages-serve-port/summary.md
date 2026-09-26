@@ -1,0 +1,1 @@
+serve-pages.py and sw-apl-server say plainly when a port is in use (address, flag, what to do), no traceback; just pages-serve takes a port. port_tests and check-serve-pages.sh in gates. Docs. Pushed.
