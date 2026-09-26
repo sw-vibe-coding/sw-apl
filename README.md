@@ -221,6 +221,8 @@ Using sw-apl:
   every 2741 overstrike
 - [The 2741 and the service](docs/terminal.md) -- the keyboard, the
   protocol, and what a session is
+- [Literate APL](docs/literate.md) -- an Emacs mode and an Org Babel
+  language, so an Org document runs its APL as it is read
 
 The modes and the workspaces:
 

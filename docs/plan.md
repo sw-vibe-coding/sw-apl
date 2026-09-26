@@ -1013,8 +1013,9 @@ gate that the tangled code equals the committed files.
 
 Design, the defaults the steps take:
 
-- **`ob-sw-apl`** (`emacs/ob-sw-apl.el`), with a small major mode
-  `sw-apl-mode` (`emacs/sw-apl-mode.el`) whose font-lock faces are
+- **`ob-sw-apl`** (`docs/emacs/ob-sw-apl.el`, beside the input
+  method), with a small major mode `sw-apl-mode`
+  (`docs/emacs/sw-apl-mode.el`) whose font-lock faces are
   what htmlize colours: primitives, system names and commands,
   numbers, strings, comments, the del. A source block runs through
   `sw-apl --no-echo` in batch; `:mode 70` or `:mode 75` chooses the

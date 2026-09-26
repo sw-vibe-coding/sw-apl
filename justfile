@@ -22,6 +22,17 @@ test component="":
         echo "== $c"; (cd "components/$c" && cargo test --workspace)
     done
 
+# The Emacs mode and Org Babel language, with ERT under a batch
+# Emacs. Skipped, and says so, where there is no Emacs.
+test-emacs: release
+    #!/usr/bin/env bash
+    set -euo pipefail
+    emacs=${EMACS:-}
+    [ -n "$emacs" ] || ! command -v emacs >/dev/null 2>&1 || emacs=emacs
+    [ -n "$emacs" ] || [ ! -x /Applications/Emacs.app/Contents/MacOS/Emacs ] || emacs=/Applications/Emacs.app/Contents/MacOS/Emacs
+    if [ -z "$emacs" ]; then echo "test-emacs: no Emacs; skipped"; exit 0; fi
+    "$emacs" --batch -Q -L docs/emacs -l docs/emacs/test/sw-apl-tests.el -f ert-run-tests-batch-and-exit
+
 clippy component="":
     #!/usr/bin/env bash
     set -euo pipefail
@@ -57,7 +68,7 @@ gates:
     sw-checklist
 
 # The full pre-commit gate, in order: format, test, lint, standards.
-precommit: fmt test clippy fmt-check gates
+precommit: fmt test test-emacs clippy fmt-check gates
 
 # Build the release binaries: sw-apl, sw-apl-server, aplterm.
 release:

@@ -13,6 +13,11 @@
   checkout without a browser can still run the suite. It skips with
   a note rather than failing when `playwright-core` is absent.
 
+- **`just test-emacs`** runs the ERT tests for the Emacs mode and
+  the Org Babel language (`docs/emacs/test/`) under a batch Emacs,
+  against the release binary. It is part of `just precommit`, and
+  skips with a note where there is no Emacs.
+
 - **Rust tests** cover the libraries: unit tests inside a crate,
   and the integration tests in each crate's `tests/`, which drive
   a crate's public API rather than a process.

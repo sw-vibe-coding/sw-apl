@@ -129,6 +129,12 @@ buffer, including `M-x shell`, `M-x term`, `vterm`, and `eshell`, so
 you can run sw-apl inside Emacs and type glyphs directly. Add the
 `load-file` line to your init file to make it permanent.
 
+### A mode, and APL in Org documents
+
+`docs/emacs/sw-apl-mode.el` colours sw-apl source, and
+`docs/emacs/ob-sw-apl.el` runs APL blocks in an Org document; see
+`literate.md`.
+
 ### Without any configuration
 
 `C-x 8 RET` (`insert-char`) accepts a Unicode name or code point:
