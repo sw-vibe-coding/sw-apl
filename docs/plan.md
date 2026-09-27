@@ -917,6 +917,12 @@ The design, from the owner's discussion and this repository's rules:
   switch is documented as not implemented; the owner is asked whether
   it should replace the planned host-clock flag (last step) or not be
   built.
+  Owner decision 2026-09-26: "default no clock; optional flag for
+  providing a clock, maybe --clock={none|hardware} default none". So
+  step 020 is `--clock none|hardware`, `none` by default, at the CLI
+  and the service (and the same key in sw-apl.toml): `none` is (B)'s
+  1900 time stamp as today, `hardware` gives `⎕TS` the host's clock.
+  No general --environment switch.
 
 Decisions for the owner, with the defaults the steps take until told
 otherwise: the config file's name and places (above); a library
