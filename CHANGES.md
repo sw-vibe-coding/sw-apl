@@ -14,6 +14,8 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-26
 
+- feat(literate): BIRDS as a literate program, published and linked from the demo
+- docs(changes): refresh CHANGES.md to HEAD; complete 015-ob-sw-apl
 - feat(emacs): sw-apl-mode and ob-sw-apl, an Org Babel language for APL
 - docs(changes): refresh CHANGES.md to HEAD; complete 014-pages-serve-port
 - fix(serve): a port already in use is said plainly, and pages-serve takes a port

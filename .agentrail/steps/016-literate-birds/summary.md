@@ -1,0 +1,1 @@
+docs/literate/birds.org: BIRDS (B) in WEB style, named chunks assembled by noweb in file order, tangles byte for byte; examples recorded. index.org and style.setup (htmlize classes, APL385, light and dark). ob-sw-apl :load. just literate and check-literate (in precommit; proven to catch drift). Footer link Literate APL, checked by check-pages. Pushed.
