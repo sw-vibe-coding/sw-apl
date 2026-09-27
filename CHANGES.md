@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-26
 
+- docs(samples): 88, number bases with decode and encode
+- plan: owner decision on the clock -- --clock none|hardware, none by default
+- docs(changes): refresh CHANGES.md to HEAD; complete 017-literate-tttml
 - feat(literate): TTTML as a literate program, beside BIRDS
 - docs(changes): refresh CHANGES.md to HEAD; complete 016-literate-birds
 - feat(literate): BIRDS as a literate program, published and linked from the demo

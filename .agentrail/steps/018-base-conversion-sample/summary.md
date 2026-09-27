@@ -1,0 +1,1 @@
+Sample 88 base conversion: decode and encode across bases, hex via a digit string, mixed radix, the truncation and index-origin traps, two's complement. reg-rs seeded, 97 pass. Pushed.
