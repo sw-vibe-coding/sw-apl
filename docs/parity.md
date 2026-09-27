@@ -158,7 +158,7 @@ the session numeric tests, and sample 67.
 | `↑ ↓` | dyadic | dyadic | per axis, negatives, overtake fill; samples 07, 10, 44 |
 | `/ ⌿` compress | dyadic | dyadic | boolean left, either axis, axis bracket; a scalar or one-element left argument extends, a scalar right argument does not (manual p. 3.41), so `1 0 1/7` is LENGTH ERROR; samples 17, 74 |
 | `\ ⍀` expand | dyadic | dyadic | boolean left, either axis, axis bracket |
-| `⊥ ⊤` | dyadic | dyadic | mixed radix, scalar extension, matrix columns; either argument of decode may be a one-element vector (manual p. 3.42); samples 36, 74 |
+| `⊥ ⊤` | dyadic | dyadic | mixed radix, scalar extension, matrix columns; either argument of decode may be a one-element vector (manual p. 3.42); samples 36, 74, 88 (base conversion) |
 | `∊` | dyadic | dyadic | with the fuzz; sample 30 |
 | `⍋ ⍒` | monadic | monadic | vectors, stable, origin-aware; sample 32 |
 | `⌹` | monadic, dyadic | monadic, dyadic | inverse, left inverse, least-squares divide by Householder QR; vectors are one column and scalars one by one; singular, wider than tall, and characters are DOMAIN ERROR; rank 3 is RANK ERROR; sample 66. Not in the Aug 1968 manual: domino was added to APL\360 in 1970, and the rules followed are the APLX Language Manual's for the same lineage |

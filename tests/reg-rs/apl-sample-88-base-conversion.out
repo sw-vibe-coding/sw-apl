@@ -1,0 +1,78 @@
+      ⍝ Number bases with decode and encode. Decode, the down tack, reads
+      ⍝ a vector of digits in the radix on its left and gives one number.
+      ⍝ The same four digits, read in base 2, 8, 10 and 16:
+      2⊥1 0 1 1
+11
+      8⊥1 0 1 1
+521
+      10⊥1 0 1 1
+1011
+      16⊥1 0 1 1
+4113
+      ⍝ Encode, the up tack, is the inverse: a radix vector and a number
+      ⍝ give the digits, one per element of the radix. 200 in binary,
+      ⍝ and back again:
+      2 2 2 2 2 2 2 2⊤200
+1 1 0 0 1 0 0 0
+      2⊥2 2 2 2 2 2 2 2⊤200
+200
+      ⍝ In octal:
+      8 8 8⊤200
+3 1 0
+      ⍝ Hexadecimal needs digits above 9. APL\360 has no format function,
+      ⍝ so the digits index a vector of the characters that show them.
+      ⍝ Each digit is 0 to 15, and the index origin is 1, hence the 1+.
+      16 16⊤200
+12 8
+      HEX←'0123456789ABCDEF'
+      HEX[1+16 16⊤200]
+C8
+      HEX[1+16 16 16 16⊤48879]
+BEEF
+      ⍝ Reading hex back is dyadic iota, the position of each character,
+      ⍝ less the origin. Forget the 1 and the digits are one too big:
+      16⊥HEX⍳'BEEF'
+53248
+      16⊥(HEX⍳'BEEF')-1
+48879
+      ⍝ What decode is really for is a mixed radix, which is no number
+      ⍝ base at all. Hours, minutes and seconds, to seconds and back:
+      24 60 60⊥2 15 30
+8130
+      24 60 60⊤8130
+2 15 30
+      ⍝ A 0 at the front of the radix takes whatever is left over, here
+      ⍝ the whole days in 200000 seconds:
+      0 24 60 60⊤200000
+2 7 33 20
+      ⍝ Pounds, shillings and pence: 20 shillings to the pound and 12
+      ⍝ pence to the shilling.
+      20 12⊥3 7
+43
+      0 20 12⊤1000
+4 3 4
+      ⍝ The traps. A radix vector too short for the number loses the high
+      ⍝ digits without a word: 13 is 1101 in binary, and three places
+      ⍝ give 101.
+      2 2 2⊤13
+1 0 1
+      2 2 2 2⊤13
+1 1 0 1
+      ⍝ And the hex step depends on the index origin. At origin 0 the 1+
+      ⍝ is one too many, and every digit comes out one high:
+      )ORIGIN 0
+WAS 1
+      HEX[1+16 16⊤200]
+D9
+      HEX[16 16⊤200]
+C8
+      )ORIGIN 1
+WAS 0
+      ⍝ Encode of a negative number with a radix of 2s gives its two's
+      ⍝ complement, the way a machine word holds it: ¯1 in 8 bits.
+      (8⍴2)⊤¯1
+1 1 1 1 1 1 1 1
+      )OFF
+18.21.49 09/26/26
+CONNECTED 0.00.00
+CPU TIME 0.00.00

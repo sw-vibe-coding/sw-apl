@@ -42,6 +42,12 @@ a reply to quad input that is not an answer: a system command runs
 and the request is made again, an error is reported and the request
 is made again, and )CLEAR gives the request up.
 
+`88-base-conversion.apl` converts between binary, octal, decimal and
+hexadecimal with decode and encode, prints hex digits by indexing a
+character vector, reads a mixed radix (hours, minutes and seconds;
+pounds, shillings and pence), and shows two traps: a radix too short
+for the number, and the index origin in the hex step.
+
 `87-learn.apl` loads LEARN, the introduction in library 1, and
 walks its DESCRIBE, its first and last lessons, a line one of them
 suggests, and a lesson it does not have.
