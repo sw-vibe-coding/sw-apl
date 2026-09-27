@@ -105,12 +105,13 @@ the manner of Knuth's WEB: prose and code in the order a reader meets
 them. Each named chunk of code is shown with its name, and one block
 at the end assembles the chunks, by noweb reference, in the order the
 workspace file keeps them; tangling the document writes that file.
-Examples are blocks with `:load "1 BIRDS"` and their results recorded
+Examples are blocks with `:load "1 BIRDS"` (or `"1 TTTML"`) and their results recorded
 beneath them.
 
 | Document | Tangles to |
 |---|---|
 | `birds.org` | `ws/lib1/BIRDS.b-75.apl.ws` |
+| `tttml.org` | `ws/lib1/TTTML.b-75.apl.ws`. Its model, `KEYS` and `VALS`, is data and is left out of the page, though not out of the tangle |
 
 `style.setup` is their shared look: the page, and the colour of each
 class, light and dark. `index.org` lists them.

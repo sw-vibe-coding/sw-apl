@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TTTML: a machine that learns tic-tac-toe</title>
+<meta name="author" content="Michael A Wright" />
+<meta name="generator" content="Org Mode" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+@font-face { font-family: "APL385 Unicode"; src: local("APL385 Unicode"), url("../redistributed/apl385-font/APL385.woff2") format("woff2"); font-display: swap; }
+:root { color-scheme: light dark; --paper: #fbf7ef; --ink: #2b2118; --rule: #d8cdb8; --code: #f4eee2;
+--prim: #0550ae; --arrow: #8250df; --num: #953800; --sys: #0a6e7a; --cmd: #6e5494; --del: #b3261e; --fn: #116329; --label: #7d4e00; --str: #0a7d55; --comment: #6a737d; }
+@media (prefers-color-scheme: dark) { :root { --paper: #17130e; --ink: #e8dfd0; --rule: #3a3229; --code: #211b14;
+--prim: #79c0ff; --arrow: #d2a8ff; --num: #ffa657; --sys: #56d4dd; --cmd: #b392f0; --del: #ff7b72; --fn: #7ee787; --label: #e3b341; --str: #7ee2b8; --comment: #8b949e; } }
+body { margin: 0 auto; max-width: 46rem; padding: 1rem; background: var(--paper); color: var(--ink); font: 17px/1.55 Georgia, "Times New Roman", serif; }
+a { color: var(--prim); }
+h1.title { font-size: 1.9rem; line-height: 1.2; margin-bottom: .2rem; }
+.subtitle { display: block; font-size: 1.05rem; font-weight: normal; font-style: italic; margin-top: .4rem; }
+nav.literate { font: 14px/1.4 system-ui, sans-serif; padding: .5rem 0; border-bottom: 1px solid var(--rule); margin-bottom: 1rem; }
+pre, code { font-family: "APL385 Unicode", "DejaVu Sans Mono", ui-monospace, monospace; }
+pre.src, pre.example { background: var(--code); border: 1px solid var(--rule); border-radius: 6px; padding: .6rem .8rem; overflow-x: auto; font-size: 15px; line-height: 1.45; }
+pre.example { border-left: 4px solid var(--rule); }
+.org-src-container label.org-src-name { display: block; font: 13px system-ui, sans-serif; color: var(--comment); margin: 1rem 0 .2rem; }
+.org-src-container label.org-src-name .listing-number { display: none; }
+.org-sw-apl-primitive { color: var(--prim); }
+.org-sw-apl-arrow { color: var(--arrow); font-weight: 600; }
+.org-sw-apl-number { color: var(--num); }
+.org-sw-apl-system { color: var(--sys); }
+.org-sw-apl-command { color: var(--cmd); }
+.org-sw-apl-del { color: var(--del); font-weight: 700; }
+.org-sw-apl-label, .org-variable-name { color: var(--label); }
+.org-function-name { color: var(--fn); font-weight: 600; }
+.org-string { color: var(--str); }
+.org-comment, .org-comment-delimiter { color: var(--comment); font-style: italic; }
+table { border-collapse: collapse; } td, th { padding: .2rem .6rem; border-bottom: 1px solid var(--rule); }
+</style>
+</head>
+<body>
+<div id="preamble" class="status">
+<nav class="literate"><a href="index.html">Literate APL</a> · <a href="../">sw-apl in your browser</a> · <a href="https://github.com/sw-vibe-coding/sw-apl">Repository</a></nav>
+</div>
+<div id="content" class="content">
+<h1 class="title">TTTML: a machine that learns tic-tac-toe
+<br>
+<span class="subtitle">learning by playing itself, in APL, in the memory of a 1975 desktop computer</span>
+</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orgfe2b64b">The board</a></li>
+<li><a href="#org2380b42">Who has won</a></li>
+<li><a href="#org86a6606">One position, eight ways</a></li>
+<li><a href="#orgf69f351">What a position is worth</a></li>
+<li><a href="#orgc0983e3">Choosing a move</a></li>
+<li><a href="#org009c8c2">Learning from a game</a></li>
+<li><a href="#orgc33ef85">Playing</a></li>
+<li><a href="#orgbe1261e">What the workspace says of itself</a></li>
+<li><a href="#orgc845dcd">The workspace file</a></li>
+</ul>
+</div>
+</div>
+<p>
+This is TTTML, the (B) '75 workspace in sw-apl's library 1 that learns
+tic-tac-toe by playing itself and then plays you, written as a literate
+program. The prose and the code come in the order a reader needs them;
+the last section assembles them into <code>ws/lib1/TTTML.b-75.apl.ws</code>,
+byte for byte. Every example was run by sw-apl on the workspace as it
+ships, trained, and its result recorded under it. <code>)LOAD 1 TTTML</code> in
+the (B) tab of sw-apl in your browser gives the same answers.
+</p>
+
+<p>
+The machine (B) is modelled on, a desktop computer of 1975, had at
+most 64 KB of memory and interpreted APL slowly. So the question is
+not only how a program learns a game, but how it does so in a small
+space: <code>docs/learn-tic-tac-toe-strategy.md</code> tells that story, with
+the measurements; this document is the program.
+</p>
+<div id="outline-container-orgfe2b64b" class="outline-2">
+<h2 id="orgfe2b64b">The board</h2>
+<div class="outline-text-2" id="text-orgfe2b64b">
+<p>
+A board is 9 numbers, the squares row by row: <code>1</code> for X, <code>¯1</code> for O,
+<code>0</code> for an empty square. X always moves first, so whose turn it is
+can be read from the board: X's when the marks are even. <code>SHOW</code> draws
+one:
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 1: </span><code>&lt;&lt;fn-show&gt;&gt;</code></label><pre class="src src-sw-apl" id="org33fcfa0"><span class="org-sw-apl-del">&#8711;</span><span class="org-function-name">SHOW</span> S;B<span class="org-sw-apl-primitive">
+</span><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">THE BOARD: X, O, AND A DOT FOR AN EMPTY SQUARE.
+</span>B<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-number">9</span> <span class="org-sw-apl-number">2</span><span class="org-sw-apl-primitive">&#9076;</span><span class="org-string">' '</span><span class="org-sw-apl-primitive">
+</span>B[;<span class="org-sw-apl-number">2</span>]<span class="org-sw-apl-arrow">&#8592;</span><span class="org-string">'O.X'</span>[S<span class="org-sw-apl-primitive">+</span><span class="org-sw-apl-number">2</span>]<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-number">3</span> <span class="org-sw-apl-number">6</span><span class="org-sw-apl-primitive">&#9076;,</span>B<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-del">&#8711;</span>
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-sw-apl">SHOW <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">&#175;1</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">&#175;1</span>
+</pre>
+</div>
+
+<pre class="example">
+X O .
+. X .
+. . O
+</pre>
+</div>
+</div>
+<div id="outline-container-org2380b42" class="outline-2">
+<h2 id="org2380b42">Who has won</h2>
+<div class="outline-text-2" id="text-org2380b42">
+<p>
+A line is three squares, and there are eight: three rows, three
+columns, two diagonals. <code>WL</code> holds them as an 8 by 9 matrix of 0s and
+1s, a row per line, so one inner product sums the board along every
+line at once. X has a line where a sum is 3, O where it is <code>¯3</code>:
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 2: </span><code>&lt;&lt;var-wl&gt;&gt;</code></label><pre class="src src-sw-apl" id="org5f7d52b">WL<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-number">8</span> <span class="org-sw-apl-number">9</span><span class="org-sw-apl-primitive">&#9076;</span><span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span>
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-sw-apl">WL<span class="org-sw-apl-primitive">+.&#215;</span><span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">&#175;1</span> <span class="org-sw-apl-number">&#175;1</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span>
+</pre>
+</div>
+
+<pre class="example">
+3 ¯2 0 0 0 1 0 0
+</pre>
+
+
+<p>
+<code>OUTCOME</code> reads the result from those sums: 1 when X has won, <code>¯1</code>
+when O has, 2 for a full board with no line, a draw, and 0 while the
+game goes on.
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 3: </span><code>&lt;&lt;fn-outcome&gt;&gt;</code></label><pre class="src src-sw-apl" id="org2f05cc5"><span class="org-sw-apl-del">&#8711;</span>R<span class="org-sw-apl-arrow">&#8592;</span><span class="org-function-name">OUTCOME</span> S;L<span class="org-sw-apl-primitive">
+</span><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">1 X HAS WON, &#175;1 O HAS, 2 A DRAW, 0 THE GAME GOES ON.
+</span><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">WL IS THE 8 LINES OF THE BOARD: A SUM OF 3 IS X'S LINE.
+</span>L<span class="org-sw-apl-arrow">&#8592;</span>WL<span class="org-sw-apl-primitive">+.&#215;</span>S<span class="org-sw-apl-primitive">
+</span>R<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-number">2</span><span class="org-sw-apl-primitive">&#215;~</span><span class="org-sw-apl-number">0</span><span class="org-sw-apl-primitive">&#8714;</span>S<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-arrow">&#8594;</span>(<span class="org-sw-apl-primitive">~</span><span class="org-sw-apl-number">3</span><span class="org-sw-apl-primitive">&#8714;</span>L)<span class="org-sw-apl-primitive">/</span>NX<span class="org-sw-apl-primitive">
+</span>R<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-number">1</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-label">NX</span>:<span class="org-sw-apl-arrow">&#8594;</span>(<span class="org-sw-apl-primitive">~</span><span class="org-sw-apl-number">&#175;3</span><span class="org-sw-apl-primitive">&#8714;</span>L)<span class="org-sw-apl-primitive">/</span><span class="org-sw-apl-number">0</span><span class="org-sw-apl-primitive">
+</span>R<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-number">&#175;1</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-del">&#8711;</span>
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-sw-apl">OUTCOME <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">&#175;1</span> <span class="org-sw-apl-number">&#175;1</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span><span class="org-sw-apl-primitive">
+</span>OUTCOME <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">&#175;1</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">&#175;1</span> <span class="org-sw-apl-number">&#175;1</span> <span class="org-sw-apl-number">&#175;1</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">1</span><span class="org-sw-apl-primitive">
+</span>OUTCOME <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">&#175;1</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span>
+</pre>
+</div>
+
+<pre class="example">
+      OUTCOME 1 1 1 ¯1 ¯1 0 0 0 0
+1
+      OUTCOME 1 ¯1 1 1 ¯1 ¯1 ¯1 1 1
+2
+      OUTCOME 1 ¯1 0 0 0 0 0 0 0
+0
+</pre>
+</div>
+</div>
+<div id="outline-container-org86a6606" class="outline-2">
+<h2 id="org86a6606">One position, eight ways</h2>
+<div class="outline-text-2" id="text-org86a6606">
+<p>
+A board turned a quarter or reflected is the same position to play:
+a corner opening is a corner opening in any of the four corners. The
+square has eight symmetries, and <code>SYM</code> lists them as eight
+rearrangements of the square numbers, so <code>S[SYM]</code> is all eight
+versions of a board <code>S</code> at once:
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 4: </span><code>&lt;&lt;var-sym&gt;&gt;</code></label><pre class="src src-sw-apl" id="org2c5844a">SYM<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-number">8</span> <span class="org-sw-apl-number">9</span><span class="org-sw-apl-primitive">&#9076;</span><span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">2</span> <span class="org-sw-apl-number">3</span> <span class="org-sw-apl-number">4</span> <span class="org-sw-apl-number">5</span> <span class="org-sw-apl-number">6</span> <span class="org-sw-apl-number">7</span> <span class="org-sw-apl-number">8</span> <span class="org-sw-apl-number">9</span> <span class="org-sw-apl-number">7</span> <span class="org-sw-apl-number">4</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">8</span> <span class="org-sw-apl-number">5</span> <span class="org-sw-apl-number">2</span> <span class="org-sw-apl-number">9</span> <span class="org-sw-apl-number">6</span> <span class="org-sw-apl-number">3</span> <span class="org-sw-apl-number">9</span> <span class="org-sw-apl-number">8</span> <span class="org-sw-apl-number">7</span> <span class="org-sw-apl-number">6</span> <span class="org-sw-apl-number">5</span> <span class="org-sw-apl-number">4</span> <span class="org-sw-apl-number">3</span> <span class="org-sw-apl-number">2</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">3</span> <span class="org-sw-apl-number">6</span> <span class="org-sw-apl-number">9</span> <span class="org-sw-apl-number">2</span> <span class="org-sw-apl-number">5</span> <span class="org-sw-apl-number">8</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">4</span> <span class="org-sw-apl-number">7</span> <span class="org-sw-apl-number">3</span> <span class="org-sw-apl-number">2</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">6</span> <span class="org-sw-apl-number">5</span> <span class="org-sw-apl-number">4</span> <span class="org-sw-apl-number">9</span> <span class="org-sw-apl-number">8</span> <span class="org-sw-apl-number">7</span> <span class="org-sw-apl-number">7</span> <span class="org-sw-apl-number">8</span> <span class="org-sw-apl-number">9</span> <span class="org-sw-apl-number">4</span> <span class="org-sw-apl-number">5</span> <span class="org-sw-apl-number">6</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">2</span> <span class="org-sw-apl-number">3</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">4</span> <span class="org-sw-apl-number">7</span> <span class="org-sw-apl-number">2</span> <span class="org-sw-apl-number">5</span> <span class="org-sw-apl-number">8</span> <span class="org-sw-apl-number">3</span> <span class="org-sw-apl-number">6</span> <span class="org-sw-apl-number">9</span> <span class="org-sw-apl-number">9</span> <span class="org-sw-apl-number">6</span> <span class="org-sw-apl-number">3</span> <span class="org-sw-apl-number">8</span> <span class="org-sw-apl-number">5</span> <span class="org-sw-apl-number">2</span> <span class="org-sw-apl-number">7</span> <span class="org-sw-apl-number">4</span> <span class="org-sw-apl-number">1</span>
+</pre>
+</div>
+
+<p>
+<code>CODES</code> names a position. Read as a base-3 number, <code>3⊥S+1</code>, a board
+is a single integer; each of the eight versions has its own, and the
+least of the eight is the position's code. It takes a matrix, a board
+per row, and codes them all together:
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 5: </span><code>&lt;&lt;fn-codes&gt;&gt;</code></label><pre class="src src-sw-apl" id="org80b0f3e"><span class="org-sw-apl-del">&#8711;</span>C<span class="org-sw-apl-arrow">&#8592;</span><span class="org-function-name">CODES</span> T;N<span class="org-sw-apl-primitive">
+</span><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">EACH ROW OF T AS A BASE-3 NUMBER, THE LEAST OF ITS 8
+</span><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">ROTATIONS AND REFLECTIONS (THE ROWS OF SYM).
+</span>N<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-number">1</span><span class="org-sw-apl-primitive">&#8593;&#9076;</span>T<span class="org-sw-apl-primitive">
+</span>C<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-primitive">&#8970;/</span>(N<span class="org-sw-apl-primitive">,</span><span class="org-sw-apl-number">8</span>)<span class="org-sw-apl-primitive">&#9076;</span><span class="org-sw-apl-number">3</span><span class="org-sw-apl-primitive">&#8869;&#9033;</span>((N<span class="org-sw-apl-primitive">&#215;</span><span class="org-sw-apl-number">8</span>)<span class="org-sw-apl-primitive">,</span><span class="org-sw-apl-number">9</span>)<span class="org-sw-apl-primitive">&#9076;</span>(T<span class="org-sw-apl-primitive">+</span><span class="org-sw-apl-number">1</span>)[;<span class="org-sw-apl-primitive">,</span>SYM]<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-del">&#8711;</span>
+</pre>
+</div>
+
+<p>
+An X in the top left corner and an X in the top right are one
+position, and have one code; an X on an edge is another:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sw-apl">CODES <span class="org-sw-apl-number">2</span> <span class="org-sw-apl-number">9</span><span class="org-sw-apl-primitive">&#9076;</span><span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span><span class="org-sw-apl-primitive">
+</span>CODES <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">9</span><span class="org-sw-apl-primitive">&#9076;</span><span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span>
+</pre>
+</div>
+
+<pre class="example">
+      CODES 2 9⍴1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0
+9842 9842
+      CODES 1 9⍴0 1 0 0 0 0 0 0 0
+9844
+</pre>
+
+
+<p>
+Of the 5,478 positions a game can reach, 765 are different up to
+symmetry. That is the first saving.
+</p>
+</div>
+</div>
+<div id="outline-container-orgf69f351" class="outline-2">
+<h2 id="orgf69f351">What a position is worth</h2>
+<div class="outline-text-2" id="text-orgf69f351">
+<p>
+What the machine learns is one number for each position it has met:
+how good that board, just after a move, has turned out to be for the
+player who made the move. Towards 1 is a win, towards 0 a loss, and
+0.5 a draw &#x2013; or no idea yet. This is the value of an <i>afterstate</i>,
+and it is the second saving: one number per board, where a table of
+every board and every move would need nine, and more memory than the
+machine had.
+</p>
+
+<p>
+The model is two vectors: <code>KEYS</code>, the codes met so far, and <code>VALS</code>,
+their values. They are what training writes, so they are data, not
+code: 757 numbers each, too long to print here, in chunks
+<code>&lt;&lt;var-keys&gt;&gt;</code> and <code>&lt;&lt;var-vals&gt;&gt;</code> of the Org source. How many, and how
+much of the workspace is in use:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sw-apl"><span class="org-sw-apl-primitive">&#9076;</span>KEYS<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-number">1048576</span><span class="org-sw-apl-primitive">-</span><span class="org-sw-apl-system">&#9109;WA</span>
+</pre>
+</div>
+
+<pre class="example">
+      ⍴KEYS
+757
+      1048576-⎕WA
+17762
+</pre>
+
+
+<p>
+About 17 KB of the workspace is in use, the model and the program
+together: well inside 64 KB, with nothing to swap out to tape.
+</p>
+
+<p>
+<code>VALUE</code> looks positions up, a matrix of boards at a time. One it has
+not seen before is added to the model, worth 0.5, so the table grows
+only with positions that play reaches:
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 6: </span><code>&lt;&lt;fn-value&gt;&gt;</code></label><pre class="src src-sw-apl" id="org7d4a3d3"><span class="org-sw-apl-del">&#8711;</span>V<span class="org-sw-apl-arrow">&#8592;</span><span class="org-function-name">VALUE</span> T;C;N<span class="org-sw-apl-primitive">
+</span><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">WHAT EACH ROW OF T IS WORTH TO THE PLAYER WHO MADE IT.
+</span><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">A POSITION NOT SEEN BEFORE IS ADDED, WORTH 0.5.
+</span>C<span class="org-sw-apl-arrow">&#8592;</span>CODES T<span class="org-sw-apl-primitive">
+</span>N<span class="org-sw-apl-arrow">&#8592;</span>(KEYS<span class="org-sw-apl-primitive">&#9075;</span>C)<span class="org-sw-apl-primitive">&gt;&#9076;</span>KEYS<span class="org-sw-apl-primitive">
+</span>N<span class="org-sw-apl-arrow">&#8592;</span>N<span class="org-sw-apl-primitive">&#8743;</span>(<span class="org-sw-apl-primitive">&#9075;&#9076;</span>C)<span class="org-sw-apl-primitive">=</span>C<span class="org-sw-apl-primitive">&#9075;</span>C<span class="org-sw-apl-primitive">
+</span>KEYS<span class="org-sw-apl-arrow">&#8592;</span>KEYS<span class="org-sw-apl-primitive">,</span>N<span class="org-sw-apl-primitive">/</span>C<span class="org-sw-apl-primitive">
+</span>VALS<span class="org-sw-apl-arrow">&#8592;</span>VALS<span class="org-sw-apl-primitive">,</span><span class="org-sw-apl-number">0.5</span><span class="org-sw-apl-primitive">+</span><span class="org-sw-apl-number">0</span><span class="org-sw-apl-primitive">&#215;</span>N<span class="org-sw-apl-primitive">/</span>C<span class="org-sw-apl-primitive">
+</span>V<span class="org-sw-apl-arrow">&#8592;</span>VALS[KEYS<span class="org-sw-apl-primitive">&#9075;</span>C]<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-del">&#8711;</span>
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-sw-apl">VALUE <span class="org-sw-apl-number">3</span> <span class="org-sw-apl-number">9</span><span class="org-sw-apl-primitive">&#9076;</span><span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span>
+</pre>
+</div>
+
+<pre class="example">
+0.30922 0.36138 0.40962
+</pre>
+
+
+<p>
+To X's first move, the corner is worth a little less than the edge and
+the centre is worth most.
+</p>
+</div>
+</div>
+<div id="outline-container-orgc0983e3" class="outline-2">
+<h2 id="orgc0983e3">Choosing a move</h2>
+<div class="outline-text-2" id="text-orgc0983e3">
+<p>
+<code>CHOOSE</code> builds every board the player to move could make, one per
+empty square, as a single matrix &#x2013; the board repeated, plus the
+mover's mark where <code>P∘.=⍳9</code> puts it &#x2013; values them all with one call
+to <code>VALUE</code>, and takes the best. The mover's mark is 1 or <code>¯1</code> as the
+number of marks already down is even or odd.
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 7: </span><code>&lt;&lt;fn-choose&gt;&gt;</code></label><pre class="src src-sw-apl" id="org182346e"><span class="org-sw-apl-del">&#8711;</span>A<span class="org-sw-apl-arrow">&#8592;</span><span class="org-function-name">CHOOSE</span> S;P;V;M<span class="org-sw-apl-primitive">
+</span><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">THE SQUARE WHOSE AFTERSTATE IS WORTH MOST TO THE MOVER.
+</span>P<span class="org-sw-apl-arrow">&#8592;</span>(S<span class="org-sw-apl-primitive">=</span><span class="org-sw-apl-number">0</span>)<span class="org-sw-apl-primitive">/&#9075;</span><span class="org-sw-apl-number">9</span><span class="org-sw-apl-primitive">
+</span>M<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-number">1</span><span class="org-sw-apl-primitive">-</span><span class="org-sw-apl-number">2</span><span class="org-sw-apl-primitive">&#215;</span><span class="org-sw-apl-number">2</span><span class="org-sw-apl-primitive">|+/</span>S<span class="org-sw-apl-primitive">&#8800;</span><span class="org-sw-apl-number">0</span><span class="org-sw-apl-primitive">
+</span>V<span class="org-sw-apl-arrow">&#8592;</span>VALUE(((<span class="org-sw-apl-primitive">&#9076;</span>P)<span class="org-sw-apl-primitive">,</span><span class="org-sw-apl-number">9</span>)<span class="org-sw-apl-primitive">&#9076;</span>S)<span class="org-sw-apl-primitive">+</span>M<span class="org-sw-apl-primitive">&#215;</span>P<span class="org-sw-apl-primitive">&#8728;.=&#9075;</span><span class="org-sw-apl-number">9</span><span class="org-sw-apl-primitive">
+</span>A<span class="org-sw-apl-arrow">&#8592;</span>P[V<span class="org-sw-apl-primitive">&#9075;&#8968;/</span>V]<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-del">&#8711;</span>
+</pre>
+</div>
+
+<p>
+It opens in the centre, takes a win when there is one, and blocks
+one:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sw-apl">CHOOSE <span class="org-sw-apl-number">9</span><span class="org-sw-apl-primitive">&#9076;</span><span class="org-sw-apl-number">0</span><span class="org-sw-apl-primitive">
+</span>CHOOSE <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">&#175;1</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">&#175;1</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span><span class="org-sw-apl-primitive">
+</span>CHOOSE <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">&#175;1</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span>
+</pre>
+</div>
+
+<pre class="example">
+      CHOOSE 9⍴0
+5
+      CHOOSE 1 ¯1 0 ¯1 1 0 0 0 0
+9
+      CHOOSE 1 1 0 ¯1 0 0 0 0 0
+3
+</pre>
+</div>
+</div>
+<div id="outline-container-org009c8c2" class="outline-2">
+<h2 id="org009c8c2">Learning from a game</h2>
+<div class="outline-text-2" id="text-org009c8c2">
+<p>
+<code>GAME</code> plays one game against itself, choosing as <code>CHOOSE</code> does but,
+when a draw of <code>?1000</code> falls under <code>EPS</code>, playing a random legal move
+instead, so that it keeps trying moves it now thinks are bad. It
+keeps every afterstate, a row of <code>H</code> per move, and learns from them
+once the game is over:
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 8: </span><code>&lt;&lt;fn-game&gt;&gt;</code></label><pre class="src src-sw-apl" id="org4ed7cf8"><span class="org-sw-apl-del">&#8711;</span>W<span class="org-sw-apl-arrow">&#8592;</span><span class="org-function-name">GAME</span> EPS;S;H;A;P;M<span class="org-sw-apl-primitive">
+</span><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">ONE GAME AGAINST ITSELF, A RANDOM MOVE WHEN A DRAW OF ?1000
+</span><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">FALLS UNDER EPS, AND THEN LEARN FROM IT.
+</span>S<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-number">9</span><span class="org-sw-apl-primitive">&#9076;</span><span class="org-sw-apl-number">0</span><span class="org-sw-apl-primitive">
+</span>H<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">9</span><span class="org-sw-apl-primitive">&#9076;</span><span class="org-sw-apl-number">0</span><span class="org-sw-apl-primitive">
+</span>M<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-number">1</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-label">LOOP</span>:P<span class="org-sw-apl-arrow">&#8592;</span>(S<span class="org-sw-apl-primitive">=</span><span class="org-sw-apl-number">0</span>)<span class="org-sw-apl-primitive">/&#9075;</span><span class="org-sw-apl-number">9</span><span class="org-sw-apl-primitive">
+</span>A<span class="org-sw-apl-arrow">&#8592;</span>CHOOSE S<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-arrow">&#8594;</span>(EPS<span class="org-sw-apl-primitive">&#8804;</span>(<span class="org-sw-apl-primitive">?</span><span class="org-sw-apl-number">1000</span>)<span class="org-sw-apl-primitive">&#247;</span><span class="org-sw-apl-number">1000</span>)<span class="org-sw-apl-primitive">/</span>PUT<span class="org-sw-apl-primitive">
+</span>A<span class="org-sw-apl-arrow">&#8592;</span>P[<span class="org-sw-apl-primitive">?&#9076;</span>P]<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-label">PUT</span>:S[A]<span class="org-sw-apl-arrow">&#8592;</span>M<span class="org-sw-apl-primitive">
+</span>H<span class="org-sw-apl-arrow">&#8592;</span>H<span class="org-sw-apl-primitive">,</span>[<span class="org-sw-apl-number">1</span>]S<span class="org-sw-apl-primitive">
+</span>W<span class="org-sw-apl-arrow">&#8592;</span>OUTCOME S<span class="org-sw-apl-primitive">
+</span>M<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-primitive">-</span>M<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-arrow">&#8594;</span>(W<span class="org-sw-apl-primitive">=</span><span class="org-sw-apl-number">0</span>)<span class="org-sw-apl-primitive">/</span>LOOP<span class="org-sw-apl-primitive">
+</span>H LEARN W<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-del">&#8711;</span>
+</pre>
+</div>
+
+<p>
+<code>LEARN</code> goes back through the game from the last move to the first,
+moving each afterstate's value a fifth of the way towards a target.
+For the last two moves the target is the result, as the player who
+made the move sees it: 1 won, 0 lost, 0.5 drawn. For an earlier move
+it is that player's next afterstate, two rows on, taken at 0.9 so that
+a sooner win is worth more than a later one. This is
+temporal-difference learning, as in Sutton and Barto's tic-tac-toe
+example: a win or a loss at the end reaches back, game by game, to
+the moves that led to it.
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 9: </span><code>&lt;&lt;fn-learn&gt;&gt;</code></label><pre class="src src-sw-apl" id="org6632b1b"><span class="org-sw-apl-del">&#8711;</span>H <span class="org-function-name">LEARN</span> W;I;J;N;T<span class="org-sw-apl-primitive">
+</span><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">MOVE EACH AFTERSTATE A FIFTH OF THE WAY TO ITS MOVER'S NEXT
+</span><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">ONE, TAKEN AT 0.9 SO A SOONER WIN IS WORTH MORE, OR TO THE
+</span><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">RESULT: 1 WON, 0 LOST, 0.5 DRAWN.
+</span>I<span class="org-sw-apl-arrow">&#8592;</span>KEYS<span class="org-sw-apl-primitive">&#9075;</span>CODES H<span class="org-sw-apl-primitive">
+</span>N<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-primitive">&#9076;</span>I<span class="org-sw-apl-primitive">
+</span>J<span class="org-sw-apl-arrow">&#8592;</span>N<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-label">BACK</span>:T<span class="org-sw-apl-arrow">&#8592;</span>(W<span class="org-sw-apl-primitive">=</span><span class="org-sw-apl-number">2</span>)<span class="org-sw-apl-primitive">&#215;</span><span class="org-sw-apl-number">0.5</span><span class="org-sw-apl-primitive">
+</span>T<span class="org-sw-apl-arrow">&#8592;</span>T<span class="org-sw-apl-primitive">+</span>W<span class="org-sw-apl-primitive">=</span><span class="org-sw-apl-number">1</span><span class="org-sw-apl-primitive">-</span><span class="org-sw-apl-number">2</span><span class="org-sw-apl-primitive">&#215;</span><span class="org-sw-apl-number">0</span><span class="org-sw-apl-primitive">=</span><span class="org-sw-apl-number">2</span><span class="org-sw-apl-primitive">|</span>J<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-arrow">&#8594;</span>(J<span class="org-sw-apl-primitive">&#8805;</span>N<span class="org-sw-apl-primitive">-</span><span class="org-sw-apl-number">1</span>)<span class="org-sw-apl-primitive">/</span>SET<span class="org-sw-apl-primitive">
+</span>T<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-number">0.9</span><span class="org-sw-apl-primitive">&#215;</span>VALS[I[J<span class="org-sw-apl-primitive">+</span><span class="org-sw-apl-number">2</span>]]<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-label">SET</span>:VALS[I[J]]<span class="org-sw-apl-arrow">&#8592;</span>VALS[I[J]]<span class="org-sw-apl-primitive">+</span><span class="org-sw-apl-number">0.2</span><span class="org-sw-apl-primitive">&#215;</span>T<span class="org-sw-apl-primitive">-</span>VALS[I[J]]<span class="org-sw-apl-primitive">
+</span>J<span class="org-sw-apl-arrow">&#8592;</span>J<span class="org-sw-apl-primitive">-</span><span class="org-sw-apl-number">1</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-arrow">&#8594;</span>(J<span class="org-sw-apl-primitive">&gt;</span><span class="org-sw-apl-number">0</span>)<span class="org-sw-apl-primitive">/</span>BACK<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-del">&#8711;</span>
+</pre>
+</div>
+
+<p>
+<code>TRAIN</code> forgets everything and learns again from <code>N</code> games, saying
+every thousand how many positions it knows and how many bytes are
+still free. Its result is how many games X won, O won, and were
+drawn. The workspace ships already trained, since a 1975 machine
+would have taken far longer over it than sw-apl does; here it relearns
+from 3,000 games:
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 10: </span><code>&lt;&lt;fn-train&gt;&gt;</code></label><pre class="src src-sw-apl" id="orgff2b0f1"><span class="org-sw-apl-del">&#8711;</span>R<span class="org-sw-apl-arrow">&#8592;</span><span class="org-function-name">TRAIN</span> N;K<span class="org-sw-apl-primitive">
+</span><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">FORGET, THEN LEARN FROM N GAMES AGAINST ITSELF. R IS HOW
+</span><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">MANY X WON, O WON AND WERE DRAWN. EVERY 1000 GAMES IT SAYS
+</span><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">HOW MANY POSITIONS IT KNOWS, AND THE BYTES STILL FREE.
+</span>KEYS<span class="org-sw-apl-arrow">&#8592;</span>VALS<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-primitive">&#9075;</span><span class="org-sw-apl-number">0</span><span class="org-sw-apl-primitive">
+</span>R<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span> <span class="org-sw-apl-number">0</span><span class="org-sw-apl-primitive">
+</span>K<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-number">0</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-label">L</span>:R<span class="org-sw-apl-arrow">&#8592;</span>R<span class="org-sw-apl-primitive">+</span>(GAME <span class="org-sw-apl-number">0.1</span>)<span class="org-sw-apl-primitive">=</span><span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">&#175;1</span> <span class="org-sw-apl-number">2</span><span class="org-sw-apl-primitive">
+</span>K<span class="org-sw-apl-arrow">&#8592;</span>K<span class="org-sw-apl-primitive">+</span><span class="org-sw-apl-number">1</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-arrow">&#8594;</span>(<span class="org-sw-apl-number">0</span><span class="org-sw-apl-primitive">&#8800;</span><span class="org-sw-apl-number">1000</span><span class="org-sw-apl-primitive">|</span>K)<span class="org-sw-apl-primitive">/</span>NEXT<span class="org-sw-apl-primitive">
+</span><span class="org-string">'GAMES '</span>;K;<span class="org-string">'  POSITIONS '</span>;(<span class="org-sw-apl-primitive">&#9076;</span>KEYS);<span class="org-string">'  FREE '</span>;<span class="org-sw-apl-system">&#9109;WA</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-label">NEXT</span>:<span class="org-sw-apl-arrow">&#8594;</span>(K<span class="org-sw-apl-primitive">&lt;</span>N)<span class="org-sw-apl-primitive">/</span>L<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-del">&#8711;</span>
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-sw-apl">TRAIN <span class="org-sw-apl-number">3000</span>
+</pre>
+</div>
+
+<pre class="example">
+GAMES 1000  POSITIONS 754  FREE 1030674
+GAMES 2000  POSITIONS 754  FREE 1030674
+GAMES 3000  POSITIONS 754  FREE 1030674
+886 323 1791
+</pre>
+</div>
+</div>
+<div id="outline-container-orgc33ef85" class="outline-2">
+<h2 id="orgc33ef85">Playing</h2>
+<div class="outline-text-2" id="text-orgc33ef85">
+<p>
+To see how well it has learned, <code>AGAINST</code> plays one game with the
+machine as one side, <code>ME</code>, and a player moving at random as the
+other; <code>TRIAL</code> plays <code>N</code> games as X and <code>N</code> as O, and counts. Each row
+is won, lost and drawn:
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 11: </span><code>&lt;&lt;fn-against&gt;&gt;</code></label><pre class="src src-sw-apl" id="orgcc7e983"><span class="org-sw-apl-del">&#8711;</span>W<span class="org-sw-apl-arrow">&#8592;</span>ME <span class="org-function-name">AGAINST</span> S;M;P<span class="org-sw-apl-primitive">
+</span><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">ONE GAME, THE MACHINE AS ME (1 X, &#175;1 O), THE OTHER SIDE
+</span><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">MOVING AT RANDOM. W IS THE OUTCOME.
+</span>S<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-number">9</span><span class="org-sw-apl-primitive">&#9076;</span><span class="org-sw-apl-number">0</span><span class="org-sw-apl-primitive">
+</span>M<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-number">1</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-label">L</span>:P<span class="org-sw-apl-arrow">&#8592;</span>(S<span class="org-sw-apl-primitive">=</span><span class="org-sw-apl-number">0</span>)<span class="org-sw-apl-primitive">/&#9075;</span><span class="org-sw-apl-number">9</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-arrow">&#8594;</span>(M<span class="org-sw-apl-primitive">=</span>ME)<span class="org-sw-apl-primitive">/</span>MINE<span class="org-sw-apl-primitive">
+</span>S[P[<span class="org-sw-apl-primitive">?&#9076;</span>P]]<span class="org-sw-apl-arrow">&#8592;</span>M<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-arrow">&#8594;</span>NEXT<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-label">MINE</span>:S[CHOOSE S]<span class="org-sw-apl-arrow">&#8592;</span>M<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-label">NEXT</span>:W<span class="org-sw-apl-arrow">&#8592;</span>OUTCOME S<span class="org-sw-apl-primitive">
+</span>M<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-primitive">-</span>M<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-arrow">&#8594;</span>(W<span class="org-sw-apl-primitive">=</span><span class="org-sw-apl-number">0</span>)<span class="org-sw-apl-primitive">/</span>L<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-del">&#8711;</span>
+</pre>
+</div>
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 12: </span><code>&lt;&lt;fn-trial&gt;&gt;</code></label><pre class="src src-sw-apl" id="org3079f82"><span class="org-sw-apl-del">&#8711;</span>R<span class="org-sw-apl-arrow">&#8592;</span><span class="org-function-name">TRIAL</span> N;K;ME<span class="org-sw-apl-primitive">
+</span><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">N GAMES AS X, THEN N AS O, AGAINST A RANDOM PLAYER. EACH ROW
+</span><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">OF R IS HOW MANY THE MACHINE WON, LOST AND DREW.
+</span>R<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-number">2</span> <span class="org-sw-apl-number">3</span><span class="org-sw-apl-primitive">&#9076;</span><span class="org-sw-apl-number">0</span><span class="org-sw-apl-primitive">
+</span>K<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-number">0</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-label">L</span>:ME<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-number">1</span><span class="org-sw-apl-primitive">-</span><span class="org-sw-apl-number">2</span><span class="org-sw-apl-primitive">&#215;</span>K<span class="org-sw-apl-primitive">&#8805;</span>N<span class="org-sw-apl-primitive">
+</span>R[<span class="org-sw-apl-number">1</span><span class="org-sw-apl-primitive">+</span>K<span class="org-sw-apl-primitive">&#8805;</span>N;]<span class="org-sw-apl-arrow">&#8592;</span>R[<span class="org-sw-apl-number">1</span><span class="org-sw-apl-primitive">+</span>K<span class="org-sw-apl-primitive">&#8805;</span>N;]<span class="org-sw-apl-primitive">+</span>(ME AGAINST <span class="org-sw-apl-number">0</span>)<span class="org-sw-apl-primitive">=</span>ME<span class="org-sw-apl-primitive">,</span>(<span class="org-sw-apl-primitive">-</span>ME)<span class="org-sw-apl-primitive">,</span><span class="org-sw-apl-number">2</span><span class="org-sw-apl-primitive">
+</span>K<span class="org-sw-apl-arrow">&#8592;</span>K<span class="org-sw-apl-primitive">+</span><span class="org-sw-apl-number">1</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-arrow">&#8594;</span>(K<span class="org-sw-apl-primitive">&lt;</span><span class="org-sw-apl-number">2</span><span class="org-sw-apl-primitive">&#215;</span>N)<span class="org-sw-apl-primitive">/</span>L<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-del">&#8711;</span>
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-sw-apl">TRIAL <span class="org-sw-apl-number">100</span>
+</pre>
+</div>
+
+<pre class="example">
+99 0 1
+94 0 6
+</pre>
+
+
+<p>
+It does not lose. <code>PLAY</code> is a game against you. Your moves are read
+with <code>ASK</code>, which uses quad input and asks again for anything that is
+not an empty square:
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 13: </span><code>&lt;&lt;fn-play&gt;&gt;</code></label><pre class="src src-sw-apl" id="org27e8065"><span class="org-sw-apl-del">&#8711;</span><span class="org-function-name">PLAY</span> N;S;M;W;A;YOU<span class="org-sw-apl-primitive">
+</span><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">PLAY THE MACHINE: N IS 1 TO MOVE FIRST, AS X, OR 2 TO LET
+</span><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">IT BEGIN. THE SQUARES ARE 1 TO 9, ROW BY ROW.
+</span>YOU<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">&#175;1</span>[N]<span class="org-sw-apl-primitive">
+</span>S<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-number">9</span><span class="org-sw-apl-primitive">&#9076;</span><span class="org-sw-apl-number">0</span><span class="org-sw-apl-primitive">
+</span>M<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-number">1</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-label">L</span>:<span class="org-sw-apl-arrow">&#8594;</span>(M<span class="org-sw-apl-primitive">&#8800;</span>YOU)<span class="org-sw-apl-primitive">/</span>MINE<span class="org-sw-apl-primitive">
+</span>SHOW S<span class="org-sw-apl-primitive">
+</span>S[ASK S]<span class="org-sw-apl-arrow">&#8592;</span>M<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-arrow">&#8594;</span>NEXT<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-label">MINE</span>:A<span class="org-sw-apl-arrow">&#8592;</span>CHOOSE S<span class="org-sw-apl-primitive">
+</span><span class="org-string">'I TAKE '</span>;A<span class="org-sw-apl-primitive">
+</span>S[A]<span class="org-sw-apl-arrow">&#8592;</span>M<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-label">NEXT</span>:W<span class="org-sw-apl-arrow">&#8592;</span>OUTCOME S<span class="org-sw-apl-primitive">
+</span>M<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-primitive">-</span>M<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-arrow">&#8594;</span>(W<span class="org-sw-apl-primitive">=</span><span class="org-sw-apl-number">0</span>)<span class="org-sw-apl-primitive">/</span>L<span class="org-sw-apl-primitive">
+</span>SHOW S<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-arrow">&#8594;</span>(W<span class="org-sw-apl-primitive">=</span><span class="org-sw-apl-number">2</span>)<span class="org-sw-apl-primitive">/</span>DRAW<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-arrow">&#8594;</span>(W<span class="org-sw-apl-primitive">=</span>YOU)<span class="org-sw-apl-primitive">/</span>WON<span class="org-sw-apl-primitive">
+</span><span class="org-string">'I WIN.'</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-arrow">&#8594;</span><span class="org-sw-apl-number">0</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-label">WON</span>:<span class="org-string">'YOU WIN.'</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-arrow">&#8594;</span><span class="org-sw-apl-number">0</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-label">DRAW</span>:<span class="org-string">'A DRAW.'</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-del">&#8711;</span>
+</pre>
+</div>
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 14: </span><code>&lt;&lt;fn-ask&gt;&gt;</code></label><pre class="src src-sw-apl" id="org84530d0"><span class="org-sw-apl-del">&#8711;</span>A<span class="org-sw-apl-arrow">&#8592;</span><span class="org-function-name">ASK</span> S<span class="org-sw-apl-primitive">
+</span><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">YOUR MOVE, READ WITH QUAD: AN EMPTY SQUARE, 1 TO 9.
+</span><span class="org-sw-apl-label">L</span>:<span class="org-string">'YOUR MOVE, 1 TO 9:'</span><span class="org-sw-apl-primitive">
+</span>A<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-primitive">,</span><span class="org-sw-apl-system">&#9109;</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-arrow">&#8594;</span>((<span class="org-sw-apl-number">1</span><span class="org-sw-apl-primitive">&#8800;&#9076;</span>A)<span class="org-sw-apl-primitive">&#8744;~&#8743;/</span>A<span class="org-sw-apl-primitive">&#8714;&#9075;</span><span class="org-sw-apl-number">9</span>)<span class="org-sw-apl-primitive">/</span>BAD<span class="org-sw-apl-primitive">
+</span>A<span class="org-sw-apl-arrow">&#8592;</span>A[<span class="org-sw-apl-number">1</span>]<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-arrow">&#8594;</span>(S[A]<span class="org-sw-apl-primitive">=</span><span class="org-sw-apl-number">0</span>)<span class="org-sw-apl-primitive">/</span><span class="org-sw-apl-number">0</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-label">BAD</span>:<span class="org-string">'THAT IS NOT AN EMPTY SQUARE.'</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-arrow">&#8594;</span>L<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-del">&#8711;</span>
+</pre>
+</div>
+
+<p>
+Here it moves first, as X, and the answers typed at the <code>⎕:</code> prompts
+are 5 (taken, so refused), 3, 4 and 2. It sets up two threats at once
+and wins:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sw-apl">PLAY <span class="org-sw-apl-number">2</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-number">5</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-number">3</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-number">4</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-number">2</span>
+</pre>
+</div>
+
+<pre class="example" id="org7776946">
+      PLAY 2
+I TAKE 5
+ . . .
+ . X .
+ . . .
+YOUR MOVE, 1 TO 9:
+⎕:
+      5
+THAT IS NOT AN EMPTY SQUARE.
+YOUR MOVE, 1 TO 9:
+⎕:
+      3
+I TAKE 7
+ . . O
+ . X .
+ X . .
+YOUR MOVE, 1 TO 9:
+⎕:
+      4
+I TAKE 8
+ . . O
+ O X .
+ X X .
+YOUR MOVE, 1 TO 9:
+⎕:
+      2
+I TAKE 9
+ . O O
+ O X .
+ X X X
+I WIN.
+</pre>
+</div>
+</div>
+<div id="outline-container-orgbe1261e" class="outline-2">
+<h2 id="orgbe1261e">What the workspace says of itself</h2>
+<div class="outline-text-2" id="text-orgbe1261e">
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 15: </span><code>&lt;&lt;fn-describe&gt;&gt;</code></label><pre class="src src-sw-apl" id="orgf4d3b9d"><span class="org-sw-apl-del">&#8711;</span><span class="org-function-name">DESCRIBE</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'TTTML -- A MACHINE THAT LEARNS TIC-TAC-TOE BY PLAYING'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'ITSELF, THEN PLAYS YOU WITH WHAT IT LEARNED. IT COMES'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'TRAINED.'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">''</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'   PLAY 1       PLAY IT, YOU MOVING FIRST, AS X'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'   PLAY 2       PLAY IT, IT MOVING FIRST'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'   TRIAL N      N GAMES EACH SIDE AGAINST A RANDOM PLAYER:'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'                WON, LOST AND DRAWN, AS X THEN AS O'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'   TRAIN N      FORGET, AND LEARN AGAIN FROM N GAMES'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'   SHOW S       A BOARD OF 9 SQUARES, 1 X, &#175;1 O, 0 EMPTY'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">''</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'THE SQUARES ARE NUMBERED 1 TO 9, ROW BY ROW. WHAT IT LEARNS'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'IS A VALUE FOR EACH POSITION IT HAS MET, KEYS AND VALS, A'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'POSITION AND ITS 7 ROTATIONS AND REFLECTIONS COUNTED AS ONE:'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'ABOUT 750 OF THEM, AND 12,000 BYTES.'</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-del">&#8711;</span>
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-sw-apl">DESCRIBE
+</pre>
+</div>
+
+<pre class="example" id="orgde77903">
+TTTML -- A MACHINE THAT LEARNS TIC-TAC-TOE BY PLAYING
+ITSELF, THEN PLAYS YOU WITH WHAT IT LEARNED. IT COMES
+TRAINED.
+
+   PLAY 1       PLAY IT, YOU MOVING FIRST, AS X
+   PLAY 2       PLAY IT, IT MOVING FIRST
+   TRIAL N      N GAMES EACH SIDE AGAINST A RANDOM PLAYER:
+                WON, LOST AND DRAWN, AS X THEN AS O
+   TRAIN N      FORGET, AND LEARN AGAIN FROM N GAMES
+   SHOW S       A BOARD OF 9 SQUARES, 1 X, ¯1 O, 0 EMPTY
+
+THE SQUARES ARE NUMBERED 1 TO 9, ROW BY ROW. WHAT IT LEARNS
+IS A VALUE FOR EACH POSITION IT HAS MET, KEYS AND VALS, A
+POSITION AND ITS 7 ROTATIONS AND REFLECTIONS COUNTED AS ONE:
+ABOUT 750 OF THEM, AND 12,000 BYTES.
+</pre>
+</div>
+</div>
+<div id="outline-container-orgc845dcd" class="outline-2">
+<h2 id="orgc845dcd">The workspace file</h2>
+<div class="outline-text-2" id="text-orgc845dcd">
+<p>
+A saved workspace is APL that could have been typed. It opens with
+lines that say what it is and names itself; then come its variables
+and its functions, each in the order <code>)SAVE</code> writes them, by name.
+The <code>⍝!LINK</code> line is the random link it was saved with, so a run that
+loads it draws the same random numbers every time, which is why the
+examples above come out the same.
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 16: </span><code>&lt;&lt;workspace-header&gt;&gt;</code></label><pre class="src src-sw-apl" id="orgb04f6e2"><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">sw-apl workspace. Re-executable APL: loading it runs it.
+</span><span class="org-comment-delimiter">&#9053;</span><span class="org-comment">!MODES (B)
+</span><span class="org-comment-delimiter">&#9053;</span><span class="org-comment">!SOURCE sw-apl -- written for this repository. MIT, (c) 2026 Michael A Wright.
+</span><span class="org-comment-delimiter">&#9053;</span><span class="org-comment">!SAVED 21.39.13 09/22/26
+</span><span class="org-comment-delimiter">&#9053;</span><span class="org-comment">!LINK 1547632030
+</span><span class="org-comment-delimiter">&#9053;</span><span class="org-comment">!ORIGIN 1
+</span><span class="org-comment-delimiter">&#9053;</span><span class="org-comment">!DIGITS 5
+</span><span class="org-comment-delimiter">&#9053;</span><span class="org-comment">!WIDTH 64
+</span><span class="org-sw-apl-command">)WSID TTTML</span>
+</pre>
+</div>
+
+<p>
+The assembly, in the file's order; tangling the document writes the
+workspace:
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 17: </span>The workspace, in the order its file keeps</label><pre class="src src-sw-apl"><span class="org-sw-apl-primitive">&lt;&lt;</span>workspace<span class="org-sw-apl-primitive">-</span>header<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>var<span class="org-sw-apl-primitive">-</span>keys<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>var<span class="org-sw-apl-primitive">-</span>sym<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>var<span class="org-sw-apl-primitive">-</span>vals<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>var<span class="org-sw-apl-primitive">-</span>wl<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>fn<span class="org-sw-apl-primitive">-</span>against<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>fn<span class="org-sw-apl-primitive">-</span>ask<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>fn<span class="org-sw-apl-primitive">-</span>choose<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>fn<span class="org-sw-apl-primitive">-</span>codes<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>fn<span class="org-sw-apl-primitive">-</span>describe<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>fn<span class="org-sw-apl-primitive">-</span>game<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>fn<span class="org-sw-apl-primitive">-</span>learn<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>fn<span class="org-sw-apl-primitive">-</span>outcome<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>fn<span class="org-sw-apl-primitive">-</span>play<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>fn<span class="org-sw-apl-primitive">-</span>show<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>fn<span class="org-sw-apl-primitive">-</span>train<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>fn<span class="org-sw-apl-primitive">-</span>trial<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>fn<span class="org-sw-apl-primitive">-</span>value<span class="org-sw-apl-primitive">&gt;&gt;</span>
+</pre>
+</div>
+
+<p>
+<code>samples/81-tttml.apl</code> plays two games and trains it again, as a
+transcript, and <code>docs/learn-tic-tac-toe-strategy.md</code> gives the
+design and the measurements.
+</p>
+</div>
+</div>
+</div>
+</body>
+</html>

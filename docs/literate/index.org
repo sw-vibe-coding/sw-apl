@@ -14,6 +14,7 @@ sw-apl in your browser: ~)LOAD 1 NAME~, then ~DESCRIBE~.
 | Document | Mode | What it is |
 |----------+------+------------|
 | [[file:birds.html][BIRDS]] | (B) '75 | Smullyan's combinators -- the Idiot to the Sage -- given functions by name and calling them with execute |
+| [[file:tttml.html][TTTML]] | (B) '75 | A machine that learns tic-tac-toe by playing itself, in the memory of a 1975 desktop computer, and then plays you |
 
 The documents are Org files in ~docs/literate/~, run by Org Babel with
 ~ob-sw-apl~ and coloured by ~sw-apl-mode~, both in ~docs/emacs/~.

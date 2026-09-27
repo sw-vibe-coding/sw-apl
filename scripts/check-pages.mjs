@@ -452,7 +452,7 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
     const text = birds.ok ? await birds.text() : '';
     return {
       href: link.getAttribute('href'),
-      lists: index.includes('href="birds.html"'),
+      lists: index.includes('href="birds.html"') && index.includes('href="tttml.html"'),
       coloured: text.includes('class="org-sw-apl-primitive"'),
       font: text.includes('../redistributed/apl385-font/APL385.woff2'),
     };

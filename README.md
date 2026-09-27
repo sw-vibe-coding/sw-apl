@@ -65,8 +65,8 @@ terminal it is one flag (see Libraries, below).
 
 `)SAVE` keeps a workspace in the browser's own storage, and Help on
 the page covers the rest. **Literate APL**, linked from the page's
-footer, is BIRDS written as a literate program: the workspace, with
-its prose, and every example run.
+footer, is BIRDS and TTTML written as literate programs: each
+workspace with its prose, and every example run.
 
 ## Commands sw-apl adds
 
