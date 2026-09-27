@@ -1,0 +1,8 @@
+number = 20
+slug = "life-rules-sample"
+status = "in-progress"
+description = "Owner question 2026-09-27: is the LIFE demo correct with respect to Conway's ..."
+role = "production"
+context_files = []
+created_at = "2026-09-27T15:19:07"
+commits = []

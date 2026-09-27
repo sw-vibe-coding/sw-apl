@@ -42,6 +42,12 @@ a reply to quad input that is not an answer: a system command runs
 and the request is made again, an error is reported and the request
 is made again, and )CLEAR gives the request up.
 
+`89-life-rules.apl` checks that LIFE keeps Conway's rules, B3/S23 on
+a torus: a lone cell and an overcrowded one die, three neighbours give
+birth, the block stands still, the blinker blinks (across the edge
+too), and the glider moves one square diagonally in four generations
+and comes home after twenty-four.
+
 `88-base-conversion.apl` converts between binary, octal, decimal and
 hexadecimal with decode and encode, prints hex digits by indexing a
 character vector, reads a mixed radix (hours, minutes and seconds;

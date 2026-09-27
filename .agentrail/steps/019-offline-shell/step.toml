@@ -1,10 +1,11 @@
 number = 19
 slug = "offline-shell"
-status = "in-progress"
+status = "completed"
 description = """
 Owner direction 2026-09-20, third (docs/plan.md). The demo opens
 with the net..."""
 role = "production"
 context_files = []
 created_at = "2026-09-24T11:51:09"
-commits = []
+completed_at = "2026-09-27T15:16:34"
+commits = ["256879a66512d0c3d2deba72d990328ba06afc8a"]
