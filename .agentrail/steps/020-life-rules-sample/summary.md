@@ -1,0 +1,1 @@
+Sample 89: LIFE against Conway's rules by behaviour, all checks 1 in both modes; reg-rs 98 pass. Pushed.

@@ -12,8 +12,14 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-09-27
+
+- docs(samples): 89, LIFE keeps Conway's rules
+- feat(pages): the demo runs with the network off
+
 ## 2026-09-26
 
+- docs(changes): refresh CHANGES.md to HEAD; complete 018-base-conversion-sample
 - docs(samples): 88, number bases with decode and encode
 - plan: owner decision on the clock -- --clock none|hardware, none by default
 - docs(changes): refresh CHANGES.md to HEAD; complete 017-literate-tttml
