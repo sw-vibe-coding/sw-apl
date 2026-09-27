@@ -195,8 +195,8 @@ tell that from a slow load, and a plain reload does not replace a
 worker a browser has already cached.
 
 `just check-pages` is that check, in a browser: a first visit, a
-visit holding the worker from an older bundle, and a worker that
-never answers.
+visit holding the worker from an older bundle, a worker that never
+answers, and a reload with the network off.
 
 `SharedArrayBuffer` needs the page to be cross-origin isolated, which
 means two headers:
@@ -253,9 +253,26 @@ launcher that crops to a circle.
 `scripts/gen-icons.sh` makes all of them and they are tracked, like
 the rest of `pages/`.
 
-Installed, it still needs the network for the first load: offline is
-`offline-shell`'s, and it is last because it is the part that can
-break the version stamp.
+Once loaded, it runs with the network off. The session is
+WebAssembly and the browser's own storage and reaches for nothing,
+and `sw.js` keeps a copy of what it fetches: a reload offline, or
+opening the installed app, starts as before, and `offline` at the
+foot of the page says the network is off. Library 2 is there offline
+only if it was reached before.
+
+The copy is only ever the fallback. Every request goes to the network
+first, so a reader online always gets the build that is published;
+a cache answering first is how a stale page once ignored typing, and
+no reload could shift it. The copy is one cache per build, named for
+the build the worker was registered at (`sw-apl-` and the version).
+The worker fills it with the page's files when it installs. When the
+page is served by a worker from an older build, it registers the
+current build's worker in the background; that one takes over and
+deletes every older build's cache, so the next load, online or off,
+is the new build. `just check-pages` loads the page, goes offline and
+reloads; then serves a new build underneath, reloads online in the
+same profile without clearing, and checks it has the new build, and
+that offline afterwards it is still the new one.
 
 The session is exactly as tall as the viewport really is, sized
 from `visualViewport` and following it: `100dvh` is the viewport

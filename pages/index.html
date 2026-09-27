@@ -50,6 +50,7 @@
   .mode-tabs [role=tab] + [role=tab] { margin-left: .3rem; }
   .mode-tabs [role=tab][aria-selected="true"] { border-color: var(--ink); font-weight: 600; }
   .mode-about { font-size: 12px; opacity: .7; }
+  .bar .offline { font-size: 12px; opacity: .7; align-self: center; }
   header { border-width: 0 0 1px; }
   footer, .bar { border-color: var(--rule); border-style: solid; }
   .bar { font-size: 13px; opacity: .8; }
@@ -260,6 +261,8 @@
   <nav class="bar">
     <button type="button" id="show-board" aria-pressed="false">Keyboard</button>
     <button type="button" id="show-help">Help</button>
+    <span class="offline" id="offline" hidden
+          title="The network is off. sw-apl runs here without it.">offline</span>
   </nav>
 </main>
 
@@ -341,6 +344,16 @@
     Each mode lists and loads only the workspaces that run in it.
     Switching starts a new session in a clear workspace, so
     <code>)SAVE</code> first what you want to keep.
+  </p>
+  <h3>With the network off</h3>
+  <p>
+    Once this page has loaded, sw-apl runs without the network: the
+    interpreter is here in the tab, and workspaces you save are kept in
+    this browser. Reload it offline, or open it from your home screen,
+    and it starts as before; <b>offline</b> at the foot of the page says
+    the network is off. Library 2 comes from another repository, so
+    it is there offline only if it was reached before. Online, the page
+    always takes the newest build.
   </p>
   <h3>If it says there is no shared memory</h3>
   <p>

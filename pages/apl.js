@@ -188,6 +188,7 @@ let refused = "";
 async function isolate() {
   if (self.crossOriginIsolated) {
     try { sessionStorage.removeItem(RELOADS); } catch { /* private mode */ }
+    renew();
     return true;
   }
   if (!("serviceWorker" in navigator)) {
@@ -215,6 +216,28 @@ async function isolate() {
   }
   location.reload();
   return false;
+}
+
+// A worker in charge from an older build still isolates the page, but
+// it keeps the older build's copy for offline use. Register this
+// build's in the background: it fills its own copy, takes over, and
+// drops the old one. No reload; the next load is served by it.
+function renew() {
+  const controller = navigator.serviceWorker?.controller;
+  if (!VERSION || !controller) return;
+  if (new URL(controller.scriptURL).searchParams.get("v") === VERSION) return;
+  navigator.serviceWorker.register(`sw.js${query([["v", VERSION]])}`, { updateViaCache: "none" })
+    .catch((error) => console.error("sw-apl: could not renew the worker:", error));
+}
+
+// Say when the network is off, which is when the kept copy is serving.
+function offline() {
+  const shown = document.getElementById("offline");
+  if (!shown) return;
+  const update = () => { shown.hidden = navigator.onLine; };
+  addEventListener("online", update);
+  addEventListener("offline", update);
+  update();
 }
 
 // What this browser says about isolation, when it has not given it:
@@ -402,6 +425,7 @@ function viewport() {
 async function run() {
   viewport();
   controls();
+  offline();
   if (!(await isolate())) {
     // One line. A reader who cannot run it needs to know that and
     // where to look, not an essay on service workers -- the rest is

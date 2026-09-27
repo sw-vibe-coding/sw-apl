@@ -39,7 +39,8 @@ conformance corpus in `samples/`.
 **[sw-apl in your browser](https://sw-apl.softwarewrighter.com/)**
 
 The interpreter runs in the tab, compiled to WebAssembly; nothing
-typed is sent anywhere. The page opens in (B) '75, and the tabs at
+typed is sent anywhere, and once loaded it works with the network
+off. The page opens in (B) '75, and the tabs at
 the top switch mode (a new session, in a clear workspace). A keyboard
 on the page gives every glyph a key, so a phone works too.
 

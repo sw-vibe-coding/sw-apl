@@ -105,6 +105,14 @@ const CHROME = process.env.CHROME_PATH
 // none at all except where a library is what is checked.
 serving.set('/libraries.json', '[]');
 
+// A check that cannot finish is a failure, not a wait: whatever
+// hangs -- a navigation that never loads, a page that never answers --
+// ends the run, and says so, after fifteen minutes.
+setTimeout(() => {
+  console.log('check-pages: timed out after 15 minutes; a check hung');
+  process.exit(1);
+}, 15 * 60 * 1000).unref();
+
 const server = await host(ROOT);
 const url = `http://127.0.0.1:${server.address().port}/`;
 const browser = await chromium.launch({ executablePath: CHROME, headless: true });
@@ -118,11 +126,13 @@ const check = (name, ok, saw) => {
 // Wait until the page is either taking typing or has said why not.
 async function settle(page, seconds = 20) {
   for (let i = 0; i < seconds * 4; i++) {
+    // A page that is not sw-apl at all -- the browser's own error
+    // page, or one torn down by a navigation -- is not settled yet.
     const done = await page.evaluate(() => {
       const line = document.getElementById('line');
       return !line.classList.contains('waiting')
         || document.getElementById('paper').textContent.trim().length > 0;
-    });
+    }).catch(() => false);
     if (done) return;
     await page.waitForTimeout(250);
   }
@@ -1035,6 +1045,69 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   check('a spent count of reloads is started again', count === null || Number(count) < 9, count);
   await spent.close();
 }
+
+// 16. With the network off. Once loaded, the page runs offline: the
+//     worker kept a copy of what it fetched. And a rebuild underneath
+//     is still what a reload online gets -- the copy is only ever the
+//     fallback -- after which offline is the new build too.
+const offlineContext = await browser.newContext();
+offline: {
+  const context = offlineContext;
+  const page = await context.newPage();
+  await page.goto(url, { waitUntil: 'load' });
+  await page.waitForTimeout(3000);
+  await settle(page);
+  const built = () => page.evaluate(() => document.getElementById('built').textContent);
+  const first = await built();
+  await page.waitForTimeout(1500); // the worker's copy is filled on install
+  await context.setOffline(true);
+  // A reload the browser cannot make at all -- no copy kept -- is a
+  // failure to report, not a crash of the check.
+  const reload = () => page.reload({ waitUntil: 'load', timeout: 20000 })
+    .then(() => '', (error) => String(error).split('\n')[0]);
+  const refusedOffline = await reload();
+  await settle(page);
+  const startedOffline = !refusedOffline && await typing(page).catch(() => false);
+  check('with the network off, a reload still starts a session', startedOffline,
+    refusedOffline || 'not a session: the page did not load from the kept copy');
+  // Nothing below can be checked without a page.
+  if (!startedOffline) break offline;
+  await send(page, '+/⍳10');
+  await send(page, ')LOAD 1 LIFE');
+  const offline = await paper(page);
+  check('and it computes, and loads a shipped workspace',
+    offline.includes('55') && offline.includes('SAVED'), JSON.stringify(offline.slice(-200)));
+  check('and the page says it is offline',
+    await page.evaluate(() => !document.getElementById('offline').hidden), 'no offline marker');
+  await context.setOffline(false);
+
+  // A rebuild underneath: a new version and new build facts, served
+  // in place of the old; the same profile reloads without clearing.
+  const info = JSON.parse(await readFile(join(ROOT, 'build-info.json'), 'utf8'));
+  serving.set('/version.txt', 'feedfacefeedface');
+  serving.set('/build-info.json', JSON.stringify({ ...info, version: 'feedfacefeedface', commit: 'rebuilt' }));
+  await page.reload({ waitUntil: 'load' });
+  await settle(page);
+  await page.waitForTimeout(500);
+  const second = await built();
+  check('a rebuild underneath is what a reload online gets',
+    /rebuilt/.test(second) && /feedfacefeedface/.test(second) && second !== first, second);
+  check('and the page is marked online again',
+    await page.evaluate(() => document.getElementById('offline').hidden), 'still marked offline');
+  await page.waitForTimeout(2500); // the new build's worker takes over
+  await context.setOffline(true);
+  const refusedAgain = await reload();
+  await settle(page);
+  await page.waitForTimeout(500);
+  check('and offline after that it is the new build, not the old copy',
+    !refusedAgain && /feedfacefeedface/.test(await built()) && await typing(page), await built());
+  const kept = await page.evaluate(async () => (await caches.keys()).filter((k) => k.startsWith('sw-apl-')));
+  check('and only the new build is kept', kept.length === 1 && kept[0] === 'sw-apl-feedfacefeedface',
+    JSON.stringify(kept));
+}
+await offlineContext.close();
+serving.delete('/version.txt');
+serving.delete('/build-info.json');
 
 await browser.close();
 server.close();
