@@ -53,6 +53,7 @@ needs from another block by noweb reference (`:noweb yes` and
 |---|---|
 | `:mode 75` or `:mode 70` | The mode, (B) '75 or (A) '70. (B) is the default |
 | `:echo yes` | Show each line as typed, six spaces in, so the result reads as a session: the line, then what it printed |
+| `:load "1 BIRDS"` | `)LOAD` that workspace before the block runs. Its SAVED line is left out of the result, so the result is the block's own; a load that fails keeps its report |
 | `:library DIR` | Where libraries 0 and 1 are, as `sw-apl --library` |
 | `:lib "2=DIR,NAME"` | A library beyond them, as `sw-apl --lib` |
 | `:session` | Refused: a block runs and ends |
@@ -96,6 +97,36 @@ mode colours has a class of its own, named for its face:
 
 The document's own stylesheet (an `#+HTML_HEAD:` line) says what
 colour each is.
+
+## The documents here
+
+`docs/literate/` holds workspaces written as literate programs, in
+the manner of Knuth's WEB: prose and code in the order a reader meets
+them. Each named chunk of code is shown with its name, and one block
+at the end assembles the chunks, by noweb reference, in the order the
+workspace file keeps them; tangling the document writes that file.
+Examples are blocks with `:load "1 BIRDS"` and their results recorded
+beneath them.
+
+| Document | Tangles to |
+|---|---|
+| `birds.org` | `ws/lib1/BIRDS.b-75.apl.ws` |
+
+`style.setup` is their shared look: the page, and the colour of each
+class, light and dark. `index.org` lists them.
+
+They are published in `pages/literate/`, which the demo's footer
+links as Literate APL. Two recipes look after them, both needing Emacs
+with htmlize and the release build:
+
+| Recipe | |
+|---|---|
+| `just literate` | Run every block and record its result, tangle, and export to `pages/literate/`. Commit what changes |
+| `just check-literate` | In a scratch copy, do the same and fail if anything differs: a tangled workspace from the committed one, a recorded result from what sw-apl prints now, a page from its fresh export. Part of `just precommit`; without Emacs it says so and passes |
+
+So a change to a workspace that a document tangles to is made in the
+document, and a change to sw-apl that alters an example's answer
+shows up as a drifted result.
 
 ## Tests
 

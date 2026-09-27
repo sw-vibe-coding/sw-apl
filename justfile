@@ -68,7 +68,19 @@ gates:
     sw-checklist
 
 # The full pre-commit gate, in order: format, test, lint, standards.
-precommit: fmt test test-emacs clippy fmt-check gates
+precommit: fmt test test-emacs clippy fmt-check gates check-literate
+
+# Run, tangle and publish the literate documents (docs/literate/*.org):
+# record each block's result, write the workspace each tangles to, and
+# export each to pages/literate/. Needs Emacs with htmlize. Commit what
+# changes; `just check-literate` fails until you do.
+literate: release
+    ./scripts/literate.sh
+
+# The literate documents agree with their workspaces, their recorded
+# results and their pages. Skipped, and says so, without Emacs.
+check-literate: release
+    ./scripts/check-literate.sh
 
 # Build the release binaries: sw-apl, sw-apl-server, aplterm.
 release:

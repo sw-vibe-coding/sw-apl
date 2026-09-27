@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>BIRDS: combinators in (B) '75</title>
+<meta name="author" content="Michael A Wright" />
+<meta name="generator" content="Org Mode" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+@font-face { font-family: "APL385 Unicode"; src: local("APL385 Unicode"), url("../redistributed/apl385-font/APL385.woff2") format("woff2"); font-display: swap; }
+:root { color-scheme: light dark; --paper: #fbf7ef; --ink: #2b2118; --rule: #d8cdb8; --code: #f4eee2;
+--prim: #0550ae; --arrow: #8250df; --num: #953800; --sys: #0a6e7a; --cmd: #6e5494; --del: #b3261e; --fn: #116329; --label: #7d4e00; --str: #0a7d55; --comment: #6a737d; }
+@media (prefers-color-scheme: dark) { :root { --paper: #17130e; --ink: #e8dfd0; --rule: #3a3229; --code: #211b14;
+--prim: #79c0ff; --arrow: #d2a8ff; --num: #ffa657; --sys: #56d4dd; --cmd: #b392f0; --del: #ff7b72; --fn: #7ee787; --label: #e3b341; --str: #7ee2b8; --comment: #8b949e; } }
+body { margin: 0 auto; max-width: 46rem; padding: 1rem; background: var(--paper); color: var(--ink); font: 17px/1.55 Georgia, "Times New Roman", serif; }
+a { color: var(--prim); }
+h1.title { font-size: 1.9rem; line-height: 1.2; margin-bottom: .2rem; }
+.subtitle { display: block; font-size: 1.05rem; font-weight: normal; font-style: italic; margin-top: .4rem; }
+nav.literate { font: 14px/1.4 system-ui, sans-serif; padding: .5rem 0; border-bottom: 1px solid var(--rule); margin-bottom: 1rem; }
+pre, code { font-family: "APL385 Unicode", "DejaVu Sans Mono", ui-monospace, monospace; }
+pre.src, pre.example { background: var(--code); border: 1px solid var(--rule); border-radius: 6px; padding: .6rem .8rem; overflow-x: auto; font-size: 15px; line-height: 1.45; }
+pre.example { border-left: 4px solid var(--rule); }
+.org-src-container label.org-src-name { display: block; font: 13px system-ui, sans-serif; color: var(--comment); margin: 1rem 0 .2rem; }
+.org-src-container label.org-src-name .listing-number { display: none; }
+.org-sw-apl-primitive { color: var(--prim); }
+.org-sw-apl-arrow { color: var(--arrow); font-weight: 600; }
+.org-sw-apl-number { color: var(--num); }
+.org-sw-apl-system { color: var(--sys); }
+.org-sw-apl-command { color: var(--cmd); }
+.org-sw-apl-del { color: var(--del); font-weight: 700; }
+.org-sw-apl-label, .org-variable-name { color: var(--label); }
+.org-function-name { color: var(--fn); font-weight: 600; }
+.org-string { color: var(--str); }
+.org-comment, .org-comment-delimiter { color: var(--comment); font-style: italic; }
+table { border-collapse: collapse; } td, th { padding: .2rem .6rem; border-bottom: 1px solid var(--rule); }
+</style>
+</head>
+<body>
+<div id="preamble" class="status">
+<nav class="literate"><a href="index.html">Literate APL</a> · <a href="../">sw-apl in your browser</a> · <a href="https://github.com/sw-vibe-coding/sw-apl">Repository</a></nav>
+</div>
+<div id="content" class="content">
+<h1 class="title">BIRDS: combinators in (B) '75
+<br>
+<span class="subtitle">Smullyan's birds, written in APL with execute, read as a literate program</span>
+</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org7531489">Birds and combinators</a></li>
+<li><a href="#org3340fb7">The Thrush: calling a function by name</a></li>
+<li><a href="#org18f8596">Birds on values: the Idiot and the Kestrel</a></li>
+<li><a href="#org05d4546">The Kite: a bird made of two others</a></li>
+<li><a href="#org038fd55">Two functions at once: the Bluebird and the Starling</a></li>
+<li><a href="#org4a412e9">One function, two ways round: the Cardinal and the Warbler</a></li>
+<li><a href="#orga074c17">The Mockingbird: a function applied to itself</a></li>
+<li><a href="#orge6b0ceb">The Sage: recursion without a name</a></li>
+<li><a href="#org4a81985">What is still missing</a></li>
+<li><a href="#orgbef4e32">The workspace's own tour</a></li>
+<li><a href="#org9953970">The workspace file</a></li>
+</ul>
+</div>
+</div>
+<p>
+This is the (B) '75 BIRDS workspace from sw-apl's library 1, written as
+a literate program: the prose and the code in the order a reader meets
+them, rather than the order the file keeps them. Every function is
+here, and the last section puts them together into the workspace file,
+<code>ws/lib1/BIRDS.b-75.apl.ws</code>, byte for byte &#x2013; tangling this document
+writes that file. Every example below was run by sw-apl and its result
+recorded under it; in the sw-apl in your browser, <code>)LOAD 1 BIRDS</code> in
+the (B) tab gives the same answers.
+</p>
+<div id="outline-container-org7531489" class="outline-2">
+<h2 id="org7531489">Birds and combinators</h2>
+<div class="outline-text-2" id="text-org7531489">
+<p>
+A combinator is a function of functions. The Bluebird takes two
+functions and composes them; the Mockingbird takes a function and
+applies it to itself. Raymond Smullyan's <i>To Mock a Mockingbird</i>
+(1985) made each combinator a bird, and the names have stuck.
+</p>
+
+<p>
+APL is a language of functions, but in the APL of 1970 a function
+could not be handed to another: an argument is always an array. The
+(A) '70 BIRDS gets as far as that allows, over a table of primitives.
+(B) '75 has what makes the rest possible: <b>execute</b>, <code>⍎</code>, which runs
+a character vector as a line of APL.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sw-apl"><span class="org-sw-apl-primitive">&#9038;</span><span class="org-string">'2+3'</span>
+</pre>
+</div>
+
+<pre class="example">
+5
+</pre>
+
+
+<p>
+So in (B) a bird is given a function by its <i>name</i> &#x2013; its glyph, or
+the name of a defined function &#x2013; as characters, and calls it by
+building a line around the name and executing it. Nothing else is
+needed, and no table stands between the bird and the function: any
+function will do, primitive or defined.
+</p>
+</div>
+</div>
+<div id="outline-container-org3340fb7" class="outline-2">
+<h2 id="org3340fb7">The Thrush: calling a function by name</h2>
+<div class="outline-text-2" id="text-org3340fb7">
+<p>
+The Thrush is the pattern every bird follows, so it comes first.
+<code>X T F</code> applies <code>F</code> to <code>X</code>: it catenates the name and <code>' X'</code> and
+executes the line.
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 1: </span><code>&lt;&lt;fn-t&gt;&gt;</code></label><pre class="src src-sw-apl" id="org31bfc38"><span class="org-sw-apl-del">&#8711;</span>R<span class="org-sw-apl-arrow">&#8592;</span>X <span class="org-function-name">T</span> F<span class="org-sw-apl-primitive">
+</span>R<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-primitive">&#9038;</span>F<span class="org-sw-apl-primitive">,</span><span class="org-string">' X'</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-del">&#8711;</span>
+</pre>
+</div>
+
+<p>
+The line runs inside <code>T</code>, where <code>X</code> is <code>T</code>'s own argument, so the
+function named applies to the value <code>T</code> was given. A glyph is a name:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sw-apl"><span class="org-sw-apl-number">5</span> T <span class="org-string">'&#9075;'</span>
+</pre>
+</div>
+
+<pre class="example">
+1 2 3 4 5
+</pre>
+
+
+<p>
+and so is a defined function's name. <code>FACT</code> is the usual recursive
+factorial, which the workspace keeps as a function to give to birds:
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 2: </span><code>&lt;&lt;fn-fact&gt;&gt;</code></label><pre class="src src-sw-apl" id="orgdfa1175"><span class="org-sw-apl-del">&#8711;</span>R<span class="org-sw-apl-arrow">&#8592;</span><span class="org-function-name">FACT</span> N<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-arrow">&#8594;</span>(N<span class="org-sw-apl-primitive">&gt;</span><span class="org-sw-apl-number">1</span>)<span class="org-sw-apl-primitive">/</span>MORE<span class="org-sw-apl-primitive">
+</span>R<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-number">1</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-arrow">&#8594;</span><span class="org-sw-apl-number">0</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-label">MORE</span>:R<span class="org-sw-apl-arrow">&#8592;</span>N<span class="org-sw-apl-primitive">&#215;</span>FACT N<span class="org-sw-apl-primitive">-</span><span class="org-sw-apl-number">1</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-del">&#8711;</span>
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-sw-apl"><span class="org-sw-apl-number">6</span> T <span class="org-string">'FACT'</span>
+</pre>
+</div>
+
+<pre class="example">
+720
+</pre>
+</div>
+</div>
+<div id="outline-container-org18f8596" class="outline-2">
+<h2 id="org18f8596">Birds on values: the Idiot and the Kestrel</h2>
+<div class="outline-text-2" id="text-org18f8596">
+<p>
+Two birds apply nothing, so they need no execute. The Idiot gives back
+its argument, and the Kestrel keeps its left argument whatever its
+right one is.
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 3: </span><code>&lt;&lt;fn-i&gt;&gt;</code></label><pre class="src src-sw-apl" id="org9b214fc"><span class="org-sw-apl-del">&#8711;</span>R<span class="org-sw-apl-arrow">&#8592;</span><span class="org-function-name">I</span> X<span class="org-sw-apl-primitive">
+</span>R<span class="org-sw-apl-arrow">&#8592;</span>X<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-del">&#8711;</span>
+</pre>
+</div>
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 4: </span><code>&lt;&lt;fn-k&gt;&gt;</code></label><pre class="src src-sw-apl" id="orgea85bf2"><span class="org-sw-apl-del">&#8711;</span>R<span class="org-sw-apl-arrow">&#8592;</span>X <span class="org-function-name">K</span> Y<span class="org-sw-apl-primitive">
+</span>R<span class="org-sw-apl-arrow">&#8592;</span>X<span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-del">&#8711;</span>
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-sw-apl">I <span class="org-sw-apl-number">42</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-number">7</span> K <span class="org-sw-apl-number">9</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'KEEP'</span> K <span class="org-sw-apl-number">1</span> <span class="org-sw-apl-number">2</span> <span class="org-sw-apl-number">3</span>
+</pre>
+</div>
+
+<pre class="example">
+      I 42
+42
+      7 K 9
+7
+      'KEEP' K 1 2 3
+KEEP
+</pre>
+</div>
+</div>
+<div id="outline-container-org05d4546" class="outline-2">
+<h2 id="org05d4546">The Kite: a bird made of two others</h2>
+<div class="outline-text-2" id="text-org05d4546">
+<p>
+Smullyan makes the Kite from the Kestrel and the Idiot: it is <code>K I</code>,
+the Kestrel given the Idiot, and it keeps its <i>right</i> argument. In
+(B) that construction can be written as he wrote it. <code>'I' K X</code> is the
+name <code>'I'</code>, whatever <code>X</code> is, and that name applied to <code>Y</code> is <code>Y</code>:
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 5: </span><code>&lt;&lt;fn-ki&gt;&gt;</code></label><pre class="src src-sw-apl" id="org8fad445"><span class="org-sw-apl-del">&#8711;</span>R<span class="org-sw-apl-arrow">&#8592;</span>X <span class="org-function-name">KI</span> Y<span class="org-sw-apl-primitive">
+</span><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">K GIVEN THE IDIOT: 'I' K X IS 'I', AND THAT NAME, APPLIED TO Y,
+</span><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">IS Y.
+</span>R<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-primitive">&#9038;</span>(<span class="org-string">'I'</span> K X)<span class="org-sw-apl-primitive">,</span><span class="org-string">' Y'</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-del">&#8711;</span>
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-sw-apl"><span class="org-sw-apl-number">7</span> KI <span class="org-sw-apl-number">9</span>
+</pre>
+</div>
+
+<pre class="example">
+9
+</pre>
+</div>
+</div>
+<div id="outline-container-org038fd55" class="outline-2">
+<h2 id="org038fd55">Two functions at once: the Bluebird and the Starling</h2>
+<div class="outline-text-2" id="text-org038fd55">
+<p>
+The Bluebird composes: <code>FG B X</code> is <code>F G X</code>. An APL function has at
+most two arguments, and one of them is <code>X</code>, so both functions come in
+one character vector, with a space between them since a name can be
+longer than one character. The line <code>⍎</code> runs is then <code>F G X</code> itself:
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 6: </span><code>&lt;&lt;fn-b&gt;&gt;</code></label><pre class="src src-sw-apl" id="org547b0b2"><span class="org-sw-apl-del">&#8711;</span>R<span class="org-sw-apl-arrow">&#8592;</span>FG <span class="org-function-name">B</span> X<span class="org-sw-apl-primitive">
+</span><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">FG IS 'F G', TWO FUNCTIONS BY NAME OR GLYPH: F G X.
+</span>R<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-primitive">&#9038;</span>FG<span class="org-sw-apl-primitive">,</span><span class="org-string">' X'</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-del">&#8711;</span>
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-sw-apl"><span class="org-string">'&#9021; &#9075;'</span> B <span class="org-sw-apl-number">5</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'FACT &#8968;'</span> B <span class="org-sw-apl-number">3.2</span>
+</pre>
+</div>
+
+<pre class="example">
+      '⌽ ⍳' B 5
+5 4 3 2 1
+      'FACT ⌈' B 3.2
+24
+</pre>
+
+
+<p>
+The Starling is <code>X F G X</code>: <code>F</code> between <code>X</code> and <code>G X</code>. With <code>'+ ⌽'</code>,
+each element is added to its mirror image:
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 7: </span><code>&lt;&lt;fn-s&gt;&gt;</code></label><pre class="src src-sw-apl" id="org0c84120"><span class="org-sw-apl-del">&#8711;</span>R<span class="org-sw-apl-arrow">&#8592;</span>FG <span class="org-function-name">S</span> X<span class="org-sw-apl-primitive">
+</span><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">FG IS 'F G': X F G X.
+</span>R<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-primitive">&#9038;</span><span class="org-string">'X '</span><span class="org-sw-apl-primitive">,</span>FG<span class="org-sw-apl-primitive">,</span><span class="org-string">' X'</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-del">&#8711;</span>
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-sw-apl"><span class="org-string">'+ &#9021;'</span> S <span class="org-sw-apl-primitive">&#9075;</span><span class="org-sw-apl-number">5</span>
+</pre>
+</div>
+
+<pre class="example">
+6 6 6 6 6
+</pre>
+</div>
+</div>
+<div id="outline-container-org4a412e9" class="outline-2">
+<h2 id="org4a412e9">One function, two ways round: the Cardinal and the Warbler</h2>
+<div class="outline-text-2" id="text-org4a412e9">
+<p>
+The Cardinal flips the arguments of a dyadic function: <code>F C Y Z</code> is
+<code>Z F Y</code>. It takes the two values as a pair, since <code>F</code> has the left
+argument's place:
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 8: </span><code>&lt;&lt;fn-c&gt;&gt;</code></label><pre class="src src-sw-apl" id="org76852e9"><span class="org-sw-apl-del">&#8711;</span>R<span class="org-sw-apl-arrow">&#8592;</span>F <span class="org-function-name">C</span> YZ<span class="org-sw-apl-primitive">
+</span>R<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-primitive">&#9038;</span><span class="org-string">'YZ[2] '</span><span class="org-sw-apl-primitive">,</span>F<span class="org-sw-apl-primitive">,</span><span class="org-string">' YZ[1]'</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-del">&#8711;</span>
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-sw-apl"><span class="org-string">'-'</span> C <span class="org-sw-apl-number">10</span> <span class="org-sw-apl-number">3</span>
+</pre>
+</div>
+
+<pre class="example">
+¯7
+</pre>
+
+
+<p>
+The Warbler gives a dyadic function the same argument on both sides:
+<code>F W X</code> is <code>X F X</code>. <code>HYP</code>, the hypotenuse, is here to be given to it,
+and <code>×</code> does as well:
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 9: </span><code>&lt;&lt;fn-w&gt;&gt;</code></label><pre class="src src-sw-apl" id="org6fc0154"><span class="org-sw-apl-del">&#8711;</span>R<span class="org-sw-apl-arrow">&#8592;</span>F <span class="org-function-name">W</span> X<span class="org-sw-apl-primitive">
+</span>R<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-primitive">&#9038;</span><span class="org-string">'X '</span><span class="org-sw-apl-primitive">,</span>F<span class="org-sw-apl-primitive">,</span><span class="org-string">' X'</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-del">&#8711;</span>
+</pre>
+</div>
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 10: </span><code>&lt;&lt;fn-hyp&gt;&gt;</code></label><pre class="src src-sw-apl" id="org4933096"><span class="org-sw-apl-del">&#8711;</span>R<span class="org-sw-apl-arrow">&#8592;</span>A <span class="org-function-name">HYP</span> B<span class="org-sw-apl-primitive">
+</span>R<span class="org-sw-apl-arrow">&#8592;</span>((A<span class="org-sw-apl-primitive">*</span><span class="org-sw-apl-number">2</span>)<span class="org-sw-apl-primitive">+</span>B<span class="org-sw-apl-primitive">*</span><span class="org-sw-apl-number">2</span>)<span class="org-sw-apl-primitive">*</span><span class="org-sw-apl-number">0.5</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-del">&#8711;</span>
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-sw-apl"><span class="org-string">'HYP'</span> W <span class="org-sw-apl-number">3</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'&#215;'</span> W <span class="org-sw-apl-number">5</span>
+</pre>
+</div>
+
+<pre class="example">
+      'HYP' W 3
+4.2426
+      '×' W 5
+25
+</pre>
+</div>
+</div>
+<div id="outline-container-orga074c17" class="outline-2">
+<h2 id="orga074c17">The Mockingbird: a function applied to itself</h2>
+<div class="outline-text-2" id="text-orga074c17">
+<p>
+The Mockingbird is <code>λx.x x</code>. A function is given here by its name, so
+applied to itself means applied to its own name. <code>SHOUT</code> puts an
+exclamation mark after its argument, and <code>M 'SHOUT'</code> is <code>SHOUT</code> given
+<code>'SHOUT'</code>:
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 11: </span><code>&lt;&lt;fn-m&gt;&gt;</code></label><pre class="src src-sw-apl" id="org4baf77b"><span class="org-sw-apl-del">&#8711;</span>R<span class="org-sw-apl-arrow">&#8592;</span><span class="org-function-name">M</span> F<span class="org-sw-apl-primitive">
+</span><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">F APPLIED TO ITSELF: TO ITS OWN NAME.
+</span>R<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-primitive">&#9038;</span>F<span class="org-sw-apl-primitive">,</span><span class="org-string">' F'</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-del">&#8711;</span>
+</pre>
+</div>
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 12: </span><code>&lt;&lt;fn-shout&gt;&gt;</code></label><pre class="src src-sw-apl" id="org376f7bf"><span class="org-sw-apl-del">&#8711;</span>R<span class="org-sw-apl-arrow">&#8592;</span><span class="org-function-name">SHOUT</span> X<span class="org-sw-apl-primitive">
+</span>R<span class="org-sw-apl-arrow">&#8592;</span>X<span class="org-sw-apl-primitive">,</span><span class="org-string">'!'</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-del">&#8711;</span>
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-sw-apl">M <span class="org-string">'SHOUT'</span>
+</pre>
+</div>
+
+<pre class="example">
+SHOUT!
+</pre>
+</div>
+</div>
+<div id="outline-container-orge6b0ceb" class="outline-2">
+<h2 id="orge6b0ceb">The Sage: recursion without a name</h2>
+<div class="outline-text-2" id="text-orge6b0ceb">
+<p>
+The Sage, <code>Y</code>, takes a function and gives back its fixed point, which
+is recursion without the function ever naming itself. <code>FSTEP</code> is one
+step of a factorial that calls itself only through its left argument,
+<code>SELF</code>, a line of characters that says how:
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 13: </span><code>&lt;&lt;fn-fstep&gt;&gt;</code></label><pre class="src src-sw-apl" id="orgd4254a6"><span class="org-sw-apl-del">&#8711;</span>R<span class="org-sw-apl-arrow">&#8592;</span>SELF <span class="org-function-name">FSTEP</span> N<span class="org-sw-apl-primitive">
+</span><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">ONE STEP OF THE FACTORIAL. IT NEVER NAMES ITSELF: SELF IS HOW.
+</span><span class="org-sw-apl-arrow">&#8594;</span>(N<span class="org-sw-apl-primitive">&gt;</span><span class="org-sw-apl-number">1</span>)<span class="org-sw-apl-primitive">/</span>MORE<span class="org-sw-apl-primitive">
+</span>R<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-number">1</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-arrow">&#8594;</span><span class="org-sw-apl-number">0</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-label">MORE</span>:R<span class="org-sw-apl-arrow">&#8592;</span>N<span class="org-sw-apl-primitive">&#215;&#9038;</span>SELF<span class="org-sw-apl-primitive">,</span><span class="org-string">' N-1'</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-del">&#8711;</span>
+</pre>
+</div>
+
+<p>
+The Sage supplies <code>SELF</code>: a quoted copy of the step's name followed by
+<code>Y</code>, so that executing <code>SELF</code> with an argument goes round the Sage
+again.
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 14: </span><code>&lt;&lt;fn-y&gt;&gt;</code></label><pre class="src src-sw-apl" id="org1dba1a4"><span class="org-sw-apl-del">&#8711;</span>R<span class="org-sw-apl-arrow">&#8592;</span>F <span class="org-function-name">Y</span> X;SELF<span class="org-sw-apl-primitive">
+</span><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">THE FIXED POINT OF F. F IS DYADIC: ITS LEFT ARGUMENT IS HOW TO
+</span><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">CALL ITSELF, AS CHARACTERS, SO IT RECURSES WITHOUT ITS OWN NAME.
+</span>SELF<span class="org-sw-apl-arrow">&#8592;</span><span class="org-string">''''</span><span class="org-sw-apl-primitive">,</span>F<span class="org-sw-apl-primitive">,</span><span class="org-string">''' Y'</span><span class="org-sw-apl-primitive">
+</span>R<span class="org-sw-apl-arrow">&#8592;</span><span class="org-sw-apl-primitive">&#9038;</span><span class="org-string">'SELF '</span><span class="org-sw-apl-primitive">,</span>F<span class="org-sw-apl-primitive">,</span><span class="org-string">' X'</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-del">&#8711;</span>
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-sw-apl"><span class="org-string">'FSTEP'</span> Y <span class="org-sw-apl-number">6</span><span class="org-sw-apl-primitive">
+</span>FACT <span class="org-sw-apl-number">6</span>
+</pre>
+</div>
+
+<pre class="example">
+      'FSTEP' Y 6
+720
+      FACT 6
+720
+</pre>
+
+
+<p>
+APL evaluates an argument before the function that takes it, so a
+Sage built by self-application alone would never stop building itself.
+The strict fixed point, Z, delays the self-application by a step, and
+that is what <code>Y</code> is here: the line in <code>SELF</code> is only characters until
+<code>FSTEP</code> decides to run it.
+</p>
+</div>
+</div>
+<div id="outline-container-org4a81985" class="outline-2">
+<h2 id="org4a81985">What is still missing</h2>
+<div class="outline-text-2" id="text-org4a81985">
+<p>
+With execute, every bird that APL of 1970 could not write is here.
+<code>NOTHERE</code> says what (B) still lacks: a function as a value.
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 15: </span><code>&lt;&lt;fn-nothere&gt;&gt;</code></label><pre class="src src-sw-apl" id="orgbefd770"><span class="org-sw-apl-del">&#8711;</span><span class="org-function-name">NOTHERE</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'WITH EXECUTE, EVERY BIRD THAT APL\360 COULD NOT WRITE IS HERE:'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'THE MOCKINGBIRD, THE SAGE, AND K GIVEN I. WHAT IS STILL'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'MISSING IS A FUNCTION AS A VALUE.'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">''</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'A BIRD IS GIVEN A FUNCTION''S NAME, AND GIVES BACK A VALUE. IT'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'CANNOT GIVE BACK A FUNCTION: B RETURNS F G X, NOT THE NEW'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'FUNCTION F G, AND K GIVEN A FUNCTION CAN ONLY HAND BACK ITS'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'NAME. NOR CAN A DEFINED FUNCTION BE AN OPERAND: / AND &#8728;. TAKE'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'PRIMITIVES ONLY, IN THIS APL AS IN APL\360.'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">''</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'Y HERE IS ALSO Z, ITS STRICT FORM: APL EVALUATES AN ARGUMENT'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'BEFORE IT CALLS, SO THE SAGE IT CAN WRITE IS THE STRICT ONE.'</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-del">&#8711;</span>
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-sw-apl">NOTHERE
+</pre>
+</div>
+
+<pre class="example" id="orgf48118d">
+WITH EXECUTE, EVERY BIRD THAT APL\360 COULD NOT WRITE IS HERE:
+THE MOCKINGBIRD, THE SAGE, AND K GIVEN I. WHAT IS STILL
+MISSING IS A FUNCTION AS A VALUE.
+
+A BIRD IS GIVEN A FUNCTION'S NAME, AND GIVES BACK A VALUE. IT
+CANNOT GIVE BACK A FUNCTION: B RETURNS F G X, NOT THE NEW
+FUNCTION F G, AND K GIVEN A FUNCTION CAN ONLY HAND BACK ITS
+NAME. NOR CAN A DEFINED FUNCTION BE AN OPERAND: / AND ∘. TAKE
+PRIMITIVES ONLY, IN THIS APL AS IN APL\360.
+
+Y HERE IS ALSO Z, ITS STRICT FORM: APL EVALUATES AN ARGUMENT
+BEFORE IT CALLS, SO THE SAGE IT CAN WRITE IS THE STRICT ONE.
+</pre>
+</div>
+</div>
+<div id="outline-container-orgbef4e32" class="outline-2">
+<h2 id="orgbef4e32">The workspace's own tour</h2>
+<div class="outline-text-2" id="text-orgbef4e32">
+<p>
+A workspace in library 1 says what it holds when asked. <code>DESCRIBE</code>
+lists the birds, and <code>HOWBIRDS</code> flies each one, showing the line as it
+would be typed and then its answer.
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 16: </span><code>&lt;&lt;fn-describe&gt;&gt;</code></label><pre class="src src-sw-apl" id="org465ba31"><span class="org-sw-apl-del">&#8711;</span><span class="org-function-name">DESCRIBE</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'BIRDS -- COMBINATORS, AFTER THE BIRDS OF SMULLYAN''S'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'TO MOCK A MOCKINGBIRD. HOWBIRDS SHOWS THEM ALL. A FUNCTION'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'IS GIVEN TO A BIRD BY NAME OR GLYPH, AS CHARACTERS, AND'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'EXECUTE CALLS IT: ANY FUNCTION, PRIMITIVE OR DEFINED.'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">''</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'   I X         IDIOT       X'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'   X K Y       KESTREL     X, IGNORING Y'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'   X KI Y      KITE        Y, IGNORING X: K GIVEN I'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'   X T F       THRUSH      F X'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'   FG B X      BLUEBIRD    F G X'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'   F C Y Z     CARDINAL    Z F Y'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'   F W X       WARBLER     X F X'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'   FG S X      STARLING    X F G X'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'   M F         MOCKINGBIRD F F'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'   F Y X       SAGE        THE FIXED POINT OF F, ON X'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">''</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'FG IS TWO FUNCTIONS, ''F G''. FSTEP, SHOUT AND HYP ARE THERE'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'TO BE GIVEN TO THE BIRDS. NOTHERE SAYS WHAT IS STILL MISSING.'</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-del">&#8711;</span>
+</pre>
+</div>
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 17: </span><code>&lt;&lt;fn-howbirds&gt;&gt;</code></label><pre class="src src-sw-apl" id="org95dea6a"><span class="org-sw-apl-del">&#8711;</span><span class="org-function-name">HOWBIRDS</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'      I 42'</span><span class="org-sw-apl-primitive">
+</span>I <span class="org-sw-apl-number">42</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'      7 K 9'</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-number">7</span> K <span class="org-sw-apl-number">9</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'      7 KI 9'</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-number">7</span> KI <span class="org-sw-apl-number">9</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'      5 T ''&#9075;'''</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-number">5</span> T <span class="org-string">'&#9075;'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'      ''&#9021; &#9075;'' B 5'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'&#9021; &#9075;'</span> B <span class="org-sw-apl-number">5</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'      ''FACT &#8968;'' B 3.2'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'FACT &#8968;'</span> B <span class="org-sw-apl-number">3.2</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'      ''-'' C 10 3'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'-'</span> C <span class="org-sw-apl-number">10</span> <span class="org-sw-apl-number">3</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'      ''HYP'' W 3'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'HYP'</span> W <span class="org-sw-apl-number">3</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'      ''+ &#9021;'' S &#9075;5'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'+ &#9021;'</span> S <span class="org-sw-apl-primitive">&#9075;</span><span class="org-sw-apl-number">5</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'      M ''SHOUT'''</span><span class="org-sw-apl-primitive">
+</span>M <span class="org-string">'SHOUT'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'      ''FSTEP'' Y 6'</span><span class="org-sw-apl-primitive">
+</span><span class="org-string">'FSTEP'</span> Y <span class="org-sw-apl-number">6</span><span class="org-sw-apl-primitive">
+</span><span class="org-sw-apl-del">&#8711;</span>
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-sw-apl">HOWBIRDS
+</pre>
+</div>
+
+<pre class="example" id="org43c3bc9">
+      I 42
+42
+      7 K 9
+7
+      7 KI 9
+9
+      5 T '⍳'
+1 2 3 4 5
+      '⌽ ⍳' B 5
+5 4 3 2 1
+      'FACT ⌈' B 3.2
+24
+      '-' C 10 3
+¯7
+      'HYP' W 3
+4.2426
+      '+ ⌽' S ⍳5
+6 6 6 6 6
+      M 'SHOUT'
+SHOUT!
+      'FSTEP' Y 6
+720
+</pre>
+</div>
+</div>
+<div id="outline-container-org9953970" class="outline-2">
+<h2 id="org9953970">The workspace file</h2>
+<div class="outline-text-2" id="text-org9953970">
+<p>
+A saved workspace is APL that could have been typed: loading it runs
+it. It opens with lines that say what it is &#x2013; its modes, where it
+came from, when it was saved, the settings it keeps &#x2013; and names
+itself; then come the functions, in the order <code>)SAVE</code> writes them,
+which is by name.
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 18: </span><code>&lt;&lt;workspace-header&gt;&gt;</code></label><pre class="src src-sw-apl" id="org13db858"><span class="org-comment-delimiter">&#9053; </span><span class="org-comment">sw-apl workspace. Re-executable APL: loading it runs it.
+</span><span class="org-comment-delimiter">&#9053;</span><span class="org-comment">!MODES (B)
+</span><span class="org-comment-delimiter">&#9053;</span><span class="org-comment">!SOURCE sw-apl -- written for this repository. MIT, (c) 2026 Michael A Wright.
+</span><span class="org-comment-delimiter">&#9053;</span><span class="org-comment">!SAVED 20.41.27 09/22/26
+</span><span class="org-comment-delimiter">&#9053;</span><span class="org-comment">!LINK 16807
+</span><span class="org-comment-delimiter">&#9053;</span><span class="org-comment">!ORIGIN 1
+</span><span class="org-comment-delimiter">&#9053;</span><span class="org-comment">!DIGITS 5
+</span><span class="org-comment-delimiter">&#9053;</span><span class="org-comment">!WIDTH 64
+</span><span class="org-sw-apl-command">)WSID BIRDS</span>
+</pre>
+</div>
+
+<p>
+That order is the file's, not the reader's. The block below puts the
+pieces of this document together in it, and tangling the document
+writes the workspace:
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 19: </span>The workspace, in the order its file keeps</label><pre class="src src-sw-apl"><span class="org-sw-apl-primitive">&lt;&lt;</span>workspace<span class="org-sw-apl-primitive">-</span>header<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>fn<span class="org-sw-apl-primitive">-</span>b<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>fn<span class="org-sw-apl-primitive">-</span>c<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>fn<span class="org-sw-apl-primitive">-</span>describe<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>fn<span class="org-sw-apl-primitive">-</span>fact<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>fn<span class="org-sw-apl-primitive">-</span>fstep<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>fn<span class="org-sw-apl-primitive">-</span>howbirds<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>fn<span class="org-sw-apl-primitive">-</span>hyp<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>fn<span class="org-sw-apl-primitive">-</span>i<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>fn<span class="org-sw-apl-primitive">-</span>k<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>fn<span class="org-sw-apl-primitive">-</span>ki<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>fn<span class="org-sw-apl-primitive">-</span>m<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>fn<span class="org-sw-apl-primitive">-</span>nothere<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>fn<span class="org-sw-apl-primitive">-</span>s<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>fn<span class="org-sw-apl-primitive">-</span>shout<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>fn<span class="org-sw-apl-primitive">-</span>t<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>fn<span class="org-sw-apl-primitive">-</span>w<span class="org-sw-apl-primitive">&gt;&gt;
+&lt;&lt;</span>fn<span class="org-sw-apl-primitive">-</span>y<span class="org-sw-apl-primitive">&gt;&gt;</span>
+</pre>
+</div>
+
+<p>
+<code>samples/80-birds-75.apl</code> runs the same birds as a transcript, and
+<code>docs/birds.md</code> sets them beside the (A) '70 workspace.
+</p>
+</div>
+</div>
+</div>
+</body>
+</html>

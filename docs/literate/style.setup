@@ -1,0 +1,36 @@
+# Shared by every literate document here: the page's look, and the
+# colours for the classes htmlize gives sw-apl-mode's faces
+# (docs/literate.md lists them). Light by default, dark when the
+# reader's system is.
+#+OPTIONS: toc:2 num:nil timestamp:nil author:t ^:{} html-postamble:nil html-preamble:t html-style:nil
+#+HTML_DOCTYPE: html5
+#+HTML_HEAD: <meta name="viewport" content="width=device-width, initial-scale=1">
+#+HTML_HEAD: <style>
+#+HTML_HEAD: @font-face { font-family: "APL385 Unicode"; src: local("APL385 Unicode"), url("../redistributed/apl385-font/APL385.woff2") format("woff2"); font-display: swap; }
+#+HTML_HEAD: :root { color-scheme: light dark; --paper: #fbf7ef; --ink: #2b2118; --rule: #d8cdb8; --code: #f4eee2;
+#+HTML_HEAD:   --prim: #0550ae; --arrow: #8250df; --num: #953800; --sys: #0a6e7a; --cmd: #6e5494; --del: #b3261e; --fn: #116329; --label: #7d4e00; --str: #0a7d55; --comment: #6a737d; }
+#+HTML_HEAD: @media (prefers-color-scheme: dark) { :root { --paper: #17130e; --ink: #e8dfd0; --rule: #3a3229; --code: #211b14;
+#+HTML_HEAD:   --prim: #79c0ff; --arrow: #d2a8ff; --num: #ffa657; --sys: #56d4dd; --cmd: #b392f0; --del: #ff7b72; --fn: #7ee787; --label: #e3b341; --str: #7ee2b8; --comment: #8b949e; } }
+#+HTML_HEAD: body { margin: 0 auto; max-width: 46rem; padding: 1rem; background: var(--paper); color: var(--ink); font: 17px/1.55 Georgia, "Times New Roman", serif; }
+#+HTML_HEAD: a { color: var(--prim); }
+#+HTML_HEAD: h1.title { font-size: 1.9rem; line-height: 1.2; margin-bottom: .2rem; }
+#+HTML_HEAD: .subtitle { display: block; font-size: 1.05rem; font-weight: normal; font-style: italic; margin-top: .4rem; }
+#+HTML_HEAD: nav.literate { font: 14px/1.4 system-ui, sans-serif; padding: .5rem 0; border-bottom: 1px solid var(--rule); margin-bottom: 1rem; }
+#+HTML_HEAD: pre, code { font-family: "APL385 Unicode", "DejaVu Sans Mono", ui-monospace, monospace; }
+#+HTML_HEAD: pre.src, pre.example { background: var(--code); border: 1px solid var(--rule); border-radius: 6px; padding: .6rem .8rem; overflow-x: auto; font-size: 15px; line-height: 1.45; }
+#+HTML_HEAD: pre.example { border-left: 4px solid var(--rule); }
+#+HTML_HEAD: .org-src-container label.org-src-name { display: block; font: 13px system-ui, sans-serif; color: var(--comment); margin: 1rem 0 .2rem; }
+#+HTML_HEAD: .org-src-container label.org-src-name .listing-number { display: none; }
+#+HTML_HEAD: .org-sw-apl-primitive { color: var(--prim); }
+#+HTML_HEAD: .org-sw-apl-arrow { color: var(--arrow); font-weight: 600; }
+#+HTML_HEAD: .org-sw-apl-number { color: var(--num); }
+#+HTML_HEAD: .org-sw-apl-system { color: var(--sys); }
+#+HTML_HEAD: .org-sw-apl-command { color: var(--cmd); }
+#+HTML_HEAD: .org-sw-apl-del { color: var(--del); font-weight: 700; }
+#+HTML_HEAD: .org-sw-apl-label, .org-variable-name { color: var(--label); }
+#+HTML_HEAD: .org-function-name { color: var(--fn); font-weight: 600; }
+#+HTML_HEAD: .org-string { color: var(--str); }
+#+HTML_HEAD: .org-comment, .org-comment-delimiter { color: var(--comment); font-style: italic; }
+#+HTML_HEAD: table { border-collapse: collapse; } td, th { padding: .2rem .6rem; border-bottom: 1px solid var(--rule); }
+#+HTML_HEAD: </style>
+#+PROPERTY: header-args:sw-apl :results output :exports both :eval no-export :library ../..

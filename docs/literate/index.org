@@ -1,0 +1,19 @@
+#+TITLE: Literate APL
+#+SUBTITLE: sw-apl workspaces, read as programs
+#+AUTHOR: Michael A Wright
+#+SETUPFILE: style.setup
+#+OPTIONS: toc:nil
+
+Each document here is a workspace from sw-apl's library 1 written as
+a literate program, in the manner of Knuth's WEB: prose and code in
+the order a reader meets them. Tangling a document writes its
+workspace file, byte for byte, and every example in it was run by
+sw-apl and its answer recorded beneath it. The same workspaces are in
+sw-apl in your browser: ~)LOAD 1 NAME~, then ~DESCRIBE~.
+
+| Document | Mode | What it is |
+|----------+------+------------|
+| [[file:birds.html][BIRDS]] | (B) '75 | Smullyan's combinators -- the Idiot to the Sage -- given functions by name and calling them with execute |
+
+The documents are Org files in ~docs/literate/~, run by Org Babel with
+~ob-sw-apl~ and coloured by ~sw-apl-mode~, both in ~docs/emacs/~.

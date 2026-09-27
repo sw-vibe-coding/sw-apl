@@ -18,6 +18,10 @@
   against the release binary. It is part of `just precommit`, and
   skips with a note where there is no Emacs.
 
+- **`just check-literate`** re-runs, re-tangles and re-exports the
+  literate documents in a scratch copy and fails on any difference
+  from what is committed (`literate.md`).
+
 - **Rust tests** cover the libraries: unit tests inside a crate,
   and the integration tests in each crate's `tests/`, which drive
   a crate's public API rather than a process.

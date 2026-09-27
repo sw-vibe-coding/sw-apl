@@ -1,0 +1,494 @@
+#+TITLE: BIRDS: combinators in (B) '75
+#+SUBTITLE: Smullyan's birds, written in APL with execute, read as a literate program
+#+AUTHOR: Michael A Wright
+#+SETUPFILE: style.setup
+
+This is the (B) '75 BIRDS workspace from sw-apl's library 1, written as
+a literate program: the prose and the code in the order a reader meets
+them, rather than the order the file keeps them. Every function is
+here, and the last section puts them together into the workspace file,
+~ws/lib1/BIRDS.b-75.apl.ws~, byte for byte -- tangling this document
+writes that file. Every example below was run by sw-apl and its result
+recorded under it; in the sw-apl in your browser, ~)LOAD 1 BIRDS~ in
+the (B) tab gives the same answers.
+
+* Birds and combinators
+
+A combinator is a function of functions. The Bluebird takes two
+functions and composes them; the Mockingbird takes a function and
+applies it to itself. Raymond Smullyan's /To Mock a Mockingbird/
+(1985) made each combinator a bird, and the names have stuck.
+
+APL is a language of functions, but in the APL of 1970 a function
+could not be handed to another: an argument is always an array. The
+(A) '70 BIRDS gets as far as that allows, over a table of primitives.
+(B) '75 has what makes the rest possible: *execute*, ~⍎~, which runs
+a character vector as a line of APL.
+
+#+begin_src sw-apl
+⍎'2+3'
+#+end_src
+
+#+RESULTS:
+: 5
+
+So in (B) a bird is given a function by its /name/ -- its glyph, or
+the name of a defined function -- as characters, and calls it by
+building a line around the name and executing it. Nothing else is
+needed, and no table stands between the bird and the function: any
+function will do, primitive or defined.
+
+* The Thrush: calling a function by name
+
+The Thrush is the pattern every bird follows, so it comes first.
+~X T F~ applies ~F~ to ~X~: it catenates the name and ~' X'~ and
+executes the line.
+
+#+name: fn-t
+#+caption: =<<fn-t>>=
+#+begin_src sw-apl :tangle no :eval no :exports code
+∇R←X T F
+R←⍎F,' X'
+∇
+#+end_src
+
+The line runs inside ~T~, where ~X~ is ~T~'s own argument, so the
+function named applies to the value ~T~ was given. A glyph is a name:
+
+#+begin_src sw-apl :load "1 BIRDS"
+5 T '⍳'
+#+end_src
+
+#+RESULTS:
+: 1 2 3 4 5
+
+and so is a defined function's name. ~FACT~ is the usual recursive
+factorial, which the workspace keeps as a function to give to birds:
+
+#+name: fn-fact
+#+caption: =<<fn-fact>>=
+#+begin_src sw-apl :tangle no :eval no :exports code
+∇R←FACT N
+→(N>1)/MORE
+R←1
+→0
+MORE:R←N×FACT N-1
+∇
+#+end_src
+#+begin_src sw-apl :load "1 BIRDS"
+6 T 'FACT'
+#+end_src
+
+#+RESULTS:
+: 720
+
+* Birds on values: the Idiot and the Kestrel
+
+Two birds apply nothing, so they need no execute. The Idiot gives back
+its argument, and the Kestrel keeps its left argument whatever its
+right one is.
+
+#+name: fn-i
+#+caption: =<<fn-i>>=
+#+begin_src sw-apl :tangle no :eval no :exports code
+∇R←I X
+R←X
+∇
+#+end_src
+#+name: fn-k
+#+caption: =<<fn-k>>=
+#+begin_src sw-apl :tangle no :eval no :exports code
+∇R←X K Y
+R←X
+∇
+#+end_src
+#+begin_src sw-apl :load "1 BIRDS" :echo yes
+I 42
+7 K 9
+'KEEP' K 1 2 3
+#+end_src
+
+#+RESULTS:
+:       I 42
+: 42
+:       7 K 9
+: 7
+:       'KEEP' K 1 2 3
+: KEEP
+
+* The Kite: a bird made of two others
+
+Smullyan makes the Kite from the Kestrel and the Idiot: it is ~K I~,
+the Kestrel given the Idiot, and it keeps its /right/ argument. In
+(B) that construction can be written as he wrote it. ~'I' K X~ is the
+name ~'I'~, whatever ~X~ is, and that name applied to ~Y~ is ~Y~:
+
+#+name: fn-ki
+#+caption: =<<fn-ki>>=
+#+begin_src sw-apl :tangle no :eval no :exports code
+∇R←X KI Y
+⍝ K GIVEN THE IDIOT: 'I' K X IS 'I', AND THAT NAME, APPLIED TO Y,
+⍝ IS Y.
+R←⍎('I' K X),' Y'
+∇
+#+end_src
+#+begin_src sw-apl :load "1 BIRDS"
+7 KI 9
+#+end_src
+
+#+RESULTS:
+: 9
+
+* Two functions at once: the Bluebird and the Starling
+
+The Bluebird composes: ~FG B X~ is ~F G X~. An APL function has at
+most two arguments, and one of them is ~X~, so both functions come in
+one character vector, with a space between them since a name can be
+longer than one character. The line ~⍎~ runs is then ~F G X~ itself:
+
+#+name: fn-b
+#+caption: =<<fn-b>>=
+#+begin_src sw-apl :tangle no :eval no :exports code
+∇R←FG B X
+⍝ FG IS 'F G', TWO FUNCTIONS BY NAME OR GLYPH: F G X.
+R←⍎FG,' X'
+∇
+#+end_src
+#+begin_src sw-apl :load "1 BIRDS" :echo yes
+'⌽ ⍳' B 5
+'FACT ⌈' B 3.2
+#+end_src
+
+#+RESULTS:
+:       '⌽ ⍳' B 5
+: 5 4 3 2 1
+:       'FACT ⌈' B 3.2
+: 24
+
+The Starling is ~X F G X~: ~F~ between ~X~ and ~G X~. With ~'+ ⌽'~,
+each element is added to its mirror image:
+
+#+name: fn-s
+#+caption: =<<fn-s>>=
+#+begin_src sw-apl :tangle no :eval no :exports code
+∇R←FG S X
+⍝ FG IS 'F G': X F G X.
+R←⍎'X ',FG,' X'
+∇
+#+end_src
+#+begin_src sw-apl :load "1 BIRDS"
+'+ ⌽' S ⍳5
+#+end_src
+
+#+RESULTS:
+: 6 6 6 6 6
+
+* One function, two ways round: the Cardinal and the Warbler
+
+The Cardinal flips the arguments of a dyadic function: ~F C Y Z~ is
+~Z F Y~. It takes the two values as a pair, since ~F~ has the left
+argument's place:
+
+#+name: fn-c
+#+caption: =<<fn-c>>=
+#+begin_src sw-apl :tangle no :eval no :exports code
+∇R←F C YZ
+R←⍎'YZ[2] ',F,' YZ[1]'
+∇
+#+end_src
+#+begin_src sw-apl :load "1 BIRDS"
+'-' C 10 3
+#+end_src
+
+#+RESULTS:
+: ¯7
+
+The Warbler gives a dyadic function the same argument on both sides:
+~F W X~ is ~X F X~. ~HYP~, the hypotenuse, is here to be given to it,
+and ~×~ does as well:
+
+#+name: fn-w
+#+caption: =<<fn-w>>=
+#+begin_src sw-apl :tangle no :eval no :exports code
+∇R←F W X
+R←⍎'X ',F,' X'
+∇
+#+end_src
+#+name: fn-hyp
+#+caption: =<<fn-hyp>>=
+#+begin_src sw-apl :tangle no :eval no :exports code
+∇R←A HYP B
+R←((A*2)+B*2)*0.5
+∇
+#+end_src
+#+begin_src sw-apl :load "1 BIRDS" :echo yes
+'HYP' W 3
+'×' W 5
+#+end_src
+
+#+RESULTS:
+:       'HYP' W 3
+: 4.2426
+:       '×' W 5
+: 25
+
+* The Mockingbird: a function applied to itself
+
+The Mockingbird is ~λx.x x~. A function is given here by its name, so
+applied to itself means applied to its own name. ~SHOUT~ puts an
+exclamation mark after its argument, and ~M 'SHOUT'~ is ~SHOUT~ given
+~'SHOUT'~:
+
+#+name: fn-m
+#+caption: =<<fn-m>>=
+#+begin_src sw-apl :tangle no :eval no :exports code
+∇R←M F
+⍝ F APPLIED TO ITSELF: TO ITS OWN NAME.
+R←⍎F,' F'
+∇
+#+end_src
+#+name: fn-shout
+#+caption: =<<fn-shout>>=
+#+begin_src sw-apl :tangle no :eval no :exports code
+∇R←SHOUT X
+R←X,'!'
+∇
+#+end_src
+#+begin_src sw-apl :load "1 BIRDS"
+M 'SHOUT'
+#+end_src
+
+#+RESULTS:
+: SHOUT!
+
+* The Sage: recursion without a name
+
+The Sage, ~Y~, takes a function and gives back its fixed point, which
+is recursion without the function ever naming itself. ~FSTEP~ is one
+step of a factorial that calls itself only through its left argument,
+~SELF~, a line of characters that says how:
+
+#+name: fn-fstep
+#+caption: =<<fn-fstep>>=
+#+begin_src sw-apl :tangle no :eval no :exports code
+∇R←SELF FSTEP N
+⍝ ONE STEP OF THE FACTORIAL. IT NEVER NAMES ITSELF: SELF IS HOW.
+→(N>1)/MORE
+R←1
+→0
+MORE:R←N×⍎SELF,' N-1'
+∇
+#+end_src
+
+The Sage supplies ~SELF~: a quoted copy of the step's name followed by
+~Y~, so that executing ~SELF~ with an argument goes round the Sage
+again.
+
+#+name: fn-y
+#+caption: =<<fn-y>>=
+#+begin_src sw-apl :tangle no :eval no :exports code
+∇R←F Y X;SELF
+⍝ THE FIXED POINT OF F. F IS DYADIC: ITS LEFT ARGUMENT IS HOW TO
+⍝ CALL ITSELF, AS CHARACTERS, SO IT RECURSES WITHOUT ITS OWN NAME.
+SELF←'''',F,''' Y'
+R←⍎'SELF ',F,' X'
+∇
+#+end_src
+#+begin_src sw-apl :load "1 BIRDS" :echo yes
+'FSTEP' Y 6
+FACT 6
+#+end_src
+
+#+RESULTS:
+:       'FSTEP' Y 6
+: 720
+:       FACT 6
+: 720
+
+APL evaluates an argument before the function that takes it, so a
+Sage built by self-application alone would never stop building itself.
+The strict fixed point, Z, delays the self-application by a step, and
+that is what ~Y~ is here: the line in ~SELF~ is only characters until
+~FSTEP~ decides to run it.
+
+* What is still missing
+
+With execute, every bird that APL of 1970 could not write is here.
+~NOTHERE~ says what (B) still lacks: a function as a value.
+
+#+name: fn-nothere
+#+caption: =<<fn-nothere>>=
+#+begin_src sw-apl :tangle no :eval no :exports code
+∇NOTHERE
+'WITH EXECUTE, EVERY BIRD THAT APL\360 COULD NOT WRITE IS HERE:'
+'THE MOCKINGBIRD, THE SAGE, AND K GIVEN I. WHAT IS STILL'
+'MISSING IS A FUNCTION AS A VALUE.'
+''
+'A BIRD IS GIVEN A FUNCTION''S NAME, AND GIVES BACK A VALUE. IT'
+'CANNOT GIVE BACK A FUNCTION: B RETURNS F G X, NOT THE NEW'
+'FUNCTION F G, AND K GIVEN A FUNCTION CAN ONLY HAND BACK ITS'
+'NAME. NOR CAN A DEFINED FUNCTION BE AN OPERAND: / AND ∘. TAKE'
+'PRIMITIVES ONLY, IN THIS APL AS IN APL\360.'
+''
+'Y HERE IS ALSO Z, ITS STRICT FORM: APL EVALUATES AN ARGUMENT'
+'BEFORE IT CALLS, SO THE SAGE IT CAN WRITE IS THE STRICT ONE.'
+∇
+#+end_src
+#+begin_src sw-apl :load "1 BIRDS"
+NOTHERE
+#+end_src
+
+#+RESULTS:
+#+begin_example
+WITH EXECUTE, EVERY BIRD THAT APL\360 COULD NOT WRITE IS HERE:
+THE MOCKINGBIRD, THE SAGE, AND K GIVEN I. WHAT IS STILL
+MISSING IS A FUNCTION AS A VALUE.
+
+A BIRD IS GIVEN A FUNCTION'S NAME, AND GIVES BACK A VALUE. IT
+CANNOT GIVE BACK A FUNCTION: B RETURNS F G X, NOT THE NEW
+FUNCTION F G, AND K GIVEN A FUNCTION CAN ONLY HAND BACK ITS
+NAME. NOR CAN A DEFINED FUNCTION BE AN OPERAND: / AND ∘. TAKE
+PRIMITIVES ONLY, IN THIS APL AS IN APL\360.
+
+Y HERE IS ALSO Z, ITS STRICT FORM: APL EVALUATES AN ARGUMENT
+BEFORE IT CALLS, SO THE SAGE IT CAN WRITE IS THE STRICT ONE.
+#+end_example
+
+* The workspace's own tour
+
+A workspace in library 1 says what it holds when asked. ~DESCRIBE~
+lists the birds, and ~HOWBIRDS~ flies each one, showing the line as it
+would be typed and then its answer.
+
+#+name: fn-describe
+#+caption: =<<fn-describe>>=
+#+begin_src sw-apl :tangle no :eval no :exports code
+∇DESCRIBE
+'BIRDS -- COMBINATORS, AFTER THE BIRDS OF SMULLYAN''S'
+'TO MOCK A MOCKINGBIRD. HOWBIRDS SHOWS THEM ALL. A FUNCTION'
+'IS GIVEN TO A BIRD BY NAME OR GLYPH, AS CHARACTERS, AND'
+'EXECUTE CALLS IT: ANY FUNCTION, PRIMITIVE OR DEFINED.'
+''
+'   I X         IDIOT       X'
+'   X K Y       KESTREL     X, IGNORING Y'
+'   X KI Y      KITE        Y, IGNORING X: K GIVEN I'
+'   X T F       THRUSH      F X'
+'   FG B X      BLUEBIRD    F G X'
+'   F C Y Z     CARDINAL    Z F Y'
+'   F W X       WARBLER     X F X'
+'   FG S X      STARLING    X F G X'
+'   M F         MOCKINGBIRD F F'
+'   F Y X       SAGE        THE FIXED POINT OF F, ON X'
+''
+'FG IS TWO FUNCTIONS, ''F G''. FSTEP, SHOUT AND HYP ARE THERE'
+'TO BE GIVEN TO THE BIRDS. NOTHERE SAYS WHAT IS STILL MISSING.'
+∇
+#+end_src
+#+name: fn-howbirds
+#+caption: =<<fn-howbirds>>=
+#+begin_src sw-apl :tangle no :eval no :exports code
+∇HOWBIRDS
+'      I 42'
+I 42
+'      7 K 9'
+7 K 9
+'      7 KI 9'
+7 KI 9
+'      5 T ''⍳'''
+5 T '⍳'
+'      ''⌽ ⍳'' B 5'
+'⌽ ⍳' B 5
+'      ''FACT ⌈'' B 3.2'
+'FACT ⌈' B 3.2
+'      ''-'' C 10 3'
+'-' C 10 3
+'      ''HYP'' W 3'
+'HYP' W 3
+'      ''+ ⌽'' S ⍳5'
+'+ ⌽' S ⍳5
+'      M ''SHOUT'''
+M 'SHOUT'
+'      ''FSTEP'' Y 6'
+'FSTEP' Y 6
+∇
+#+end_src
+#+begin_src sw-apl :load "1 BIRDS"
+HOWBIRDS
+#+end_src
+
+#+RESULTS:
+#+begin_example
+      I 42
+42
+      7 K 9
+7
+      7 KI 9
+9
+      5 T '⍳'
+1 2 3 4 5
+      '⌽ ⍳' B 5
+5 4 3 2 1
+      'FACT ⌈' B 3.2
+24
+      '-' C 10 3
+¯7
+      'HYP' W 3
+4.2426
+      '+ ⌽' S ⍳5
+6 6 6 6 6
+      M 'SHOUT'
+SHOUT!
+      'FSTEP' Y 6
+720
+#+end_example
+
+* The workspace file
+
+A saved workspace is APL that could have been typed: loading it runs
+it. It opens with lines that say what it is -- its modes, where it
+came from, when it was saved, the settings it keeps -- and names
+itself; then come the functions, in the order ~)SAVE~ writes them,
+which is by name.
+
+#+name: workspace-header
+#+caption: =<<workspace-header>>=
+#+begin_src sw-apl :tangle no :eval no :exports code
+⍝ sw-apl workspace. Re-executable APL: loading it runs it.
+⍝!MODES (B)
+⍝!SOURCE sw-apl -- written for this repository. MIT, (c) 2026 Michael A Wright.
+⍝!SAVED 20.41.27 09/22/26
+⍝!LINK 16807
+⍝!ORIGIN 1
+⍝!DIGITS 5
+⍝!WIDTH 64
+)WSID BIRDS
+#+end_src
+
+That order is the file's, not the reader's. The block below puts the
+pieces of this document together in it, and tangling the document
+writes the workspace:
+
+#+caption: The workspace, in the order its file keeps
+#+begin_src sw-apl :tangle ../../ws/lib1/BIRDS.b-75.apl.ws :noweb no-export :eval no :exports code
+<<workspace-header>>
+<<fn-b>>
+<<fn-c>>
+<<fn-describe>>
+<<fn-fact>>
+<<fn-fstep>>
+<<fn-howbirds>>
+<<fn-hyp>>
+<<fn-i>>
+<<fn-k>>
+<<fn-ki>>
+<<fn-m>>
+<<fn-nothere>>
+<<fn-s>>
+<<fn-shout>>
+<<fn-t>>
+<<fn-w>>
+<<fn-y>>
+#+end_src
+
+~samples/80-birds-75.apl~ runs the same birds as a transcript, and
+~docs/birds.md~ sets them beside the (A) '70 workspace.

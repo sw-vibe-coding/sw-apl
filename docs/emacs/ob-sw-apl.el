@@ -19,6 +19,8 @@
 ;;   :mode 70 or 75     the mode, (A) '70 or (B) '75; 75 by default
 ;;   :echo yes          show each line as typed, indented six spaces,
 ;;                      so the result reads as a session transcript
+;;   :load "1 BIRDS"    )LOAD this workspace first; its SAVED line is
+;;                      not shown, so the result is the block's own
 ;;   :library DIR       where libraries 0 and 1 are (sw-apl --library)
 ;;   :lib "2=DIR,NAME"  a library beyond them (sw-apl --lib)
 ;;
@@ -77,6 +79,20 @@ with a short PATH would not look."
             (when lib (list "--lib" (format "%s" lib)))
             (list "-f" file))))
 
+(defun org-babel-sw-apl--loading (params)
+  "The )LOAD line the :load header argument in PARAMS asks for, or none."
+  (let ((load (cdr (assq :load params))))
+    (if load (format ")LOAD %s\n" load) "")))
+
+(defun org-babel-sw-apl--quiet (params output)
+  "OUTPUT without what a :load in PARAMS printed on its way in: the
+line it was typed on, when echoed, and its SAVED line. A load that
+failed keeps its report."
+  (if (and (cdr (assq :load params))
+           (string-match "\\`\\(?: *)LOAD[^\n]*\n\\)?SAVED [^\n]*\n" output))
+      (substring output (match-end 0))
+    output))
+
 (defun org-babel-execute:sw-apl (body params)
   "Run BODY, an sw-apl block with header arguments PARAMS, and return
 what it printed."
@@ -89,14 +105,15 @@ what it printed."
         (progn
           (with-temp-file file
             (set-buffer-file-coding-system 'utf-8-unix)
-            (insert (org-babel-expand-body:generic body params) "\n"))
+            (insert (org-babel-sw-apl--loading params)
+                    (org-babel-expand-body:generic body params) "\n"))
           (with-temp-buffer
             (let* ((coding-system-for-read 'utf-8)
                    (status (apply #'call-process program nil t nil
                                   (org-babel-sw-apl--arguments params file))))
               (unless (eq status 0)
                 (user-error "sw-apl block: exit %s: %s" status (buffer-string)))
-              (buffer-string))))
+              (org-babel-sw-apl--quiet params (buffer-string)))))
       (delete-file file))))
 
 (provide 'ob-sw-apl)

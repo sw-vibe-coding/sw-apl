@@ -91,5 +91,18 @@
 (ert-deftest ob-sw-apl-defines-and-runs-a-function ()
   (should (equal (sw-apl-tests--run "∇R←AVG X\nR←(+/X)÷⍴X\n∇\nAVG 3 5 10") "6\n")))
 
+;; The library is the repository root, where ws/lib1 is.
+(defconst sw-apl-tests--root
+  (expand-file-name "../../.." (file-name-directory (or load-file-name buffer-file-name))))
+
+(ert-deftest ob-sw-apl-loads-a-workspace-quietly ()
+  (let ((library (format ":library %s" sw-apl-tests--root)))
+    (should (equal (sw-apl-tests--run "I 42" ":load \"1 BIRDS\"" library) "42\n"))
+    (should (equal (sw-apl-tests--run "I 42" ":load \"1 BIRDS\"" ":echo yes" library)
+                   "      I 42\n42\n"))
+    ;; A workspace that is not there says so, as )LOAD does.
+    (should (string-match-p "WS NOT FOUND"
+                            (sw-apl-tests--run "1" ":load \"1 NOSUCH\"" library)))))
+
 (provide 'sw-apl-tests)
 ;;; sw-apl-tests.el ends here

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Literate APL</title>
+<meta name="author" content="Michael A Wright" />
+<meta name="generator" content="Org Mode" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+@font-face { font-family: "APL385 Unicode"; src: local("APL385 Unicode"), url("../redistributed/apl385-font/APL385.woff2") format("woff2"); font-display: swap; }
+:root { color-scheme: light dark; --paper: #fbf7ef; --ink: #2b2118; --rule: #d8cdb8; --code: #f4eee2;
+--prim: #0550ae; --arrow: #8250df; --num: #953800; --sys: #0a6e7a; --cmd: #6e5494; --del: #b3261e; --fn: #116329; --label: #7d4e00; --str: #0a7d55; --comment: #6a737d; }
+@media (prefers-color-scheme: dark) { :root { --paper: #17130e; --ink: #e8dfd0; --rule: #3a3229; --code: #211b14;
+--prim: #79c0ff; --arrow: #d2a8ff; --num: #ffa657; --sys: #56d4dd; --cmd: #b392f0; --del: #ff7b72; --fn: #7ee787; --label: #e3b341; --str: #7ee2b8; --comment: #8b949e; } }
+body { margin: 0 auto; max-width: 46rem; padding: 1rem; background: var(--paper); color: var(--ink); font: 17px/1.55 Georgia, "Times New Roman", serif; }
+a { color: var(--prim); }
+h1.title { font-size: 1.9rem; line-height: 1.2; margin-bottom: .2rem; }
+.subtitle { display: block; font-size: 1.05rem; font-weight: normal; font-style: italic; margin-top: .4rem; }
+nav.literate { font: 14px/1.4 system-ui, sans-serif; padding: .5rem 0; border-bottom: 1px solid var(--rule); margin-bottom: 1rem; }
+pre, code { font-family: "APL385 Unicode", "DejaVu Sans Mono", ui-monospace, monospace; }
+pre.src, pre.example { background: var(--code); border: 1px solid var(--rule); border-radius: 6px; padding: .6rem .8rem; overflow-x: auto; font-size: 15px; line-height: 1.45; }
+pre.example { border-left: 4px solid var(--rule); }
+.org-src-container label.org-src-name { display: block; font: 13px system-ui, sans-serif; color: var(--comment); margin: 1rem 0 .2rem; }
+.org-src-container label.org-src-name .listing-number { display: none; }
+.org-sw-apl-primitive { color: var(--prim); }
+.org-sw-apl-arrow { color: var(--arrow); font-weight: 600; }
+.org-sw-apl-number { color: var(--num); }
+.org-sw-apl-system { color: var(--sys); }
+.org-sw-apl-command { color: var(--cmd); }
+.org-sw-apl-del { color: var(--del); font-weight: 700; }
+.org-sw-apl-label, .org-variable-name { color: var(--label); }
+.org-function-name { color: var(--fn); font-weight: 600; }
+.org-string { color: var(--str); }
+.org-comment, .org-comment-delimiter { color: var(--comment); font-style: italic; }
+table { border-collapse: collapse; } td, th { padding: .2rem .6rem; border-bottom: 1px solid var(--rule); }
+</style>
+</head>
+<body>
+<div id="preamble" class="status">
+<nav class="literate"><a href="index.html">Literate APL</a> · <a href="../">sw-apl in your browser</a> · <a href="https://github.com/sw-vibe-coding/sw-apl">Repository</a></nav>
+</div>
+<div id="content" class="content">
+<h1 class="title">Literate APL
+<br>
+<span class="subtitle">sw-apl workspaces, read as programs</span>
+</h1>
+<p>
+Each document here is a workspace from sw-apl's library 1 written as
+a literate program, in the manner of Knuth's WEB: prose and code in
+the order a reader meets them. Tangling a document writes its
+workspace file, byte for byte, and every example in it was run by
+sw-apl and its answer recorded beneath it. The same workspaces are in
+sw-apl in your browser: <code>)LOAD 1 NAME</code>, then <code>DESCRIBE</code>.
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Document</th>
+<th scope="col" class="org-left">Mode</th>
+<th scope="col" class="org-left">What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><a href="birds.html">BIRDS</a></td>
+<td class="org-left">(B) '75</td>
+<td class="org-left">Smullyan's combinators &#x2013; the Idiot to the Sage &#x2013; given functions by name and calling them with execute</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+The documents are Org files in <code>docs/literate/</code>, run by Org Babel with
+<code>ob-sw-apl</code> and coloured by <code>sw-apl-mode</code>, both in <code>docs/emacs/</code>.
+</p>
+</div>
+</body>
+</html>

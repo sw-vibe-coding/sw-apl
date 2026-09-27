@@ -443,6 +443,23 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
     /\w+ .*\d{4}-/.test(said.built), said.built);
   check('and the repository and the licence',
     said.repo.includes('github.com/sw-vibe-coding/sw-apl'), said.repo);
+  // The literate documents: the footer links their index, the index
+  // lists BIRDS, and BIRDS is coloured by sw-apl-mode's classes.
+  const literate = await page.evaluate(async () => {
+    const link = document.getElementById('literate');
+    const index = await (await fetch(link.href)).text();
+    const birds = await fetch(new URL('birds.html', link.href));
+    const text = birds.ok ? await birds.text() : '';
+    return {
+      href: link.getAttribute('href'),
+      lists: index.includes('href="birds.html"'),
+      coloured: text.includes('class="org-sw-apl-primitive"'),
+      font: text.includes('../redistributed/apl385-font/APL385.woff2'),
+    };
+  });
+  check('the footer links the literate documents, and they load coloured',
+    literate.href === 'literate/index.html' && literate.lists && literate.coloured && literate.font,
+    JSON.stringify(literate));
   check('and it is one wrapping line, not paragraphs',
     (await page.evaluate(() => document.querySelectorAll('.colophon p').length)) === 0
       && (await page.evaluate(() => getComputedStyle(document.querySelector('.colophon')).flexWrap))
