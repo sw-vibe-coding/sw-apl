@@ -14,6 +14,8 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-26
 
+- feat(literate): TTTML as a literate program, beside BIRDS
+- docs(changes): refresh CHANGES.md to HEAD; complete 016-literate-birds
 - feat(literate): BIRDS as a literate program, published and linked from the demo
 - docs(changes): refresh CHANGES.md to HEAD; complete 015-ob-sw-apl
 - feat(emacs): sw-apl-mode and ob-sw-apl, an Org Babel language for APL
