@@ -852,6 +852,10 @@ shell.
 
 ## Phase 10 (owner direction 2026-09-24): help, libraries, and LEARN
 
+Owner direction (2026-09-28): install persistent CLI and server
+binaries with libraries on both boards, and connect the host aplterm
+to each board. Extend the cross-build commands and document operation.
+
 Owner direction (2026-09-28): cross-compile the standalone sw-apl
 CLI for LicheeRV and Luckfox boards before the host-clock work.
 Use the existing local LicheeRV Nano and Luckfox RV1103 static-musl

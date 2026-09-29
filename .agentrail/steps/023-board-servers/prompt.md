@@ -1,0 +1,1 @@
+Install persistent sw-apl and sw-apl-server binaries and shipped libraries on LicheeRV Nano and Luckfox Pico RV1103. Extend cross-build commands for server, run servers on board USB addresses, validate host aplterm connects to both, document paths and start/connection commands. Preserve saved workspaces. Host-clock remains deferred.

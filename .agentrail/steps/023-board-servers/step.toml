@@ -1,0 +1,8 @@
+number = 23
+slug = "board-servers"
+status = "in-progress"
+description = "Install persistent sw-apl and sw-apl-server binaries and shipped libraries on..."
+role = "production"
+context_files = []
+created_at = "2026-09-28T17:13:11"
+commits = []

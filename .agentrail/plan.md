@@ -21,3 +21,8 @@ Owner direction 2026-09-28: cross-build sw-apl for LicheeRV Nano
 and Luckfox Pico RV1103 using the hardwarewrighter hello-world Rust
 configs. This preempts host-clock work and includes repairing any
 32-bit compilation failures, validation, and deployment documentation.
+
+Owner direction 2026-09-28: install CLI, server, and workspace libraries
+persistently under /root/sw-apl on both boards. Run each board's server
+and connect host aplterm; verify library loading over both connections.
+This preempts the host-clock flag.

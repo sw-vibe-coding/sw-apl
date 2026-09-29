@@ -88,8 +88,8 @@ release:
     cd components/web && cargo build --release -p sw-apl-server
     cd components/term && cargo build --release -p aplterm
 
-# Static standalone CLI for licheerv (Nano) or luckfox (Pico RV1103).
-cross board:
+# Static CLI or server for licheerv (Nano) or luckfox (Pico RV1103).
+cross board binary="sw-apl":
     #!/usr/bin/env bash
     set -euo pipefail
     case "{{board}}" in
@@ -97,8 +97,13 @@ cross board:
         luckfox) target=armv7-unknown-linux-musleabihf ;;
         *) echo "Usage: just cross licheerv|luckfox" >&2; exit 2 ;;
     esac
-    cd components/cli
-    cargo build --locked --release -p sw-apl --target "$target"
+    case "{{binary}}" in
+        sw-apl) component=cli ;;
+        sw-apl-server) component=web ;;
+        *) echo "Binary must be sw-apl or sw-apl-server" >&2; exit 2 ;;
+    esac
+    cd "components/$component"
+    cargo build --locked --release -p "{{binary}}" --target "$target"
 
 # Everything runs on this machine: the interpreter is a process here
 # and the page talks to it over the loopback address. Nothing typed
