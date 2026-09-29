@@ -852,6 +852,11 @@ shell.
 
 ## Phase 10 (owner direction 2026-09-24): help, libraries, and LEARN
 
+Owner report (2026-09-28): the Linux clone fails to build after
+working on macOS. Before the host-clock flag, reproduce the failure,
+declare the required Rust toolchain, and verify the release build and
+quality gates on Linux.
+
 Phase 9 is done: both modes, the (B) tab, library 1 per mode,
 TTTML, live output, the keyboard per mode, and format. The owner,
 after reading an AI chat's answers saved untracked as

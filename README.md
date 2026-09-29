@@ -118,8 +118,11 @@ library 1's are, and each mode sees only those that run in it.
 
 ## Run it on your machine
 
-Needs a Rust toolchain (edition 2024, stable) and, for the commands
-below, [just](https://github.com/casey/just).
+Needs [rustup](https://rustup.rs/) and, for the commands below,
+[just](https://github.com/casey/just). The repository's
+`rust-toolchain.toml` selects Rust 1.89.0 with rustfmt and Clippy;
+rustup installs them automatically on the first build. Rust 1.89
+or later is required by the CLI's line editor (file locking).
 
 ```bash
 just release                                  # builds the three binaries

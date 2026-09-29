@@ -12,3 +12,7 @@ and the offline shell. The Linux regression fixtures come first.
 
 docs/plan.md, "Phase 10", holds the design and the decisions the
 steps take until the owner says otherwise.
+
+Owner report 2026-09-28: repair the Linux clone's build before the
+remaining host-clock flag. Reproduce the compiler mismatch, declare
+the Rust requirement, and verify the release build and quality gates.

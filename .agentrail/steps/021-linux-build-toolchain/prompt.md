@@ -1,0 +1,1 @@
+Owner report: this clone fails to build after building on Mac. Reproduce and fix the Linux build, make the Rust toolchain requirement explicit, document setup, and run the applicable quality gates. Preserve the host-clock feature for the next step.
