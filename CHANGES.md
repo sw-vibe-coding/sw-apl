@@ -12,8 +12,13 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-09-28
+
+- fix(build): select Rust 1.89 for rustyline file locking
+
 ## 2026-09-27
 
+- docs(changes): refresh CHANGES.md to HEAD; complete 019 and 020
 - docs(samples): 89, LIFE keeps Conway's rules
 - feat(pages): the demo runs with the network off
 
