@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-28
 
+- feat(build): cross-build and deploy board APL servers
+- saga: record board cross-build completion
+- docs(changes): refresh CHANGES.md to HEAD
 - feat(build): cross-compile sw-apl for LicheeRV and Luckfox
 - saga: record Linux build-toolchain completion
 - docs(changes): refresh CHANGES.md to HEAD
