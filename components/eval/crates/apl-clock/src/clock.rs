@@ -55,7 +55,7 @@ fn cpu() -> i64 {
     }
     // SAFETY: getrusage returned 0, so the struct is initialised.
     let usage = unsafe { usage.assume_init() };
-    let spent = |t: libc::timeval| t.tv_sec * TICKS + i64::from(t.tv_usec) * TICKS / 1_000_000;
+    let spent = |t: libc::timeval| crate::ticks::ticks(t.tv_sec, t.tv_usec);
     spent(usage.ru_utime) + spent(usage.ru_stime)
 }
 

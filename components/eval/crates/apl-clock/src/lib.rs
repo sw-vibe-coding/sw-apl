@@ -7,6 +7,8 @@
 
 mod clock;
 mod hms;
+#[cfg(unix)]
+mod ticks;
 
 pub use clock::{Clock, Time, stopped, system};
 pub use hms::hms;

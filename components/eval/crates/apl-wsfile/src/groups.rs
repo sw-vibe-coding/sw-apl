@@ -92,5 +92,5 @@ fn function_name(header: &str) -> String {
         3 => names.get(1),
         _ => None,
     };
-    name.unwrap_or(&"").to_string()
+    (*name.unwrap_or(&"")).to_string()
 }

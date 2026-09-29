@@ -135,6 +135,9 @@ target/release/sw-apl --help
 Run it from the repository root, or pass `--library DIR`, so that
 `)LOAD 1 NAME` finds the shipped workspaces in `ws/lib1`.
 
+For LicheeRV Nano and Luckfox Pico RV1103, see
+[cross-compiling and running on boards](docs/boards.md).
+
 ## A 2741 terminal and a service
 
 sw-apl also runs the way APL\360 ran: a service holding one session

@@ -162,7 +162,7 @@ the session numeric tests, and sample 67.
 | `∊` | dyadic | dyadic | with the fuzz; sample 30 |
 | `⍋ ⍒` | monadic | monadic | vectors, stable, origin-aware; sample 32 |
 | `⌹` | monadic, dyadic | monadic, dyadic | inverse, left inverse, least-squares divide by Householder QR; vectors are one column and scalars one by one; singular, wider than tall, and characters are DOMAIN ERROR; rank 3 is RANK ERROR; sample 66. Not in the Aug 1968 manual: domino was added to APL\360 in 1970, and the rules followed are the APLX Language Manual's for the same lineage |
-| `⌶` I-beams 20 to 27 | monadic | NONCE ERROR | time, processor time, space still free, terminals, sign-on, date, the line now executing, the state indicator; a left argument is DOMAIN ERROR; samples 58 and 62; `i-beam-reference.md` |
+| `⌶` I-beams 20 to 27 | monadic | NONCE ERROR | time, processor time (32- and 64-bit Unix), space still free, terminals, sign-on, date, the line now executing, the state indicator; a left argument is DOMAIN ERROR; samples 58 and 62; `i-beam-reference.md` |
 
 ## Operators
 

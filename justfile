@@ -88,6 +88,18 @@ release:
     cd components/web && cargo build --release -p sw-apl-server
     cd components/term && cargo build --release -p aplterm
 
+# Static standalone CLI for licheerv (Nano) or luckfox (Pico RV1103).
+cross board:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    case "{{board}}" in
+        licheerv) target=riscv64gc-unknown-linux-musl ;;
+        luckfox) target=armv7-unknown-linux-musleabihf ;;
+        *) echo "Usage: just cross licheerv|luckfox" >&2; exit 2 ;;
+    esac
+    cd components/cli
+    cargo build --locked --release -p sw-apl --target "$target"
+
 # Everything runs on this machine: the interpreter is a process here
 # and the page talks to it over the loopback address. Nothing typed
 # is sent anywhere. Library 0 is target/demo/work, so a demo session

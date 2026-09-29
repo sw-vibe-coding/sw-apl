@@ -852,6 +852,12 @@ shell.
 
 ## Phase 10 (owner direction 2026-09-24): help, libraries, and LEARN
 
+Owner direction (2026-09-28): cross-compile the standalone sw-apl
+CLI for LicheeRV and Luckfox boards before the host-clock work.
+Use the existing local LicheeRV Nano and Luckfox RV1103 static-musl
+targets, provide repeatable builds and deployment instructions, and
+distinguish cross-build validation from testing on real hardware.
+
 Owner report (2026-09-28): the Linux clone fails to build after
 working on macOS. Before the host-clock flag, reproduce the failure,
 declare the required Rust toolchain, and verify the release build and

@@ -1,0 +1,1 @@
+Cross-compile standalone sw-apl for LicheeRV Nano and Luckfox RV1103 using the existing local static-musl RISC-V and ARMv7 approach. Add repeatable build commands, document deployment and REPL usage, validate both artifacts and appropriate gates. Confirm exact board models with owner; do not claim hardware validation without running there.

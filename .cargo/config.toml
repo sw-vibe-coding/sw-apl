@@ -18,3 +18,13 @@
 
 [build]
 target-dir = "target"
+
+# Static Linux binaries for LicheeRV Nano and Luckfox Pico RV1103.
+# Rust's bundled linker and musl runtime avoid a vendor SDK dependency.
+[target.riscv64gc-unknown-linux-musl]
+linker = "rust-lld"
+rustflags = ["-C", "target-feature=+crt-static", "-C", "link-self-contained=yes"]
+
+[target.armv7-unknown-linux-musleabihf]
+linker = "rust-lld"
+rustflags = ["-C", "target-feature=+crt-static", "-C", "link-self-contained=yes"]

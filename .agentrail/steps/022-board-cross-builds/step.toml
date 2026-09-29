@@ -1,0 +1,8 @@
+number = 22
+slug = "board-cross-builds"
+status = "in-progress"
+description = "Cross-compile standalone sw-apl for LicheeRV Nano and Luckfox RV1103 using th..."
+role = "production"
+context_files = []
+created_at = "2026-09-28T17:04:39"
+commits = []

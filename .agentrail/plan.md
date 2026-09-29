@@ -16,3 +16,8 @@ steps take until the owner says otherwise.
 Owner report 2026-09-28: repair the Linux clone's build before the
 remaining host-clock flag. Reproduce the compiler mismatch, declare
 the Rust requirement, and verify the release build and quality gates.
+
+Owner direction 2026-09-28: cross-build sw-apl for LicheeRV Nano
+and Luckfox Pico RV1103 using the hardwarewrighter hello-world Rust
+configs. This preempts host-clock work and includes repairing any
+32-bit compilation failures, validation, and deployment documentation.
