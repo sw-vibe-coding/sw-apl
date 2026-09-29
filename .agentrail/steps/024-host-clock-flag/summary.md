@@ -1,0 +1,1 @@
+Clock flag done as the owner decided: none by default, hardware on request, at the CLI, the service and sw-apl.toml. (B) quad TS reads the clock only with hardware; (A) unchanged. TimeSource and stamp in apl-clock hms.rs (rebased onto the board-build lane, which added ticks.rs). Tests with an injected clock, docs, help, reg-rs rebases, check-pages. Pushed.

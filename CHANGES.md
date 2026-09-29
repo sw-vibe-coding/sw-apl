@@ -12,8 +12,15 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-09-29
+
+- chore(pages): republish after rebasing onto the board-build commits
+- feat(clock): --clock none|hardware, none by default
+
 ## 2026-09-28
 
+- saga: record board server deployment
+- docs(changes): refresh CHANGES.md to HEAD
 - feat(build): cross-build and deploy board APL servers
 - saga: record board cross-build completion
 - docs(changes): refresh CHANGES.md to HEAD
