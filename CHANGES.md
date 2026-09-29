@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-09-28
 
+- feat(build): cross-compile sw-apl for LicheeRV and Luckfox
+- saga: record Linux build-toolchain completion
+- docs(changes): refresh CHANGES.md to HEAD
 - fix(build): select Rust 1.89 for rustyline file locking
 
 ## 2026-09-27
