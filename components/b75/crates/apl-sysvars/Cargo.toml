@@ -9,6 +9,7 @@ repository.workspace = true
 
 [dependencies]
 apl-ast = { path = "../../../parse/crates/apl-ast" }
+apl-clock = { path = "../../../eval/crates/apl-clock" }
 apl-modes = { path = "../../../eval/crates/apl-modes" }
 apl-settings = { path = "../../../session/crates/apl-settings" }
 apl-value = { path = "../../../value/crates/apl-value" }

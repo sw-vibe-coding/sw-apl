@@ -5,7 +5,11 @@
 //! flag wins over the file for the same number. The CLI and the
 //! service take the same.
 //!
+//! The file may also give the clock, as `--clock` does:
+//!
 //! ```toml
+//! clock = "hardware"
+//!
 //! [[library]]
 //! number = 2
 //! name = "EXTENDED"
@@ -15,5 +19,5 @@
 mod file;
 mod spec;
 
-pub use file::{configured, from_file};
-pub use spec::{LibrarySpec, attach, parse_lib};
+pub use file::{clock, configured, from_file};
+pub use spec::{LibrarySpec, attach, parse_clock, parse_lib};

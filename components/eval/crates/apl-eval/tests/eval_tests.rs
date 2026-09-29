@@ -511,6 +511,7 @@ fn at_noon() -> Workspace {
             now: 12 * 60 * 60 * 60,
             cpu: 300,
             date: 91_726,
+            year: 2026,
         },
         signed_on: 9 * 60 * 60 * 60,
         ..Workspace::default()

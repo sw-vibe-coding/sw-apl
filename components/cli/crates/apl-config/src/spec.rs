@@ -3,6 +3,7 @@
 
 use std::path::PathBuf;
 
+use apl_clock::TimeSource;
 use apl_libraries::{Added, Source};
 use apl_store::Store;
 
@@ -77,4 +78,12 @@ pub fn attach(store: Box<dyn Store>, libraries: &[LibrarySpec]) -> Added {
         added = added.with(l.number, &l.name, &place, Source::Dir(l.path.clone()));
     }
     added
+}
+
+/// `--clock none|hardware`, as the CLI and the service take it.
+///
+/// # Errors
+/// Any other word.
+pub fn parse_clock(word: &str) -> Result<TimeSource, String> {
+    TimeSource::parse(word).ok_or_else(|| format!("{word} is not a clock: none or hardware"))
 }

@@ -164,6 +164,7 @@ fn the_host_sets_the_mode_with_the_quota_and_the_store() {
         quota: 12_345,
         store: Box::new(Files(dir.0.clone())),
         mode: Mode::B,
+        clock: apl_session::TimeSource::None,
     };
     let s = Session::attached(Box::new(Mute), host);
     assert_eq!((s.ws.quota, s.ws.mode), (12_345, Mode::B));

@@ -76,6 +76,12 @@ pub struct Args {
     /// ./sw-apl.toml or the user's sw-apl/config.toml.
     #[arg(long, value_name = "FILE")]
     pub config: Option<PathBuf>,
+
+    /// Whether the session has a clock: none, the default, as the
+    /// 5110 had none, so (B)'s quad TS is 1900; or hardware, the
+    /// computer's. (A)'s I-beams read the computer's clock either way.
+    #[arg(long, value_name = "none|hardware", value_parser = apl_config::parse_clock)]
+    pub clock: Option<apl_session::TimeSource>,
 }
 
 /// A mode as `--mode` names it: its year or its letter.
@@ -83,24 +89,25 @@ fn mode(word: &str) -> Result<Mode, String> {
     Mode::parse(word).ok_or_else(|| format!("{word} is not a mode: 70 or 75"))
 }
 
-/// The libraries: `--library`'s 0 and 1, and any `--lib` and the
-/// configuration file add.
-fn store(args: &Args) -> Result<Box<dyn apl_session::Store>, String> {
+/// What the host decides: the size, the libraries -- `--library`'s 0
+/// and 1, and any `--lib` and the configuration file add -- the mode,
+/// and the clock, from `--clock` or the configuration file.
+fn host(args: &Args) -> Result<Host, String> {
     let libraries = apl_config::configured(args.config.as_deref(), &args.libs)?;
     let files = Box::new(Files(args.library.clone()));
-    Ok(Box::new(apl_config::attach(files, &libraries)))
+    Ok(Host {
+        quota: args.ws_size,
+        store: Box::new(apl_config::attach(files, &libraries)),
+        mode: args.mode,
+        clock: apl_config::clock(args.config.as_deref(), args.clock)?,
+    })
 }
 
 fn main() -> ExitCode {
     let args = Args::parse();
     let echo = !args.no_echo;
-    let Ok(store) = store(&args).map_err(|err| eprintln!("sw-apl: {err}")) else {
+    let Ok(ws) = host(&args).map_err(|err| eprintln!("sw-apl: {err}")) else {
         return ExitCode::FAILURE;
-    };
-    let ws = Host {
-        quota: args.ws_size,
-        store,
-        mode: args.mode,
     };
     let outcome = match args.file {
         Some(path) => shell::run_batch(Some(&path), echo, ws),

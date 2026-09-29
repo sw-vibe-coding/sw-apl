@@ -36,7 +36,8 @@ target/release/aplterm --connect 127.0.0.1:2741
 
 `sw-apl-server --help` describes both listeners, `--library`,
 `--lib` and `--config` (libraries 2 and up, as for `sw-apl`; see
-`workspaces.md`), `--ws-size` and `--sessions`. `sw-apl` with no
+`workspaces.md`), `--clock` (as for `sw-apl`; see
+`emulation-policy.md`), `--ws-size` and `--sessions`. `sw-apl` with no
 service, holding its session in process, is unchanged and is still
 the daily interpreter.
 

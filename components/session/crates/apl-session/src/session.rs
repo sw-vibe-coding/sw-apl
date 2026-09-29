@@ -38,6 +38,7 @@ impl Session {
         session.ws.quota = host.quota;
         session.ws.store = host.store;
         session.ws.mode = host.mode;
+        session.ws.time = host.clock;
         session.ws.saved = clear_workspace(host.mode);
         session
     }

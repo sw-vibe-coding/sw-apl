@@ -109,7 +109,8 @@ a letter is one name (`[system_names]` in `data/glyphs.toml`); in (A)
   `⎕TT` and `⎕UL` with fixed values, the 5110 having one user and no
   clock, and lets `⎕AI` and `⎕TS` be assigned. sw-apl follows it:
   `⎕TS` is 1900 0 0 0 0 0 0 until assigned, and does not read the
-  clock the I-beams read. `⎕AI` is four zeros (the manual's value is
+  clock the I-beams read -- unless the session is started with
+  `--clock hardware` (`emulation-policy.md`). `⎕AI` is four zeros (the manual's value is
   illegible in the scan; four is APLSV's length). `⎕TT` is 0; `⎕UL` is
   1 (the manual gives no value; one user). `⎕DL` is a function in
   APLSV; step 015 settled it as the 5110's variable, holding 0.

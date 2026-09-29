@@ -5,7 +5,12 @@ use apl_ibeam::{argument, ibeam};
 use apl_value::{Array, Data, ErrorKind, Number};
 
 fn at(now: i64, cpu: i64, date: i64) -> Time {
-    Time { now, cpu, date }
+    Time {
+        now,
+        cpu,
+        date,
+        year: 2000 + date % 100,
+    }
 }
 
 /// The free space every case here is run with, when it is not the

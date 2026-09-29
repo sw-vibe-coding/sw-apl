@@ -17,7 +17,7 @@ use std::thread;
 
 use apl_attn::{Flag, attend};
 use apl_serve::serve;
-use apl_session::{Files, Host, Mode};
+use apl_session::{Files, Host, Mode, TimeSource};
 use apl_wire::{Link, Socket};
 
 use crate::http::greet;
@@ -41,8 +41,8 @@ pub enum Dialled {
 #[derive(Clone, Debug)]
 pub struct Service {
     /// The workspace size in bytes, the directory the libraries are
-    /// under, and the mode, as the CLI takes them.
-    pub ws: (usize, PathBuf, Mode),
+    /// under, the mode and the clock, as the CLI takes them.
+    pub ws: (usize, PathBuf, Mode, TimeSource),
     /// The libraries beyond 0 and 1, from `--lib` and the
     /// configuration file.
     pub libraries: Vec<apl_config::LibrarySpec>,
@@ -104,10 +104,18 @@ fn hold(socket: TcpStream, service: &Service, over: Dialled) -> io::Result<()> {
             None => return Ok(()),
         },
     };
-    let (quota, root, mode) = service.ws.clone();
+    let (quota, root, mode, clock) = service.ws.clone();
     let store = Box::new(apl_config::attach(
         Box::new(Files(root)),
         &service.libraries,
     ));
-    serve(link, Host { quota, store, mode })
+    serve(
+        link,
+        Host {
+            quota,
+            store,
+            mode,
+            clock,
+        },
+    )
 }

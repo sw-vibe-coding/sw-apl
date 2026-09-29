@@ -5,13 +5,17 @@ use std::path::{Path, PathBuf};
 
 use serde::Deserialize;
 
-use crate::spec::{LibrarySpec, check};
+use apl_clock::TimeSource;
+
+use crate::spec::{LibrarySpec, check, parse_clock};
 
 /// The file's shape: a list of libraries.
 #[derive(Deserialize)]
 struct Config {
     #[serde(default)]
     library: Vec<Entry>,
+    /// `none` or `hardware`, as `--clock` takes it.
+    clock: Option<String>,
 }
 
 /// One `[[library]]` table.
@@ -64,6 +68,27 @@ pub fn configured(given: Option<&Path>, flags: &[LibrarySpec]) -> Result<Vec<Lib
     all.extend(flags.iter().cloned());
     all.sort_by_key(|l| l.number);
     Ok(all)
+}
+
+/// The clock a session is given: `flag` when `--clock` was given, else
+/// the configuration file's `clock` key -- `given`, or the first file
+/// there is -- else none.
+///
+/// # Errors
+/// A file that cannot be read or parsed, or a clock it may not name.
+pub fn clock(given: Option<&Path>, flag: Option<TimeSource>) -> Result<TimeSource, String> {
+    if let Some(flag) = flag {
+        return Ok(flag);
+    }
+    let Some(file) = given.map(Path::to_path_buf).or_else(found) else {
+        return Ok(TimeSource::None);
+    };
+    let text = std::fs::read_to_string(&file).map_err(|e| format!("{}: {e}", file.display()))?;
+    let config: Config = toml::from_str(&text).map_err(|e| format!("{}: {e}", file.display()))?;
+    let named = config.clock.as_deref().map(parse_clock).transpose();
+    Ok(named
+        .map_err(|e| format!("{}: {e}", file.display()))?
+        .unwrap_or_default())
 }
 
 /// The first configuration file there is, where none was named.

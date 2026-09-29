@@ -6,7 +6,7 @@
 use std::collections::BTreeMap;
 use std::path::PathBuf;
 
-use apl_clock::{Clock, stopped};
+use apl_clock::{Clock, TimeSource, stopped};
 use apl_console::{Console, Output, Shown, render_all};
 use apl_modes::Mode;
 use apl_space::{of_value, room, used};
@@ -66,6 +66,9 @@ pub struct Workspace {
     /// keeps for compatibility only: it has one user and no clock.
     /// Session state, since neither is saved with a workspace.
     pub compatible: BTreeMap<String, Array>,
+    /// Whether the session has a clock for (B)'s time stamp: none,
+    /// as on the 5110, unless the host was started with one.
+    pub time: TimeSource,
     /// What runs a system command typed in reply to quad input.
     pub command: Option<Command>,
     /// A command typed in reply to quad input that abandoned the
@@ -85,6 +88,7 @@ impl Default for Workspace {
             quota: apl_space::DEFAULT,
             mode: Mode::default(),
             compatible: BTreeMap::new(),
+            time: TimeSource::None,
             command: None,
             abandoned: None,
         }

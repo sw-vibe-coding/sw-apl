@@ -94,6 +94,11 @@ pub struct Args {
     /// ./sw-apl.toml or the user's sw-apl/config.toml.
     #[arg(long, value_name = "FILE")]
     pub config: Option<PathBuf>,
+
+    /// Whether every session has a clock: none, the default, so (B)'s
+    /// quad TS is 1900 as on the 5110; or hardware, the computer's.
+    #[arg(long, value_name = "none|hardware", value_parser = apl_config::parse_clock)]
+    pub clock: Option<apl_session::TimeSource>,
 }
 
 /// A mode as `--mode` names it: its year or its letter.
@@ -132,8 +137,10 @@ fn start(args: &Args) -> std::io::Result<()> {
     let (line, web) = (bind(&args.listen, "--listen")?, bind(&args.http, "--http")?);
     let libraries = apl_config::configured(args.config.as_deref(), &args.libs)
         .map_err(std::io::Error::other)?;
+    let clock =
+        apl_config::clock(args.config.as_deref(), args.clock).map_err(std::io::Error::other)?;
     let service = Service {
-        ws: (args.ws_size, args.library.clone(), args.mode),
+        ws: (args.ws_size, args.library.clone(), args.mode, clock),
         libraries,
         held: Arc::new(AtomicUsize::new(0)),
         limit: args.sessions,

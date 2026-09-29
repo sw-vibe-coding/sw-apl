@@ -103,6 +103,7 @@ dependencies = [
 name = "apl-modes"
 version = "0.1.0"
 dependencies = [
+ "apl-clock",
  "apl-store",
  "apl-value",
 ]
@@ -295,6 +296,7 @@ name = "apl-sysvars"
 version = "0.1.0"
 dependencies = [
  "apl-ast",
+ "apl-clock",
  "apl-modes",
  "apl-settings",
  "apl-value",

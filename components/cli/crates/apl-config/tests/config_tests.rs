@@ -90,3 +90,33 @@ fn a_flag_wins_over_the_file_for_the_same_number() {
 fn a_named_config_file_that_is_not_there_is_an_error() {
     assert!(configured(Some(&root().join("no-such.toml")), &[]).is_err());
 }
+
+/// The clock a session is given: --clock, else the file's clock key,
+/// else none -- (B)'s time stamp in 1900, as the 5110 gave it.
+#[test]
+fn the_clock_is_none_unless_a_flag_or_the_file_says_hardware() {
+    use apl_clock::TimeSource;
+    let dir = std::env::temp_dir().join(format!("sw-apl-clock-{}", std::process::id()));
+    std::fs::create_dir_all(&dir).expect("dir");
+    let with = dir.join("with.toml");
+    std::fs::write(&with, "clock = \"hardware\"\n").expect("write");
+    let without = dir.join("without.toml");
+    std::fs::write(&without, "").expect("write");
+    let bad = dir.join("bad.toml");
+    std::fs::write(&bad, "clock = \"sundial\"\n").expect("write");
+    assert_eq!(
+        apl_config::clock(Some(&without), None),
+        Ok(TimeSource::None)
+    );
+    assert_eq!(
+        apl_config::clock(Some(&with), None),
+        Ok(TimeSource::Hardware)
+    );
+    assert_eq!(
+        apl_config::clock(Some(&with), Some(TimeSource::None)),
+        Ok(TimeSource::None),
+        "a flag wins over the file"
+    );
+    assert!(apl_config::clock(Some(&bad), None).is_err_and(|e| e.contains("sundial")));
+    std::fs::remove_dir_all(&dir).ok();
+}

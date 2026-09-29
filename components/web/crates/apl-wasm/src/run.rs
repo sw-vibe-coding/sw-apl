@@ -3,7 +3,7 @@
 //! 1 baked into the bundle, and any the page fetched.
 
 use apl_serve::serve;
-use apl_session::{Host, Mode, QUOTA};
+use apl_session::{Host, Mode, QUOTA, TimeSource};
 use wasm_bindgen::JsValue;
 use wasm_bindgen::prelude::wasm_bindgen;
 
@@ -35,6 +35,9 @@ fn field(message: &JsValue, name: &str) -> Option<JsValue> {
 /// one; taking it apart here rather than at the call means the
 /// worker has nothing to get wrong, and an older worker's call is
 /// still a call this understands.
+///
+/// The browser has no `--clock`: a session there has none, as the
+/// 5110 had none, so (B)'s time stamp is 1900.
 #[wasm_bindgen]
 pub fn start(message: &JsValue) {
     console_error_panic_hook::set_once();
@@ -54,6 +57,7 @@ pub fn start(message: &JsValue) {
             field(message, "libraries").as_ref(),
         )),
         mode: mode.as_deref().and_then(Mode::parse).unwrap_or_default(),
+        clock: TimeSource::None,
     };
     let ended = serve(Box::new(link), host);
     if let Err(error) = ended {

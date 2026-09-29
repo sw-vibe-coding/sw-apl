@@ -450,3 +450,35 @@ fn output_is_shown_with_the_settings_it_was_written_under() {
         ]
     );
 }
+
+/// A clock that stands at 14:05:06.5 on 27 September 2026.
+fn fixed() -> apl_session::Time {
+    apl_session::Time {
+        now: ((14 * 60 + 5) * 60 + 6) * 60 + 30,
+        cpu: 0,
+        date: 92_726,
+        year: 2026,
+    }
+}
+
+/// --clock none, the default: (B) is the 5110, which had no clock,
+/// whatever clock the session holds.
+#[test]
+fn with_no_clock_the_time_stamp_is_1900() {
+    let mut b = in_mode(Mode::B);
+    b.ws.clock = fixed;
+    assert_eq!(out(&mut b, "⎕TS"), vec!["1900 0 0 0 0 0 0"]);
+}
+
+/// --clock hardware: the time stamp is the clock's, and an assignment
+/// still wins, as the manual lets one.
+#[test]
+fn with_a_hardware_clock_the_time_stamp_is_the_clocks() {
+    let mut b = in_mode(Mode::B);
+    b.ws.clock = fixed;
+    b.ws.time = apl_session::TimeSource::Hardware;
+    assert_eq!(out(&mut b, "⎕TS"), vec!["2026 9 27 14 5 6 500"]);
+    assert_eq!(out(&mut b, "⎕TS[1]"), vec!["2026"]);
+    out(&mut b, "⎕TS←1977 12 1 9 30 0 0");
+    assert_eq!(out(&mut b, "⎕TS"), vec!["1977 12 1 9 30 0 0"]);
+}

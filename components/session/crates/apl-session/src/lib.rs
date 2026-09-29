@@ -7,7 +7,8 @@ mod quad;
 mod session;
 
 pub use apl_eval::{
-    Console, Files, Host, INDENT, Memory, Mode, QUOTA, Shelf, Shown, Store, system,
+    Console, Files, Host, INDENT, Memory, Mode, QUOTA, Shelf, Shown, Store, Time, TimeSource,
+    system,
 };
 pub use apl_libraries::{Added, Source};
 pub use apl_reply::Reply;

@@ -1,6 +1,7 @@
 //! Reading a system variable, and where the evaluator hands one over.
 
 use apl_ast::Expr;
+use apl_clock::{TimeSource, stamp};
 use apl_modes::Mode;
 use apl_value::{AplError, AplResult, Array, Data, ErrorKind, Number};
 use apl_workspace::{Workspace, free, used};
@@ -9,7 +10,9 @@ use crate::assign::assign;
 use crate::av::atomic_vector;
 
 /// What `⎕AI` and `⎕TS` hold until one is assigned: the 5110 has one
-/// user and no clock, and keeps them for compatibility with APLSV.
+/// user and no clock, and keeps them for compatibility with APLSV. A
+/// session started with `--clock hardware` reads the time stamp from
+/// its clock instead.
 /// The manual gives the time stamp; the accounting information is
 /// APLSV's four numbers, all zero.
 const ACCOUNT: [i64; 4] = [0, 0, 0, 0];
@@ -57,7 +60,10 @@ pub fn read(ws: &Workspace, name: &str) -> AplResult<Array> {
         "⎕LX" => ws.saved.latent.clone().unwrap_or_else(empty),
         "⎕AV" => atomic_vector(),
         "⎕AI" => fixed(&ACCOUNT),
-        "⎕TS" => fixed(&STAMP),
+        "⎕TS" => fixed(&match ws.time {
+            TimeSource::Hardware => stamp(&(ws.clock)()),
+            TimeSource::None => STAMP,
+        }),
         _ => return Err(AplError::new(ErrorKind::Syntax)),
     })
 }

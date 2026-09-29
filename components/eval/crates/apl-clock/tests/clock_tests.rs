@@ -39,3 +39,33 @@ fn a_duration_prints_as_hours_minutes_and_seconds() {
     // A clock that has not been set cannot make a negative duration.
     assert_eq!(hms(-1), "0.00.00");
 }
+
+/// The time stamp a (B) session with a hardware clock reads for quad
+/// TS: year, month, day, hour, minute, second and millisecond.
+#[test]
+fn a_time_stamp_is_the_date_and_the_time_to_the_millisecond() {
+    let at = apl_clock::Time {
+        // 14:05:06 and 30 sixtieths
+        now: ((14 * 60 + 5) * 60 + 6) * 60 + 30,
+        cpu: 0,
+        date: 92_726,
+        year: 2026,
+    };
+    assert_eq!(apl_clock::stamp(&at), [2026, 9, 27, 14, 5, 6, 500]);
+}
+
+/// The clock a session is given, as --clock names it.
+#[test]
+fn the_clock_is_none_or_hardware() {
+    use apl_clock::TimeSource;
+    assert_eq!(TimeSource::parse("none"), Some(TimeSource::None));
+    assert_eq!(TimeSource::parse("hardware"), Some(TimeSource::Hardware));
+    assert_eq!(TimeSource::parse("host"), None);
+    assert_eq!(TimeSource::default(), TimeSource::None);
+}
+
+/// The real clock gives the whole year, not two digits of it.
+#[test]
+fn the_system_clock_gives_the_whole_year() {
+    assert!(apl_clock::system().year >= 2026);
+}

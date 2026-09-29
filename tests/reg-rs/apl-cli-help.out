@@ -30,6 +30,9 @@ Options:
       --config <FILE>
           The configuration file to read libraries from, in place of ./sw-apl.toml or the user's sw-apl/config.toml
 
+      --clock <none|hardware>
+          Whether the session has a clock: none, the default, as the 5110 had none, so (B)'s quad TS is 1900; or hardware, the computer's. (A)'s I-beams read the computer's clock either way
+
   -h, --help
           Print help (see a summary with '-h')
 

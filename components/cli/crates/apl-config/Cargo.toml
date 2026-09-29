@@ -8,6 +8,7 @@ authors.workspace = true
 repository.workspace = true
 
 [dependencies]
+apl-clock = { path = "../../../eval/crates/apl-clock" }
 apl-libraries = { path = "../../../eval/crates/apl-libraries" }
 apl-store = { path = "../../../eval/crates/apl-store" }
 serde = { version = "1", features = ["derive"] }

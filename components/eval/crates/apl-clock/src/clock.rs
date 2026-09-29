@@ -14,6 +14,8 @@ pub struct Time {
     pub cpu: i64,
     /// Today's date as the integer MMDDYY.
     pub date: i64,
+    /// This year, all four digits: MMDDYY keeps only two.
+    pub year: i64,
 }
 
 /// Where a workspace reads the time. It is a plain function so a test
@@ -40,6 +42,7 @@ pub fn system() -> Time {
         date: i64::from(local.month()) * 10_000
             + i64::from(local.day()) * 100
             + i64::from(local.year().rem_euclid(100)),
+        year: i64::from(local.year()),
     }
 }
 

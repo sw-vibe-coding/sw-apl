@@ -1,5 +1,6 @@
 //! A mode, a set of them, and what the host decides.
 
+use apl_clock::TimeSource;
 use apl_store::Store;
 
 /// One of sw-apl's languages. (A) is '70, the default and everything
@@ -64,4 +65,6 @@ pub struct Host {
     /// Which mode the session is in: `--mode` at the CLI and the
     /// service, the tab in a browser.
     pub mode: Mode,
+    /// Whether it has a clock: `--clock`, none by default.
+    pub clock: TimeSource,
 }

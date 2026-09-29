@@ -109,6 +109,9 @@ if (Symbol.dispose) Board.prototype[Symbol.dispose] = Board.prototype.free;
  * one; taking it apart here rather than at the call means the
  * worker has nothing to get wrong, and an older worker's call is
  * still a call this understands.
+ *
+ * The browser has no `--clock`: a session there has none, as the
+ * 5110 had none, so (B)'s time stamp is 1900.
  * @param {any} message
  */
 export function start(message) {

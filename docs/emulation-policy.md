@@ -28,7 +28,7 @@ Every case is one of these.
 
 | Case | Mode | Class | What sw-apl does |
 |---|---|---|---|
-| `⎕TS`, the time stamp | (B) | historical | `1900 0 0 0 0 0 0`, as the 5110 gives it: the machine had no clock. It may be assigned, as the manual allows, and then holds what was assigned for the session. It never reads the host's clock |
+| `⎕TS`, the time stamp | (B) | historical, or host with `--clock hardware` | `1900 0 0 0 0 0 0`, as the 5110 gives it: the machine had no clock. It may be assigned, as the manual allows, and then holds what was assigned for the session. A session started with `--clock hardware` reads the host's clock instead: year, month, day, hour, minute, second and millisecond |
 | `⎕AI`, `⎕TT`, `⎕UL`, `⎕DL` | (B) | historical | The 5110's compatibility values for one user and no clock: `⎕AI` four zeros, `⎕TT` 0, `⎕UL` 1, `⎕DL` a variable holding 0 |
 | `⌶20` time of day, `⌶24` sign-on time, `⌶25` the date | (A) | host | The host's local clock. A 360 had a clock and APL\360 read it, so the nearest thing is the machine sw-apl runs on. In the browser it is the page's clock |
 | `⌶21` processor time | (A) | host | The processor time this process has used, in sixtieths of a second; on a modern machine usually 0. In the browser, always 0: a page cannot ask |
@@ -61,9 +61,20 @@ Every case is one of these.
   another user who is not there answers INCORRECT COMMAND rather
   than pretending to send.
 
-## A switch between historical and host
+## The clock: `--clock none|hardware`
 
-A flag choosing between the historical answer and the host's, such
-as `--environment historical` or `host`, is not implemented. The one
-case it would change is (B)'s clock: `⎕TS` in (B) is always the
-5110's, and nothing makes it read the host's clock.
+The one machine-decided answer a session may change is whether it
+has a clock. `--clock none`, the default, is the 5110's answer: no
+clock, and `⎕TS` in 1900. `--clock hardware` gives `⎕TS` the
+computer's clock. `sw-apl` and `sw-apl-server` take the flag, and a
+configuration file may say the same:
+
+```toml
+clock = "hardware"
+```
+
+A flag wins over the file. The browser has no flag and no clock. (A)
+is not changed by it: APL\360's machine had a clock, and its I-beams
+read the host's either way. There is no wider switch between
+historical and host answers; the clock is the only one a program
+could reasonably want changed.

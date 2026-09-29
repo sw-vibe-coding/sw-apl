@@ -58,6 +58,7 @@ fn session_in(mode: Mode, lines: &[&str]) -> Vec<Frame> {
             quota: QUOTA,
             store: Box::new(Files(PathBuf::from("."))),
             mode,
+            clock: apl_session::TimeSource::None,
         },
     )
     .unwrap();

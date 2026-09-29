@@ -27,6 +27,7 @@ fn connect() -> (TcpStream, BufReader<TcpStream>, thread::JoinHandle<()>) {
                 quota: QUOTA,
                 store: Box::new(Files(std::env::temp_dir())),
                 mode: Mode::A,
+                clock: apl_session::TimeSource::None,
             },
         )
         .unwrap();

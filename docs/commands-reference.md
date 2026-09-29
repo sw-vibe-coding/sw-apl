@@ -365,6 +365,7 @@ command line:
 | `--library DIR` | The directory the libraries sit under. Library 0 is `DIR/work`, library 1 is `DIR/ws/lib1` |
 | `--lib N=DIR[,NAME]` | Library N (2 and up) is the workspaces in DIR, read-only; again for another |
 | `--config FILE` | Read libraries from FILE's `[[library]]` tables, in place of `./sw-apl.toml` or `~/.config/sw-apl/config.toml`. See `workspaces.md` |
+| `--clock none` or `--clock hardware` | Whether the session has a clock: none by default, so (B)'s `⎕TS` is in 1900 as on the 5110; hardware reads the computer's. Or `clock = "hardware"` in the configuration file |
 | `--ws-size BYTES` | How much the workspace may hold before `WS FULL` |
 | `--mode 70` or `--mode 75` | The mode, (A) '70 or (B) '75; the default is 70 |
 

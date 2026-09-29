@@ -25,7 +25,8 @@ The 5100's APL is APLSV -- the APL that followed APL\360 at IBM,
 adding shared variables, execute, format and the quad names -- cut
 down by IBM for a machine with one user: no shared
 variables, no time-sharing commands, a 64-column screen, and no
-clock (in (B), the date is in 1900). (B) follows the 5110 APL
+clock (in (B), the date is in 1900, unless a session is started
+with `--clock hardware`). (B) follows the 5110 APL
 Reference Manual; [docs/mode-b.md](docs/mode-b.md) lists every way it
 differs from (A). It is not System/370 APLSV.
 
