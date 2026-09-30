@@ -42,8 +42,9 @@ browser with a tab, and nothing done for (B) changes (A).
   with integer representation used when exact; characters as a
   second element type; boolean results are numbers 0 and 1.
 - The complete APL\360 primitive set: scalar functions, mixed
-  functions, the reduce, scan, inner product, outer product
-  operators, axis brackets, indexing and indexed assignment.
+  functions, domino (matrix inverse and divide), the reduce, scan,
+  inner product, outer product operators, axis brackets, indexing
+  and indexed assignment.
 - User-defined functions via the del editor: niladic, monadic,
   dyadic, with or without explicit result, local names, labels,
   branching, dynamic scoping, recursion.
@@ -56,7 +57,6 @@ browser with a tab, and nothing done for (B) changes (A).
   I-beams and the settings commands are not in (B); `⎕IO`, `⎕PW`
   and `⎕PP` replace the commands. `docs/mode-b.md` has the whole
   list.
-- Domino (matrix divide) in a later phase.
 
 ### Session
 
@@ -68,7 +68,10 @@ browser with a tab, and nothing done for (B) changes (A).
 - System commands starting with a right parenthesis: workspace
   control, inquiry, and settings, following the APL\360 names.
 - Workspaces are saved to and loaded from plain text files; a
-  numbered library convention maps `)LOAD 1 NAME` to directories.
+  numbered library convention maps `)LOAD 1 NAME` to directories,
+  and libraries 2 and up are configured from outside the language
+  (`--lib`, `sw-apl.toml`). `)LIBS`, `)DIALECT` and `)HELP` are
+  sw-apl's own commands.
 - A workspace names the modes it runs in -- (A), (A)(B) or (B) --
   from what it uses, and is listed and loaded only in those modes.
   Library 1 differs by mode where the workspaces do.
@@ -86,8 +89,13 @@ browser with a tab, and nothing done for (B) changes (A).
 ### Delivery
 
 - `sw-apl` binary: interactive REPL, `-f FILE` batch, stdin batch.
-- Builds and runs on macOS (Apple silicon and Intel) and Linux.
-- Later: browser build via Yew and Trunk, deployed to GitHub Pages.
+- `sw-apl-server`, a local service holding a session per connection,
+  and `aplterm`, a 2741 in a terminal window.
+- Builds and runs on macOS (Apple silicon and Intel) and Linux, and
+  cross-compiles for small RISC-V and ARM boards (`boards.md`).
+- A browser build: the session compiled to WebAssembly with
+  wasm-pack, run in a worker by a page in plain JavaScript, published
+  on GitHub Pages; installable, and working offline once loaded.
 
 ## What it must not do
 

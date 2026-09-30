@@ -148,8 +148,9 @@ pass it:
 target/release/aplterm --keymap my-keymap.json
 ```
 
-The browser terminal takes APL glyphs typed or pasted directly. Its
-keyboard and overstrikes are not implemented yet.
+The browser terminal takes APL glyphs typed or pasted directly. It
+has no 2741 keyboard and no overstrikes: `aplterm` and the browser
+demo have both.
 
 ## A browser on its own
 

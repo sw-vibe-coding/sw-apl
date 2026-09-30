@@ -96,22 +96,17 @@ under the code you had already written.
 
 ## What sw-apl does
 
-- The origin is part of the workspace, written into the file as
-  `)ORIGIN n` along with the print settings and the random link. See
-  `design.md` D7.
+- The origin is part of the workspace, written into the file as the
+  directive `⍝!ORIGIN n`, beside the print settings and the random
+  link, so that both modes read it. See `design.md` D7.
 - `)LOAD` applies it, because loading a workspace means running the
-  file, and the file sets it.
-- `)COPY` must not. Since the file is re-executable APL, copying
-  cannot simply run it: the loader has to take the definitions and
-  leave the settings commands alone. That is a requirement on the
-  step that implements `)COPY`, not something that falls out for
-  free.
-
-A caution on the last two points: the `)LOAD`/`)COPY` split above is
-how APL\360 is described to behave and how sw-apl will behave, but
-the exact wording is worth checking against the IBM APL\360 User's
-Manual (1968) before it is treated as settled. `parity.md` is the
-place any correction lands.
+  file, and the file sets it. In (B) it is `⎕IO`.
+- `)COPY` and `)PCOPY` do not. Since the file is re-executable APL,
+  copying cannot simply run it: the copy takes the definitions and
+  leaves the settings alone, so the origin of the workspace being
+  copied into is the one its code keeps running under. A command
+  test pins it (`copying_takes_the_names_and_leaves_the_settings`),
+  and so does sample 61.
 
 ## Writing a workspace here
 

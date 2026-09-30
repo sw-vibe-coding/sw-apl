@@ -203,6 +203,8 @@ name says the modes it runs in: `NAME.apl.ws` for both,
 | Workspaces | `)SAVE`, `)LOAD`, `)COPY`, `)PCOPY`, `)DROP`, `)LIB` over numbered libraries, library 2 and up configured from outside; a saved workspace is plain APL you could have typed |
 | Session | The six-space prompt, a printed transcript, output shown as it is printed, batch runs of a script, `)OFF`; `)HELP`, `)DIALECT` and `)LIBS`, sw-apl's own |
 | Input | The 2741 keyboard and overstrikes in `aplterm` and the browser; Espanso and Emacs keymaps |
+| Browser | The session compiled to WebAssembly: both modes, library 1 in the page, library 0 in the browser's storage, library 2 fetched; installable, and working offline once loaded |
+| Literate | An Emacs mode and an Org Babel language for sw-apl; BIRDS and TTTML as literate programs whose code tangles to the shipped workspaces |
 
 `docs/parity.md` is the row-by-row picture for each mode, and
 [docs/emulation-policy.md](docs/emulation-policy.md) says what sw-apl
@@ -269,9 +271,16 @@ just clippy          # clippy, warnings as errors
 just fmt-check
 just gates           # markdown and code-shape checks
 scripts/reg.sh run   # transcript regressions (reg-rs), one per sample
-just pages           # the browser build, into pages/
+just publish         # the browser build into pages/, with the facts
+                     # of the build the page's footer shows
 just check-pages     # the browser build, checked in Chrome
+just test-emacs      # the Emacs mode and Org Babel language (ERT)
+just literate        # run, tangle and export the literate documents
+just check-literate  # they agree with their workspaces and pages
 ```
+
+`just precommit` runs the lot in order. Commit `pages/` as built:
+the published demo is the committed folder.
 
 ## Repository layout
 
@@ -279,9 +288,13 @@ just check-pages     # the browser build, checked in Chrome
 components/   one cargo workspace per component: the interpreter,
               the CLI, the service (web), the 2741 (term), and the
               parts only one mode has (a70, b75)
-docs/         reference, plan, requirements, architecture
+data/         the glyph tables and the )HELP pages
+docs/         reference, plan, requirements, architecture;
+              literate/, the literate documents; emacs/, the Emacs
+              input method, mode and Org Babel language
 pages/        the browser demo: a page, a worker, and the session
-              compiled to WebAssembly
+              compiled to WebAssembly; literate/, the documents as
+              web pages
 samples/      conformance corpus: glyph-form APL programs
 ws/lib1/      the workspaces sw-apl ships
 scripts/      change log, sample runner, reg-rs wrappers, gates

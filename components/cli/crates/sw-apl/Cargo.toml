@@ -1,6 +1,6 @@
 [package]
 name = "sw-apl"
-description = "Clean-room APL\\360 interpreter: terminal REPL and batch runner"
+description = "Clean-room APL interpreter, (A) '70 and (B) '75: terminal REPL and batch runner"
 edition.workspace = true
 rust-version = "1.89"
 license.workspace = true

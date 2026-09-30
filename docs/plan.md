@@ -1020,6 +1020,36 @@ DRILL all read answers with it. So before LEARN:
   library 2: copying a function the workspace already holds is a
   DEFN ERROR, where `)COPY` replaces it.
 
+## Owner direction (2026-09-29): the documents, checked against the code
+
+"Is the README up-to-date? Scan documents for stale info or
+'planned' work that is actually done." Found, each checked against
+the code or a test:
+
+- **Interrupting** is described as unable to stop one long statement
+  (parity.md, session.md) and as not reaching a running statement
+  over the service (parity.md). Both work and are tested
+  (`attention_stops_one_long_statement`, the socket and WebSocket
+  ATTN tests).
+- **architecture.md**'s crate tree predates about 25 crates and
+  names one that does not exist (`apl-error`); its library 1 line
+  lacks LEARN and TTTML. Regenerate it from each crate's own
+  description.
+- **mode-b.md**: "Step 005 must write the settings" as directives
+  (every workspace already does), and decision 5's "Step 014 changes
+  them" (done); the decisions list should say what was decided.
+- **prd.md**: domino "in a later phase" and a browser build "via Yew
+  and Trunk" -- domino is done, and the browser build is wasm-pack
+  and plain JavaScript.
+- **terminal.md** and the service's terminal page: the page's
+  keyboard and overstrikes "not implemented yet" / "come later" --
+  true that it has none, but nothing plans them: say it present
+  tense, and point at aplterm and the browser demo.
+- **README**: the recipes lack `just publish`, `just literate`,
+  `just check-literate` and `just test-emacs`; the layout lacks
+  `docs/literate/`, `docs/emacs/` and `pages/literate/`; What works
+  does not say the demo runs offline.
+
 ## Owner direction (2026-09-25): literate APL, with Org Babel
 
 "I want to add a literate programming example using an Emacs org-mode

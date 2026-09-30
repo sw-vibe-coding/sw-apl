@@ -339,12 +339,11 @@ the step that builds it.
 
 ## The workspace file
 
-Today a saved workspace writes its settings as `)ORIGIN`, `)DIGITS`
-and `)WIDTH` lines. (B) has none of those commands, so by the modes
-rule every workspace saved so far would be (A)-only. Step 005 must
-write the settings in a form both modes read -- `⍝!` directives, as
-the random link already is -- and read the old lines when loading in
-(A).
+A saved workspace writes its settings as `⍝!` directives --
+`⍝!ORIGIN`, `⍝!DIGITS`, `⍝!WIDTH`, beside `⍝!LINK` for the random
+link -- which both modes read, since (B) has no `)ORIGIN`, `)DIGITS`
+or `)WIDTH` to run. An older file that sets them with those command
+lines still loads in (A), which has the commands.
 
 The defaults differ, so a workspace records its values rather than
 relying on the clear-workspace ones: a (A)(B) workspace loaded in (B)
@@ -420,8 +419,8 @@ Guesses and choices the sources do not make:
    shift+ATTN strong in (B); (A) unchanged.
 5. **The tabs' tooltips** -- settled by the owner (2026-09-21): no
    IBM product names as the name of anything, so the tooltips read
-   "APL\360-inspired" for (A) and "IBM 5100-inspired" for (B). Step
-   014 changes them.
+   "APL\360-inspired" for (A) and "IBM 5100-inspired" for (B), as
+   they do.
 6. **Tape and diskette libraries** -- the 5100 kept workspaces in
    numbered files on a tape cartridge (`)MARK` formatted a tape into
    files, and `)LIB` listed every file on it with its type and size);

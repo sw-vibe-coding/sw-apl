@@ -468,11 +468,11 @@ SPIN[4]  R←R+I
 SPIN[4]*
 ```
 
-  A body is read between its lines, so a statement that has not
-  finished a line of its own -- a long reduction over a large
-  array -- cannot yet be stopped. At a prompt Ctrl-C cancels the
-  line, as it always did: the line editor holds the terminal then,
-  and no interrupt is sent.
+  It stops a loop of lines between two of them, and one long
+  statement -- a reduction over a large array -- inside it, since
+  the primitives look for the interrupt as they work. At a prompt
+  Ctrl-C cancels the line instead: the line editor holds the
+  terminal then, and no interrupt is sent.
 - Ctrl-D at the prompt signs off, as `)OFF` does.
 
 ## Running a file from the shell

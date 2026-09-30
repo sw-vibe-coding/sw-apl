@@ -10,95 +10,178 @@ every workspace at the shared `target/` at the repo root.
 ```
 sw-apl/
   components/
-    value/     apl-value, apl-error        element and array model
-    display/   apl-display                 APL\360 output formatting
-    lex/       apl-lex                     Unicode tokenizer
-    parse/     apl-ast                     AST and Defn types
-               apl-scan                    brackets, segments, del header
-               apl-parse                   right-to-left parser
-    prims/     apl-prims-scalar            scalar primitives
-               apl-prims-mixed             structural primitives
-               apl-prims-ops               reduce/scan/inner/outer
-    eval/      apl-console                 output, rendering, the terminal
-               apl-saved                   what a file holds: names,
-                                           frames, settings
-               apl-workspace               symbol table, frames, env
-               apl-call                    defined-function calls
-               apl-quad                    reading a line mid-statement
-               apl-clock                   the clock, and how a span of
-                                           time reads
-               apl-space                   what a value costs, and the quota
-               apl-store                   somewhere to keep a saved
-                                           workspace: a disc, a browser
-               apl-modes                   the modes, the `⍝!MODES` line,
-                                           and what the host decides
-               apl-shelves                 the libraries as each mode
-                                           sees them
-               apl-uses                    which modes a workspace runs
-                                           in, from what its code uses
-               apl-eval                    interpreter
-    session/   apl-library                 which workspace a command means,
-                                           and what to say when there is not one
-               apl-copy                    taking names out of a stored one
-               apl-inquiry                 listing names, groups, erasing
-               apl-session                 system commands, del editor,
-                                           workspace files, libraries
-               apl-settings                index origin, digits, width,
-                                           checked; the directives set them
-    a70/       apl-ibeam                   the I-beams                 } only (A) '70
-               apl-a70-commands            )ORIGIN )DIGITS )WIDTH,     } reaches
-                                           )GROUP )GRP )GRPS           } these
-    b75/       apl-execute                 execute                     } only (B) '75
-               apl-sysvars                 the system variables        } reaches
-               apl-sysfns                  which quad names are        } these
-                                           functions, and applying one
-               apl-fix                     a function as characters
-                                           and back: ⎕CR and ⎕FX
-               apl-console-control         ⎕CC: the 5110's screen,
-                                           alarm, keyboard and printer
-    cli/       sw-apl                      terminal REPL and batch
-    web/       apl-wire                    the terminal protocol: a
-                                           frame out, a typed line in
-               apl-serve                   one session per connection,
-                                           held over a link
-               sw-apl-server               the two listeners, and the
-                                           terminal page
-    web/       apl-board                   the 2741 keyboard in a
-                                           browser
-               apl-wasm                    the session on a worker,
-                                           over a shared channel
-    term/      apl-keyboard                2741 keys, overstrikes, the
-                                           line being typed
-               apl-paper                   what the carriage put on
-                                           the page
-               apl-typing                  reading one line at the
-                                           keyboard
-               aplterm                     the 2741 itself
-  docs/        planning and reference docs
+    value/     apl-attn            attention: the flag that stops a run,
+                                   per session
+               apl-value           value model: numbers, arrays, errors
+    glyphs/    apl-glyphs          glyph tables, generated from
+                                   data/glyphs.toml
+    display/   apl-display         APL\360-style output formatting
+    lex/       apl-lex             tokenizer for traditional APL glyphs
+               apl-strike          overstrikes: forming a glyph from two
+                                   characters, as on a 2741
+    parse/     apl-ast             abstract syntax tree types
+               apl-parse           right-to-left parser and AST
+               apl-scan            token-level scanning: brackets,
+                                   segments, del headers
+    prims/     apl-prims           primitive dispatch: glyph to scalar,
+                                   mixed, or operator implementation
+               apl-prims-index     bracket indexing and indexed
+                                   assignment
+               apl-prims-join      catenate and laminate along an axis
+               apl-prims-mask      compress and expand along an axis
+               apl-prims-matrix    matrix inverse and matrix divide: the
+                                   domino primitive
+               apl-prims-mixed     mixed (structural) primitive functions
+               apl-prims-ops       operators: reduce and scan along an
+                                   axis, inner and outer products
+               apl-prims-radix     encode and decode in mixed radix
+               apl-prims-scalar    scalar primitive functions with scalar
+                                   extension
+               apl-prims-search    membership and index-of
+               apl-prims-select    take, drop, reverse, rotate, transpose
+               apl-scalar-arith    scalar arithmetic: plus, minus, times,
+                                   divide, maximum, minimum, residue,
+                                   power, log, exponential
+               apl-scalar-circ     scalar circular functions, factorial
+                                   and binomial via the gamma function
+               apl-scalar-logic    scalar comparisons with the fuzz,
+                                   boolean functions
+    eval/      apl-call            defined-function calls: valence,
+                                   frame, body, branch
+               apl-clock           clock: the time, the date and the
+                                   processor time, how a span and a
+                                   moment read, and whether a session has
+                                   a clock
+               apl-console         terminal: what a statement shows, and
+                                   where it reads a line
+               apl-eval            evaluator and workspace
+               apl-libraries       libraries beyond 0 and 1: configured,
+                                   read-only, from a directory or from
+                                   fetched text
+               apl-modes           modes: which modes a workspace runs
+                                   in, and the libraries each mode sees
+               apl-quad            quad and quote-quad input: prompting
+                                   and reading a line
+               apl-saved           saved half of a workspace: symbol
+                                   table, activation stack, settings
+               apl-shelves         libraries as each mode sees them:
+                                   listing, loading, saving and dropping
+                                   by mode
+               apl-space           workspace accounting: what a value
+                                   costs and what a quota allows
+               apl-store           workspace libraries: somewhere to keep
+                                   a saved workspace
+               apl-transcript      console on paper: keeps what it is
+                                   shown, answers reads from loaded lines
+               apl-uses            which modes a workspace runs in, from
+                                   what its code uses
+               apl-workspace       active workspace: variables,
+                                   functions, environment, output
+               apl-wsfile          workspace file: a saved workspace as
+                                   re-executable APL
+    session/   apl-commands        system commands: the lines that begin
+                                   with a parenthesis
+               apl-copy            )COPY and )PCOPY: taking names out of
+                                   a stored workspace
+               apl-editor          del editor: definition mode, line
+                                   editing, display
+               apl-extensions      own system commands, which no
+                                   historical system had: )DIALECT,
+                                   )HELP, )LIBS
+               apl-inquiry         inquiry commands: listing names,
+                                   groups, erasing
+               apl-library         workspace libraries: where a file is,
+                                   and what to say when it is not there
+               apl-reply           session reply: the lines one input
+                                   produced, and what the shell does next
+               apl-session         session: line in, transcript lines out
+               apl-settings        workspace settings: index origin,
+                                   digits, width and random link, each
+                                   checked against what it may be
+    a70/       apl-a70-commands    system commands only the (A) '70 mode
+                                   has: the settings and group commands
+               apl-ibeam           I-beam system functions, which only
+                                   the (A) '70 mode has
+                                   (only (A) '70 reaches these)
+    b75/       apl-console-control console control: the IBM 5110's own
+                                   system function, which only the (B)
+                                   '75 mode has
+               apl-execute         execute: a character vector run as a
+                                   line of APL, which only the (B) '75
+                                   mode has
+               apl-fix             canonical representation and fix: a
+                                   defined function as characters and
+                                   back, which only the (B) '75 mode has
+               apl-format          (B) '75: format, monadic and dyadic
+               apl-numeral         (B) '75: a number rounded and laid out
+                                   in decimal or scaled form, for format
+               apl-sysfns          system functions: quad-named functions
+                                   on the workspace's names and
+                                   definitions, which only the (B) '75
+                                   mode has
+               apl-sysvars         system variables: the quad-named
+                                   settings and values, which only the
+                                   (B) '75 mode has
+                                   (only (B) '75 reaches these)
+    cli/       apl-config          library configuration: --lib
+                                   N=DIR[,NAME] and sw-apl.toml, for the
+                                   CLI and the service
+               sw-apl              clean-room APL interpreter, (A) '70
+                                   and (B) '75: terminal REPL and batch
+                                   runner
+    web/       apl-board           the 2741 keyboard in a browser: one
+                                   keystroke in, the line out
+               apl-serve           service: one session per connection,
+                                   over any link
+               apl-wasm            in a browser: the session in a worker,
+                                   on a shared channel
+               apl-wasm-store      in a browser: the libraries a session
+                                   keeps, from the page's storage, the
+                                   bundle, and URLs
+               apl-wire            terminal protocol: one frame of
+                                   transcript and prompt
+               sw-apl-server       service: the APL\360 session a 2741
+                                   dials into
+    term/      apl-keyboard        2741 keyboard: key translation,
+                                   overstrike composition, the line being
+                                   typed
+               apl-paper           2741 paper: what the carriage has put
+                                   on the page
+               apl-typing          2741 keystrokes: reading one line at
+                                   the keyboard
+               aplterm             the 2741 terminal: a keyboard, a page,
+                                   and a line to the service
+  data/        glyphs.toml, the glyph tables; help.txt, the )HELP pages
+  docs/        reference, plan and design; literate/, the literate
+               documents; emacs/, the Emacs mode and Org Babel language
+  pages/       the browser demo, built and committed; literate/ its pages
   samples/     conformance corpus (.apl transcripts)
   tests/reg-rs reg-rs regression baselines
-  scripts/     gen-changes, run-samples, reg wrappers
-  ws/lib1/     shipped library workspaces: LIFE, RACE, EDIT, BIRDS
+  scripts/     changes, samples, reg-rs, pages, literate, gates
+  ws/lib1/     shipped library workspaces: LEARN, LIFE, RACE, EDIT,
+               BIRDS (one for each mode), TTTML ((B) only)
 ```
 
-Workspaces are created by the saga step that first needs them;
-the tree above is the target layout, not a promise that every
-directory exists today.
+The tree is each crate's own `description` from its `Cargo.toml`, so
+it can be checked against them.
 
 ## Dependency flow
 
 ```
-value -> display -> console
-value -> lex -> scan -> parse
-value -> prims (scalar, mixed, ops)
-prims + console -> workspace -> call, quad
-parse + prims + call + quad -> eval
-eval -> session -> cli
-eval -> session -> web (wire, serve, server)
+glyphs -> value -> display -> console
+value -> lex (and strike) -> scan -> parse
+value -> prims (dispatch; scalar, mixed, ops and the rest)
+prims + console + clock + modes -> workspace -> call, quad
+parse + prims + call + quad + a70 + b75 -> eval
+eval -> session (commands, editor, library, extensions) -> cli (+ config)
+eval -> session -> web (wire, serve, server; wasm, board, wasm-store)
 lex (strike) -> term (keyboard, paper, typing, aplterm) -> wire
 ```
 
-- `apl-value` has no dependencies inside the repo.
+- `apl-glyphs` generates its tables from `data/glyphs.toml`, the
+  one list of every glyph sw-apl knows; `apl-value` re-exports them.
+  Nothing else holds a copy.
+- `apl-value` depends only on `apl-glyphs`.
 - `apl-lex`, `apl-scan`, and `apl-parse` never depend on
   `apl-prims` or `apl-eval`; the parser produces an AST, it does
   not evaluate.
@@ -123,10 +206,19 @@ lex (strike) -> term (keyboard, paper, typing, aplterm) -> wire
   statement has already shown, so the prompt has to land after that
   and not before it. The workspace holds a `Console`, which is the
   seam the web build replaces.
-- `apl-ibeam` answers the I-beams, and owns the `Clock` the
-  workspace holds. A clear workspace has a clock that does not
-  move, so nothing reads the real world until a host installs one
-  that does, and a transcript made without a terminal reproduces.
+- `apl-clock` owns the `Clock` the workspace holds, and whether a
+  session has a clock at all (`--clock`). A clear workspace has a
+  clock that does not move, so nothing reads the real world until a
+  host installs one that does, and a transcript made without a
+  terminal reproduces. `apl-ibeam`, which only (A) reaches, answers
+  the I-beams from it; (B)'s `⎕TS` reads it only with a clock.
+- `apl-modes` knows the two modes, what a host decides (`Host`: the
+  quota, the libraries, the mode, the clock), and the `⍝!MODES` line;
+  `apl-shelves` shows each mode only the workspaces that run in it.
+  `apl-libraries` adds libraries 2 and up, read-only, and
+  `apl-config` (in `cli/`) reads them from `--lib` and `sw-apl.toml`
+  for the CLI and the service; `apl-wasm-store` does the same for
+  the browser.
 - `apl-space` says what a value, a name and a defined function cost
   in bytes, and whether one more will fit. It measures nothing: the
   figures are what APL\360 would have charged, so a workspace is the
@@ -154,9 +246,12 @@ lex (strike) -> term (keyboard, paper, typing, aplterm) -> wire
   `apl-commands`' neighbour rather than its contents: that crate
   was at its module budget, and listing names has little to do
   with reading and writing workspace files.
+- `apl-extensions` answers the commands sw-apl adds -- `)DIALECT`,
+  `)LIBS`, `)HELP` -- and `apl-reply` is what the session hands back
+  for one line.
 - `apl-session` owns everything that begins with a right
-  parenthesis, the del editor, workspace files, and the library
-  directory map. It exposes a line-oriented `Session` API: feed a
+  parenthesis, the del editor, and a system command typed in reply
+  to quad input. It exposes a line-oriented `Session` API: feed a
   line, receive output lines. The CLI and the web demo are both
   thin shells over that API.
 
@@ -173,7 +268,8 @@ lex (strike) -> term (keyboard, paper, typing, aplterm) -> wire
 4. `apl-eval` evaluates the AST against the workspace, producing
    a value or an error with a caret position.
 5. `apl-display` formats the value (or the error transcript)
-   with the `)DIGITS` and `)WIDTH` settings.
+   with the printing precision and width: `)DIGITS` and `)WIDTH`
+   in (A), `⎕PP` and `⎕PW` in (B), one setting either way.
 6. The shell prints the lines and shows the next prompt.
 
 ## Value model
@@ -189,9 +285,10 @@ APL\360, not APL2.
 
 ## Error model
 
-`apl-error::AplError { kind, caret: Option<usize>, context }` with
+`apl_value::AplError { kind, caret: Option<usize>, context }` with
 kinds SYNTAX, VALUE, DOMAIN, RANK, LENGTH, INDEX, WS FULL, DEFN,
-CHARACTER, DEPTH, and INTERRUPT. The caret is a character offset
+CHARACTER, DEPTH, INTERRUPT, and NONCE (in (B), for what the 5110
+does not do). The caret is a character offset
 into the source line so the session can print the APL\360 caret
 line. Each crate maps its own failures into `AplError`.
 
@@ -199,13 +296,16 @@ line. Each crate maps its own failures into `AplError`.
 
 `data/glyphs.toml` is the single source of truth for every glyph:
 the primitives with their monadic and dyadic names, the punctuation
-and sentinels, the lookalikes a CHARACTER ERROR should redirect, and
-the later-APL glyphs it should name. Two consumers read it, and
-nothing else may hold a copy:
+and sentinels, the lookalikes a CHARACTER ERROR should redirect, the
+later-APL glyphs it should name (and which of them (B) accepts), the
+characters of the set with no meaning, which are a SYNTAX ERROR,
+the overstrikes, and the underscored alphabet. Two consumers read
+it, and nothing else may hold a copy:
 
-- `components/value/.../build.rs` emits Rust consts into `OUT_DIR`,
-  which `apl-value`'s `glyphs` module includes. The lexer takes its
-  accepted set from there, and the error display its hint tables.
+- `components/glyphs/crates/apl-glyphs/build.rs` emits Rust consts
+  into `OUT_DIR`, which `apl-glyphs` includes and `apl-value`
+  re-exports. The lexer takes its accepted set from there, and the
+  error display its hint tables.
 - `scripts/gen-glyphs.sh` regenerates `docs/glyphs.txt`.
 
 Adding a glyph is therefore one edit plus `scripts/gen-glyphs.sh`,

@@ -1,6 +1,6 @@
 [package]
 name = "apl-clock"
-description = "sw-apl clock: the time, the date and the processor time, and how a span of time reads"
+description = "sw-apl clock: the time, the date and the processor time, how a span and a moment read, and whether a session has a clock"
 edition.workspace = true
 license.workspace = true
 version.workspace = true

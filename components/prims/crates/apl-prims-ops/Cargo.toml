@@ -1,6 +1,6 @@
 [package]
 name = "apl-prims-ops"
-description = "sw-apl operators: reduce"
+description = "sw-apl operators: reduce and scan along an axis, inner and outer products"
 edition.workspace = true
 license.workspace = true
 version.workspace = true
