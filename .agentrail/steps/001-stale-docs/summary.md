@@ -1,0 +1,1 @@
+Documents brought up to date: interrupt claims, architecture tree regenerated from crate descriptions, mode-b, index-origin, prd, terminal and the service page, README recipes, layout and What works. Each change checked against code or tests. Pushed.

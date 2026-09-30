@@ -12,8 +12,13 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-09-30
+
+- docs: bring the documents up to date with the code
+
 ## 2026-09-29
 
+- docs(changes): refresh CHANGES.md to HEAD; complete 024-host-clock-flag, saga done
 - chore(pages): republish after rebasing onto the board-build commits
 - feat(clock): --clock none|hardware, none by default
 

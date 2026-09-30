@@ -1,8 +1,9 @@
 number = 1
 slug = "stale-docs"
-status = "in-progress"
+status = "completed"
 description = "docs/plan.md, owner direction 2026-09-29. Fix every stale finding listed ther..."
 role = "production"
 context_files = []
 created_at = "2026-09-29T12:50:29"
-commits = []
+completed_at = "2026-09-30T08:20:36"
+commits = ["ba9ff79bb14bcf3b75378be31561e6416848404e"]
