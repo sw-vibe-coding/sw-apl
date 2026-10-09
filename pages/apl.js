@@ -380,10 +380,18 @@ async function library({ number, name, index }) {
   };
   try {
     const at = new URL(index, location.href);
+    // raw.githubusercontent.com advertises a five-minute cache for a
+    // branch URL. A library is loaded once per session, so give this
+    // session's index and files a fresh URL and never bind a demo to an
+    // older branch snapshot held by an intermediary.
+    const fresh = String(Date.now());
+    at.searchParams.set("_", fresh);
     const list = await get(at, "json");
     const work = {};
     await Promise.all(list.workspaces.map(async ({ file }) => {
-      work[file.replace(/\.apl\.ws$/, "")] = await get(new URL(file, at), "text");
+      const url = new URL(file, at);
+      url.searchParams.set("_", fresh);
+      work[file.replace(/\.apl\.ws$/, "")] = await get(url, "text");
     }));
     return { number: String(number), name, place: at.href, work };
   } catch (error) {
