@@ -1,1 +1,1 @@
-Owner direction 2026-09-29 (docs/plan.md, 'the documents, checked against the code'): bring the README and docs up to date with what the code does, each claim checked against the code or a test; no step numbers, plans or 'yet' in user-facing docs.
+Owner direction 2026-10-26 (docs/plan.md, 'overstrikes on the board, one tap each'): a row of overstrike buttons on the browser board's APL mode, filtered per language mode, with each button showing its two parts.

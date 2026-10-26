@@ -30,6 +30,7 @@ const SHELL = [
   "./", "version.txt", "build-info.json", "libraries.json", "manifest.json",
   "apl.js", "board.js", "worker.js", "wasm/apl_wasm.js", "wasm/apl_wasm_bg.wasm",
   "keymap.json", "glyph-names.json", "board-keys.json", "board.json",
+  "overstrikes.json",
   "redistributed/apl-keyboard/APL-keybd2.svg",
   "redistributed/apl-keyboard/APL-keybd2-board.svg",
   "redistributed/apl385-font/APL385.woff2",

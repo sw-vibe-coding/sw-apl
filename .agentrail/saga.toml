@@ -1,6 +1,6 @@
-name = "docs-audit"
-status = "completed"
+name = "overstrike-row"
+status = "active"
 current_step = 1
-created_at = "2026-09-29T12:50:23"
+created_at = "2026-10-26T08:10:22"
 plan_file = ".agentrail/plan.md"
 retroactive = false

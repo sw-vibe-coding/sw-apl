@@ -1020,6 +1020,35 @@ DRILL all read answers with it. So before LEARN:
   library 2: copying a function the workspace already holds is a
   DEFN ERROR, where `)COPY` replaces it.
 
+## Owner direction (2026-10-26): overstrikes on the board, one tap each
+
+"New users have difficulty figuring out how to compose overstruck
+characters. I need a way to provide buttons for each overstruck
+character (filtered by the two APL flavors, i.e. do not show
+invalid/unused characters for each mode). Arbitrary overstruck
+characters can still be composed via the backspace button (or the
+Ctrl-] key)." A row of buttons below the picture, in the board's
+APL mode only, one per overstrike the mode has, most used first.
+
+- **What is on it** comes from `data/board.json` (`overstrikes`),
+  where a test runs every entry in each mode it is offered in,
+  like the commands and idioms. A test also holds it to the
+  `[[overstrike]]` table in `data/glyphs.toml`: every glyph in the
+  table is on the board, in no mode the table does not give it.
+  So `⌶` is (A) only (in (B) an I-beam is a NONCE ERROR), and `⍎`
+  and `⍕` are (B) only.
+- **How each is made** -- its two parts -- is shown on the button,
+  so that a tap also teaches the backspace recipe. The page reads
+  it from a copy of the table made at build time
+  (`pages/overstrikes.json`), never from a copy in JavaScript.
+- **Order**: by use, not by name. Comment, the rotations and
+  transpose, log, the grades, execute and format, then the rest;
+  `⌶` and `⍙` last.
+- The underscored letters are not on it: twenty-six buttons for
+  letter-backspace-underbar would bury the rest.
+
+Saga `overstrike-row`, one step.
+
 ## Owner direction (2026-09-29): the documents, checked against the code
 
 "Is the README up-to-date? Scan documents for stale info or

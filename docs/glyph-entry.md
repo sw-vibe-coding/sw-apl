@@ -21,6 +21,15 @@ that tapping `⍴` also shows where Shift-R is. **Keyboard** shows it,
 **ABC** switches it to letters and digits, and it remembers whether
 it was up. See `terminal.md`.
 
+Under the keys, in the board's APL mode, is a row of the overstruck
+glyphs, one tap each: `⍝ ⌽ ⊖ ⍉ ⍟ ⍋ ⍒`, then the rest, most used
+first. Each button shows, small beneath its glyph, the two characters
+it is struck from -- `○*` under `⍟` -- so the row also teaches the
+recipe. It holds only what the mode has: `⌶` in (A) '70, `⍎` and `⍕`
+in (B) '75. The board's **BACKSPACE** key is the overstrike key, as
+on a 2741, and strikes any pair, in or out of the row (see
+Overstrikes, below).
+
 Both modes share the board: the IBM 5100 family put every APL symbol
 on the key a 2741 did. In (B) the board has one mode more, **CMD**:
 the 5110's CMD key, with a letter key, typed what is engraved on the

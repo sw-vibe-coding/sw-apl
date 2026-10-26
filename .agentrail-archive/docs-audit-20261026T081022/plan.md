@@ -1,0 +1,1 @@
+Owner direction 2026-09-29 (docs/plan.md, 'the documents, checked against the code'): bring the README and docs up to date with what the code does, each claim checked against the code or a test; no step numbers, plans or 'yet' in user-facing docs.

@@ -20,7 +20,7 @@ digest() {
 
 files=(pages/apl.js pages/board.js pages/worker.js pages/sw.js
        pages/keymap.json pages/glyph-names.json pages/manifest.json
-       pages/board-keys.json pages/board.json
+       pages/board-keys.json pages/board.json pages/overstrikes.json
        images/redistributed/apl-keyboard/APL-keybd2-board.svg
        pages/wasm/apl_wasm.js pages/wasm/apl_wasm_bg.wasm)
 for file in "${files[@]}"; do

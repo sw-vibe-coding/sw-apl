@@ -143,6 +143,22 @@
     text-anchor: middle; dominant-baseline: central; pointer-events: none;
   }
 
+  /* The overstrikes, under the picture in APL mode: the glyph, and
+     small beneath it the two it is struck from. */
+  .board .strikes {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(calc(var(--key) * 1.05), 1fr));
+    gap: .2rem; max-width: calc(var(--key) * 16); margin: 0 auto; width: 100%;
+  }
+  .board .strikes[hidden] { display: none; }
+  .board .strike {
+    font: inherit; cursor: pointer; padding: .1rem 0; color: var(--ink); background: none;
+    border: 1px solid var(--rule); border-radius: .3rem;
+    display: flex; flex-direction: column; align-items: center; line-height: 1.1;
+  }
+  .board .strike:active { background: var(--rule); }
+  .board .strike .glyph { font-size: calc(var(--key) * .45); }
+  .board .strike .parts { font-size: 10px; opacity: .55; letter-spacing: .15em; }
+
   /* Commands and Idioms: one tap each. */
   .board .list {
     display: grid; grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
@@ -307,7 +323,10 @@
       painted with.</li>
     <li><b>Overstrikes.</b> <kbd>Ctrl</kbd>-<kbd>]</kbd> strikes the last
       glyph, so <code>⍟</code> is <code>○</code>, that key,
-      <code>*</code>.</li>
+      <code>*</code>. On the board, the row under the keys has each
+      overstrike this mode has, one tap each, with the two it is struck
+      from shown small beneath it; the board's <b>BACKSPACE</b> strikes
+      any pair.</li>
     <li><b>Paste.</b> APL pasted in arrives as it is.</li>
   </ol>
   <h3>Workspaces</h3>

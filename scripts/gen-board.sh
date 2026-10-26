@@ -11,6 +11,9 @@
 #                     data/glyphs.toml, which is the single source of
 #                     truth for that. A board is unusable to a screen
 #                     reader without it.
+#   overstrikes.json  the two characters each overstrike is struck
+#                     from, out of the same file, so a button on the
+#                     board can show how its glyph is typed.
 #
 # Build output: pages/ carries neither under version control. See
 # docs/terminal.md.
@@ -36,6 +39,11 @@ for section in data.values():
 out = pathlib.Path("pages/glyph-names.json")
 out.write_text(json.dumps(names, ensure_ascii=False, indent=0, sort_keys=True))
 print(f"gen-board: {out} has {len(names)} glyphs")
+
+parts = {row["glyph"]: [row["base"], row["over"]] for row in data["overstrike"]}
+out = pathlib.Path("pages/overstrikes.json")
+out.write_text(json.dumps(parts, ensure_ascii=False, indent=0, sort_keys=True))
+print(f"gen-board: {out} has {len(parts)} overstrikes")
 PY
 
 # Where each key is on the 2741 picture, measured out of the picture

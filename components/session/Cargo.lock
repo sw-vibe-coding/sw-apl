@@ -420,6 +420,7 @@ dependencies = [
  "apl-value",
  "apl-wsfile",
  "serde_json",
+ "toml",
 ]
 
 [[package]]

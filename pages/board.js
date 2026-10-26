@@ -12,7 +12,10 @@
 //
 // Four modes, and a fifth in (B). APL and ABC are the two faces every
 // 2741 key carries -- the picture shows both on each key -- so they
-// are the two shift states of one picture, not two layouts. Commands
+// are the two shift states of one picture, not two layouts. Under the
+// picture in APL mode is a row of the glyphs a 2741 typed by
+// overstriking, one tap each, each showing the two it is struck from
+// -- the board's Backspace still strikes any pair. Commands
 // and Idioms were never on a 2741; they are the board's own, from
 // board.json, where a test runs every entry, in each language mode
 // only what that mode has.
@@ -97,11 +100,13 @@ export async function build(root, stamped, tap, attn, letter = "A") {
     fetch(stamped(PICTURE)).then((r) => r.text()),
   ]);
   named = await load("glyph-names.json").catch(() => ({}));
+  const parts = await load("overstrikes.json").catch(() => ({}));
 
   const here = (entry) => !entry.modes || entry.modes.includes(letter);
   const kinds = MODES.filter(([id]) => id !== "cmd" || letter === "B");
   root.append(modes(root, kinds));
   root.append(picture(layout, map, drawing, tap, attn));
+  root.append(strikes(lists.overstrikes.filter(here), parts, tap));
   for (const kind of ["commands", "idioms", "cmd"]) {
     if (kinds.some(([id]) => id === kind)) root.append(list(kind, lists[kind].filter(here), tap));
   }
@@ -141,6 +146,7 @@ function mode(root, id) {
   root.dataset.mode = known;
   const keyboard = known === "apl" || known === "abc";
   root.querySelector(".picture").hidden = !keyboard;
+  root.querySelector(".strikes").hidden = known !== "apl";
   for (const panel of root.querySelectorAll(".list")) {
     panel.hidden = panel.dataset.kind !== known;
   }
@@ -272,6 +278,31 @@ function shape(tag, attrs) {
   const el = document.createElementNS(NS, tag);
   for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
   return el;
+}
+
+// The overstrikes: the glyph, and under it the two characters it is
+// struck from, so a tap also shows how it is typed with Backspace.
+// Only those the language mode has, most used first, as board.json
+// lists them.
+function strikes(entries, parts, tap) {
+  const row = document.createElement("div");
+  row.className = "strikes";
+  row.setAttribute("aria-label", "overstruck glyphs");
+  for (const { insert: glyph } of entries) {
+    const [base, over] = parts[glyph] ?? ["", ""];
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "strike";
+    button.innerHTML = `<span class="glyph"></span><span class="parts"></span>`;
+    button.querySelector(".glyph").textContent = glyph;
+    button.querySelector(".parts").textContent = `${base}${over}`;
+    const how = base ? `: ${name(base)}, backspace, ${name(over)}` : "";
+    button.title = `${name(glyph)}${how}`;
+    button.setAttribute("aria-label", name(glyph));
+    button.addEventListener("click", () => tap(glyph));
+    row.append(button);
+  }
+  return row;
 }
 
 // Commands or Idioms: one tap each. A command that takes an argument

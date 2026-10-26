@@ -245,5 +245,86 @@
       "label": "CMD M",
       "try": "⌽⍳3"
     }
+  ],
+  "overstrikes": [
+    {
+      "insert": "⍝",
+      "try": "⍝ A NOTE"
+    },
+    {
+      "insert": "⌽",
+      "try": "⌽⍳3"
+    },
+    {
+      "insert": "⊖",
+      "try": "⊖2 2⍴⍳4"
+    },
+    {
+      "insert": "⍉",
+      "try": "⍉2 2⍴⍳4"
+    },
+    {
+      "insert": "⍟",
+      "try": "⍟1"
+    },
+    {
+      "insert": "⍋",
+      "try": "⍋3 1 2"
+    },
+    {
+      "insert": "⍒",
+      "try": "⍒3 1 2"
+    },
+    {
+      "insert": "⍎",
+      "modes": "B",
+      "try": "⍎'2+3'"
+    },
+    {
+      "insert": "⍕",
+      "modes": "B",
+      "try": "⍕2 3"
+    },
+    {
+      "insert": "!",
+      "try": "!3"
+    },
+    {
+      "insert": "⌿",
+      "try": "+⌿2 2⍴⍳4"
+    },
+    {
+      "insert": "⍀",
+      "try": "+⍀⍳3"
+    },
+    {
+      "insert": "⌹",
+      "try": "⌹2 2⍴1 0 0 1"
+    },
+    {
+      "insert": "⍞",
+      "try": "⍞←'HI'"
+    },
+    {
+      "insert": "⍱",
+      "try": "0⍱0"
+    },
+    {
+      "insert": "⍲",
+      "try": "1⍲1"
+    },
+    {
+      "insert": "⍫",
+      "try": "'⍫'"
+    },
+    {
+      "insert": "⍙",
+      "try": "⍙X←1"
+    },
+    {
+      "insert": "⌶",
+      "modes": "A",
+      "try": "⌶21"
+    }
   ]
 }

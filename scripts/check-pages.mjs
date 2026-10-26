@@ -355,6 +355,30 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   }
   await page.click('#board [data-mode=apl]');
 
+  // The overstrikes: a row under the picture in APL mode, holding
+  // only what this mode -- (B), which the page opens in -- has, each
+  // showing its two parts. A tap inserts the glyph.
+  const strikes = () => page.evaluate(() => {
+    const row = document.querySelector('#board .strikes');
+    return {
+      shown: !row.hidden,
+      glyphs: [...row.querySelectorAll('.glyph')].map((g) => g.textContent).join(''),
+      log: row.querySelector('.strike[aria-label="log"] .parts')?.textContent,
+    };
+  });
+  const row = await strikes();
+  check('the overstrikes show in APL mode, (B) only', row.shown && row.glyphs.startsWith('⍝')
+    && row.glyphs.includes('⍎') && !row.glyphs.includes('⌶') && row.log === '○*', JSON.stringify(row));
+  await page.click('#board .strike[aria-label="log"]');
+  await page.click('#board [data-mode=abc]');
+  check('and not in ABC mode', !(await strikes()).shown, 'shown');
+  await tapKey('1');
+  await page.click('#board .controls .key[aria-label^="return"]');
+  await page.waitForTimeout(700);
+  check('a tapped overstrike runs', (await paper(page)).trim().endsWith('⍟1\n0'),
+    JSON.stringify((await paper(page)).slice(-40)));
+  await page.click('#board [data-mode=apl]');
+
   // The line being typed must never be off screen on a phone.
   const onscreen = await page.evaluate(() => {
     const box = document.getElementById('line').getBoundingClientRect();
