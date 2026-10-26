@@ -1,0 +1,1 @@
+Help dialog: sticky X at the top right, closes on a backdrop click, opens scrolled to the top; check-pages 9e. Published with the strike fixes; pushed.

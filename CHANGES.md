@@ -15,6 +15,11 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 ## 2026-10-26
 
 - chore: identify deployed pages commit
+- feat(pages): Help closes by an X or a click outside, and opens at the top
+- saga: complete 001-no-dead-end-strike
+- fix(keyboard): no overstrike that cannot be finished; the board says what it is doing
+- docs(changes): refresh CHANGES.md to HEAD; complete 002-underscore-key, saga done
+- chore: identify deployed pages commit
 - feat(pages): an underscore key on the board's ABC tab
 - docs(changes): refresh CHANGES.md to HEAD; complete 001-overstrike-buttons
 - chore: identify deployed pages commit
