@@ -656,6 +656,63 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
     onBoard === atKeyboard, `board ${JSON.stringify(onBoard)}, keyboard ${JSON.stringify(atKeyboard)}`);
 }
 
+// 9c. The underscore key, on the ABC tab: one tap strikes the next
+//     letter, two quick taps lock it, a tap while it is on lets go.
+//     Only letters are struck, and a struck letter is erased whole.
+{
+  const line = (page) => page.evaluate(() =>
+    document.getElementById('before').textContent + document.getElementById('after').textContent);
+  const page = await visit();
+  await page.click('#show-board');
+  const under = '#board .controls .under';
+  const state = () => page.evaluate(() => document.getElementById('board').dataset.under);
+  const tapKey = (cap) => page.click(`#board .hit[data-plain="${cap}"]`);
+  check('the underscore key is not on the APL tab', !(await page.isVisible(under)), 'shown');
+  await page.click('#board [data-mode=abc]');
+
+  await page.click(under);
+  check('one tap underscores the next letter only', await state() === 'once', await state());
+  for (const cap of ['A', 'B']) await tapKey(cap);
+  check('so A then B is A-underscored B', await line(page) === 'A̲B', JSON.stringify(await line(page)));
+  await page.click('#board .controls .erase');
+  await page.click('#board .controls .erase');
+  check('and Erase takes a struck letter whole', await line(page) === '', JSON.stringify(await line(page)));
+
+  await page.click(under);
+  await page.click(under);
+  check('two quick taps lock it', await state() === 'lock', await state());
+  for (const cap of ['A', 'B', '1', 'C']) await tapKey(cap);
+  check('locked, every letter is struck and a digit is not',
+    await line(page) === 'A̲B̲1C̲', JSON.stringify(await line(page)));
+  check('and the lock holds after a digit', await state() === 'lock', await state());
+  await page.click(under);
+  await tapKey('D');
+  check('a tap lets it go', await state() === 'off' && (await line(page)).endsWith('D'),
+    JSON.stringify(await line(page)));
+
+  await page.click(under);
+  await page.click('#board [data-mode=apl]');
+  check('leaving the ABC tab lets it go', await state() === 'off', await state());
+
+  // The struck name runs: X̲←3, then X̲.
+  await page.click('#board [data-mode=abc]');
+  while (await line(page)) await page.click('#board .controls .erase');
+  await page.click(under);
+  await tapKey('X');
+  await page.click('#board [data-mode=apl]');
+  await tapKey('[');                   // ← is the [ key's APL face
+  await page.click('#board [data-mode=abc]');
+  await tapKey('3');
+  await page.click('#board .controls .key[aria-label^="return"]');
+  await page.click(under);
+  await tapKey('X');
+  await page.click('#board .controls .key[aria-label^="return"]');
+  await page.waitForTimeout(900);
+  check('a name typed with it runs', (await paper(page)).trim().endsWith('X̲\n3'),
+    JSON.stringify((await paper(page)).slice(-40)));
+  await page.context().close();
+}
+
 // 10. ATTN in the browser. A loop that runs forever must stop, by
 //     Escape, by Ctrl-[, and by the board's key -- the last being the
 //     only way on a touch screen, which has no Escape at all. Each

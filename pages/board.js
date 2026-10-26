@@ -111,6 +111,7 @@ export async function build(root, stamped, tap, attn, letter = "A") {
     if (kinds.some(([id]) => id === kind)) root.append(list(kind, lists[kind].filter(here), tap));
   }
   root.append(controls(tap));
+  root.querySelector(".controls").prepend(underKey(root));
   root.append(placing(root));
   root.append(credit());
   size(root, Number(remembered(SIZE, KEYS.default)));
@@ -147,6 +148,8 @@ function mode(root, id) {
   const keyboard = known === "apl" || known === "abc";
   root.querySelector(".picture").hidden = !keyboard;
   root.querySelector(".strikes").hidden = known !== "apl";
+  root.querySelector(".controls .under").hidden = known !== "abc";
+  if (known !== "abc") underscore(root, "off");
   for (const panel of root.querySelectorAll(".list")) {
     panel.hidden = panel.dataset.kind !== known;
   }
@@ -203,8 +206,9 @@ function picture(layout, map, drawing, tap, attn) {
       const { normal, shifted } = faces(cap, map);
       Object.assign(hit.dataset, { plain: cap, normal, shifted });
       hit.addEventListener("click", () => {
-        const face = root().dataset.mode === "abc" ? normal : shifted;
-        press(hit, () => tap(face));
+        const board = root();
+        const face = board.dataset.mode === "abc" ? normal : shifted;
+        press(hit, () => typeKey(board, face, tap));
       });
     }
     svg.append(hit);
@@ -265,6 +269,54 @@ function attention(box, attn) {
   g.append(label);
   g.addEventListener("click", () => press(g, attn));
   return g;
+}
+
+// A key's face, and, while the underscore key is on and the face is a
+// letter, the underbar struck over it -- through the board's own
+// overstrike, so the line gets the one glyph a 2741 made and Erase
+// takes it whole. A letter spends a single tap; it does not spend a
+// lock, and nothing but a letter spends either.
+function typeKey(board, face, tap) {
+  tap(face);
+  if (board.dataset.under === "off" || !/^[A-Z]$/.test(face)) return;
+  tap("overstrike");
+  tap("_");
+  if (board.dataset.under === "once") underscore(board, "off");
+}
+
+// The underscore key, on the ABC tab, works as a phone's Shift: one
+// tap strikes the next letter, a second within QUICK ms locks it for
+// every letter, and a tap while it is on lets go.
+const QUICK = 450;
+const UNDER = {
+  off: "underscore the next letter",
+  once: "underscoring the next letter; tap again to lock",
+  lock: "underscoring every letter; tap to stop",
+};
+
+function underKey(root) {
+  const key = document.createElement("button");
+  key.type = "button";
+  key.className = "key under";
+  key.textContent = "A\u0332";
+  let last = 0;
+  key.addEventListener("click", () => {
+    const now = Date.now();
+    const at = root.dataset.under;
+    const quick = at === "once" && now - last < QUICK;
+    underscore(root, quick ? "lock" : at === "off" ? "once" : "off");
+    last = now;
+  });
+  return key;
+}
+
+// Set the underscore key's state, and say it.
+function underscore(root, state) {
+  root.dataset.under = state;
+  const key = root.querySelector(".controls .under");
+  key.setAttribute("aria-label", UNDER[state]);
+  key.title = UNDER[state];
+  key.setAttribute("aria-pressed", String(state !== "off"));
 }
 
 // Show that a key went down, then do what it does.

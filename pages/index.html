@@ -187,6 +187,14 @@
   .board .controls .key { height: calc(var(--key) * 1.1); font-size: 14px; }
   .board .controls .key:active { background: var(--rule); }
   .board .controls .erase { flex: 1.2; }
+  /* The underscore key, on the ABC tab: lit for the next letter,
+     solid and barred beneath while locked. */
+  .board .controls .under { flex: .8; }
+  .board .controls .under[hidden] { display: none; }
+  .board[data-under="once"] .controls .under { background: var(--rule); }
+  .board[data-under="lock"] .controls .under {
+    background: var(--ink); color: var(--paper); box-shadow: inset 0 -3px 0 #f5b301;
+  }
   .board .controls .space { flex: 3; }
   .board .controls .return {
     flex: 2.2; font-size: 16px; font-weight: 700;
@@ -326,7 +334,9 @@
       <code>*</code>. On the board, the row under the keys has each
       overstrike this mode has, one tap each, with the two it is struck
       from shown small beneath it; the board's <b>BACKSPACE</b> strikes
-      any pair.</li>
+      any pair. On the <b>ABC</b> tab, the <b>A&#818;</b> key underscores
+      letters: one tap for the next letter, two quick taps to lock it
+      for every letter, and a tap to let go.</li>
     <li><b>Paste.</b> APL pasted in arrives as it is.</li>
   </ol>
   <h3>Workspaces</h3>

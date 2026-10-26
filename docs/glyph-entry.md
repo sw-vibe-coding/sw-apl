@@ -30,6 +30,17 @@ in (B) '75. The board's **BACKSPACE** key is the overstrike key, as
 on a 2741, and strikes any pair, in or out of the row (see
 Overstrikes, below).
 
+On the ABC tab, the controls row has an underscore key, `A̲`, for the
+underscored letters (see The underscored alphabet, below). It works like
+a phone's Shift. One tap underscores the next letter and lets go,
+which suits a name such as `A̲BC`. Two quick taps lock it, and every
+letter is underscored until it is tapped again, which suits `A̲B̲C̲`.
+Only the letters A to Z are struck: digits, `∆` and `⍙` type as
+themselves and neither spend the single tap nor release the lock.
+Each letter is struck through the board's own overstrike, so Erase
+takes it whole. Leaving the ABC tab lets the key go. At a physical
+keyboard the recipe is unchanged: the letter, `Ctrl-]`, then `_`.
+
 Both modes share the board: the IBM 5100 family put every APL symbol
 on the key a 2741 did. In (B) the board has one mode more, **CMD**:
 the 5110's CMD key, with a letter key, typed what is engraved on the

@@ -1049,6 +1049,29 @@ APL mode only, one per overstrike the mode has, most used first.
 
 Saga `overstrike-row`, one step.
 
+Then, the same day: "Is there a way we could add an 'Underscored'
+toggle button under the keyboard on the ABC tab? like a caps-lock it
+lets you type an underscore letter. Maybe a way to click once for one
+underscore letter and click twice to keep it depressed?" Settled as
+a phone's Shift:
+
+- A key `A̲` in the controls row, on the ABC tab only. One tap: the
+  next letter is underscored, then it lets go -- for mixed names
+  such as `A̲BC`. Two quick taps: locked, every letter, until tapped
+  again -- for names underscored throughout. A tap while it is on
+  turns it off.
+- Only A-Z are struck. Digits, `∆` and `⍙` type as themselves,
+  neither spending a single tap nor releasing the lock.
+- A letter it underscores is sent as letter, overstrike, `_`: the
+  board's own composer makes the one struck glyph, so Erase takes it
+  whole and nothing new reaches the line.
+- Leaving the ABC tab turns it off, so a lock never acts where it
+  cannot be seen. Each state looks different and says itself to a
+  screen reader. The physical keyboard is unchanged: letter,
+  Ctrl-], `_`.
+
+Step `002-underscore-key`.
+
 ## Owner direction (2026-09-29): the documents, checked against the code
 
 "Is the README up-to-date? Scan documents for stale info or
