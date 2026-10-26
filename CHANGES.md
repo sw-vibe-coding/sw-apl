@@ -15,6 +15,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 ## 2026-10-26
 
 - chore: identify deployed pages commit
+- feat(pages): an underscore key on the board's ABC tab
+- docs(changes): refresh CHANGES.md to HEAD; complete 001-overstrike-buttons
+- chore: identify deployed pages commit
 - feat(pages): a row of overstrike buttons on the board's APL mode
 
 ## 2026-10-08

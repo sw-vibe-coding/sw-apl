@@ -1,0 +1,1 @@
+Underscore key on the board's ABC tab, a phone's Shift: one tap strikes the next letter, two quick taps lock, a tap releases; only A-Z struck, via letter-overstrike-underbar so Erase takes it whole; leaving ABC releases. check-pages 9c covers it; glyph-entry.md and Help updated. Pushed.
