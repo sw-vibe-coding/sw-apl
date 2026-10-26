@@ -225,6 +225,12 @@
     border: 1px solid var(--rule); border-radius: .4rem; padding: 1rem;
   }
   dialog::backdrop { background: #0009; }
+  /* Help's close button: held at the top right as the dialog scrolls. */
+  dialog .x { position: sticky; top: 0; float: right; height: 0; margin: 0; }
+  dialog .x button {
+    font-size: 20px; line-height: 1; width: 2rem; height: 2rem; padding: 0;
+    border-radius: 50%; background: var(--paper);
+  }
   #diagnosis { font-size: 11px; white-space: pre-wrap; word-break: break-all; user-select: all; }
   dialog h2 { margin: 0 0 .5rem; font-size: 1.1rem; }
   dialog h3 { margin: 1rem 0 .3rem; font-size: .95rem; }
@@ -318,6 +324,9 @@
 </footer>
 
 <dialog id="help">
+  <!-- First, so it sits at the top right of whatever is scrolled into
+       view; Escape and a click outside close Help too. -->
+  <form method="dialog" class="x"><button aria-label="Close Help" title="Close">&times;</button></form>
   <h2>sw-apl</h2>
   <p>
     An APL session, compiled to WebAssembly and running in a worker

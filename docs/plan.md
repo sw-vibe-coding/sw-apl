@@ -1119,7 +1119,12 @@ it; the board stays the way in on a phone. A layout file for an
 existing Android keyboard, and an opt-in input path the system
 keyboard could type into, are options, not planned.
 
-Saga `strike-fixes`, one step.
+Then: "the help dialog should have an (X) at the top right corner and
+also dismiss with a click outside the dialog or on the X. Also, when
+re-opening the help, it should be scrolled to the top." Step
+`002-help-dialog`.
+
+Saga `strike-fixes`, two steps.
 
 ## Owner direction (2026-09-29): the documents, checked against the code
 

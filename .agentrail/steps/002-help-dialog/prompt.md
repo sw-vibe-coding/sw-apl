@@ -1,0 +1,1 @@
+docs/plan.md, 'a strike that cannot be finished', last paragraph: Help gets an X close button at its top right, closes on a click outside it, and opens scrolled to the top every time. check-pages first.

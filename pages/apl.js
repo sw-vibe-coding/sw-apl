@@ -525,7 +525,20 @@ async function keyboard() {
 function controls() {
   tabs();
   const help = document.getElementById("help");
-  document.getElementById("show-help").addEventListener("click", () => help.showModal());
+  // Always from the top: Help is read from its start, not from
+  // wherever a reader last left it.
+  document.getElementById("show-help").addEventListener("click", () => {
+    help.showModal();
+    help.scrollTop = 0;
+  });
+  // A click on the backdrop lands on the dialog itself, outside its
+  // box: that closes it, as the X and Escape do.
+  help.addEventListener("click", (event) => {
+    const box = help.getBoundingClientRect();
+    const inside = event.clientX >= box.left && event.clientX <= box.right
+      && event.clientY >= box.top && event.clientY <= box.bottom;
+    if (event.target === help && !inside) help.close();
+  });
 }
 
 // The mode tabs. The current one shows, on a tap, what its tooltip

@@ -763,6 +763,35 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await page.context().close();
 }
 
+// 9e. Help closes by its X at the top right and by a click outside it,
+//     and opens at the top however far it was scrolled.
+{
+  const page = await visit();
+  const open = () => page.evaluate(() => document.getElementById('help').open);
+  await page.click('#show-help');
+  const x = await page.evaluate(() => {
+    const d = document.getElementById('help').getBoundingClientRect();
+    const b = document.querySelector('#help .x button').getBoundingClientRect();
+    return { right: d.right - b.right, top: b.top - d.top };
+  });
+  check('Help has an X at its top right', x.right < 40 && x.top < 40, JSON.stringify(x));
+  await page.click('#help .x button');
+  check('and the X closes it', !(await open()), 'still open');
+
+  await page.click('#show-help');
+  await page.mouse.click(5, 5);
+  check('a click outside Help closes it', !(await open()), 'still open');
+
+  await page.click('#show-help');
+  await page.evaluate(() => { document.getElementById('help').scrollTop = 400; });
+  await page.mouse.click(5, 5);
+  await page.click('#show-help');
+  const top = await page.evaluate(() => document.getElementById('help').scrollTop);
+  check('Help opens scrolled to the top', top === 0, String(top));
+  await page.mouse.click(5, 5);
+  await page.context().close();
+}
+
 // 10. ATTN in the browser. A loop that runs forever must stop, by
 //     Escape, by Ctrl-[, and by the board's key -- the last being the
 //     only way on a touch screen, which has no Escape at all. Each

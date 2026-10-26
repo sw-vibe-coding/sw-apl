@@ -1,0 +1,8 @@
+number = 2
+slug = "help-dialog"
+status = "in-progress"
+description = "docs/plan.md, 'a strike that cannot be finished', last paragraph: Help gets a..."
+role = "production"
+context_files = []
+created_at = "2026-10-26T10:52:16"
+commits = []
