@@ -112,6 +112,7 @@ export async function build(root, stamped, tap, attn, letter = "A") {
   }
   root.append(controls(tap));
   root.querySelector(".controls").prepend(underKey(root));
+  underscore(root, "off");
   root.append(placing(root));
   root.append(credit());
   size(root, Number(remembered(SIZE, KEYS.default)));
@@ -158,7 +159,7 @@ function mode(root, id) {
   }
   const face = known === "abc" ? "normal" : "shifted";
   for (const hit of root.querySelectorAll(".hit:not(.wide)")) {
-    if (hit.dataset[face] !== "backspace") hit.setAttribute("aria-label", name(hit.dataset[face]));
+    if (hit.dataset[face] !== "backspace") label(hit, name(hit.dataset[face]));
   }
   remember(MODE, known);
 }
@@ -200,7 +201,7 @@ function picture(layout, map, drawing, tap, attn) {
       // board it is again. Erasing is the Erase key below.
       hit.dataset.plain = "BACKSPACE";
       hit.dataset.normal = hit.dataset.shifted = "backspace";
-      hit.setAttribute("aria-label", "backspace: strike the next glyph over the last");
+      label(hit, "backspace: the next glyph strikes over the last; again to cancel");
       hit.addEventListener("click", () => press(hit, () => tap("overstrike")));
     } else {
       const { normal, shifted } = faces(cap, map);
@@ -241,13 +242,13 @@ function wideKey(cap, box, root, tap) {
   hit.setAttribute("role", "button");
   hit.dataset.plain = cap;
   if (cap === "CAPS") {
-    hit.setAttribute("aria-label", "Caps Lock: switch between APL glyphs and letters");
+    label(hit, "Caps Lock: switch between APL glyphs and letters");
     hit.addEventListener("click", () =>
       press(hit, () => mode(root(), root().dataset.mode === "abc" ? "apl" : "abc")));
     return hit;
   }
   if (cap === "RETURN") {
-    hit.setAttribute("aria-label", "return, send the line");
+    label(hit, "return, send the line");
     hit.addEventListener("click", () => press(hit, () => tap("return")));
     return hit;
   }
@@ -262,11 +263,11 @@ function attention(box, attn) {
   const left = -PAD + 3;
   const g = shape("g", { class: "key attn" });
   g.setAttribute("role", "button");
-  g.setAttribute("aria-label", "ATTN, stop what is running");
+  label(g, "ATTN, stop what is running");
   g.append(shape("rect", { x: left, y, width: x + kw - left, height: kh, rx: 3 }));
-  const label = shape("text", { x: (left + x + kw) / 2, y: y + kh / 2 });
-  label.textContent = "ATTN";
-  g.append(label);
+  const word = shape("text", { x: (left + x + kw) / 2, y: y + kh / 2 });
+  word.textContent = "ATTN";
+  g.append(word);
   g.addEventListener("click", () => press(g, attn));
   return g;
 }
@@ -314,9 +315,51 @@ function underKey(root) {
 function underscore(root, state) {
   root.dataset.under = state;
   const key = root.querySelector(".controls .under");
-  key.setAttribute("aria-label", UNDER[state]);
-  key.title = UNDER[state];
+  label(key, UNDER[state]);
   key.setAttribute("aria-pressed", String(state !== "off"));
+  said.under = UNDER_NOTE[state];
+  tell();
+}
+
+// What the board is in the middle of, said in words under the line.
+// A tooltip needs a mouse; this is how a phone learns what a special
+// key did, by tapping it. Shown only while there is something to say.
+const said = { strike: "", under: "" };
+const UNDER_NOTE = {
+  off: "",
+  once: "A\u0332 on: the next letter is underscored. Tap A\u0332 again quickly to lock it.",
+  lock: "A\u0332 locked: every letter is underscored. Tap A\u0332 to stop.",
+};
+
+function tell() {
+  const note = document.getElementById("note");
+  if (!note) return;
+  const text = [said.strike, said.under].filter(Boolean).join(" ");
+  note.textContent = text;
+  note.hidden = !text;
+}
+
+// A strike is waiting over `base`, or none is ("" ). The page calls
+// this whenever it draws the line, whichever keyboard began it, and ←
+// on the picture is lit while it waits.
+export function striking(base) {
+  said.strike = base
+    ? `Striking over ${base}: type the character to strike over it, or press \u2190 (Ctrl-]) again or Erase to cancel.`
+    : "";
+  document.querySelector('#board .hit[data-plain="BACKSPACE"]')?.classList.toggle("waiting", Boolean(base));
+  tell();
+}
+
+// A key's name for a screen reader, and its tooltip for a mouse: a
+// title attribute on a button, a <title> child in the picture.
+function label(el, text) {
+  el.setAttribute("aria-label", text);
+  if (el.namespaceURI !== NS) {
+    el.title = text;
+    return;
+  }
+  const title = el.querySelector("title") ?? el.appendChild(shape("title", {}));
+  title.textContent = text;
 }
 
 // Show that a key went down, then do what it does.
@@ -350,7 +393,7 @@ function strikes(entries, parts, tap) {
     button.querySelector(".parts").textContent = `${base}${over}`;
     const how = base ? `: ${name(base)}, backspace, ${name(over)}` : "";
     button.title = `${name(glyph)}${how}`;
-    button.setAttribute("aria-label", name(glyph));
+    button.setAttribute("aria-label", `${name(glyph)}${how}`);
     button.addEventListener("click", () => tap(glyph));
     row.append(button);
   }
@@ -388,16 +431,16 @@ function list(kind, entries, tap) {
 function controls(tap) {
   const row = document.createElement("div");
   row.className = "row controls";
-  const add = (label, aria, sends, cls) => {
+  const add = (text, aria, sends, cls) => {
     const button = document.createElement("button");
     button.type = "button";
     button.className = `key ${cls}`;
-    button.textContent = label;
-    button.setAttribute("aria-label", aria);
+    button.textContent = text;
+    label(button, aria);
     button.addEventListener("click", () => tap(sends));
     row.append(button);
   };
-  add("Erase", "erase the last glyph", "backspace", "erase");
+  add("Erase", "erase the last glyph, or cancel a waiting overstrike", "backspace", "erase");
   add("space", "space", " ", "space");
   add("Return ⏎", "return, send the line", "return", "return");
   return row;
@@ -428,12 +471,12 @@ function size(root, rem) {
 function placing(root) {
   const row = document.createElement("div");
   row.className = "row placing";
-  const add = (label, aria, onclick, cls = "") => {
+  const add = (text, aria, onclick, cls = "") => {
     const button = document.createElement("button");
     button.type = "button";
     button.className = `key small ${cls}`;
-    button.textContent = label;
-    button.setAttribute("aria-label", aria);
+    button.textContent = text;
+    label(button, aria);
     button.addEventListener("click", onclick);
     row.append(button);
   };

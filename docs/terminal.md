@@ -120,10 +120,13 @@ Ctrl-] is the overstrike key. Backspace cannot be it -- a line editor
 needs backspace for deleting -- and neither can Ctrl-H, which *is*
 the backspace byte.
 
-- Ctrl-] holds the cell the carriage just passed. Pressing it twice
-  is harmless.
-- A pair that forms no glyph rings the bell and keeps the base: press
-  the second key again, or Backspace to cancel the strike.
+- Ctrl-] holds the cell the carriage just passed, for the next key
+  to strike. Over a glyph nothing strikes -- an underscored letter, a
+  digit, a blank -- or at the start of the line it rings and holds
+  nothing. Pressed again while a strike waits, it cancels the strike.
+- A pair that forms no glyph rings the bell, keeps the base, drops
+  the key, and ends the strike; typing goes on as usual. Backspace
+  also cancels a waiting strike.
 - Backspace deletes a whole glyph, an underscored letter included.
 - Arrow keys, Home, End and Delete edit the line; Up and Down recall
   earlier lines.

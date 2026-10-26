@@ -1,1 +1,1 @@
-Owner direction 2026-10-26 (docs/plan.md, 'overstrikes on the board, one tap each'): a row of overstrike buttons on the browser board's APL mode, filtered per language mode, with each button showing its two parts.
+Owner direction 2026-10-26, later (docs/plan.md, 'a strike that cannot be finished'): no dead-end overstrike on the board or in aplterm, a visible waiting strike, and tooltips on the board's keys.

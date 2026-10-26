@@ -31,6 +31,19 @@ pub fn strike(base: char, over: char, also: &[(char, char, char)]) -> Option<Str
     }
 }
 
+/// Whether anything struck over `base` forms a glyph in the mode
+/// whose extra pairs are `also`: whether an overstrike key may hold it.
+/// A keyboard that held one nothing strikes would wait for a key that
+/// cannot come.
+#[must_use]
+pub fn strikes(base: char, also: &[(char, char, char)]) -> bool {
+    let paired = OVERSTRIKE
+        .iter()
+        .chain(also)
+        .any(|(_, a, b)| *a == base || *b == base);
+    paired || base == UNDERBAR || UNDERSCORED.contains(base)
+}
+
 /// A letter struck with the underbar: one of the twenty-six further
 /// characters of the APL\360 set, written as the letter and a
 /// combining low line.

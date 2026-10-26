@@ -37,7 +37,7 @@ impl Board {
         match act(key, ctrl, alt) {
             Act::Type(c) => bell = !self.0.type_key(c),
             Act::Literal(c) => bell = !self.0.paste(&c.to_string()),
-            Act::Overstrike => self.0.overstrike(),
+            Act::Overstrike => bell = !self.0.overstrike(),
             Act::Backspace => self.0.backspace(),
             Act::Delete => self.0.delete(),
             Act::Carriage(where_to) => self.0.move_cursor(where_to),

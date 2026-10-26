@@ -64,7 +64,11 @@ pub(crate) fn handle(
 fn control(code: KeyCode, keyboard: &mut Keyboard) -> Outcome {
     match code {
         // Crossterm decodes the legacy Ctrl-] byte (0x1D) as Ctrl-5.
-        KeyCode::Char(']' | '5' | '\u{1d}') => keyboard.overstrike(),
+        KeyCode::Char(']' | '5' | '\u{1d}') => {
+            if !keyboard.overstrike() {
+                print!("\x07");
+            }
+        }
         KeyCode::Char('c' | 'u') => keyboard.clear(),
         KeyCode::Char('d') if keyboard.text().is_empty() => return Outcome::Disconnect,
         KeyCode::Char('d') => keyboard.delete(),

@@ -1,0 +1,1 @@
+Owner direction 2026-10-26 (docs/plan.md, 'overstrikes on the board, one tap each'): a row of overstrike buttons on the browser board's APL mode, filtered per language mode, with each button showing its two parts.

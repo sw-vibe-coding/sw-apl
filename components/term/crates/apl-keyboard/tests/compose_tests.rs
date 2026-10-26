@@ -64,14 +64,16 @@ fn underscore_is_one_editable_cell_but_two_wire_codepoints() {
 }
 
 #[test]
-fn invalid_strike_preserves_base_and_repeated_back_is_harmless() {
+fn invalid_strike_preserves_base_and_ends_the_strike() {
     let mut k = Keyboard::default();
     k.overstrike();
+    assert!(!k.pending, "nothing to strike at the start of a line");
     k.type_key('L');
-    k.overstrike();
     k.overstrike();
     assert!(!k.type_key('a'));
     assert_eq!(k.text(), "⎕");
+    assert!(!k.pending, "a pair that forms nothing ends the strike");
+    k.overstrike();
     k.type_key('K');
     assert_eq!(k.text(), "⍞");
 }
@@ -211,6 +213,7 @@ fn a_pasted_character_that_forms_no_glyph_rings_and_leaves_the_base() {
     k.overstrike();
     assert!(!k.paste("⍴"), "A and rho form nothing, so the bell rings");
     assert_eq!(k.text(), "A");
+    assert!(!k.pending, "and the strike is over");
 }
 
 #[test]

@@ -23,7 +23,7 @@ const query = (pairs) => {
 const stamped = (path) => `${path}${query([["v", VERSION], ["ts", LOADED]])}`;
 
 const { default: init, Board } = await import(stamped("./wasm/apl_wasm.js"));
-const { build } = await import(stamped("./board.js"));
+const { build, striking } = await import(stamped("./board.js"));
 
 // Must agree with channel.rs, which is where these are documented.
 const SIZE = 64 * 1024;
@@ -106,6 +106,7 @@ const draw = (state) => {
   before.textContent = state.before;
   after.textContent = state.text.slice(state.before.length);
   line.classList.toggle("pending", state.pending);
+  striking(state.pending ? [...state.before].at(-1) ?? "" : "");
   if (state.bell) {
     line.animate([{ opacity: 1 }, { opacity: 0.3 }, { opacity: 1 }], 140);
   }

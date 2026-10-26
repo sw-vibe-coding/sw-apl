@@ -1,0 +1,6 @@
+name = "overstrike-row"
+status = "completed"
+current_step = 2
+created_at = "2026-10-26T08:10:22"
+plan_file = ".agentrail/plan.md"
+retroactive = false

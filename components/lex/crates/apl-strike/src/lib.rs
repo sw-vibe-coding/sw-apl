@@ -12,4 +12,4 @@ mod machine;
 mod strike;
 
 pub use machine::{BACK, BACK_LABEL, BACKSPACE, Strike, compose};
-pub use strike::{read, strike};
+pub use strike::{read, strike, strikes};

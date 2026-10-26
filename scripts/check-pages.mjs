@@ -363,13 +363,13 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
     return {
       shown: !row.hidden,
       glyphs: [...row.querySelectorAll('.glyph')].map((g) => g.textContent).join(''),
-      log: row.querySelector('.strike[aria-label="log"] .parts')?.textContent,
+      log: row.querySelector('.strike[aria-label^="log:"] .parts')?.textContent,
     };
   });
   const row = await strikes();
   check('the overstrikes show in APL mode, (B) only', row.shown && row.glyphs.startsWith('⍝')
     && row.glyphs.includes('⍎') && !row.glyphs.includes('⌶') && row.log === '○*', JSON.stringify(row));
-  await page.click('#board .strike[aria-label="log"]');
+  await page.click('#board .strike[aria-label^="log:"]');
   await page.click('#board [data-mode=abc]');
   check('and not in ABC mode', !(await strikes()).shown, 'shown');
   await tapKey('1');
@@ -710,6 +710,56 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await page.waitForTimeout(900);
   check('a name typed with it runs', (await paper(page)).trim().endsWith('X̲\n3'),
     JSON.stringify((await paper(page)).slice(-40)));
+  await page.context().close();
+}
+
+// 9d. No strike that cannot be finished (the owner's sequence:
+//     letters, some underscored, Erase, then the picture's ←, after
+//     which every key rang until Erase). And the board says, under
+//     the line, what it is in the middle of -- a phone has no hover.
+{
+  const line = (page) => page.evaluate(() =>
+    document.getElementById('before').textContent + document.getElementById('after').textContent);
+  const page = await visit();
+  await page.click('#show-board');
+  await page.click('#board [data-mode=abc]');
+  const tapKey = (cap) => page.click(`#board .hit[data-plain="${cap}"]`);
+  const at = () => page.evaluate(() => ({
+    pending: document.getElementById('line').classList.contains('pending'),
+    note: document.getElementById('note').hidden ? '' : document.getElementById('note').textContent,
+    lit: document.querySelector('#board .hit[data-plain="BACKSPACE"]').classList.contains('waiting'),
+  }));
+
+  await page.click('#board .controls .under');
+  check('the underscore key says it is on, under the line',
+    (await at()).note.includes('next letter is underscored'), JSON.stringify(await at()));
+  await tapKey('X');
+  check('and stops saying so when spent', (await at()).note === '', JSON.stringify(await at()));
+  await tapKey('BACKSPACE');
+  check('← over an underscored letter holds nothing', !(await at()).pending && (await at()).note === '',
+    JSON.stringify(await at()));
+
+  await tapKey('A');
+  await tapKey('BACKSPACE');
+  const waiting = await at();
+  check('← over a letter holds it, lit, and says how to go on',
+    waiting.pending && waiting.lit && waiting.note.includes('Striking over A'), JSON.stringify(waiting));
+  await tapKey('B');
+  check('a pair that forms nothing ends the strike, the base kept',
+    !(await at()).pending && !(await at()).lit && await line(page) === 'X̲A', JSON.stringify(await line(page)));
+  await tapKey('B');
+  check('and typing goes on', await line(page) === 'X̲AB', JSON.stringify(await line(page)));
+
+  await tapKey('BACKSPACE');
+  await tapKey('BACKSPACE');
+  check('← again cancels a waiting strike', !(await at()).pending, JSON.stringify(await at()));
+
+  const tips = await page.evaluate(() => ({
+    under: document.querySelector('#board .controls .under').title,
+    erase: document.querySelector('#board .controls .erase').title,
+    back: document.querySelector('#board .hit[data-plain="BACKSPACE"] title')?.textContent,
+  }));
+  check('the board keys carry tooltips', tips.under && tips.erase && tips.back, JSON.stringify(tips));
   await page.context().close();
 }
 

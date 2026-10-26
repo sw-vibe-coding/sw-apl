@@ -1072,6 +1072,55 @@ a phone's Shift:
 
 Step `002-underscore-key`.
 
+## Owner direction (2026-10-26, later): a strike that cannot be finished
+
+Found by the owner on the board: letters, some underscored, then
+Erase, then the picture's ← (BACKSPACE, the 2741's overstrike key).
+The carriage turned into a hollow box that reads as `⎕`, and no key
+did anything -- each blinked -- until Erase. Cause: ← holds the last
+glyph for a strike; a pair that forms no glyph rang the bell and left
+the strike waiting; an underscored letter can never be struck, so
+nothing could finish it; Enter rings on a half-typed glyph; ATTN only
+stops a run; and only Erase cancels, which nothing said. "Do all
+four":
+
+1. **No strike that cannot be finished.** The overstrike key rings
+   and holds nothing when the glyph before the carriage is the base
+   of no overstrike in the mode: an underscored letter, a digit, a
+   blank.
+2. **A pair that forms no glyph ends the strike.** It rings, drops
+   the key, and typing goes on as normal, the base unchanged.
+3. **The overstrike key again cancels it,** as Erase does.
+4. **The page says so.** While a strike waits, a note under the line
+   names the glyph being struck and how to cancel, ← is lit, and the
+   carriage no longer looks like `⎕`.
+
+1-3 are in `apl-keyboard`, which `aplterm` shares, so the terminal
+gets them too; 4 is the page's. Also asked: hover text on the
+board's buttons, the underscore key above all -- every key below the
+picture, and every key on it, carries a tooltip.
+
+Then: "hovertext does not work on a smartphone browser (or PWA), so
+how can we improve the help for phone users?" A tooltip is for a
+mouse. On a phone the board says itself: the note under the line
+that point 4 adds shows whatever special state the board is in --
+a strike waiting, the underscore key on for one letter or locked --
+in words, as it happens, so the reader learns a key by tapping it.
+And Help gains a short list of the board's special keys: ←, Erase,
+`A̲`, the overstrike row, Caps Lock, ATTN, and the size and place
+keys.
+
+Then: "is there a way to provide an Android alternate keyboard for a
+PWA in general and for this APL demo in particular?" and "write up
+the keyboard analysis in docs/phone-keyboards.md". Written up there:
+a web page cannot supply a system keyboard; the demo has nothing
+focusable, so no soft keyboard rises over it and none can type into
+it; the board stays the way in on a phone. A layout file for an
+existing Android keyboard, and an opt-in input path the system
+keyboard could type into, are options, not planned.
+
+Saga `strike-fixes`, one step.
+
 ## Owner direction (2026-09-29): the documents, checked against the code
 
 "Is the README up-to-date? Scan documents for stale info or
