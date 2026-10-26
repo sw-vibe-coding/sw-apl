@@ -1,0 +1,1 @@
+No dead-end overstrike: refused over unstrikable glyphs, ended by a bad pair, cancelled by pressing again (apl-keyboard, board and aplterm); note under the line for strike and underscore states; lit backspace key and amber caret; tooltips; Help special keys; docs/phone-keyboards.md. Committed locally, NOT pushed, awaiting owner review.

@@ -1,8 +1,9 @@
 number = 1
 slug = "no-dead-end-strike"
-status = "in-progress"
+status = "completed"
 description = "docs/plan.md 'a strike that cannot be finished': apl-keyboard tests first -- ..."
 role = "production"
 context_files = []
 created_at = "2026-10-26T09:41:33"
-commits = []
+completed_at = "2026-10-26T10:52:03"
+commits = ["cf83173db9b0ac040895c6a1bfa7d336b99b9a9e"]
