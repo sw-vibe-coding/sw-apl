@@ -12,8 +12,19 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-10-26
+
+- chore: identify deployed pages commit
+- feat(pages): a row of overstrike buttons on the board's APL mode
+
+## 2026-10-08
+
+- chore: identify deployed pages commit
+- fix: refresh external workspace libraries
+
 ## 2026-09-30
 
+- docs(changes): refresh CHANGES.md to HEAD; complete docs-audit
 - docs: bring the documents up to date with the code
 
 ## 2026-09-29

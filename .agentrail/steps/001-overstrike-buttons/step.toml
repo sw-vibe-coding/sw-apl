@@ -1,8 +1,9 @@
 number = 1
 slug = "overstrike-buttons"
-status = "in-progress"
+status = "completed"
 description = "Owner direction 2026-10-26 (docs/plan.md). TDD: board_tests first -- every ov..."
 role = "production"
 context_files = []
 created_at = "2026-10-26T08:10:27"
-commits = []
+completed_at = "2026-10-26T09:19:47"
+commits = ["24df8d2ac6600ec77dacd9ef2724834e1dbc064b"]
