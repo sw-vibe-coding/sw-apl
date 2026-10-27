@@ -106,7 +106,7 @@ const draw = (state) => {
   before.textContent = state.before;
   after.textContent = state.text.slice(state.before.length);
   line.classList.toggle("pending", state.pending);
-  striking(state.pending ? [...state.before].at(-1) ?? "" : "");
+  striking(state.pending ? [...state.before].at(-1) ?? "" : "", state.missed);
   if (state.bell) {
     line.animate([{ opacity: 1 }, { opacity: 0.3 }, { opacity: 1 }], 140);
   }

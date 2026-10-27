@@ -10,16 +10,18 @@ use serde_json::json;
 /// characters would not do, because a glyph may be two code points
 /// and an overstrike changes one already typed. `pending` is a strike
 /// waiting for its second key, `bell` a pair that forms no glyph,
+/// `missed` what to say about it (empty when there is nothing),
 /// `submit` a finished line, and `acted` whether the keystroke was
 /// ours at all: a chord we do not claim has to reach the browser, so
 /// that copy still copies and reload still reloads.
 #[must_use]
-pub fn state(keyboard: &Keyboard, bell: bool, submit: bool, acted: bool) -> String {
+pub fn state(keyboard: &mut Keyboard, bell: bool, submit: bool, acted: bool) -> String {
     json!({
         "text": keyboard.text(),
         "before": keyboard.before_cursor(),
         "pending": keyboard.pending,
         "bell": bell,
+        "missed": keyboard.missed().unwrap_or_default(),
         "submit": submit,
         "acted": acted,
     })

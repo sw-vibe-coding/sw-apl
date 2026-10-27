@@ -1,1 +1,5 @@
-Owner direction 2026-10-26, later (docs/plan.md, 'a strike that cannot be finished'): no dead-end overstrike on the board or in aplterm, a visible waiting strike, and tooltips on the board's keys.
+# near-miss
+
+See docs/plan.md, "Owner direction (2026-10-26, evening): say the near miss".
+
+1. 001-near-miss-hint: when a strike forms no glyph, the note under the line names the pair and lists what the base forms in the mode.

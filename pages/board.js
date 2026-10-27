@@ -341,11 +341,12 @@ function tell() {
 
 // A strike is waiting over `base`, or none is ("" ). The page calls
 // this whenever it draws the line, whichever keyboard began it, and ←
-// on the picture is lit while it waits.
-export function striking(base) {
+// on the picture is lit while it waits. `missed` is what the keyboard
+// says about a strike that just formed no glyph, until the next key.
+export function striking(base, missed = "") {
   said.strike = base
     ? `Striking over ${base}: type the character to strike over it, or press \u2190 (Ctrl-]) again or Erase to cancel.`
-    : "";
+    : missed;
   document.querySelector('#board .hit[data-plain="BACKSPACE"]')?.classList.toggle("waiting", Boolean(base));
   tell();
 }

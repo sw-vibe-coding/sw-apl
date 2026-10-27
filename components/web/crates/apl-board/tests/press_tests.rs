@@ -64,8 +64,28 @@ fn the_page_is_told_where_the_carriage_is_not_how_far_along_it_is() {
     keyboard.type_key('1');
     keyboard.move_cursor(Move::Left);
     let drawn: serde_json::Value =
-        serde_json::from_str(&state(&keyboard, false, false, true)).unwrap();
+        serde_json::from_str(&state(&mut keyboard, false, false, true)).unwrap();
     assert_eq!(drawn["text"], "A\u{332}1");
     assert_eq!(drawn["before"], "A\u{332}", "one cell, two code points");
     assert_eq!(drawn["acted"], true);
+}
+
+#[test]
+fn a_strike_that_misses_hands_the_page_a_hint_once() {
+    use apl_board::state;
+    use apl_keyboard::Keyboard;
+
+    let mut keyboard = Keyboard::default();
+    keyboard.paste("∩");
+    keyboard.overstrike();
+    keyboard.paste("∘");
+    let drawn: serde_json::Value =
+        serde_json::from_str(&state(&mut keyboard, true, false, true)).unwrap();
+    assert_eq!(
+        drawn["missed"],
+        "∩ with ∘ forms no glyph. ∩ forms ⍝ with ○."
+    );
+    let again: serde_json::Value =
+        serde_json::from_str(&state(&mut keyboard, false, false, true)).unwrap();
+    assert_eq!(again["missed"], "", "the next key clears it");
 }

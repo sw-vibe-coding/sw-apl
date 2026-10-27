@@ -59,6 +59,7 @@ impl Keyboard {
             return false;
         };
         let Some(glyph) = apl_strike::strike(base, over, self.also) else {
+            self.miss = Some((base, over));
             return false;
         };
         self.cells[self.cursor - 1] = glyph;

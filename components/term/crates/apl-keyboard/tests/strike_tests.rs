@@ -62,3 +62,23 @@ fn a_pair_that_forms_no_glyph_drops_the_key_and_ends_the_strike() {
     assert!(k.type_key('b'));
     assert_eq!(k.text(), "AB", "typing goes on as normal");
 }
+
+#[test]
+fn a_miss_is_remembered_once_as_a_hint() {
+    let mut k = holding("∩");
+    k.overstrike();
+    assert!(!k.paste("∘"), "cap with jot forms nothing");
+    assert_eq!(
+        k.missed().as_deref(),
+        Some("∩ with ∘ forms no glyph. ∩ forms ⍝ with ○.")
+    );
+    assert_eq!(k.missed(), None, "a hint is said once");
+}
+
+#[test]
+fn a_strike_that_forms_a_glyph_leaves_no_hint() {
+    let mut k = holding("∩");
+    k.overstrike();
+    assert!(k.paste("○"));
+    assert_eq!(k.missed(), None);
+}

@@ -8,8 +8,10 @@
 //! data and is generated into `apl-value`, so that the CLI and the
 //! browser terminal read one table rather than two.
 
+mod hint;
 mod machine;
 mod strike;
 
+pub use hint::near_miss;
 pub use machine::{BACK, BACK_LABEL, BACKSPACE, Strike, compose};
 pub use strike::{read, strike, strikes};

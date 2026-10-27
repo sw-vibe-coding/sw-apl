@@ -28,7 +28,11 @@ it is struck from -- `○*` under `⍟` -- so the row also teaches the
 recipe. It holds only what the mode has: `⌶` in (A) '70, `⍎` and `⍕`
 in (B) '75. The board's **BACKSPACE** key is the overstrike key, as
 on a 2741, and strikes any pair, in or out of the row (see
-Overstrikes, below).
+Overstrikes, below). A pair that forms no glyph rings, and the note
+under the line says what the first character does form in the mode:
+`∩` then `∘` gets "∩ with ∘ forms no glyph. ∩ forms ⍝ with ○.", the
+lamp being cap and circle, not cap and jot. The note goes with the
+next key.
 
 On the ABC tab, the controls row has an underscore key, `A̲`, for the
 underscored letters (see The underscored alphabet, below). It works like

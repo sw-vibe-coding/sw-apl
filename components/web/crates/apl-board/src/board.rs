@@ -44,9 +44,9 @@ impl Board {
             Act::Clear => self.0.clear(),
             Act::Submit if self.0.pending => bell = true,
             Act::Submit => submit = true,
-            Act::Ignore => return state(&self.0, false, false, false),
+            Act::Ignore => return state(&mut self.0, false, false, false),
         }
-        state(&self.0, bell, submit, true)
+        state(&mut self.0, bell, submit, true)
     }
 
     /// Put text in literally, which is what a paste is: Unicode
@@ -54,7 +54,7 @@ impl Board {
     #[must_use]
     pub fn paste(&mut self, text: &str) -> String {
         let bell = !self.0.paste(text);
-        state(&self.0, bell, false, true)
+        state(&mut self.0, bell, false, true)
     }
 
     /// The finished line, and a fresh one after it.

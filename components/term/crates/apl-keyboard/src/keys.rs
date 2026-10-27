@@ -27,6 +27,9 @@ pub struct Keyboard {
     /// none in (A), the 5100's in (B). Set from what the service says
     /// the mode is; a keyboard does not choose it.
     pub also: &'static [(char, char, char)],
+    /// The last strike that formed no glyph, base then key, until
+    /// `missed` says it.
+    pub(crate) miss: Option<(char, char)>,
 }
 
 impl Default for Keyboard {
@@ -40,6 +43,7 @@ impl Default for Keyboard {
             map: serde_json::from_str(include_str!("../keymap.json"))
                 .expect("the built-in keymap is valid JSON"),
             also: &[],
+            miss: None,
         }
     }
 }

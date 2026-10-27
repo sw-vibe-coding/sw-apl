@@ -1,0 +1,8 @@
+number = 1
+slug = "near-miss-hint"
+status = "in-progress"
+description = "When a strike forms no glyph, say why: apl-strike builds a hint from the mode..."
+role = "production"
+context_files = []
+created_at = "2026-10-26T18:19:11"
+commits = []

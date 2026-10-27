@@ -747,8 +747,19 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await tapKey('B');
   check('a pair that forms nothing ends the strike, the base kept',
     !(await at()).pending && !(await at()).lit && await line(page) === 'X̲A', JSON.stringify(await line(page)));
+  check('and says what A does form', (await at()).note === 'A with B forms no glyph. A forms A̲ with _.',
+    JSON.stringify(await at()));
   await tapKey('B');
   check('and typing goes on', await line(page) === 'X̲AB', JSON.stringify(await line(page)));
+  check('the hint goes with the next key', (await at()).note === '', JSON.stringify(await at()));
+
+  // The near miss a reader hit: the lamp tried as cap and jot.
+  await page.keyboard.press('Shift+C');
+  await page.keyboard.press('Control+]');
+  await page.keyboard.press('Shift+J');
+  check('cap struck with jot points at the lamp, cap with circle',
+    (await at()).note === '∩ with ∘ forms no glyph. ∩ forms ⍝ with ○.', JSON.stringify(await at()));
+  await page.keyboard.press('Backspace');
 
   await tapKey('BACKSPACE');
   await tapKey('BACKSPACE');

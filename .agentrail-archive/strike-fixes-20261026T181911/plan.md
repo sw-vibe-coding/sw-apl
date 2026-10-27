@@ -1,0 +1,1 @@
+Owner direction 2026-10-26, later (docs/plan.md, 'a strike that cannot be finished'): no dead-end overstrike on the board or in aplterm, a visible waiting strike, and tooltips on the board's keys.

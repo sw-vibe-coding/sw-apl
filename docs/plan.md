@@ -1126,6 +1126,21 @@ re-opening the help, it should be scrolled to the top." Step
 
 Saga `strike-fixes`, two steps.
 
+## Owner direction (2026-10-26, evening): say the near miss
+
+A reader tried to type the lamp as cap struck with jot, `∩` and `∘`,
+and nothing formed: the lamp is `∩` with `○`, the circle. The strike
+rang and the note under the line went away, which said nothing about
+why. "Add the near-miss hint": when a strike forms no glyph, the note
+under the line says so and lists what the base does form, in the
+mode -- for `∩` and `∘`, that `∩` with `○` makes `⍝`. The hint stays
+until the next key.
+
+The hint text is built in `apl-strike` from the mode's table, so it
+cannot drift from what strikes; `apl-keyboard` remembers the pair
+that missed; the board hands it to the page. Saga `near-miss`, one
+step.
+
 ## Owner direction (2026-09-29): the documents, checked against the code
 
 "Is the README up-to-date? Scan documents for stale info or

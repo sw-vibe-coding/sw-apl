@@ -1,0 +1,1 @@
+When a strike forms no glyph, say why: apl-strike builds a hint from the mode's table listing what the base forms (cap with circle makes lamp); apl-keyboard remembers the missed pair; apl-board puts the hint in its state; the page shows it in the note under the line until the next key. TDD; check-pages section; docs/glyph-entry.md; publish.

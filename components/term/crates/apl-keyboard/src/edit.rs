@@ -47,4 +47,11 @@ impl Keyboard {
             Move::End => self.cells.len(),
         };
     }
+
+    /// What to say about the last strike that formed no glyph -- what
+    /// its base does form -- once, and `None` until another misses.
+    pub fn missed(&mut self) -> Option<String> {
+        let (base, over) = self.miss.take()?;
+        Some(apl_strike::near_miss(base, over, self.also))
+    }
 }
