@@ -14,6 +14,8 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-10-27
 
+- docs(plan): [n?m] line editing, by mode, not yet a saga
+- docs(changes): refresh CHANGES.md to HEAD; complete 001-near-miss-hint, saga done
 - chore: identify deployed pages commit
 - feat(keyboard): a strike that forms no glyph says what its base does form
 
