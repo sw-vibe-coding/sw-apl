@@ -1141,6 +1141,48 @@ cannot drift from what strikes; `apl-keyboard` remembers the pair
 that missed; the board hands it to the page. Saga `near-miss`, one
 step.
 
+## Owner direction (2026-10-27): `[n⎕m]` line editing
+
+"Add `[n⎕m]` line editing to the plan." Prompted by a 2741 user's
+memory of spacing along under a printed line to change it. The del
+editor today has `[n]`, `[⎕]`, `[n⎕]`, `[∆n]` and `[0]`; it has no way
+to change part of a line short of retyping it.
+
+**(A) '70, APL\360's form.** `[n⎕m]` prints line n and leaves the
+carriage under column m. On the line below, the reader types, under
+the characters of the printed line, a `/` for each character to
+delete and a digit or letter for a gap to open before it; spaces
+change nothing. After Return the line is printed again with the
+deletions made and the gaps opened, and the reader types into it;
+Return stores the line. This is from memory and `mode-b.md`'s
+summary: the exact rules come from the APL\360 User's Manual before
+code -- how many blanks each digit and letter opens, where the
+carriage stands after the reprint, what m does at 0 and past the
+line, and what a mark beyond the end means. Each is
+recorded in `docs/del-editor-guide.md` and the source in
+`docs/citations.md`.
+
+**(B) '75.** The 5110 has no slash line (`mode-b.md`, "The del editor
+differs"): `[n⎕]` and `[n⎕m]` put the line in the input area to edit
+in place, m dropped. On the board and at a terminal, that is the line
+offered for editing with the carriage at its start. Whether (B) also
+accepts the slash line is decided in that step, as `mode-b.md` says.
+
+**Where it runs.** The editor is in the session, so the slash line
+works wherever a line can be typed: the CLI, `aplterm`, the service,
+and the browser demo. The (B) form needs a front end that can hand
+the session a prefilled line to edit; the CLI's line editor and the
+browser board can, the plain protocol needs a way to say it.
+
+**Not in this.** The 2741's backspace-then-ATTN correction while a
+line is typed (ATTN drops the line from the carriage on, with a caret
+printed under the cut). Asked about, not planned.
+
+Not yet a saga: planned for when the owner starts it. Likely steps:
+the (A) slash line, TDD in `apl-editor` with a sample and reg-rs;
+the (B) in-place form in the CLI and the board; parity.md's del
+editor row, `del-editor-guide.md` and `session.md` updated with each.
+
 ## Owner direction (2026-09-29): the documents, checked against the code
 
 "Is the README up-to-date? Scan documents for stale info or
