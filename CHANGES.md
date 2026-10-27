@@ -12,8 +12,14 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-10-27
+
+- chore: identify deployed pages commit
+- feat(keyboard): a strike that forms no glyph says what its base does form
+
 ## 2026-10-26
 
+- docs(changes): refresh CHANGES.md to HEAD; complete 002-help-dialog, saga done
 - chore: identify deployed pages commit
 - feat(pages): Help closes by an X or a click outside, and opens at the top
 - saga: complete 001-no-dead-end-strike

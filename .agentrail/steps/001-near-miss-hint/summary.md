@@ -1,0 +1,1 @@
+Near-miss hint: a strike that forms no glyph says what its base forms in the mode (cap with jot points to lamp, cap with circle). apl-strike near_miss from the table; apl-keyboard remembers the miss; apl-board state carries missed; page note and Help; glyph-entry.md; check-pages 144 pass. Pushed 26c5631, 35c68b1.
