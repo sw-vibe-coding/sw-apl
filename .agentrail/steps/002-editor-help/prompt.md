@@ -1,0 +1,1 @@
+A )HELP topic for the del editor and [N⎕M] line editing (data/help.txt, 64 columns, by mode), listed in TOPICS; and a section in the demo's Help dialog. Tests for the help page; check-pages for the dialog section.

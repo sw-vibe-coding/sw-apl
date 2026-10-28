@@ -1,0 +1,8 @@
+number = 3
+slug = "b-in-place"
+status = "pending"
+description = "(B) '75 in-place [n⎕] and [n⎕m] per mode-b.md (5110 manual ch. 6): the li..."
+role = "production"
+context_files = []
+created_at = "2026-10-27T20:58:36"
+commits = []

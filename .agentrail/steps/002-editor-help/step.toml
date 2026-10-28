@@ -1,0 +1,8 @@
+number = 2
+slug = "editor-help"
+status = "pending"
+description = "A )HELP topic for the del editor and [N⎕M] line editing (data/help.txt, 64 ..."
+role = "production"
+context_files = []
+created_at = "2026-10-27T20:58:36"
+commits = []

@@ -1,0 +1,1 @@
+(B) '75 in-place [n⎕] and [n⎕m] per mode-b.md (5110 manual ch. 6): the line offered to edit. Design how a front end gets a prefilled line (CLI, aplterm, service protocol, board).

@@ -1148,19 +1148,39 @@ memory of spacing along under a printed line to change it. The del
 editor today has `[n]`, `[⎕]`, `[n⎕]`, `[∆n]` and `[0]`; it has no way
 to change part of a line short of retyping it.
 
-**(A) '70, APL\360's form.** `[n⎕m]` prints line n and leaves the
-carriage under column m. On the line below, the reader types, under
-the characters of the printed line, a `/` for each character to
-delete and a digit or letter for a gap to open before it; spaces
-change nothing. After Return the line is printed again with the
-deletions made and the gaps opened, and the reader types into it;
-Return stores the line. This is from memory and `mode-b.md`'s
-summary: the exact rules come from the APL\360 User's Manual before
-code -- how many blanks each digit and letter opens, where the
-carriage stands after the reprint, what m does at 0 and past the
-line, and what a mark beyond the end means. Each is
-recorded in `docs/del-editor-guide.md` and the source in
-`docs/citations.md`.
+**(A) '70, APL\360's form**, from the APL\360-OS and APL\360-DOS
+User's Manual (SH20-0906-0, December 1970), "Line editing", p. 3.18,
+and its worked example on p. A.5:
+
+1. `[N⎕M]`, M an integer, displays statement N and stops the carriage
+   under position M.
+2. Under the displayed statement the reader may type a letter, a
+   digit or `/`; any other character is ignored.
+3. On Return the statement is displayed again: a character under `/`
+   is deleted, one under a digit K has K blanks put before it, one
+   under a letter has 5×R, R the letter's place in the alphabet. The
+   carriage then stops at the first blank put in, and the reader goes
+   on as usual. The effect is exactly as if the whole line had been
+   typed; a blank marks line leaves the statement as it was.
+4. The statement number is part of the displayed line: changing it
+   puts the edited statement under the new number and leaves N as it
+   was.
+
+The example (`[1⎕9]` over `Z←(33×Q+(R×5)-6`, marks `/   1 /1`, the
+reader then filling the gaps to `Z←(3×Q)+(T×5)-6`) places the carriage
+under the statement's first `3`: positions are columns from the left
+margin, from 0, and the statement starts at column 6 after `[1]`.
+
+In a line-at-a-time session: the displayed statement is output; the
+marks line is read behind a prompt of M blanks, so the reader's first
+character is at column M; the edited line is output and the next line
+is read behind a prompt of the edited line up to its first gap (all of
+it when there is none). What the reader types there lands on the
+edited line by column, as on paper: a blank keeps what is there, a
+character fills a blank, and a character over a character is an
+overstrike -- the glyph the pair forms, or CHARACTER ERROR. The result is taken as a typed line.
+Improper requests (no such statement, M not an integer) are DEFN
+ERROR, as the manual's list of causes says.
 
 **(B) '75.** The 5110 has no slash line (`mode-b.md`, "The del editor
 differs"): `[n⎕]` and `[n⎕m]` put the line in the input area to edit
@@ -1178,10 +1198,16 @@ browser board can, the plain protocol needs a way to say it.
 line is typed (ATTN drops the line from the carriage on, with a caret
 printed under the cut). Asked about, not planned.
 
-Not yet a saga: planned for when the owner starts it. Likely steps:
-the (A) slash line, TDD in `apl-editor` with a sample and reg-rs;
-the (B) in-place form in the CLI and the board; parity.md's del
-editor row, `del-editor-guide.md` and `session.md` updated with each.
+Then: "make this a saga, continue", and asked whether Help covers the
+del editor: it does not -- no `)HELP` page and no section in the
+demo's Help. Saga `line-edit`:
+
+1. `001-slash-line`: `[N⎕M]` in (A), TDD in `apl-editor`, a sample
+   and its reg-rs transcript, parity.md, `del-editor-guide.md`,
+   `session.md`.
+2. `002-editor-help`: a `)HELP` topic for the del editor and line
+   editing, and a section in the demo's Help.
+3. `003-b-in-place`: (B)'s in-place form, the line offered to edit.
 
 ## Owner direction (2026-09-29): the documents, checked against the code
 
