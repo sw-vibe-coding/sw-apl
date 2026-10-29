@@ -25,7 +25,8 @@ carry the same files, for example
 - **APL\360-OS and APL\360-DOS User's Manual**, SH20-0906-0, IBM,
   December 1970. The Program Product release (5734-XM6, 5736-XM6)
   that (A) models, and where domino comes from: it gives the keying of
-  ⌹ that `data/glyphs.toml` quotes.
+  ⌹ that `data/glyphs.toml` quotes, and the line editing `[n⎕m]`
+  follows ("Line editing", p. 3.18, and its example on p. A.5).
   <https://www.bitsavers.org/pdf/ibm/apl/SH20-0906-0_APL_360-OS_and_APL_360-DOS_Users_Manual_Dec70.pdf>
 - **IBM APL\360-OS (5734-XM6)**, Computer History Museum catalog.
   <https://www.computerhistory.org/collections/catalog/102787847>

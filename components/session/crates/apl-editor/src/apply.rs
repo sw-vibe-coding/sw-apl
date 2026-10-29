@@ -1,10 +1,11 @@
 //! What each input line in definition mode does.
 
-use apl_scan::parse_header;
+use apl_patch::{Patch, Taken};
+use apl_scan::{header_text, parse_header};
 use apl_value::{AplError, AplResult, ErrorKind};
 
-use crate::command::{Edit, advance, parse_edit};
-use crate::definition::{Definition, Step};
+use crate::command::{Edit, advance, format_line, parse_edit};
+use crate::definition::{Definition, Step, WIDTH};
 
 impl Definition {
     /// Take one input line. A line that is nothing but a del closes
@@ -16,11 +17,22 @@ impl Definition {
     /// DEFN ERROR for a malformed command, a line that is not there
     /// to delete, or a header that does not parse.
     pub fn line(&mut self, text: &str) -> AplResult<Step> {
+        if let Some(patch) = self.patch.take() {
+            return match patch.take(text, &[])? {
+                Taken::Again(patch, edited) => {
+                    self.patch = Some(patch);
+                    Ok(Step {
+                        lines: vec![edited],
+                        ..Step::default()
+                    })
+                }
+                Taken::Line(line) => self.line(&line),
+            };
+        }
         let trimmed = text.trim();
         if trimmed == "∇" || trimmed == "⍫" {
-            let closed = Some(trimmed == "⍫");
             return Ok(Step {
-                closed,
+                closed: Some(trimmed == "⍫"),
                 ..Step::default()
             });
         }
@@ -41,17 +53,18 @@ impl Definition {
             }
             Edit::Show(from) => self.show(from),
             Edit::Delete(n) => {
-                self.remove(n)?;
+                let i = self.lines.binary_search_by_key(&n, |(k, _)| *k);
+                self.lines
+                    .remove(i.map_err(|_| AplError::new(ErrorKind::Defn))?);
                 Vec::new()
             }
+            Edit::Patch(n, at) => vec![self.patch(n, at)?],
         };
-        if rest.is_empty() {
-            return Ok(Step {
-                lines,
-                ..Step::default()
-            });
-        }
-        let mut step = self.line(rest)?;
+        let mut step = if rest.is_empty() {
+            Step::default()
+        } else {
+            self.line(rest)?
+        };
         step.lines = [lines, step.lines].concat();
         Ok(step)
     }
@@ -74,15 +87,28 @@ impl Definition {
         Ok(())
     }
 
-    /// Delete line `n`.
+    /// Begin a line edit of statement `n`, the carriage under position
+    /// `at`, and hand back the statement as it is displayed. (A) only:
+    /// the 5110 edits in place and has no slash line, and APL\360's
+    /// mode is the one with no glyphs beyond its own.
     ///
     /// # Errors
-    /// DEFN ERROR when the function has no such line.
-    fn remove(&mut self, n: i64) -> AplResult<()> {
-        let Ok(i) = self.lines.binary_search_by_key(&n, |(k, _)| *k) else {
-            return Err(AplError::new(ErrorKind::Defn));
+    /// DEFN ERROR in (B), or when the function has no statement `n` --
+    /// the manual's "improper request for a line edit".
+    fn patch(&mut self, n: i64, at: usize) -> AplResult<String> {
+        let text = match n {
+            0 => Some(header_text(&self.header)),
+            _ => self
+                .lines
+                .iter()
+                .find(|(k, _)| *k == n)
+                .map(|(_, t)| t.clone()),
         };
-        self.lines.remove(i);
-        Ok(())
+        let text = text
+            .filter(|_| self.glyphs.is_empty())
+            .ok_or_else(|| AplError::new(ErrorKind::Defn))?;
+        let shown = format!("{:<WIDTH$}{text}", format!("[{}]", format_line(n)));
+        self.patch = Some(Patch::open(&shown, at));
+        Ok(shown)
     }
 }

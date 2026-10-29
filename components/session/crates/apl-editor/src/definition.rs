@@ -2,6 +2,7 @@
 //! stands, and how it reads back as a transcript.
 
 use apl_ast::Defn;
+use apl_patch::Patch;
 use apl_scan::header_text;
 
 use crate::command::format_line;
@@ -30,6 +31,10 @@ pub struct Definition {
     /// edited at `[0]`: in (B) it may make a setting local. Empty is
     /// (A).
     pub(crate) glyphs: &'static str,
+    /// A line edit, `[n⎕m]`, part way through: the lines typed while
+    /// it lasts are its marks and its fill, not lines of the function
+    /// -- nor system commands, though one may begin with `)`.
+    pub patch: Option<Patch>,
 }
 
 /// What one input line in definition mode did.
@@ -63,13 +68,18 @@ impl Definition {
             next,
             locking,
             glyphs,
+            patch: None,
         }
     }
 
     /// The prompt for the next line: its number in brackets, padded
-    /// to the width immediate execution indents by.
+    /// to the width immediate execution indents by -- or, during a line
+    /// edit, what its marks or its fill are typed behind.
     #[must_use]
     pub fn prompt(&self) -> String {
+        if let Some(patch) = &self.patch {
+            return patch.prompt();
+        }
         format!("{:<WIDTH$}", format!("[{}]", format_line(self.next)))
     }
 

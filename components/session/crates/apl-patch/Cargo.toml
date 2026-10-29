@@ -1,0 +1,15 @@
+[package]
+name = "apl-patch"
+description = "sw-apl line editing: the [N⎕M] marks under a displayed statement, and the line they leave"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-strike = { path = "../../../lex/crates/apl-strike" }
+apl-value = { path = "../../../value/crates/apl-value" }
+
+[lints]
+workspace = true

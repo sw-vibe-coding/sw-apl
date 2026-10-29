@@ -106,6 +106,7 @@ name = "apl-editor"
 version = "0.1.0"
 dependencies = [
  "apl-ast",
+ "apl-patch",
  "apl-scan",
  "apl-value",
 ]
@@ -239,6 +240,14 @@ dependencies = [
  "apl-ast",
  "apl-lex",
  "apl-scan",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-patch"
+version = "0.1.0"
+dependencies = [
+ "apl-strike",
  "apl-value",
 ]
 
@@ -450,6 +459,13 @@ dependencies = [
 [[package]]
 name = "apl-store"
 version = "0.1.0"
+
+[[package]]
+name = "apl-strike"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+]
 
 [[package]]
 name = "apl-sysfns"

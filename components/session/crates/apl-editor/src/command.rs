@@ -13,6 +13,9 @@ pub enum Edit {
     Show(i64),
     /// `[∆n]`: delete line n.
     Delete(i64),
+    /// `[n⎕m]`: edit line n with marks typed from position m, the
+    /// slash line of APL\360. Line 0 is the header.
+    Patch(i64, usize),
 }
 
 /// The bracketed command a line starts with and whatever followed it.
@@ -21,7 +24,8 @@ pub enum Edit {
 ///
 /// # Errors
 /// DEFN ERROR for an unclosed bracket, or one holding something that
-/// is not an editor command.
+/// is not an editor command -- `[n⎕m]` with an m that is not a
+/// position, or `[⎕n]`.
 pub fn parse_edit(line: &str) -> AplResult<Option<(Edit, &str)>> {
     let Some(body) = line.strip_prefix('[') else {
         return Ok(None);
@@ -30,14 +34,16 @@ pub fn parse_edit(line: &str) -> AplResult<Option<(Edit, &str)>> {
         return Err(AplError::new(ErrorKind::Defn));
     };
     let (inside, rest) = (body[..close].trim(), &body[close + 1..]);
+    let defn = || AplError::new(ErrorKind::Defn);
     let edit = if let Some(n) = inside.strip_prefix('∆') {
         Edit::Delete(line_number(n)?)
-    } else if let Some(n) = inside.strip_suffix('⎕') {
-        Edit::Show(if n.trim().is_empty() {
-            0
-        } else {
-            line_number(n)?
-        })
+    } else if let Some((n, m)) = inside.split_once('⎕') {
+        match (n.trim(), m.trim()) {
+            ("", "") => Edit::Show(0),
+            (n, "") => Edit::Show(line_number(n)?),
+            ("", _) => return Err(defn()),
+            (n, m) => Edit::Patch(line_number(n)?, m.parse().map_err(|_| defn())?),
+        }
     } else {
         Edit::At(line_number(inside)?)
     };

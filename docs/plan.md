@@ -1205,9 +1205,19 @@ demo's Help. Saga `line-edit`:
 1. `001-slash-line`: `[N⎕M]` in (A), TDD in `apl-editor`, a sample
    and its reg-rs transcript, parity.md, `del-editor-guide.md`,
    `session.md`.
-2. `002-editor-help`: a `)HELP` topic for the del editor and line
+2. `002-display-forms`: APL\360's `[N⎕]` and `[⎕N]` (below).
+3. `003-editor-help`: a `)HELP` topic for the del editor and line
    editing, and a section in the demo's Help.
-3. `003-b-in-place`: (B)'s in-place form, the line offered to edit.
+4. `004-b-in-place`: (B)'s in-place form, the line offered to edit.
+
+Found while reading the manual for step 1: APL\360's display commands
+are not sw-apl's. The manual (p. 3.18, "Display"): `[N⎕]` displays
+statement N alone and awaits its replacement; `[⎕N]` displays from N
+on and awaits replacement of the last; `[⎕]` the whole function.
+sw-apl's `[n⎕]` displays from n on and leaves the prompt. Step
+`002-display-forms` corrects (A), with the manual as the reason for
+any transcript it moves, and checks the 5110 manual before touching
+(B).
 
 ## Owner direction (2026-09-29): the documents, checked against the code
 

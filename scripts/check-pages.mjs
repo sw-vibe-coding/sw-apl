@@ -803,6 +803,20 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await page.context().close();
 }
 
+// 9f. Line editing, [N⎕M], in (A): the marks line keeps its leading
+//     blanks, since a mark's position is the whole point of it.
+{
+  const page = await visitIn('A');
+  for (const line of ['∇F', 'X←1', '[1⎕6]', ' 2', '+', '∇']) await send(page, line);
+  await send(page, '∇F[⎕]∇');
+  const said = await paper(page);
+  check('[1⎕6] with a mark under ← opens two blanks before it',
+    said.includes('[1]   X  ←1\n'), JSON.stringify(said.slice(-160)));
+  check('and the fill lands in them', said.trimEnd().endsWith('[1]   X+ ←1\n      ∇'),
+    JSON.stringify(said.slice(-80)));
+  await page.context().close();
+}
+
 // 10. ATTN in the browser. A loop that runs forever must stop, by
 //     Escape, by Ctrl-[, and by the board's key -- the last being the
 //     only way on a touch screen, which has no Escape at all. Each

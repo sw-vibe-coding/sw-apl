@@ -1,6 +1,7 @@
 [workspace]
 members = [
     "crates/apl-editor",
+    "crates/apl-patch",
     "crates/apl-library",
     "crates/apl-copy",
     "crates/apl-inquiry",

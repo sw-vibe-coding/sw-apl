@@ -1,4 +1,4 @@
-number = 3
+number = 4
 slug = "b-in-place"
 status = "pending"
 description = "(B) '75 in-place [n⎕] and [n⎕m] per mode-b.md (5110 manual ch. 6): the li..."

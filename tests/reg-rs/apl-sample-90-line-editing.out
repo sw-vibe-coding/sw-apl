@@ -1,0 +1,54 @@
+      ⍝ Line editing, [N⎕M]: change part of a statement without retyping
+      ⍝ it. The editor displays statement N and the marks line starts at
+      ⍝ position M, counted from the left margin. Under the statement: /
+      ⍝ deletes the character above, a digit K puts K blanks before it, a
+      ⍝ letter 5×R blanks (A 5, B 10, ...). The statement is displayed
+      ⍝ again, and the next line is typed from its first blank: a blank
+      ⍝ keeps what is above, a character fills a blank.
+      ⍝ The manual's example: 33 becomes 3, Q gets its parenthesis, R
+      ⍝ becomes T.
+      ∇Z←ABC X
+[1]   Z←(33×Q+(R×5)-6
+[2]   [1⎕9]
+[1]   Z←(33×Q+(R×5)-6
+         /   1 /1
+[1]   Z←(3×Q +( ×5)-6
+[1]   Z←(3×Q)  T
+[2]   ∇
+      ∇ABC[⎕]∇
+      ∇Z←ABC X
+[1]   Z←(3×Q)+(T×5)-6
+      ∇
+      ⍝ Statement 0 is the header: open two blanks before F, write R←.
+      ∇F
+[1]   X←1
+[2]   [0⎕6]
+[0]   F
+      2
+[0]     F
+[0]   R←
+[1]   ∇
+      ∇F[⎕]∇
+      ∇R←F
+[1]   X←1
+      ∇
+      ⍝ Changing the number moves the statement and leaves the old one:
+      ⍝ delete the 1 of [1], open a blank before ], and type 2.
+      ∇F
+[2]   [1⎕1]
+[1]   X←1
+ /1
+[ ]   X←1
+[2
+[3]   ∇
+      ∇F[⎕]∇
+      ∇R←F
+[1]   X←1
+[2]   X←1
+      ∇
+      ⍝ A request for a statement that is not there is a DEFN ERROR.
+      ∇F[5⎕3]
+DEFN ERROR
+      [5⎕3]
+      ^
+[3]   ∇

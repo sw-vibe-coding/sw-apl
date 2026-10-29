@@ -115,6 +115,57 @@ typing anything you did not plan.
 [1]   
 ```
 
+## Changing part of a line
+
+In (A) '70, `[n⎕m]` edits line n in place of retyping it, the way
+APL\360 did on paper. The line is displayed, and the next line is
+typed from position m, counted from the left margin -- the `[n]` takes
+columns 0 to 5, so the statement itself starts at 6. Under the
+characters of the line you type marks:
+
+| Mark | What it does to the character above |
+|---|---|
+| `/` | Deletes it |
+| a digit K | Puts K blanks before it |
+| a letter | Puts 5 blanks before it for A, 10 for B, and so on to 130 for Z |
+| anything else, or a blank | Nothing |
+
+Then the line is displayed again with the marks applied, and the next
+line is typed behind the line up to its first new blank. What you type
+lands on the line position by position: a blank keeps what is there,
+a character fills a blank, and a character over a character strikes
+it, as an overstrike would -- or is a CHARACTER ERROR when the two
+form no glyph. Return enters the whole line.
+
+The example from the APL\360 manual changes `(33×Q+(R×5)-6` to
+`(3×Q)+(T×5)-6`:
+
+```
+[2]   [1⎕9]
+[1]   Z←(33×Q+(R×5)-6
+         /   1 /1
+[1]   Z←(3×Q +( ×5)-6
+[1]   Z←(3×Q)  T
+[2]   
+```
+
+The `/` under the first 3 deletes it, the `1` under `+` opens a
+blank for `)`, the `/` under R deletes it and the `1` under `×`
+opens a blank for T. In the fill, the two blanks step over `+(`.
+
+The result is taken exactly as if the whole line had been typed,
+number and all, so the prompt moves on to `[2]`, a blank marks line
+and a blank fill leave the line as it was, and changing the number
+moves the line: delete the 1 of `[1]` and open a blank before the `]`
+with `/1` under them, type 3, and line 3 becomes a copy of line 1,
+which is left as it was. `[0⎕m]` edits the header.
+
+While an edit lasts, its two lines are positions, not commands: a
+fill may begin with `)`, as the example's does. Asking for a line
+that is not there, or giving an m that is not a whole number, is a
+DEFN ERROR. (B) '75 does not have this form, because the 5110 edits a
+line on its screen; there `[n⎕m]` is a DEFN ERROR.
+
 ## Inserting a line
 
 Line numbers may be fractional. To put a line between 1 and 2,
@@ -264,6 +315,7 @@ typed here goes into the function.
 | `[n] TEXT` | Write TEXT at line n |
 | `[⎕]` | Display the whole function |
 | `[n⎕]` | Display from line n on |
+| `[n⎕m]` | (A) Edit line n with marks typed from position m |
 | `[∆n]` | Delete line n |
 | `[0]` | Move to the header |
 | `[0] HEADER` | Replace the header |

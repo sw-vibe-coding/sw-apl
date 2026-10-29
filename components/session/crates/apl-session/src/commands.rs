@@ -83,6 +83,11 @@ pub fn definition_line(session: &mut Session, line: &str) -> Reply {
 /// `None` when the line is a statement, which the session evaluates.
 pub fn dispatch(session: &mut Session, line: &str) -> Option<Reply> {
     let trimmed = line.trim();
+    // A line edit's marks and fill are positions on the line, and the
+    // manual's own fill begins with `)`: no line of one is a command.
+    if session.defining.as_ref().is_some_and(|d| d.patch.is_some()) {
+        return Some(definition_line(session, line));
+    }
     if let Some(command) = trimmed.strip_prefix(')') {
         return Some(run_command(session, command));
     }
