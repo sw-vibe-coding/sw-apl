@@ -1,8 +1,9 @@
 number = 1
 slug = "slash-line"
-status = "in-progress"
+status = "completed"
 description = "[N⎕M] line editing in (A), per docs/plan.md and SH20-0906-0 p. 3.18: displa..."
 role = "production"
 context_files = []
 created_at = "2026-10-27T20:58:36"
-commits = []
+completed_at = "2026-10-29T12:13:49"
+commits = ["427d92882464b94777b652bcb9892eb9e5d509ef"]

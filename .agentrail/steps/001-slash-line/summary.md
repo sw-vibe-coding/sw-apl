@@ -1,0 +1,1 @@
+[N⎕M] line editing in (A) per SH20-0906-0 p. 3.18: new apl-patch crate (marks, fill, Patch state), editor Edit::Patch and routing, session routes patch lines before commands. Sample 90 + reg-rs, check-pages 9f (146 pass), docs. Inserted 002-display-forms for the manual's [N⎕]/[⎕N] which differ from sw-apl. Pushed d5cc2ac.

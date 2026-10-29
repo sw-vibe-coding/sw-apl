@@ -12,8 +12,15 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-10-29
+
+- chore: identify deployed pages commit
+- feat(editor): [N?M] line editing in (A), APL\360's slash line
+
 ## 2026-10-27
 
+- saga: begin line-edit; the manual's [N?M] rules in the plan
+- docs(changes): refresh CHANGES.md to HEAD
 - docs(plan): [n?m] line editing, by mode, not yet a saga
 - docs(changes): refresh CHANGES.md to HEAD; complete 001-near-miss-hint, saga done
 - chore: identify deployed pages commit
