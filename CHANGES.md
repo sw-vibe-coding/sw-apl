@@ -15,6 +15,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 ## 2026-10-29
 
 - chore: identify deployed pages commit
+- fix(editor): [N?] and [?N] display as the manuals say
+- docs(changes): refresh CHANGES.md to HEAD; complete 001-slash-line
+- chore: identify deployed pages commit
 - feat(editor): [N?M] line editing in (A), APL\360's slash line
 
 ## 2026-10-27

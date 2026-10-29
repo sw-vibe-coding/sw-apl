@@ -1,8 +1,9 @@
 number = 2
 slug = "display-forms"
-status = "in-progress"
+status = "completed"
 description = '''Correct the (A) display commands to APL\360's (SH20-0906-0 p. 3.18, Display):...'''
 role = "production"
 context_files = []
 created_at = "2026-10-29T08:46:53"
-commits = []
+completed_at = "2026-10-29T16:14:11"
+commits = ["88b9d39197b6c068002393d88f4b60a77bc4b035"]

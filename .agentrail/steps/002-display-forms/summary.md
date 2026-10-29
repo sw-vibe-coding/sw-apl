@@ -1,0 +1,1 @@
+Display forms per SH20-0906-0 p. 3.18 and the 5110 manual: [n⎕] line n alone then offers [n]; [⎕n] from n on then offers the last; [0⎕] header; DEFN for nothing shown. Sample 55 rebased with the manual as reason. Pushed c71f0c8.
