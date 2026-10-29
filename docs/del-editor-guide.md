@@ -86,8 +86,20 @@ would type it:
 [3]   
 ```
 
-`[2⎕]` displays from line 2 onward, without the header. Displaying
-does not move the prompt, so you can look and carry on typing.
+That display does not move the prompt, so you can look and carry on
+typing. The other two do, because each offers a line for replacing:
+
+```
+[3]   [1⎕]
+[1]   W←H+1
+[1]   
+```
+
+`[n⎕]` displays line n alone and the prompt offers `[n]`: type the
+new line, or a bracketed command to go elsewhere. `[⎕n]` displays
+from line n onward and the prompt offers the last line it showed.
+`[0⎕]` displays the header as line 0. A display of nothing -- a line
+that is not there -- is a DEFN ERROR.
 
 From immediate execution, `∇AREA[⎕]∇` opens, displays, and closes
 in one line. That is the usual way to read a function without
@@ -314,7 +326,8 @@ typed here goes into the function.
 | `[n]` | Move to line n |
 | `[n] TEXT` | Write TEXT at line n |
 | `[⎕]` | Display the whole function |
-| `[n⎕]` | Display from line n on |
+| `[⎕n]` | Display from line n on, then offer the last |
+| `[n⎕]` | Display line n, then offer it |
 | `[n⎕m]` | (A) Edit line n with marks typed from position m |
 | `[∆n]` | Delete line n |
 | `[0]` | Move to the header |

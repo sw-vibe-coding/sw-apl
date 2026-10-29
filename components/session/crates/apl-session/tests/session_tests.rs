@@ -571,9 +571,10 @@ fn a_bracketed_quad_displays_the_function() {
     // Showing it left the session in immediate execution, unchanged.
     assert_eq!(s.prompt(), "      ");
     assert_eq!(out(&mut s, "F 1"), vec!["2"]);
-    // [n⎕] shows from line n, without the header or the closing del.
+    // [n⎕] shows line n alone, and offers it for replacing.
     out(&mut s, "\u{2207}F");
     assert_eq!(out(&mut s, "[2\u{2395}]"), vec!["[2]   R\u{2190}T+1"]);
+    assert_eq!(s.prompt(), "[2]   ");
     out(&mut s, "\u{2207}");
 }
 

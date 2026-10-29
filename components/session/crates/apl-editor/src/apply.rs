@@ -51,7 +51,7 @@ impl Definition {
                 self.next = n;
                 Vec::new()
             }
-            Edit::Show(from) => self.show(from),
+            Edit::Show(from, only) => self.show(from, only)?,
             Edit::Delete(n) => {
                 let i = self.lines.binary_search_by_key(&n, |(k, _)| *k);
                 self.lines

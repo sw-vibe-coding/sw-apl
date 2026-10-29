@@ -8,9 +8,10 @@ use apl_value::{AplError, AplResult, ErrorKind};
 pub enum Edit {
     /// `[n]`: the next line typed becomes line n. Line 0 is the header.
     At(i64),
-    /// `[n⎕]`: display from line n. `[⎕]` is line 0, the whole
-    /// function, header and closing del included.
-    Show(i64),
+    /// A display. `[⎕]` is `Show(0, false)`, the whole function, its
+    /// dels included; `[⎕n]` is `Show(n, false)`, from line n on; and
+    /// `[n⎕]` is `Show(n, true)`, line n alone.
+    Show(i64, bool),
     /// `[∆n]`: delete line n.
     Delete(i64),
     /// `[n⎕m]`: edit line n with marks typed from position m, the
@@ -25,7 +26,7 @@ pub enum Edit {
 /// # Errors
 /// DEFN ERROR for an unclosed bracket, or one holding something that
 /// is not an editor command -- `[n⎕m]` with an m that is not a
-/// position, or `[⎕n]`.
+/// position.
 pub fn parse_edit(line: &str) -> AplResult<Option<(Edit, &str)>> {
     let Some(body) = line.strip_prefix('[') else {
         return Ok(None);
@@ -39,9 +40,9 @@ pub fn parse_edit(line: &str) -> AplResult<Option<(Edit, &str)>> {
         Edit::Delete(line_number(n)?)
     } else if let Some((n, m)) = inside.split_once('⎕') {
         match (n.trim(), m.trim()) {
-            ("", "") => Edit::Show(0),
-            (n, "") => Edit::Show(line_number(n)?),
-            ("", _) => return Err(defn()),
+            ("", "") => Edit::Show(0, false),
+            (n, "") => Edit::Show(line_number(n)?, true),
+            ("", n) => Edit::Show(line_number(n)?, false),
             (n, m) => Edit::Patch(line_number(n)?, m.parse().map_err(|_| defn())?),
         }
     } else {

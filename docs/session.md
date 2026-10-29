@@ -410,7 +410,8 @@ that follow are the body, typed behind the number each will hold.
 | `[n]` | The next line typed becomes line n |
 | `[n] TEXT` | Put TEXT at line n |
 | `[⎕]` | Display the whole function, header and dels included |
-| `[n⎕]` | Display from line n on, without the header |
+| `[⎕n]` | Display from line n on, and offer the last line shown |
+| `[n⎕]` | Display line n alone, and offer it for replacing |
 | `[n⎕m]` | (A) Edit line n: marks typed from position m, then a fill. See `del-editor-guide.md` |
 | `[∆n]` | Delete line n. DEFN ERROR if there is no such line |
 | `[0]` | The next line typed becomes the header |
@@ -425,7 +426,7 @@ steps at the grain the number itself uses, so `[1.5]` is followed
 by `[1.6]`. Closing the definition renumbers every line from 1,
 which is why a branch should name a label rather than a number.
 
-A display leaves the prompt where it was, so `∇NAME[⎕]∇` shows a
+`[⎕]` leaves the prompt where it was, so `∇NAME[⎕]∇` shows a
 function and returns to immediate execution without changing it.
 
 `[0]` may rename the function as well as change its arguments and

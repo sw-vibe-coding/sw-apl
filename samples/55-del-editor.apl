@@ -19,10 +19,12 @@ AREA 3
 ⍝ The close renumbered them, so 1.5 is line 2 now.
 ∇AREA[⎕]∇
 ⍝ Replace a line by typing its number, and delete one with ∆.
-⍝ [n⎕] shows from line n onward, without the header.
+⍝ [n⎕] shows line n alone and offers it for replacing; [⎕n] shows
+⍝ from line n onward and offers the last line shown.
 ∇AREA
 [2] W←H+10
 [2⎕]
+[⎕2]
 [∆3]
 R←H×W
 [⎕]

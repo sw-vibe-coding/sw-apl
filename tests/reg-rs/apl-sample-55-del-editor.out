@@ -31,10 +31,13 @@
 [3]   R←H×W
       ∇
       ⍝ Replace a line by typing its number, and delete one with ∆.
-      ⍝ [n⎕] shows from line n onward, without the header.
+      ⍝ [n⎕] shows line n alone and offers it for replacing; [⎕n] shows
+      ⍝ from line n onward and offers the last line shown.
       ∇AREA
 [4]   [2] W←H+10
 [3]   [2⎕]
+[2]   W←H+10
+[2]   [⎕2]
 [2]   W←H+10
 [3]   R←H×W
 [3]   [∆3]
@@ -93,6 +96,6 @@ DEFN ERROR
       ∇R←SIDES H
       ^
       )OFF
-20.05.40 09/17/26
+15.11.11 10/29/26
 CONNECTED 0.00.00
 CPU TIME 0.00.00

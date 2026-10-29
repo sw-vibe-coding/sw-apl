@@ -4,6 +4,7 @@
 use apl_ast::Defn;
 use apl_patch::Patch;
 use apl_scan::header_text;
+use apl_value::{AplError, AplResult, ErrorKind};
 
 use crate::command::format_line;
 
@@ -83,21 +84,31 @@ impl Definition {
         format!("{:<WIDTH$}", format!("[{}]", format_line(self.next)))
     }
 
-    /// The function from line `from` as a transcript. Line 0 is the
-    /// header, so `[⎕]` frames the whole function in its dels.
-    pub(crate) fn show(&self, from: i64) -> Vec<String> {
-        let mut out = Vec::new();
-        if from == 0 {
-            out.push(format!("{:WIDTH$}∇{}", "", header_text(&self.header)));
+    /// A display, as a transcript. `[⎕]` -- line 0, not `only` --
+    /// frames the whole function in its dels and leaves the prompt.
+    /// Otherwise the lines from `from` on, or line `from` alone when
+    /// `only`, line 0 being the header; and the prompt offers the last
+    /// one shown for replacement, as the manual says.
+    ///
+    /// # Errors
+    /// DEFN ERROR when there is nothing to show.
+    pub(crate) fn show(&mut self, from: i64, only: bool) -> AplResult<Vec<String>> {
+        let numbered =
+            |n: i64, text: &str| format!("{:<WIDTH$}{text}", format!("[{}]", format_line(n)));
+        if from == 0 && !only {
+            let header = format!("{:WIDTH$}∇{}", "", header_text(&self.header));
+            let body = self.lines.iter().map(|(n, text)| numbered(*n, text));
+            let close = format!("{:WIDTH$}∇", "");
+            return Ok(std::iter::once(header).chain(body).chain([close]).collect());
         }
-        for (n, text) in self.lines.iter().filter(|(n, _)| *n >= from) {
-            let number = format!("[{}]", format_line(*n));
-            out.push(format!("{number:<WIDTH$}{text}"));
-        }
-        if from == 0 {
-            out.push(format!("{:WIDTH$}∇", ""));
-        }
-        out
+        let header = (0, header_text(&self.header));
+        let shown: Vec<(i64, String)> = std::iter::once(header)
+            .chain(self.lines.iter().cloned())
+            .filter(|(n, _)| if only { *n == from } else { *n >= from })
+            .collect();
+        let (last, _) = shown.last().ok_or_else(|| AplError::new(ErrorKind::Defn))?;
+        self.next = *last;
+        Ok(shown.iter().map(|(n, text)| numbered(*n, text)).collect())
     }
 
     /// Finish: renumber the lines from 1 and hand back the function,

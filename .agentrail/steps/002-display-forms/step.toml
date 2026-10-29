@@ -1,6 +1,6 @@
 number = 2
 slug = "display-forms"
-status = "pending"
+status = "in-progress"
 description = '''Correct the (A) display commands to APL\360's (SH20-0906-0 p. 3.18, Display):...'''
 role = "production"
 context_files = []
