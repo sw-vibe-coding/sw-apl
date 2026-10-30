@@ -85,11 +85,13 @@ fn every_page_fits_the_75_screen() {
         let mut s = in_mode(mode);
         let mut topics = out(&mut s, ")HELP TOPICS");
         topics.extend(out(&mut s, ")HELP"));
-        for name in
-            commands(mode)
-                .into_iter()
-                .chain(["TOPICS", "MODES", "EXTENSIONS", "RESTRICTIONS"])
-        {
+        for name in commands(mode).into_iter().chain([
+            "TOPICS",
+            "MODES",
+            "EXTENSIONS",
+            "RESTRICTIONS",
+            "EDITOR",
+        ]) {
             topics.extend(out(&mut s, &format!(")HELP {name}")));
         }
         for line in topics {
@@ -189,4 +191,27 @@ fn a_configured_library_is_read_only_and_others_are_not_there() {
         out(&mut s, ")LOAD 3 GREET"),
         vec!["IMPROPER LIBRARY REFERENCE"]
     );
+}
+
+#[test]
+fn the_editor_has_a_page_in_each_mode() {
+    for mode in [Mode::A, Mode::B] {
+        let mut s = in_mode(mode);
+        assert!(
+            out(&mut s, ")HELP TOPICS")
+                .iter()
+                .any(|l| l.starts_with("EDITOR")),
+            "{mode:?}: TOPICS lists EDITOR"
+        );
+        let page = out(&mut s, ")HELP EDITOR").join("\n");
+        for form in ["[⎕]", "[⎕N]", "[N⎕]", "[∆N]", "[0]"] {
+            assert!(page.contains(form), "{mode:?}: no {form}\n{page}");
+        }
+        // Line editing is APL\360's; the 5110 edits on its screen.
+        assert_eq!(
+            page.contains("CHANGE PART OF LINE N"),
+            mode == Mode::A,
+            "{mode:?}\n{page}"
+        );
+    }
 }

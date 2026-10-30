@@ -401,6 +401,29 @@
     <code>)HELP LOAD</code> (or any command, or <code>)HELP TOPICS</code>)
     shows a page. <code>)DIALECT</code> says which mode you are in.
   </p>
+  <h3>Defining and changing functions</h3>
+  <p>
+    <code>∇Z←S W;V</code> opens a new function, and the prompt
+    <code>[1]</code> numbers the line you type next; <code>∇</code>
+    closes it. <code>∇S</code> reopens one. While it is open:
+  </p>
+  <ul>
+    <li><code>[3]</code> goes to line 3, <code>[3] text</code> replaces
+      it, <code>[1.5]</code> puts a line between 1 and 2, and
+      <code>[∆3]</code> deletes line 3.</li>
+    <li><code>[⎕]</code> shows the whole function, <code>[3⎕]</code>
+      line 3 alone, and <code>[⎕3]</code> from line 3 on.
+      <code>∇S[⎕]∇</code> shows S without leaving the prompt.</li>
+    <li>In (A) '70, <code>[3⎕10]</code> changes part of line 3: it is
+      shown, and under it, from column 10, <code>/</code> deletes the
+      character above and a digit opens that many blanks before it.
+      The line is shown again; type into the blanks and press Return.</li>
+  </ul>
+  <p>
+    A function name already in use is a DEFN ERROR:
+    <code>)ERASE</code> it, or reopen it with <code>∇NAME</code>.
+    <code>)HELP EDITOR</code> has the whole list.
+  </p>
   <h3>Two modes</h3>
   <p>
     The tabs at the top are the modes, and the page opens in

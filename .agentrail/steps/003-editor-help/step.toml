@@ -1,6 +1,6 @@
 number = 3
 slug = "editor-help"
-status = "pending"
+status = "in-progress"
 description = "A )HELP topic for the del editor and [N⎕M] line editing (data/help.txt, 64 ..."
 role = "production"
 context_files = []

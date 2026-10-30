@@ -799,6 +799,9 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await page.click('#show-help');
   const top = await page.evaluate(() => document.getElementById('help').scrollTop);
   check('Help opens scrolled to the top', top === 0, String(top));
+  const editor = await page.evaluate(() => [...document.querySelectorAll('#help h3')]
+    .some((h) => h.textContent === 'Defining and changing functions'));
+  check('Help has a section on the del editor', editor, 'no section');
   await page.mouse.click(5, 5);
   await page.context().close();
 }

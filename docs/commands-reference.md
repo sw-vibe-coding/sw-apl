@@ -349,7 +349,7 @@ SW-APL'S OWN )DIALECT )LIBS )HELP
 
 `)HELP NAME` shows a page: a command, with or without its
 parenthesis (`)HELP LOAD`, `)HELP )LOAD`), or a topic -- `TOPICS`,
-`MODES`, `EXTENSIONS`, `RESTRICTIONS`. A command the mode has not got
+`MODES`, `EXTENSIONS`, `RESTRICTIONS`, `EDITOR` (the del editor, with line editing in (A)). A command the mode has not got
 says so (`(B) '75 HAS NO )ORIGIN.`), and a name with no page says to
 ask `)HELP TOPICS`. The pages are `data/help.txt` in the repository,
 and every line fits the 64 columns of the (B) screen.
