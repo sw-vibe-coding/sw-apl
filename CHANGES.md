@@ -12,8 +12,14 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-10-30
+
+- chore: identify deployed pages commit
+- docs(help): )HELP EDITOR in each mode, and the demo's Help covers the del editor
+
 ## 2026-10-29
 
+- docs(changes): refresh CHANGES.md to HEAD; complete 002-display-forms
 - chore: identify deployed pages commit
 - fix(editor): [N?] and [?N] display as the manuals say
 - docs(changes): refresh CHANGES.md to HEAD; complete 001-slash-line

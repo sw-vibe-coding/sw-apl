@@ -1,8 +1,9 @@
 number = 3
 slug = "editor-help"
-status = "in-progress"
+status = "completed"
 description = "A )HELP topic for the del editor and [N⎕M] line editing (data/help.txt, 64 ..."
 role = "production"
 context_files = []
 created_at = "2026-10-27T20:58:36"
-commits = []
+completed_at = "2026-10-30T15:44:12"
+commits = ["8a3cd24712c20624a4b8ee5f0e983c6e8e638b8b"]
