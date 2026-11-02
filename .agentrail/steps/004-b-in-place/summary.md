@@ -1,0 +1,1 @@
+(B) in-place editing: [n⎕] and [n⎕m] offer the line in the input (5110 manual); Patch::Offer, Session::offer, Frame.offer, all front ends prefill (CLI rustyline initial, aplterm keyboard, board, server page). Tests at every layer, check-pages 149, sample 91. CLI interactive path not driven in a real terminal. Pushed 15abdb0.

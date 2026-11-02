@@ -12,8 +12,14 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-11-01
+
+- chore: identify deployed pages commit
+- feat(editor): (B) [n?] puts the line in the input to edit in place
+
 ## 2026-10-30
 
+- docs(changes): refresh CHANGES.md to HEAD; complete 003-editor-help
 - chore: identify deployed pages commit
 - docs(help): )HELP EDITOR in each mode, and the demo's Help covers the del editor
 

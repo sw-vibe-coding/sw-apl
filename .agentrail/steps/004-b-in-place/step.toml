@@ -1,8 +1,9 @@
 number = 4
 slug = "b-in-place"
-status = "in-progress"
+status = "completed"
 description = "(B) '75 in-place [n⎕] and [n⎕m] per mode-b.md (5110 manual ch. 6): the li..."
 role = "production"
 context_files = []
 created_at = "2026-10-27T20:58:36"
-commits = []
+completed_at = "2026-11-01T18:20:06"
+commits = ["bc632aa899a1af2a87808344ee9b9a6e7210b6b7"]
