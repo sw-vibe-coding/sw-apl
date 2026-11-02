@@ -49,10 +49,16 @@ impl Held {
     ///
     /// # Errors
     /// A transport failure, or such a line.
-    pub fn ask(&mut self, lines: Vec<String>, prompt: String) -> io::Result<Option<String>> {
+    pub fn ask(
+        &mut self,
+        lines: Vec<String>,
+        prompt: String,
+        offer: String,
+    ) -> io::Result<Option<String>> {
         let frame = Frame {
             lines,
             prompt: Some(prompt),
+            offer,
             mode: self.mode.to_string(),
             ..Frame::default()
         };

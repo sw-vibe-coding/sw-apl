@@ -1,4 +1,5 @@
-//! A line edit in progress: waiting for its marks, then for its fill.
+//! A line edit in progress: waiting for its marks, then for its fill;
+//! or, in the 5110's form, for the line typed over in place.
 
 use apl_value::AplResult;
 
@@ -14,6 +15,9 @@ pub enum Patch {
     /// The statement is displayed again with its marks applied; what
     /// is typed next lands on it from position `from`.
     Fill { edited: String, from: usize },
+    /// The 5110's form: the line is in the input area, typed over in
+    /// place, and what comes back is the line.
+    Offer { line: String },
 }
 
 /// What one typed line did to a line edit.
@@ -45,6 +49,16 @@ impl Patch {
         match self {
             Patch::Marks { at, .. } => " ".repeat(*at),
             Patch::Fill { edited, from } => cells(edited)[..*from].concat(),
+            Patch::Offer { .. } => String::new(),
+        }
+    }
+
+    /// The line the typing starts with, when the edit is one in place.
+    #[must_use]
+    pub fn offered(&self) -> Option<&str> {
+        match self {
+            Patch::Offer { line } => Some(line),
+            _ => None,
         }
     }
 
@@ -65,6 +79,7 @@ impl Patch {
                 Ok(Taken::Again(next, edited))
             }
             Patch::Fill { edited, from } => fill(&edited, from, typed, also).map(Taken::Line),
+            Patch::Offer { .. } => Ok(Taken::Line(typed.to_string())),
         }
     }
 }

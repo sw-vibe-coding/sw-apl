@@ -36,7 +36,7 @@ impl Console for Reader {
         let at = open.unwrap_or(INDENT).to_string();
         Rc::clone(&self.0)
             .borrow_mut()
-            .ask(lines, at)
+            .ask(lines, at, String::new())
             .ok()
             .flatten()
     }

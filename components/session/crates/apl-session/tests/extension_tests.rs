@@ -207,7 +207,7 @@ fn the_editor_has_a_page_in_each_mode() {
         for form in ["[⎕]", "[⎕N]", "[N⎕]", "[∆N]", "[0]"] {
             assert!(page.contains(form), "{mode:?}: no {form}\n{page}");
         }
-        // Line editing is APL\360's; the 5110 edits on its screen.
+        // The slash line is APL\360's; the 5110 edits in place.
         assert_eq!(
             page.contains("CHANGE PART OF LINE N"),
             mode == Mode::A,

@@ -411,8 +411,8 @@ that follow are the body, typed behind the number each will hold.
 | `[n] TEXT` | Put TEXT at line n |
 | `[⎕]` | Display the whole function, header and dels included |
 | `[⎕n]` | Display from line n on, and offer the last line shown |
-| `[n⎕]` | Display line n alone, and offer it for replacing |
-| `[n⎕m]` | (A) Edit line n: marks typed from position m, then a fill. See `del-editor-guide.md` |
+| `[n⎕]` | (A) Display line n alone, and offer it for replacing; (B) put it in the input line to edit in place |
+| `[n⎕m]` | (A) Edit line n: marks typed from position m, then a fill; (B) as `[n⎕]`. See `del-editor-guide.md` |
 | `[∆n]` | Delete line n. DEFN ERROR if there is no such line |
 | `[0]` | The next line typed becomes the header |
 | `[0] HEADER` | Replace the header now |

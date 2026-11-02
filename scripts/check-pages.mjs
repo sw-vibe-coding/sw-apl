@@ -820,6 +820,25 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await page.context().close();
 }
 
+// 9g. In (B), [n⎕] puts the statement in the line to be typed over
+//     in place, as the 5110 does; Return enters it as it then stands.
+{
+  const page = await visit();
+  for (const line of ['∇F', 'X←1', '[1⎕]']) await send(page, line);
+  const typed = await page.evaluate(() =>
+    document.getElementById('before').textContent + document.getElementById('after').textContent);
+  check('(B) [1⎕] offers line 1 to type over', typed === '[1]   X←1', JSON.stringify(typed));
+  await page.keyboard.press('Backspace');
+  await page.keyboard.press('2');
+  await page.keyboard.press('Enter');
+  await page.waitForTimeout(900);
+  await send(page, '∇');
+  await send(page, '∇F[⎕]∇');
+  check('and Return enters it as edited', (await paper(page)).includes('[1]   X←2\n      ∇'),
+    JSON.stringify((await paper(page)).slice(-120)));
+  await page.context().close();
+}
+
 // 10. ATTN in the browser. A loop that runs forever must stop, by
 //     Escape, by Ctrl-[, and by the board's key -- the last being the
 //     only way on a touch screen, which has no Escape at all. Each

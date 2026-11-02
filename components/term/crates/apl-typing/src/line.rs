@@ -35,7 +35,9 @@ impl Drop for Raw {
     }
 }
 
-/// Read one line at the keyboard, prompted with `prompt`.
+/// Read one line at the keyboard, prompted with `prompt`. The line
+/// starts with what the keyboard holds: nothing, or a statement the
+/// service put in the input to be typed over in place.
 ///
 /// `None` is Ctrl-D on an empty line: the reader hanging up, which
 /// drops the link and, at the service's end, releases the session.
@@ -48,7 +50,6 @@ pub fn read_line(
     history: &mut Vec<String>,
 ) -> io::Result<Option<String>> {
     let _raw = Raw::enter()?;
-    keyboard.clear();
     let mut state = actions::State {
         history_at: history.len(),
         draft: String::new(),

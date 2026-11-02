@@ -32,6 +32,7 @@ impl Link for Typist {
             off: frame.off,
             mode: frame.mode.clone(),
             more: frame.more,
+            offer: frame.offer.clone(),
         });
         Ok(())
     }
@@ -153,4 +154,22 @@ fn what_a_function_prints_goes_out_while_it_runs() {
     assert_eq!(during[0].lines, ["1"]);
     assert_eq!(during[0].prompt, None, "no prompt: it is still running");
     assert_eq!(text(&sent), ["1", "2"], "and the result after it");
+}
+
+#[test]
+fn b_offers_a_statement_to_type_over_in_place() {
+    let paper = session_in(Mode::B, &["∇F", "X←1", "[1⎕]", "[1]   X←2", "∇", "∇F[⎕]∇"]);
+    let offered: Vec<_> = paper.iter().filter(|f| !f.offer.is_empty()).collect();
+    assert_eq!(offered.len(), 1, "{paper:?}");
+    assert_eq!(offered[0].offer, "[1]   X←1");
+    assert_eq!(
+        offered[0].prompt.as_deref(),
+        Some(""),
+        "the [1] is in the offer"
+    );
+    let shown = paper
+        .iter()
+        .flat_map(|f| f.lines.clone())
+        .collect::<Vec<_>>();
+    assert!(shown.contains(&"[1]   X←2".to_string()), "{shown:?}");
 }

@@ -13,5 +13,8 @@ apl-patch = { path = "../apl-patch" }
 apl-scan = { path = "../../../parse/crates/apl-scan" }
 apl-value = { path = "../../../value/crates/apl-value" }
 
+[dev-dependencies]
+apl-patch = { path = "../apl-patch" }
+
 [lints]
 workspace = true

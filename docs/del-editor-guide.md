@@ -175,8 +175,26 @@ which is left as it was. `[0⎕m]` edits the header.
 While an edit lasts, its two lines are positions, not commands: a
 fill may begin with `)`, as the example's does. Asking for a line
 that is not there, or giving an m that is not a whole number, is a
-DEFN ERROR. (B) '75 does not have this form, because the 5110 edits a
-line on its screen; there `[n⎕m]` is a DEFN ERROR.
+DEFN ERROR.
+
+## Changing a line in place, in (B)
+
+(B) '75 has no slash line, because the 5110 edits a line on its
+screen. There `[n⎕]` puts line n, number and all, in the input line,
+already typed: move along it, change what you like, and press Return.
+What you enter is taken as the whole line, so a changed number puts
+it at the new number and leaves the old one, as in (A). `[n⎕m]` does
+the same; the m is ignored.
+
+```
+[2]   [1⎕]
+[1]   W←H+1
+```
+
+Here the second line is the input, holding `[1]   W←H+1` for you to
+edit. The CLI, `aplterm`, the browser demo and the service's
+terminal page all offer the line this way. In a batch file there is
+nothing to edit: the next line of the file is the whole line.
 
 ## Inserting a line
 
@@ -327,8 +345,8 @@ typed here goes into the function.
 | `[n] TEXT` | Write TEXT at line n |
 | `[⎕]` | Display the whole function |
 | `[⎕n]` | Display from line n on, then offer the last |
-| `[n⎕]` | Display line n, then offer it |
-| `[n⎕m]` | (A) Edit line n with marks typed from position m |
+| `[n⎕]` | (A) Display line n, then offer it; (B) put it in the input to edit |
+| `[n⎕m]` | (A) Edit line n with marks typed from position m; (B) as `[n⎕]` |
 | `[∆n]` | Delete line n |
 | `[0]` | Move to the header |
 | `[0] HEADER` | Replace the header |

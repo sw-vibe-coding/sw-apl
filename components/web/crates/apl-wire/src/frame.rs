@@ -39,6 +39,14 @@ pub struct Frame {
     /// it, is false.
     #[serde(default, skip_serializing_if = "std::ops::Not::not")]
     pub more: bool,
+    /// What the typing starts with, already typed and open to editing:
+    /// the statement a (B) `[n⎕]` puts in the input to be typed over in
+    /// place, as the 5110 does. Absent, as from an older service, or
+    /// empty, is an ordinary read. A terminal that ignores it shows the
+    /// prompt with nothing after it, and what it sends back is taken as
+    /// the whole line.
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub offer: String,
 }
 
 /// Write one JSON value and its newline, and flush it: the terminal

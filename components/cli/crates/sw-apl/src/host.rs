@@ -33,7 +33,7 @@ impl Console for Terminal {
             println!("{prompt}");
         }
         let at = open.unwrap_or(INDENT);
-        read_line(&mut self.0.borrow_mut(), at).ok().flatten()
+        read_line(&mut self.0.borrow_mut(), at, "").ok().flatten()
     }
 
     /// Print `lines` now, while the statement runs.

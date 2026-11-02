@@ -102,3 +102,21 @@ fn with_no_gap_the_fill_starts_at_the_end() {
     };
     assert_eq!(patch.prompt(), "[2]   X←1");
 }
+
+#[test]
+fn an_offer_is_typed_over_and_taken_whole() {
+    let patch = Patch::Offer {
+        line: "[2]   X←1".to_string(),
+    };
+    assert_eq!(patch.prompt(), "");
+    assert_eq!(patch.offered(), Some("[2]   X←1"));
+    assert_eq!(
+        patch.take("[2]   X←2", &[]).unwrap(),
+        Taken::Line("[2]   X←2".to_string())
+    );
+    assert_eq!(
+        Patch::open("[1]   A", 0).offered(),
+        None,
+        "a slash line offers nothing"
+    );
+}

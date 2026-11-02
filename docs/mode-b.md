@@ -331,11 +331,9 @@ on paper (5110 manual, Chapter 6 and Appendix E):
   whole, and returns afterwards.
 - Editing a pendent function is a DEFN ERROR, as in APLSV.
 
-For sw-apl this means the (B) editor is the shared editor plus `[∆n]`
-and a screen form of `[n⎕]`; on a phone, "display the line in the
-input area to be edited" maps naturally onto the input field. Which
-parts of APL\360's `[n⎕m]` stay reachable in (B) is a decision for
-the step that builds it.
+In sw-apl, (B)'s `[n⎕]` and `[n⎕m]` put the line, number and all,
+in the input line already typed, to edit in place; Return enters it
+as it then stands. APL\360's slash line is (A)'s only.
 
 ## The workspace file
 

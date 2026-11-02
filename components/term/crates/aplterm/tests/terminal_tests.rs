@@ -128,6 +128,7 @@ fn actual_terminal_composes_before_enter_and_sends_unicode_only() {
                 off: false,
                 mode: String::new(),
                 more: false,
+                offer: String::new(),
             },
         )
         .unwrap();
@@ -139,6 +140,22 @@ fn actual_terminal_composes_before_enter_and_sends_unicode_only() {
         assert_eq!(received, expected);
         assert!(!received.contains('\u{1d}'));
     }
+    // An offer -- a (B) [n⎕] statement put in the input to be typed
+    // over in place -- is typed already: erase its last glyph, type 2.
+    let mut transcript = Vec::new();
+    send(
+        &mut socket,
+        &Frame {
+            prompt: Some(String::new()),
+            offer: "[1]   X←1".to_string(),
+            ..Frame::default()
+        },
+    )
+    .unwrap();
+    wait_for(&output, &mut transcript, "[1]   X←1");
+    keyboard.write_all(b"\x7f2\r").unwrap();
+    let received: String = receive(&mut input).unwrap().unwrap();
+    assert_eq!(received, "[1]   X←2");
     send(
         &mut socket,
         &Frame {
@@ -147,6 +164,7 @@ fn actual_terminal_composes_before_enter_and_sends_unicode_only() {
             off: true,
             mode: String::new(),
             more: false,
+            offer: String::new(),
         },
     )
     .unwrap();
@@ -203,6 +221,7 @@ fn a_busy_service_is_sent_attention_by_escape_and_by_ctrl_c() {
             off: false,
             mode: String::new(),
             more: false,
+            offer: String::new(),
         };
         send(&mut socket, &frame).unwrap();
         wait_for(&output, &mut transcript, &prompt);
@@ -237,6 +256,7 @@ fn a_busy_service_is_sent_attention_by_escape_and_by_ctrl_c() {
         off: true,
         mode: String::new(),
         more: false,
+        offer: String::new(),
     };
     send(&mut socket, &bye).unwrap();
     let _ = client.0.wait();

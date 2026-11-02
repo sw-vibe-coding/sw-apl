@@ -32,11 +32,7 @@ pub fn run(mut socket: TcpStream, mut keyboard: Keyboard) -> io::Result<()> {
     let frames = listen(socket.try_clone()?);
     let mut history = Vec::new();
     while let Some(frame) = next(&frames, &mut socket)? {
-        // The service's mode decides which overstrikes compose.
-        keyboard.also = Mode::parse(&frame.mode).unwrap_or_default().overstrikes();
-        for line in &frame.lines {
-            println!("{}", display(line));
-        }
+        take(&frame, &mut keyboard);
         if frame.more {
             continue;
         }
@@ -52,6 +48,19 @@ pub fn run(mut socket: TcpStream, mut keyboard: Keyboard) -> io::Result<()> {
         send(&mut socket, &typed)?;
     }
     Ok(())
+}
+
+/// Print what a frame carries and set the keyboard for it: the
+/// service's mode decides which overstrikes compose, and the line
+/// starts with what the frame offers -- a (B) `[n⎕]` statement to be
+/// typed over in place, or nothing.
+fn take(frame: &Frame, keyboard: &mut Keyboard) {
+    keyboard.also = Mode::parse(&frame.mode).unwrap_or_default().overstrikes();
+    for line in &frame.lines {
+        println!("{}", display(line));
+    }
+    keyboard.clear();
+    keyboard.paste(&frame.offer);
 }
 
 /// Frames from the service, read on a thread of their own.

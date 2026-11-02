@@ -53,6 +53,8 @@
     for (const line of frame.lines) put(line + "\n");
     if (frame.off || frame.prompt === null) return stop("Session ended.");
     prompt.textContent = frame.prompt;
+    // A (B) [n⎕] puts the statement in the line to be typed over.
+    typed.value = frame.offer ?? "";
     typed.disabled = false;
     typed.focus();
   };

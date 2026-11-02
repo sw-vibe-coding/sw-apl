@@ -412,6 +412,14 @@ value -- and has no prompt: the terminal prints them and waits for
 the next frame. A long run shows its output as it goes, as a 2741's
 carriage did. A line `⍞←` has left open waits for what finishes it.
 
+A frame may carry `offer`, a line the typing starts with, already
+typed and open to editing. (B)'s `[n⎕]` sends one: the statement,
+number and all, to be typed over in place as on the 5110, with an
+empty prompt. What the terminal sends back is the whole line. A
+terminal that ignores `offer` shows an empty prompt instead, and
+whatever is typed there is still taken as the whole line. Absent is
+an ordinary read.
+
 The terminal sends the typed line as a JSON string. A line that is
 not JSON is taken verbatim, so `nc` is an emergency client and a
 debugging window:

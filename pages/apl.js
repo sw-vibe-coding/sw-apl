@@ -613,6 +613,9 @@ function show(frame) {
   prompt.textContent = frame.prompt;
   typing = true;
   line.classList.remove("waiting");
+  // A (B) [n⎕] puts the statement in the line, to be typed over in
+  // place as on the 5110; Return enters it as it then stands.
+  if (frame.offer) draw(JSON.parse(board.paste(frame.offer)));
 }
 
 // Put a typed line in the channel and wake the session.

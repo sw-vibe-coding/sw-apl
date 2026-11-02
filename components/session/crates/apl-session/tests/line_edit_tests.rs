@@ -40,3 +40,22 @@ fn an_edit_may_be_asked_for_as_the_definition_opens() {
     out(&mut s, "∇");
     assert_eq!(out(&mut s, "∇F[⎕]∇")[1], "[1]   X←+21");
 }
+
+#[test]
+fn b_offers_the_statement_to_the_input() {
+    let mut s = Session::default();
+    s.ws.mode = apl_session::Mode::B;
+    out(&mut s, ")CLEAR");
+    out(&mut s, "∇F");
+    out(&mut s, "X←1");
+    assert_eq!(s.offer(), None);
+    assert!(out(&mut s, "[1⎕]").is_empty());
+    assert_eq!(
+        (s.prompt(), s.offer()),
+        (String::new(), Some("[1]   X←1".to_string()))
+    );
+    out(&mut s, "[1]   X←2");
+    assert_eq!((s.prompt(), s.offer()), ("[2]   ".to_string(), None));
+    out(&mut s, "∇");
+    assert_eq!(out(&mut s, "∇F[⎕]∇")[1], "[1]   X←2");
+}

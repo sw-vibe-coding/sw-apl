@@ -92,8 +92,20 @@ fn an_illegitimate_overstrike_in_the_fill_ends_the_edit() {
 }
 
 #[test]
-fn b_has_no_slash_line() {
-    // The 5110 edits [n⎕m] in place instead (mode-b.md); not yet.
-    let mut f = open_in("⍎⍕", &["X←1"]);
-    assert_eq!(f.line("[1⎕3]").unwrap_err().kind, ErrorKind::Defn);
+fn b_offers_the_line_to_edit_in_place() {
+    // The 5110 puts the line in its input area to be typed over
+    // (mode-b.md); [n⎕m] is the same, the m dropped.
+    for command in ["[1⎕]", "[1⎕3]"] {
+        let mut f = open_in("⍎⍕", &["X←1", "Y←2"]);
+        assert!(
+            shows(&mut f, command).is_empty(),
+            "{command} prints nothing"
+        );
+        assert_eq!(f.prompt(), "", "{command}: the [1] is in the line");
+        let offered = f.patch.as_ref().and_then(apl_patch::Patch::offered);
+        assert_eq!(offered, Some("[1]   X←1"), "{command}");
+        shows(&mut f, "[1]   X←10");
+        assert_eq!(f.prompt(), "[2]   ", "{command}: as if typed whole");
+        assert_eq!(body(f), ["X←10", "Y←2"], "{command}");
+    }
 }

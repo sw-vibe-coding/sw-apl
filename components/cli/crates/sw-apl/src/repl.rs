@@ -68,7 +68,8 @@ fn prompt_loop(session: &mut Session, editor: &Editor) -> io::Result<()> {
         } else {
             std::mem::take(&mut open)
         };
-        let read = match read_line(&mut editor.borrow_mut(), &prompt) {
+        let offer = session.offer().unwrap_or_default();
+        let read = match read_line(&mut editor.borrow_mut(), &prompt, &offer) {
             Ok(read) => read,
             Err(err) => return Err(io::Error::other(err)),
         };
@@ -86,10 +87,15 @@ fn prompt_loop(session: &mut Session, editor: &Editor) -> io::Result<()> {
 }
 
 /// One edited line; `None` at end of input. A cancelled line (Ctrl-C)
-/// is skipped and the prompt shown again.
-pub fn read_line(editor: &mut DefaultEditor, prompt: &str) -> LineResult<Option<String>> {
+/// is skipped and the prompt shown again. `offer` is typed already,
+/// to be edited: a (B) `[n⎕]` statement, or nothing.
+pub fn read_line(
+    editor: &mut DefaultEditor,
+    prompt: &str,
+    offer: &str,
+) -> LineResult<Option<String>> {
     loop {
-        match editor.readline(prompt) {
+        match editor.readline_with_initial(prompt, (offer, "")) {
             Ok(line) => {
                 let _ = editor.add_history_entry(&line);
                 return Ok(Some(line));

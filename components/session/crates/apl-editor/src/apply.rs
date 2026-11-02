@@ -51,6 +51,7 @@ impl Definition {
                 self.next = n;
                 Vec::new()
             }
+            Edit::Show(n, true) if !self.glyphs.is_empty() => self.patch(n, 0)?,
             Edit::Show(from, only) => self.show(from, only)?,
             Edit::Delete(n) => {
                 let i = self.lines.binary_search_by_key(&n, |(k, _)| *k);
@@ -58,7 +59,7 @@ impl Definition {
                     .remove(i.map_err(|_| AplError::new(ErrorKind::Defn))?);
                 Vec::new()
             }
-            Edit::Patch(n, at) => vec![self.patch(n, at)?],
+            Edit::Patch(n, at) => self.patch(n, at)?,
         };
         let mut step = if rest.is_empty() {
             Step::default()
@@ -87,15 +88,17 @@ impl Definition {
         Ok(())
     }
 
-    /// Begin a line edit of statement `n`, the carriage under position
-    /// `at`, and hand back the statement as it is displayed. (A) only:
-    /// the 5110 edits in place and has no slash line, and APL\360's
-    /// mode is the one with no glyphs beyond its own.
+    /// Begin a line edit of statement `n`, and hand back what it
+    /// displays. In (A), APL\360's slash line: the statement is shown
+    /// and the marks are typed from position `at`. In (B), the 5110's:
+    /// nothing is shown, the statement is offered to the input to be
+    /// typed over in place, and `at` is dropped. (A) is the mode with
+    /// no glyphs beyond APL\360's.
     ///
     /// # Errors
-    /// DEFN ERROR in (B), or when the function has no statement `n` --
-    /// the manual's "improper request for a line edit".
-    fn patch(&mut self, n: i64, at: usize) -> AplResult<String> {
+    /// DEFN ERROR when the function has no statement `n` -- the
+    /// manual's "improper request for a line edit".
+    fn patch(&mut self, n: i64, at: usize) -> AplResult<Vec<String>> {
         let text = match n {
             0 => Some(header_text(&self.header)),
             _ => self
@@ -104,11 +107,13 @@ impl Definition {
                 .find(|(k, _)| *k == n)
                 .map(|(_, t)| t.clone()),
         };
-        let text = text
-            .filter(|_| self.glyphs.is_empty())
-            .ok_or_else(|| AplError::new(ErrorKind::Defn))?;
-        let shown = format!("{:<WIDTH$}{text}", format!("[{}]", format_line(n)));
-        self.patch = Some(Patch::open(&shown, at));
-        Ok(shown)
+        let text = text.ok_or_else(|| AplError::new(ErrorKind::Defn))?;
+        let line = format!("{:<WIDTH$}{text}", format!("[{}]", format_line(n)));
+        if !self.glyphs.is_empty() {
+            self.patch = Some(Patch::Offer { line });
+            return Ok(Vec::new());
+        }
+        self.patch = Some(Patch::open(&line, at));
+        Ok(vec![line])
     }
 }

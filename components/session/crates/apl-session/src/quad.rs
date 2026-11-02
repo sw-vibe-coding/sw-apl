@@ -23,6 +23,20 @@ impl Default for Session {
     }
 }
 
+impl Session {
+    /// The line the next read starts with, typed already and open to
+    /// editing, alongside `prompt`: the statement a (B) `[n⎕]` puts in
+    /// the input to be typed over in place, as the 5110 does. `None`
+    /// for an ordinary read. A terminal that cannot offer it shows
+    /// nothing in its place, and whatever is typed is taken as the
+    /// whole line.
+    #[must_use]
+    pub fn offer(&self) -> Option<String> {
+        let patch = self.defining.as_ref()?.patch.as_ref()?;
+        patch.offered().map(str::to_string)
+    }
+}
+
 /// Run a command typed at the quad prompt, in the middle of the
 /// statement that asked, and give back what it showed. A command
 /// that abandons the read is left for the session instead, since

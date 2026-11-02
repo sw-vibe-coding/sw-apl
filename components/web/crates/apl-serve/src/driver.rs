@@ -42,7 +42,8 @@ fn run(session: &mut Session, terminal: &Terminal) -> io::Result<()> {
     let mut shown = Shown::default();
     loop {
         let prompt = carriage(&shown, &session.prompt());
-        let Some(line) = terminal.borrow_mut().ask(shown.lines, prompt)? else {
+        let offer = session.offer().unwrap_or_default();
+        let Some(line) = terminal.borrow_mut().ask(shown.lines, prompt, offer)? else {
             return Ok(());
         };
         let reply = session.respond(&line);
