@@ -12,8 +12,14 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-11-09
+
+- chore: identify deployed pages commit
+- feat(pages): a landing page of four machines before the demo
+
 ## 2026-11-01
 
+- docs(changes): refresh CHANGES.md to HEAD; complete 004-b-in-place, saga done
 - chore: identify deployed pages commit
 - feat(editor): (B) [n?] puts the line in the input to edit in place
 
