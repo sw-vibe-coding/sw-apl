@@ -29,6 +29,8 @@ says so.
 | 1982 | APL2, with nested arrays, is released as an Installed User Program: a prototype | Not modelled |
 | 1984 | APL2 is released | Not modelled |
 
+`apl-feature-history.md` gives the same APLs feature by feature.
+
 ## The owner's questions, answered
 
 - **When was APL\360 released?** Outside IBM, in August 1968, as a

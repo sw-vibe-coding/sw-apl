@@ -1,0 +1,1 @@
+Write docs/apl-feature-history.md: a table of features against the seven APLs, each cell from a cited manual, with unknowns marked. Add the sources to docs/citations.md and link the page from docs/apl-timeline.md.

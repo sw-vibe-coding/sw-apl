@@ -1233,6 +1233,14 @@ intends emulations for C and D; this page is only their placeholders.
 
 The pictures are the owner's own renders of their own 3D models.
 
+## Owner direction (2026-11-09, later): when each feature arrived
+
+"A document that details when each APL feature was added", from
+APL\1130 through the 1968 and 1970 APL\360, 1975 APLSV, APL-80, IBM
+PC APL and APL2. It is `docs/apl-feature-history.md`, each cell
+traced to a manual. (A) is the 1970 column. APL\1130 is the owner's
+separate project, listed for the history and not modelled here.
+
 ## Owner direction (2026-09-29): the documents, checked against the code
 
 "Is the README up-to-date? Scan documents for stale info or

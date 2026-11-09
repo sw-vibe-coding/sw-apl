@@ -1,0 +1,1 @@
+A landing page at the site root, per docs/plan.md owner direction 2026-11-09: four captioned tiles, the first two opening the demo in (A) and (B), the last two a Coming soon placeholder; the demo moves to demo.html; the demo title links home; the letters a to d choose a tile.

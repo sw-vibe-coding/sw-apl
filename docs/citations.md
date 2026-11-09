@@ -89,6 +89,26 @@ carry the same files, for example
   and deal, which sw-apl's matches, and J's mapping of a link onto a
   range, which sw-apl's does not. <https://www.jsoftware.com/papers/roll.htm>
 
+## The feature history
+
+`apl-feature-history.md` draws on these, besides the manuals above.
+
+- **APL\1130 Primer**, C20-1697-0, IBM, 1968.
+  <https://www.bitsavers.org/pdf/ibm/apl/C20-1697-0_APL_1130_Primer_1968.pdf>
+- **APL80**, Phelps Gates and Ramware, undated: the manual for APL on
+  the TRS-80.
+  <https://archive.org/details/APL80_19xx_Phelps_Gates-Ramware>
+- **APL Reference**, 1502219, IBM, May 1983: IBM Personal Computer APL.
+  <https://bitsavers.trailing-edge.com/pdf/ibm/pc/languages/1502219_APL_Reference_May83.pdf>
+- **An APL System for the IBM Personal Computer**, M. L. Tavera and
+  M. Alfonseca, IBM Systems Journal 24, no. 1: the June 1983
+  announcement.
+  <https://bitsavers.trailing-edge.com/pdf/ibm/IBM_Systems_Journal/241/ibmsj2401H.pdf>
+- **An Introduction to APL2**, SH20-9229-1, IBM, December 1985.
+  <https://www.bitsavers.org/pdf/ibm/apl/SH20-9229-1_An_Introduction_to_APL_2_Dec85.pdf>
+- **APL2 Migration Guide**, Version 2 Release 2, IBM, 1994.
+  <https://public.dhe.ibm.com/ps/products/apl2/pubs/apl2mig.pdf>
+
 ## The timeline
 
 `apl-timeline.md` draws on these, besides the manuals above.

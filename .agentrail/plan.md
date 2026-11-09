@@ -1,1 +1,1 @@
-A landing page at the site root, per docs/plan.md owner direction 2026-11-09: four captioned tiles, the first two opening the demo in (A) and (B), the last two a Coming soon placeholder; the demo moves to demo.html; the demo title links home; the letters a to d choose a tile.
+A document of when each APL feature arrived, across APL backslash 1130, the 1968 and 1970 APL 360, 1975 APLSV, APL-80, IBM PC APL and APL2, per docs/plan.md owner direction 2026-11-09, each cell traced to a manual.
