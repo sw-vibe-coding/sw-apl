@@ -14,6 +14,8 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-11-09
 
+- docs: when each APL feature arrived, from APL\1130 to APL2
+- docs(changes): refresh CHANGES.md to HEAD; complete landing-page, saga done
 - chore: identify deployed pages commit
 - feat(pages): a landing page of four machines before the demo
 

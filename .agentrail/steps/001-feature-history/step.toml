@@ -1,8 +1,9 @@
 number = 1
 slug = "feature-history"
-status = "in-progress"
+status = "completed"
 description = "Write docs/apl-feature-history.md: a table of features against the seven APLs..."
 role = "production"
 context_files = []
 created_at = "2026-11-09T11:15:31"
-commits = []
+completed_at = "2026-11-09T11:16:10"
+commits = ["b941c06a7fe7595e3d938204ca515170ad800486"]

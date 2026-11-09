@@ -1,0 +1,1 @@
+Added docs/apl-feature-history.md: features against seven APLs from their manuals, unknowns marked, sources in citations. Found that scan is in neither APL 360 manual read though sw-apl (A) has it; reported to the owner.
