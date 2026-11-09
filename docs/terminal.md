@@ -183,7 +183,7 @@ read as they do everywhere else.
 
 The page, the worker and the WebAssembly are one build served as
 three files, and a browser caches them separately. So only
-`index.html` is fetched fresh -- it is the navigation -- and it asks
+`demo.html` is fetched fresh -- it is the navigation -- and it asks
 for `version.txt` uncached, which the build writes as a digest of
 what a visitor actually runs. Everything below is fetched at that
 version: `apl.js?v=`, then `worker.js?v=`, then the bundle. A cached
@@ -232,6 +232,11 @@ overstrike table that `aplterm` uses. The page sends it keystrokes
 and draws what it hands back, so `⍟` is `○`, `Ctrl-]`, `*` in a
 browser exactly as it is in a terminal, and there is no second copy
 of the table in JavaScript.
+
+The site opens on a landing page, `index.html`: a tile for each mode,
+opened by a click or by its letter. The demo itself is `demo.html`,
+`?mode=A` or `?mode=B` choosing the mode, and its title links back. An
+address naming a mode at the root is forwarded there.
 
 The demo is at <https://sw-apl.softwarewrighter.com/>, and at
 `sw-vibe-coding.github.io/sw-apl/` as well, which is why nothing the

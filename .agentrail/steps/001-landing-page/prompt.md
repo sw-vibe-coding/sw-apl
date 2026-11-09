@@ -1,0 +1,1 @@
+Landing page at the site root per docs/plan.md, owner direction 2026-11-09. Four tiles captioned with an underscored letter and year. A and B open demo.html in that mode; C and D open coming-soon.html. D shows Image TBD. The letters a to d in either case choose a tile. The demo title links home. Old addresses with mode forward to the demo.

@@ -7,7 +7,7 @@
 // keystrokes and draws what it hands back, and never learns what an
 // overstrike is.
 // The version this page was fetched at, passed on to everything it
-// fetches. index.html reads it from version.txt, which the build
+// fetches. demo.html reads it from version.txt, which the build
 // writes and the page asks for uncached, so the page, the worker and
 // the WebAssembly are always one build and never three.
 //

@@ -114,6 +114,12 @@ carry the same files, for example
 - **The combinator demos**, sw-MLPL. The same birds in another
   language. <https://mlpl.softwarewrighter.com/>
 
+## The pictures on the landing page
+
+The pictures in `pages/machines/` are the owner's own renders of 3D
+models, not borrowed work. The badges they show are part of the
+historical machines they depict.
+
 ## Carried in the repository, under licence
 
 - **APL-keybd2.svg**, Wikimedia Commons user Rursus, July 2007:

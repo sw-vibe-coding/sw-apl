@@ -1219,6 +1219,20 @@ sw-apl's `[n⎕]` displays from n on and leaves the prompt. Step
 any transcript it moves, and checks the 5110 manual before touching
 (B).
 
+## Owner direction (2026-11-09): a landing page before the demos
+
+A page at the site root with four captioned thumbnails, the owner's
+menu of A, B, C and D: a 2741, captioned `A'70`, opening the demo in
+(A); a 5100, `B'75`, opening it in (B); a TRS-80, `C'80`, and an IBM
+PC, `D'83`, the letters underscored, each of the last two opening a
+placeholder that says "Coming soon...". The tiles' tooltips, large text on a see-through shim over the
+picture, are
+APL\360, APLSV, APL-80 and IBM PC APL. The demo moves to `demo.html`,
+and an old address carrying `?mode=` is forwarded there. The owner
+intends emulations for C and D; this page is only their placeholders.
+
+The pictures are the owner's own renders of their own 3D models.
+
 ## Owner direction (2026-09-29): the documents, checked against the code
 
 "Is the README up-to-date? Scan documents for stale info or

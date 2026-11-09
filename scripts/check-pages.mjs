@@ -34,6 +34,7 @@ const TYPES = {
   '.mjs': 'text/javascript',
   '.wasm': 'application/wasm',
   '.svg': 'image/svg+xml',
+  '.webp': 'image/webp',
   '.txt': 'text/plain',
   '.ts': 'text/plain',
 };
@@ -114,7 +115,8 @@ setTimeout(() => {
 }, 15 * 60 * 1000).unref();
 
 const server = await host(ROOT);
-const url = `http://127.0.0.1:${server.address().port}/`;
+const home = `http://127.0.0.1:${server.address().port}/`;
+const url = `${home}demo.html`;
 const browser = await chromium.launch({ executablePath: CHROME, headless: true });
 
 let failed = 0;
@@ -434,7 +436,7 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
 //    first response and must not need a second load.
 {
   const direct = await host(ROOT, true);
-  const at = `http://127.0.0.1:${direct.address().port}/`;
+  const at = `http://127.0.0.1:${direct.address().port}/demo.html`;
   const page = await (await browser.newContext()).newPage();
   let loads = 0;
   page.on('load', () => { loads += 1; });
@@ -1184,7 +1186,7 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
 //    a project page from. Nothing must be fetched from the root.
 {
   const sub = await host(ROOT, false, PREFIX);
-  const at = `http://127.0.0.1:${sub.address().port}${PREFIX}`;
+  const at = `http://127.0.0.1:${sub.address().port}${PREFIX}demo.html`;
   const page = await (await browser.newContext()).newPage();
   const missed = [];
   page.on('response', (r) => { if (r.status() >= 400) missed.push(r.url()); });
@@ -1257,6 +1259,83 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
 //     worker kept a copy of what it fetched. And a rebuild underneath
 //     is still what a reload online gets -- the copy is only ever the
 //     fallback -- after which offline is the new build too.
+// The landing page: four tiles before the demo, each opened by a
+// click and by its letter in either case.
+{
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  const missed = [];
+  page.on('response', (r) => { if (r.status() >= 400) missed.push(r.url()); });
+  const fresh = async () => {
+    await page.goto(home, { waitUntil: 'load' });
+    await page.waitForTimeout(200);
+  };
+  const at = () => page.url().replace(home, '');
+  await fresh();
+  const tiles = await page.evaluate(() => [...document.querySelectorAll('.machines a')].map((a) => ({
+    caption: a.querySelector('span').textContent,
+    tip: a.dataset.tip,
+    under: a.querySelector('u')?.textContent,
+    image: a.querySelector('img')?.naturalWidth ?? 0,
+  })));
+  check("the tiles read A'70, B'75, C'80, D'83",
+    tiles.map((t) => t.caption).join() === "A'70,B'75,C'80,D'83", JSON.stringify(tiles));
+  check('each tile has its tooltip',
+    tiles.map((t) => t.tip).join() === 'APL\\360,APLSV,APL-80,IBM PC APL', JSON.stringify(tiles));
+  const tip = () => page.evaluate(() => {
+    const after = getComputedStyle(document.querySelector('[data-key="a"]'), '::after');
+    return { shown: after.opacity, size: parseFloat(after.fontSize), over: after.backgroundColor };
+  });
+  const idle = await tip();
+  await page.hover('[data-key="a"]');
+  const hovered = await tip();
+  check('a tooltip is hidden until the tile is hovered', idle.shown === '0' && hovered.shown === '1',
+    JSON.stringify({ idle, hovered }));
+  check('and it is large text on a see-through shim',
+    hovered.size >= 28 && /rgba\(0, 0, 0, 0\.5\)/.test(hovered.over), JSON.stringify(hovered));
+  check('and each letter is underscored', tiles.map((t) => t.under).join('') === 'ABCD', JSON.stringify(tiles));
+  check('all four pictures load',
+    tiles.length === 4 && tiles.every((t) => t.image > 0), JSON.stringify(tiles));
+  const places = [['a', 'demo.html?mode=A'], ['b', 'demo.html?mode=B'],
+    ['c', 'coming-soon.html'], ['d', 'coming-soon.html']];
+  for (const [letter, place] of places) {
+    await fresh();
+    await page.click(`[data-key="${letter}"]`);
+    await page.waitForURL(home + place);
+    check(`clicking ${letter.toUpperCase()} opens ${place}`, at() === place, at());
+    for (const key of [letter, `Shift+${letter.toUpperCase()}`]) {
+      await fresh();
+      await page.keyboard.press(key);
+      await page.waitForURL(home + place);
+      check(`${key} opens ${place}`, at() === place, at());
+    }
+  }
+  for (const key of ['Control+a', 'Meta+b', 'x']) {
+    await fresh();
+    await page.keyboard.press(key);
+    await page.waitForTimeout(300);
+    check(`${key} stays on the landing page`, at() === '', at());
+  }
+  await page.goto(`${home}coming-soon.html`, { waitUntil: 'load' });
+  check('the placeholder says Coming soon...',
+    await page.textContent('h1') === 'Coming soon...', await page.textContent('h1'));
+  await page.click('a');
+  await page.waitForURL(home);
+  check('and links back', at() === '', at());
+  await page.goto(`${home}?mode=A`, { waitUntil: 'load' });
+  await page.waitForURL(`${home}demo.html?mode=A`);
+  check('an old address with a mode forwards to the demo', at() === 'demo.html?mode=A', at());
+  for (const mode of ['A', 'B']) {
+    const demo = await visitIn(mode);
+    check(`the demo's sw-apl in (${mode}) links home`,
+      await demo.evaluate(() => document.querySelector('header a.name').href) === home,
+      await demo.textContent('header .name'));
+    await demo.close();
+  }
+  check('nothing on the landing page is missing', missed.length === 0, missed.join());
+  await context.close();
+}
+
 const offlineContext = await browser.newContext();
 offline: {
   const context = offlineContext;

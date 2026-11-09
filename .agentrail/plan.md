@@ -1,7 +1,1 @@
-# line-edit
-
-See docs/plan.md, "Owner direction (2026-10-27): [n⎕m] line editing".
-
-1. 001-slash-line: [N⎕M] in (A), from the APL\360-OS/DOS manual p. 3.18.
-2. 002-editor-help: )HELP topic and demo Help section for the del editor and line editing.
-3. 003-b-in-place: (B) in-place form.
+A landing page at the site root, per docs/plan.md owner direction 2026-11-09: four captioned tiles, the first two opening the demo in (A) and (B), the last two a Coming soon placeholder; the demo moves to demo.html; the demo title links home; the letters a to d choose a tile.

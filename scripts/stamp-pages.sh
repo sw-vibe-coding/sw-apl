@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Write pages/version.txt: the version every file below index.html is
+# Write pages/version.txt: the version every file below demo.html is
 # fetched at.
 #
 # The page, the worker and the WebAssembly are one build served as
-# three files, and a browser caches them separately. index.html asks
+# three files, and a browser caches them separately. demo.html asks
 # for this file uncached and stamps everything it loads with what it
 # says, so the three cannot drift apart. See docs/terminal.md.
 #

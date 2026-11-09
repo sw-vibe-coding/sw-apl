@@ -41,7 +41,8 @@ conformance corpus in `samples/`.
 
 The interpreter runs in the tab, compiled to WebAssembly; nothing
 typed is sent anywhere, and once loaded it works with the network
-off. The page opens in (B) '75, and the tabs at
+off. The site opens on a page of machines: choose one, by clicking it
+or typing its letter, and the demo opens in that mode. The tabs at
 the top switch mode (a new session, in a clear workspace). A keyboard
 on the page gives every glyph a key, so a phone works too.
 
@@ -292,7 +293,7 @@ data/         the glyph tables and the )HELP pages
 docs/         reference, plan, requirements, architecture;
               literate/, the literate documents; emacs/, the Emacs
               input method, mode and Org Babel language
-pages/        the browser demo: a page, a worker, and the session
+pages/        the landing page; the browser demo: a page, a worker, and the session
               compiled to WebAssembly; literate/, the documents as
               web pages
 samples/      conformance corpus: glyph-form APL programs

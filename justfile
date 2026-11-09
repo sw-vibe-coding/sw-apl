@@ -136,7 +136,7 @@ pages:
     cd components/web/crates/apl-wasm && \
       wasm-pack build --release --target web --no-pack \
         --out-dir ../../../../pages/wasm
-    # The version every file below index.html is fetched at. It is a
+    # The version every file below demo.html is fetched at. It is a
     # digest of what a visitor actually runs, so a rebuild that
     # changed nothing does not invalidate a cache, and one that
     # changed anything invalidates all of it at once. The page asks

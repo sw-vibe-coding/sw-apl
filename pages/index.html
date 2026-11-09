@@ -2,512 +2,59 @@
 <meta charset="utf-8">
 <title>sw-apl</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="A clean-room APL interpreter, compiled to WebAssembly and running in this tab.">
-<!-- start_url and scope are relative, so this works at a root and
-     under a GitHub project page's /sw-apl/ alike. -->
+<meta name="description" content="A clean-room APL interpreter, compiled to WebAssembly and running in the tab.">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="theme-color" content="#fbf7ef" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#17130e" media="(prefers-color-scheme: dark)">
-<!-- The standard name, plus Apple's older one: iOS before 16.4 reads
-     only the second, and Chrome warns only that the first is missing. -->
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="sw-apl">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<style>
-  /* APL385 Unicode, public domain, by Adrian Smith: an installed copy
-     first, then the page's own. Text shows at once in the next font
-     in the list and changes when this one arrives. */
-  @font-face {
-    font-family: "APL385 Unicode";
-    src: local("APL385 Unicode"), url("redistributed/apl385-font/APL385.woff2") format("woff2");
-    font-display: swap;
+<script>
+  // An address from before this page existed named a mode here.
+  if (new URLSearchParams(location.search).has("mode")) {
+    location.replace(`demo.html${location.search}`);
   }
+</script>
+<style>
   :root { color-scheme: light dark; --paper: #fbf7ef; --ink: #2b2118; --rule: #d8cdb8; }
   @media (prefers-color-scheme: dark) {
     :root { --paper: #17130e; --ink: #e8dfd0; --rule: #3a3229; }
   }
-  body {
-    margin: 0; background: var(--paper); color: var(--ink);
-    font: 15px/1.45 "APL385 Unicode", "DejaVu Sans Mono", ui-monospace, monospace;
-    display: flex; flex-direction: column; height: 100vh;
-  }
-  header { padding: .4rem 1rem; border-color: var(--rule); border-style: solid; }
-  header {
-    font-size: 13px; display: flex; align-items: center; gap: .6rem; flex-wrap: wrap;
-  }
-  header .name { opacity: .8; }
-  /* The mode tab. A tooltip for a mouse; a touch screen has no hover,
-     so a tap shows the same words beside it. */
-  .mode-tabs { display: flex; }
-  .mode-tabs [role=tab] {
-    font: inherit; font-size: 13px; cursor: pointer; padding: .1rem .5rem;
-    color: var(--ink); background: none;
-    border: 1px solid var(--rule); border-radius: .3rem;
-  }
-  .mode-tabs [role=tab] + [role=tab] { margin-left: .3rem; }
-  .mode-tabs [role=tab][aria-selected="true"] { border-color: var(--ink); font-weight: 600; }
-  .mode-about { font-size: 12px; opacity: .7; }
-  .bar .offline { font-size: 12px; opacity: .7; align-self: center; }
-  header { border-width: 0 0 1px; }
-  footer, .bar { border-color: var(--rule); border-style: solid; }
-  .bar { font-size: 13px; opacity: .8; }
-  #paper { flex: 1; overflow-y: auto; margin: 0; padding: 1rem; white-space: pre-wrap; }
-  #paper .pua { opacity: .45; }
-  #line { padding: 0 1rem 1rem; white-space: pre-wrap; word-break: break-word; }
-  #line.waiting { opacity: .45; }
-  #caret {
-    display: inline-block; width: .6em; height: 1.15em; vertical-align: text-bottom;
-    background: currentColor; animation: blink 1.1s step-end infinite;
-  }
-  #line.waiting #caret { animation: none; background: none; }
-  /* A strike waiting: a bar under the carriage, in the lit key's
-     amber -- not a hollow box, which in an APL font reads as quad. */
-  #line.pending #caret { background: none; box-shadow: inset 0 -3px 0 #f5b301; }
-  #note { padding: 0 1rem .6rem; font-size: 13px; opacity: .85; }
-  #note[hidden] { display: none; }
-  @keyframes blink { 50% { background: transparent; } }
-
-  /* The bar keeps only what a reader cannot work without; the rest
-     is behind Help. A phone has no room for prose it has read. */
-  .bar button, dialog button {
-    font: inherit; font-size: 13px; padding: .3rem .7rem;
-    color: var(--ink); background: none;
-    border: 1px solid var(--rule); border-radius: .3rem; cursor: pointer;
-  }
-  .bar button[aria-pressed="true"] { background: var(--rule); }
-
-  /* The board a reader taps: the 2741's own keyboard, the picture
-     with hit regions laid over it. It scales with the window and never
-     scrolls off it -- a keyboard that cannot be reached is worse than
-     none. */
-  .board {
-    --key: 2.4rem;
-    flex: none; padding: .35rem .3rem;
-    border-top: 1px solid var(--rule); background: var(--paper);
-    display: flex; flex-direction: column; gap: .3rem;
-    touch-action: manipulation;
-  }
-  .board[hidden] { display: none; }
-  .board[data-edge="bottom"] { padding-bottom: calc(.35rem + env(safe-area-inset-bottom)); }
-  .board[data-edge="top"] { border-top: 0; border-bottom: 1px solid var(--rule); }
-  .board .row { display: flex; gap: .3rem; justify-content: center; }
-
-  /* The mode switch: one segment each, the current one marked. */
-  .board .modes { display: flex; gap: 0; max-width: calc(var(--key) * 16); margin: 0 auto; width: 100%; }
-  .board .modes button {
-    flex: 1; font: inherit; font-size: 13px; padding: .3rem .2rem; cursor: pointer;
-    color: var(--ink); background: none; border: 1px solid var(--rule);
-  }
-  .board .modes button + button { border-left: 0; }
-  .board .modes button:first-child { border-radius: .3rem 0 0 .3rem; }
-  .board .modes button:last-child { border-radius: 0 .3rem .3rem 0; }
-  .board .modes button[aria-selected="true"] { background: var(--ink); color: var(--paper); font-weight: 600; }
-
-  /* The picture. Its keys are dark on nothing, so a light plate sits
-     under it in both themes. */
-  .board .picture { display: flex; justify-content: center; }
-  .board .picture[hidden] { display: none; }
-  .board .picture svg {
-    width: 100%; height: auto; max-width: calc(var(--key) * 16); display: block;
-  }
-  .board .picture .plate { fill: #fbf7ef; }
-  .board .picture .hit {
-    fill: #1663d9; fill-opacity: 0; pointer-events: all; cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .board .picture .hit:hover { fill-opacity: .1; }
-  .board .picture .hit.down { fill-opacity: .3; }
-  .board .picture .hit.waiting { fill: #f5b301; fill-opacity: .45; }
-  /* The face a key sends is drawn boldly and the other is dimmed, so a
-     reader sees which the board is on without reading the tabs. The
-     picture colours its glyphs in inline style attributes, which beat
-     any selector, hence !important: it is the only way to reach them
-     without editing the drawing's colours. */
-  .board .picture .face-normal,
-  .board .picture .face-shifted { transition: opacity .15s; }
-  .board[data-mode="apl"] .picture .face-normal,
-  .board[data-mode="abc"] .picture .face-shifted { opacity: .2; }
-  .board[data-mode="apl"] .picture .face-shifted,
-  .board[data-mode="abc"] .picture .face-normal {
-    fill: #0b3d91 !important; stroke: #0b3d91 !important; stroke-width: .5 !important;
-  }
-  /* Caps Lock down is APL: lit. Up is ABC: dim. */
-  .board[data-mode="apl"] .picture .caps-lock-face { fill: #f5b301 !important; }
-  .board[data-mode="apl"] .picture .caps-lock-label { fill: #000 !important; font-weight: 700; }
-  .board[data-mode="abc"] .picture .caps-lock { opacity: .45; }
-  /* Tab and the Shifts do nothing here, so they look like it, always. */
-  .board .picture .inert { opacity: .3; }
-  .board .picture .attn { cursor: pointer; }
-  .board .picture .attn rect { fill: #c0392b; }
-  .board .picture .attn.down rect { fill: #922b21; }
-  .board .picture .attn text {
-    fill: #fff; font: 700 9px system-ui, sans-serif;
-    text-anchor: middle; dominant-baseline: central; pointer-events: none;
-  }
-
-  /* The overstrikes, under the picture in APL mode: the glyph, and
-     small beneath it the two it is struck from. */
-  .board .strikes {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(calc(var(--key) * 1.05), 1fr));
-    gap: .2rem; max-width: calc(var(--key) * 16); margin: 0 auto; width: 100%;
-  }
-  .board .strikes[hidden] { display: none; }
-  .board .strike {
-    font: inherit; cursor: pointer; padding: .1rem 0; color: var(--ink); background: none;
-    border: 1px solid var(--rule); border-radius: .3rem;
-    display: flex; flex-direction: column; align-items: center; line-height: 1.1;
-  }
-  .board .strike:active { background: var(--rule); }
-  .board .strike .glyph { font-size: calc(var(--key) * .45); }
-  .board .strike .parts { font-size: 10px; opacity: .55; letter-spacing: .15em; }
-
-  /* Commands and Idioms: one tap each. */
-  .board .list {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
-    gap: .3rem; max-height: 38dvh; overflow-y: auto;
-    max-width: calc(var(--key) * 16); margin: 0 auto; width: 100%;
-  }
-  .board .list[hidden] { display: none; }
-  .board .list .entry {
-    font: inherit; font-size: 14px; text-align: left; cursor: pointer;
-    padding: .35rem .5rem; color: var(--ink); background: none;
-    border: 1px solid var(--rule); border-radius: .3rem;
-    display: flex; flex-direction: column; gap: .1rem;
-  }
-  .board .list .entry:active { background: var(--rule); }
-  .board .list .label { font-size: 11px; opacity: .6; }
-  .board .list .label:empty { display: none; }
-
-  /* Space, erase and return. Return is the most important key on the
-     board and is drawn so. */
-  .board .controls { max-width: calc(var(--key) * 16); margin: 0 auto; width: 100%; }
-  .board .key {
-    font: inherit; cursor: pointer; color: var(--ink); background: none;
-    border: 1px solid var(--rule); border-radius: .3rem;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .board .controls .key { height: calc(var(--key) * 1.1); font-size: 14px; }
-  .board .controls .key:active { background: var(--rule); }
-  .board .controls .erase { flex: 1.2; }
-  /* The underscore key, on the ABC tab: lit for the next letter,
-     solid and barred beneath while locked. */
-  .board .controls .under { flex: .8; }
-  .board .controls .under[hidden] { display: none; }
-  .board[data-under="once"] .controls .under { background: var(--rule); }
-  .board[data-under="lock"] .controls .under {
-    background: var(--ink); color: var(--paper); box-shadow: inset 0 -3px 0 #f5b301;
-  }
-  .board .controls .space { flex: 3; }
-  .board .controls .return {
-    flex: 2.2; font-size: 16px; font-weight: 700;
-    color: var(--paper); background: var(--ink); border-color: var(--ink);
-  }
-  .board .controls .return:active { opacity: .8; }
-
-  /* Where the board sits and how big it is: small, at one end, and
-     never mistakable for a key that types something. */
-  .board .placing { justify-content: flex-end; gap: .3rem; }
-  .board .key.small {
-    flex: 0 0 auto; width: 2rem; height: 1.5rem; font-size: 12px; opacity: .65;
-  }
-  .board .key.small:hover { opacity: 1; }
-  .board .credit { justify-content: center; }
-  .board .credit a { font-size: 11px; opacity: .55; color: inherit; }
-  .board .credit a:hover { opacity: 1; }
-
-  dialog {
-    max-width: 34rem; width: calc(100vw - 2rem);
-    max-height: 80dvh; overflow-y: auto;
-    color: var(--ink); background: var(--paper);
-    border: 1px solid var(--rule); border-radius: .4rem; padding: 1rem;
-  }
-  dialog::backdrop { background: #0009; }
-  /* Help's close button: held at the top right as the dialog scrolls. */
-  dialog .x { position: sticky; top: 0; float: right; height: 0; margin: 0; }
-  dialog .x button {
-    font-size: 20px; line-height: 1; width: 2rem; height: 2rem; padding: 0;
-    border-radius: 50%; background: var(--paper);
-  }
-  #diagnosis { font-size: 11px; white-space: pre-wrap; word-break: break-all; user-select: all; }
-  dialog h2 { margin: 0 0 .5rem; font-size: 1.1rem; }
-  dialog h3 { margin: 1rem 0 .3rem; font-size: .95rem; }
-  dialog img { max-width: 100%; height: auto; }
-  dialog .quiet { opacity: .7; font-size: 12px; }
-
-  /* The session owns the window exactly, and the colophon sits after
-     it -- below the fold, scrolled to by whoever wants it. The bar
-     under the paper has been cut twice for taking room the
-     transcript wanted; this must not give any of it back. */
-  body { height: auto; min-height: 100dvh; display: block; }
-  /* As tall as the viewport actually is. --vh is set from
-     visualViewport, which tracks the URL bar sliding in and out and
-     pinch-zoom; dvh is the fallback and vh the fallback to that. */
-  #session { height: 100vh; display: flex; flex-direction: column; }
-  @supports (height: 100dvh) { #session { height: 100dvh; } }
-  #session { height: var(--vh, 100dvh); }
-
-  /* One line of items, wrapping: a phone will not fit them on one,
-     and a PWA window is a phone. The separators are decoration and
-     are hidden from a screen reader. */
-  .colophon {
-    border-width: 1px 0 0;
-    padding: 1rem 1rem calc(1.4rem + env(safe-area-inset-bottom));
-    font-size: 12px; line-height: 1.9; opacity: .75;
-    display: flex; flex-wrap: wrap; justify-content: center;
-    gap: 0 .5rem; text-align: center;
-  }
-  .colophon a { color: inherit; }
-  .colophon .sep { opacity: .45; }
-  #built { font-variant-numeric: tabular-nums; }
-
-  /* The controls under the paper. Not a footer: there is a real one
-     now, and this is two buttons. */
-  .bar {
-    display: flex; gap: .5rem; align-items: center; flex-wrap: wrap;
-    padding: .4rem 1rem calc(.4rem + env(safe-area-inset-bottom));
-    border-top: 1px solid var(--rule);
-  }
+  body { margin: 0 auto; max-width: 64rem; padding: 2rem 1.25rem;
+    background: var(--paper); color: var(--ink);
+    font-family: Georgia, "Times New Roman", serif; }
+  h1 { font-size: 1.75rem; font-weight: normal; margin: 0 0 1.5rem; }
+  .machines { display: grid; gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); }
+  .machines a { display: block; position: relative; color: inherit; text-decoration: none;
+    border: 1px solid var(--rule); border-radius: .5rem; overflow: hidden; }
+  .machines a:hover, .machines a:focus-visible { border-color: var(--ink); }
+  .machines a:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .machines img { display: block; width: 100%; aspect-ratio: 5 / 4;
+    object-fit: contain; background: #c3c7cc; }
+  .machines img.dark { background: #2b3134; }
+  .machines a::after { content: attr(data-tip); position: absolute; inset: 0 0 auto;
+    aspect-ratio: 5 / 4; display: grid; place-content: center; text-align: center;
+    padding: .5rem; box-sizing: border-box; font-size: 2rem; color: #fff;
+    background: rgb(0 0 0 / .5); opacity: 0; pointer-events: none; }
+  .machines a:hover::after, .machines a:focus-visible::after { opacity: 1; }
+  .machines span { display: block; padding: .6rem; text-align: center; font-size: 1.25rem; }
 </style>
-<main id="session">
-  <header>
-    <span class="name">sw-apl</span>
-    <!-- The mode, as a row of tabs: the current one is marked, and
-         the other starts a session in its mode. The circled letter is
-         decoration to a screen reader, which reads the label instead. -->
-    <div class="mode-tabs" role="tablist" aria-label="APL mode">
-      <button type="button" role="tab" aria-selected="false" id="mode-tab-a" data-mode="A"
-              title="APL\360-inspired" aria-label="1970, APL\360-inspired">
-        <span aria-hidden="true">Ⓐ '70</span>
-      </button>
-      <button type="button" role="tab" aria-selected="true" id="mode-tab-b" data-mode="B"
-              title="IBM 5100-inspired" aria-label="1975, IBM 5100-inspired">
-        <span aria-hidden="true">Ⓑ '75</span>
-      </button>
-    </div>
-    <span class="mode-about" id="mode-about" hidden>IBM 5100-inspired</span>
-  </header>
-  <pre id="paper"></pre>
-  <div id="line" class="waiting"><span id="prompt"></span><span
-    id="before"></span><span id="caret"></span><span id="after"></span></div>
-  <!-- What the board is in the middle of, in words: a strike waiting,
-       the underscore key on. A phone has no hover, so this is where
-       a reader learns what a special key just did. -->
-  <div id="note" role="status" aria-live="polite" hidden></div>
-  <div id="board" class="board" hidden aria-label="APL keyboard"></div>
-  <nav class="bar">
-    <button type="button" id="show-board" aria-pressed="false">Keyboard</button>
-    <button type="button" id="show-help">Help</button>
-    <span class="offline" id="offline" hidden
-          title="The network is off. sw-apl runs here without it.">offline</span>
-  </nav>
-</main>
-
-<footer class="colophon">
-  <span>MIT License</span>
-  <span class="sep" aria-hidden="true">·</span>
-  <span>&copy; 2026 Michael A Wright</span>
-  <span class="sep" aria-hidden="true">·</span>
-  <a href="https://github.com/sw-vibe-coding/sw-apl">sw-apl</a>
-  <span class="sep" aria-hidden="true">·</span>
-  <a href="literate/index.html" id="literate">Literate APL</a>
-  <span class="sep" aria-hidden="true">·</span>
-  <a href="https://software-wrighter-lab.github.io/">Blog</a>
-  <span class="sep" aria-hidden="true">·</span>
-  <a href="https://discord.com/invite/Ctzk5uHggZ">Discord</a>
-  <span class="sep" aria-hidden="true">·</span>
-  <a href="https://www.youtube.com/@SoftwareWrighter">YouTube</a>
-  <span class="sep" aria-hidden="true">·</span>
-  <span id="built">&mdash;</span>
-</footer>
-
-<dialog id="help">
-  <!-- First, so it sits at the top right of whatever is scrolled into
-       view; Escape and a click outside close Help too. -->
-  <form method="dialog" class="x"><button aria-label="Close Help" title="Close">&times;</button></form>
-  <h2>sw-apl</h2>
-  <p>
-    An APL session, compiled to WebAssembly and running in a worker
-    in this tab. There is no server: nothing typed here leaves your
-    browser, and nothing is sent anywhere.
-  </p>
-  <h3>The keyboard</h3>
-  <p>
-    <img src="redistributed/apl-keyboard/APL-keybd2.svg"
-         alt="An IBM 2741 APL keyboard layout" width="410" height="125">
-  </p>
-  <h3>Four ways to enter a glyph</h3>
-  <ol>
-    <li><b>Tap the board.</b> <b>Keyboard</b> shows it. Keys are laid out
-      like the 2741's, so tapping also shows you where the key is.
-      <b>ABC</b> switches to letters and digits.</li>
-    <li><b>The 2741 layout.</b> Unshifted letters are capitals;
-      <kbd>Shift</kbd>-R is <code>⍴</code>, <kbd>Shift</kbd>-L is
-      <code>⎕</code>. Hold <kbd>Alt</kbd> for the character a key is
-      painted with.</li>
-    <li><b>Overstrikes.</b> <kbd>Ctrl</kbd>-<kbd>]</kbd> strikes the last
-      glyph, so <code>⍟</code> is <code>○</code>, that key,
-      <code>*</code>. On the board, the row under the keys has each
-      overstrike this mode has, one tap each, with the two it is struck
-      from shown small beneath it; the board's <b>BACKSPACE</b> strikes
-      any pair. On the <b>ABC</b> tab, the <b>A&#818;</b> key underscores
-      letters: one tap for the next letter, two quick taps to lock it
-      for every letter, and a tap to let go.</li>
-    <li><b>Paste.</b> APL pasted in arrives as it is.</li>
-  </ol>
-  <h3>The board's special keys</h3>
-  <ul>
-    <li><b>&larr;</b> (Backspace, on the picture) is the 2741's
-      overstrike key: it does not erase. The next character strikes
-      over the last one, so <code>○</code>, &larr;, <code>*</code> is
-      <code>⍟</code>. A note under the line says a strike is waiting;
-      &larr; again or <b>Erase</b> cancels it. A pair that makes
-      nothing rings, and the note says what the first one does make:
-      the lamp <code>⍝</code> is <code>∩</code> with <code>○</code>,
-      not with <code>∘</code>.</li>
-    <li><b>Erase</b> deletes the last glyph, a struck one whole.</li>
-    <li><b>The row under the keys</b> (APL tab) has every overstruck
-      glyph this mode has, one tap each, with its two parts beneath.</li>
-    <li><b>A&#818;</b> (ABC tab) underscores letters: one tap for the
-      next letter, two quick taps to lock it, a tap to stop. The note
-      under the line says which.</li>
-    <li><b>Caps Lock</b> switches the picture between APL glyphs and
-      letters, as the APL and ABC tabs do.</li>
-    <li><b>ATTN</b> stops a running line.</li>
-    <li><b>&#x2B0D;</b> moves the board to the other edge;
-      <b>&minus;</b> and <b>+</b> size its keys.</li>
-  </ul>
-  <h3>Workspaces</h3>
-  <p>
-    <code>)LIB 1</code> lists the workspaces sw-apl ships;
-    <code>)LOAD 1 RACE</code> loads one. <code>)SAVE</code> writes
-    library 0 into this browser's own storage, so a saved workspace
-    comes back next time you open this page in this browser -- and is
-    in no other browser and on no other machine.
-  </p>
-  <h3>Other libraries</h3>
-  <p>
-    <code>)LIBS</code> lists the libraries this page reaches: 0 is
-    yours, 1 is what sw-apl ships, and 2 is EXTENDED, the workspaces
-    kept in the sw-apl-workspaces repository. <code>)LIB 2</code> lists
-    them and <code>)LOAD 2 COURSE</code> loads one. Only library 0 can
-    be saved to.
-  </p>
-  <h3>Help at the prompt</h3>
-  <p>
-    <code>)HELP</code> lists the commands this mode has, and
-    <code>)HELP LOAD</code> (or any command, or <code>)HELP TOPICS</code>)
-    shows a page. <code>)DIALECT</code> says which mode you are in.
-  </p>
-  <h3>Defining and changing functions</h3>
-  <p>
-    <code>∇Z←S W;V</code> opens a new function, and the prompt
-    <code>[1]</code> numbers the line you type next; <code>∇</code>
-    closes it. <code>∇S</code> reopens one. While it is open:
-  </p>
-  <ul>
-    <li><code>[3]</code> goes to line 3, <code>[3] text</code> replaces
-      it, <code>[1.5]</code> puts a line between 1 and 2, and
-      <code>[∆3]</code> deletes line 3.</li>
-    <li><code>[⎕]</code> shows the whole function, <code>[3⎕]</code>
-      line 3 alone, and <code>[⎕3]</code> from line 3 on.
-      <code>∇S[⎕]∇</code> shows S without leaving the prompt.</li>
-    <li>In (B) '75, <code>[3⎕]</code> puts line 3 in the input line to
-      edit in place; press Return to enter it.</li>
-    <li>In (A) '70, <code>[3⎕10]</code> changes part of line 3: it is
-      shown, and under it, from column 10, <code>/</code> deletes the
-      character above and a digit opens that many blanks before it.
-      The line is shown again; type into the blanks and press Return.</li>
-  </ul>
-  <p>
-    A function name already in use is a DEFN ERROR:
-    <code>)ERASE</code> it, or reopen it with <code>∇NAME</code>.
-    <code>)HELP EDITOR</code> has the whole list.
-  </p>
-  <h3>Two modes</h3>
-  <p>
-    The tabs at the top are the modes, and the page opens in
-    <b>Ⓑ '75</b> until you choose the other. <b>Ⓐ '70</b> is
-    APL\360-inspired. <b>Ⓑ '75</b> is IBM 5100-inspired: it adds
-    execute <code>⍎</code> and the quad system variables and functions
-    such as <code>⎕IO</code> and <code>⎕FX</code>, and has no I-beams
-    and no <code>)ORIGIN</code>, <code>)DIGITS</code> or
-    <code>)WIDTH</code>.
-    Each mode lists and loads only the workspaces that run in it.
-    Switching starts a new session in a clear workspace, so
-    <code>)SAVE</code> first what you want to keep.
-  </p>
-  <h3>With the network off</h3>
-  <p>
-    Once this page has loaded, sw-apl runs without the network: the
-    interpreter is here in the tab, and workspaces you save are kept in
-    this browser. Reload it offline, or open it from your home screen,
-    and it starts as before; <b>offline</b> at the foot of the page says
-    the network is off. Library 2 comes from another repository, so
-    it is there offline only if it was reached before. Online, the page
-    always takes the newest build.
-  </p>
-  <h3>If it says there is no shared memory</h3>
-  <p>
-    The interpreter stops and waits for a line, which needs a
-    <code>SharedArrayBuffer</code>, which a browser grants only to an
-    isolated page. Served locally by <code>just demo</code> or
-    <code>just pages-serve</code>, that is two headers and it simply
-    works. A static host will not send them, so the published page
-    installs a service worker to add them and loads once more under
-    it. If the browser will not install it, the page clears out what
-    this site left in the browser and tries again before it gives up;
-    the words after the colon say why it stopped.
-  </p>
-  <ul>
-    <li><b>A private window</b> refuses the worker. Use an ordinary
-      one.</li>
-    <li><b>Blocking site data</b>: allow this site to save data in the
-      browser's site settings, then reload.</li>
-    <li><b>Anything else</b>: clear this site's data (in Chrome, the
-      icon left of the address, then Site settings, then Delete data)
-      and reload. That removes a worker an earlier visit left broken.
-      Or run it locally.</li>
-  </ul>
-  <h3>Credits</h3>
-  <p>
-    The keyboard picture is by Rursus, under CC BY-SA 3.0; the glyphs
-    are drawn in APL385 Unicode, by Adrian Smith, public domain. The
-    terms travel with them, in
-    <a href="redistributed/apl-keyboard/ATTRIBUTION.md">apl-keyboard</a>
-    and <a href="redistributed/apl385-font/ATTRIBUTION.md">apl385-font</a>.
-  </p>
-  <p>What this browser said, to send with a report:</p>
-  <pre id="diagnosis" hidden></pre>
-  <form method="dialog"><button>Close</button></form>
-</dialog>
-<dialog id="switch" aria-labelledby="switch-title">
-  <h2 id="switch-title">Switch to <span id="switch-to"></span>?</h2>
-  <p>
-    The session starts again in the other mode, in a clear workspace:
-    the workspace in hand is not carried across. <code>)SAVE</code> it
-    first to keep it. A saved workspace is listed in the modes it runs
-    in, so one that runs in both is there in either.
-  </p>
-  <form method="dialog">
-    <button value="switch">Switch</button>
-    <button value="stay" autofocus>Stay</button>
-  </form>
-</dialog>
-<script type="module">
-  // The page is the one file a browser must fetch fresh: it is the
-  // navigation, and everything else hangs off it. version.txt is
-  // asked for uncached and names the build; every file below is
-  // fetched at that version, so a cached worker or an older bundle
-  // cannot meet a newer page. Without it the page still loads --
-  // unstamped, as it did before there was a build to stamp.
-  const version = await fetch("version.txt", { cache: "no-store" })
-    .then((r) => (r.ok ? r.text() : ""))
-    .catch(() => "");
-  const at = version.trim();
-  const query = new URLSearchParams({ ts: String(Date.now()) });
-  if (at) query.set("v", at);
-  await import(`./apl.js?${query}`);
+<h1>sw-apl</h1>
+<nav class="machines">
+  <a id="apl-70" data-key="a" data-tip="APL\360" href="demo.html?mode=A">
+    <img src="machines/70.webp" alt="A printing terminal with paper loaded"><span><u>A</u>'70</span></a>
+  <a id="apl-75" data-key="b" data-tip="APLSV" href="demo.html?mode=B">
+    <img src="machines/75.webp" alt="A desktop computer with a small screen above its keyboard"><span><u>B</u>'75</span></a>
+  <a id="apl-80" data-key="c" data-tip="APL-80" href="coming-soon.html">
+    <img src="machines/80.webp" alt="A home computer with a video display on its keyboard unit"><span><u>C</u>'80</span></a>
+  <a id="apl-83" data-key="d" data-tip="IBM PC APL" href="coming-soon.html">
+    <img class="dark" src="machines/83.webp" alt="A personal computer with two monitors and a keyboard"><span><u>D</u>'83</span></a>
+</nav>
+<script>
+  // A letter, either case, is the same as choosing its tile.
+  addEventListener("keydown", (event) => {
+    if (event.ctrlKey || event.metaKey || event.altKey || event.repeat) return;
+    const key = event.key.toLowerCase();
+    if (key.length === 1) document.querySelector(`[data-key="${CSS.escape(key)}"]`)?.click();
+  });
 </script>
