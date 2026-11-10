@@ -1,0 +1,1 @@
+Scan out of (A): SYNTAX ERROR when it runs, (B) unchanged, scanning workspaces saved as (B) only, board idiom (B) only, samples 33 and 52 rebased and 92 added, docs updated. Committed locally, NOT pushed or published, at the owner direction; sw-apl-workspaces POLY and COURSE fixes were pushed earlier.

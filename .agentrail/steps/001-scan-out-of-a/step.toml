@@ -1,8 +1,9 @@
 number = 1
 slug = "scan-out-of-a"
-status = "in-progress"
+status = "completed"
 description = "In (A) a scan is SYNTAX ERROR when it runs, in (B) it is unchanged; a saved w..."
 role = "production"
 context_files = []
 created_at = "2026-11-10T08:00:10"
-commits = []
+completed_at = "2026-11-10T09:10:48"
+commits = ["fccf60644515b0562638c074b395d3e4f43f8d24"]
