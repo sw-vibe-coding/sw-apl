@@ -52,7 +52,7 @@ if [ -n "$untracked" ]; then
 fi
 # Borrowed material that IS redistributed lives under
 # images/redistributed/, one directory per work, and may not travel
-# without the terms it travels under. A licence file nobody wrote is
+# without the terms it travels under. A license file nobody wrote is
 # the whole risk here: copying a file is one command, and finding out
 # afterwards what it was licensed under is not.
 for dir in images/redistributed/*/; do

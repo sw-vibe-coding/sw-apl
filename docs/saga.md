@@ -36,4 +36,4 @@ made an axis bracket a SYNTAX ERROR wherever APL\360 has no such
 form. Two steps came from the owner mid-saga: line editing with
 history in the REPL, and generating the glyph tables from
 `data/glyphs.toml`. Conway's Life runs at the end of it, written
-the APL\360 way with eight neighbour rotations.
+the APL\360 way with eight neighbor rotations.

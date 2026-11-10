@@ -3,7 +3,7 @@
 `APL-keybd2.svg` is the layout of the IBM 2741's APL keyboard: which
 glyph each key carries, shifted above and unshifted below.
 
-It is not ours. It is redistributed here under its own licence, kept
+It is not ours. It is redistributed here under its own license, kept
 in `images/redistributed/` so that what sw-apl wrote and what sw-apl
 borrowed are never in the same directory.
 
@@ -15,7 +15,7 @@ borrowed are never in the same directory.
 - **Source:** <https://commons.wikimedia.org/wiki/File:APL-keybd2.svg>
 - **First published:** 25 July 2007, derived by its author from
   `APL-keybd.svg`
-- **Licence:** [Creative Commons Attribution-ShareAlike 3.0
+- **License:** [Creative Commons Attribution-ShareAlike 3.0
   Unported](https://creativecommons.org/licenses/by-sa/3.0/), whose
   full text is in `LICENSE` beside this file. The author also offers
   it under the GNU Free Documentation License 1.2 or later; sw-apl
@@ -26,7 +26,7 @@ borrowed are never in the same directory.
 ## The adaptation: `APL-keybd2-board.svg`
 
 `APL-keybd2-board.svg` is an adaptation of `APL-keybd2.svg`, made so
-that the on-screen keyboard in sw-apl's browser demo can emphasise
+that the on-screen keyboard in sw-apl's browser demo can emphasize
 one face of every key and dim the other. It is written by
 `scripts/board-keys.py --adapt` from the original, never edited by
 hand, so it can be made again from the original at any time.
@@ -40,13 +40,13 @@ What was changed:
    key -- its edge, its face and its label -- so its state can be
    shown, and `inert` to the parts of Tab and both Shift keys, which
    do nothing on the board and are drawn so.
-3. Writing the file back re-serialised it: attribute order and
+3. Writing the file back re-serialized it: attribute order and
    whitespace differ from the original. Nothing drawn was moved,
-   recoloured, resized or removed. Rendered at 150 dpi, the
+   recolored, resized or removed. Rendered at 150 dpi, the
    adaptation and the original differ in no pixel.
 
-The adaptation is offered under **CC BY-SA 3.0**, the licence of the
-work it adapts, and not under sw-apl's MIT licence. The credit above
+The adaptation is offered under **CC BY-SA 3.0**, the license of the
+work it adapts, and not under sw-apl's MIT license. The credit above
 applies to it in full; the adaptation's own additions are too slight
 to claim.
 
@@ -61,15 +61,15 @@ other.
 
 ## What share-alike asks of us
 
-CC BY-SA is not a licence to copy and forget. If this file is ever
-changed -- keys given identifiers so they can be clicked, colours
+CC BY-SA is not a license to copy and forget. If this file is ever
+changed -- keys given identifiers so they can be clicked, colors
 altered, pieces cut out -- then:
 
 1. the change must be stated here, saying what was changed;
 2. the result must be distributed under CC BY-SA 3.0 or a compatible
-   licence, not under sw-apl's MIT licence;
+   license, not under sw-apl's MIT license;
 3. the changed file belongs in **this directory**, beside the
-   original and this licence. A modified SVG does not become sw-apl's
+   original and this license. A modified SVG does not become sw-apl's
    by being useful to sw-apl, and moving it into `pages/` or
    `components/` would put a share-alike work under an MIT tree; and
 4. the credit above must survive wherever the result is shown,
@@ -77,4 +77,4 @@ altered, pieces cut out -- then:
 
 A page that shows the keyboard is a redistribution like any other.
 Whoever can see it must be able to reach the author's name and the
-licence.
+license.

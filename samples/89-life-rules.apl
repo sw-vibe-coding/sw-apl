@@ -1,15 +1,15 @@
 ⍝ LIFE keeps Conway's rules, B3/S23: an empty cell with exactly 3
-⍝ neighbours is born, a live cell with 2 or 3 survives, and every
+⍝ neighbors is born, a live cell with 2 or 3 survives, and every
 ⍝ other cell is empty next generation -- of loneliness with fewer
 ⍝ than 2, of overcrowding with more than 3. GEN counts the eight
-⍝ neighbours by rotating the board, so the edges wrap: a torus.
+⍝ neighbors by rotating the board, so the edges wrap: a torus.
 )LOAD 1 LIFE
 ⍝ Each check is 1 when it holds. Boards are compared whole:
 ⍝ ∧/,A=B is 1 when every square of A equals B's.
-⍝ A lone cell dies, and so does one with four neighbours.
+⍝ A lone cell dies, and so does one with four neighbors.
 GEN 3 3⍴0 0 0 0 1 0 0 0 0
 (GEN 5 5⍴0 0 0 0 0 0 1 0 1 0 0 0 1 0 0 0 1 0 1 0 0 0 0 0 0)[3;3]
-⍝ An empty cell with exactly three neighbours is born.
+⍝ An empty cell with exactly three neighbors is born.
 (GEN 3 3⍴1 1 1 0 0 0 0 0 0)[2;2]
 ⍝ A block, 2 by 2, is a still life: it never changes.
 B←6 6⍴0

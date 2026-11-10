@@ -65,14 +65,14 @@ that print nothing.
   is owner-only). If your change introduced a warning, split to the
   gate before committing.
 - `scripts/reg.sh run -q` when interpreter, session or CLI
-  behaviour changed. reg-rs covers both: the sample transcripts
+  behavior changed. reg-rs covers both: the sample transcripts
   and the CLI itself -- arguments, batch and stdin modes, exit
   codes, executable files. Rebase a baseline only intentionally;
   name the test and the reason in the commit message.
 
 ## 6. Docs
 
-- Update `docs/language.md` / `docs/session.md` when behaviour
+- Update `docs/language.md` / `docs/session.md` when behavior
   changed (what and how, no chronology).
 - Update `docs/plan.md` when scope or ordering changed; the saga
   plan must match (`agentrail plan`).

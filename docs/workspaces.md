@@ -79,7 +79,7 @@ somewhere other than your own `work/`.
 
 Library 1 holds `LEARN` (an introduction to APL, in nine lessons:
 `START`, then `LESSON N`), `LIFE` (Conway's Life on a torus), `RACE` (a horse
-race written to be read), `EDIT` (a workspace to practise the del
+race written to be read), `EDIT` (a workspace to practice the del
 editor on, whose `FACT` is wrong by one on purpose), `BIRDS`
 (combinators, a version for each mode), and, in (B) only, `TTTML` (a
 machine that learns tic-tac-toe; `learn-tic-tac-toe-strategy.md`).

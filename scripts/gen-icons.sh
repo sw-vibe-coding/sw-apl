@@ -29,10 +29,10 @@ trap 'rm -rf "$tmp"' EXIT
 #
 # Bright green on nothing, so it reads on a light tab bar and a dark
 # one alike -- a favicon with a background is a square of somebody
-# else's colour in a strip of tabs.
+# else's color in a strip of tabs.
 #
-# The `favicon` CLI leaves the string low and left of centre with the
-# rotation applied, so the mark is trimmed to its ink and re-centred
+# The `favicon` CLI leaves the string low and left of center with the
+# rotation applied, so the mark is trimmed to its ink and re-centered
 # here: an icon is mostly seen small, and the dead corner was most of
 # the tile.
 mark="⍝⍴⌊"
@@ -40,7 +40,7 @@ green="#22c55e"
 
 favicon -T -f "$green" -t "$mark" -R 33 --font-size 52 -s 256 \
     --png -o "$tmp/mark.png" >/dev/null
-centre() {
+center() {
     magick "$tmp/mark.png" -trim +repage -background none -gravity center \
         -extent '%[fx:max(w,h)*1.18]x%[fx:max(w,h)*1.18]' \
         -resize "$1x$1" -background "$2" -gravity center -extent "$1x$1" "$3"
@@ -52,7 +52,7 @@ centre() {
 # Not 48: an ICO frame is stored as raw BGRA, so 48 alone is nine
 # kilobytes and triples the file, and nothing in a browser asks for
 # it -- Windows tiles are served by the manifest's PNGs instead.
-# Reducing colours does nothing for the same reason, raw BGRA having
+# Reducing colors does nothing for the same reason, raw BGRA having
 # no palette to reduce.
 #
 # Not an SVG either, tempting as it is at a tenth the size: the mark
@@ -60,11 +60,11 @@ centre() {
 # APL font. Outlining them needs a tracer this repository does not
 # require. A bitmap that always draws beats a vector that sometimes
 # does not.
-centre 256 none "$tmp/icon.png"
+center 256 none "$tmp/icon.png"
 magick "$tmp/icon.png" -define icon:auto-resize=16,32 pages/favicon.ico
 # iOS puts black behind a transparent touch icon, so this one has
 # paper under it rather than nothing.
-centre 180 "$paper" pages/apple-touch-icon.png
+center 180 "$paper" pages/apple-touch-icon.png
 
 # The install icons, from the logo. It is a round badge on nothing --
 # the source is a JPEG with white corners, masked to its circle in

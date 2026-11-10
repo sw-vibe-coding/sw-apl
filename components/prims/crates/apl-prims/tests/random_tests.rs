@@ -31,7 +31,7 @@ fn the_link_starts_at_16807_and_roll_is_reproducible() {
 }
 
 #[test]
-fn roll_honours_the_origin_and_rejects_bad_arguments() {
+fn roll_honors_the_origin_and_rejects_bad_arguments() {
     let mut env = Env {
         io: 0,
         ..Env::default()

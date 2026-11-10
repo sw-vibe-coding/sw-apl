@@ -13,7 +13,7 @@ It has two modes (owner direction 2026-09-21):
 
 - **(A) '70, APL\360**, as on the IBM 2741. Everything below
   describes this mode unless it says otherwise.
-- **(B) '75**, modelled on the APL of the IBM 5100, 5110 and 5120
+- **(B) '75**, modeled on the APL of the IBM 5100, 5110 and 5120
   desktop computers -- APLSV as IBM adapted it for one user and a
   64-column screen. (A) with execute, format, and the quad system
   variables and functions added, and the I-beams and the `)ORIGIN`,

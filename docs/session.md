@@ -1,10 +1,10 @@
 # sw-apl Session: terminal look and feel, system commands
 
 sw-apl reproduces the APL\360 terminal session, in both of its
-modes: (A) '70, modelled on APL\360, and (B) '75, modelled on the APL
+modes: (A) '70, modeled on APL\360, and (B) '75, modeled on the APL
 of the IBM 5100 family. The session looks the same in each; where a
 mode differs, this page says so. Everything here is observable
-behaviour the reg-rs transcripts pin down.
+behavior the reg-rs transcripts pin down.
 
 ## Prompt and transcript
 
@@ -147,7 +147,7 @@ to `⍞` is just those characters.
 
 ## System commands
 
-Recognised when the first non-blank character is a right
+Recognized when the first non-blank character is a right
 parenthesis. Names are case-insensitive. Unknown commands, and
 known ones given an argument they do not take, report INCORRECT
 COMMAND. The tables below say what each command means, and which
@@ -360,7 +360,7 @@ Library 1 holds:
 | `LEARN` | An introduction to APL for someone who has never used it: `START`, then `LESSON 2` and on to `LESSON 9`. Where you are, numbers, vectors, reduction and indexing, names, errors, defining a function, saving, and where to go next. Each lesson shows lines to try and names the next |
 | `LIFE` | Conway's Life on a torus: `GLIDER` then `RUN 4` |
 | `RACE` | A horse race, written to be read: character matrix, mixed output, the conditional branch idiom |
-| `EDIT` | A workspace to practise the del editor on. `FACT` is wrong by one on purpose |
+| `EDIT` | A workspace to practice the del editor on. `FACT` is wrong by one on purpose |
 | `BIRDS` | Combinators, after Smullyan's birds, with a version for each mode: `HOWBIRDS` flies them all, and `NOTHERE` says what cannot be written and why. In (A), the birds APL\360 can write, over a table of primitives; in (B), every bird in the list, the Mockingbird and the Sage included, reaching any function by execute. See `birds.md`, and `combinators.md` for its functions |
 | `TTTML` | (B) only. A machine that learns tic-tac-toe by playing itself, and plays you with what it learned: `PLAY 1` to move first, `PLAY 2` to let it begin, `TRIAL N` against a random player, `TRAIN N` to learn again. See `learn-tic-tac-toe-strategy.md` |
 

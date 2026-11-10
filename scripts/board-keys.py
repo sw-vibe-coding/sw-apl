@@ -22,7 +22,7 @@ their path data names.
 With `--adapt OUT` it also writes the adaptation the board draws: the
 picture with a class on every glyph saying which face of its key it is
 on, and on the parts of the Caps Lock key. See ATTRIBUTION.md beside
-the picture for what that changes and under what licence.
+the picture for what that changes and under what license.
 
 Usage: scripts/board-keys.py [--adapt OUT.svg] > pages/board-keys.json
 """
@@ -186,13 +186,13 @@ def rows(found):
 
 def glyph_boxes(el, m, found):
     """Every small outline in the picture -- the glyphs on the keys --
-    with the element and the centre of its box."""
+    with the element and the center of its box."""
     m = times(m, matrix(el.get("transform")))
     if el.tag == SVG + "path" and el.get("d"):
         pts = [(m[0] * x + m[2] * y + m[4], m[1] * x + m[3] * y + m[5]) for x, y in path_points(el.get("d"))]
         xs, ys = [p[0] for p in pts], [p[1] for p in pts]
-        centre = ((min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2)
-        found.append((el, centre, max(xs) - min(xs), max(ys) - min(ys)))
+        center = ((min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2)
+        found.append((el, center, max(xs) - min(xs), max(ys) - min(ys)))
     for child in el:
         glyph_boxes(child, m, found)
     return found
@@ -210,12 +210,12 @@ def mark(el, cls):
 def adapt(tree, keys, special, out):
     """Write the adaptation: the picture with a class on each glyph
     saying which face of its key it is on, and on the parts of the Caps
-    Lock key. A page can then emphasise one face and dim the other.
+    Lock key. A page can then emphasize one face and dim the other.
 
     A 2741 key carries its shifted glyph above and its unshifted one
     below, and every ordinary key on the picture has exactly one of
-    each, so the face is which half of the key a glyph's centre is in.
-    Nothing is moved, recoloured or removed: only classes are added.
+    each, so the face is which half of the key a glyph's center is in.
+    Nothing is moved, recolored or removed: only classes are added.
     """
     found = glyph_boxes(tree.getroot(), [1, 0, 0, 1, 0, 0], [])
     for key in keys:
@@ -225,8 +225,8 @@ def adapt(tree, keys, special, out):
         on = [(el, c) for el, c, gw, gh in found if gw < 20 and gh < 20 and within(c, key["box"])]
         if len(on) != 2:
             sys.exit(f"board-keys: key {key['cap']} carries {len(on)} glyphs, not two")
-        for el, centre in on:
-            mark(el, "face-shifted" if centre[1] < y + h / 2 else "face-normal")
+        for el, center in on:
+            mark(el, "face-shifted" if center[1] < y + h / 2 else "face-normal")
     caps = next(k["box"] for k in special if k["cap"] == "CAPS")
     for el, c, gw, gh in found:
         if within(c, caps):

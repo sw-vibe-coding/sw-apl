@@ -154,7 +154,7 @@ fn character_data_and_empties() {
 }
 
 #[test]
-fn axis_resolution_honours_the_origin() {
+fn axis_resolution_honors_the_origin() {
     let ax = |x: f64| Array::scalar(Number::from_f64(x));
     assert_eq!(resolve_axis(None, 1, 2).unwrap(), Axis::Last);
     assert_eq!(resolve_axis(Some(&ax(1.0)), 1, 2).unwrap(), Axis::At(0));

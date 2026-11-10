@@ -1,10 +1,10 @@
 # Citations
 
-Every source sw-apl's behaviour, documentation and workspaces refer
+Every source sw-apl's behavior, documentation and workspaces refer
 to. The code and the docs describe what these say in their own words;
 none of them is copied into the repository. The one borrowed file the
 repository does carry, the 2741 keyboard picture, is listed last with
-the licence it is carried under.
+the license it is carried under.
 
 bitsavers refuses scripted downloads from its main host; its mirrors
 carry the same files, for example
@@ -57,7 +57,7 @@ carry the same files, for example
 - **IBM Beam Spring Keyboards**, Deskthority wiki: the 5100 and 5120
   keyboards sharing a layout. <https://deskthority.net/wiki/IBM_Beam_Spring_Keyboards>
 - **Ibm5100 (2297950254).jpg**, Marcin Wichary, Wikimedia Commons: a
-  photograph of a 5100 keyboard; not carried, licence unchecked.
+  photograph of a 5100 keyboard; not carried, license unchecked.
   <https://commons.wikimedia.org/wiki/File:Ibm5100_(2297950254).jpg>
 
 - **IBM 5100 APL Reference Manual**, SA21-9213-2, May 1976, as above:
@@ -143,11 +143,11 @@ The pictures in `pages/machines/` are the owner's own renders of 3D
 models, not borrowed work. The badges they show are part of the
 historical machines they depict.
 
-## Carried in the repository, under licence
+## Carried in the repository, under license
 
 - **APL-keybd2.svg**, Wikimedia Commons user Rursus, July 2007:
   the IBM 2741 APL keyboard. Carried under CC BY-SA 3.0, with an
-  adaptation beside it; the licence, the credit and what was changed
+  adaptation beside it; the license, the credit and what was changed
   are in `images/redistributed/apl-keyboard/`.
   <https://commons.wikimedia.org/wiki/File:APL-keybd2.svg>
 - **APL385 Unicode**, Adrian Smith, 2016: the font the browser demo

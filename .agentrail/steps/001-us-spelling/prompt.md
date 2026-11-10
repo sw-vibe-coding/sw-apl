@@ -1,0 +1,1 @@
+Sweep the repository to American spelling: prose, UI strings, data, code identifiers and comments. Leave generated and append-only files, third-party licence texts and quoted titles alone. Add the rule to CLAUDE.md. Rebase any transcript that moves, with this as the reason.

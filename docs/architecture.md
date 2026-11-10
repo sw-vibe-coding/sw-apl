@@ -243,7 +243,7 @@ lex (strike) -> term (keyboard, paper, typing, aplterm) -> wire
 - `apl-inquiry` answers the commands that report what a workspace
   holds -- `)FNS`, `)VARS`, `)GRPS`, `)GRP`, `)SI`, `)SIV`,
   `)SYMBOLS` -- and owns the group facility and `)ERASE`. It is
-  `apl-commands`' neighbour rather than its contents: that crate
+  `apl-commands`' neighbor rather than its contents: that crate
   was at its module budget, and listing names has little to do
   with reading and writing workspace files.
 - `apl-extensions` answers the commands sw-apl adds -- `)DIALECT`,

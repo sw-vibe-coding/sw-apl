@@ -30,7 +30,7 @@ const NS = "http://www.w3.org/2000/svg";
 
 // The adaptation of the 2741 picture: the original, with a class on
 // every glyph saying which face of its key it is on. Drawn inline, not
-// as an <image>, so that the page can emphasise one face and dim the
+// as an <image>, so that the page can emphasize one face and dim the
 // other. CC BY-SA, like the original; see its ATTRIBUTION.md.
 const PICTURE = "redistributed/apl-keyboard/APL-keybd2-board.svg";
 

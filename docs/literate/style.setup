@@ -1,5 +1,5 @@
 # Shared by every literate document here: the page's look, and the
-# colours for the classes htmlize gives sw-apl-mode's faces
+# colors for the classes htmlize gives sw-apl-mode's faces
 # (docs/literate.md lists them). Light by default, dark when the
 # reader's system is.
 #+OPTIONS: toc:2 num:nil timestamp:nil author:t ^:{} html-postamble:nil html-preamble:t html-style:nil

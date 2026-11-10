@@ -138,7 +138,7 @@ fn an_overdetermined_system_gets_the_least_squares_fit() {
 }
 
 #[test]
-fn the_fit_minimises_the_squared_error() {
+fn the_fit_minimizes_the_squared_error() {
     // y = x with a symmetric wobble: the slope through the origin is
     // still 1, and no other slope does better.
     let x = m(3, 1, &[1.0, 2.0, 3.0]);

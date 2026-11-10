@@ -2,7 +2,7 @@
 
 This is the definition of done for the sw-apl CLI: one row per
 feature, with its status in each mode and what pins it. sw-apl has
-two modes: (A) '70, modelled on APL\360, and (B) '75, modelled on the
+two modes: (A) '70, modeled on APL\360, and (B) '75, modeled on the
 APL of the IBM 5100 family (`mode-b.md`). Each table has a column per
 mode. "done" means implemented and locked by a unit test or a reg-rs
 transcript (`tests/reg-rs`, seeded from `samples/`); `--` means the
@@ -52,7 +52,7 @@ For (B) '75 the oracle is the IBM 5110 APL Reference Manual, with
 the 5100's and the APLSV manuals where it defers to them
 (`mode-b.md` lists them, and what (B) adds, drops and changes). The
 criterion is the same shape: every row `done` in the (B) column, and
-its samples (76, 77, 78) reproducing the manual's behaviour.
+its samples (76, 77, 78) reproducing the manual's behavior.
 
 ## Syntax and the session
 
@@ -66,7 +66,7 @@ its samples (76, 77, 78) reproducing the manual's behaviour.
 | Quad input `⎕`: prompts `⎕:`, evaluates the reply in the current environment, prompts again for a reply with no value | done | done | eval/cli tests, sample 57 |
 | A reply to `⎕` that is not an answer: a system command runs and the request is made again (`)LOAD`, `)CLEAR`, `)OFF` and `)CONTINUE` give the request up); an error is reported and the request is made again, nothing left suspended; `⍞` takes either as characters | done | done | `quad_input_tests`, samples 85, 86 |
 | Quote-quad `⍞`: reads characters without evaluating, and on the left writes with no line ending so a prompt and its answer share a line | done | done | eval/cli tests, sample 57 |
-| A line `⍞←` left open carries across a statement boundary | done | done | `Reply` says its last line is unfinished and both shells honour it: the batch runner writes it without a newline and the reader prompts with it, as a terminal's carriage would sit there. Open-line tests, `tests/scripts/open-line.apl` |
+| A line `⍞←` left open carries across a statement boundary | done | done | `Reply` says its last line is unfinished and both shells honor it: the batch runner writes it without a newline and the reader prompts with it, as a terminal's carriage would sit there. Open-line tests, `tests/scripts/open-line.apl` |
 | Character literals `'...'`, doubled quote, any Unicode inside | done | done | lex tests, samples 19, 20 |
 | Bracket indexing `A[I;J]`, elided axes, index arrays of any rank | done | done | index tests, sample 48 |
 | Indexed assignment with scalar extension | done | done | index tests, sample 48 |

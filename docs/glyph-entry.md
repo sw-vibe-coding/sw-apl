@@ -155,7 +155,7 @@ you can run sw-apl inside Emacs and type glyphs directly. Add the
 
 ### A mode, and APL in Org documents
 
-`docs/emacs/sw-apl-mode.el` colours sw-apl source, and
+`docs/emacs/sw-apl-mode.el` colors sw-apl source, and
 `docs/emacs/ob-sw-apl.el` runs APL blocks in an Org document; see
 `literate.md`.
 
@@ -168,7 +168,7 @@ Slow, but always available.
 ### MELPA modes
 
 - `gnu-apl-mode` provides the `APL-Z` input method (default prefix is
-  a period, customisable through `gnu-apl-key-prefix`) and syntax
+  a period, customizable through `gnu-apl-key-prefix`) and syntax
   highlighting for `.apl` files. The key positions match the table
   above.
 - `dyalog-mode` provides an input method with the backtick prefix and
@@ -239,7 +239,7 @@ shortcut known. `Ctrl-^`, `0x1E`, is the fallback if some platform
 turns out to claim it.
 
 If you have a programmable keyboard, a spare key sending `Ctrl-]` --
-a keypad key relabelled, say -- gives you the 2741 gesture with
+a keypad key relabeled, say -- gives you the 2741 gesture with
 keycaps that carry only the foundational characters, as a 2741's did.
 
 Pressing `Ctrl-]` at the start of a line, or twice in a row, does

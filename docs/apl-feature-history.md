@@ -24,7 +24,7 @@ carries no date, and 1980 is the owner's.
 
 sw-apl's (A) '70 follows the '70 column. Its (B) '75 follows the APL
 of the IBM 5100 family, which IBM derived from APLSV; `mode-b.md`
-records how the two differ. APL\1130 is not modelled in sw-apl.
+records how the two differ. APL\1130 is not modeled in sw-apl.
 
 ## How to read a cell
 

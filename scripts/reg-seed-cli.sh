@@ -41,7 +41,7 @@ seed() {
 }
 
 seed apl-cli-version \
-    "The version block: name, copyright, licence, repository, build" \
+    "The version block: name, copyright, license, repository, build" \
     "$apl --version"
 seed apl-cli-version-short \
     "The short form -V gives the same block as --version" \

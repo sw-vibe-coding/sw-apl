@@ -11,7 +11,7 @@ byte for byte. Every example was run by sw-apl on the workspace as it
 ships, trained, and its result recorded under it. ~)LOAD 1 TTTML~ in
 the (B) tab of sw-apl in your browser gives the same answers.
 
-The machine (B) is modelled on, a desktop computer of 1975, had at
+The machine (B) is modeled on, a desktop computer of 1975, had at
 most 64 KB of memory and interpreted APL slowly. So the question is
 not only how a program learns a game, but how it does so in a small
 space: ~docs/learn-tic-tac-toe-strategy.md~ tells that story, with
@@ -207,7 +207,7 @@ VALUE 3 9⍴1 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0
 : 0.30922 0.36138 0.40962
 
 To X's first move, the corner is worth a little less than the edge and
-the centre is worth most.
+the center is worth most.
 
 * Choosing a move
 
@@ -229,7 +229,7 @@ A←P[V⍳⌈/V]
 ∇
 #+end_src
 
-It opens in the centre, takes a win when there is one, and blocks
+It opens in the center, takes a win when there is one, and blocks
 one:
 
 #+begin_src sw-apl :load "1 TTTML" :mode 75 :echo yes

@@ -1,5 +1,5 @@
 ⍝ Conway's Life as defined functions: a glider on a 6 by 6 torus.
-⍝ GEN counts the eight neighbours and applies the birth and survival
+⍝ GEN counts the eight neighbors and applies the birth and survival
 ⍝ rules; RUN steps N generations, displaying each. Still pure APL\360:
 ⍝ eight explicit rotations, a label, and the →LABEL×⍳COND idiom.
 ∇R←GEN B;N

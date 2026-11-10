@@ -1,4 +1,4 @@
-A clean-room APL interpreter with traditional glyphs, written in Rust from scratch, in two modes: (A) '70, modelled on APL\360, and (B) '75, modelled on the APL of the IBM 5100 family. Flat arrays, floating point, the del editor, and workspaces in numbered libraries.
+A clean-room APL interpreter with traditional glyphs, written in Rust from scratch, in two modes: (A) '70, modeled on APL\360, and (B) '75, modeled on the APL of the IBM 5100 family. Flat arrays, floating point, the del editor, and workspaces in numbered libraries.
 
 Usage: sw-apl [OPTIONS]
 
@@ -89,4 +89,4 @@ AI CODING AGENT INSTRUCTIONS:
        printf '2+2\n)OFF\n' | sw-apl
   3. Use --no-echo when comparing raw output against another APL.
   4. Regression baselines live in tests/reg-rs; run
-     scripts/reg.sh run -q before claiming behaviour is unchanged.
+     scripts/reg.sh run -q before claiming behavior is unchanged.

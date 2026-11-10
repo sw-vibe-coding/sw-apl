@@ -48,4 +48,4 @@ AI CODING AGENT INSTRUCTIONS:
        printf '2+2\n)OFF\n' | sw-apl
   3. Use --no-echo when comparing raw output against another APL.
   4. Regression baselines live in tests/reg-rs; run
-     scripts/reg.sh run -q before claiming behaviour is unchanged.
+     scripts/reg.sh run -q before claiming behavior is unchanged.

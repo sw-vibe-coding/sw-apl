@@ -56,7 +56,7 @@ fn cpu() -> i64 {
     if unsafe { libc::getrusage(libc::RUSAGE_SELF, usage.as_mut_ptr()) } != 0 {
         return 0;
     }
-    // SAFETY: getrusage returned 0, so the struct is initialised.
+    // SAFETY: getrusage returned 0, so the struct is initialized.
     let usage = unsafe { usage.assume_init() };
     let spent = |t: libc::timeval| crate::ticks::ticks(t.tv_sec, t.tv_usec);
     spent(usage.ru_utime) + spent(usage.ru_stime)

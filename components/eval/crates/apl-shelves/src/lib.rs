@@ -2,7 +2,7 @@
 //!
 //! A workspace is listed and loaded only in the modes its `⍝!MODES`
 //! line names. One that runs in both is kept once and shown in both;
-//! that is an optimisation nobody sees. Saving or dropping in one mode
+//! that is an optimization nobody sees. Saving or dropping in one mode
 //! never touches what another mode keeps as its own, which is how two
 //! workspaces come to share a name. See `docs/workspaces.md`.
 //!

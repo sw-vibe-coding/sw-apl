@@ -8,7 +8,7 @@ Newest at the bottom.
 The interpreter is written from the APL\360 language description
 (the 1968 User's Manual, its 1970 edition, and the December 1970
 APL\360-OS/DOS manual for domino) and from observed
-terminal behaviour, not by
+terminal behavior, not by
 translating `sw-cor24-apl` (C) or GNU APL. Those projects are
 consulted for test expectations only. Rules out: copying parser
 or evaluator structure from either.
@@ -27,7 +27,7 @@ ERROR by default; see the open question in `plan.md`.
 
 ## D3. Pure APL\360, I-beams for the system interface
 
-Primitives and session behaviour follow APL\360 (flat arrays, the
+Primitives and session behavior follow APL\360 (flat arrays, the
 primitives of the 1968 and 1970 User's Manuals, and domino from the
 December 1970 APL\360-OS/DOS manual).
 The system interface is APL\360's too: I-beam functions for time,
@@ -123,7 +123,7 @@ suppress. Rules out: one big interpreter crate.
 
 ## D10. TDD plus reg-rs transcripts
 
-Every step writes failing unit tests first. End-to-end behaviour
+Every step writes failing unit tests first. End-to-end behavior
 is pinned with reg-rs: each `samples/*.apl` file is a test whose
 baseline is the interpreter's transcript. Baselines are rebased
 only with a stated reason in the commit message. See
@@ -148,7 +148,7 @@ reported as CHARACTER ERROR with a byte offset. Rules out: silent
 acceptance of Greek lookalikes and of tabs or other control
 characters in source.
 
-## D13. A workspace is a modelled size, not measured memory
+## D13. A workspace is a modeled size, not measured memory
 
 A workspace holds a fixed number of bytes, set by `--ws-size` and
 reported free by `⌶22`. What a value costs is charged the way

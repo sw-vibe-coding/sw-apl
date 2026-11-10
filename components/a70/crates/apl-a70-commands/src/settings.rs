@@ -1,6 +1,6 @@
 //! The settings commands: `)ORIGIN`, `)DIGITS` and `)WIDTH`.
 //!
-//! These are APL\360's. The IBM 5100 family dropped them in favour of
+//! These are APL\360's. The IBM 5100 family dropped them in favor of
 //! its system variables (docs/mode-b.md), so they are '70-only.
 
 use apl_eval::Saved;

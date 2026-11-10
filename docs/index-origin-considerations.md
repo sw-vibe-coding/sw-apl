@@ -52,7 +52,7 @@ APL\360 function cannot set the origin it needs, cannot restore the
 one it found, and cannot even ask what it is.
 
 This is the defect that later APLs fixed. From APLSV onwards the
-origin is a system *variable*, `⎕IO`, which can be localised in a
+origin is a system *variable*, `⎕IO`, which can be localized in a
 header:
 
 ```apl

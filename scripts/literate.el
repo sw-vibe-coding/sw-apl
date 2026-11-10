@@ -12,7 +12,7 @@
 ;;
 ;;   (sw-apl-literate-run FILE)       run every block, record results
 ;;   (sw-apl-literate-tangle FILE)    write the files it tangles to
-;;   (sw-apl-literate-export FILE)    FILE.html beside it, coloured
+;;   (sw-apl-literate-export FILE)    FILE.html beside it, colored
 
 ;;; Code:
 
@@ -64,7 +64,7 @@ Visiting a document moves `default-directory' to the document's own.")
   (org-babel-tangle-file (sw-apl-literate--path file)))
 
 (defun sw-apl-literate-export (file)
-  "Export FILE to HTML beside it, with htmlize's classes for colour."
+  "Export FILE to HTML beside it, with htmlize's classes for color."
   (sw-apl-literate--visit file)
   ;; Org names what it links to with random references; seeded, they
   ;; come out the same every time, so an export can be checked.

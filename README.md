@@ -13,10 +13,10 @@ workspaces saved and loaded by name.
 ## Two modes
 
 sw-apl runs in one of two modes, chosen when a session starts. Each
-is modelled on an APL IBM shipped, and each lists and loads only the
+is modeled on an APL IBM shipped, and each lists and loads only the
 workspaces that run in it.
 
-| Mode | Modelled on | What it has |
+| Mode | Modeled on | What it has |
 |---|---|---|
 | (A) '70 | APL\360, IBM's time-sharing APL for the System/360, used from an IBM 2741 terminal | The APL\360 language; I-beams for system values; `)ORIGIN`, `)DIGITS` and `)WIDTH` for the settings; groups |
 | (B) '75 | The APL of the IBM 5100 family of desktop computers (the 5100, 5110 and 5120) | The same core, plus execute, format, and the quad system variables and functions (quad IO, quad FX and the rest); no I-beams, no settings commands, no groups |
@@ -32,7 +32,7 @@ differs from (A). It is not System/370 APLSV.
 
 Neither mode is APL2 or Dyalog: arrays are flat, with no nesting and
 no each. sw-apl is not a port; the C interpreter `sw-cor24-apl` and
-GNU APL served only as references for expected behaviour and for the
+GNU APL served only as references for expected behavior and for the
 conformance corpus in `samples/`.
 
 ## Try it
@@ -189,7 +189,7 @@ name says the modes it runs in: `NAME.apl.ws` for both,
 | LEARN | both | An introduction to APL, from nothing: `START`, then `LESSON 2` to `LESSON 9` |
 | LIFE | both | Conway's Life on a torus: `GLIDER`, then `RUN 4` |
 | RACE | both | A horse race, written to be read |
-| EDIT | both | A workspace to practise the del editor on; its `FACT` is wrong by one on purpose |
+| EDIT | both | A workspace to practice the del editor on; its `FACT` is wrong by one on purpose |
 | BIRDS | a version for each | Combinators, after Smullyan's birds. In (A), the ones APL\360 can write; in (B), every one in the list, by execute |
 | TTTML | (B) | A machine that learns tic-tac-toe by playing itself, then plays you |
 
@@ -239,7 +239,7 @@ Using sw-apl:
 
 The modes and the workspaces:
 
-- [The (B) '75 mode](docs/mode-b.md) -- what (B) is modelled on, its
+- [The (B) '75 mode](docs/mode-b.md) -- what (B) is modeled on, its
   sources, and every way it differs from (A)
 - [Emulation policy](docs/emulation-policy.md) -- the clock, the
   terminals, the workspace size: what each mode answers, and why
@@ -324,9 +324,9 @@ an `ATTRIBUTION.md` naming the author and saying whether the file was
 changed. One is the IBM 2741 APL keyboard layout
 ([images/redistributed/apl-keyboard](images/redistributed/apl-keyboard)),
 by the Wikimedia Commons user Rursus, under CC BY-SA 3.0 -- a
-share-alike licence, so any modified version of it stays under CC
+share-alike license, so any modified version of it stays under CC
 BY-SA and lives in that same directory rather than becoming MIT by
-moving. A build or a page that ships the picture ships its licence
+moving. A build or a page that ships the picture ships its license
 with it. `scripts/check-provenance.sh` is the gate: borrowed material
 cannot be committed there without the terms it travels under.
 

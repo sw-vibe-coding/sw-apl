@@ -36,7 +36,7 @@
     (let ((face (get-text-property (match-beginning 0) 'face)))
       (if (consp face) (car face) face))))
 
-(ert-deftest sw-apl-mode-colours-each-kind ()
+(ert-deftest sw-apl-mode-colors-each-kind ()
   (let ((line "R←+/⍳10 ¯2.5 'TEXT' ⎕IO ⍝ NOTE"))
     (should (eq (sw-apl-tests--face-at line "+") 'sw-apl-primitive-face))
     (should (eq (sw-apl-tests--face-at line "⍳") 'sw-apl-primitive-face))
@@ -48,7 +48,7 @@
     (should (eq (sw-apl-tests--face-at line "NOTE") 'font-lock-comment-face))
     (should-not (sw-apl-tests--face-at line "R"))))
 
-(ert-deftest sw-apl-mode-colours-definitions-commands-and-labels ()
+(ert-deftest sw-apl-mode-colors-definitions-commands-and-labels ()
   (should (eq (sw-apl-tests--face-at "∇R←AVG X\n" "∇") 'sw-apl-del-face))
   (should (eq (sw-apl-tests--face-at "∇R←AVG X\n" "AVG") 'font-lock-function-name-face))
   (should (eq (sw-apl-tests--face-at ")LOAD 1 LIFE\n" ")LOAD") 'sw-apl-command-face))

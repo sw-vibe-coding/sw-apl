@@ -41,7 +41,7 @@ Two delivery surfaces, in order:
   enclose/disclose/pick, no dfns, no union/intersection, no dyadic
   tilde ("without"), no diamond statement separator.
 - Not a port of `sw-cor24-apl` (C) or of GNU APL. Those are
-  references for behaviour and for the conformance corpus only.
+  references for behavior and for the conformance corpus only.
 - In the '70 mode, not the 5100's APL: no quad system variables or
   functions (quad-IO, quad-CT, quad-EX, quad-NL, ...), no execute,
   no format. Their APL\360 counterparts are I-beams, `)ORIGIN`,
@@ -150,7 +150,7 @@ widen each layer to the full APL\360 set.
 5. `reduce-scan` first-axis forms, axis brackets, scan, identity
    elements for empty reductions.
 6. `inner-outer-product`.
-7. `indexing-and-indexed-assignment` honouring the index origin.
+7. `indexing-and-indexed-assignment` honoring the index origin.
 8. `axis-operator` for the structural functions that take one.
 
 ### Phase 3: functions, control, and the session (saga `core-session`)
@@ -343,9 +343,9 @@ regression commands. These three existing fixtures fail on Linux independently
 of the prototype; their baselines remain unchanged in this slice.
 
 Owner direction 2026-09-20: the keyboard is the 2741's, and the
-picture of it comes with a licence.
+picture of it comes with a license.
 
-The owner types on a keyboard relabelled as a 2741's, so the map is
+The owner types on a keyboard relabeled as a 2741's, so the map is
 not a convenience to be chosen -- it is a physical fact to be matched.
 Two keys are wrong today: the semicolon key sends `]` and shifted it
 sends `)`. ATTN is Escape, which is the same byte as Ctrl-[, and
@@ -361,10 +361,10 @@ check one against the other.
 
 That picture is `File:APL-keybd2.svg` by Wikimedia Commons user
 Rursus, under CC BY-SA 3.0. The owner wants it redistributed with
-sw-apl, which the licence allows on its terms: credit the author,
-link the licence, say whether it was changed, and pass the same
-licence on. It goes in `images/redistributed/apl-keyboard/` with the
-licence text beside it, kept apart from sw-apl's own MIT material so
+sw-apl, which the license allows on its terms: credit the author,
+link the license, say whether it was changed, and pass the same
+license on. It goes in `images/redistributed/apl-keyboard/` with the
+license text beside it, kept apart from sw-apl's own MIT material so
 that what is ours and what is borrowed is never in doubt -- the same
 distinction `ws/` and `work/` already make.
 
@@ -372,7 +372,7 @@ Owner direction 2026-09-20, second: the browser offers the keyboard
 as an aid to typing.
 
 The picture is not only reference material -- a reader who has not
-relabelled their keycaps cannot type APL at all, and the page should
+relabeled their keycaps cannot type APL at all, and the page should
 show them the board. It is offered rather than imposed: shown on
 request, pinnable to the top or the bottom of the window, and
 resizable, because a keyboard that cannot be got out of the way is
@@ -416,10 +416,10 @@ This is what the picture being an SVG buys, and it is also where
 share-alike starts to bite. The file is all outline paths: no text
 elements, no identified keys, nothing to attach a click to. Two ways
 out, and they are not equal. Overlaying hit-boxes computed from the
-key grid leaves the file untouched and the licence simple. Giving the
+key grid leaves the file untouched and the license simple. Giving the
 paths identifiers is a change to the work, which CC BY-SA allows and
 which then obliges us to say what we changed and to pass the same
-licence on. Prefer the overlay, and if the grid turns out not to be
+license on. Prefer the overlay, and if the grid turns out not to be
 regular enough for it, take the modification deliberately and record
 it -- not by accident.
 
@@ -473,7 +473,7 @@ the browser's local storage rather than being refused -- a saved
 workspace is small UTF-8 text, so there is nothing about it that needs
 a file. That wants a seam under `apl-session` saying where workspaces
 live and how they are listed, read and written, with the native
-implementation being the filesystem it is today: the CLI's behaviour,
+implementation being the filesystem it is today: the CLI's behavior,
 and reg-rs, must not move.
 
 Order: prove the worker and the blocking read with the plain page
@@ -548,7 +548,7 @@ either: `Ctrl-H` *is* `0x08`, byte-identical to backspace, and
 rustyline already binds it. `Ctrl-]` (0x1D) is free in rustyline,
 is not a terminal signal (SIGQUIT is `Ctrl-\`), and is claimed by
 no browser shortcut known; `Ctrl-^` (0x1E) is the fallback. The
-owner's keyboard sends it from a repurposed, relabelled keypad key.
+owner's keyboard sends it from a repurposed, relabeled keypad key.
 
 Two lessons from `sw-embed/web-sw-tos`, whose frontend assists with
 keystrokes rather than forwarding them: name the key in one
@@ -614,7 +614,7 @@ to open it to the LAN, and the docs saying which.
 
 The owner, after BIRDS: sw-apl gains modes. The header already shows
 the current one as a tab, `Ⓐ '70`, built as a row holding one tab so
-another could be added; the second is `Ⓑ '75`, modelled on the IBM 5100. This reverses
+another could be added; the second is `Ⓑ '75`, modeled on the IBM 5100. This reverses
 the non-goal that kept APLSV's additions out, for that mode only.
 
 Names (owner, 2026-09-21), used interchangeably in conversation: (A)
@@ -633,7 +633,7 @@ subjects in CHANGES.md. The keyboard matches the hardware. But the names sw-apl 
 are its own (owner, 2026-09-21, later): the app is sw-apl and its
 modes are (A) '70 and (B) '75, so as not to borrow IBM's possibly
 trademarked names. IBM names appear only as descriptions of what a
-mode is modelled on. The tab shows the letter and the year; its
+mode is modeled on. The tab shows the letter and the year; its
 tooltip, which today reads "APL\360 compatible", is reworded to
 carry no IBM name. The owner settled the wording (2026-09-21, later):
 "APL\360-inspired" for (A) and "IBM 5100-inspired" for (B), in step
@@ -704,7 +704,7 @@ modes it runs in, and is listed and loaded only there:
   loaded in that mode alone. One using only what both share runs in
   both, and is listed in both.
 - Keeping such a workspace once and showing it in both is an
-  optimisation the reader never sees; a library is still a mode's.
+  optimization the reader never sees; a library is still a mode's.
 - `)SAVE` should decide the line from what the workspace uses, not
   from the mode it was saved in: a workspace saved in '75 that uses
   nothing '75 added is `(A)(B)`. So the same name can stand for a
@@ -722,8 +722,8 @@ modes it runs in, and is listed and loaded only there:
 The keyboard (owner, 2026-09-21): the same treatment. '70 has the
 2741's; '75 has the IBM 5100's. The 5100 and 5110 share a layout
 (the 5110 adds a lowercase mode and shift+ATTN), and the 5120's is
-reported the same with other keycap colours. A picture of one needs
-its own licence, as the 2741's has; see `docs/mode-b.md`.
+reported the same with other keycap colors. A picture of one needs
+its own license, as the 2741's has; see `docs/mode-b.md`.
 
 The del editor: the owner expected it to be the same in both modes;
 the 5110 manual says it is not quite. The screen machines replace
@@ -735,8 +735,8 @@ same functions, and must agree with the editor.
 Sources: the APL\360 User's Manual has been the reference for
 everything so far. '75's is the IBM 5110 APL Reference Manual, with
 the 5100's beside it; step 004 found them and recorded what differs,
-in `docs/mode-b.md`, before any '75 behaviour is built. Where the manual is not to hand, a guess is
-labelled as one.
+in `docs/mode-b.md`, before any '75 behavior is built. Where the manual is not to hand, a guess is
+labeled as one.
 
 Not in this phase: shared variables (see non-goals), and APL2 -- the
 owner mentioned a '84 tab, but where APL2 is to live is not settled,
@@ -1239,7 +1239,7 @@ The pictures are the owner's own renders of their own 3D models.
 APL\1130 through the 1968 and 1970 APL\360, 1975 APLSV, APL-80, IBM
 PC APL and APL2. It is `docs/apl-feature-history.md`, each cell
 traced to a manual. (A) is the 1970 column. APL\1130 is the owner's
-separate project, listed for the history and not modelled here.
+separate project, listed for the history and not modeled here.
 
 ## Owner direction (2026-11-09, later): no scan in (A)
 
@@ -1254,6 +1254,16 @@ an expansion with no array on its left. (B) keeps scan. A saved
 workspace whose code scans is (B) only. The library workspaces that
 ran in both were fixed first, in sw-apl-workspaces: POLY's scans
 became APL\360 expressions, and COURSE says scan is (B)'s.
+
+## Owner direction (2026-11-10): American spelling
+
+"I am American, APL is American. Please use US spellings." Then: "do
+the whole repo sweep as its own step", and make CLAUDE.md and AGENTS.md
+say so. The sweep changes prose, UI strings, data, workspace text,
+identifiers, test names, comments and scripts. Generated and
+append-only files (CHANGES.md, `.agentrail/`), the research notes, the
+title of a published source and third-party text stay as they are.
+Transcripts that move are rebased, with this as the reason.
 
 ## Owner direction (2026-09-29): the documents, checked against the code
 
@@ -1293,7 +1303,7 @@ it in some worked examples. The footer in the live-demo should link
 to an index page with several .org files published as html with
 color syntax htmlize." The worked examples: BIRDS, its (B) '75
 version, and TTTML, annotated in WEB/weave style. The model is the
-sw-ml-study demos' literate documents (demo-decision-model): colours
+sw-ml-study demos' literate documents (demo-decision-model): colors
 from htmlize faces set in the document's HTML head, a nav bar, and a
 gate that the tangled code equals the committed files.
 
@@ -1302,7 +1312,7 @@ Design, the defaults the steps take:
 - **`ob-sw-apl`** (`docs/emacs/ob-sw-apl.el`, beside the input
   method), with a small major mode `sw-apl-mode`
   (`docs/emacs/sw-apl-mode.el`) whose font-lock faces are
-  what htmlize colours: primitives, system names and commands,
+  what htmlize colors: primitives, system names and commands,
   numbers, strings, comments, the del. A source block runs through
   `sw-apl --no-echo` in batch; `:mode 70` or `:mode 75` chooses the
   mode (default 75); `:session` is not supported. ERT tests under
@@ -1418,11 +1428,11 @@ belongs behind something asked for -- a help dialog, or links that
 open one -- and the page itself should be paper, prompt, and as
 little else as will do. What stays visible is what a reader cannot
 work without and cannot get back: that nothing leaves the browser is
-a claim worth keeping in sight, and the licence and the keyboard
+a claim worth keeping in sight, and the license and the keyboard
 picture's attribution have to be reachable wherever they are put.
 
 The owner also wants the demo installable as a PWA, and points at
-`sw-fun/suduko` for how: a `manifest.json` with names, colours,
+`sw-fun/suduko` for how: a `manifest.json` with names, colors,
 scope and icons, the `apple-mobile-web-app-*` meta tags, a viewport
 with `viewport-fit=cover`, and a service worker that caches the
 shell so the page opens offline.

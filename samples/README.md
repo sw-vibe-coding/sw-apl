@@ -43,7 +43,7 @@ and the request is made again, an error is reported and the request
 is made again, and )CLEAR gives the request up.
 
 `89-life-rules.apl` checks that LIFE keeps Conway's rules, B3/S23 on
-a torus: a lone cell and an overcrowded one die, three neighbours give
+a torus: a lone cell and an overcrowded one die, three neighbors give
 birth, the block stands still, the blinker blinks (across the edge
 too), and the glider moves one square diagonally in four generations
 and comes home after twenty-four.
@@ -192,7 +192,7 @@ displaying with the bracketed quad, editing and renaming through the
 header, and locking with del-tilde.
 
 `54-life-function.apl` is Conway's Life rewritten as functions --
-GEN for one generation, RUN for a labelled loop over several --
+GEN for one generation, RUN for a labeled loop over several --
 beside the straight-line form in `51-life.apl`.
 
 Run the corpus against the release binary:

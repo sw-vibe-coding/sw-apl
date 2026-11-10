@@ -7,16 +7,16 @@
 
 ;; A major mode for APL as sw-apl reads it: scripts (.apl) and saved
 ;; workspaces (.apl.ws), and the source blocks of an Org document
-;; (see ob-sw-apl.el).  It colours what a reader tells apart at a
+;; (see ob-sw-apl.el).  It colors what a reader tells apart at a
 ;; glance -- primitives, the arrows, numbers, strings, comments,
 ;; system names and commands, the del and the function it opens,
 ;; labels -- and nothing else: no indentation, no REPL.
 ;;
 ;; Every face is its own, named sw-apl-...-face, so a document
 ;; exported with htmlize carries a class per kind (org-sw-apl-...)
-;; that its stylesheet can colour.
+;; that its stylesheet can color.
 ;;
-;; A primitive is recognised by what it is not -- a letter, a digit, a
+;; A primitive is recognized by what it is not -- a letter, a digit, a
 ;; quote, punctuation, a name, a system name -- so this file holds no
 ;; copy of sw-apl's glyph table (data/glyphs.toml is the only one).
 ;;
@@ -100,7 +100,7 @@ word, the first of two (monadic) or the middle of three (dyadic)."
      1 'sw-apl-number-face)
     ("[←→]" . 'sw-apl-arrow-face)
     (,(concat "[^" sw-apl--not-primitive "]") . 'sw-apl-primitive-face))
-  "What sw-apl-mode colours, first match winning.")
+  "What sw-apl-mode colors, first match winning.")
 
 ;;;###autoload
 (define-derived-mode sw-apl-mode prog-mode "sw-apl"

@@ -46,7 +46,7 @@ fn a_modes_own_bases_strike_only_in_that_mode() {
 fn the_overstrike_key_again_cancels_the_strike() {
     let mut k = holding("A");
     k.overstrike();
-    assert!(k.overstrike(), "cancelling is not a refusal");
+    assert!(k.overstrike(), "canceling is not a refusal");
     assert!(!k.pending);
     k.type_key('b');
     assert_eq!(k.text(), "AB", "B goes beside A, not over it");

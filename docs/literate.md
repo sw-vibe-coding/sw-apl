@@ -5,7 +5,7 @@ with the APL run as you read:
 
 | File | What it is |
 |---|---|
-| `docs/emacs/sw-apl-mode.el` | A major mode for sw-apl source: `.apl` scripts, `.apl.ws` workspaces, and the APL blocks of an Org document. It colours primitives, the arrows, numbers, strings, comments, quad names, system commands, the del and the function it opens, and labels |
+| `docs/emacs/sw-apl-mode.el` | A major mode for sw-apl source: `.apl` scripts, `.apl.ws` workspaces, and the APL blocks of an Org document. It colors primitives, the arrows, numbers, strings, comments, quad names, system commands, the del and the function it opens, and labels |
 | `docs/emacs/ob-sw-apl.el` | An Org Babel language, `sw-apl`: a source block is run by sw-apl, and what it prints is the block's result |
 
 `docs/emacs/apl-input.el`, the input method, is the third; see
@@ -74,10 +74,10 @@ An error is part of the result, as it would be on the terminal:
 Blocks tangle to `.apl` files, and are shown and edited in
 `sw-apl-mode`.
 
-## Publishing with colour
+## Publishing with color
 
 Exported to HTML with htmlize set to CSS classes, every kind the
-mode colours has a class of its own, named for its face:
+mode colors has a class of its own, named for its face:
 
 ```elisp
 (setq org-html-htmlize-output-type 'css)
@@ -96,7 +96,7 @@ mode colours has a class of its own, named for its face:
 | `org-string`, `org-comment` | Strings and comments |
 
 The document's own stylesheet (an `#+HTML_HEAD:` line) says what
-colour each is.
+color each is.
 
 ## The documents here
 
@@ -113,7 +113,7 @@ beneath them.
 | `birds.org` | `ws/lib1/BIRDS.b-75.apl.ws` |
 | `tttml.org` | `ws/lib1/TTTML.b-75.apl.ws`. Its model, `KEYS` and `VALS`, is data and is left out of the page, though not out of the tangle |
 
-`style.setup` is their shared look: the page, and the colour of each
+`style.setup` is their shared look: the page, and the color of each
 class, light and dark. `index.org` lists them.
 
 They are published in `pages/literate/`, which the demo's footer

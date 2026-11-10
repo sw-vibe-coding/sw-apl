@@ -256,7 +256,7 @@ window, and carries the icons; `start_url` and `scope` are relative,
 so it installs from a project page's sub-path as readily as from a
 root. The favicon is `⍝⍴⌊` turned 33 degrees: three APL glyphs that,
 turned, read as the letters APL. Bright green on nothing, because a
-favicon with a background is a square of somebody else's colour in a
+favicon with a background is a square of somebody else's color in a
 strip of tabs. The install icons are the project logo the README
 shows, scaled down, with a maskable copy inside the safe zone for a
 launcher that crops to a circle.
@@ -297,7 +297,7 @@ nothing contenteditable, because keystrokes are read off the window
 what the board on the page is for.
 
 Below the session is a colophon in the form the other live demos
-use: one line of middot-separated items -- licence, copyright, the
+use: one line of middot-separated items -- license, copyright, the
 repository, the Software Wrighter channels, and the build -- wrapping
 on a phone, where a PWA window is a phone. The build facts come from
 `build-info.json`, which `just publish` writes, so there is nowhere
@@ -332,7 +332,7 @@ painted with; it remembers whether it was up, and it is reachable by
 tab and named for a screen reader out of `data/glyphs.toml`.
 
 The layout is the IBM 2741's, and the drawing of it that sw-apl
-redistributes is somebody else's work under a share-alike licence.
+redistributes is somebody else's work under a share-alike license.
 A link beside the board credits it and goes to the picture, its
 LICENSE and its ATTRIBUTION together; it is shown exactly when the
 board is, which puts the obligation next to the thing it is about
@@ -357,7 +357,7 @@ key, as it was on the machine.
 
 The board is ours. The redistributed keyboard picture is reference
 only -- an Inkscape drawing whose keys are not addressable -- and is
-shown under **Help** with its author and licence beside it.
+shown under **Help** with its author and license beside it.
 
 Two differences from the terminal, both because a browser is not one:
 

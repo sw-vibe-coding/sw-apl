@@ -1,0 +1,1 @@
+Take scan out of (A) '70, per docs/plan.md owner direction 2026-11-09: neither APL 360 manual has it. Keep it in (B). A workspace that uses scan is (B) only.

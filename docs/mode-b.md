@@ -2,7 +2,7 @@
 
 The mode is called (B) '75, and only that. IBM product names appear
 here to say which historical machines and manuals the mode is
-modelled on, never as the name of the mode or of sw-apl.
+modeled on, never as the name of the mode or of sw-apl.
 
 A planning document. It records, from IBM's manuals, what the APL of
 the IBM 5100 family is and how it differs from APL\360, so that the
@@ -30,13 +30,13 @@ and the 5110 manual carries a second listing what the 5110 changed
 from the 5100 (Appendix D). Those three appendices are the backbone
 of this document.
 
-**Which manual (B) follows.** (B) is modelled on the 5100 family
+**Which manual (B) follows.** (B) is modeled on the 5100 family
 (5100, 5110, 5120). The reference manual it is built from
 is the 5110's. It is the later of the
 two manuals, it is the one the 5120 ran (the 5120 is a 5110-class
 machine with the display and diskettes built in; bitsavers carries no
 separate 5120 APL manual), and every 5100 workspace loads on it. Where
-the 5100 differs, the 5100's behaviour is noted but not built.
+the 5100 differs, the 5100's behavior is noted but not built.
 
 ## Sources found, and not found
 
@@ -49,7 +49,7 @@ Found, and read (all listed in `docs/citations.md`):
 - IBM 5100 APL Reference Manual, SA21-9213-2, May 1976.
 - APL Language, GC26-3847-0, March 1975, and the APLSV User's Guide,
   SH20-1460-1, March 1975 -- what the 5100 family inherited, read
-  where the 5110 manual defers to APLSV behaviour.
+  where the 5110 manual defers to APLSV behavior.
 
 Not found: any APL manual specific to the 5120. The bitsavers 5120
 directory holds only maintenance and logic manuals. That the 5120's
@@ -134,7 +134,7 @@ a letter is one name (`[system_names]` in `data/glyphs.toml`); in (A)
   point on hover); the characters themselves are unchanged, and the
   CLI prints them as they are.
 
-Decisions where sw-apl differs from the 5110, each labelled:
+Decisions where sw-apl differs from the 5110, each labeled:
 
 - A value a setting cannot take is a DOMAIN ERROR at the assignment,
   as in APLSV; the 5110 took it and reported IMPLICIT ERROR when it
@@ -188,7 +188,7 @@ with no wrapping. Dyadic format takes one pair for every column, a
 pair for each column, or a precision alone (width 0).
 
 Decisions where the manual is silent or its machine is not sw-apl's,
-each labelled:
+each labeled:
 
 - **Rounding** starts from the number as written, its shortest
   decimal form, and goes half to even. The manual rounds `¯123.45` to
@@ -245,7 +245,7 @@ function, where a system variable is a name.
   for and answers 1 or 0 as the 5110 would. sw-apl has none of those
   devices, so nothing else happens.
 
-Decisions where the sources are silent or disagree, each labelled:
+Decisions where the sources are silent or disagree, each labeled:
 
 - The row `⎕FX` reports is the function's line number, the header
   being 0, which is the 5110 manual's "the number of the row in error
@@ -366,7 +366,7 @@ history.**
   a lowercase mode (HOLD, then shift+scroll-down; back with
   shift+scroll-up) in which the APL symbols move to the CMD key, and
   the shift+ATTN strong interrupt.
-- **5120**: the same layout as the 5100, differing in keycap colour
+- **5120**: the same layout as the 5100, differing in keycap color
   (a secondary source, the keyboard pages collected by Deskthority;
   treat as likely, not confirmed by IBM).
 - **How it differs from the 2741** (5110 manual, Chapter 1): letters

@@ -34,18 +34,18 @@ The binary therefore has no Rust test crate. What used to be in
 
 Every saga step follows red, green, refactor:
 
-1. RED: write failing unit tests that define the behaviour in the
+1. RED: write failing unit tests that define the behavior in the
    step prompt. Run them and watch them fail for the right reason.
 2. GREEN: write the least code that passes.
 3. REFACTOR: split to the sw-checklist gates, keep tests green.
 
-Unit tests live in the crate: `tests/*.rs` for public behaviour,
+Unit tests live in the crate: `tests/*.rs` for public behavior,
 `*_tests.rs` sibling modules for internals. Keep test modules out
 of production files when they distort readability.
 
 ## Transcript regressions with reg-rs
 
-End-to-end behaviour is pinned with `reg-rs`. Each sample program
+End-to-end behavior is pinned with `reg-rs`. Each sample program
 in `samples/` is a test whose baseline is the transcript sw-apl
 prints for it. Tests are stored in the repo under `tests/reg-rs/`
 (`.rgt` spec plus `.out` baseline) by exporting
@@ -155,7 +155,7 @@ file in the same commit.
 `samples/*.apl` are glyph-form programs adapted from the
 `sw-cor24-apl` GNU APL comparison set, filtered to APL\360 scope.
 Each ends with `)OFF`. Add a sample whenever a step adds a
-primitive or a session behaviour; the sample is the executable
+primitive or a session behavior; the sample is the executable
 spec for that feature.
 
 Samples from the original corpus that used features outside
@@ -179,7 +179,7 @@ that the generated tables are consistent.
   glyphs and is not ASCII-gated.
 - `sw-checklist` always; zero failures, warnings kept at zero.
 - `scripts/reg.sh run -q` when interpreter, session or CLI
-  behaviour changed.
+  behavior changed.
 
 `/mw-cp` (in `.claude/commands/mw-cp.md`) runs this list in
 order and commits.

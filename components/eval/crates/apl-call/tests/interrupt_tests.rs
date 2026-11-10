@@ -2,7 +2,7 @@
 //!
 //! The stop flag was once one global, which is why this file stands
 //! alone: cargo runs a file's tests on parallel threads, and a test
-//! that set the flag could stop a neighbour's call. It is per-session
+//! that set the flag could stop a neighbor's call. It is per-session
 //! now, installed on the session's own thread, so a test that asks
 //! its own flag cannot reach any other -- which is the property a
 //! service holding many sessions needed in the first place.

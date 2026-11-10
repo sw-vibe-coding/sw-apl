@@ -4,7 +4,7 @@
 #
 # Every test is created with the normalize filter, so a sample may
 # print a value that cannot come back the same -- a clock reading, a
-# processor time -- by labelling it (VARIES). See the filter's own
+# processor time -- by labeling it (VARIES). See the filter's own
 # comments and docs/testing.md. The filter changes nothing in a
 # transcript with no such label, so it is on for all of them and one
 # less thing to remember when a sample later grows one.

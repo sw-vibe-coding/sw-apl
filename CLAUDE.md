@@ -296,7 +296,7 @@ Phase 9):
   (B) step that changes a '70 transcript is wrong, not rebased. A
   correctness fix to (A) itself may move one, with its source as the
   reason, as any fix may.
-- **(B) '75**, modelled on the APL of the IBM 5100, 5110 and 5120
+- **(B) '75**, modeled on the APL of the IBM 5100, 5110 and 5120
   desktop computers (owner: "an IBM 5120 on my phone", not System/370
   APLSV). APLSV as IBM cut it down for one user: (A) plus execute,
   format and the quad system variables and functions; no I-beams, no
@@ -344,7 +344,7 @@ and sw-markdown-checker stay repo-wide (fast, global budgets).
 
 ## Every step is TDD
 
-RED: write the failing unit tests (and, for behaviour visible in a
+RED: write the failing unit tests (and, for behavior visible in a
 transcript, the sample in `samples/`) first. GREEN: least code to
 pass. REFACTOR: split to the sw-checklist gates. See
 `docs/testing.md`.
@@ -378,6 +378,26 @@ glyphs; the README links to docs instead of showing glyphs.
 `docs/glyphs.txt` stays the machine-readable glyph table that
 lexer tests read. Gate: `just gates`.
 
+## American spelling, everywhere (owner direction 2026-11-10)
+
+The owner is American and APL is American: write US English, never
+British. color, center, behavior, neighbor, gray, favor, honor,
+catalog, license (noun and verb), practice (noun and verb), program,
+modeled, labeled, canceled, traveled, and -ize, not -ise (initialize,
+optimize, recognize). This holds for every kind of text: docs, UI
+strings, data files, workspace text, Rust identifiers and test names,
+comments, scripts, and commit messages.
+
+Two things keep their own spelling: the title of a source as it was
+published, and a third party's license text quoted as it is. HTML and
+library names are what they are (`aria-labelledby`). Check before a
+commit with:
+
+```bash
+git grep -n -i -E 'colour|behaviour|centre|neighbour|honour|favour|licence|modelled|labelled|cancelled|practise|initialis|optimis|recognis' \
+  -- ':!CHANGES.md' ':!.agentrail*' ':!docs/research*.txt' ':!CLAUDE.md'
+```
+
 ## reg-rs transcripts
 
 `REG_RS_DATA_DIR=tests/reg-rs` (set by `scripts/reg.sh` and
@@ -388,7 +408,7 @@ reason stated in the commit message.
 ## /mw-cp checkpoint (every commit)
 
 `.claude/commands/mw-cp.md` is the pre-commit gate: scoped tests,
-clippy, fmt, markdown checker, sw-checklist, reg-rs when behaviour
+clippy, fmt, markdown checker, sw-checklist, reg-rs when behavior
 changed, docs updates, detailed commit, push, CHANGES.md refresh.
 Never skip gates, never suppress warnings, never `--no-verify`.
 
@@ -427,6 +447,7 @@ The owner keeps stable binaries under `~/.local/softwarewrighter/bin/`.
 - Commit before complete; push after commit; report per step.
 - TDD is mandatory; quality gates are mandatory.
 - Glyphs only. No Latin aliases, no name translation, not APL2.
+- American spelling everywhere: color, center, behavior, -ize.
 - Nothing done for (B) moves (A): every existing sample and test is
   a '70 one, and reg-rs proves it.
 

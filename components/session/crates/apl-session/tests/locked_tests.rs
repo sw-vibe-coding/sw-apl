@@ -74,7 +74,7 @@ fn an_obscured_workspace_loads_and_the_lock_comes_back() {
         out(&mut s, "\u{2207}SECRET[\u{2395}]\u{2207}")[0],
         "DEFN ERROR"
     );
-    // The unlocked one is not locked by having travelled with it.
+    // The unlocked one is not locked by having traveled with it.
     let shown = out(&mut s, "\u{2207}PLAIN[\u{2395}]\u{2207}");
     assert!(shown[0].ends_with("\u{2207}R\u{2190}PLAIN"), "{shown:?}");
 }

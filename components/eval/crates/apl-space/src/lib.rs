@@ -3,7 +3,7 @@
 //!
 //! The figures here are a model, not a measurement. Nothing in this
 //! crate asks Rust how much memory an `Array` occupies: a workspace
-//! has to be the same size on every machine, at every optimisation
+//! has to be the same size on every machine, at every optimization
 //! level, and in a test that states a number. So a value costs what
 //! APL\360 would have charged for it -- a descriptor, an entry per
 //! axis, and eight bytes a number or one a character -- and a

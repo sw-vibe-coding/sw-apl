@@ -1,7 +1,7 @@
 //! Libraries as directories of files, which is where the CLI and the
 //! service keep them.
 //!
-//! This is the behaviour sw-apl has always had, moved behind the
+//! This is the behavior sw-apl has always had, moved behind the
 //! trait and not otherwise altered: library 0 is `work/` under the
 //! library root and library 1 is `ws/lib1/`, a workspace is a file
 //! named for it, and library 0 is made when something is first

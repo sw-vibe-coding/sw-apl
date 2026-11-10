@@ -283,3 +283,10 @@ This project uses **agentrail** for session-based saga/step orchestration.
 **Quick start:** run `agentrail next`, then `agentrail begin`, do the work in the step prompt, commit, then `agentrail complete`. Push the branch.
 
 **For the full set of rules, read [CLAUDE.md](CLAUDE.md).** Project-specific rules and architecture notes live there. The briefing block in this file matches the one in CLAUDE.md by construction (both are managed by `agentrail instructions apply`), so non-Claude agents can rely on it as authoritative for shared rules.
+
+**American spelling, everywhere.** The owner is American and APL is
+American: write US English, never British -- color, center, behavior,
+neighbor, license, practice, modeled, labeled, -ize -- in docs, UI
+strings, data, identifiers, comments and commit messages. Only a
+published title or quoted third-party text keeps its own spelling.
+CLAUDE.md, "American spelling, everywhere", has the check to run.

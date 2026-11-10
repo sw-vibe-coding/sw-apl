@@ -18,7 +18,7 @@ Every case is one of these.
 
 | Class | Meaning |
 |---|---|
-| **historical** | As the modelled machine did it, even where a modern host could do more |
+| **historical** | As the modeled machine did it, even where a modern host could do more |
 | **host** | The modern host's own answer: its clock, its processor time |
 | **fixed** | A constant, the same on every run, chosen so a transcript reproduces |
 | **unavailable** | Not emulated: the command or facility is absent, and says so |

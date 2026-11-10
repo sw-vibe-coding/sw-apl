@@ -116,7 +116,7 @@ fn run_lines(session: &mut Session, pending: &Pending, echo: bool) {
 ///
 /// The last line of an open reply is written without ending it, so
 /// that what comes next carries on where `⍞←` stopped. Both shells
-/// print replies and both must honour that.
+/// print replies and both must honor that.
 #[must_use]
 pub fn show(reply: &Reply) -> String {
     let (finished, carried) = reply.split();

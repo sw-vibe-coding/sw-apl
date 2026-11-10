@@ -2,10 +2,10 @@
 
 This describes the language sw-apl implements, in its two modes:
 
-- **(A) '70**, modelled on APL\360. Behaviour follows the IBM
+- **(A) '70**, modeled on APL\360. Behavior follows the IBM
   APL\360 User's Manual (1968, and its 1970 edition), with domino
   from the APL\360-OS/DOS manual of December 1970.
-- **(B) '75**, modelled on the APL of the IBM 5100 family, following
+- **(B) '75**, modeled on the APL of the IBM 5100 family, following
   the IBM 5110 APL Reference Manual. `mode-b.md` records the sources
   and every decision where sw-apl departs from them.
 

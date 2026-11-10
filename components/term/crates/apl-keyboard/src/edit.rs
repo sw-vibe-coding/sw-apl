@@ -17,7 +17,7 @@ pub enum Move {
 
 impl Keyboard {
     /// Delete the cell before the carriage -- a whole glyph,
-    /// underscore and all. A strike waiting to be made is cancelled
+    /// underscore and all. A strike waiting to be made is canceled
     /// instead, which is how a reader backs out of one.
     pub fn backspace(&mut self) {
         if self.pending {

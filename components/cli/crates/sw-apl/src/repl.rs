@@ -86,7 +86,7 @@ fn prompt_loop(session: &mut Session, editor: &Editor) -> io::Result<()> {
     }
 }
 
-/// One edited line; `None` at end of input. A cancelled line (Ctrl-C)
+/// One edited line; `None` at end of input. A canceled line (Ctrl-C)
 /// is skipped and the prompt shown again. `offer` is typed already,
 /// to be edited: a (B) `[n⎕]` statement, or nothing.
 pub fn read_line(

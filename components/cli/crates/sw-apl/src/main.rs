@@ -37,7 +37,7 @@ pub const VERSION: &str = concat!(
     about,
     long_about = "A clean-room APL interpreter with traditional glyphs, \
                   written in Rust from scratch, in two modes: (A) '70, \
-                  modelled on APL\\360, and (B) '75, modelled on the APL \
+                  modeled on APL\\360, and (B) '75, modeled on the APL \
                   of the IBM 5100 family. Flat arrays, floating point, the \
                   del editor, and workspaces in numbered libraries.",
     after_long_help = include_str!("cli_help.txt")

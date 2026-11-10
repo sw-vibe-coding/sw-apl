@@ -414,7 +414,7 @@ fn a_label_does_not_change_what_its_line_does() {
     let mut ws = Workspace::default();
     define(&mut ws, "R\u{2190}SHOUT", &["L:'HI'", "R\u{2190}L"]);
     assert_eq!(nums(&mut ws, "SHOUT"), [Number::Int(1)]);
-    assert_eq!(ws.output.len(), 1, "the labelled line still displays");
+    assert_eq!(ws.output.len(), 1, "the labeled line still displays");
 }
 
 /// A workspace whose console will answer reads with these lines.

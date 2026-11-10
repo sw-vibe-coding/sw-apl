@@ -1,8 +1,8 @@
 # APL timeline
 
 The APLs sw-apl touches, in order, with the two it models marked. sw-apl
-has two modes: (A), modelled on APL\360 as it stood from its
-December 1970 release, and (B), modelled on the APL of the IBM 5100
+has two modes: (A), modeled on APL\360 as it stood from its
+December 1970 release, and (B), modeled on the APL of the IBM 5100
 family. The modes' names, the tab and the `--mode` flag carry short
 year marks; this page uses full years throughout.
 
@@ -16,18 +16,18 @@ says so.
 | November 1966 | APL\360 first runs, on an IBM System/360 Model 50, as a time-sharing system. For about two years it is used inside IBM | |
 | Autumn 1967 | APL\1130, for the IBM 1130, is written | |
 | August 1968 | APL\360 is released outside IBM as a Type-III Library program: source available, free, and unsupported. The *APL\360 User's Manual* is dated the same month, and time-sharing services built on it follow the same year | (A)'s language, and the manual sw-apl was first checked against |
-| Late 1968 | APL\1130 is released, on a deck of punched cards. APL Wiki calls it the first APL the public could have; set beside APL\360's August release, which came first depends on what counts as public | Not modelled |
+| Late 1968 | APL\1130 is released, on a deck of punched cards. APL Wiki calls it the first APL the public could have; set beside APL\360's August release, which came first depends on what counts as public | Not modeled |
 | March 1970 | The second edition of the *APL\360 User's Manual* (GH20-0683-1). Its primitives are the first edition's: take and drop are in both, domino in neither | Checked against alongside the first |
 | June 1970 | IBM announces System/370, the successor to System/360, which runs System/360 software unchanged | |
 | December 1970 | APL\360-OS and APL\360-DOS become IBM Program Products (5734-XM6 and 5736-XM6), with their user's manual (SH20-0906-0). This APL\360 has domino: matrix inverse and matrix divide | **(A): the APL\360 sw-apl builds** |
 | 1972 | The owner learns APL on an IBM 2741 connected to APL\360 | Why (A) looks and types like a 2741 |
-| 1973 | APLSV (also written APL.SV) adds shared variables, the quad system variables and functions, execute and format. It runs on System/370 | What (B)'s language derives from; not modelled as such |
+| 1973 | APLSV (also written APL.SV) adds shared variables, the quad system variables and functions, execute and format. It runs on System/370 | What (B)'s language derives from; not modeled as such |
 | September 1975 | IBM announces the 5100, a portable computer with APL, BASIC or both; delivery begins the same month | **(B): the APL sw-apl builds** |
-| 1976 | VS APL, the System/370 APL that adds files | Not modelled |
+| 1976 | VS APL, the System/370 APL that adds files | Not modeled |
 | January 1978 | IBM announces the 5110, a successor to the 5100 with a diskette option. The owner starts using IBM 51xx computers | (B) follows the 5110's APL manual |
 | February 1980 | IBM releases the 5120, the desktop follow-on to the 5110 (also called the 5110 Model 3), with two built-in diskette drives and APL and BASIC in ROM | The machine (B) recreates |
-| 1982 | APL2, with nested arrays, is released as an Installed User Program: a prototype | Not modelled |
-| 1984 | APL2 is released | Not modelled |
+| 1982 | APL2, with nested arrays, is released as an Installed User Program: a prototype | Not modeled |
+| 1984 | APL2 is released | Not modeled |
 
 `apl-feature-history.md` gives the same APLs feature by feature.
 
