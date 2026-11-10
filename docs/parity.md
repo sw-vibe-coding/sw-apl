@@ -171,7 +171,7 @@ the session numeric tests, and sample 67.
 | --- | --- | --- | --- |
 | Reduce `f/` last axis | done | done | scalar dyadic f; identity table for empties |
 | Reduce first axis `f⌿`, axis `f/[k]` | done | done | ops tests, sample 52 |
-| Scan `f\`, `f⍀` | done | done | prefix reductions on either axis; samples 33, 52 |
+| Scan `f\`, `f⍀` | -- | done | prefix reductions on either axis, sample 92. Neither APL\360 manual has scan, in its text or its index, so in (A) a function before a slope is an expansion with no array on its left: SYNTAX ERROR when the line runs, sample 33. A saved workspace that scans is (B) only |
 | Inner product `f.g` | done | done | any ranks, scalar extension; sample 39 |
 | Outer product `∘.f` | done | done | result shape is both shapes catenated; sample 38 |
 

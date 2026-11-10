@@ -203,13 +203,14 @@ Notes:
 - Reduce: `f slash` along the last axis, `f slash-bar` along the
   first. Reducing an empty vector yields the identity element of
   f when one exists, otherwise DOMAIN ERROR.
-- Scan: `f backslash` and `f backslash-bar` produce running
-  reductions.
+- Scan, in (B) only: `f backslash` and `f backslash-bar` produce
+  running reductions. APL\360 has no scan, so in (A) it is SYNTAX
+  ERROR.
 - Inner product: `f dot g`, the classic `plus dot times` for
   matrix product.
 - Outer product: `jot dot f`.
 - Axis: a bracketed axis after a function or operator selects the
-  axis for reduce, scan, reverse, rotate, catenate, compress,
+  axis for reduce, scan in (B), reverse, rotate, catenate, compress,
   expand. The axis is a scalar or a one-element array.
 
 ## Indexing and assignment

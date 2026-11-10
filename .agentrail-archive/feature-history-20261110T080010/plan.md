@@ -1,0 +1,1 @@
+A document of when each APL feature arrived, across APL backslash 1130, the 1968 and 1970 APL 360, 1975 APLSV, APL-80, IBM PC APL and APL2, per docs/plan.md owner direction 2026-11-09, each cell traced to a manual.

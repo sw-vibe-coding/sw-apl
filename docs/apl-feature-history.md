@@ -142,9 +142,11 @@ divide, and lamination. Both manuals describe `[N⎕M]` line editing and
 the three commands `)ORIGIN`, `)DIGITS` and `)WIDTH`.
 
 **Scan.** Neither APL\360 manual has scan, in its text or its index.
-The APLSV User's Guide has a section on it and the 1975 language
-manual counts it among the operators. A later APL\360 edition, the
-January 1973 GH20-0906-1, was not read.
+The APLSV User's Guide has a section on it, the 1975 language manual
+counts it among the operators, and the IBM 5100 APL manual of May
+1976 has it. A later APL\360 edition, the January 1973 GH20-0906-1,
+was not read. sw-apl follows the two read: (A) has no scan and (B)
+does.
 
 **APLSV.** Execute, format, the quad names and shared variables are
 the additions. Its guide says the older workspace functions built on

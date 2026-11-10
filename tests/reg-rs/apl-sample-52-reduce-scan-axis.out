@@ -1,4 +1,4 @@
-      ⍝ Reduce and scan on either axis, identities on empties
+      ⍝ Reduce on either axis, identities on empties; scan is (B)'s, sample 92
       M←2 3⍴⍳6
       +/M
 6 15
@@ -8,12 +8,6 @@
 5 7 9
       -/M
 2 5
-      ×\M
-1  2   6
-4 20 120
-      +⍀M
-1 2 3
-5 7 9
       ∨/0 0 1
 1
       ∧/1 1 0
@@ -28,9 +22,7 @@
 1.797693135E308
       =/⍳0
 1
-      -\1 2 3
-1 ¯1 2
       )OFF
-20.05.40 09/17/26
+9.02.43 11/10/26
 CONNECTED 0.00.00
 CPU TIME 0.00.00

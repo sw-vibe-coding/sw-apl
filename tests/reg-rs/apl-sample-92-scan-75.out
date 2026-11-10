@@ -1,0 +1,31 @@
+      ⍝!MODES (B)
+      ⍝ Scan, in (B) '75: every reduction along the way, on either axis.
+      ⍝ The 5100 family has it from APLSV; (A) does not, sample 33.
+      +\1 2 3 4
+1 3 6 10
+      ×\1 2 3 4 5
+1 2 6 24 120
+      ⌈\3 1 4 1 5 9
+3 3 4 4 5 9
+      ⌊\9 5 1 4 3
+9 5 1 1 1
+      ∨\0 0 1 0 0
+0 0 1 1 1
+      ∧\1 1 1 0 1
+1 1 1 0 0
+      -\1 2 3
+1 ¯1 2
+      M←2 3⍴⍳6
+      ×\M
+1  2   6
+4 20 120
+      +⍀M
+1 2 3
+5 7 9
+      +\[1]M
+1 2 3
+5 7 9
+      )OFF
+9.01.23 11/10/26
+CONNECTED 0.00.00
+CPU TIME 0.00.00

@@ -60,6 +60,9 @@ carry the same files, for example
   photograph of a 5100 keyboard; not carried, licence unchecked.
   <https://commons.wikimedia.org/wiki/File:Ibm5100_(2297950254).jpg>
 
+- **IBM 5100 APL Reference Manual**, SA21-9213-2, May 1976, as above:
+  its section on the scan operator is what keeps scan in (B).
+
 ## APLSV -- what the 5100 family's APL derives from
 
 - **APL Language**, GC26-3847-0, IBM, March 1975. The language

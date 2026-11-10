@@ -1241,6 +1241,20 @@ PC APL and APL2. It is `docs/apl-feature-history.md`, each cell
 traced to a manual. (A) is the 1970 column. APL\1130 is the owner's
 separate project, listed for the history and not modelled here.
 
+## Owner direction (2026-11-09, later): no scan in (A)
+
+"Correct a'70 - remove scan (keep in b'75)." Writing the feature
+history found scan in neither APL\360 manual (A) follows, August 1968
+or December 1970, in their text or their index; APLSV's guide has a
+section on it, and the 5100 manual of May 1976 has it. A correctness
+fix to (A), so its transcripts move with the manuals as the reason.
+
+In (A) a scan is SYNTAX ERROR when the line runs, as APL\360 reports
+an expansion with no array on its left. (B) keeps scan. A saved
+workspace whose code scans is (B) only. The library workspaces that
+ran in both were fixed first, in sw-apl-workspaces: POLY's scans
+became APL\360 expressions, and COURSE says scan is (B)'s.
+
 ## Owner direction (2026-09-29): the documents, checked against the code
 
 "Is the README up-to-date? Scan documents for stale info or

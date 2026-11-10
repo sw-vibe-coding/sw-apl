@@ -60,6 +60,9 @@ software, same publications), not a statement from a manual.
 
 From the 5110 manual, Chapters 4 and 5:
 
+- **Scan**, `f\B` and `f⍀B`: every reduction along the way, on either
+  axis. APLSV has it and APL\360 does not; sw-apl takes it out of (A)
+  on that evidence (parity row "Scan").
 - **Execute**, `⍎B`: evaluates a character scalar or vector as an APL
   expression; monadic only.
 - **Format**, `⍕B` and `A⍕B`: monadic gives the characters the display

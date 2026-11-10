@@ -94,7 +94,8 @@
     },
     {
       "insert": "+\\⍳5",
-      "label": "running sum"
+      "label": "running sum",
+      "modes": "B"
     },
     {
       "insert": "⌽⍳5",
@@ -295,7 +296,7 @@
     },
     {
       "insert": "⍀",
-      "try": "+⍀⍳3"
+      "try": "1 0 1⍀1 2"
     },
     {
       "insert": "⌹",

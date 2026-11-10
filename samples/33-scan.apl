@@ -1,8 +1,8 @@
-⍝ Scan operator (running reduce)
+⍝ (A) has no scan: neither APL\360 manual has it. A function before
+⍝ the slope is an expansion with no array on its left. Expansion
+⍝ itself is unchanged; (B) '75 scans, sample 92.
 +\1 2 3 4
 ×\1 2 3 4 5
-⌈\3 1 4 1 5 9
-⌊\9 5 1 4 3
-∨\0 0 1 0 0
-∧\1 1 1 0 1
+1 0 1 1\1 2 3
+1 0 1⍀1 2
 )OFF

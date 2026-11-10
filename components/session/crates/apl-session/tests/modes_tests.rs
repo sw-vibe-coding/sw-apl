@@ -101,6 +101,35 @@ fn a_workspace_using_an_i_beam_is_68_only() {
 }
 
 #[test]
+fn a_workspace_using_scan_is_75_only() {
+    let dir = Dir::new("scan");
+    let mut b = session(&dir.0, Mode::B);
+    for line in ["∇R←T V", "R←+\\V", "∇", ")SAVE RUNNING"] {
+        out(&mut b, line);
+    }
+    let mut a = session(&dir.0, Mode::A);
+    assert!(out(&mut a, ")LIB").is_empty());
+    assert_eq!(out(&mut b, ")LIB"), vec!["RUNNING"]);
+}
+
+#[test]
+fn a_workspace_whose_scan_is_only_text_is_listed_in_both() {
+    let dir = Dir::new("scantext");
+    let mut b = session(&dir.0, Mode::B);
+    for line in [
+        "∇R←T",
+        "R←'+\\1 2' ⍝ +\\ IS SCAN",
+        "∇",
+        "E←1 0 1\\1 2",
+        ")SAVE TEXT",
+    ] {
+        out(&mut b, line);
+    }
+    let mut a = session(&dir.0, Mode::A);
+    assert_eq!(out(&mut a, ")LIB"), vec!["TEXT"]);
+}
+
+#[test]
 fn a_workspace_saved_before_modes_is_68_only() {
     let dir = Dir::new("old");
     let work = dir.0.join("work");

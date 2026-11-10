@@ -7,6 +7,9 @@ use apl_modes::{Mode, Modes};
 use apl_value::FUZZ;
 use apl_workspace::Saved;
 
+/// The scalar functions, the ones a scan applies.
+const SCALAR: &str = "+-×÷⌈⌊|*⍟○!<≤=≥>≠∧∨⍲⍱";
+
 /// The modes `saved` runs in: every mode, less the ones it uses
 /// something missing from.
 ///
@@ -15,7 +18,8 @@ use apl_workspace::Saved;
 /// (docs/mode-b.md). '75-only: execute, format, a quad-named system
 /// variable or function, a setting made local in a header, a
 /// comparison tolerance other than the fixed one, and a latent
-/// expression, which only `⎕LX` sets. Quad and quote-quad alone are I/O both modes have.
+/// expression, which only `⎕LX` sets, and a scan, which APL\360 does
+/// not have. Quad and quote-quad alone are I/O both modes have.
 #[must_use]
 pub fn runs_in(saved: &Saved) -> Modes {
     let lines = saved.funcs.values().flat_map(|f| f.body.iter());
@@ -57,5 +61,14 @@ fn added(code: &str) -> bool {
     let named = chars
         .windows(2)
         .any(|w| w[0] == '⎕' && w[1].is_alphabetic());
-    named || code.contains('⍎') || code.contains('⍕')
+    named || code.contains('⍎') || code.contains('⍕') || scans(&chars)
+}
+
+/// Whether code scans: a scalar function, then the slope or the slope
+/// bar, with only blanks between, as the parser reads `f\` and `f⍀`.
+fn scans(chars: &[char]) -> bool {
+    let glyphs: Vec<char> = chars.iter().copied().filter(|c| *c != ' ').collect();
+    glyphs
+        .windows(2)
+        .any(|w| SCALAR.contains(w[0]) && matches!(w[1], '\\' | '⍀'))
 }

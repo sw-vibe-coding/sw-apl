@@ -1,0 +1,1 @@
+In (A) a scan is SYNTAX ERROR when it runs, in (B) it is unchanged; a saved workspace whose code scans is (B) only; the board offers scan examples in (B) only; samples, parity, language, mode-b and the feature history say so.

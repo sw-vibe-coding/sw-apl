@@ -1,6 +1,6 @@
 //! The session turns one input line into transcript lines.
 
-use apl_session::Session;
+use apl_session::{Mode, Session};
 
 fn out(s: &mut Session, line: &str) -> Vec<String> {
     let reply = s.respond(line);
@@ -244,7 +244,7 @@ fn grade_radix_and_deal_end_to_end() {
 }
 
 #[test]
-fn reduce_and_scan_on_either_axis_end_to_end() {
+fn reduce_on_either_axis_end_to_end() {
     let mut s = Session::default();
     assert_eq!(
         out(&mut s, "M\u{2190}2 3\u{2374}\u{2373}6"),
@@ -253,9 +253,6 @@ fn reduce_and_scan_on_either_axis_end_to_end() {
     assert_eq!(out(&mut s, "+/M"), vec!["6 15"]);
     assert_eq!(out(&mut s, "+\u{233f}M"), vec!["5 7 9"]);
     assert_eq!(out(&mut s, "+/[1]M"), vec!["5 7 9"]);
-    assert_eq!(out(&mut s, "+\\1 2 3 4"), vec!["1 3 6 10"]);
-    assert_eq!(out(&mut s, "+\u{2340}M"), vec!["1 2 3", "5 7 9"]);
-    assert_eq!(out(&mut s, "+\\[1]M"), vec!["1 2 3", "5 7 9"]);
     assert_eq!(out(&mut s, "\u{2228}/0 0 1"), vec!["1"]);
     assert_eq!(
         out(&mut s, "\u{2308}/\u{2373}0"),
@@ -314,7 +311,7 @@ fn only_the_axis_taking_glyphs_accept_a_bracket() {
         out(&mut s, "M\u{2190}2 3\u{2374}\u{2373}6"),
         Vec::<String>::new()
     );
-    // The seven APL\360 forms that take an axis.
+    // The APL\360 forms that take an axis.
     for line in [
         "\u{233d}[1]M",
         "\u{2296}[2]M",
@@ -324,7 +321,6 @@ fn only_the_axis_taking_glyphs_accept_a_bracket() {
         "1 1\u{2340}[1]M",
         "M,[1]M",
         "+/[1]M",
-        "+\\[2]M",
     ] {
         assert_ne!(out(&mut s, line)[0], "SYNTAX ERROR", "{line} takes an axis");
     }
@@ -969,5 +965,46 @@ fn the_shuffle_idiom() {
         got,
         [10, 20, 30, 40, 50],
         "a shuffle holds every element once"
+    );
+}
+
+/// Scan, in (B), on either axis.
+#[test]
+fn scan_on_either_axis_in_75() {
+    let mut s = Session::default();
+    s.ws.mode = Mode::B;
+    out(&mut s, "M\u{2190}2 3\u{2374}\u{2373}6");
+    assert_eq!(out(&mut s, "+\\1 2 3 4"), vec!["1 3 6 10"]);
+    assert_eq!(out(&mut s, "+\u{2340}M"), vec!["1 2 3", "5 7 9"]);
+    assert_eq!(out(&mut s, "+\\[1]M"), vec!["1 2 3", "5 7 9"]);
+    assert_eq!(out(&mut s, "+\\[2]M"), vec!["1 3  6", "4 9 15"]);
+}
+
+/// APL\360 has no scan: neither the 1968 nor the 1970 manual has it,
+/// in its text or its index. A function before the slope is an
+/// expansion with nothing on its left, a SYNTAX ERROR when it runs.
+/// Expansion itself is unchanged.
+#[test]
+fn in_70_a_scan_is_a_syntax_error() {
+    let mut s = Session::default();
+    out(&mut s, "M\u{2190}2 3\u{2374}\u{2373}6");
+    for line in [
+        "+\\1 2 3 4",
+        "\u{d7}\\1 2 3",
+        "+\u{2340}M",
+        "+\\[1]M",
+        "\u{2228}\\0 1 0",
+    ] {
+        assert_eq!(out(&mut s, line)[0], "SYNTAX ERROR", "{line}");
+    }
+    assert_eq!(out(&mut s, "1 0 1\\1 2"), vec!["1 0 2"]);
+    assert_eq!(out(&mut s, "1 0 1\u{2340}1 2"), vec!["1 0 2"]);
+    for line in ["\u{2207}R\u{2190}F V", "R\u{2190}+\\V", "\u{2207}"] {
+        out(&mut s, line);
+    }
+    assert_eq!(
+        out(&mut s, "F 1 2")[0],
+        "SYNTAX ERROR",
+        "defined, it fails when it runs"
     );
 }
