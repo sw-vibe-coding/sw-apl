@@ -1,0 +1,1 @@
+American spelling across the repository: about 200 lines in 68 files, six transcripts rebased for spelling only, CLAUDE.md and AGENTS.md carry the rule and a check. Committed locally, not pushed.

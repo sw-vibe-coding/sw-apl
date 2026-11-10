@@ -1,8 +1,9 @@
 number = 1
 slug = "us-spelling"
-status = "in-progress"
+status = "completed"
 description = "Sweep the repository to American spelling: prose, UI strings, data, code iden..."
 role = "production"
 context_files = []
 created_at = "2026-11-10T10:01:01"
-commits = []
+completed_at = "2026-11-10T12:28:25"
+commits = ["a46e6d931ac085f28be1a287c40ef7124da3fb3b"]
