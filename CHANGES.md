@@ -14,6 +14,8 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-11-10
 
+- docs: architecture, adding a mode without moving the ones before it
+- docs(changes): refresh CHANGES.md to HEAD
 - docs(mode-c): APL80's key table, read from the manual's scan
 - docs(changes): refresh CHANGES.md to HEAD
 - docs: (C) decisions -- APL80's look, modeled peek/poke/call/)DOS, no delta
