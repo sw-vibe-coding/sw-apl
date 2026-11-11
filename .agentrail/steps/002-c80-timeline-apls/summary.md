@@ -1,0 +1,1 @@
+Timeline: I-APL (v1.0 Jan 1988, BAA-backed free APL for schools, BBC Micro) and TryAPL2 (ca. 1990, IBM free APL2 for DOS) as linked notes; IBM PC APL callout says it required the 8087. Docs apl-timeline.md, citations.md, plan.md; test added; pages rebuilt and pushed.
