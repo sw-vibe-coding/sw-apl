@@ -1,6 +1,6 @@
 number = 1
 slug = "c80-names"
-status = "pending"
+status = "in-progress"
 description = "Rename every workspace in sw-apl and sw-apl-workspaces to NAME.modes.apl.ws, ..."
 role = "production"
 context_files = []

@@ -73,7 +73,7 @@ numbered ones are public.
 | 2 and up | configured | Any directory of workspaces; read-only. See below |
 
 `)LIB` lists library 0, `)LIB 1` lists library 1 -- one at a time, as
-APL\360 did. A workspace is the file `NAME.apl.ws`. `--library DIR`
+APL\360 did. A workspace is the file `NAME.<modes>.apl.ws`. `--library DIR`
 sets the directory they are all under, so a script or a test can work
 somewhere other than your own `work/`.
 
@@ -161,7 +161,7 @@ R←((A*2)+B*2)*0.5
 Loading it is running it, so the same file works as a program:
 
 ```sh
-sw-apl -f work/CLASS.apl.ws
+sw-apl -f work/CLASS.ab.apl.ws
 ```
 
 A workspace file is a sample and a sample is a workspace. That is
@@ -203,19 +203,21 @@ only in the modes its `⍝!MODES` line names, and a file with no such
 line is an (A) workspace.
 
 A file's name says the modes it runs in too, so a list of the files
-shows it, and the mode is left out when a workspace runs in both:
+shows it: `NAME.<modes>.apl.ws`, the letters of its modes in order.
 
 | Runs in | File |
 |---|---|
-| (A) and (B) | `NAME.apl.ws` |
-| (A) only | `NAME.a-70.apl.ws` |
-| (B) only | `NAME.b-75.apl.ws` |
+| (A) and (B) | `NAME.ab.apl.ws` |
+| (A) only | `NAME.a.apl.ws` |
+| (B) only | `NAME.b.apl.ws` |
 
 Every mode still calls the workspace `NAME`: `)LOAD CLASS` finds
-`CLASS.b-75.apl.ws` in (B). The modes line inside is the authority;
+`CLASS.b.apl.ws` in (B). The modes line inside is the authority;
 `scripts/check-provenance.sh` checks that every shipped workspace's
-name agrees with it. A file named the way an earlier build named a
-pair, `NAME@B.apl.ws`, is still read.
+name agrees with it. A file named the way an earlier build named it --
+`NAME.apl.ws`, `NAME.a-70.apl.ws`, `NAME.b-75.apl.ws` or
+`NAME@B.apl.ws` -- is still read, and a save renames it for its
+letters.
 
 `)SAVE` writes the line from what the workspace uses, not from the
 mode it was saved in:
@@ -237,7 +239,7 @@ mode too only where the other mode was listing the same workspace:
 - A save is also listed in any other mode it runs in that has no
   workspace of that name. A workspace another mode keeps as its own is
   never touched, so an (A) workspace and a (B) one may share a name:
-  `NAME.a-70.apl.ws` and `NAME.b-75.apl.ws`, both called `NAME`.
+  `NAME.a.apl.ws` and `NAME.b.apl.ws`, both called `NAME`.
 - A workspace that stops running in a mode is renamed for the one it
   still runs in.
 - `)DROP` in one mode takes the workspace out of that mode only; the
@@ -457,12 +459,12 @@ for it.
 ### An obscured workspace is not a program
 
 A plain workspace file is also a sample: `sw-apl -f
-work/NAME.apl.ws` rebuilds the workspace, because loading it is
+work/NAME.ab.apl.ws` rebuilds the workspace, because loading it is
 running it. An obscured one cannot be, and rather than leave that
 to be found out it says so:
 
 ```
-      sw-apl -f work/VAULT.apl.ws
+      sw-apl -f work/VAULT.ab.apl.ws
 OBSCURED WORKSPACE. )LOAD IT -- IT CANNOT BE RUN AS A PROGRAM.
 ```
 

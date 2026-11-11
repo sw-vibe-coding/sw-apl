@@ -25,15 +25,21 @@ for f in $tracked; do
     fi
 done
 # A workspace's file name says the modes it runs in, so a list of the
-# files shows it (owner, 2026-09-22): NAME.a-70.apl.ws for (A) only,
-# NAME.b-75.apl.ws for (B) only, NAME.apl.ws for both. The modes line
-# inside is the authority, and the two must agree.
+# files shows it (owner, 2026-09-22; letters, 2026-11-10):
+# NAME.<modes>.apl.ws, the letters of its modes in order --
+# NAME.a.apl.ws for (A) only, NAME.ab.apl.ws for (A) and (B).
+# The modes line inside is the authority, and the two must agree.
 for f in $tracked; do
-    case "$f" in
-        *.a-70.apl.ws) want='(A)' ;;
-        *.b-75.apl.ws) want='(B)' ;;
-        *) want='(A)(B)' ;;
-    esac
+    # NAME.ab.apl.ws: the letters after the name, upper-cased and each
+    # in parentheses, are the modes line it must have.
+    base="$(basename "$f" .apl.ws)"
+    letters="${base#*.}"
+    if [ "$letters" = "$base" ] || [[ ! "$letters" =~ ^[abcd]+$ ]]; then
+        echo "  FAIL $f: no mode letters (NAME.ab.apl.ws)"
+        status=1
+        continue
+    fi
+    want="$(tr a-z A-Z <<<"$letters" | sed 's/./(&)/g')"
     have="$(grep -m1 '^⍝!MODES ' "$f" | cut -d' ' -f2- || true)"
     if [ "$have" = "$want" ]; then
         echo "  ok   $f runs in $want"

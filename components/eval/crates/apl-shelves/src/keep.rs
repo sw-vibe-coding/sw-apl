@@ -1,6 +1,6 @@
 //! Saving and dropping in one mode without disturbing another.
 
-use apl_modes::{Mode, Modes, modes, retag};
+use apl_modes::{LETTERS, Mode, Modes, modes, retag};
 use apl_store::Store;
 
 use crate::find::{Entry, entries};
@@ -76,16 +76,12 @@ fn narrow(
     store.write(library, &entry.key, None)
 }
 
-/// The key a workspace running in `modes` is kept under: the name
-/// alone when it runs in both, and the name marked with its one mode
-/// when not, so a list of the files shows which mode each is for
-/// (owner, 2026-09-22).
+/// The key a workspace running in `modes` is kept under: the name and
+/// the letters of its modes, in order -- `LIFE.ab`, `BIRDS.a` -- so a
+/// list of the files shows which modes each is for (owner, 2026-09-22;
+/// letters, 2026-11-10).
 fn key_for(name: &str, modes: Modes) -> String {
-    if modes == Modes::only(Mode::A) {
-        format!("{name}.a-70")
-    } else if modes == Modes::only(Mode::B) {
-        format!("{name}.b-75")
-    } else {
-        name.to_string()
-    }
+    let ours = LETTERS.iter().filter(|(mode, _)| modes.has(*mode));
+    let letters: String = ours.map(|(_, c)| c.to_ascii_lowercase()).collect();
+    format!("{name}.{letters}")
 }

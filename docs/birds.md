@@ -1,7 +1,7 @@
 # BIRDS: combinators in each mode
 
 BIRDS is a workspace in library 1, with a version for each mode --
-`ws/lib1/BIRDS.a-70.apl.ws` and `ws/lib1/BIRDS.b-75.apl.ws` -- and
+`ws/lib1/BIRDS.a.apl.ws` and `ws/lib1/BIRDS.b.apl.ws` -- and
 `)LOAD 1 BIRDS` takes the one for the mode the session is in:
 
 ```

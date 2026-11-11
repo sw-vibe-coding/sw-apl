@@ -8,20 +8,32 @@ use apl_session::Shelf;
 /// holds it: a workspace that differs between the modes is two.
 const SHIPPED: [(&str, &str); 7] = [
     (
-        "BIRDS.a-70",
-        include_str!("../../../../../ws/lib1/BIRDS.a-70.apl.ws"),
+        "BIRDS.a",
+        include_str!("../../../../../ws/lib1/BIRDS.a.apl.ws"),
     ),
     (
-        "BIRDS.b-75",
-        include_str!("../../../../../ws/lib1/BIRDS.b-75.apl.ws"),
+        "BIRDS.b",
+        include_str!("../../../../../ws/lib1/BIRDS.b.apl.ws"),
     ),
-    ("EDIT", include_str!("../../../../../ws/lib1/EDIT.apl.ws")),
-    ("LEARN", include_str!("../../../../../ws/lib1/LEARN.apl.ws")),
-    ("LIFE", include_str!("../../../../../ws/lib1/LIFE.apl.ws")),
-    ("RACE", include_str!("../../../../../ws/lib1/RACE.apl.ws")),
     (
-        "TTTML.b-75",
-        include_str!("../../../../../ws/lib1/TTTML.b-75.apl.ws"),
+        "EDIT.ab",
+        include_str!("../../../../../ws/lib1/EDIT.ab.apl.ws"),
+    ),
+    (
+        "LEARN.ab",
+        include_str!("../../../../../ws/lib1/LEARN.ab.apl.ws"),
+    ),
+    (
+        "LIFE.ab",
+        include_str!("../../../../../ws/lib1/LIFE.ab.apl.ws"),
+    ),
+    (
+        "RACE.ab",
+        include_str!("../../../../../ws/lib1/RACE.ab.apl.ws"),
+    ),
+    (
+        "TTTML.b",
+        include_str!("../../../../../ws/lib1/TTTML.b.apl.ws"),
     ),
 ];
 

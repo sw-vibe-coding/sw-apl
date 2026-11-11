@@ -110,8 +110,8 @@ beneath them.
 
 | Document | Tangles to |
 |---|---|
-| `birds.org` | `ws/lib1/BIRDS.b-75.apl.ws` |
-| `tttml.org` | `ws/lib1/TTTML.b-75.apl.ws`. Its model, `KEYS` and `VALS`, is data and is left out of the page, though not out of the tangle |
+| `birds.org` | `ws/lib1/BIRDS.b.apl.ws` |
+| `tttml.org` | `ws/lib1/TTTML.b.apl.ws`. Its model, `KEYS` and `VALS`, is data and is left out of the page, though not out of the tangle |
 
 `style.setup` is their shared look: the page, and the color of each
 class, light and dark. `index.org` lists them.

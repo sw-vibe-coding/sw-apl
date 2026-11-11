@@ -7,7 +7,7 @@ This is the (B) '75 BIRDS workspace from sw-apl's library 1, written as
 a literate program: the prose and the code in the order a reader meets
 them, rather than the order the file keeps them. Every function is
 here, and the last section puts them together into the workspace file,
-~ws/lib1/BIRDS.b-75.apl.ws~, byte for byte -- tangling this document
+~ws/lib1/BIRDS.b.apl.ws~, byte for byte -- tangling this document
 writes that file. Every example below was run by sw-apl and its result
 recorded under it; in the sw-apl in your browser, ~)LOAD 1 BIRDS~ in
 the (B) tab gives the same answers.
@@ -469,7 +469,7 @@ pieces of this document together in it, and tangling the document
 writes the workspace:
 
 #+caption: The workspace, in the order its file keeps
-#+begin_src sw-apl :tangle ../../ws/lib1/BIRDS.b-75.apl.ws :noweb no-export :eval no :exports code
+#+begin_src sw-apl :tangle ../../ws/lib1/BIRDS.b.apl.ws :noweb no-export :eval no :exports code
 <<workspace-header>>
 <<fn-b>>
 <<fn-c>>

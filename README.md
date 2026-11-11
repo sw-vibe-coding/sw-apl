@@ -182,8 +182,8 @@ otherwise be talking to that older build.
 
 The workspaces sw-apl ships, in `ws/lib1/`. Each is a plain text
 file, and each has a `DESCRIBE` that says what it holds. A file's
-name says the modes it runs in: `NAME.apl.ws` for both,
-`NAME.a-70.apl.ws` or `NAME.b-75.apl.ws` for one.
+name says the modes it runs in, by letter: `NAME.ab.apl.ws` for both,
+`NAME.a.apl.ws` or `NAME.b.apl.ws` for one.
 
 | Workspace | Modes | What it is |
 |---|---|---|

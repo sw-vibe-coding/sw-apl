@@ -6,7 +6,7 @@
 This is TTTML, the (B) '75 workspace in sw-apl's library 1 that learns
 tic-tac-toe by playing itself and then plays you, written as a literate
 program. The prose and the code come in the order a reader needs them;
-the last section assembles them into ~ws/lib1/TTTML.b-75.apl.ws~,
+the last section assembles them into ~ws/lib1/TTTML.b.apl.ws~,
 byte for byte. Every example was run by sw-apl on the workspace as it
 ships, trained, and its result recorded under it. ~)LOAD 1 TTTML~ in
 the (B) tab of sw-apl in your browser gives the same answers.
@@ -555,7 +555,7 @@ The assembly, in the file's order; tangling the document writes the
 workspace:
 
 #+caption: The workspace, in the order its file keeps
-#+begin_src sw-apl :tangle ../../ws/lib1/TTTML.b-75.apl.ws :noweb no-export :eval no :exports code
+#+begin_src sw-apl :tangle ../../ws/lib1/TTTML.b.apl.ws :noweb no-export :eval no :exports code
 <<workspace-header>>
 <<var-keys>>
 <<var-sym>>

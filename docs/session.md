@@ -365,8 +365,9 @@ Library 1 holds:
 | `TTTML` | (B) only. A machine that learns tic-tac-toe by playing itself, and plays you with what it learned: `PLAY 1` to move first, `PLAY 2` to let it begin, `TRIAL N` against a random player, `TRAIN N` to learn again. See `learn-tic-tac-toe-strategy.md` |
 
 `)LIB` lists library 0 and `)LIB 1` lists library 1; one library
-at a time, as APL\360 did. A workspace is `NAME.apl.ws`, UTF-8
-text (see `design.md` D7).
+at a time, as APL\360 did. A workspace is `NAME.<modes>.apl.ws`, UTF-8
+text (see `design.md` D7), the letters naming the modes it runs in:
+`CLASS.ab.apl.ws` runs in both.
 
 A directory is where the CLI and the service keep them, not what a
 library is. In a browser there is no filesystem: library 1 is baked
@@ -379,7 +380,7 @@ run as a program:
 
 ```
       )LOAD CLASS
-      sw-apl -f work/CLASS.apl.ws     # the same thing, from a shell
+      sw-apl -f work/CLASS.ab.apl.ws  # the same thing, from a shell
 ```
 
 What it holds is the names, the settings and the random link. It
@@ -391,7 +392,7 @@ Library form: `)LOAD 1 CLASS` loads workspace CLASS from library
 1. Library 0 (the default) is `work/` under `--library DIR`, library
 1 is `ws/lib1/` there, and libraries 2 and up are configured with
 `--lib` or a `sw-apl.toml`. Workspace names follow APL rules and the file on
-disk is `NAME.apl.ws` (UTF-8 text, see `design.md` D7).
+disk is `NAME.<modes>.apl.ws` (UTF-8 text, see `design.md` D7).
 
 ## The del editor
 

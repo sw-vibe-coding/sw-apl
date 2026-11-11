@@ -44,7 +44,7 @@ fn a_workspace_with_a_locked_function_is_not_saved_as_readable_apl() {
     out(&mut s, ")WSID VAULT");
     define(&mut s);
     out(&mut s, ")SAVE");
-    let text = std::fs::read_to_string(work.join("VAULT.apl.ws")).expect("saved");
+    let text = std::fs::read_to_string(work.join("VAULT.ab.apl.ws")).expect("saved");
     assert!(text.starts_with("\u{235d}!OBSCURED"), "{text}");
     assert!(
         !text.contains("R\u{2190}42"),
@@ -87,7 +87,7 @@ fn a_workspace_that_gains_a_lock_changes_form_when_saved_again() {
         out(&mut s, line);
     }
     out(&mut s, ")SAVE");
-    let file = work.join("VAULT.apl.ws");
+    let file = work.join("VAULT.ab.apl.ws");
     let before = std::fs::read_to_string(&file).expect("saved");
     assert!(before.contains("R\u{2190}7"), "plain text so far");
     for line in ["\u{2207}R\u{2190}SECRET", "R\u{2190}42", "\u{236b}"] {

@@ -46,7 +46,7 @@ fn a_workspace_saved_and_loaded_comes_back_whole() {
     let saved = out(&mut s, ")SAVE");
     assert_eq!(saved.len(), 1);
     assert!(saved[0].ends_with(" CLASS"), "{saved:?}");
-    assert!(dir.0.join("work/CLASS.apl.ws").exists());
+    assert!(dir.0.join("work/CLASS.ab.apl.ws").exists());
     assert_eq!(out(&mut s, ")LIB"), vec!["CLASS"]);
     out(&mut s, ")CLEAR");
     // )LOAD says SAVED and nothing else: no hint, nothing echoed.
@@ -212,7 +212,7 @@ fn continue_saves_and_signs_off() {
     out(&mut s, "A\u{2190}1");
     let reply = s.respond(")CONTINUE");
     assert!(reply.off, "the session ended");
-    assert!(dir.0.join("work/CONTINUE.apl.ws").exists());
+    assert!(dir.0.join("work/CONTINUE.ab.apl.ws").exists());
     assert!(reply.lines.iter().any(|l| l.starts_with("CONNECTED ")));
 }
 

@@ -213,5 +213,6 @@ it runs in, in order: `LIFE.abc.apl.ws`, `COURSE.ab.apl.ws`,
 variant for some modes shares the name with disjoint letters, and in
 any one mode a name is unique. The `⍝!MODES` line inside stays the
 authority, and a gate in each repository checks that the two agree.
-It replaces today's `NAME.apl.ws`, `NAME.a-70.apl.ws` and
-`NAME.b-75.apl.ws`, which cannot say three modes or four.
+It replaced `NAME.apl.ws`, `NAME.a-70.apl.ws` and
+`NAME.b-75.apl.ws`, which could not say three modes or four; files
+named those ways are still read.

@@ -5,9 +5,9 @@ use apl_store::Store;
 use apl_modes::{Mode, Modes, modes};
 
 /// What separates a name from the modes its key says it runs in:
-/// `BIRDS.b-75`. `@` is how an earlier build marked a key, `BIRDS@B`,
-/// and is still read. A workspace name is letters and digits, so it
-/// can never contain either.
+/// `BIRDS.b`, `LIFE.ab`. Earlier builds marked a key `BIRDS.b-75` or
+/// `BIRDS@B`, and both are still read. A workspace name is letters and
+/// digits, so it can never contain either separator.
 const APART: [char; 2] = ['.', '@'];
 
 /// The name a key stands for, without the modes it may carry.

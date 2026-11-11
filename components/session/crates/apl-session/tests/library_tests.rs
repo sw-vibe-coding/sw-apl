@@ -14,25 +14,25 @@ use apl_session::{Files, Mode, Session};
 const SHIPPED: [(&str, &str, Mode, &[&str]); 8] = [
     (
         "LIFE",
-        "LIFE",
+        "LIFE.ab",
         Mode::A,
         &["DESCRIBE", "HOWRUN", "GEN", "RUN", "GLIDER"],
     ),
     (
         "RACE",
-        "RACE",
+        "RACE.ab",
         Mode::A,
         &["DESCRIBE", "HOWRACE", "SHOW", "RACE"],
     ),
     (
         "EDIT",
-        "EDIT",
+        "EDIT.ab",
         Mode::A,
         &["DESCRIBE", "HOWEDIT", "FACT", "MEAN"],
     ),
     (
         "BIRDS",
-        "BIRDS.a-70",
+        "BIRDS.a",
         Mode::A,
         &[
             "DESCRIBE", "HOWBIRDS", "NOTHERE", "I", "K", "KI", "T", "B", "C", "W", "S", "APPLY",
@@ -41,18 +41,28 @@ const SHIPPED: [(&str, &str, Mode, &[&str]); 8] = [
     ),
     (
         "BIRDS",
-        "BIRDS.b-75",
+        "BIRDS.b",
         Mode::B,
         &[
             "DESCRIBE", "HOWBIRDS", "NOTHERE", "I", "K", "KI", "T", "B", "C", "W", "S", "M", "Y",
             "FSTEP", "SHOUT", "HYP", "FACT",
         ],
     ),
-    ("LEARN", "LEARN", Mode::A, &["DESCRIBE", "START", "LESSON"]),
-    ("LEARN", "LEARN", Mode::B, &["DESCRIBE", "START", "LESSON"]),
+    (
+        "LEARN",
+        "LEARN.ab",
+        Mode::A,
+        &["DESCRIBE", "START", "LESSON"],
+    ),
+    (
+        "LEARN",
+        "LEARN.ab",
+        Mode::B,
+        &["DESCRIBE", "START", "LESSON"],
+    ),
     (
         "TTTML",
-        "TTTML.b-75",
+        "TTTML.b",
         Mode::B,
         &[
             "DESCRIBE", "PLAY", "TRIAL", "TRAIN", "SHOW", "CHOOSE", "GAME", "LEARN",
