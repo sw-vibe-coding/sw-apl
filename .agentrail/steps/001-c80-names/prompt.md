@@ -1,0 +1,1 @@
+Rename every workspace in sw-apl and sw-apl-workspaces to NAME.modes.apl.ws, the letters of the modes it runs in; teach both provenance gates and gen-pair.sh the letters; update shipped.rs, library indexes and docs. No behavior change; all transcripts unchanged.

@@ -1,0 +1,8 @@
+number = 6
+slug = "c80-demo-link"
+status = "pending"
+description = "Make the C tab live in the demo and link the timeline C80 callout to it with ..."
+role = "production"
+context_files = []
+created_at = "2026-11-10T17:37:46"
+commits = []

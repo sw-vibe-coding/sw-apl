@@ -1,0 +1,1 @@
+Add mode C to apl-modes and the CLI as --mode 80: parse, list and load only C workspaces, a demo tab; and APL80 limits as a C profile per docs/mode-c.md, each with a test and a sample.

@@ -242,6 +242,8 @@ The modes and the workspaces:
 
 - [The (B) '75 mode](docs/mode-b.md) -- what (B) is modeled on, its
   sources, and every way it differs from (A)
+- [The (C) '80 mode](docs/mode-c.md) -- APL80 on the TRS-80: how it differs,
+  which workspaces port, and the naming of workspaces for four modes
 - [Emulation policy](docs/emulation-policy.md) -- the clock, the
   terminals, the workspace size: what each mode answers, and why
 - [APL timeline](docs/apl-timeline.md) -- the APLs sw-apl models,

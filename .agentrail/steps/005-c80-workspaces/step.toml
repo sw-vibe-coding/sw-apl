@@ -1,0 +1,8 @@
+number = 5
+slug = "c80-workspaces"
+status = "pending"
+description = "Port the workspaces docs/mode-c.md finds portable: add c or write C variants,..."
+role = "production"
+context_files = []
+created_at = "2026-11-10T17:37:46"
+commits = []

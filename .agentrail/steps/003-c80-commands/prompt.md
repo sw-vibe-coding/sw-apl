@@ -1,0 +1,1 @@
+In C: )DEF and )EDIT with the line commands in place of the del editor; )TRON )TROFF )PS )PD )AUTO )EXEC; the f format statement and the d axis operator; the # and s operators, per docs/mode-c.md.

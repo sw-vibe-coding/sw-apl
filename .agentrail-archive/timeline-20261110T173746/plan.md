@@ -1,0 +1,1 @@
+The APL timeline, per docs/plan.md owner directions 2026-11-09 and 2026-11-10: a Rust and Yew strip of APL history with the owner's live demos, becoming the site's landing page.

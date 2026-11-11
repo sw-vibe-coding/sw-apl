@@ -1305,6 +1305,40 @@ owner's directions, as they came:
   still reaches the demo. `docs/apl-timeline.md` is brought up to date
   with it, and pushed with it.
 
+## Owner direction (2026-11-10, later): (C) '80, APL80 on the TRS-80
+
+"Start a new plan to implement APL80 (or APL-80) for the TRS-80, as a
+live demo variation of the existing demos. Figure out which
+workspaces can be ported to this target. Create saga/step(s) to
+implement this and link to it from the timeline." And: "consider a
+naming scheme for the workspaces to identify if a workspace can run
+on a, b, c, and/or d. c is apl80."
+
+`docs/mode-c.md` is the design: what APL80 changes, the two decisions
+for the owner (typing and display; the machine's hardware), which
+workspaces port, and the naming scheme `NAME.<modes>.apl.ws`.
+
+Saga `c80`:
+
+1. `c80-names` -- the naming scheme in both repositories: every
+   workspace renamed, the gates and `gen-pair.sh` taught the letters,
+   `shipped.rs` and the docs updated. No behavior changes.
+2. `c80-mode` -- (C) as a mode: `Mode::C` in `apl-modes`, `--mode 80`,
+   a workspace listed in (C) only when its line says so, a tab on the
+   demo, and APL80's limits as a profile: no domino, lamination,
+   diagonal transpose or hyperbolic functions; encode, decode,
+   factorial and binomial limited; one assignment a statement; 32
+   functions and 255 lines.
+3. `c80-commands` -- `)DEF`, `)EDIT` and the line commands in place of
+   the del in (C); `)TRON )TROFF )PS )PD )AUTO )EXEC`; the `f` format
+   statement and the `d` axis operator; `#` and `s`.
+4. `c80-screen` -- typing and display, as the owner decides: APL80's
+   characters on a 64-by-16 screen, or glyphs.
+5. `c80-workspaces` -- the workspaces that port, as `.c` variants or
+   with `c` added; samples and transcripts for each.
+6. `c80-demo-link` -- the demo's (C) tab live, and the timeline's C'80
+   callout linking to it, its tooltip "My live demo of APL-80".
+
 ## Owner direction (2026-09-29): the documents, checked against the code
 
 "Is the README up-to-date? Scan documents for stale info or

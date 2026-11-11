@@ -1,0 +1,1 @@
+Typing and display in C as the owner decides in docs/mode-c.md: APL80 characters on a 64 by 16 screen, or glyphs; keyboard and board for the demo.

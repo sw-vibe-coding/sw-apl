@@ -1,0 +1,1 @@
+Port the workspaces docs/mode-c.md finds portable: add c or write C variants, with samples and transcripts; update library indexes.
