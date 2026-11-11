@@ -39,6 +39,53 @@ files; the tape version is noted, not built.
 - 15-digit arithmetic, 6-digit transcendental functions, and printing
   in 6 digits (`)PS`) or 15 (`)PD`).
 
+## The keys
+
+From the manual's Character Set page (page 4 of the undated edition).
+APL80 types every APL character it has in one of three ways. A
+shifted letter is typed with SHIFT and shows as a graphics dot and the
+letter; here it is written `.P`, as the manual's own text writes it.
+
+**The same in APL and APL80:** `! ' ( ) * : ; = ↑ ↓ ← → + , . ? / > <`.
+The four arrows are typed with SHIFT and the arrow key.
+
+**Substitutes:**
+
+| APL | APL80 | Note |
+|---|---|---|
+| `÷` | `%` | |
+| `⍟` | `@` | the scan prints a filled circle; logarithm is the one APL\360 character left to match it |
+| `[` `]` | `(` `)` | indexing, which therefore looks like a call |
+| `≠` | `$` | |
+| `∧` | `&` | |
+| `∘` | `"` | so an outer product is `".+` |
+| `¯` | `-` | the ordinary minus is the negative sign |
+| `-` | `_` | subtract and negate, typed with the CLEAR key |
+| `⍋` `⍒` | `↑` `↓` | monadic; dyadic they are take and drop |
+
+**Shifted letters:**
+
+| APL | APL80 | APL | APL80 | APL | APL80 |
+|---|---|---|---|---|---|
+| `×` | `.X` | `○` | `.O` | `\` | `.W` |
+| `≥` | `.Z` | `\|` | `.J` | `⌶` | `.S` |
+| `≤` | `.K` | `⎕` | `.Q` | `⌈` | `.H` |
+| `~` | `.N` | `⍞` | `.M` | `⌊` | `.L` |
+| `∨` | `.V` | `⍳` | `.I` | `⊥` | `.B` |
+| `⍲` | `.A` | `⍴` | `.P` | `⊤` | `.T` |
+| `⍱` | `.Y` | `∊` | `.E` | `⍝` | `.C` |
+| | | `⌽` | `.R` | `⍉` | `.G` |
+| | | | | `⍕` | `.F` |
+
+Read from the scan, which is sharp for most of the row. Three are
+read with help from the rest of the manual: `⌶` as `.S`, which is
+APL80's status operator in place of the I-beams; `⍝` as `.C`, which
+the function table lists as comment; and `⍕` as `.F`, which is the
+format statement. Not in the table, and so not in APL80: `∆`, `⍎`,
+`⌹`, `⊖`, `⌿` and `⍀` (the first-axis forms are the `d` axis
+operator). `#` is not a substitute: it is APL80's own character and
+number conversion, and with `)RAM`, Call.
+
 ## What (C) changes from (A)
 
 From the manual's "Limitations":
