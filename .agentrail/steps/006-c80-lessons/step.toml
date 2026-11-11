@@ -1,0 +1,8 @@
+number = 6
+slug = "c80-lessons"
+status = "pending"
+description = "Write LESSON1 to LESSON5 for C in sw-apl-workspaces, new text in the spirit o..."
+role = "production"
+context_files = []
+created_at = "2026-11-10T17:41:18"
+commits = []

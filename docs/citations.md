@@ -101,6 +101,10 @@ carry the same files, for example
 - **APL80**, Phelps Gates and Ramware, undated: the manual for APL on
   the TRS-80.
   <https://archive.org/details/APL80_19xx_Phelps_Gates-Ramware>
+- **APL80**, Phelps Gates and Ramware, 1980, 26 pages: a second edition
+  of the manual, listed in Ira Goldklang's TRS-80 catalog, which dates
+  APL80 to 1980.
+  <https://www.trs-80.com/sub-publications-manuals-software-1.htm#apl80-2>
 - **APL Reference**, 1502219, IBM, May 1983: IBM Personal Computer APL.
   <https://bitsavers.trailing-edge.com/pdf/ibm/pc/languages/1502219_APL_Reference_May83.pdf>
 - **An APL System for the IBM Personal Computer**, M. L. Tavera and

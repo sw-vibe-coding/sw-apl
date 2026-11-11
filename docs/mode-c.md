@@ -103,6 +103,29 @@ against the limits above:
 PLOT, POLY, DRILL, LEARN and COURSE use `∆` in names, which waits on
 the question above.
 
+## The lessons
+
+APL80's disk came with five workspaces, LESSON1/APL to LESSON5/APL,
+loaded with `)LOAD LESSON1/APL`. The cassette version had none. The
+manual names them and says no more, and no copy of the disk is known
+to survive, so their text is lost.
+
+(C) gets five lessons of its own, LESSON1 to LESSON5: new text, in
+the spirit of the originals, that follows the order of the manual's
+Using APL chapter:
+
+1. arithmetic from the keyboard, and vectors;
+2. variables, the index generator, and defining functions with
+   `)DEF` and `)EDIT`;
+3. arrays and the products;
+4. shape, grading, membership and indexing;
+5. branching, quad input, and files.
+
+Nothing of APL80 itself goes into either repository: no program, no
+disk image, no manual text. The lessons, like the rest of (C), are
+written from a reading of the manual and cite it in
+[citations.md](citations.md).
+
 ## Naming the workspaces for four modes
 
 A workspace's file is `NAME.<modes>.apl.ws`, the letters of the modes

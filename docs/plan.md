@@ -1336,7 +1336,11 @@ Saga `c80`:
    characters on a 64-by-16 screen, or glyphs.
 5. `c80-workspaces` -- the workspaces that port, as `.c` variants or
    with `c` added; samples and transcripts for each.
-6. `c80-demo-link` -- the demo's (C) tab live, and the timeline's C'80
+6. `c80-lessons` -- LESSON1 to LESSON5 for (C): new lessons in the
+   spirit of APL80's lost disk lessons, in the order of its manual's
+   Using APL chapter. Owner direction: no APL80 source, disk image or
+   manual text is redistributed unless its license allows it.
+7. `c80-demo-link` -- the demo's (C) tab live, and the timeline's C'80
    callout linking to it, its tooltip "My live demo of APL-80".
 
 ## Owner direction (2026-09-29): the documents, checked against the code
