@@ -292,6 +292,50 @@ does not do). The caret is a character offset
 into the source line so the session can print the APL\360 caret
 line. Each crate maps its own failures into `AplError`.
 
+## Adding a mode
+
+(A) '70 and (B) '75 are built; (C) '80 is planned (`mode-c.md`), and
+(D) '83, IBM PC APL, a punched-card APL like Maryland's, and the
+APL\1130 subset of APL\360 may follow. Each is added without moving
+the modes before it, in five layers:
+
+1. **The core stays APL\360.** The shared crates know nothing of
+   modes. What only some modes have is a crate of its own, under the
+   directory of the mode that first needed it (`a70/`, `b75/`), and a
+   later mode reuses it rather than copying: (D) is mostly (B)'s
+   crates, (C) and APL\1130 mostly the core with parts turned off.
+2. **A mode is a profile, not a match.** Code asks what the session's
+   profile has -- execute, the del editor, the I-beams, its limits on
+   functions and lines -- not which mode it is in. Adding a mode adds
+   a profile and a letter to `apl-modes`, not an arm to every `match`
+   on `Mode`. Today's mode checks move to profile questions as each
+   new mode needs them, each move covered by the tests already there.
+3. **Typing and display are translated at the edges.** The lexer and
+   everything after it see glyphs. Between them and the screen, a
+   mode's surface turns what is typed into glyphs and what is shown
+   back: APL80's `.P`, `$` and `%` and its dotted letters on a 64-by-16
+   screen, a keypunch's upper case, a code page. (A) and (B) have the
+   identity surface. A workspace is stored in glyphs, whatever the
+   mode that runs it.
+4. **What the grammar itself changes is a parser option.** APL80's
+   round-bracket indexing and names with `.` and `-`, and
+   `)DEF`/`)EDIT` in place of the del, are not spellings: they change
+   how a line parses or how a function is entered. Each is an option
+   the profile sets, off by default, so that (A) and (B) parse exactly
+   as before; each is tested in both states.
+5. **Nothing before moves, and that is proved.** Every sample has a
+   reg-rs transcript in its mode, and a new mode brings its own. A
+   change to an earlier mode's transcript fails the gate unless it is
+   a correctness fix to that mode, with its source. The CLI starts in
+   (A), the demo's `?mode=A` and `?mode=B` keep their meaning, and a
+   workspace's mode letters (`NAME.<modes>.apl.ws` and its `⍝!MODES`
+   line) keep it out of every mode it was not written for.
+
+The order follows the risk: (C) first, since it exercises the surface
+and the parser options hardest; then APL\1130, mostly a profile with
+parts off; then (D), mostly (B); then the punched-card mode, whose
+input arrives as a deck and needs the most new session work.
+
 ## Generated tables
 
 `data/glyphs.toml` is the single source of truth for every glyph:

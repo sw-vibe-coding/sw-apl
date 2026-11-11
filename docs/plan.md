@@ -1351,6 +1351,17 @@ subset of peek, poke, )DOS within reason, give errors for some."
 And, of `∆`: APL80 has none, so its names become `D.` names in the
 (C) variants, made by script; `docs/mode-c.md` records all three.
 
+Owner direction (2026-11-10, later): "how do you plan to support
+different flavors of APL while sharing code yet not breaking existing
+demos? we plan to add D (IBM PC APL) and possibly U of Maryland punch
+card APL flavor, and even might add the 1130\APL subset of APL\360."
+The answer is `docs/architecture.md`, "Adding a mode": the core stays
+APL\360; a mode is a profile of capabilities, not a match on `Mode`;
+typing and display translate at the edges; grammar changes are parser
+options off by default; reg-rs proves no earlier mode moves. (C) goes
+first, then APL\1130, (D), and the punched-card mode. No saga yet for
+any but (C).
+
 ## Owner direction (2026-09-29): the documents, checked against the code
 
 "Is the README up-to-date? Scan documents for stale info or
