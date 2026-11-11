@@ -14,6 +14,8 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-11-10
 
+- docs: (C) decisions -- APL80's look, modeled peek/poke/call/)DOS, no delta
+- docs(changes): refresh CHANGES.md to HEAD
 - docs: plan (C) lessons, in the spirit of APL80's lost disk lessons
 - docs(changes): refresh CHANGES.md to HEAD
 - docs: plan (C) '80, APL80 on the TRS-80
