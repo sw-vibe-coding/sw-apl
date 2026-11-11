@@ -9,6 +9,7 @@ repository.workspace = true
 
 [dependencies]
 apl-attn = { path = "../../../value/crates/apl-attn" }
+apl-c80-scalar = { path = "../../../c80/crates/apl-c80-scalar" }
 apl-scalar-arith = { path = "../apl-scalar-arith" }
 apl-scalar-circ = { path = "../apl-scalar-circ" }
 apl-scalar-logic = { path = "../apl-scalar-logic" }

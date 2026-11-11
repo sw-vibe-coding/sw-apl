@@ -349,9 +349,9 @@ is the current one, so running sw-apl from a checkout finds the
 shipped workspaces. Point it somewhere else and library 0 goes with
 it, which is how a test or a script keeps out of your own `work/`.
 
-`--mode 70` or `--mode 75` sets the mode; the default is 70. Each
-mode lists and loads only the workspaces that run in it, which a
-workspace names on its `⍝!MODES` line. See `workspaces.md`.
+`--mode 70`, `--mode 75` or `--mode 80` sets the mode; the default is
+70. Each mode lists and loads only the workspaces that run in it,
+which a workspace names on its `⍝!MODES` line. See `workspaces.md`.
 
 Library 1 holds:
 

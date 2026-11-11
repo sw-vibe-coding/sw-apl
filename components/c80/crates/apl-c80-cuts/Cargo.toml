@@ -1,0 +1,17 @@
+[package]
+name = "apl-c80-cuts"
+description = "sw-apl cuts: what the (C) '80 mode leaves out of a statement and the mixed functions, after APL80's Limitations"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-ast = { path = "../../../parse/crates/apl-ast" }
+apl-c80-scalar = { path = "../apl-c80-scalar" }
+apl-modes = { path = "../../../eval/crates/apl-modes" }
+apl-value = { path = "../../../value/crates/apl-value" }
+
+[lints]
+workspace = true

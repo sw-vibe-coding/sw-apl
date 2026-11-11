@@ -123,12 +123,21 @@ sw-apl/
                                    settings and values, which only the
                                    (B) '75 mode has
                                    (only (B) '75 reaches these)
+    c80/       apl-c80-cuts        cuts: what the (C) '80 mode leaves
+                                   out of a statement and the mixed
+                                   functions, after APL80's Limitations
+               apl-c80-scalar      scalar cuts: the scalar functions the
+                                   (C) '80 mode leaves out, the
+                                   hyperbolic circle functions and
+                                   factorial of a fraction
+                                   (each asks the session's profile, so
+                                   only (C) '80 is cut)
     cli/       apl-config          library configuration: --lib
                                    N=DIR[,NAME] and sw-apl.toml, for the
                                    CLI and the service
-               sw-apl              clean-room APL interpreter, (A) '70
-                                   and (B) '75: terminal REPL and batch
-                                   runner
+               sw-apl              clean-room APL interpreter, (A) '70,
+                                   (B) '75 and (C) '80: terminal REPL
+                                   and batch runner
     web/       apl-board           the 2741 keyboard in a browser: one
                                    keystroke in, the line out
                apl-serve           service: one session per connection,
@@ -170,9 +179,9 @@ it can be checked against them.
 ```
 glyphs -> value -> display -> console
 value -> lex (and strike) -> scan -> parse
-value -> prims (dispatch; scalar, mixed, ops and the rest)
+value -> c80 (scalar cuts) -> prims (dispatch; scalar, mixed, ops and the rest)
 prims + console + clock + modes -> workspace -> call, quad
-parse + prims + call + quad + a70 + b75 -> eval
+parse + prims + call + quad + a70 + b75 + c80 -> eval
 eval -> session (commands, editor, library, extensions) -> cli (+ config)
 eval -> session -> web (wire, serve, server; wasm, board, wasm-store)
 lex (strike) -> term (keyboard, paper, typing, aplterm) -> wire
@@ -294,22 +303,25 @@ line. Each crate maps its own failures into `AplError`.
 
 ## Adding a mode
 
-(A) '70 and (B) '75 are built; (C) '80 is planned (`mode-c.md`), and
+(A) '70 and (B) '75 are built, and (C) '80 is being built (`mode-c.md`);
 (D) '83, IBM PC APL, a punched-card APL like Maryland's, and the
 APL\1130 subset of APL\360 may follow. Each is added without moving
 the modes before it, in five layers:
 
 1. **The core stays APL\360.** The shared crates know nothing of
    modes. What only some modes have is a crate of its own, under the
-   directory of the mode that first needed it (`a70/`, `b75/`), and a
+   directory of the mode that first needed it (`a70/`, `b75/`, `c80/`), and a
    later mode reuses it rather than copying: (D) is mostly (B)'s
    crates, (C) and APL\1130 mostly the core with parts turned off.
 2. **A mode is a profile, not a match.** Code asks what the session's
    profile has -- execute, the del editor, the I-beams, its limits on
    functions and lines -- not which mode it is in. Adding a mode adds
    a profile and a letter to `apl-modes`, not an arm to every `match`
-   on `Mode`. Today's mode checks move to profile questions as each
-   new mode needs them, each move covered by the tests already there.
+   on `Mode`. `Mode::profile` answers `has(Feature)` -- the I-beams,
+   the settings commands, scan, a latent expression -- and
+   `cuts(Cut)`, with the limits on functions and lines; the checks
+   that were matches on `Mode` ask it, each move covered by the tests
+   already there.
 3. **Typing and display are translated at the edges.** The lexer and
    everything after it see glyphs. Between them and the screen, a
    mode's surface turns what is typed into glyphs and what is shown

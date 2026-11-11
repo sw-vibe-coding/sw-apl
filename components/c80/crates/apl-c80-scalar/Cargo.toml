@@ -1,0 +1,14 @@
+[package]
+name = "apl-c80-scalar"
+description = "sw-apl scalar cuts: the scalar functions the (C) '80 mode leaves out, the hyperbolic circle functions and factorial of a fraction"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-value = { path = "../../../value/crates/apl-value" }
+
+[lints]
+workspace = true

@@ -5,7 +5,7 @@ use apl_ast::{Expr, Function};
 use apl_call::value;
 use apl_execute as execute;
 use apl_ibeam::system_value;
-use apl_modes::Mode;
+use apl_modes::Feature;
 use apl_prims::{apply_dyadic, apply_monadic, axis_index, inner, outer, reduce, scan};
 use apl_value::ErrorKind::{self, Syntax};
 use apl_value::{AplError, AplResult, Array};
@@ -24,7 +24,7 @@ use crate::eval::{eval_expr, eval_line};
 /// glyph that takes none is a SYNTAX ERROR the dispatch reports. The
 /// lexer lets execute and format through only in (B); format is not
 /// implemented yet, and says so with NONCE ERROR. A system function,
-/// which only (B) lexes, is `apl-sysfns`'s. Scan is (B)'s too: in (A),
+/// which only (B) lexes, is `apl-sysfns`'s. Scan is a mode's feature: in (A),
 /// as in APL\360, a function before a slope is an expansion with no
 /// array on its left, a SYNTAX ERROR when the line runs.
 ///
@@ -48,11 +48,15 @@ pub fn eval_monadic(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
             return system_value(ws, &r).map_err(|e| e.at(*pos));
         }
         Function::Prim('⍎') if axis.is_none() => return execute::value(ws, &r, *pos, eval_line),
-        Function::Scan { .. } if ws.mode == Mode::A => return Err(AplError::new(Syntax).at(*pos)),
+        Function::Scan { .. } if !ws.mode.profile().has(Feature::Scan) => {
+            return Err(AplError::new(Syntax).at(*pos));
+        }
         _ => {}
     }
     let axis = axis.as_deref().map(|a| eval_expr(ws, a)).transpose()?;
-    monadic(func, axis.as_ref(), &r, &mut ws.saved).map_err(|e| e.at(*pos))
+    let cut = apl_c80_cuts::mixed(ws.mode.profile(), func, axis.as_ref(), None, &r);
+    cut.and_then(|()| monadic(func, axis.as_ref(), &r, &mut ws.saved))
+        .map_err(|e| e.at(*pos))
 }
 
 /// `left f right`: right, then left, then the axis.
@@ -80,7 +84,9 @@ pub fn eval_dyadic(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
         _ => {}
     }
     let axis = axis.as_deref().map(|a| eval_expr(ws, a)).transpose()?;
-    dyadic(func, axis.as_ref(), &l, &r, &mut ws.saved).map_err(|e| e.at(*pos))
+    let cut = apl_c80_cuts::mixed(ws.mode.profile(), func, axis.as_ref(), Some(&l), &r);
+    cut.and_then(|()| dyadic(func, axis.as_ref(), &l, &r, &mut ws.saved))
+        .map_err(|e| e.at(*pos))
 }
 
 /// `func right`, with the evaluated axis: a primitive, (B)'s format,

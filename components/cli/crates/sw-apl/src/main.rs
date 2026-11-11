@@ -29,16 +29,17 @@ pub const VERSION: &str = concat!(
     env!("BUILD_TIMESTAMP"),
 );
 
-/// A clean-room APL interpreter with traditional glyphs, in two modes.
+/// A clean-room APL interpreter with traditional glyphs, in three modes.
 #[derive(Parser, Debug)]
 #[command(
     name = "sw-apl",
     version = VERSION,
     about,
     long_about = "A clean-room APL interpreter with traditional glyphs, \
-                  written in Rust from scratch, in two modes: (A) '70, \
-                  modeled on APL\\360, and (B) '75, modeled on the APL \
-                  of the IBM 5100 family. Flat arrays, floating point, the \
+                  written in Rust from scratch, in three modes: (A) '70, \
+                  modeled on APL\\360; (B) '75, modeled on the APL of the \
+                  IBM 5100 family; and (C) '80, modeled on APL80 for the \
+                  TRS-80. Flat arrays, floating point, the \
                   del editor, and workspaces in numbered libraries.",
     after_long_help = include_str!("cli_help.txt")
 )]
@@ -61,7 +62,7 @@ pub struct Args {
     #[arg(long = "library", value_name = "DIR", default_value = ".")]
     pub library: PathBuf,
 
-    /// The mode: 70 for (A), 75 for (B). Each lists and loads only
+    /// The mode: 70 for (A), 75 for (B), 80 for (C). Each lists and loads only
     /// the workspaces that run in it.
     #[arg(long, value_name = "MODE", default_value = "70", value_parser = mode)]
     pub mode: Mode,
@@ -86,7 +87,7 @@ pub struct Args {
 
 /// A mode as `--mode` names it: its year or its letter.
 fn mode(word: &str) -> Result<Mode, String> {
-    Mode::parse(word).ok_or_else(|| format!("{word} is not a mode: 70 or 75"))
+    Mode::parse(word).ok_or_else(|| format!("{word} is not a mode: 70, 75 or 80"))
 }
 
 /// What the host decides: the size, the libraries -- `--library`'s 0

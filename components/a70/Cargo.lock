@@ -37,6 +37,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-c80-cuts"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-c80-scalar",
+ "apl-modes",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-c80-scalar"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+]
+
+[[package]]
 name = "apl-call"
 version = "0.1.0"
 dependencies = [
@@ -82,6 +99,7 @@ name = "apl-eval"
 version = "0.1.0"
 dependencies = [
  "apl-ast",
+ "apl-c80-cuts",
  "apl-call",
  "apl-execute",
  "apl-format",
@@ -275,6 +293,7 @@ name = "apl-prims-scalar"
 version = "0.1.0"
 dependencies = [
  "apl-attn",
+ "apl-c80-scalar",
  "apl-scalar-arith",
  "apl-scalar-circ",
  "apl-scalar-logic",

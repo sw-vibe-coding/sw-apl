@@ -2,7 +2,7 @@
 
 use apl_ast::Expr;
 use apl_clock::{TimeSource, stamp};
-use apl_modes::Mode;
+use apl_modes::Feature;
 use apl_value::{AplError, AplResult, Array, Data, ErrorKind, Number};
 use apl_workspace::{Workspace, free, used};
 
@@ -90,9 +90,9 @@ fn scalar(ws: &Workspace, name: &str) -> Option<Number> {
 }
 
 /// The line that runs a loaded workspace's latent expression, when it
-/// has one and the session is in (B): `⍎⎕LX`, which is what the 5110
+/// has one and the session's mode runs one, as (B) does: `⍎⎕LX`, which is what the 5110
 /// runs, so an error in it is reported against that line.
 #[must_use]
 pub fn latent(ws: &Workspace) -> Option<&'static str> {
-    (ws.mode == Mode::B && ws.saved.latent.is_some()).then_some("⍎⎕LX")
+    (ws.mode.profile().has(Feature::Latent) && ws.saved.latent.is_some()).then_some("⍎⎕LX")
 }

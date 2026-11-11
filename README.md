@@ -10,16 +10,17 @@ APL the way it was used: traditional glyphs typed as Unicode, the
 six-space prompt, a printed transcript, the del editor, and
 workspaces saved and loaded by name.
 
-## Two modes
+## Modes
 
-sw-apl runs in one of two modes, chosen when a session starts. Each
-is modeled on an APL IBM shipped, and each lists and loads only the
-workspaces that run in it.
+sw-apl runs in one of three modes, chosen when a session starts.
+Each is modeled on an APL that shipped, and each lists and loads only
+the workspaces that run in it.
 
 | Mode | Modeled on | What it has |
 |---|---|---|
 | (A) '70 | APL\360, IBM's time-sharing APL for the System/360, used from an IBM 2741 terminal | The APL\360 language; I-beams for system values; `)ORIGIN`, `)DIGITS` and `)WIDTH` for the settings; groups |
 | (B) '75 | The APL of the IBM 5100 family of desktop computers (the 5100, 5110 and 5120) | The same core, plus execute, format, and the quad system variables and functions (quad IO, quad FX and the rest); no I-beams, no settings commands, no groups |
+| (C) '80 | APL80, Phelps Gates's APL for the TRS-80 Model I home computer | The same core with scan, less what APL80 left out: domino, lamination, the diagonal transpose, the hyperbolic functions, and two specifications in one statement; at most 32 functions of 255 lines. It types the same glyphs as (A) and defines functions with the del |
 
 The 5100's APL is APLSV -- the APL that followed APL\360 at IBM,
 adding shared variables, execute, format and the quad names -- cut
@@ -131,6 +132,7 @@ or later is required by the CLI's line editor (file locking).
 just release                                  # builds the three binaries
 target/release/sw-apl                         # (A) '70 at the terminal
 target/release/sw-apl --mode 75               # (B) '75
+target/release/sw-apl --mode 80               # (C) '80
 target/release/sw-apl -f samples/06-reduce.apl
 target/release/sw-apl --help
 ```

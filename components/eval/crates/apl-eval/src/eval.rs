@@ -21,6 +21,7 @@ pub fn eval_line(ws: &mut Workspace, line: &str) -> AplResult<Output> {
     let Some(expr) = parse(line, ws.mode.glyphs(), &takes_argument)? else {
         return Ok(Output::Nothing);
     };
+    apl_c80_cuts::enter(ws.mode.profile(), &expr)?;
     // An execute that is the whole statement shows what its line shows.
     if let Some(done) = apl_execute::whole(ws, &expr, eval_expr, eval_line) {
         return done;

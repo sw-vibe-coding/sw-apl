@@ -9,6 +9,12 @@ use apl_modes::{Mode, Modes, modes};
 use apl_workspace::Saved;
 use apl_wsfile::{plain, write};
 
+/// (A) and (B): every mode a workspace's code can claim. (C) is claimed
+/// only by a save made in it.
+fn ab() -> Modes {
+    Modes::ALL.minus(Modes::only(Mode::C))
+}
+
 const WHEN: &str = "1.00.00 01/01/70";
 
 fn with(body: &str, locked: bool) -> Saved {
@@ -42,7 +48,7 @@ fn the_settings_are_directives_not_commands() {
     }
     assert!(!text.contains(")ORIGIN"), "no '70-only command: {text}");
     assert!(!text.contains(")DIGITS") && !text.contains(")WIDTH"));
-    assert_eq!(modes(&text), Modes::ALL, "settings alone run anywhere");
+    assert_eq!(modes(&text), ab(), "settings alone run anywhere");
 }
 
 #[test]
@@ -69,22 +75,14 @@ fn execute_format_or_a_quad_name_make_a_workspace_75_only() {
 #[test]
 fn quad_and_quote_quad_run_in_both() {
     for body in ["R←⎕", "⎕←1", "R←⍞"] {
-        assert_eq!(
-            modes(&write(&with(body, false), WHEN)),
-            Modes::ALL,
-            "{body}"
-        );
+        assert_eq!(modes(&write(&with(body, false), WHEN)), ab(), "{body}");
     }
 }
 
 #[test]
 fn a_glyph_in_a_string_or_a_comment_is_not_a_use() {
     for body in ["R←'⌶⍎⍕'", "R←1 ⍝ ⌶ AND ⍎", "R←'IT''S ⍎'"] {
-        assert_eq!(
-            modes(&write(&with(body, false), WHEN)),
-            Modes::ALL,
-            "{body}"
-        );
+        assert_eq!(modes(&write(&with(body, false), WHEN)), ab(), "{body}");
     }
 }
 

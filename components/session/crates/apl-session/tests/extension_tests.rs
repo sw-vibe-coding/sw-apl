@@ -19,6 +19,7 @@ fn out(s: &mut Session, line: &str) -> Vec<String> {
 fn dialect_names_the_mode() {
     assert_eq!(out(&mut in_mode(Mode::A), ")DIALECT"), vec!["(A) '70"]);
     assert_eq!(out(&mut in_mode(Mode::B), ")DIALECT"), vec!["(B) '75"]);
+    assert_eq!(out(&mut in_mode(Mode::C), ")DIALECT"), vec!["(C) '80"]);
 }
 
 #[test]
@@ -51,7 +52,7 @@ fn commands(mode: Mode) -> Vec<&'static str> {
 
 #[test]
 fn help_lists_the_commands_the_mode_has() {
-    for mode in [Mode::A, Mode::B] {
+    for mode in [Mode::A, Mode::B, Mode::C] {
         let shown = out(&mut in_mode(mode), ")HELP").join("\n");
         for name in commands(mode) {
             assert!(
@@ -59,15 +60,18 @@ fn help_lists_the_commands_the_mode_has() {
                 "{mode:?}: )HELP lacks ){name}\n{shown}"
             );
         }
-        if mode == Mode::B {
-            assert!(!shown.contains(")ORIGIN"), "(B) has no )ORIGIN\n{shown}");
+        if mode != Mode::A {
+            assert!(
+                !shown.contains(")ORIGIN"),
+                "{mode:?} has no )ORIGIN\n{shown}"
+            );
         }
     }
 }
 
 #[test]
 fn every_command_has_a_page_that_names_it() {
-    for mode in [Mode::A, Mode::B] {
+    for mode in [Mode::A, Mode::B, Mode::C] {
         let mut s = in_mode(mode);
         for name in commands(mode) {
             let page = out(&mut s, &format!(")HELP {name}"));
@@ -81,7 +85,7 @@ fn every_command_has_a_page_that_names_it() {
 
 #[test]
 fn every_page_fits_the_75_screen() {
-    for mode in [Mode::A, Mode::B] {
+    for mode in [Mode::A, Mode::B, Mode::C] {
         let mut s = in_mode(mode);
         let mut topics = out(&mut s, ")HELP TOPICS");
         topics.extend(out(&mut s, ")HELP"));
@@ -127,7 +131,7 @@ fn every_help_page_tries_a_command_its_modes_have() {
         if group == "TOPIC" || tried.is_empty() {
             continue;
         }
-        for (letter, mode) in [('A', Mode::A), ('B', Mode::B)] {
+        for (letter, mode) in [('A', Mode::A), ('B', Mode::B), ('C', Mode::C)] {
             if modes.contains(letter) {
                 let reply = out(&mut in_mode(mode), &tried).join("\n");
                 assert!(
@@ -195,7 +199,7 @@ fn a_configured_library_is_read_only_and_others_are_not_there() {
 
 #[test]
 fn the_editor_has_a_page_in_each_mode() {
-    for mode in [Mode::A, Mode::B] {
+    for mode in [Mode::A, Mode::B, Mode::C] {
         let mut s = in_mode(mode);
         assert!(
             out(&mut s, ")HELP TOPICS")
@@ -207,10 +211,11 @@ fn the_editor_has_a_page_in_each_mode() {
         for form in ["[⎕]", "[⎕N]", "[N⎕]", "[∆N]", "[0]"] {
             assert!(page.contains(form), "{mode:?}: no {form}\n{page}");
         }
-        // The slash line is APL\360's; the 5110 edits in place.
+        // The slash line is APL\360's, and (C)'s until it has APL80's
+        // own editor; the 5110 edits in place.
         assert_eq!(
             page.contains("CHANGE PART OF LINE N"),
-            mode == Mode::A,
+            mode != Mode::B,
             "{mode:?}\n{page}"
         );
     }

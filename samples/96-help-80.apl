@@ -1,0 +1,33 @@
+⍝!MODES (C)
+⍝ Help in (C) '80: the overview, then every page the mode has --
+⍝ each command and each topic -- then the commands (C) has not, and
+⍝ a name with no page.
+)HELP
+)HELP CLEAR
+)HELP WSID
+)HELP COPY
+)HELP PCOPY
+)HELP ERASE
+)HELP SAVE
+)HELP LOAD
+)HELP DROP
+)HELP LIB
+)HELP FNS
+)HELP VARS
+)HELP SI
+)HELP SIV
+)HELP SYMBOLS
+)HELP OFF
+)HELP CONTINUE
+)HELP DIALECT
+)HELP LIBS
+)HELP HELP
+)HELP TOPICS
+)HELP MODES
+)HELP EDITOR
+)HELP EXTENSIONS
+)HELP RESTRICTIONS
+)HELP ORIGIN
+)HELP GROUP
+)HELP NOSUCH
+)OFF

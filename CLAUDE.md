@@ -303,13 +303,18 @@ Phase 9):
   )ORIGIN, )DIGITS, )WIDTH; clear workspace width 64, digits 5. The
   5110 APL Reference Manual is its source; `docs/mode-b.md` records
   the differences. No shared variables.
+- **(C) '80**, modeled on APL80 for the TRS-80 (saga c80, being
+  built): the core with scan, less what APL80's manual leaves out.
+  `docs/mode-c.md` records the sources and the decisions.
 
-The code is in three parts: the shared core, which is what existed
+The code is in four parts: the shared core, which is what existed
 before Phase 9 and stays where it is; '70-only crates, pulled out of
 it for what (B) dropped (the I-beams, )ORIGIN, )DIGITS, )WIDTH);
-and '75-only crates for what (B) added. A profile on the workspace decides which
+'75-only crates for what (B) added; and '80-only crates (`c80/`) for
+what (C) leaves out. `Mode::profile` is what code asks. A profile on the workspace decides which
 mode-only parts are reachable. A workspace names the modes it runs
-in -- (A), (A)(B) or (B) -- and is listed and loaded only there.
+in -- by letters, as (A)(B) or (C) -- and is listed and loaded only
+there.
 
 CLI and service first (macOS + Linux), and a WASM live demo. Not
 APL2 -- other modes are maybe some day, and not planned here. Not a

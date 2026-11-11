@@ -57,7 +57,7 @@ fn pages() -> Vec<Page<'static>> {
 /// got, or a name with no page, says so.
 #[must_use]
 pub fn help(mode: Mode, name: Option<&str>) -> Vec<String> {
-    let letter = if mode == Mode::A { 'A' } else { 'B' };
+    let letter = mode.letter();
     let all = pages();
     let here: Vec<&Page> = all.iter().filter(|p| p.modes.contains(letter)).collect();
     let Some(name) = name else {

@@ -26,6 +26,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-c80-scalar"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+]
+
+[[package]]
 name = "apl-clock"
 version = "0.1.0"
 dependencies = [
@@ -195,6 +202,7 @@ name = "apl-prims-scalar"
 version = "0.1.0"
 dependencies = [
  "apl-attn",
+ "apl-c80-scalar",
  "apl-scalar-arith",
  "apl-scalar-circ",
  "apl-scalar-logic",

@@ -1,7 +1,12 @@
 //! Modes: the line a workspace names them on, and the libraries each
 //! mode sees through it.
 
-use apl_modes::{Mode, Modes, modes, render, retag};
+use apl_modes::{Cut, Feature, Mode, Modes, modes, render, retag};
+
+/// (A) and (B), the modes every workspace written before (C) runs in.
+fn ab() -> Modes {
+    Modes::ALL.minus(Modes::only(Mode::C))
+}
 
 /// A workspace file with the given modes line, or none.
 fn ws(line: Option<&str>, body: &str) -> String {
@@ -18,6 +23,8 @@ fn a_mode_is_named_by_its_year_or_its_letter() {
     assert_eq!(Mode::parse("75"), Some(Mode::B));
     assert_eq!(Mode::parse("A"), Some(Mode::A));
     assert_eq!(Mode::parse("b"), Some(Mode::B));
+    assert_eq!(Mode::parse("80"), Some(Mode::C));
+    assert_eq!(Mode::parse("c"), Some(Mode::C));
     assert_eq!(Mode::parse("72"), None, "'72 was (B)'s old name");
     assert_eq!(Mode::parse("68"), None, "and '68 (A)'s");
     assert_eq!(Mode::default(), Mode::A);
@@ -25,9 +32,11 @@ fn a_mode_is_named_by_its_year_or_its_letter() {
 
 #[test]
 fn the_line_is_rendered_and_read_back() {
-    assert_eq!(render(Modes::ALL), "(A)(B)");
+    assert_eq!(render(ab()), "(A)(B)");
+    assert_eq!(render(Modes::ALL), "(A)(B)(C)");
+    assert_eq!(modes(&ws(Some("(C)"), "X←1")), Modes::only(Mode::C));
     assert_eq!(render(Modes::only(Mode::B)), "(B)");
-    assert_eq!(modes(&ws(Some("(A)(B)"), "X←1")), Modes::ALL);
+    assert_eq!(modes(&ws(Some("(A)(B)"), "X←1")), ab(), "not (C)");
     assert_eq!(modes(&ws(Some("(B)"), "X←1")), Modes::only(Mode::B));
     assert_eq!(modes(&ws(Some("(A)"), "X←1")), Modes::only(Mode::A));
 }
@@ -49,17 +58,18 @@ fn a_line_further_down_is_not_the_modes_line() {
 fn retagging_replaces_the_line_or_adds_it_second() {
     let tagged = retag(&ws(Some("(A)(B)"), "X←1"), Modes::only(Mode::A));
     assert_eq!(tagged, ws(Some("(A)"), "X←1"));
-    let added = retag(&ws(None, "X←1"), Modes::ALL);
+    let added = retag(&ws(None, "X←1"), ab());
     assert_eq!(added, ws(Some("(A)(B)"), "X←1"));
 }
 
 #[test]
 fn sets_meet_and_subtract() {
     let (a, b) = (Modes::only(Mode::A), Modes::only(Mode::B));
-    assert!(Modes::ALL.has(Mode::A) && Modes::ALL.has(Mode::B));
+    assert!(Modes::ALL.has(Mode::A) && Modes::ALL.has(Mode::B) && Modes::ALL.has(Mode::C));
     assert!(!a.has(Mode::B));
     assert!(a.meets(Modes::ALL) && !a.meets(b));
-    assert_eq!(Modes::ALL.minus(a), b);
+    assert_eq!(ab().minus(a), b);
+    assert_eq!(Modes::ALL.minus(ab()), Modes::only(Mode::C));
     assert_eq!(a.minus(a), Modes::NONE);
 }
 
@@ -70,4 +80,52 @@ fn each_mode_says_what_it_adds() {
     assert!(Mode::A.overstrikes().is_empty());
     let b: Vec<char> = Mode::B.overstrikes().iter().map(|(g, _, _)| *g).collect();
     assert_eq!(b, ['⍎', '⍕']);
+}
+
+#[test]
+fn c_types_no_later_glyph_and_forms_no_overstrike() {
+    assert_eq!(
+        Mode::C.glyphs(),
+        "",
+        "APL80 has no execute, quad names or format glyph"
+    );
+    assert!(
+        Mode::C.overstrikes().is_empty(),
+        "APL80 is keyed, not overstruck"
+    );
+    assert_eq!(Mode::C.letter(), 'C');
+}
+
+#[test]
+fn each_mode_has_a_profile_of_what_it_can_do() {
+    let (a, b, c) = (Mode::A.profile(), Mode::B.profile(), Mode::C.profile());
+    let has = |f| [a.has(f), b.has(f), c.has(f)];
+    assert_eq!(
+        has(Feature::Ibeams),
+        [true, false, false],
+        "the I-beams are (A)'s"
+    );
+    assert_eq!(
+        has(Feature::Settings),
+        [true, false, false],
+        ")ORIGIN and the groups"
+    );
+    assert_eq!(
+        has(Feature::Scan),
+        [false, true, true],
+        "APL\\360 had no scan; APL80 has"
+    );
+    assert_eq!(has(Feature::Latent), [false, true, false], "⎕LX is (B)'s");
+    for cut in [Cut::Domino, Cut::Laminate, Cut::Diagonal, Cut::Hyperbolic] {
+        assert!(c.cuts(cut) && !a.cuts(cut) && !b.cuts(cut), "{cut:?}");
+    }
+    for cut in [
+        Cut::MatrixRadix,
+        Cut::FractionalFactorial,
+        Cut::MultipleSpecification,
+    ] {
+        assert!(c.cuts(cut) && !a.cuts(cut) && !b.cuts(cut), "{cut:?}");
+    }
+    assert_eq!((c.functions, c.lines), (32, 255));
+    assert_eq!((a.functions, b.lines), (usize::MAX, usize::MAX));
 }

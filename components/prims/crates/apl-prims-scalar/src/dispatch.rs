@@ -15,7 +15,8 @@ pub const DYADIC: &str = "+-×÷⌈⌊|*⍟○!∧∨⍲⍱<≤=≥>≠";
 /// `f r` for one number.
 ///
 /// # Errors
-/// DOMAIN ERROR from the function; SYNTAX ERROR for a glyph with no such form.
+/// DOMAIN ERROR from the function; SYNTAX ERROR for a glyph with no such form;
+/// what the session's mode leaves out, from `apl-c80-scalar`.
 pub fn apply_monadic(f: char, r: Number, ct: f64) -> AplResult<Number> {
     attended()?;
     let a = r.as_f64();
@@ -24,7 +25,10 @@ pub fn apply_monadic(f: char, r: Number, ct: f64) -> AplResult<Number> {
     }
     match f {
         '○' => finite(std::f64::consts::PI * a),
-        '!' => finite(factorial(a)?),
+        '!' => {
+            apl_c80_scalar::factorial(a)?;
+            finite(factorial(a)?)
+        }
         '~' => Ok(Number::Int(not(a)?.into())),
         _ => Err(AplError::new(ErrorKind::Syntax)),
     }
@@ -34,7 +38,8 @@ pub fn apply_monadic(f: char, r: Number, ct: f64) -> AplResult<Number> {
 /// `ct` is the comparison tolerance.
 ///
 /// # Errors
-/// DOMAIN ERROR from the function; SYNTAX ERROR for a glyph with no such form.
+/// DOMAIN ERROR from the function; SYNTAX ERROR for a glyph with no such form;
+/// what the session's mode leaves out, from `apl-c80-scalar`.
 pub fn apply_dyadic(f: char, left: Number, right: Number, ct: f64) -> AplResult<Number> {
     attended()?;
     if let Some(exact) = Number::exact_int(f, left, right) {
@@ -51,8 +56,15 @@ pub fn apply_dyadic(f: char, left: Number, right: Number, ct: f64) -> AplResult<
         return Ok(Number::Int(truth?.into()));
     }
     match f {
-        '○' => finite(circular(lhs, rhs)?),
-        '!' => finite(binomial(lhs, rhs)?),
+        '○' => {
+            apl_c80_scalar::circular(lhs)?;
+            finite(circular(lhs, rhs)?)
+        }
+        '!' => {
+            apl_c80_scalar::factorial(lhs)?;
+            apl_c80_scalar::factorial(rhs)?;
+            finite(binomial(lhs, rhs)?)
+        }
         _ => Err(AplError::new(ErrorKind::Syntax)),
     }
 }

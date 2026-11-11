@@ -1,0 +1,19 @@
+# What only the (C) '80 mode has, or leaves out: APL80 on the TRS-80
+# (docs/mode-c.md). The shared core reaches it only in (C); see
+# docs/architecture.md, "Adding a mode".
+[workspace]
+members = [
+    "crates/apl-c80-cuts",
+    "crates/apl-c80-scalar",
+]
+resolver = "2"
+
+[workspace.package]
+edition = "2024"
+license = "MIT"
+version = "0.1.0"
+authors = ["Michael A Wright"]
+repository = "https://github.com/sw-vibe-coding/sw-apl"
+
+[workspace.lints.clippy]
+pedantic = "warn"

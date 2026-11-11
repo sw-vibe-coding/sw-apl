@@ -1,6 +1,6 @@
 # sw-apl Language Reference
 
-This describes the language sw-apl implements, in its two modes:
+This describes the language sw-apl implements, in its three modes:
 
 - **(A) '70**, modeled on APL\360. Behavior follows the IBM
   APL\360 User's Manual (1968, and its 1970 edition), with domino
@@ -8,13 +8,16 @@ This describes the language sw-apl implements, in its two modes:
 - **(B) '75**, modeled on the APL of the IBM 5100 family, following
   the IBM 5110 APL Reference Manual. `mode-b.md` records the sources
   and every decision where sw-apl departs from them.
+- **(C) '80**, modeled on APL80 for the TRS-80, following its manual.
+  `mode-c.md` records the sources and the decisions.
 
 Most of the language is one shared core, and the sections from
 *Accepted Unicode* to *Defined functions* describe it: they hold in
-both modes except where they say otherwise. Then come what (B) adds
+every mode except where they say otherwise. Then come what (B) adds
 -- execute and the quad system variables and functions -- and what
 (A) has that (B) has not -- the I-beam functions and the settings
-commands. `--mode 70` or `--mode 75` chooses the mode at the command
+commands, and what (C) leaves out. `--mode 70`, `--mode 75` or
+`--mode 80` chooses the mode at the command
 line, and the tab does in the browser.
 
 Glyphs are mostly named in prose; `glyphs.txt` is the
@@ -429,11 +432,34 @@ of rolls -- which is what `samples/58-ibeams.apl` shows.
 and reply with the previous value as `WAS n`. They are saved with
 the workspace, and read back in (B) as `⎕IO`, `⎕PP` and `⎕PW`.
 
+## What (C) '80 leaves out
+
+(C) runs the shared core with scan, less what the "Limitations" of
+the APL80 manual leave out. Each answers an error where (A) runs it:
+
+| What | Example | In (C) |
+|---|---|---|
+| Domino, monadic and dyadic | `⌹2 2⍴4 0 0 2` | NONCE ERROR |
+| Lamination | `1 2,[0.5]3 4` | NONCE ERROR |
+| The diagonal case of dyadic transpose | `1 1⍉2 2⍴⍳4` | NONCE ERROR |
+| The hyperbolic functions, `5○` to `7○` and `¯5○` to `¯7○` | `5○1` | NONCE ERROR |
+| Encode and decode with an argument above a vector | `10 10⊤2 2⍴⍳4` | NONCE ERROR |
+| Factorial and binomial of a number that is not whole | `!2.5` | DOMAIN ERROR |
+| Two specifications in a statement, or one whose value is used | `X←Y←9`, `÷X←4` | SYNTAX ERROR |
+| A 33rd function in a workspace, or a 256th line in a function | | DEFN ERROR |
+
+The scalar cuts hold through reduction, scan and the products, as
+`!/2.5 3` and `5 1∘.○0` show. A clear workspace in (C) prints six
+digits in a line of 64. `docs/mode-c.md` records the sources and the
+choice of each error, which the manual does not name. (C) types
+and shows the same glyphs as (A), and defines functions with the
+del.
+
 ## Errors
 
 SYNTAX ERROR, VALUE ERROR, DOMAIN ERROR, RANK ERROR, LENGTH
 ERROR, INDEX ERROR, WS FULL, DEFN ERROR, CHARACTER ERROR, DEPTH
-ERROR, INTERRUPT, and in (B) NONCE ERROR. That is the whole
+ERROR, INTERRUPT, and in (B) and (C) NONCE ERROR. That is the whole
 vocabulary. Display format is
 in `session.md`.
 

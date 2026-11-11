@@ -173,3 +173,26 @@ fn keys_named_before_the_letters_are_still_found() {
     assert!(read(&s, Mode::A, 0, "PAIR").unwrap().contains("X←2"));
     assert!(read(&s, Mode::B, 0, "PAIR").unwrap().contains("X←3"));
 }
+
+#[test]
+fn c_lists_and_reads_only_what_says_it_runs_in_c() {
+    let s = store(&[
+        ("OLD", &ws(None, "X←1")),
+        ("BOTH.ab", &ws(Some("(A)(B)"), "X←2")),
+        ("LIFE.abc", &ws(Some("(A)(B)(C)"), "X←3")),
+        ("LESSON1.c", &ws(Some("(C)"), "X←4")),
+    ]);
+    assert_eq!(list(&s, Mode::C, 0), vec!["LESSON1", "LIFE"]);
+    assert!(read(&s, Mode::C, 0, "BOTH").is_none(), "(A)(B) is not (C)");
+    assert!(read(&s, Mode::C, 0, "OLD").is_none());
+    assert_eq!(list(&s, Mode::A, 0), vec!["BOTH", "LIFE", "OLD"]);
+    assert!(read(&s, Mode::B, 0, "LESSON1").is_none());
+}
+
+#[test]
+fn a_save_in_c_is_named_with_its_letter() {
+    let mut s = store(&[]);
+    keep(&mut s, Mode::C, 0, "T", &ws(Some("(C)"), "X←1")).unwrap();
+    keep(&mut s, Mode::C, 0, "U", &ws(Some("(A)(B)"), "X←2")).unwrap();
+    assert_eq!(s.list(0), vec!["T.c", "U.abc"]);
+}

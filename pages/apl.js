@@ -135,7 +135,9 @@ const LIBRARY = "apl-library-0";
 // The modes, by the letter the tab and the board use and the word the
 // session reads. A session is in one mode for as long as it lasts, so
 // changing mode is starting another.
-const MODES = { A: "70", B: "75" };
+// (C) is reached by its address alone until its demo is finished: its
+// tab stays hidden unless the page is in it.
+const MODES = { A: "70", B: "75", C: "80" };
 
 // Which mode this visit is in: the address says, or else the mode the
 // last visit was in, or else (B). The address is what a switch sets,
@@ -550,6 +552,7 @@ function tabs() {
   const ask = document.getElementById("switch");
   for (const tab of document.querySelectorAll(".mode-tabs [role=tab]")) {
     const here = tab.dataset.mode === MODE;
+    if (here) tab.hidden = false;
     tab.setAttribute("aria-selected", String(here));
     if (here) about.textContent = tab.title;
     tab.addEventListener("click", () => {

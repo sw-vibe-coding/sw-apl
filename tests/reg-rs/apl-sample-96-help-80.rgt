@@ -1,0 +1,5 @@
+command = "target/release/sw-apl --mode 80 -f samples/96-help-80.apl"
+timeout = 60
+preprocess = "bash scripts/normalize-apl-output.sh"
+exit_code = 0
+desc = "Transcript of samples/96-help-80.apl"

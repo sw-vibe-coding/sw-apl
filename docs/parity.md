@@ -2,9 +2,10 @@
 
 This is the definition of done for the sw-apl CLI: one row per
 feature, with its status in each mode and what pins it. sw-apl has
-two modes: (A) '70, modeled on APL\360, and (B) '75, modeled on the
-APL of the IBM 5100 family (`mode-b.md`). Each table has a column per
-mode. "done" means implemented and locked by a unit test or a reg-rs
+three modes: (A) '70, modeled on APL\360; (B) '75, modeled on the
+APL of the IBM 5100 family (`mode-b.md`); and (C) '80, modeled on APL80
+for the TRS-80 (`mode-c.md`). Each table has a column for (A) and
+(B); (C) has a table of its own. "done" means implemented and locked by a unit test or a reg-rs
 transcript (`tests/reg-rs`, seeded from `samples/`); `--` means the
 mode does not have the feature at all, and the other mode's column
 says what it has instead where there is something. Update this file
@@ -228,7 +229,7 @@ the session numeric tests, and sample 67.
 | `)SI` `)SIV` | done | done |  |
 | `)SYMBOLS` | reports | reports | the number cannot be set -- see Restrictions |
 | `)DIALECT`, an sw-apl command: the session's mode; it does not switch | done | done | extension tests, sample 83 |
-| `)HELP`, an sw-apl command: the mode's commands by group, and a page per command and topic from `data/help.txt`, each only in the modes that have it | done | done | extension tests, samples 83 and 84 |
+| `)HELP`, an sw-apl command: the mode's commands by group, and a page per command and topic from `data/help.txt`, each only in the modes that have it | done | done | extension tests, samples 83 and 84, and every page in samples 94 and 95 |
 | Library form `)LOAD 1 NAME`, DESCRIBE convention | done | done | `--library` sets the directory they are under, library 1 is `ws/lib1/`, and LEARN, LIFE, RACE, EDIT and BIRDS each carry a DESCRIBE, and so does TTTML, (B)'s alone; library tests, samples 64, 72, 80, 81 and 87; sample 89 checks LIFE against Conway's rules. A library is somewhere workspaces are kept, not a directory: the browser keeps library 1 in the bundle and library 0 in its own storage, and the commands do not change. Store tests |
 | `)LOAD` prints only the SAVED line, as APL\360 did, and nothing runs on load | done | done | command tests, sample 61 |
 | Trouble reports: WS NOT FOUND, OBJECT NOT FOUND, IMPROPER LIBRARY REFERENCE, NOT SAVED THIS WS IS | done | done | INCORRECT COMMAND is kept for a command given an argument it does not take, as the manual's table has it; report tests, sample 65 |
@@ -248,6 +249,28 @@ the session numeric tests, and sample 67.
 | A glyph used where it has no such form (`1~0`, `1⍋2`, `⍳/1 2`, `,[1]M`) | done | done | done; SYNTAX ERROR, because APL\360 has no such function and the sentence does not parse. A glyph that *has* the form and was given a bad argument is still DOMAIN ERROR |
 | NOT IMPLEMENTED (temporary, must reach zero) | reached zero | reached zero | the error kind is gone from the vocabulary |
 | NONCE ERROR: an I-beam, and what (B) has not implemented | -- | done | a70 crate tests, session modes tests, system variables session tests |
+
+## (C) '80
+
+(C) is modeled on APL80 for the TRS-80 (`mode-c.md`). It has one
+table of its own: the core it shares with (A) is pinned in the tables
+above, and these rows are what (C) changes.
+
+| Feature | (C) '80 | Pinned by |
+| --- | --- | --- |
+| `--mode 80`, `?mode=C` in the browser, `)DIALECT` answers `(C) '80` | done | modes tests, extension help tests, sample 93 |
+| `)HELP` in (C): its commands by group and every page it has, and the commands it has not | done | extension tests, sample 96 |
+| A workspace is listed and loaded in (C) only when its `⍝!MODES` line names (C); a save in (C) is named with its `c` | done | shelves tests |
+| A clear workspace prints six digits in a line of 64 | done | c80 session tests, sample 93 |
+| Scan, as APL80's disk version has it | done | c80 session tests, sample 93 |
+| Not implemented, NONCE ERROR: domino, lamination, the diagonal transpose, the hyperbolic functions, encode and decode above a vector | done | c80 session tests, sample 93 |
+| Factorial and binomial take whole numbers, through every operator too | done | c80 session tests, sample 93 |
+| One specification a statement, at its left | done | c80 session tests, sample 93 |
+| At most 32 functions in a workspace and 255 lines in a function | done | c80 session tests |
+| APL80's typing and display: its substitutes, dotted shifted letters, upper case, a 64-by-16 screen | part | types and shows (A)'s glyphs |
+| Functions defined by `)DEF` and `)EDIT`, and APL80's other commands | part | the del editor and (A)'s commands |
+| The `f` format statement, the `d` axis operator, `#` and `s` | part | not there |
+| The workspaces that run in (C), and five lessons | part | none yet |
 
 ## Restrictions
 

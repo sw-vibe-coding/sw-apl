@@ -5,7 +5,7 @@ use std::rc::Rc;
 
 use apl_ast::Defn;
 use apl_space::{of_function, of_value, room, used};
-use apl_value::AplResult;
+use apl_value::{AplError, AplResult, ErrorKind};
 
 use crate::workspace::Workspace;
 
@@ -27,9 +27,17 @@ impl Workspace {
     ///
     /// # Errors
     /// WS FULL when the function does not fit in what the quota
-    /// leaves. Nothing is stored and nothing is removed: a name that
-    /// held something still holds it.
+    /// leaves. DEFN ERROR past the mode's limits: more lines than a
+    /// function may have, or a new function in a workspace that holds
+    /// as many as it may (APL80's 32 and 255). Nothing is stored and
+    /// nothing is removed: a name that held something still holds it.
     pub fn define(&mut self, defn: Defn) -> AplResult<()> {
+        let profile = self.mode.profile();
+        let another = !self.saved.funcs.contains_key(&defn.name);
+        let full = another && self.saved.funcs.len() >= profile.functions;
+        if full || defn.body.len() > profile.lines {
+            return Err(AplError::new(ErrorKind::Defn));
+        }
         let held = self.saved.vars.get(&defn.name).map_or(0, of_value);
         let was = self
             .saved

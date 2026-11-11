@@ -4,7 +4,8 @@ use apl_clock::TimeSource;
 use apl_store::Store;
 
 /// One of sw-apl's languages. (A) is '70, the default and everything
-/// sw-apl was before it had modes; (B) is '75.
+/// sw-apl was before it had modes; (B) is '75; (C) is '80, APL80 on the
+/// TRS-80 (docs/mode-c.md).
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
 pub enum Mode {
     /// '70.
@@ -12,10 +13,12 @@ pub enum Mode {
     A,
     /// '75.
     B,
+    /// '80.
+    C,
 }
 
 /// Each mode's letter, as the `⍝!MODES` line writes it, in order.
-pub const LETTERS: [(Mode, char); 2] = [(Mode::A, 'A'), (Mode::B, 'B')];
+pub const LETTERS: [(Mode, char); 3] = [(Mode::A, 'A'), (Mode::B, 'B'), (Mode::C, 'C')];
 
 /// Some of the modes: the ones a workspace runs in.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -25,7 +28,7 @@ impl Modes {
     /// No mode at all.
     pub const NONE: Modes = Modes(0);
     /// Every mode there is.
-    pub const ALL: Modes = Modes(0b11);
+    pub const ALL: Modes = Modes(0b111);
 
     /// The one mode alone.
     #[must_use]

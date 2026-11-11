@@ -152,6 +152,35 @@ errors for some."
    saved workspaces and files), `KILL` and `RETURN`, which goes back
    with the workspace intact. Any other DOS command is an error.
 
+## Decisions the manual leaves open
+
+The manual lists what APL80 leaves out without naming the error each
+gives. (C) answers:
+
+- **NONCE ERROR** for what is "not implemented" or "limited to" less:
+  domino, lamination, the diagonal transpose, the hyperbolic functions
+  (`5○` to `7○` and `¯5○` to `¯7○`), and encode or decode with an
+  argument above a vector. It is the error sw-apl gives for what one
+  mode leaves out and another has, as (B) does for an I-beam.
+- **DOMAIN ERROR** for factorial or binomial of a number that is not
+  whole: the manual says the arguments "must be" integers, an
+  argument of the wrong kind. The check is in the scalar functions
+  themselves, so it holds through reduction, scan and the products.
+- **SYNTAX ERROR**, at the second arrow, for two specifications in a
+  statement or one whose value is used (`X←Y←9`, `÷X←4`).
+- **DEFN ERROR** for a 33rd function or a 256th line, when the
+  function is defined. A workspace that already holds more is loaded
+  as it is.
+
+A clear workspace prints six digits, the `)PS` the manual describes,
+in a line of 64. The manual does not say how a long whole number
+prints, so it prints as (A)'s does.
+
+No workspace is taken to run in (C) from its code: until (C) reads
+APL80's own characters, a workspace is in (C) only when it was saved
+there or its `⍝!MODES` line says so. A save in (C) claims (A) and (B)
+too when its code would run there.
+
 ## Names with `∆`
 
 `∆` is not an operator or a function: in APL it is a letter, allowed in
