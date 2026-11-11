@@ -15,7 +15,8 @@ decision still to be made says so.
 The owner's direction (2026-11-10): a live demo of APL80 for the
 TRS-80, a variation of the existing demos, with the workspaces that
 can run on it, linked from the timeline's C'80 callout. The year is
-the owner's; the manual is undated. The owner used APL80 in 1980.
+the owner's, and a 1980 edition of the manual confirms it. The owner
+used APL80 in 1980.
 
 APL80 describes itself as a large subset of APL. Its manual lists only
 how it differs and what it leaves out; the rest is APL as the reader
@@ -56,7 +57,9 @@ From the manual's "Limitations":
 - **An axis is the `d` operator,** not a bracket: reduce, compress,
   expand, scan, reverse and rotate take it.
 - **Names** may contain `.` and `-`; `M-N` is a name, and subtraction
-  is the lowered minus. Whether `∆` is allowed is not stated.
+  is the lowered minus. There is no `∆`: the manual's character
+  table, which lists every APL character APL80 can type, has none, so
+  a name is letters, digits, `.` and `-`.
 - **Indexing** floors a non-integer index without comment, and the
   semicolon between indexes is not a strong delimiter.
 - **Comparison** takes characters, both arguments of one type; `?0`
@@ -76,16 +79,42 @@ What it adds:
   the line counter and the free space; peek, poke and call reach memory
   after `)RAM`.
 
-## Decisions for the owner
+## The owner's decisions (2026-11-10)
 
-1. **Typing and display.** Faithful (C) types and shows APL80's own
-   characters, the substitutes and dotted shifted letters, on a
-   64-by-16 screen. That departs from sw-apl's rule of glyphs only,
-   which was written for (A). The recommendation is to be faithful in
-   (C), and to say so in the docs.
-2. **What of peek, poke, call and `)DOS`:** they reach a TRS-80 that is
-   not there. The recommendation is to report them as not available,
-   as (B) does for the 5110's hardware.
+"Be compatible. Make it look like it did originally, do not change
+appearance. Emulate a subset of peek, poke, )DOS within reason, give
+errors for some."
+
+1. **Typing and display are APL80's.** (C) types and shows APL80's own
+   characters, the substitutes and the dotted shifted letters, upper
+   case, on a 64-by-16 screen. The glyphs-only rule is (A)'s and (B)'s;
+   (C) does not show a glyph APL80 could not.
+2. **Peek, poke and call, within reason, after `)RAM`.** A modeled
+   memory, with no TRS-80 ROM in it (the ROM is not ours to ship):
+   - the screen, 15360 to 16383, is the 64-by-16 display: a peek reads
+     the character there, a poke puts one there (the manual's own
+     example puts an A on the screen with 65 at 16000);
+   - the RAM above 16383 is plain bytes, peeked and poked as stored;
+   - the ROM below 12288 and the keyboard and devices between are not
+     modeled: a peek or poke there is an error;
+   - call does the two routines the manual shows, printing a character
+     (51) and reading a key as INKEY$ does (43); any other address is
+     an error.
+   Without `)RAM` all three are errors, as on the machine.
+3. **`)DOS`, within reason.** It shows DOS READY and takes `DIR` (the
+   saved workspaces and files), `KILL` and `RETURN`, which goes back
+   with the workspace intact. Any other DOS command is an error.
+
+## Names with `∆`
+
+`∆` is not an operator or a function: in APL it is a letter, allowed in
+names, and these workspaces use it by convention to mark their own
+helpers (`∆TRIM`, `∆JOIN`, `∆L1`) so that they sort together and do
+not clash with the user's names. APL80 has no `∆` to type, so in (C)
+those names are renamed: `∆` becomes a `D.` prefix (`∆TRIM` is
+`D.TRIM`), a legal APL80 name that keeps both properties. The rename is
+mechanical, made by the script that makes a workspace's (C) variant,
+so the (A) and (B) workspaces are untouched.
 
 ## The workspaces
 
@@ -100,8 +129,11 @@ against the limits above:
 | Need a (C) version of their own | COURSE (55 functions, and it teaches the del), EDIT (teaches the del) |
 | Cannot run | MATRIX (domino, the diagonal transpose), STATS (45 functions, domino), and the (B)-only BIRDS, TTTML and DRILL |
 
-PLOT, POLY, DRILL, LEARN and COURSE use `∆` in names, which waits on
-the question above.
+PLOT (2 names) and POLY (4) port with the `∆` rename above. DRILL
+(about 50) renames as easily, but it drills the APL keyboard, so its
+(C) version needs APL80's keys as well. LEARN is about the (A) and (B)
+keyboards and is not ported: the (C) lessons below take its place.
+COURSE gets its own (C) version in any case. STATS cannot run.
 
 ## The lessons
 

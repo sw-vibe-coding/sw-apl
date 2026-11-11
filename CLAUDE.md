@@ -446,7 +446,8 @@ The owner keeps stable binaries under `~/.local/softwarewrighter/bin/`.
 - Do NOT skip agentrail steps; do NOT continue after `complete`.
 - Commit before complete; push after commit; report per step.
 - TDD is mandatory; quality gates are mandatory.
-- Glyphs only. No Latin aliases, no name translation, not APL2.
+- Glyphs only in (A) and (B). No Latin aliases, no name translation,
+  not APL2. (C) shows APL80's own characters (docs/mode-c.md).
 - American spelling everywhere: color, center, behavior, -ize.
 - Nothing done for (B) moves (A): every existing sample and test is
   a '70 one, and reg-rs proves it.

@@ -1332,8 +1332,10 @@ Saga `c80`:
 3. `c80-commands` -- `)DEF`, `)EDIT` and the line commands in place of
    the del in (C); `)TRON )TROFF )PS )PD )AUTO )EXEC`; the `f` format
    statement and the `d` axis operator; `#` and `s`.
-4. `c80-screen` -- typing and display, as the owner decides: APL80's
-   characters on a 64-by-16 screen, or glyphs.
+4. `c80-screen` -- typing and display as APL80 had them: its
+   characters, substitutes and dotted shifted letters on a 64-by-16
+   screen; peek, poke and call on a modeled memory, and a small
+   `)DOS`, as docs/mode-c.md decides.
 5. `c80-workspaces` -- the workspaces that port, as `.c` variants or
    with `c` added; samples and transcripts for each.
 6. `c80-lessons` -- LESSON1 to LESSON5 for (C): new lessons in the
@@ -1342,6 +1344,12 @@ Saga `c80`:
    manual text is redistributed unless its license allows it.
 7. `c80-demo-link` -- the demo's (C) tab live, and the timeline's C'80
    callout linking to it, its tooltip "My live demo of APL-80".
+
+Owner direction (2026-11-10, on the decisions): "be compatible. make
+it look like it did originally, do not change appearance. emulate a
+subset of peek, poke, )DOS within reason, give errors for some."
+And, of `∆`: APL80 has none, so its names become `D.` names in the
+(C) variants, made by script; `docs/mode-c.md` records all three.
 
 ## Owner direction (2026-09-29): the documents, checked against the code
 
