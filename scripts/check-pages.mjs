@@ -1259,69 +1259,19 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
 //     worker kept a copy of what it fetched. And a rebuild underneath
 //     is still what a reload online gets -- the copy is only ever the
 //     fallback -- after which offline is the new build too.
-// The landing page: four tiles before the demo, each opened by a
-// click and by its letter in either case.
+// Around the timeline: the coming-soon page leads back to the root,
+// an old address naming a mode at the root reaches the demo, and the
+// demo's title leads home.
 {
   const context = await browser.newContext();
   const page = await context.newPage();
-  const missed = [];
-  page.on('response', (r) => { if (r.status() >= 400) missed.push(r.url()); });
-  const fresh = async () => {
-    await page.goto(home, { waitUntil: 'load' });
-    await page.waitForTimeout(200);
-  };
   const at = () => page.url().replace(home, '');
-  await fresh();
-  const tiles = await page.evaluate(() => [...document.querySelectorAll('.machines a')].map((a) => ({
-    caption: a.querySelector('span').textContent,
-    tip: a.dataset.tip,
-    under: a.querySelector('u')?.textContent,
-    image: a.querySelector('img')?.naturalWidth ?? 0,
-  })));
-  check("the tiles read A'70, B'75, C'80, D'83",
-    tiles.map((t) => t.caption).join() === "A'70,B'75,C'80,D'83", JSON.stringify(tiles));
-  check('each tile has its tooltip',
-    tiles.map((t) => t.tip).join() === 'APL\\360,APLSV,APL-80,IBM PC APL', JSON.stringify(tiles));
-  const tip = () => page.evaluate(() => {
-    const after = getComputedStyle(document.querySelector('[data-key="a"]'), '::after');
-    return { shown: after.opacity, size: parseFloat(after.fontSize), over: after.backgroundColor };
-  });
-  const idle = await tip();
-  await page.hover('[data-key="a"]');
-  const hovered = await tip();
-  check('a tooltip is hidden until the tile is hovered', idle.shown === '0' && hovered.shown === '1',
-    JSON.stringify({ idle, hovered }));
-  check('and it is large text on a see-through shim',
-    hovered.size >= 28 && /rgba\(0, 0, 0, 0\.5\)/.test(hovered.over), JSON.stringify(hovered));
-  check('and each letter is underscored', tiles.map((t) => t.under).join('') === 'ABCD', JSON.stringify(tiles));
-  check('all four pictures load',
-    tiles.length === 4 && tiles.every((t) => t.image > 0), JSON.stringify(tiles));
-  const places = [['a', 'demo.html?mode=A'], ['b', 'demo.html?mode=B'],
-    ['c', 'coming-soon.html'], ['d', 'coming-soon.html']];
-  for (const [letter, place] of places) {
-    await fresh();
-    await page.click(`[data-key="${letter}"]`);
-    await page.waitForURL(home + place);
-    check(`clicking ${letter.toUpperCase()} opens ${place}`, at() === place, at());
-    for (const key of [letter, `Shift+${letter.toUpperCase()}`]) {
-      await fresh();
-      await page.keyboard.press(key);
-      await page.waitForURL(home + place);
-      check(`${key} opens ${place}`, at() === place, at());
-    }
-  }
-  for (const key of ['Control+a', 'Meta+b', 'x']) {
-    await fresh();
-    await page.keyboard.press(key);
-    await page.waitForTimeout(300);
-    check(`${key} stays on the landing page`, at() === '', at());
-  }
   await page.goto(`${home}coming-soon.html`, { waitUntil: 'load' });
   check('the placeholder says Coming soon...',
     await page.textContent('h1') === 'Coming soon...', await page.textContent('h1'));
   await page.click('a');
   await page.waitForURL(home);
-  check('and links back', at() === '', at());
+  check('and links back to the root', at() === '', at());
   await page.goto(`${home}?mode=A`, { waitUntil: 'load' });
   await page.waitForURL(`${home}demo.html?mode=A`);
   check('an old address with a mode forwards to the demo', at() === 'demo.html?mode=A', at());
@@ -1332,7 +1282,54 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
       await demo.textContent('header .name'));
     await demo.close();
   }
-  check('nothing on the landing page is missing', missed.length === 0, missed.join());
+  await context.close();
+}
+
+// The site's root: the timeline of APL, opening at 1970 with the A'70
+// demo whole in view, its demos linked, its future
+// demos marked, and the strip within the window.
+{
+  const context = await browser.newContext({ viewport: { width: 1440, height: 800 } });
+  const page = await context.newPage();
+  const missed = [];
+  page.on('response', (r) => { if (r.status() >= 400) missed.push(r.url()); });
+  await page.goto(home, { waitUntil: 'load' });
+  await page.waitForTimeout(1500);
+  const seen = await page.evaluate(() => {
+    const boxes = [...document.querySelectorAll('.track .callout')];
+    const demo = (name) => boxes.find((b) => b.querySelector('.demo')?.textContent.startsWith(name));
+    const a70 = demo("A'70")?.getBoundingClientRect();
+    return {
+      callouts: boxes.length,
+      links: ["A'70", "B'75", "C'80", "D'83"].map((n) => demo(n)?.querySelector('a')?.getAttribute('href')),
+      future: boxes.filter((b) => b.querySelector('.shot')?.dataset.tip === 'Future demo').length,
+      a70: Boolean(a70) && a70.left >= 0 && a70.right <= innerWidth,
+      broken: [...document.images].filter((i) => !i.naturalWidth).length,
+      legend: document.querySelector('.legend')?.textContent.includes('1990 APL2'),
+      zoom: parseFloat(document.querySelector('.track').style.zoom || '1'),
+      axis: document.querySelector('.line').getBoundingClientRect().top < innerHeight,
+      built: document.getElementById('built')?.textContent,
+      license: document.querySelector('footer a[href$="LICENSE"]')?.textContent,
+    };
+  });
+  check('the root is the timeline, every callout drawn and every picture loaded',
+    seen.callouts > 30 && seen.broken === 0, JSON.stringify(seen));
+  check("it opens with the A'70 demo whole in view", seen.a70, JSON.stringify(seen));
+  check('its four demos link to the demo and the coming-soon page',
+    seen.links.join() === 'demo.html?mode=A,demo.html?mode=B,coming-soon.html,coming-soon.html',
+    JSON.stringify(seen.links));
+  check('four pictures say Future demo', seen.future === 4, JSON.stringify(seen));
+  check('the legend has the owner\'s years', seen.legend, JSON.stringify(seen));
+  // Text size comes first (owner, 2026-11-10): the strip is drawn smaller
+  // to fit no further than 90 per cent, and the page scrolls past that;
+  // the axis is always in view when it opens.
+  check('the text is never shrunk below 90 per cent, and the axis is in view',
+    seen.zoom >= 0.9 && seen.axis, JSON.stringify(seen));
+  const info = JSON.parse(await readFile(join(ROOT, 'build-info.json'), 'utf8'));
+  check('the footer says the license and the build',
+    seen.license === 'MIT License' && seen.built === `${info.host} | ${info.commit} | ${info.built_at}`,
+    JSON.stringify({ license: seen.license, built: seen.built }));
+  check('nothing on the timeline is missing', missed.length === 0, missed.join());
   await context.close();
 }
 

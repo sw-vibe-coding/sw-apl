@@ -1,60 +1,120 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<title>sw-apl</title>
+<title>sw-apl: a timeline of APL</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="A clean-room APL interpreter, compiled to WebAssembly and running in the tab.">
+<meta name="description" content="A timeline of APL, with live demos of the APLs of 1970 and 1975 running in the tab.">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="theme-color" content="#fbf7ef" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#17130e" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f3e9d2">
 <script>
-  // An address from before this page existed named a mode here.
+  // An address from before the demo moved named a mode here.
   if (new URLSearchParams(location.search).has("mode")) {
     location.replace(`demo.html${location.search}`);
   }
 </script>
 <style>
-  :root { color-scheme: light dark; --paper: #fbf7ef; --ink: #2b2118; --rule: #d8cdb8; }
-  @media (prefers-color-scheme: dark) {
-    :root { --paper: #17130e; --ink: #e8dfd0; --rule: #3a3229; }
-  }
-  body { margin: 0 auto; max-width: 64rem; padding: 2rem 1.25rem;
-    background: var(--paper); color: var(--ink);
+  :root { --paper: #f3e9d2; --ink: #3b2b1d; --soft: #8a7356; --box: #fbf6ea;
+    --hand: "Bradley Hand", "Segoe Print", "Comic Neue", cursive; }
+  body { margin: 0; background: var(--paper); color: var(--ink);
     font-family: Georgia, "Times New Roman", serif; }
-  h1 { font-size: 1.75rem; font-weight: normal; margin: 0 0 1.5rem; }
-  .machines { display: grid; gap: 1.25rem;
-    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); }
-  .machines a { display: block; position: relative; color: inherit; text-decoration: none;
-    border: 1px solid var(--rule); border-radius: .5rem; overflow: hidden; }
-  .machines a:hover, .machines a:focus-visible { border-color: var(--ink); }
-  .machines a:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
-  .machines img { display: block; width: 100%; aspect-ratio: 5 / 4;
-    object-fit: contain; background: #c3c7cc; }
-  .machines img.dark { background: #2b3134; }
-  .machines a::after { content: attr(data-tip); position: absolute; inset: 0 0 auto;
-    aspect-ratio: 5 / 4; display: grid; place-content: center; text-align: center;
-    padding: .5rem; box-sizing: border-box; font-size: 2rem; color: #fff;
-    background: rgb(0 0 0 / .5); opacity: 0; pointer-events: none; }
-  .machines a:hover::after, .machines a:focus-visible::after { opacity: 1; }
-  .machines span { display: block; padding: .6rem; text-align: center; font-size: 1.25rem; }
+  header { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; padding: .8rem 1.25rem 0; }
+  header h1 { font-size: 1.5rem; font-weight: normal; margin: 0; }
+  header a { color: inherit; }
+  .legend { margin-left: auto; max-width: 42rem; padding: .35rem .7rem; font-size: 1.02rem; line-height: 1.35;
+    border: 1px solid var(--soft); border-radius: 8px; background: var(--box); }
+  .legend b { font-family: var(--hand); }
+  .go { position: relative; font: inherit; font-size: 2.6rem; line-height: 1; color: var(--ink);
+    background: none; border: 0; padding: 0 .2rem; cursor: pointer; }
+  .go:hover, .go:focus-visible { color: #9a5b1e; }
+  .home { position: relative; text-decoration: none; }
+  .home:hover, .home:focus-visible { text-decoration: underline; }
+  .go::after, .home::after { content: attr(data-tip); position: absolute; top: 110%; z-index: 5; white-space: nowrap;
+    font-size: 1.4rem; font-weight: normal; padding: .35rem .7rem; border-radius: .4rem; color: #fff;
+    background: rgb(0 0 0 / .72); opacity: 0; pointer-events: none; }
+  .go[data-go="-1"]::after, .home::after { left: 0; }
+  .go[data-go="1"]::after { left: 0; }
+  .go:hover::after, .go:focus-visible::after, .home:hover::after, .home:focus-visible::after { opacity: 1; }
+  .strip { overflow-x: auto; overflow-y: hidden; outline: none; }
+  .track { position: relative; margin-top: 10px; }
+  .line { position: absolute; height: 3px; background: var(--ink); transform: translateY(-1px); }
+  .line::after { content: ""; position: absolute; right: -14px; top: -7px;
+    border: 8px solid transparent; border-left: 14px solid var(--ink); }
+  .tick { position: absolute; width: 1px; height: 10px; background: var(--soft); transform: translate(0, -5px); }
+  .tick.fifth { width: 3px; height: 22px; background: var(--ink); transform: translate(-1px, -11px); }
+  .year { position: absolute; z-index: 1; transform: translateX(-50%); font-size: 1.6rem;
+    font-weight: bold; line-height: 1.1; padding: 0 6px; background: var(--paper); }
+  .beyond { position: absolute; font-family: var(--hand); font-size: 1.32rem; white-space: nowrap; }
+  .leader { position: absolute; z-index: 0; overflow: visible; pointer-events: none; }
+  .leader polyline { fill: none; stroke: var(--soft); stroke-width: 2; }
+  /* Each tone a color and a dash pattern, so a reader who cannot tell
+     the colors apart can still follow a leader: solid, dashed, dotted,
+     dash-dot. */
+  .leader.tone-1 polyline { stroke: #4f6f8f; stroke-dasharray: 8 5; }
+  .leader.tone-2 polyline { stroke: #9a4b3c; stroke-dasharray: 2 4; stroke-linecap: round; }
+  .leader.tone-3 polyline { stroke: #4e7a55; stroke-dasharray: 9 4 2 4; }
+  .dot { position: absolute; width: 9px; height: 9px; border-radius: 50%;
+    background: var(--ink); transform: translate(-4px, -4px); }
+  .callout { position: absolute; z-index: 2; box-sizing: border-box; padding: 8px 10px;
+    background: var(--box); border: 2px solid var(--ink); border-radius: 10px;
+    box-shadow: 2px 3px 0 rgb(59 43 29 / .18); }
+  .callout.note { border-width: 1px; border-color: var(--soft); background: transparent; box-shadow: none; }
+  .callout a { color: inherit; text-decoration: none; display: block; height: 100%; }
+  .callout a:hover .when { text-decoration: underline; }
+  .callout img, .callout .tbd { display: block; width: 100%; height: 140px;
+    object-fit: contain; background: #c3c7cc; border-radius: 4px; }
+  .callout .tbd { display: grid; place-content: center; text-align: center; font-size: 1.38rem; color: #2b2118; }
+  .callout p { margin: 3px 0 0; line-height: 1.2; }
+  .callout .shot { position: relative; }
+  .callout .shot:empty { display: none; }
+  .callout .shot[data-tip]::after { content: attr(data-tip); position: absolute; inset: 0;
+    display: grid; place-content: center; text-align: center; padding: .5rem; box-sizing: border-box;
+    font-size: 1.62rem; line-height: 1.25; color: #fff; background: rgb(0 0 0 / .5);
+    border-radius: 4px; opacity: 0; pointer-events: none; }
+  .callout:hover .shot::after, .callout a:focus-visible .shot::after { opacity: 1; }
+  .demo { font-size: 1.62rem; font-weight: bold; }
+  .when { font-family: var(--hand); font-size: 1.5rem; font-weight: bold; }
+  .text { font-size: 1.38rem; }
+  .callout.note .when { font-size: 1.58rem; }
+  .callout.note .text { font-size: 1.46rem; }
+  .callout.mine { border-color: #2f5d3a; }
+  footer { padding: .2rem 1.25rem .4rem; font-size: .96rem; color: var(--soft); }
+  footer p { margin: .15rem 0; }
+  footer a { color: inherit; }
 </style>
-<h1>sw-apl</h1>
-<nav class="machines">
-  <a id="apl-70" data-key="a" data-tip="APL\360" href="demo.html?mode=A">
-    <img src="machines/70.webp" alt="A printing terminal with paper loaded"><span><u>A</u>'70</span></a>
-  <a id="apl-75" data-key="b" data-tip="APLSV" href="demo.html?mode=B">
-    <img src="machines/75.webp" alt="A desktop computer with a small screen above its keyboard"><span><u>B</u>'75</span></a>
-  <a id="apl-80" data-key="c" data-tip="APL-80" href="coming-soon.html">
-    <img src="machines/80.webp" alt="A home computer with a video display on its keyboard unit"><span><u>C</u>'80</span></a>
-  <a id="apl-83" data-key="d" data-tip="IBM PC APL" href="coming-soon.html">
-    <img class="dark" src="machines/83.webp" alt="A personal computer with two monitors and a keyboard"><span><u>D</u>'83</span></a>
-</nav>
-<script>
-  // A letter, either case, is the same as choosing its tile.
-  addEventListener("keydown", (event) => {
-    if (event.ctrlKey || event.metaKey || event.altKey || event.repeat) return;
-    const key = event.key.toLowerCase();
-    if (key.length === 1) document.querySelector(`[data-key="${CSS.escape(key)}"]`)?.click();
-  });
+<header>
+  <button class="go" data-go="-1" data-tip="Earlier: the history before 1970" aria-label="Scroll to earlier years">↞</button>
+  <h1><a class="home" href="./" data-tip="Back to 1970">A timeline of APL</a></h1>
+  <button class="go" data-go="1" data-tip="Later: on to today, and my own APLs" aria-label="Scroll to later years">↠</button>
+  <aside class="legend" aria-label="My APL experiences">
+    <b>My APL experiences:</b>
+    1972 APL\360 · 1976 U. of Maryland 1100\APL · 1977 APLSV ·
+    1980 APL80 · 1983 IBM PC APL · 1990 APL2 ·
+    2026 my own array languages
+  </aside>
+</header>
+<div id="timeline"></div>
+<footer>
+  <p class="hint">Scroll sideways, or turn the wheel. To the left is the history before 1970; to the right, the years on to today, and my own APLs. The title brings you back to 1970.</p>
+  <p class="colophon">Copyright &copy; 2026 Michael A Wright
+    <span aria-hidden="true">·</span> <a href="https://github.com/sw-vibe-coding/sw-apl/blob/main/LICENSE">MIT License</a>
+    <span aria-hidden="true">·</span> <a href="https://github.com/sw-vibe-coding/sw-apl">sw-apl</a>
+    <span aria-hidden="true">·</span> <span id="built">build</span></p>
+</footer>
+<script type="module">
+  import init from "./timeline/apl_timeline_web.js";
+  init();
+  // What this page is running: the host, the commit and when it was
+  // built, from build-info.json, which publishing writes.
+  fetch("build-info.json", { cache: "no-store" })
+    .then((r) => (r.ok ? r.json() : Promise.reject()))
+    .then((info) => {
+      document.getElementById("built").textContent = `${info.host} | ${info.commit} | ${info.built_at}`;
+    })
+    .catch(() => {});
+  // The arrows by the title: most of a view earlier or later, smoothly.
+  for (const go of document.querySelectorAll(".go")) {
+    go.addEventListener("click", () => document.querySelector(".strip")
+      ?.scrollBy({ left: Number(go.dataset.go) * innerWidth * 0.8, behavior: "smooth" }));
+  }
 </script>

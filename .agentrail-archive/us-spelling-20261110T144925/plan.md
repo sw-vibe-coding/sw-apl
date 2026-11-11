@@ -1,0 +1,1 @@
+American spelling across the repository, per docs/plan.md owner direction 2026-11-10, and CLAUDE.md saying so.

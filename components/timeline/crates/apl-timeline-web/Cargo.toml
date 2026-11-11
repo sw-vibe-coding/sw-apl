@@ -1,0 +1,20 @@
+[package]
+name = "apl-timeline-web"
+description = "The APL timeline in a browser: a wide strip that scrolls sideways, in Yew"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+apl-timeline = { path = "../apl-timeline" }
+yew = { version = "0.23", features = ["csr"] }
+wasm-bindgen = "0.2"
+web-sys = { version = "0.3", features = ["Document", "Element", "HtmlElement", "Window", "WheelEvent"] }
+
+[lints]
+workspace = true

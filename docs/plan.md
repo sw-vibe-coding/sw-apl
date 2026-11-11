@@ -1233,6 +1233,9 @@ intends emulations for C and D; this page is only their placeholders.
 
 The pictures are the owner's own renders of their own 3D models.
 
+Superseded 2026-11-10: the timeline is the landing page, and this tile
+page is dropped (below).
+
 ## Owner direction (2026-11-09, later): when each feature arrived
 
 "A document that details when each APL feature was added", from
@@ -1264,6 +1267,43 @@ identifiers, test names, comments and scripts. Generated and
 append-only files (CHANGES.md, `.agentrail/`), the research notes, the
 title of a published source and third-party text stay as they are.
 Transcripts that move are rebased, with this as the reason.
+
+## Owner direction (2026-11-10): a timeline of APL, and the site opens on it
+
+"Design a Rust/Yew/WASM scrollable timeline widget using our landing
+page images in the callouts", after a hand-drawn timeline the owner
+supplied: some events as text, the key ones as pictures with text. The
+owner's directions, as they came:
+
+- The strip opens at 1970, with the A'70 demo whole in view; earlier
+  history is to the left, the years since to the right, and the
+  owner's own array languages past today. The title brings the view
+  back; arrows either side of it scroll, with tooltips.
+- Pictures: the four live demos (A'70 the 2741, B'75 the 5100, C'80
+  the TRS-80, D'83 the IBM PC) each with its name, letter underscored,
+  and "my live demo" (C and D "coming soon"), and a tooltip on the
+  picture as the landing page had. The 1053 for APL\1130, the 029
+  keypunch for University of Maryland APL, the 3279G for APL2 Release
+  2 and the COR24-TB for sw-cor24-apl say "Future demo" and have no
+  link. sw-MLPL and X_eTaL link to their live demos. Every picture is
+  the owner's, from their own procedural models.
+- Text: the APL history around them, each with a source, including the
+  standards (ISO 8485, ISO/IEC 13751) and the newer array languages
+  (APL*PLUS, MCM/70, SHARP APL, A+, J, K, q, Dyalog, GNU APL, Futhark,
+  BQN, Kap, Uiua, TinyAPL).
+- A legend of the owner's own APL years: 1972 APL\360, 1976 University
+  of Maryland 1100\APL, 1977 APLSV, 1980 APL80, 1983 IBM PC APL,
+  1990 APL2.
+- No leader crosses another or runs through a box; callouts move aside
+  on a slanted leader before the strip grows taller; boxes are measured
+  so no words are cut off; a strip taller than the window is drawn
+  smaller to fit.
+- Previewed locally before anything is pushed or published.
+- Then: "We can now make this timeline the landing page." The tile page
+  goes; the timeline links every demo. The coming-soon page's Back and
+  the demo's title lead to the root, and an old address with `?mode=`
+  still reaches the demo. `docs/apl-timeline.md` is brought up to date
+  with it, and pushed with it.
 
 ## Owner direction (2026-09-29): the documents, checked against the code
 

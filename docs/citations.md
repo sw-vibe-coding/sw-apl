@@ -137,11 +137,53 @@ carry the same files, for example
 - **The combinator demos**, sw-MLPL. The same birds in another
   language. <https://mlpl.softwarewrighter.com/>
 
-## The pictures on the landing page
+## The timeline's history, besides the sources above
 
-The pictures in `pages/machines/` are the owner's own renders of 3D
-models, not borrowed work. The badges they show are part of the
-historical machines they depict.
+- **Beginning of Computing and Computer Science at the University of
+  Maryland**, Jack Minker, 2004: APL 1100 for the UNIVAC 1108.
+  <http://www.cs.umd.edu/projects/photohistory/retirement/MinkerHistory.pdf>
+- **ISO 8485:1989** and **ISO/IEC 13751:2001**, ISO and the APL Wiki.
+  <https://www.iso.org/standard/15692.html>,
+  <https://www.iso.org/standard/22817.html>,
+  <https://aplwiki.com/wiki/ISO_8485:1989>,
+  <https://aplwiki.com/wiki/ISO/IEC_13751:2001>
+- **Our History**, Dyalog: Dyalog APL v1.0 at APL83.
+  <https://dyalogdev.gos.dyalog.com/?p=14520>
+- **GNU APL 1.0 Released**, Savannah, 27 September 2013.
+  <https://savannah.gnu.org/news/?id=7702>
+- **The past and present of Futhark**, Troels Henriksen.
+  <https://futhark-lang.org/blog/2021-12-19-past-and-present.html>
+- **BQN's development history**, Marshall Lochbaum.
+  <https://mlochbaum.github.io/BQN/commentary/history.html>
+- **Kap**, **Uiua**, **TinyAPL** and **Timeline of influential array
+  languages**, APL Wiki. <https://aplwiki.com/wiki/Kap>,
+  <https://aplwiki.com/wiki/Uiua>, <https://aplwiki.com/wiki/TinyAPL>,
+  <https://aplwiki.com/wiki/History>
+- **Fortran**, **Lisp**, **ALGOL**, **COBOL** and **Forth**, Wikipedia: the
+  other languages of the timeline's early years, by name and year only.
+  <https://en.wikipedia.org/wiki/Fortran>,
+  <https://en.wikipedia.org/wiki/Lisp_(programming_language)>,
+  <https://en.wikipedia.org/wiki/ALGOL>, <https://en.wikipedia.org/wiki/COBOL>,
+  <https://en.wikipedia.org/wiki/Forth_(programming_language)>
+- **STSC** and **SHARP APL**, APL Wiki: APL*PLUS from 1970, SHARP APL by name
+  from about 1976. <https://aplwiki.com/wiki/STSC>,
+  <https://aplwiki.com/wiki/SHARP_APL>
+- **I. P. Sharp Associates** and **A+ (programming language)**,
+  Wikipedia. <https://en.wikipedia.org/wiki/I._P._Sharp_Associates>,
+  <https://en.wikipedia.org/wiki/A%2B_(programming_language)>
+- **Chronology of APL**, ACM SIGAPL, for APL*PLUS in 1970 and the
+  MCM/70 shown in May 1973.
+  <https://sigapl.hosting.acm.org/APLChronology.php>
+- **rubenverg/tinyapl**, GitHub: its first release, 11 March 2024.
+  <https://github.com/rubenverg/tinyapl>
+
+## The pictures on the landing page and the timeline
+
+The pictures in `pages/machines/` are the owner's own: generated
+from procedural 3D models the owner built, with X_eTaL and Blender,
+and some edited afterward. They are not photographs and not borrowed
+work. The badges they show are part of the historical machines they
+depict.
 
 ## Carried in the repository, under license
 

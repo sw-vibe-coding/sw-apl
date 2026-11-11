@@ -136,6 +136,13 @@ pages:
     cd components/web/crates/apl-wasm && \
       wasm-pack build --release --target web --no-pack \
         --out-dir ../../../../pages/wasm
+    # The timeline the site opens on, in its own WebAssembly, from
+    # data/timeline.json. wasm-pack writes a .gitignore and type
+    # declarations into the out-dir; neither belongs in pages/.
+    cd components/timeline/crates/apl-timeline-web && \
+      wasm-pack build --release --target web --no-pack \
+        --out-dir ../../../../pages/timeline
+    rm -f pages/timeline/.gitignore pages/timeline/*.d.ts
     # The version every file below demo.html is fetched at. It is a
     # digest of what a visitor actually runs, so a rebuild that
     # changed nothing does not invalidate a cache, and one that

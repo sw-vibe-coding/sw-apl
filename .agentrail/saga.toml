@@ -1,6 +1,6 @@
-name = "us-spelling"
-status = "completed"
+name = "timeline"
+status = "active"
 current_step = 1
-created_at = "2026-11-10T10:01:01"
+created_at = "2026-11-10T14:49:25"
 plan_file = ".agentrail/plan.md"
 retroactive = false

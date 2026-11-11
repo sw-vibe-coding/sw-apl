@@ -233,10 +233,12 @@ and draws what it hands back, so `⍟` is `○`, `Ctrl-]`, `*` in a
 browser exactly as it is in a terminal, and there is no second copy
 of the table in JavaScript.
 
-The site opens on a landing page, `index.html`: a tile for each mode,
-opened by a click or by its letter. The demo itself is `demo.html`,
-`?mode=A` or `?mode=B` choosing the mode, and its title links back. An
-address naming a mode at the root is forwarded there.
+The site opens on a timeline of APL, `index.html`: a strip in Rust and
+Yew (`components/timeline/`, drawn from `data/timeline.json`), with a
+callout for each of sw-apl's live demos that opens it. The demo itself
+is `demo.html`, `?mode=A` or `?mode=B` choosing the mode, and its
+title links back. An address naming a mode at the root is forwarded
+there.
 
 The demo is at <https://sw-apl.softwarewrighter.com/>, and at
 `sw-vibe-coding.github.io/sw-apl/` as well, which is why nothing the
