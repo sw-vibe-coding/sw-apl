@@ -1,4 +1,4 @@
-number = 3
+number = 4
 slug = "c80-commands"
 status = "pending"
 description = "In C: )DEF and )EDIT with the line commands in place of the del editor; )TRON..."

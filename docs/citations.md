@@ -180,6 +180,19 @@ carry the same files, for example
   <https://sigapl.hosting.acm.org/APLChronology.php>
 - **rubenverg/tinyapl**, GitHub: its first release, 11 March 2024.
   <https://github.com/rubenverg/tinyapl>
+- **History of I-APL**, J Wiki: version 1.0 in January 1988, Paul
+  Chapman's interpreter for the BBC Micro and PCs, and its backers.
+  <https://code.jsoftware.com/wiki/Essays/History_of_I-APL>
+- **I-APL instruction manual**, Anthony Camacho, 1989: the
+  machines it ran on. ISBN 9781871020045.
+- **APL Collection**, York University Computer Museum: TryAPL2 on
+  diskette, IBM, 1989 and 1990.
+  <https://museum.eecs.yorku.ca/collections/show/16>
+- **The IBM Personal Computer APL System**, M. Tavera, M. Alfonseca and
+  J. Rojas, 1984, and **APL Reference**, IBM, May 1983: the Math
+  Co-Processor among the requirements.
+  <http://arantxa.ii.uam.es/~alfonsec/docs/artint/apl84.pdf>,
+  <http://bitsavers.trailing-edge.com/pdf/ibm/pc/languages/1502219_APL_Reference_May83.pdf>
 
 ## The pictures on the landing page and the timeline
 

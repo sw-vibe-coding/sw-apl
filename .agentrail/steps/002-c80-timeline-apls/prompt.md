@@ -1,0 +1,1 @@
+Owner direction 2026-11-11 (docs/plan.md): add I-APL (BAA-backed free APL for schools, v1.0 January 1988, BBC Micro and PCs) and TryAPL2 (IBM free APL2 for DOS, about 1990) to data/timeline.json and docs/apl-timeline.md with links, and say on the IBM PC APL callout that it required the 8087 math coprocessor. Sources in docs/citations.md. Rebuild pages/timeline.

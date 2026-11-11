@@ -265,3 +265,18 @@ fn the_boxes_run_in_year_order() {
         }
     }
 }
+
+/// The free APLs a reader asked for, each with its year and a link, and
+/// the coprocessor IBM PC APL could not run without (owner, 2026-11-11).
+#[test]
+fn the_free_apls_and_the_coprocessor_are_there() {
+    let list = events(DATA).expect("data/timeline.json is a list of events");
+    let find = |title: &str| list.iter().find(|e| e.title.starts_with(title));
+    for (title, when) in [("I-APL", "1988"), ("TryAPL2", "ca. 1990")] {
+        let e = find(title).unwrap_or_else(|| panic!("no {title}"));
+        assert_eq!(e.when, when, "{title}");
+        assert!(e.href.is_some(), "{title} links to its source");
+    }
+    let pc = find("IBM PC APL").expect("IBM PC APL");
+    assert!(pc.text.contains("8087"), "{}", pc.text);
+}

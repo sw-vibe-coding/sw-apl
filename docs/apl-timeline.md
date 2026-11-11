@@ -46,7 +46,7 @@ says so.
 | 1980 | APL80, a large subset of APL for the TRS-80. Its manual is undated; 1980 is the owner's | C'80: a demo still to come. The owner used it in 1980 |
 | 1982 | APL2, with nested arrays, is released as an Installed User Program: a prototype | |
 | April 1983 | Dyalog APL v1.0 is launched at the APL83 conference in Washington | |
-| June 1983 | IBM Personal Computer APL is announced; it was developed at the IBM Madrid Scientific Center | D'83: a demo still to come. The owner used it from 1983 |
+| June 1983 | IBM Personal Computer APL is announced; it was developed at the IBM Madrid Scientific Center. It required the 8087 math coprocessor, then an option in the PC | D'83: a demo still to come. The owner used it from 1983 |
 | 1984 | APL2 is released | |
 | December 1985 | APL2 Release 2 adds vector specification, `⎕EC`, and lowercase in names; on VM/CMS it is typed on a 3279 color graphics terminal | A future demo. The owner used APL2 from 1990 |
 
@@ -55,8 +55,10 @@ says so.
 | Date | What happened |
 |---|---|
 | 1988 | A+, Arthur Whitney's APL at Morgan Stanley (after his A of 1985), the first built on leading-axis theory; K followed it. It was later released free under the GPL |
+| January 1988 | I-APL 1.0, a free APL for schools and small computers (the BBC Micro, PC clones, the RML Nimbus, the Archimedes), written by Paul Chapman and backed by the British APL Association and SIGAPL |
 | 1987 | ISO accepts an edited form of the IBM standard, published as ISO 8485:1989, the APL standard: flat arrays, from APLSV |
 | 1990 | J, Kenneth Iverson and Roger Hui's successor to APL, in ASCII |
+| About 1990 | TryAPL2, IBM's free APL2 for DOS, limited in its workspace size, for students |
 | 1992 | K, Arthur Whitney's list-based array language, first available |
 | 2001 | ISO/IEC 13751, Extended APL: nested arrays, mainly from APL2; the most recent APL standard |
 | 2003 | q and kdb+, K's descendant built into a database |
@@ -119,6 +121,8 @@ Listed in full, with links, in `citations.md`:
   Albany) in 1976-77, APLSV from 1977, APL80 in 1980,
   IBM PC APL from 1983, APL2 from 1990, and the IBM 51xx computers from
   1978.
+- The J Wiki's history of I-APL and Anthony Camacho's I-APL manual; the
+  York University Computer Museum's APL collection, for TryAPL2.
 - Not yet checked against a source here: q and kdb+ in 2003, the 1979
   Turing Award, and Kenneth Iverson's death in 2004. They are as
   generally recorded.

@@ -1,4 +1,4 @@
-number = 5
+number = 6
 slug = "c80-workspaces"
 status = "pending"
 description = "Port the workspaces docs/mode-c.md finds portable: add c or write C variants,..."

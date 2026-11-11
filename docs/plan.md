@@ -1362,6 +1362,17 @@ options off by default; reg-rs proves no earlier mode moves. (C) goes
 first, then APL\1130, (D), and the punched-card mode. No saga yet for
 any but (C).
 
+Owner direction (2026-11-11), relaying a reader's feedback: add the
+missing APLs, with their dates and links, and say that IBM PC APL
+needed a math coprocessor. The reader named I-APL, the free APL the
+British APL Association backed for schools and small computers (the
+BBC Micro among them), and TryAPL2, IBM's free APL2 for DOS. The
+owner had a coprocessor in their own PC for APL. Step
+`c80-timeline-apls`, inserted in saga `c80` before `c80-mode`: I-APL
+(version 1.0, January 1988) and TryAPL2 (about 1990) as notes on the
+timeline; the IBM PC APL callout says it required the 8087; sources in
+`citations.md`.
+
 ## Owner direction (2026-09-29): the documents, checked against the code
 
 "Is the README up-to-date? Scan documents for stale info or

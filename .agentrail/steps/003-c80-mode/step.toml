@@ -1,4 +1,4 @@
-number = 2
+number = 3
 slug = "c80-mode"
 status = "pending"
 description = "Add mode C to apl-modes and the CLI as --mode 80: parse, list and load only C..."
