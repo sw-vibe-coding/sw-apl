@@ -1,8 +1,9 @@
 number = 4
 slug = "c80-mode"
-status = "in-progress"
+status = "completed"
 description = "Add mode C to apl-modes and the CLI as --mode 80: parse, list and load only C..."
 role = "production"
 context_files = []
 created_at = "2026-11-10T17:37:46"
-commits = []
+completed_at = "2026-11-11T14:51:21"
+commits = ["1689364d1b08b246eba476b78f356863184a1443"]

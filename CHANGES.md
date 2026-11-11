@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-11-11
 
+- chore(pages): rebuild with mode (C), reached by ?mode=C
+- feat(c80): mode (C) '80 with APL80's limits as a profile (c80-mode)
+- docs(changes): refresh CHANGES.md to HEAD; complete pages-rerun-artifact
 - fix(ci): name the Pages artifact per run attempt (pages-rerun-artifact)
 - docs(changes): refresh CHANGES.md to HEAD; complete c80-timeline-apls
 - chore(pages): rebuild the timeline with I-APL, TryAPL2 and the 8087

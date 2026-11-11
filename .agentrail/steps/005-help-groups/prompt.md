@@ -1,0 +1,1 @@
+Owner asked for regression tests of every )HELP page. )HELP WORKSPACE (and LIBRARY, INQUIRY, TERMINAL, SW-APL) answers NO HELP although )HELP shows them as groups: make a group name list its commands, each with its usage line, in every mode; unit tests and a reg-rs sample per mode.
