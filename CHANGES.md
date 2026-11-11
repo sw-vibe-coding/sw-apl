@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-11-10
 
+- chore: identify deployed pages commit
+- feat(pages): the site opens on a timeline of APL
+- docs(changes): refresh CHANGES.md to HEAD; complete us-spelling, saga done
 - docs: American spelling across the repository
 - docs(changes): refresh CHANGES.md to HEAD; complete scan-out-of-a, saga done
 - fix(a70): no scan in (A); (B) keeps it
