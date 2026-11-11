@@ -1,8 +1,9 @@
 number = 1
 slug = "c80-names"
-status = "in-progress"
+status = "completed"
 description = "Rename every workspace in sw-apl and sw-apl-workspaces to NAME.modes.apl.ws, ..."
 role = "production"
 context_files = []
 created_at = "2026-11-10T17:37:46"
-commits = []
+completed_at = "2026-11-11T06:11:36"
+commits = ["be3b0be6fad04208b282c5a22452314e70250f46"]

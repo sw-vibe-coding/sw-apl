@@ -12,8 +12,13 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-11-11
+
+- refactor: workspace keys name their modes by letter (c80-names)
+
 ## 2026-11-10
 
+- docs(changes): refresh CHANGES.md to HEAD
 - docs: architecture, adding a mode without moving the ones before it
 - docs(changes): refresh CHANGES.md to HEAD
 - docs(mode-c): APL80's key table, read from the manual's scan
