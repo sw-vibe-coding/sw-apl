@@ -14,6 +14,8 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-11-11
 
+- fix(ci): name the Pages artifact per run attempt (pages-rerun-artifact)
+- docs(changes): refresh CHANGES.md to HEAD; complete c80-timeline-apls
 - chore(pages): rebuild the timeline with I-APL, TryAPL2 and the 8087
 - feat(timeline): I-APL and TryAPL2, and IBM PC APL's 8087 (c80-timeline-apls)
 - docs(changes): refresh CHANGES.md to HEAD; complete c80-names

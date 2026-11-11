@@ -1,8 +1,9 @@
 number = 3
 slug = "pages-rerun-artifact"
-status = "in-progress"
+status = "completed"
 description = "Pages deploy fails on a re-run: Multiple artifacts named github-pages (attemp..."
 role = "production"
 context_files = []
 created_at = "2026-11-11T13:26:39"
-commits = []
+completed_at = "2026-11-11T13:27:21"
+commits = ["ba0ed80c3dccf0e762df59ba6f6288cb7061017f"]
