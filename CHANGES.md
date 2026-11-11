@@ -14,6 +14,8 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-11-10
 
+- docs: plan (C) '80, APL80 on the TRS-80
+- docs(changes): refresh CHANGES.md to HEAD; complete timeline-landing, saga done
 - chore: identify deployed pages commit
 - feat(pages): the site opens on a timeline of APL
 - docs(changes): refresh CHANGES.md to HEAD; complete us-spelling, saga done
