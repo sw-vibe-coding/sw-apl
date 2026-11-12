@@ -162,16 +162,18 @@ Workspace control:
 
 | Command | Meaning | Modes |
 |---|---|---|
-| `)CLEAR` | Fresh workspace; prints `CLEAR WS` | both |
-| `)WSID [name]` | Show or set the workspace id; setting replies `WAS` the old one | both |
-| `)SAVE [name]` | Save; prints the timestamp and id | both |
-| `)LOAD name` | Load; prints `SAVED` and the timestamp | both |
-| `)DROP name` | Delete a saved workspace | both |
-| `)LIB [n]` | List workspaces in a library | both |
-| `)COPY name [objects]` | Copy objects from a saved workspace | both |
-| `)PCOPY name [objects]` | Copy without overwriting existing names | both |
-| `)CONTINUE` | Save as CONTINUE and sign off | both |
-| `)OFF` | End the session | both |
+| `)CLEAR` | Fresh workspace; prints `CLEAR WS` | all |
+| `)WSID [name]` | Show or set the workspace id; setting replies `WAS` the old one | all |
+| `)SAVE [name]` | Save; prints the timestamp and id | all |
+| `)LOAD name` | Load; prints `SAVED` and the timestamp | all |
+| `)DROP name` | Delete a saved workspace | all |
+| `)LIB [n]` | List workspaces in a library | all |
+| `)COPY name [objects]` | Copy objects from a saved workspace | all |
+| `)PCOPY name [objects]` | Copy without overwriting existing names | all |
+| `)CONTINUE` | Save as CONTINUE and sign off | all |
+| `)OFF` | End the session | all |
+| `)DEF header`, `)EDIT name` | Open a function to define or change, in place of the del (see `language.md`, "What (C) '80 adds") | (C) |
+| `)AUTO [expression]`, `)EXEC` | Set the expression a loaded workspace runs; run it now | (C) |
 
 Only the first four characters of a command name are significant,
 so `)CLEA`, `)CLEAR` and `)CLEAVER` are one command. A name of four
@@ -185,19 +187,21 @@ Inquiry and settings:
 
 | Command | Meaning | Modes |
 |---|---|---|
-| `)FNS [letter]` | List defined functions, alphabetically, from a letter | both |
-| `)VARS [letter]` | List global variables, alphabetically, from a letter | both |
+| `)FNS [letter]` | List defined functions, alphabetically, from a letter | all |
+| `)VARS [letter]` | List global variables, alphabetically, from a letter | all |
 | `)GRPS [letter]` | List group names, alphabetically, from a letter | (A) |
 | `)GRP name` | List what a group gathers, as it was gathered | (A) |
 | `)GROUP name [members]` | Gather names under one name; one name alone disperses it | (A) |
-| `)ERASE names` | Remove global objects; a group name takes its members | both |
-| `)SI`, `)SIV` | State indicator; `)SIV` adds local names | both |
+| `)ERASE names` | Remove global objects; a group name takes its members | all |
+| `)SI`, `)SIV` | State indicator; `)SIV` adds local names | all |
 | `)ORIGIN n` | Set index origin (0 or 1); replies `WAS n` | (A) |
 | `)DIGITS n` | Set print precision (1 to 16); replies `WAS n` | (A) |
 | `)WIDTH n` | Set print width (30 to 254); replies `WAS n` | (A) |
-| `)SYMBOLS` | How many names are held, and how many would fit | both |
-| `)DIALECT` | The session's mode, `(A) '70` or `(B) '75`; an sw-apl command no historical system had (see `commands-reference.md`, "What sw-apl adds") | both |
-| `)HELP [NAME]` | The commands the mode has, by group; with a name, a page on a command or a topic; an sw-apl command | both |
+| `)SYMBOLS` | How many names are held, and how many would fit | all |
+| `)PS`, `)PD` | Print numbers with 6 digits, or 15 | (C) |
+| `)TRON`, `)TROFF` | Name each line of a function before it runs; stop | (C) |
+| `)DIALECT` | The session's mode, `(A) '70`, `(B) '75` or `(C) '80`; an sw-apl command no historical system had (see `commands-reference.md`, "What sw-apl adds") | all |
+| `)HELP [NAME]` | The commands the mode has, by group; with a name, a page on a command or a topic, or a group's commands, each with how it is typed; an sw-apl command | all |
 
 ## What the workspace is
 

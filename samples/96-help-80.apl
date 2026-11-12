@@ -1,7 +1,7 @@
 ⍝!MODES (C)
 ⍝ Help in (C) '80: the overview, then every page the mode has --
-⍝ each command and each topic -- then the commands (C) has not, and
-⍝ a name with no page.
+⍝ each command and each topic -- each group, the commands (C) has not,
+⍝ and a name with no page.
 )HELP
 )HELP CLEAR
 )HELP WSID
@@ -37,5 +37,10 @@
 )HELP RESTRICTIONS
 )HELP ORIGIN
 )HELP GROUP
+)HELP WORKSPACE
+)HELP LIBRARY
+)HELP INQUIRY
+)HELP TERMINAL
+)HELP SW-APL
 )HELP NOSUCH
 )OFF

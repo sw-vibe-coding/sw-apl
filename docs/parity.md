@@ -229,7 +229,7 @@ the session numeric tests, and sample 67.
 | `)SI` `)SIV` | done | done |  |
 | `)SYMBOLS` | reports | reports | the number cannot be set -- see Restrictions |
 | `)DIALECT`, an sw-apl command: the session's mode; it does not switch | done | done | extension tests, sample 83 |
-| `)HELP`, an sw-apl command: the mode's commands by group, and a page per command and topic from `data/help.txt`, each only in the modes that have it | done | done | extension tests, samples 83 and 84, and every page in samples 94 and 95 |
+| `)HELP`, an sw-apl command: the mode's commands by group, and a page per command and topic from `data/help.txt`, each only in the modes that have it, and a group's commands by name, as `)HELP LIBRARY` | done | done | extension tests, samples 83 and 84, and every page and group in samples 94 and 95 |
 | Library form `)LOAD 1 NAME`, DESCRIBE convention | done | done | `--library` sets the directory they are under, library 1 is `ws/lib1/`, and LEARN, LIFE, RACE, EDIT and BIRDS each carry a DESCRIBE, and so does TTTML, (B)'s alone; library tests, samples 64, 72, 80, 81 and 87; sample 89 checks LIFE against Conway's rules. A library is somewhere workspaces are kept, not a directory: the browser keeps library 1 in the bundle and library 0 in its own storage, and the commands do not change. Store tests |
 | `)LOAD` prints only the SAVED line, as APL\360 did, and nothing runs on load | done | done | command tests, sample 61 |
 | Trouble reports: WS NOT FOUND, OBJECT NOT FOUND, IMPROPER LIBRARY REFERENCE, NOT SAVED THIS WS IS | done | done | INCORRECT COMMAND is kept for a command given an argument it does not take, as the manual's table has it; report tests, sample 65 |
@@ -259,7 +259,7 @@ above, and these rows are what (C) changes.
 | Feature | (C) '80 | Pinned by |
 | --- | --- | --- |
 | `--mode 80`, `?mode=C` in the browser, `)DIALECT` answers `(C) '80` | done | modes tests, extension help tests, sample 93 |
-| `)HELP` in (C): its commands by group and every page it has, and the commands it has not | done | extension tests, sample 96 |
+| `)HELP` in (C): its commands by group and every page it has, and the commands it has not | done | extension tests, sample 96, groups too |
 | A workspace is listed and loaded in (C) only when its `⍝!MODES` line names (C); a save in (C) is named with its `c` | done | shelves tests |
 | A clear workspace prints six digits in a line of 64 | done | c80 session tests, sample 93 |
 | Scan, as APL80's disk version has it | done | c80 session tests, sample 93 |

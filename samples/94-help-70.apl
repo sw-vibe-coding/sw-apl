@@ -1,5 +1,5 @@
 ⍝ Help in (A) '70: the overview, then every page the mode has --
-⍝ each command and each topic -- and a name with no page.
+⍝ each command and each topic -- each group, and a name with no page.
 )HELP
 )HELP CLEAR
 )HELP WSID
@@ -31,5 +31,10 @@
 )HELP EDITOR
 )HELP EXTENSIONS
 )HELP RESTRICTIONS
+)HELP WORKSPACE
+)HELP LIBRARY
+)HELP INQUIRY
+)HELP TERMINAL
+)HELP SW-APL
 )HELP NOSUCH
 )OFF

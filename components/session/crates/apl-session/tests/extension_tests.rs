@@ -263,3 +263,57 @@ fn the_modes_table_agrees_with_the_commands() {
         }
     }
 }
+
+/// A group the overview shows is a page of its own: its commands in
+/// this mode, each with the line that says how it is typed.
+#[test]
+fn a_group_name_lists_its_commands() {
+    for mode in [Mode::A, Mode::B, Mode::C] {
+        let mut s = in_mode(mode);
+        let overview = out(&mut s, ")HELP");
+        for (group, heading) in [
+            ("WORKSPACE", "WORKSPACE"),
+            ("LIBRARY", "LIBRARY"),
+            ("INQUIRY", "INQUIRY"),
+            ("TERMINAL", "TERMINAL"),
+            ("SW-APL", "SW-APL'S OWN"),
+        ] {
+            let page = out(&mut s, &format!(")HELP {group}"));
+            assert_eq!(
+                page[0],
+                format!("{heading} COMMANDS IN {}", out(&mut s, ")DIALECT")[0])
+            );
+            // The group's line in the overview, and the lines it wraps
+            // onto, which are indented under it.
+            let at = overview
+                .iter()
+                .position(|l| l.starts_with(heading))
+                .expect(heading);
+            let wrapped = overview[at + 1..].iter().take_while(|l| l.starts_with(' '));
+            let listed = std::iter::once(&overview[at]).chain(wrapped);
+            let names: Vec<String> = listed
+                .flat_map(|l| {
+                    l.chars()
+                        .skip(13)
+                        .collect::<String>()
+                        .split_whitespace()
+                        .map(String::from)
+                        .collect::<Vec<_>>()
+                })
+                .collect();
+            assert!(!names.is_empty(), "{mode:?} {group}");
+            for name in names {
+                let usage = out(&mut s, &format!(")HELP {name}"))[0].clone();
+                assert!(
+                    page.contains(&usage),
+                    "{mode:?} {group}: no {usage}\n{page:?}"
+                );
+            }
+            assert!(page.iter().all(|l| l.chars().count() <= 64));
+        }
+        assert_eq!(
+            out(&mut s, ")HELP workspace")[0],
+            out(&mut s, ")HELP WORKSPACE")[0]
+        );
+    }
+}

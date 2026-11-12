@@ -67,6 +67,9 @@ pub fn help(mode: Mode, name: Option<&str>) -> Vec<String> {
     if let Some(page) = here.iter().find(|p| p.name == name) {
         return page.lines.iter().map(|l| (*l).to_string()).collect();
     }
+    if let Some(lines) = group(&here, mode, &name) {
+        return lines;
+    }
     if all.iter().any(|p| p.name == name && p.group != "TOPIC") {
         return vec![format!("{} HAS NO ){name}.", dialect(mode))];
     }
@@ -100,4 +103,15 @@ fn overview(here: &[&Page], mode: Mode) -> Vec<String> {
     }
     lines.push(")HELP TOPICS FOR MORE: THE MODES, AND SW-APL'S OWN.".to_string());
     lines
+}
+
+/// `)HELP GROUP`, for a group the overview shows: its heading, then
+/// each command `mode` has in it, by the line that says how it is
+/// typed. `None` when `name` is no group.
+fn group(here: &[&Page], mode: Mode, name: &str) -> Option<Vec<String>> {
+    let (group, label) = GROUPS.iter().find(|(g, _)| *g == name)?;
+    let mut lines = vec![format!("{label} COMMANDS IN {}", dialect(mode))];
+    let usage = here.iter().filter(|p| p.group == *group);
+    lines.extend(usage.filter_map(|p| p.lines.first().map(|l| (*l).to_string())));
+    Some(lines)
 }

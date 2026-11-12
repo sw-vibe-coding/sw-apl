@@ -1,6 +1,6 @@
 number = 7
 slug = "help-groups"
-status = "pending"
+status = "in-progress"
 description = "Owner asked for regression tests of every )HELP page. )HELP WORKSPACE (and LI..."
 role = "production"
 context_files = []
