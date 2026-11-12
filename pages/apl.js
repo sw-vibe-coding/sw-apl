@@ -193,6 +193,11 @@ function chosen() {
 }
 const MODE = chosen();
 if (MODE === "C") document.body.classList.add("trs80");
+// Help says only what this mode has: each part marked with the modes
+// it is for is shown in those alone.
+for (const part of document.querySelectorAll("#help [data-modes]")) {
+  part.hidden = !part.dataset.modes.includes(MODE);
+}
 try {
   localStorage.setItem(CHOSEN, MODE);
 } catch { /* not remembered; the address still carries it */ }

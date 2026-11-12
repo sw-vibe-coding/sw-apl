@@ -802,8 +802,29 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   const top = await page.evaluate(() => document.getElementById('help').scrollTop);
   check('Help opens scrolled to the top', top === 0, String(top));
   const editor = await page.evaluate(() => [...document.querySelectorAll('#help h3')]
-    .some((h) => h.textContent === 'Defining and changing functions'));
+    .some((h) => h.textContent === 'Defining and changing functions' && h.checkVisibility()));
   check('Help has a section on the del editor', editor, 'no section');
+  await page.mouse.click(5, 5);
+  await page.context().close();
+}
+
+// 9e'. Help in (C) '80 is (C)'s alone: the TRS-80's keyboard and )DEF,
+//      not the 2741's picture or the del.
+{
+  const page = await visitIn('C');
+  await page.click('#show-help');
+  const help = await page.evaluate(() => {
+    const shown = (el) => el.checkVisibility();
+    const text = [...document.querySelectorAll('#help *')]
+      .filter((el) => el.children.length === 0 && shown(el))
+      .map((el) => el.textContent).join(' ');
+    const keyboard = [...document.querySelectorAll('#help img')].some(shown);
+    return { text, keyboard };
+  });
+  check('Help in (C) has no 2741 keyboard', !help.keyboard, 'the picture shows');
+  check('Help in (C) shows )DEF', help.text.includes(')DEF'), 'no )DEF');
+  check('Help in (C) shows no del', !help.text.includes('∇'), 'a del shows');
+  check('Help in (C) names no other mode', !/'70|'75/.test(help.text), 'another mode');
   await page.mouse.click(5, 5);
   await page.context().close();
 }

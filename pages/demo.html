@@ -395,6 +395,9 @@
     in this tab. There is no server: nothing typed here leaves your
     browser, and nothing is sent anywhere.
   </p>
+  <!-- Each part with data-modes is shown in those modes alone (apl.js):
+       (C) is typed on a TRS-80, not a 2741, and defines by command. -->
+  <div data-modes="AB">
   <h3>The keyboard</h3>
   <p>
     <img src="redistributed/apl-keyboard/APL-keybd2.svg"
@@ -444,10 +447,53 @@
     <li><b>&#x2B0D;</b> moves the board to the other edge;
       <b>&minus;</b> and <b>+</b> size its keys.</li>
   </ul>
+  </div>
+  <div data-modes="C">
+  <h3>The keyboard</h3>
+  <p>
+    APL80 is typed on the TRS-80's own keyboard, which has no APL
+    characters. An unshifted letter is a capital, for names. A shifted
+    letter is a symbol, and the screen shows it as the letter with a
+    dot at its left: shifted P, <b>&middot;P</b>, is <code>⍴</code>, and
+    shifted I, <b>&middot;I</b>, is <code>⍳</code>, so <b>&middot;I3</b>
+    gives <code>1 2 3</code>.
+  </p>
+  <ul>
+    <li><b>Substitutes:</b> <code>%</code> divides, <code>@</code> is
+      the logarithm, <code>$</code> not equal, <code>&amp;</code> and,
+      <code>"</code> the outer product's jot.</li>
+    <li><b>The minus signs:</b> <code>-</code> is the negative sign,
+      <code>-3</code>, and <code>_</code> subtracts, <code>5_2</code>.
+      In a name a <code>-</code> is part of it: <code>M-N</code> is one
+      name.</li>
+    <li><b>The arrows:</b> <code>[ \ ] ^</code> type
+      <code>↑ ↓ ← →</code>. An up or down arrow with nothing on its left
+      grades.</li>
+    <li><b>Round brackets</b> index a variable: <code>A(2)</code>.
+      <b>&middot;D</b> after a number is the axis:
+      <code>+/1&middot;DM</code> sums the columns.</li>
+    <li><b>&middot;F</b> sets the numeric format, <b>&middot;S</b> is
+      status, <b>&middot;C</b> begins a comment, <code>#</code> turns
+      characters into their codes and back, and <b>&middot;U</b> peeks
+      and pokes once <code>)RAM</code> is open.</li>
+  </ul>
+  <h3>Three ways to type</h3>
+  <ol>
+    <li><b>Tap the board.</b> <b>Keyboard</b> shows it: each key is the
+      character to type, with the symbol it stands for under it.</li>
+    <li><b>Your own keyboard.</b> Letters type capitals; hold
+      <kbd>Shift</kbd> for a shifted letter's symbol.</li>
+    <li><b>Paste.</b> Several lines run one by one, each as if typed and
+      entered -- a whole <code>)DEF</code> definition, then a call -- and
+      the last, unfinished line stays to be finished. Escape stops
+      them.</li>
+  </ol>
+  </div>
   <h3>Workspaces</h3>
   <p>
     <code>)LIB 1</code> lists the workspaces sw-apl ships;
-    <code>)LOAD 1 RACE</code> loads one. <code>)SAVE</code> writes
+    <code>)LOAD 1 <span data-modes="AB">RACE</span><span data-modes="C">LIFE</span></code>
+    loads one. <code>)SAVE</code> writes
     library 0 into this browser's own storage, so a saved workspace
     comes back next time you open this page in this browser -- and is
     in no other browser and on no other machine.
@@ -457,7 +503,8 @@
     <code>)LIBS</code> lists the libraries this page reaches: 0 is
     yours, 1 is what sw-apl ships, and 2 is EXTENDED, the workspaces
     kept in the sw-apl-workspaces repository. <code>)LIB 2</code> lists
-    them and <code>)LOAD 2 COURSE</code> loads one. Only library 0 can
+    them<span data-modes="AB"> and <code>)LOAD 2 COURSE</code> loads
+    one</span>. Only library 0 can
     be saved to.
   </p>
   <h3>Help at the prompt</h3>
@@ -466,6 +513,42 @@
     <code>)HELP LOAD</code> (or any command, or <code>)HELP TOPICS</code>)
     shows a page. <code>)DIALECT</code> says which mode you are in.
   </p>
+  <div data-modes="C">
+  <h3>Defining and changing functions</h3>
+  <p>
+    There is no del. <code>)DEF Z←SQ X</code> opens a new function and
+    asks for line 1; each line typed is the next, and an empty line,
+    for the TRS-80's BREAK, closes it. <code>)EDIT SQ</code> reopens
+    one. While it is open:
+  </p>
+  <ul>
+    <li><code>)?</code> shows the whole function, the header as line 0;
+      <code>)P 5</code> shows 14 lines from line 5.</li>
+    <li><code>)3</code> deletes line 3 and asks for its replacement;
+      <code>)0</code> asks for a new header.</li>
+    <li><code>)E 3</code> puts line 3 in the input line to type
+      over.</li>
+  </ul>
+  <p>
+    A name already in use is a DEFN ERROR: <code>)ERASE</code> it, or
+    open it with <code>)EDIT</code>. <code>)HELP EDITOR</code> has the
+    whole list.
+  </p>
+  <h3>The machine</h3>
+  <ul>
+    <li><code>)RAM</code> opens the TRS-80's memory:
+      <b>&middot;U</b><code> 16384</code> peeks,
+      <code>7 </code><b>&middot;U</b><code> 16384</code> pokes, and
+      15360 to 16383 is the screen. <code>51 # 65</code> prints an A.</li>
+    <li><code>)DOS</code> takes <code>DIR</code>, <code>KILL NAME</code>
+      and <code>RETURN</code>.</li>
+    <li><code>)TRON</code> traces each line of a function as it runs;
+      <code>)PS</code> and <code>)PD</code> print 6 digits or 15;
+      <code>)AUTO</code> sets a line to run when the workspace is
+      loaded, and <code>)EXEC</code> runs it.</li>
+  </ul>
+  </div>
+  <div data-modes="AB">
   <h3>Defining and changing functions</h3>
   <p>
     <code>∇Z←S W;V</code> opens a new function, and the prompt
@@ -491,8 +574,18 @@
     <code>)ERASE</code> it, or reopen it with <code>∇NAME</code>.
     <code>)HELP EDITOR</code> has the whole list.
   </p>
+  </div>
   <h3>The modes</h3>
-  <p>
+  <p data-modes="C">
+    The page runs one mode, named at the top beside <b>sw-apl</b>, which
+    leads back to the timeline, where the other modes are.
+    <b><u>C</u> '80</b> is TRS-80-inspired: APL80's own characters on a
+    64-by-16 screen, functions defined with <code>)DEF</code>, and the
+    machine's memory and DOS within reach. It lists and loads only the
+    workspaces that run in it, and a new mode is a new session in a
+    clear workspace, so <code>)SAVE</code> first what you want to keep.
+  </p>
+  <p data-modes="AB">
     The page runs one mode, named at the top beside <b>sw-apl</b>, which
     leads back to the timeline; each mode is reached from its place on
     the timeline. <b><u>A</u> '70</b> is APL\360-inspired. <b><u>B</u> '75</b> is IBM
@@ -539,7 +632,12 @@
       Or run it locally.</li>
   </ul>
   <h3>Credits</h3>
-  <p>
+  <p data-modes="C">
+    The screen and the board are drawn in JuliaMono, by Cormullion,
+    under the SIL Open Font License, fetched from its own release and
+    not kept here.
+  </p>
+  <p data-modes="AB">
     The keyboard picture is by Rursus, under CC BY-SA 3.0; the glyphs
     are drawn in APL385 Unicode, by Adrian Smith, public domain. The
     terms travel with them, in

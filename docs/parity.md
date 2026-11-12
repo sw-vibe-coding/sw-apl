@@ -269,6 +269,7 @@ above, and these rows are what (C) changes.
 | At most 32 functions in a workspace and 255 lines in a function | done | c80 session tests |
 | APL80's characters, typed and shown: shifted letters as lower case, the substitutes, the minus signs, the arrows and their codes, round-bracket indexing, the `d` axis, `f` and `s`, names with `.` and `-`; an APL glyph a CHARACTER ERROR; a function's lines kept as typed; workspace files in these characters | done | c80 keys tests (both), samples 93 and 97 |
 | The TRS-80's screen in the demo: 64 by 16, green on black, upper case, shifted letters drawn dotted, the line typed at the cursor; a board of APL80's characters | done | screen tests, board TRS-80 tests, checked by hand in Chrome |
+| The demo's Help in (C) is (C)'s alone: the TRS-80's keyboard, the shifted letters drawn dotted, `)DEF` and `)EDIT`, `)RAM` and `)DOS`; no 2741 picture, no del, no other mode | done | check-pages (C) Help, checked by hand in Chrome |
 | Functions defined by `)DEF` and changed by `)EDIT`, with `)?`, `)P n`, `)n`, `)0` and `)E n`; an empty line for BREAK; no del | done | c80 command tests, sample 97 |
 | A workspace saved in (C) runs in (C) alone, written with `)DEF` and `)AUTO` | done | c80 command tests |
 | `)TRON` and `)TROFF`, `)PS` and `)PD`, `)AUTO` and `)EXEC` | done | c80 command tests, sample 97 |
