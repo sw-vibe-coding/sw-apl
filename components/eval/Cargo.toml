@@ -12,6 +12,7 @@ members = [
     "crates/apl-store",
     "crates/apl-libraries",
     "crates/apl-modes",
+    "crates/apl-profile",
     "crates/apl-shelves",
     "crates/apl-uses",
     "crates/apl-eval",

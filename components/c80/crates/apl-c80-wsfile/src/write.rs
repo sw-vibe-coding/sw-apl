@@ -2,19 +2,23 @@
 
 use apl_ast::Defn;
 use apl_c80_keys::{named, shown};
-use apl_modes::{Mode, Modes};
+use apl_modes::{Feature, Mode, Modes};
 use apl_scan::header_text;
 use apl_value::{Array, Data};
 use apl_workspace::Saved;
 use apl_wsfile::{heading, literal};
 
-/// `saved` as a file for `mode` alone, saved at `when`, in APL80's
+/// `saved` as a file for `mode` alone, saved at `when`, when `mode`
+/// defines by command, as (C) does -- `None` in any other -- in APL80's
 /// characters: each variable as its assignment, each function as
 /// `)DEF`, its header, its lines as they were typed, and BREAK; the
 /// latent expression as `)AUTO`. APL80 has no locking, so nothing in
 /// it is obscured.
 #[must_use]
-pub fn write(saved: &Saved, when: &str, mode: Mode) -> String {
+pub fn write(saved: &Saved, when: &str, mode: Mode) -> Option<String> {
+    if !mode.profile().has(Feature::DefineByCommand) {
+        return None;
+    }
     let saved = &saved.unwound();
     let mut lines = heading(saved, when, Modes::only(mode));
     // What it is, as a comment APL80 can type: `c`, in capitals.
@@ -26,7 +30,7 @@ pub fn write(saved: &Saved, when: &str, mode: Mode) -> String {
     for name in functions {
         lines.extend(definition(&saved.funcs[name]));
     }
-    lines.join("\n") + "\n"
+    Some(lines.join("\n") + "\n")
 }
 
 /// Each variable as the assignment that sets it, sorted by name.

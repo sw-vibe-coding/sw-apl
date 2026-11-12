@@ -32,7 +32,9 @@ pub struct Answer {
     pub off: bool,
 }
 
-/// Run one system command: the text after the parenthesis.
+/// Run one system command: the text after the parenthesis. The
+/// '70-only, inquiry, sw-apl and '80-only commands answer for
+/// themselves, and None for a name they do not know.
 pub fn system_command(ws: &mut Workspace, command: &str) -> Answer {
     let mut words = command.split_whitespace();
     let typed = words.next().unwrap_or("").to_ascii_uppercase();
@@ -49,8 +51,6 @@ pub fn system_command(ws: &mut Workspace, command: &str) -> Answer {
         ("DROP", _) => drop_workspace(ws, &rest),
         ("LIB", _) => lib(ws, &rest),
         ("COPY" | "PCOPY", _) => return copy(ws, &rest, name == "PCOPY"),
-        // The '70-only, inquiry, sw-apl and '80-only commands answer
-        // for themselves, and None for a name they do not know.
         _ => seventy(&mut ws.saved, ws.mode, &name, &rest)
             .or_else(|| inquiry(ws, &name, &rest))
             .or_else(|| extension(ws, &name, &rest))

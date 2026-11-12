@@ -19,7 +19,6 @@ apl-execute = { path = "../../../b75/crates/apl-execute" }
 apl-format = { path = "../../../b75/crates/apl-format" }
 apl-sysfns = { path = "../../../b75/crates/apl-sysfns" }
 apl-sysvars = { path = "../../../b75/crates/apl-sysvars" }
-apl-ibeam = { path = "../../../a70/crates/apl-ibeam" }
 apl-parse = { path = "../../../parse/crates/apl-parse" }
 apl-quad = { path = "../apl-quad" }
 apl-prims = { path = "../../../prims/crates/apl-prims" }

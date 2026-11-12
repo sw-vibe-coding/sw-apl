@@ -6,4 +6,4 @@
 
 mod cut;
 
-pub use cut::{circular, factorial, leave_out};
+pub use cut::{circular, dyadic, factorial, leave_out};

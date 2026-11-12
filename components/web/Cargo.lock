@@ -89,11 +89,17 @@ dependencies = [
 name = "apl-board"
 version = "0.1.0"
 dependencies = [
- "apl-c80-screen",
  "apl-keyboard",
  "apl-modes",
  "serde_json",
  "wasm-bindgen",
+]
+
+[[package]]
+name = "apl-c80-chars"
+version = "0.1.0"
+dependencies = [
+ "apl-c80-screen",
 ]
 
 [[package]]
@@ -139,7 +145,7 @@ dependencies = [
 name = "apl-c80-keys"
 version = "0.1.0"
 dependencies = [
- "apl-c80-screen",
+ "apl-c80-chars",
  "apl-value",
 ]
 
@@ -153,6 +159,19 @@ dependencies = [
 [[package]]
 name = "apl-c80-screen"
 version = "0.1.0"
+
+[[package]]
+name = "apl-c80-session"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-c80-define",
+ "apl-c80-keys",
+ "apl-eval",
+ "apl-reply",
+ "apl-sysvars",
+ "apl-value",
+]
 
 [[package]]
 name = "apl-c80-status"
@@ -253,6 +272,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-del"
+version = "0.1.0"
+dependencies = [
+ "apl-editor",
+ "apl-eval",
+ "apl-parse",
+ "apl-reply",
+ "apl-value",
+]
+
+[[package]]
 name = "apl-display"
 version = "0.1.0"
 dependencies = [
@@ -281,7 +311,6 @@ dependencies = [
  "apl-call",
  "apl-execute",
  "apl-format",
- "apl-ibeam",
  "apl-modes",
  "apl-parse",
  "apl-prims",
@@ -392,6 +421,7 @@ name = "apl-modes"
 version = "0.1.0"
 dependencies = [
  "apl-clock",
+ "apl-profile",
  "apl-store",
  "apl-value",
 ]
@@ -526,6 +556,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-profile"
+version = "0.1.0"
+
+[[package]]
 name = "apl-quad"
 version = "0.1.0"
 dependencies = [
@@ -598,8 +632,10 @@ version = "0.1.0"
 dependencies = [
  "apl-c80-define",
  "apl-c80-keys",
+ "apl-c80-session",
  "apl-call",
  "apl-commands",
+ "apl-del",
  "apl-display",
  "apl-editor",
  "apl-eval",
@@ -680,6 +716,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-trs80"
+version = "0.1.0"
+dependencies = [
+ "apl-c80-screen",
+ "serde_json",
+ "wasm-bindgen",
+]
+
+[[package]]
 name = "apl-uses"
 version = "0.1.0"
 dependencies = [
@@ -703,6 +748,7 @@ dependencies = [
  "apl-board",
  "apl-serve",
  "apl-session",
+ "apl-trs80",
  "apl-wasm-store",
  "apl-wire",
  "console_error_panic_hook",

@@ -1,27 +1,46 @@
-//! Expression evaluation.
+//! Expression evaluation: a line as typed, a line in glyphs, an
+//! expression, and the indexing and quad forms.
 
 use apl_ast::Expr;
-use apl_call::{branch_target, value};
+use apl_call::value;
+use apl_modes::Feature;
 use apl_parse::parse;
 use apl_value::{AplError, AplResult, Array, ErrorKind};
 use apl_workspace::{Output, Workspace};
 
-use crate::line::eval_line;
+use crate::apply::statement;
 use crate::{apply, forms};
 
-/// Parse and evaluate one line in glyphs. `Output::Nothing` when there is
-/// nothing to display: a blank line, a comment, an assignment
-/// (including `⎕←`, which displays through the output buffer), or a
-/// call to a defined function that declares no result. In (C), a line
-/// may be a format statement instead, and what is shown is laid out
-/// by the format in force (`apl-c80-format`).
+/// Evaluate one line as it was typed. In (C) it is typed in APL80's
+/// characters and translated into glyphs first, knowing which names
+/// are functions now (`apl-c80-keys`), and may be a format statement
+/// (`apl-c80-format`); an error's caret is put back under what was
+/// typed. Every other mode types glyphs.
 ///
 /// # Errors
 /// Any lexical, syntax, or evaluation error, with a caret.
-pub(crate) fn eval_glyphs(ws: &mut Workspace, line: &str) -> AplResult<Output> {
-    if let Some(done) = apl_c80_format::statement(ws, line, eval_glyphs) {
-        return done;
+pub fn eval_line(ws: &mut Workspace, line: &str) -> AplResult<Output> {
+    // A workspace file's directives, `⍝!MODES (C)` and the rest, are
+    // comments no keyboard of APL80's could type: the machine's lines.
+    if !ws.mode.profile().has(Feature::Apl80Keys) || line.trim_start().starts_with('⍝') {
+        return eval_glyphs(ws, line);
     }
+    let typed = apl_c80_keys::glyphs(line, &|n| ws.is_function(n))?;
+    let done = apl_c80_format::statement(ws, &typed.text, eval_glyphs);
+    done.unwrap_or_else(|| eval_glyphs(ws, &typed.text))
+        .map_err(|e| typed.place(e))
+}
+
+/// Parse and evaluate one line in glyphs. `Output::Nothing` when there
+/// is nothing to display: a blank line, a comment, an assignment
+/// (including `⎕←`, which displays through the output buffer), or a
+/// call to a defined function that declares no result. What is shown
+/// is laid out by (C)'s format statement when one is in force
+/// (`apl-c80-format`).
+///
+/// # Errors
+/// Any lexical, syntax, or evaluation error, with a caret.
+fn eval_glyphs(ws: &mut Workspace, line: &str) -> AplResult<Output> {
     let takes_argument =
         |n: &str| apl_sysfns::is_function(n) || ws.function(n).is_some_and(|d| d.right.is_some());
     let Some(expr) = parse(line, ws.mode.glyphs(), &takes_argument)? else {
@@ -45,36 +64,6 @@ pub(crate) fn eval_glyphs(ws: &mut Workspace, line: &str) -> AplResult<Output> {
     let value = eval_expr(ws, &expr)?;
     let shown = (!silent).then_some(value);
     apl_c80_format::shaped(ws, shown.map_or(Output::Nothing, Output::Value))
-}
-
-/// The statement shapes that do not evaluate to one value: mixed
-/// output, a branch, and a bare call to a defined function, which
-/// displays nothing when the header declares no result. `None` when
-/// the statement is an ordinary expression.
-fn statement(ws: &mut Workspace, expr: &Expr) -> AplResult<Option<Output>> {
-    if let Expr::Mixed(parts) = expr {
-        let parts = parts
-            .iter()
-            .map(|p| eval_expr(ws, p))
-            .collect::<AplResult<_>>()?;
-        return Ok(Some(Output::Mixed(parts)));
-    }
-    if let Expr::Branch { target, .. } = expr {
-        let Some(target) = target else {
-            return Ok(Some(Output::Branch(None)));
-        };
-        let line = branch_target(&eval_expr(ws, target)?)?;
-        return Ok(Some(
-            line.map_or(Output::Nothing, |n| Output::Branch(Some(n))),
-        ));
-    }
-    let Some((name, pos, left, right)) = expr.defined_call().filter(|c| ws.is_function(c.0)) else {
-        return Ok(None);
-    };
-    let right = right.map(|e| eval_expr(ws, e)).transpose()?;
-    let left = left.map(|e| eval_expr(ws, e)).transpose()?;
-    let got = apl_call::call(ws, name, left, right, eval_line).map_err(|e| e.at(pos))?;
-    Ok(Some(got.map_or(Output::Nothing, Output::Value)))
 }
 
 /// Evaluate an expression tree. A system variable, a name only (B)

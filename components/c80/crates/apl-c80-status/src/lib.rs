@@ -9,4 +9,4 @@ mod special;
 mod status;
 
 pub use codes::{code, glyph};
-pub use status::monadic;
+pub use status::system;

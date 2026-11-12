@@ -1,5 +1,4 @@
-//! The 2741 keyboard in a browser, or in (C) the TRS-80's and its
-//! 64-by-16 screen (`Trs80`, over `apl-c80-screen`).
+//! The 2741 keyboard in a browser, or in (C) the TRS-80's.
 //!
 //! `apl-keyboard` holds the whole of how a glyph is typed -- the
 //! keymap, the overstrike state machine, the cells a line is made of
@@ -21,7 +20,3 @@ pub use press::{Act, act, trs80};
 mod board;
 #[cfg(target_arch = "wasm32")]
 pub use board::Board;
-#[cfg(target_arch = "wasm32")]
-mod screen;
-#[cfg(target_arch = "wasm32")]
-pub use screen::Trs80;

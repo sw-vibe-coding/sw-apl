@@ -60,6 +60,10 @@ sw-apl/
                                    fetched text
                apl-modes           modes: which modes a workspace runs
                                    in, and the libraries each mode sees
+               apl-profile         profile: what each mode can do -- the
+                                   features it adds and the cuts it
+                                   makes -- asked as questions rather
+                                   than by mode
                apl-quad            quad and quote-quad input: prompting
                                    and reading a line
                apl-saved           saved half of a workspace: symbol
@@ -83,6 +87,9 @@ sw-apl/
                                    with a parenthesis
                apl-copy            )COPY and )PCOPY: taking names out of
                                    a stored workspace
+               apl-del             del: an opening del and the lines
+                                   typed in definition mode, as a
+                                   session takes them
                apl-editor          del editor: definition mode, line
                                    editing, display
                apl-extensions      own system commands, which no
@@ -126,6 +133,9 @@ sw-apl/
     c80/       apl-c80-commands    system commands only the (C) '80 mode
                                    has: )TRON and )TROFF, )PS and )PD,
                                    and )AUTO
+               apl-c80-chars       characters: each of APL80's characters
+                                   and the glyph it stands for, one at a
+                                   time, both ways
                apl-c80-cuts        cuts: what the (C) '80 mode leaves
                                    out of a statement and the mixed
                                    functions, after APL80's Limitations
@@ -148,6 +158,9 @@ sw-apl/
                apl-c80-screen      screen: the TRS-80's character codes as
                                    the (C) '80 mode holds and sends them,
                                    and its 64 by 16 screen
+               apl-c80-session     session in the (C) '80 mode: )DEF,
+                                   )EDIT and )EXEC, the lines of a
+                                   function open by command, and no del
                apl-c80-status      status and conversion: the (C) '80
                                    mode's s operator, typed as the
                                    I-beam, and # between characters and
@@ -165,8 +178,10 @@ sw-apl/
                                    (B) '75 and (C) '80: terminal REPL
                                    and batch runner
     web/       apl-board           the 2741 keyboard in a browser, or in
-                                   (C) the TRS-80's and its screen: one
+                                   (C) the TRS-80's: one
                                    keystroke in, the line out
+               apl-trs80           the TRS-80's 64 by 16 screen in a
+                                   browser, for the (C) '80 mode
                apl-serve           service: one session per connection,
                                    over any link
                apl-wasm            in a browser: the session in a worker,
@@ -207,9 +222,9 @@ it can be checked against them.
 glyphs -> value -> display -> console
 value -> lex (and strike) -> scan -> parse
 value -> c80 (scalar cuts, keys) -> prims (dispatch; scalar, mixed, ops and the rest)
-prims + console + clock + modes -> workspace -> call, quad
+prims + console + clock + modes (+ profile) -> workspace -> call, quad
 parse + prims + call + quad + a70 + b75 + c80 -> eval
-eval + c80 (commands, definition, wsfile) -> session (commands, editor, library, extensions) -> cli (+ config)
+eval + c80 (commands, definition, session, wsfile) -> session (commands, del, editor, library, extensions) -> cli (+ config)
 eval -> session -> web (wire, serve, server; wasm, board, wasm-store)
 lex (strike) -> term (keyboard, paper, typing, aplterm) -> wire
 ```

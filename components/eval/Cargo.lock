@@ -26,6 +26,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-c80-chars"
+version = "0.1.0"
+dependencies = [
+ "apl-c80-screen",
+]
+
+[[package]]
 name = "apl-c80-cuts"
 version = "0.1.0"
 dependencies = [
@@ -49,7 +56,7 @@ dependencies = [
 name = "apl-c80-keys"
 version = "0.1.0"
 dependencies = [
- "apl-c80-screen",
+ "apl-c80-chars",
  "apl-value",
 ]
 
@@ -129,7 +136,6 @@ dependencies = [
  "apl-call",
  "apl-execute",
  "apl-format",
- "apl-ibeam",
  "apl-modes",
  "apl-parse",
  "apl-prims",
@@ -207,6 +213,7 @@ name = "apl-modes"
 version = "0.1.0"
 dependencies = [
  "apl-clock",
+ "apl-profile",
  "apl-store",
  "apl-value",
 ]
@@ -331,6 +338,10 @@ dependencies = [
  "apl-prims-mixed",
  "apl-value",
 ]
+
+[[package]]
+name = "apl-profile"
+version = "0.1.0"
 
 [[package]]
 name = "apl-quad"

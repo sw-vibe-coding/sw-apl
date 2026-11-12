@@ -3,8 +3,8 @@
 
 use apl_value::{AplError, AplResult, ErrorKind};
 
-use crate::chars::data;
 use crate::typed::{Last, Out};
+use apl_c80_chars::data;
 
 impl Out<'_> {
     /// `c`, typed at `at`, if it is one of these: put down, and `true`.
@@ -14,17 +14,12 @@ impl Out<'_> {
     /// number or name before it.
     pub(crate) fn mark(&mut self, c: char, at: usize) -> AplResult<bool> {
         let argued = matches!(self.last, Last::Value | Last::Variable);
+        // A closing bracket closes the last one opened, which indexed or grouped.
+        let closes = c == ')' && self.opened.pop() == Some(true);
         let (g, last) = match c {
             '(' if self.last == Last::Variable => ('[', Last::Start),
             '(' => ('(', Last::Start),
-            ')' => (
-                if self.opened.pop().unwrap_or(false) {
-                    ']'
-                } else {
-                    ')'
-                },
-                Last::Value,
-            ),
+            ')' => (if closes { ']' } else { ')' }, Last::Value),
             '↑' | '[' => (if argued { '↑' } else { '⍋' }, Last::Function),
             '↓' | '\\' => (if argued { '↓' } else { '⍒' }, Last::Function),
             '←' | ']' => ('←', Last::Start),
@@ -66,11 +61,4 @@ impl Out<'_> {
         self.push(g, at);
         Ok(())
     }
-}
-
-/// Characters typed as data -- in reply to quote-quad -- each as the
-/// character the glyphs hold for it.
-#[must_use]
-pub fn text(typed: &str) -> String {
-    typed.chars().map(|c| data(c).unwrap_or(c)).collect()
 }

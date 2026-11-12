@@ -1,0 +1,18 @@
+[package]
+name = "apl-del"
+description = "sw-apl del: an opening del and the lines typed in definition mode, as a session takes them"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-editor = { path = "../apl-editor" }
+apl-eval = { path = "../../../eval/crates/apl-eval" }
+apl-parse = { path = "../../../parse/crates/apl-parse" }
+apl-reply = { path = "../apl-reply" }
+apl-value = { path = "../../../value/crates/apl-value" }
+
+[lints]
+workspace = true

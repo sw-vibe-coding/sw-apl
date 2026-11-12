@@ -49,6 +49,7 @@ pub fn apply_dyadic(f: char, left: Number, right: Number, ct: f64) -> AplResult<
         return Ok(Number::Int(truth.into()));
     }
     let (lhs, rhs) = (left.as_f64(), right.as_f64());
+    apl_c80_scalar::dyadic(f, lhs, rhs)?;
     if let Some(value) = dyadic_arith(f, lhs, rhs, ct) {
         return finite(value?);
     }
@@ -56,15 +57,8 @@ pub fn apply_dyadic(f: char, left: Number, right: Number, ct: f64) -> AplResult<
         return Ok(Number::Int(truth?.into()));
     }
     match f {
-        '○' => {
-            apl_c80_scalar::circular(lhs)?;
-            finite(circular(lhs, rhs)?)
-        }
-        '!' => {
-            apl_c80_scalar::factorial(lhs)?;
-            apl_c80_scalar::factorial(rhs)?;
-            finite(binomial(lhs, rhs)?)
-        }
+        '○' => finite(circular(lhs, rhs)?),
+        '!' => finite(binomial(lhs, rhs)?),
         _ => Err(AplError::new(ErrorKind::Syntax)),
     }
 }

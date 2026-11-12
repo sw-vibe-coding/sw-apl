@@ -1,0 +1,14 @@
+[package]
+name = "apl-c80-chars"
+description = "sw-apl characters: each of APL80's characters and the glyph it stands for, one at a time, both ways, for the (C) '80 mode"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-c80-screen = { path = "../apl-c80-screen" }
+
+[lints]
+workspace = true

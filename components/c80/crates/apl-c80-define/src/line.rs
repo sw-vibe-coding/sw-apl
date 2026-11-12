@@ -1,10 +1,11 @@
 //! One typed line in definition mode: a statement, a line command, or
 //! BREAK.
 
-use apl_scan::header_text;
+use apl_ast::Defn;
+use apl_scan::{header_text, parse_header};
 use apl_value::{AplError, AplResult, ErrorKind};
 
-use crate::keyed::{Keyed, Slot, Typed, WIDTH, header};
+use crate::keyed::{Keyed, Slot, Typed, WIDTH};
 
 /// How many lines `)P` shows: a screen of 16, less the command and the
 /// prompt.
@@ -41,36 +42,32 @@ impl Keyed {
     }
 
     /// A line command: `)?`, `)P n`, `)n`, `)E n`; anything else is a
-    /// system command, and not definition mode's.
+    /// system command, and not definition mode's. Its letters are
+    /// capitals: on the TRS-80 a lower-case letter is a shifted one, a
+    /// symbol.
     fn command(&mut self, command: &str) -> AplResult<Typed> {
-        let upper = command.to_ascii_uppercase();
         let number = |rest: &str| rest.trim().parse::<usize>().ok();
         let lines = self.defn.body.len();
-        if upper == "?" {
+        if command == "?" {
             self.slot = None;
             return Ok(Typed::Stay(self.shown(0, lines + 1)));
         }
-        if let Some(from) = upper.strip_prefix('P').and_then(number) {
+        if let Some(from) = command.strip_prefix('P').and_then(number) {
             return Ok(Typed::Stay(self.shown(from, PAGE)));
         }
-        if let Some(n) = upper.strip_prefix('E').and_then(number) {
-            let there = (1..=lines).contains(&n);
-            self.slot = Some(Slot::Over(n)).filter(|_| there);
-            return there
-                .then(|| Typed::Stay(Vec::new()))
-                .ok_or_else(|| AplError::new(ErrorKind::Defn));
-        }
-        let Some(n) = number(&upper) else {
+        let over = command.strip_prefix('E').and_then(number);
+        let Some(n) = over.or_else(|| number(command)) else {
             return Ok(Typed::Command);
         };
-        self.slot = match n {
-            0 => Some(Slot::Header),
-            n if n <= lines => {
-                self.defn.body.remove(n - 1);
-                Some(Slot::Insert(n))
-            }
-            _ => return Err(AplError::new(ErrorKind::Defn)),
-        };
+        self.slot = Some(match (over.is_some(), n) {
+            (false, 0) => Slot::Header,
+            (_, n) if n == 0 || n > lines => return Err(AplError::new(ErrorKind::Defn)),
+            (true, n) => Slot::Over(n),
+            (false, n) => Slot::Insert(n),
+        });
+        if let Some(Slot::Insert(n)) = self.slot {
+            self.defn.body.remove(n - 1);
+        }
         Ok(Typed::Stay(Vec::new()))
     }
 
@@ -84,4 +81,19 @@ impl Keyed {
             .map(|(n, text)| format!("{:<WIDTH$}{text}", format!("[{n}]")));
         numbered.skip(from).take(count).collect()
     }
+}
+
+/// A header typed in APL80's characters, from column `at` of its line,
+/// as a definition to fill.
+///
+/// # Errors
+/// As the translation and `parse_header` give them, the caret under
+/// what was typed.
+pub fn header(text: &str, glyphs: &'static str, at: usize) -> AplResult<Defn> {
+    let shift = |mut e: AplError| {
+        e.caret = e.caret.map(|c| c + at);
+        e
+    };
+    let typed = apl_c80_keys::glyphs(text, &|_| false).map_err(shift)?;
+    parse_header(&typed.text, glyphs).map_err(|e| shift(typed.place(e)))
 }

@@ -7,8 +7,7 @@
 mod extra;
 mod line;
 mod mode;
-mod profile;
 
+pub use apl_profile::{Cut, Feature, Profile};
 pub use line::{modes, render, retag};
 pub use mode::{Host, LETTERS, Mode, Modes};
-pub use profile::{Cut, Feature, Profile};

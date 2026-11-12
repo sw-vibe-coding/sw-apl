@@ -8,7 +8,6 @@ use apl_value::FUZZ;
 use apl_workspace::Saved;
 
 use crate::literal::literal;
-use crate::obscure::{PREAMBLE, rot13};
 
 /// The prefix of a line that is a comment to APL and an instruction
 /// to `)LOAD`: what APL has no way of saying about itself.
@@ -43,7 +42,15 @@ pub fn write(saved: &Saved, when: &str) -> String {
     let saved = &saved.unwound();
     let mut lines = heading(saved, when, runs_in(saved));
     lines.extend(saved.latent.iter().map(|lx| format!("⎕LX←{}", literal(lx))));
-    lines.extend(objects(saved, definition));
+    // Each function in del form, closed the way it was closed: del-tilde
+    // when it is locked, which is the only way a file can carry a locked
+    // function at all. Locking guards the editor, not the file.
+    lines.extend(objects(saved, |defn| {
+        let mut lines = vec![format!("∇{}", header_text(defn))];
+        lines.extend(defn.body.iter().cloned());
+        lines.push(if defn.locked { "⍫" } else { "∇" }.to_string());
+        lines
+    }));
     if !saved.funcs.values().any(|f| f.locked) {
         return lines.join("\n") + "\n";
     }
@@ -103,13 +110,38 @@ pub fn objects(saved: &Saved, define: fn(&Defn) -> Vec<String>) -> Vec<String> {
     lines
 }
 
-/// One function in del form, closed the way it was closed: del-tilde
-/// when it is locked, which is the only way a file can carry a locked
-/// function at all. A text workspace therefore shows what the editor
-/// will not; locking guards the editor, not the file.
-fn definition(defn: &Defn) -> Vec<String> {
-    let mut lines = vec![format!("∇{}", header_text(defn))];
-    lines.extend(defn.body.iter().cloned());
-    lines.push(if defn.locked { "⍫" } else { "∇" }.to_string());
-    lines
+/// What an obscured workspace begins with, before anything
+/// scrambled. `)LOAD` tells the two forms apart by the first line;
+/// the other two are there for the person who runs the file as a
+/// program, so it says what it is and signs off instead of printing
+/// a screen of CHARACTER ERRORs.
+pub const PREAMBLE: [&str; 3] = [
+    "⍝!OBSCURED sw-apl workspace. Rot-13, not encryption: docs/workspaces.md.",
+    "'OBSCURED WORKSPACE. )LOAD IT -- IT CANNOT BE RUN AS A PROGRAM.'",
+    ")OFF",
+];
+
+/// Letters moved thirteen places, everything else left alone.
+///
+/// This is obscuring, not encryption, and the documentation must not
+/// suggest otherwise: anyone who means to read a rot-13 file can.
+/// What it stops is reading a locked function by accident or by
+/// curiosity, which is what APL\360's binary workspaces stopped.
+///
+/// Rot-13 is its own inverse, so this one function serves both
+/// directions: writing scrambles and `plain` unscrambles with the
+/// same call.
+#[must_use]
+pub fn rot13(text: &str) -> String {
+    text.chars()
+        .map(|c| {
+            let first = match c {
+                'A'..='Z' => b'A',
+                'a'..='z' => b'a',
+                _ => return c,
+            };
+            // Both arms above are ASCII, so this cannot overflow.
+            char::from(first + ((c as u8) - first + 13) % 26)
+        })
+        .collect()
 }

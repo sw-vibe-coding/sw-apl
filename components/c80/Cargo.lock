@@ -12,6 +12,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-a70-commands"
+version = "0.1.0"
+dependencies = [
+ "apl-eval",
+ "apl-inquiry",
+ "apl-library",
+ "apl-settings",
+]
+
+[[package]]
 name = "apl-ast"
 version = "0.1.0"
 dependencies = [
@@ -23,6 +33,13 @@ name = "apl-attn"
 version = "0.1.0"
 dependencies = [
  "libc",
+]
+
+[[package]]
+name = "apl-c80-chars"
+version = "0.1.0"
+dependencies = [
+ "apl-c80-screen",
 ]
 
 [[package]]
@@ -68,7 +85,7 @@ dependencies = [
 name = "apl-c80-keys"
 version = "0.1.0"
 dependencies = [
- "apl-c80-screen",
+ "apl-c80-chars",
  "apl-value",
 ]
 
@@ -82,6 +99,19 @@ dependencies = [
 [[package]]
 name = "apl-c80-screen"
 version = "0.1.0"
+
+[[package]]
+name = "apl-c80-session"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-c80-define",
+ "apl-c80-keys",
+ "apl-eval",
+ "apl-reply",
+ "apl-sysvars",
+ "apl-value",
+]
 
 [[package]]
 name = "apl-c80-status"
@@ -109,11 +139,41 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-call"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-attn",
+ "apl-scan",
+ "apl-value",
+ "apl-workspace",
+]
+
+[[package]]
 name = "apl-clock"
 version = "0.1.0"
 dependencies = [
  "chrono",
  "libc",
+]
+
+[[package]]
+name = "apl-commands"
+version = "0.1.0"
+dependencies = [
+ "apl-a70-commands",
+ "apl-c80-commands",
+ "apl-c80-keys",
+ "apl-c80-wsfile",
+ "apl-copy",
+ "apl-eval",
+ "apl-extensions",
+ "apl-inquiry",
+ "apl-library",
+ "apl-settings",
+ "apl-shelves",
+ "apl-value",
+ "apl-wsfile",
 ]
 
 [[package]]
@@ -125,10 +185,76 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-console-control"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+]
+
+[[package]]
+name = "apl-copy"
+version = "0.1.0"
+dependencies = [
+ "apl-eval",
+ "apl-library",
+ "apl-wsfile",
+]
+
+[[package]]
 name = "apl-display"
 version = "0.1.0"
 dependencies = [
  "apl-value",
+]
+
+[[package]]
+name = "apl-eval"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-c80-cuts",
+ "apl-c80-format",
+ "apl-c80-keys",
+ "apl-c80-status",
+ "apl-call",
+ "apl-execute",
+ "apl-format",
+ "apl-modes",
+ "apl-parse",
+ "apl-prims",
+ "apl-quad",
+ "apl-store",
+ "apl-sysfns",
+ "apl-sysvars",
+ "apl-value",
+ "apl-workspace",
+]
+
+[[package]]
+name = "apl-execute"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-value",
+ "apl-workspace",
+]
+
+[[package]]
+name = "apl-extensions"
+version = "0.1.0"
+dependencies = [
+ "apl-eval",
+]
+
+[[package]]
+name = "apl-fix"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-lex",
+ "apl-scan",
+ "apl-value",
+ "apl-workspace",
 ]
 
 [[package]]
@@ -159,6 +285,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-inquiry"
+version = "0.1.0"
+dependencies = [
+ "apl-eval",
+ "apl-library",
+ "apl-value",
+]
+
+[[package]]
 name = "apl-lex"
 version = "0.1.0"
 dependencies = [
@@ -166,10 +301,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-library"
+version = "0.1.0"
+dependencies = [
+ "apl-eval",
+ "apl-shelves",
+ "apl-wsfile",
+]
+
+[[package]]
 name = "apl-modes"
 version = "0.1.0"
 dependencies = [
  "apl-clock",
+ "apl-profile",
  "apl-store",
  "apl-value",
 ]
@@ -178,6 +323,16 @@ dependencies = [
 name = "apl-numeral"
 version = "0.1.0"
 dependencies = [
+ "apl-value",
+]
+
+[[package]]
+name = "apl-parse"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-lex",
+ "apl-scan",
  "apl-value",
 ]
 
@@ -286,6 +441,27 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-profile"
+version = "0.1.0"
+
+[[package]]
+name = "apl-quad"
+version = "0.1.0"
+dependencies = [
+ "apl-c80-keys",
+ "apl-modes",
+ "apl-value",
+ "apl-workspace",
+]
+
+[[package]]
+name = "apl-reply"
+version = "0.1.0"
+dependencies = [
+ "apl-commands",
+]
+
+[[package]]
 name = "apl-saved"
 version = "0.1.0"
 dependencies = [
@@ -327,6 +503,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-settings"
+version = "0.1.0"
+dependencies = [
+ "apl-modes",
+ "apl-workspace",
+]
+
+[[package]]
+name = "apl-shelves"
+version = "0.1.0"
+dependencies = [
+ "apl-modes",
+ "apl-store",
+]
+
+[[package]]
 name = "apl-space"
 version = "0.1.0"
 dependencies = [
@@ -337,6 +529,30 @@ dependencies = [
 [[package]]
 name = "apl-store"
 version = "0.1.0"
+
+[[package]]
+name = "apl-sysfns"
+version = "0.1.0"
+dependencies = [
+ "apl-console-control",
+ "apl-fix",
+ "apl-lex",
+ "apl-scan",
+ "apl-value",
+ "apl-workspace",
+]
+
+[[package]]
+name = "apl-sysvars"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-clock",
+ "apl-modes",
+ "apl-settings",
+ "apl-value",
+ "apl-workspace",
+]
 
 [[package]]
 name = "apl-transcript"

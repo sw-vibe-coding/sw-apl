@@ -5,14 +5,18 @@
 //! leaves the commands, because running the file would apply its
 //! settings and change the index origin under code already written.
 
+use apl_modes::{modes, retag};
+
+use crate::write::{DIRECTIVE, PREAMBLE, rot13};
+
 /// The file's definitions, each as the name it defines and the lines
 /// that define it, in the order they appear. Commands and directives
 /// are left out, which is what makes copying different from loading.
+/// A definition ends at a closing del, or for (C)'s `)DEF` at the
+/// empty line that stands for BREAK.
 #[must_use]
 pub fn definitions(text: &str) -> Vec<(String, Vec<String>)> {
     let mut groups: Vec<(String, Vec<String>)> = Vec::new();
-    // What ends the definition open, if one is: a closing del, or for
-    // (C)'s `)DEF` the empty line that stands for BREAK.
     let mut open: Option<fn(&str) -> bool> = None;
     for line in text.lines() {
         if let Some(closes) = open {
@@ -70,4 +74,28 @@ fn function_name(header: &str) -> String {
         _ => None,
     };
     (*name.unwrap_or(&"")).to_string()
+}
+
+/// A workspace file as APL, whichever way it was written. A plain
+/// file is itself; an obscured one -- which is what a workspace
+/// holding a locked function is written as -- is what lies under the
+/// preamble, unscrambled. The two are told apart by the first line.
+///
+/// Everything that reads a workspace goes through here, so nothing
+/// above it needs to know the two forms exist.
+#[must_use]
+pub fn plain(text: &str) -> String {
+    if !text.starts_with(PREAMBLE[0]) {
+        return text.to_string();
+    }
+    // The modes line follows the preamble in the clear, and goes back
+    // where a plain file has it.
+    let mut body = text.lines().skip(PREAMBLE.len()).peekable();
+    let clear = body.next_if(|l| l.starts_with(&format!("{DIRECTIVE}MODES")));
+    let body: Vec<&str> = body.collect();
+    let revealed = rot13(&(body.join("\n") + "\n"));
+    match clear {
+        Some(_) => retag(&revealed, modes(text)),
+        None => revealed,
+    }
 }

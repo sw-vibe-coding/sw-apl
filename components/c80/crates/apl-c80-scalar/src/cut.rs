@@ -45,3 +45,16 @@ pub fn factorial(x: f64) -> AplResult<()> {
     }
     Ok(())
 }
+
+/// Whether `left f right` may be taken: the circular function's left
+/// argument, and both of binomial's, checked as above.
+///
+/// # Errors
+/// As `circular` and `factorial`.
+pub fn dyadic(f: char, left: f64, right: f64) -> AplResult<()> {
+    match f {
+        '○' => circular(left),
+        '!' => factorial(left).and(factorial(right)),
+        _ => Ok(()),
+    }
+}

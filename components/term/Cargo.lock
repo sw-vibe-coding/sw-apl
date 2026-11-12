@@ -98,6 +98,7 @@ name = "apl-modes"
 version = "0.1.0"
 dependencies = [
  "apl-clock",
+ "apl-profile",
  "apl-store",
  "apl-value",
 ]
@@ -110,6 +111,10 @@ dependencies = [
  "crossterm",
  "unicode-width",
 ]
+
+[[package]]
+name = "apl-profile"
+version = "0.1.0"
 
 [[package]]
 name = "apl-store"

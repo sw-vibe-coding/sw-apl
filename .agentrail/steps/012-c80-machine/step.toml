@@ -1,6 +1,6 @@
-number = 10
+number = 12
 slug = "c80-machine"
-status = "pending"
+status = "in-progress"
 description = "Per docs/plan.md: )RAM enables peek, poke (shifted U) and Call (dyadic #) on ..."
 role = "production"
 context_files = []

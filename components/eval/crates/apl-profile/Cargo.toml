@@ -1,0 +1,11 @@
+[package]
+name = "apl-profile"
+description = "sw-apl profile: what each mode can do -- the features it adds and the cuts it makes -- asked as questions rather than by mode"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true

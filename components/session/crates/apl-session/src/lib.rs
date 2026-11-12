@@ -3,7 +3,6 @@
 //! settings; knows nothing about terminals.
 
 mod commands;
-mod keyed;
 mod quad;
 mod session;
 

@@ -11,11 +11,9 @@
 //! is shown is translated back. Inside the glyphs a name's `.` is `⍙`
 //! and its `-` is `∆`, neither of which APL80 can type.
 
-mod chars;
 mod marks;
 mod tokens;
 mod typed;
 
-pub use chars::{name, named, shown};
-pub use marks::text;
+pub use apl_c80_chars::{name, named, shown, text};
 pub use typed::{Typed, glyphs};

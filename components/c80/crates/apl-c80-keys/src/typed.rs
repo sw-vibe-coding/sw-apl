@@ -45,15 +45,6 @@ pub(crate) struct Out<'a> {
 /// caret is under the character typed.
 pub fn glyphs(line: &str, function: &dyn Fn(&str) -> bool) -> AplResult<Typed> {
     let chars: Vec<char> = line.chars().collect();
-    // A workspace file's directives, `⍝!MODES (C)` and the rest, are
-    // comments no keyboard of APL80's could type: the machine's lines,
-    // passed as they are.
-    if line.trim_start().starts_with('⍝') {
-        return Ok(Typed {
-            text: line.to_string(),
-            from: (0..chars.len()).collect(),
-        });
-    }
     let mut out = Out {
         glyphs: Vec::new(),
         from: Vec::new(),

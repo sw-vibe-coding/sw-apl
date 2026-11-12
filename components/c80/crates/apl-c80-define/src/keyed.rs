@@ -1,8 +1,6 @@
 //! A function open in definition mode, and what a typed line did.
 
 use apl_ast::Defn;
-use apl_scan::parse_header;
-use apl_value::{AplError, AplResult};
 
 /// How wide a line number is shown, with its brackets: as wide as
 /// immediate execution indents, as the del editor shows them.
@@ -78,19 +76,4 @@ impl Keyed {
     pub fn close(self) -> Defn {
         self.defn
     }
-}
-
-/// A header typed in APL80's characters, from column `at` of its line,
-/// as a definition to fill.
-///
-/// # Errors
-/// As the translation and `parse_header` give them, the caret under
-/// what was typed.
-pub fn header(text: &str, glyphs: &'static str, at: usize) -> AplResult<Defn> {
-    let shift = |mut e: AplError| {
-        e.caret = e.caret.map(|c| c + at);
-        e
-    };
-    let typed = apl_c80_keys::glyphs(text, &|_| false).map_err(shift)?;
-    parse_header(&typed.text, glyphs).map_err(|e| shift(typed.place(e)))
 }

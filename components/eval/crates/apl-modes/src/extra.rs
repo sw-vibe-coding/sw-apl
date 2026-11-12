@@ -1,9 +1,11 @@
-//! What each mode adds to APL\360's characters.
+//! What each mode adds to APL\360's characters, and what it can do.
 //!
 //! One place answers it, so the lexer, the evaluator and every front
 //! end that composes an overstrike cannot disagree about a mode.
 
 use apl_value::{MODE_B, OVERSTRIKE_B};
+
+use apl_profile::{A70, B75, C80, Profile};
 
 use crate::mode::Mode;
 
@@ -40,6 +42,18 @@ impl Mode {
             Mode::A => 'A',
             Mode::B => 'B',
             Mode::C => 'C',
+        }
+    }
+}
+
+impl Mode {
+    /// What this mode can do (`apl-profile`).
+    #[must_use]
+    pub fn profile(self) -> Profile {
+        match self {
+            Mode::A => A70,
+            Mode::B => B75,
+            Mode::C => C80,
         }
     }
 }

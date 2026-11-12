@@ -1,11 +1,4 @@
-//! What each mode can do, asked as questions rather than by mode.
-//!
-//! Code that differs by mode asks the session's profile -- has it the
-//! I-beams, a scan, a limit on functions -- and never which mode it is
-//! in, so a mode is added here and not as an arm in every `match` on
-//! `Mode` (docs/architecture.md, "Adding a mode").
-
-use crate::mode::Mode;
+//! The features and cuts, and the profile of each mode.
 
 /// Something only some modes have, beyond the shared core.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -109,31 +102,31 @@ impl Profile {
     }
 }
 
-impl Mode {
-    /// What this mode can do.
-    #[must_use]
-    pub fn profile(self) -> Profile {
-        let all = Profile {
-            features: &[],
-            cuts: &[],
-            functions: usize::MAX,
-            lines: usize::MAX,
-        };
-        match self {
-            Mode::A => Profile {
-                features: &[Feature::Ibeams, Feature::Settings],
-                ..all
-            },
-            Mode::B => Profile {
-                features: &[Feature::Scan, Feature::Latent],
-                ..all
-            },
-            Mode::C => Profile {
-                features: &APL80_HAS,
-                cuts: &APL80,
-                functions: 32,
-                lines: 255,
-            },
-        }
-    }
-}
+/// Nothing beyond the core, and no limits.
+const CORE: Profile = Profile {
+    features: &[],
+    cuts: &[],
+    functions: usize::MAX,
+    lines: usize::MAX,
+};
+
+/// (A) '70: the I-beams and the settings commands.
+pub const A70: Profile = Profile {
+    features: &[Feature::Ibeams, Feature::Settings],
+    ..CORE
+};
+
+/// (B) '75: scan and a latent expression.
+pub const B75: Profile = Profile {
+    features: &[Feature::Scan, Feature::Latent],
+    ..CORE
+};
+
+/// (C) '80: what APL80's disk version has and leaves out, and its
+/// limits of 32 functions and 255 lines.
+pub const C80: Profile = Profile {
+    features: &APL80_HAS,
+    cuts: &APL80,
+    functions: 32,
+    lines: 255,
+};

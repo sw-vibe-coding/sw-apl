@@ -3,8 +3,8 @@
 
 use apl_value::AplResult;
 
-use crate::chars::name;
 use crate::typed::{Last, Out};
+use apl_c80_chars::name;
 
 impl Out<'_> {
     /// A string, each character in it as itself; a doubled quote is

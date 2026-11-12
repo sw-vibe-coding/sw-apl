@@ -4,7 +4,7 @@
 /// The shifted letters, typed as the lower-case codes: each with the
 /// glyph it stands for. `d`, the axis, and `u`, peek and poke, stand
 /// for none.
-const SHIFTED: [(char, char); 24] = [
+pub(crate) const SHIFTED: [(char, char); 24] = [
     ('a', '⍲'),
     ('b', '⊥'),
     ('c', '⍝'),
@@ -34,7 +34,7 @@ const SHIFTED: [(char, char); 24] = [
 /// The other characters that stand for something else: the
 /// substitutes, the minus signs, and the TRS-80's codes for its arrows,
 /// which an ASCII keyboard types as `[ \ ] ^`.
-const OTHER: [(char, char); 11] = [
+pub(crate) const OTHER: [(char, char); 11] = [
     ('%', '÷'),
     ('@', '⍟'),
     ('$', '≠'),
@@ -52,7 +52,7 @@ const OTHER: [(char, char); 11] = [
 /// or a comment, where a character is only itself. `None` for one it
 /// has not got.
 #[must_use]
-pub(crate) fn data(c: char) -> Option<char> {
+pub fn data(c: char) -> Option<char> {
     let table = SHIFTED.iter().chain(OTHER.iter());
     if let Some((_, g)) = table.into_iter().find(|(k, _)| *k == c) {
         return Some(*g);
@@ -74,43 +74,9 @@ pub fn name(text: &str) -> String {
         .collect()
 }
 
-/// What is shown, in APL80's characters: each glyph as the character
-/// APL80 has for it, a name's `⍙` and `∆` as `.` and `-`, a grade as
-/// its arrow, a code the screen obeys as the terminal code for it.
+/// Characters typed as data -- in reply to quote-quad -- each as the
+/// character the glyphs hold for it.
 #[must_use]
-pub fn shown(text: &str) -> String {
-    let back = |g: char| {
-        let table = SHIFTED.iter().chain(OTHER[..7].iter());
-        table.into_iter().find(|(_, k)| *k == g).map(|(c, _)| *c)
-    };
-    let mut shown = String::new();
-    for g in text.chars() {
-        // A code the screen obeys is sent as the terminal code for it.
-        if let Some(sent) = apl_c80_screen::sent(g) {
-            shown.push_str(&sent);
-            continue;
-        }
-        shown.push(match g {
-            '⍋' => '↑',
-            '⍒' => '↓',
-            '∆' => '-',
-            '⍙' => '.',
-            g => back(g).unwrap_or(g),
-        });
-    }
-    shown
-}
-
-/// What a command shows, which is prose and names: each name's `⍙`
-/// and `∆` as the `.` and `-` it was typed with, and nothing else
-/// changed.
-#[must_use]
-pub fn named(text: &str) -> String {
-    text.chars()
-        .map(|c| match c {
-            '⍙' => '.',
-            '∆' => '-',
-            c => c,
-        })
-        .collect()
+pub fn text(typed: &str) -> String {
+    typed.chars().map(|c| data(c).unwrap_or(c)).collect()
 }

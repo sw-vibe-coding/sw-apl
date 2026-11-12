@@ -1,18 +1,18 @@
 //! Function application: evaluating the arguments and the axis, then
-//! dispatching a primitive or derived function.
+//! dispatching a primitive or derived function; and the statements that
+//! call a function or show more than one value.
 
 use apl_ast::{Expr, Function};
-use apl_call::value;
+use apl_c80_status::system;
+use apl_call::{branch_target, value};
 use apl_execute as execute;
-use apl_ibeam::system_value;
-use apl_modes::Feature;
+use apl_modes::{Feature, Profile};
 use apl_prims::{apply_dyadic, apply_monadic, axis_index, inner, outer, reduce, scan};
 use apl_value::ErrorKind::{self, Syntax};
 use apl_value::{AplError, AplResult, Array};
-use apl_workspace::{Saved, Workspace};
+use apl_workspace::{Output, Saved, Workspace};
 
-use crate::eval::eval_expr;
-use crate::line::eval_line;
+use crate::eval::{eval_expr, eval_line};
 
 /// `f right`: the right argument is evaluated first, as on a terminal
 /// reading right to left; then the axis.
@@ -43,29 +43,19 @@ pub fn eval_monadic(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
         unreachable!("eval_monadic only receives monadic applications")
     };
     let r = eval_expr(ws, right)?;
-    if let Some(done) = axis
-        .is_none()
-        .then(|| apl_c80_status::monadic(ws, func, &r))
-        .flatten()
-    {
-        return done.map_err(|e| e.at(*pos));
-    }
+    let (profile, at) = (ws.mode.profile(), |e: AplError| e.at(*pos));
     match func {
         Function::Defined(name) => return value(ws, name, *pos, (None, Some(r)), eval_line),
-        Function::System(name) => return apl_sysfns::monadic(ws, name, &r).map_err(|e| e.at(*pos)),
-        Function::Prim('⌶') if axis.is_none() => {
-            return system_value(ws, &r).map_err(|e| e.at(*pos));
-        }
+        Function::System(name) => return apl_sysfns::monadic(ws, name, &r).map_err(at),
+        Function::Prim('⌶' | '#') if axis.is_none() => return system(ws, func, &r).map_err(at),
         Function::Prim('⍎') if axis.is_none() => return execute::value(ws, &r, *pos, eval_line),
-        Function::Scan { .. } if !ws.mode.profile().has(Feature::Scan) => {
-            return Err(AplError::new(Syntax).at(*pos));
+        Function::Scan { .. } if !profile.has(Feature::Scan) => {
+            return Err(at(AplError::new(Syntax)));
         }
         _ => {}
     }
     let axis = axis.as_deref().map(|a| eval_expr(ws, a)).transpose()?;
-    let cut = apl_c80_cuts::mixed(ws.mode.profile(), func, axis.as_ref(), None, &r);
-    cut.and_then(|()| monadic(func, axis.as_ref(), &r, &mut ws.saved))
-        .map_err(|e| e.at(*pos))
+    applied(func, axis.as_ref(), (None, &r), &mut ws.saved, profile).map_err(at)
 }
 
 /// `left f right`: right, then left, then the axis.
@@ -93,51 +83,68 @@ pub fn eval_dyadic(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
         _ => {}
     }
     let axis = axis.as_deref().map(|a| eval_expr(ws, a)).transpose()?;
-    let cut = apl_c80_cuts::mixed(ws.mode.profile(), func, axis.as_ref(), Some(&l), &r);
-    cut.and_then(|()| dyadic(func, axis.as_ref(), &l, &r, &mut ws.saved))
-        .map_err(|e| e.at(*pos))
+    let profile = ws.mode.profile();
+    applied(func, axis.as_ref(), (Some(&l), &r), &mut ws.saved, profile).map_err(|e| e.at(*pos))
 }
 
-/// `func right`, with the evaluated axis: a primitive, (B)'s format,
-/// or a reduce or scan along the last axis, the first axis, or the
-/// bracket.
-fn monadic(
+/// `left func right`, or `func right` with no left, with the evaluated
+/// axis: a primitive, (B)'s format, a reduce or scan along the last
+/// axis, the first or the bracket, or an inner or outer product (which
+/// take no axis), once the mode's cuts allow it. Anything else -- a
+/// product with one argument, a defined function that got this far --
+/// is no such function, and the sentence does not parse.
+fn applied(
     func: &Function,
     axis: Option<&Array>,
-    r: &Array,
+    (left, r): (Option<&Array>, &Array),
     saved: &mut Saved,
+    profile: Profile,
 ) -> AplResult<Array> {
+    apl_c80_cuts::mixed(profile, func, axis, left, r)?;
     let (rank, env) = (r.shape.len(), &mut saved.env);
-    match func {
-        Function::Prim('⍕') if axis.is_none() => apl_format::monadic(r, saved.print.precision()),
-        Function::Prim(f) => apply_monadic(*f, r, axis, env),
-        Function::Reduce { f, first } => {
-            reduce(*f, r, axis_index(axis, *first, rank, env.io)?, env.ct)
+    let io = env.io;
+    let along = |first: bool| axis_index(axis, first, rank, io);
+    match (func, left) {
+        (Function::Prim('⍕'), None) if axis.is_none() => {
+            apl_format::monadic(r, saved.print.precision())
         }
-        Function::Scan { f, first } => scan(*f, r, axis_index(axis, *first, rank, env.io)?, env.ct),
-        // An inner or outer product with one argument, or a defined
-        // function that got this far: no such monadic function, so
-        // the sentence does not parse.
+        (Function::Prim('⍕'), Some(l)) if axis.is_none() => apl_format::dyadic(l, r),
+        (Function::Prim(f), None) => apply_monadic(*f, r, axis, env),
+        (Function::Prim(f), Some(l)) => apply_dyadic(*f, l, r, axis, env),
+        (Function::Reduce { f, first }, None) => reduce(*f, r, along(*first)?, env.ct),
+        (Function::Scan { f, first }, None) => scan(*f, r, along(*first)?, env.ct),
+        (Function::Inner { f, g }, Some(l)) if axis.is_none() => inner(*f, *g, l, r, env.ct),
+        (Function::Outer { f }, Some(l)) if axis.is_none() => outer(*f, l, r, env.ct),
         _ => Err(AplError::new(ErrorKind::Syntax)),
     }
 }
 
-/// `left func right`, with the evaluated axis: a primitive, (B)'s
-/// format, an inner product, or an outer product (the products take
-/// no axis).
-fn dyadic(
-    func: &Function,
-    axis: Option<&Array>,
-    l: &Array,
-    r: &Array,
-    saved: &mut Saved,
-) -> AplResult<Array> {
-    let env = &mut saved.env;
-    match func {
-        Function::Prim('⍕') if axis.is_none() => apl_format::dyadic(l, r),
-        Function::Prim(f) => apply_dyadic(*f, l, r, axis, env),
-        Function::Inner { f, g } if axis.is_none() => inner(*f, *g, l, r, env.ct),
-        Function::Outer { f } if axis.is_none() => outer(*f, l, r, env.ct),
-        _ => Err(AplError::new(ErrorKind::Syntax)),
+/// The statement shapes that do not evaluate to one value: mixed
+/// output, a branch, and a bare call to a defined function, which
+/// displays nothing when the header declares no result. `None` when
+/// the statement is an ordinary expression.
+pub(crate) fn statement(ws: &mut Workspace, expr: &Expr) -> AplResult<Option<Output>> {
+    if let Expr::Mixed(parts) = expr {
+        let parts = parts
+            .iter()
+            .map(|p| eval_expr(ws, p))
+            .collect::<AplResult<_>>()?;
+        return Ok(Some(Output::Mixed(parts)));
     }
+    if let Expr::Branch { target, .. } = expr {
+        let Some(target) = target else {
+            return Ok(Some(Output::Branch(None)));
+        };
+        let line = branch_target(&eval_expr(ws, target)?)?;
+        return Ok(Some(
+            line.map_or(Output::Nothing, |n| Output::Branch(Some(n))),
+        ));
+    }
+    let Some((name, pos, left, right)) = expr.defined_call().filter(|c| ws.is_function(c.0)) else {
+        return Ok(None);
+    };
+    let right = right.map(|e| eval_expr(ws, e)).transpose()?;
+    let left = left.map(|e| eval_expr(ws, e)).transpose()?;
+    let got = apl_call::call(ws, name, left, right, eval_line).map_err(|e| e.at(pos))?;
+    Ok(Some(got.map_or(Output::Nothing, Output::Value)))
 }

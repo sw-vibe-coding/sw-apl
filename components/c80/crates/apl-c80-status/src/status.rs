@@ -1,7 +1,7 @@
 //! The status operator and the conversion, where the evaluator asks.
 
 use apl_ast::Function;
-use apl_ibeam::argument;
+use apl_ibeam::{argument, system_value};
 use apl_modes::Feature;
 use apl_value::{AplError, AplResult, Array, Data, ErrorKind, Number};
 use apl_workspace::{Workspace, free, used};
@@ -11,14 +11,18 @@ use apl_c80_screen as screen;
 use crate::codes::{code, glyph};
 use crate::special::obey;
 
-/// `f r` when `f` is one of APL80's own: status, where the mode has
-/// it, and `#`. `None` for any other function.
-#[must_use]
-pub fn monadic(ws: &mut Workspace, func: &Function, r: &Array) -> Option<AplResult<Array>> {
+/// `⌶r` or `#r`, where the evaluator asks: in a mode with status, the
+/// I-beam is APL80's status; in one with the I-beams it reads them, and
+/// in any other it is a NONCE ERROR (`apl-ibeam`). `#` is APL80's
+/// conversion.
+///
+/// # Errors
+/// As `status`, `apl_ibeam::system_value` and `convert`.
+pub fn system(ws: &mut Workspace, func: &Function, r: &Array) -> AplResult<Array> {
     match func {
-        Function::Prim('⌶') if ws.mode.profile().has(Feature::Status) => Some(status(ws, r)),
-        Function::Prim('#') => Some(convert(ws, r)),
-        _ => None,
+        Function::Prim('⌶') if ws.mode.profile().has(Feature::Status) => status(ws, r),
+        Function::Prim('⌶') => system_value(ws, r),
+        _ => convert(ws, r),
     }
 }
 
