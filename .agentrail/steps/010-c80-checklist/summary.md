@@ -1,0 +1,1 @@
+Cleared the 19 sw-checklist warnings c80 left (missed because just gates prints only a summary): new crates apl-profile, apl-c80-chars, apl-del, apl-c80-session, apl-trs80; apl-wsfile and apl-eval restructured to 4 modules; long functions shortened. Behavior unchanged; reg-rs 106/106; all tests and clippy pass; 3 warnings (Binary Freshness). Pushed 923e040.

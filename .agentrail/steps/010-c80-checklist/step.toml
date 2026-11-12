@@ -1,8 +1,9 @@
 number = 10
 slug = "c80-checklist"
-status = "in-progress"
+status = "completed"
 description = "sw-checklist reports 19 warnings beyond Binary Freshness, all from saga c80 c..."
 role = "production"
 context_files = []
 created_at = "2026-11-12T09:34:51"
-commits = []
+completed_at = "2026-11-12T12:53:58"
+commits = ["923e0400f056cf2c1f785e79c74fd6a127930973"]
