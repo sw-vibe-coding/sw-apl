@@ -1,0 +1,1 @@
+Owner direction 2026-11-11 (docs/plan.md): docs/modes.md comparing modes A, B and C (room for D): one table per area -- data types, scalar and mixed functions, operators, system commands, system values, defining functions, workspaces, typing and display -- a column per mode, each cell done, partial or absent; a )HELP MODES pointer; README and docs link it.

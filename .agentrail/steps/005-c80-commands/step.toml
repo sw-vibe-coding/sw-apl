@@ -1,8 +1,9 @@
 number = 5
 slug = "c80-commands"
-status = "in-progress"
+status = "completed"
 description = "In C: )DEF and )EDIT with the line commands in place of the del editor; )TRON..."
 role = "production"
 context_files = []
 created_at = "2026-11-10T17:37:46"
-commits = []
+completed_at = "2026-11-11T17:16:47"
+commits = ["ed1de584f93499ce636581350f99f4dc64a70f8f"]
