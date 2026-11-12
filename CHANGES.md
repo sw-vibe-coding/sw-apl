@@ -14,6 +14,10 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-11-12
 
+- saga: complete c80-help
+- chore(pages): rebuild with C'80's own Help
+- fix(demo): Help in C'80 is C'80's alone (c80-help)
+- docs(changes): refresh CHANGES.md to HEAD
 - saga: complete c80-machine
 - chore(pages): rebuild with )RAM, peek, poke, Call and )DOS
 - feat(c80): )RAM with peek, poke and Call; a small )DOS (c80-machine)
