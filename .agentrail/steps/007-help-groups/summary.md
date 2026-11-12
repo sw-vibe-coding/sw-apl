@@ -1,0 +1,1 @@
+)HELP GROUP lists the mode's commands in the group with usage lines, in every mode; HELP page mentions groups; unit test against the overview incl. wrapped lines; samples 94-96 cover every group; session.md command tables updated for C. reg-rs 106/106, 3 help transcripts rebased.

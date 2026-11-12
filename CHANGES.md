@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-11-11
 
+- chore(pages): rebuild with group help
+- feat(help): a group name lists its commands, in every mode (help-groups)
+- docs(changes): refresh CHANGES.md to HEAD; complete modes-table
 - chore(pages): rebuild with the MODES help pointer
 - docs(modes): compare the modes area by area (modes-table)
 - docs(changes): refresh CHANGES.md to HEAD; complete c80-commands
