@@ -41,7 +41,9 @@ const SHARED: [&str; 19] = [
     "SIV", "SYMBOLS", "OFF", "CONTINUE", "DIALECT", "HELP", "LIBS",
 ];
 const ONLY_A: [&str; 6] = ["ORIGIN", "DIGITS", "WIDTH", "GROUP", "GRP", "GRPS"];
-const ONLY_C: [&str; 8] = ["DEF", "EDIT", "AUTO", "EXEC", "PS", "PD", "TRON", "TROFF"];
+const ONLY_C: [&str; 10] = [
+    "DEF", "EDIT", "AUTO", "EXEC", "PS", "PD", "TRON", "TROFF", "RAM", "DOS",
+];
 
 fn commands(mode: Mode) -> Vec<&'static str> {
     let mut all = SHARED.to_vec();

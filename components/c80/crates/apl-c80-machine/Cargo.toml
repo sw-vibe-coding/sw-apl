@@ -1,0 +1,14 @@
+[package]
+name = "apl-c80-machine"
+description = "sw-apl (C) '80's modeled TRS-80 memory: the screen as shown and the RAM above it, which )RAM opens"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-c80-screen = { path = "../apl-c80-screen" }
+
+[lints]
+workspace = true

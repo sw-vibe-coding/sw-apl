@@ -273,9 +273,11 @@ above, and these rows are what (C) changes.
 | A workspace saved in (C) runs in (C) alone, written with `)DEF` and `)AUTO` | done | c80 command tests |
 | `)TRON` and `)TROFF`, `)PS` and `)PD`, `)AUTO` and `)EXEC` | done | c80 command tests, sample 97 |
 | The format statement, status (`⌶` for APL80's `s`) and `#` between characters and APL80's codes | done | c80 command tests, sample 97 |
-| APL80's other commands: `)RESET`, `)KILL`, `)DOS`, `)RAM` and the file commands; the commands of (A) that APL80 has not got still answer | part | the shared commands |
+| `)RAM`: peek and poke, the shifted U, and Call, dyadic `#`, on a modeled memory -- the screen, plain RAM above it, no ROM or devices; Call 51 prints a character and 43 reads a key | done | c80 machine tests, screen tests, sample 98 |
+| `)DOS`, taking DIR, KILL and RETURN | done | c80 machine tests, sample 98 |
+| APL80's other commands: `)RESET`, `)KILL` and the file commands; the commands of (A) that APL80 has not got still answer | part | the shared commands |
 | The screen codes `#` sends -- the cursor, clearing, PRINT @, graphics, space compression -- and the codes APL80 obeys (5, 6, 9, 11, 18) | done | screen tests, c80 keys tests |
-| Zone printing (3, 7, 15, 255), stopping and starting the clock (16, 17), and Call | part | NONCE ERROR; Call is `c80-machine`'s |
+| Zone printing (3, 7, 15, 255), stopping and starting the clock (16, 17) | part | NONCE ERROR |
 | The workspaces that run in (C), and five lessons | part | none yet |
 
 ## Restrictions

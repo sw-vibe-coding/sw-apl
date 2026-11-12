@@ -52,6 +52,7 @@ display, in `session.md`.
 | Execute `⍎` | no | yes | no | |
 | Format `⍕`, monadic and dyadic | no | yes | no | (C) has the format statement instead |
 | `#`, characters to APL80's codes and back, and the screen codes | no | no | yes | Zone printing and stopping the clock are NONCE ERRORs |
+| Peek and poke, the shifted U, and Call, dyadic `#` | no | no | yes | After `)RAM` |
 
 ## Operators
 
@@ -104,7 +105,9 @@ display, in `session.md`.
 | `)TRON )TROFF` | no | no | yes | |
 | `)PS )PD` | no | no | yes | |
 | `)AUTO )EXEC` | no | no | yes | (B) has `⎕LX` |
-| `)RESET )KILL )DOS )RAM`, the file commands, peek, poke, Call | no | no | no | APL80's, not there |
+| `)RAM`, opening a modeled memory to peek, poke and Call | no | no | yes | The screen and RAM; no ROM or devices |
+| `)DOS` | no | no | yes | DIR, KILL and RETURN only |
+| `)RESET )KILL`, the file commands | no | no | no | APL80's, not there |
 | `)DIALECT )LIBS )HELP`, sw-apl's own | yes | yes | yes | |
 
 ## Workspaces

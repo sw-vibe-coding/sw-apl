@@ -12,6 +12,8 @@ pub struct Screen {
     pub(crate) cells: Vec<Vec<char>>,
     pub(crate) row: usize,
     pub(crate) col: usize,
+    /// Where the cursor was saved, to be put back.
+    pub(crate) saved: (usize, usize),
 }
 
 impl Default for Screen {
@@ -20,6 +22,7 @@ impl Default for Screen {
             cells: vec![vec![' '; WIDE]; HIGH],
             row: 0,
             col: 0,
+            saved: (0, 0),
         }
     }
 }

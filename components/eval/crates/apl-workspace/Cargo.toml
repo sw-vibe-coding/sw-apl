@@ -19,6 +19,7 @@ apl-space = { path = "../apl-space" }
 apl-modes = { path = "../apl-modes" }
 apl-store = { path = "../apl-store" }
 apl-c80-keys = { path = "../../../c80/crates/apl-c80-keys" }
+apl-c80-machine = { path = "../../../c80/crates/apl-c80-machine" }
 
 [lints]
 workspace = true

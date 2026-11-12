@@ -105,3 +105,20 @@ fn the_cursor_codes_move_and_clear() {
         "home and clear: CLS"
     );
 }
+
+#[test]
+fn the_cursor_is_saved_and_put_back() {
+    let mut screen = Screen::default();
+    screen.print("AB");
+    screen.print("\x1b[s\x1b[11;1HZ\x1b[u");
+    assert_eq!(screen.cursor(), (0, 2), "back where it was");
+    assert!(screen.rows()[10].starts_with('Z'));
+    screen.print("C");
+    assert!(screen.rows()[0].starts_with("ABC"));
+}
+
+#[test]
+fn saving_and_putting_back_are_sent_as_their_terminal_codes() {
+    assert_eq!(sent(apl_c80_screen::SAVE).as_deref(), Some("\x1b[s"));
+    assert_eq!(sent(apl_c80_screen::RESTORE).as_deref(), Some("\x1b[u"));
+}

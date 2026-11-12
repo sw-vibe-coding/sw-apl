@@ -61,6 +61,26 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-c80-machine"
+version = "0.1.0"
+dependencies = [
+ "apl-c80-screen",
+]
+
+[[package]]
+name = "apl-c80-memory"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-c80-keys",
+ "apl-c80-machine",
+ "apl-c80-screen",
+ "apl-c80-status",
+ "apl-value",
+ "apl-workspace",
+]
+
+[[package]]
 name = "apl-c80-scalar"
 version = "0.1.0"
 dependencies = [
@@ -132,7 +152,7 @@ dependencies = [
  "apl-c80-cuts",
  "apl-c80-format",
  "apl-c80-keys",
- "apl-c80-status",
+ "apl-c80-memory",
  "apl-call",
  "apl-execute",
  "apl-format",
@@ -475,6 +495,7 @@ version = "0.1.0"
 dependencies = [
  "apl-ast",
  "apl-c80-keys",
+ "apl-c80-machine",
  "apl-clock",
  "apl-console",
  "apl-modes",

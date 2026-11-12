@@ -1,6 +1,6 @@
 [package]
 name = "apl-c80-session"
-description = "sw-apl session in the (C) '80 mode: )DEF, )EDIT and )EXEC, the lines of a function open by command, and no del"
+description = "sw-apl session in the (C) '80 mode: )DEF, )EDIT and )EXEC, the lines of a function open by command, no del, and DOS"
 edition.workspace = true
 license.workspace = true
 version.workspace = true
@@ -10,8 +10,12 @@ repository.workspace = true
 [dependencies]
 apl-ast = { path = "../../../parse/crates/apl-ast" }
 apl-c80-define = { path = "../apl-c80-define" }
+apl-c80-commands = { path = "../apl-c80-commands" }
 apl-c80-keys = { path = "../apl-c80-keys" }
 apl-eval = { path = "../../../eval/crates/apl-eval" }
+apl-commands = { path = "../../../session/crates/apl-commands" }
+apl-library = { path = "../../../session/crates/apl-library" }
+apl-shelves = { path = "../../../eval/crates/apl-shelves" }
 apl-reply = { path = "../../../session/crates/apl-reply" }
 apl-sysvars = { path = "../../../b75/crates/apl-sysvars" }
 apl-value = { path = "../../../value/crates/apl-value" }

@@ -31,6 +31,9 @@ pub enum Feature {
     /// APL80's characters, typed and shown: the shifted letters, the
     /// substitutes, round-bracket indexing and the rest.
     Apl80Keys,
+    /// `)RAM`, which opens the TRS-80's memory to peek, poke and call,
+    /// and `)DOS`.
+    Machine,
 }
 
 /// Something of the core a mode leaves out. APL80's manual lists its
@@ -66,7 +69,7 @@ pub struct Profile {
 }
 
 /// What APL80's disk version has beyond the core.
-const APL80_HAS: [Feature; 8] = [
+const APL80_HAS: [Feature; 9] = [
     Feature::Scan,
     Feature::DefineByCommand,
     Feature::Auto,
@@ -75,6 +78,7 @@ const APL80_HAS: [Feature; 8] = [
     Feature::FormatStatement,
     Feature::Status,
     Feature::Apl80Keys,
+    Feature::Machine,
 ];
 
 /// Everything APL80's disk version leaves out.

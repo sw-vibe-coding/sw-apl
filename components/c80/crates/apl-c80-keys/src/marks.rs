@@ -10,8 +10,8 @@ impl Out<'_> {
     /// `c`, typed at `at`, if it is one of these: put down, and `true`.
     ///
     /// # Errors
-    /// NONCE ERROR for peek and poke; SYNTAX ERROR for an axis with no
-    /// number or name before it.
+    /// SYNTAX ERROR for an axis with no number or name before it. Peek
+    /// and poke, `u`, is put down as `⌷`, which no other key types.
     pub(crate) fn mark(&mut self, c: char, at: usize) -> AplResult<bool> {
         let argued = matches!(self.last, Last::Value | Last::Variable);
         // A closing bracket closes the last one opened, which indexed or grouped.
@@ -26,7 +26,7 @@ impl Out<'_> {
             '→' | '^' => ('→', Last::Start),
             ';' | ':' => (c, Last::Start),
             'd' => return self.axis(at).map(|()| true),
-            'u' => return Err(AplError::new(ErrorKind::Nonce).at(at)),
+            'u' => ('⌷', Last::Function),
             _ => return Ok(false),
         };
         if c == '(' {

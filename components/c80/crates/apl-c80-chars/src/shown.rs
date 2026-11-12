@@ -4,7 +4,8 @@ use crate::tables::{OTHER, SHIFTED};
 
 /// What is shown, in APL80's characters: each glyph as the character
 /// APL80 has for it, a name's `⍙` and `∆` as `.` and `-`, a grade as
-/// its arrow, a code the screen obeys as the terminal code for it.
+/// its arrow, peek and poke as `u`, a code the screen obeys as the
+/// terminal code for it.
 #[must_use]
 pub fn shown(text: &str) -> String {
     let back = |g: char| {
@@ -22,6 +23,7 @@ pub fn shown(text: &str) -> String {
             '⍋' => '↑',
             '⍒' => '↓',
             '∆' => '-',
+            '⌷' => 'u',
             '⍙' => '.',
             g => back(g).unwrap_or(g),
         });

@@ -9,6 +9,8 @@ members = [
     "crates/apl-c80-define",
     "crates/apl-c80-format",
     "crates/apl-c80-keys",
+    "crates/apl-c80-machine",
+    "crates/apl-c80-memory",
     "crates/apl-c80-scalar",
     "crates/apl-c80-screen",
     "crates/apl-c80-session",

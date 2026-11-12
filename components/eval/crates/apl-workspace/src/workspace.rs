@@ -6,6 +6,7 @@
 use std::collections::BTreeMap;
 use std::path::PathBuf;
 
+use apl_c80_machine::Machine;
 use apl_clock::{Clock, TimeSource, stopped};
 use apl_console::{Console, Output, Shown, render_all};
 use apl_modes::{Feature, Mode};
@@ -81,6 +82,11 @@ pub struct Workspace {
     /// The numeric format (C)'s format statement set, as pairs of width
     /// and decimals, until characters, an error or a command end it.
     pub format: Option<Array>,
+    /// The TRS-80's memory, once (C)'s `)RAM` has opened it to peek, poke
+    /// and call. Session state: the machine is not saved with a workspace.
+    pub machine: Option<Machine>,
+    /// Whether (C)'s `)DOS` has the keyboard, until its RETURN.
+    pub dos: bool,
 }
 
 impl Default for Workspace {
@@ -100,6 +106,8 @@ impl Default for Workspace {
             abandoned: None,
             trace: false,
             format: None,
+            machine: None,
+            dos: false,
         }
     }
 }
@@ -114,6 +122,11 @@ impl Workspace {
         // APL80's characters.
         if self.mode.profile().has(Feature::Apl80Keys) {
             shown.lines = shown.lines.iter().map(|l| apl_c80_keys::shown(l)).collect();
+        }
+        // And what is shown is on the screen a peek reads.
+        if let Some(machine) = self.machine.as_mut().filter(|_| !shown.lines.is_empty()) {
+            let end = if shown.open { "" } else { "\n" };
+            machine.screen.print(&(shown.lines.join("\n") + end));
         }
         shown
     }

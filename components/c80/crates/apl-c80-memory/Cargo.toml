@@ -1,0 +1,20 @@
+[package]
+name = "apl-c80-memory"
+description = "sw-apl (C) '80's peek and poke, u, and Call, dyadic #, on the memory )RAM opens"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-ast = { path = "../../../parse/crates/apl-ast" }
+apl-c80-keys = { path = "../apl-c80-keys" }
+apl-c80-machine = { path = "../apl-c80-machine" }
+apl-c80-screen = { path = "../apl-c80-screen" }
+apl-c80-status = { path = "../apl-c80-status" }
+apl-value = { path = "../../../value/crates/apl-value" }
+apl-workspace = { path = "../../../eval/crates/apl-workspace" }
+
+[lints]
+workspace = true

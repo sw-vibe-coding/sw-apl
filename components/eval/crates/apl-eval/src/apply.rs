@@ -3,7 +3,7 @@
 //! call a function or show more than one value.
 
 use apl_ast::{Expr, Function};
-use apl_c80_status::system;
+use apl_c80_memory::system as c80;
 use apl_call::{branch_target, value};
 use apl_execute as execute;
 use apl_modes::{Feature, Profile};
@@ -28,7 +28,8 @@ use crate::eval::{eval_expr, eval_line};
 /// which only (B) lexes, is `apl-sysfns`'s. Scan is a mode's feature: in (A),
 /// as in APL\360, a function before a slope is an expansion with no
 /// array on its left, a SYNTAX ERROR when the line runs. (C)'s status
-/// and conversion, `⌶` and `#` there, are `apl-c80-status`'s.
+/// and conversion, `⌶` and `#` there, and its peek, poke and Call are
+/// `apl-c80-memory`'s.
 ///
 /// # Errors
 /// Evaluation errors, with the glyph's position as the caret.
@@ -43,12 +44,12 @@ pub fn eval_monadic(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
         unreachable!("eval_monadic only receives monadic applications")
     };
     let r = eval_expr(ws, right)?;
-    let (profile, at) = (ws.mode.profile(), |e: AplError| e.at(*pos));
+    let (profile, at, bare) = (ws.mode.profile(), |e: AplError| e.at(*pos), axis.is_none());
     match func {
         Function::Defined(name) => return value(ws, name, *pos, (None, Some(r)), eval_line),
         Function::System(name) => return apl_sysfns::monadic(ws, name, &r).map_err(at),
-        Function::Prim('⌶' | '#') if axis.is_none() => return system(ws, func, &r).map_err(at),
-        Function::Prim('⍎') if axis.is_none() => return execute::value(ws, &r, *pos, eval_line),
+        Function::Prim('⌶' | '#' | '⌷') if bare => return c80(ws, func, None, &r).map_err(at),
+        Function::Prim('⍎') if bare => return execute::value(ws, &r, *pos, eval_line),
         Function::Scan { .. } if !profile.has(Feature::Scan) => {
             return Err(at(AplError::new(Syntax)));
         }
@@ -75,16 +76,16 @@ pub fn eval_dyadic(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
     };
     let r = eval_expr(ws, right)?;
     let l = eval_expr(ws, left)?;
+    let (at, bare) = (|e: AplError| e.at(*pos), axis.is_none());
     match func {
         Function::Defined(name) => return value(ws, name, *pos, (Some(l), Some(r)), eval_line),
-        Function::System(name) => {
-            return apl_sysfns::dyadic(ws, name, &l, &r).map_err(|e| e.at(*pos));
-        }
+        Function::System(name) => return apl_sysfns::dyadic(ws, name, &l, &r).map_err(at),
+        Function::Prim('#' | '⌷') if bare => return c80(ws, func, Some(&l), &r).map_err(at),
         _ => {}
     }
     let axis = axis.as_deref().map(|a| eval_expr(ws, a)).transpose()?;
     let profile = ws.mode.profile();
-    applied(func, axis.as_ref(), (Some(&l), &r), &mut ws.saved, profile).map_err(|e| e.at(*pos))
+    applied(func, axis.as_ref(), (Some(&l), &r), &mut ws.saved, profile).map_err(at)
 }
 
 /// `left func right`, or `func right` with no left, with the evaluated

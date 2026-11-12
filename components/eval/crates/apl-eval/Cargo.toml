@@ -12,7 +12,7 @@ apl-ast = { path = "../../../parse/crates/apl-ast" }
 apl-c80-cuts = { path = "../../../c80/crates/apl-c80-cuts" }
 apl-c80-format = { path = "../../../c80/crates/apl-c80-format" }
 apl-c80-keys = { path = "../../../c80/crates/apl-c80-keys" }
-apl-c80-status = { path = "../../../c80/crates/apl-c80-status" }
+apl-c80-memory = { path = "../../../c80/crates/apl-c80-memory" }
 apl-call = { path = "../apl-call" }
 apl-value = { path = "../../../value/crates/apl-value" }
 apl-execute = { path = "../../../b75/crates/apl-execute" }

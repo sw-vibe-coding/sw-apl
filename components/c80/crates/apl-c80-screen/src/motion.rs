@@ -26,8 +26,9 @@ impl Screen {
 
     /// One escape sequence, `ESC [ params last`: `H` home or to a line
     /// and column, `J` clear to the end of the screen, `K` to the end of
-    /// the line, `A` to `D` up, down, right and left. Any other is
-    /// ignored, as the cursor's showing and hiding are.
+    /// the line, `A` to `D` up, down, right and left, `s` and `u` save
+    /// the cursor and put it back. Any other is ignored, as the
+    /// cursor's showing and hiding are.
     pub(crate) fn escape(&mut self, params: &str, last: char) {
         let n = |i: usize| -> usize {
             params
@@ -44,6 +45,8 @@ impl Screen {
             'B' => self.row = (self.row + 1).min(HIGH - 1),
             'C' => self.col = (self.col + 1).min(WIDE - 1),
             'D' => self.col = self.col.saturating_sub(1),
+            's' => self.saved = (self.row, self.col),
+            'u' => (self.row, self.col) = self.saved,
             _ => {}
         }
     }

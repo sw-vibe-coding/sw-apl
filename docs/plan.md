@@ -1403,6 +1403,26 @@ And: the checklist warnings c80 left (19, missed because `just gates`
 prints only a summary) are cleared first, step `c80-checklist`, which
 splits five small crates out where crates were full.
 
+Owner report (2026-11-12, during c80-machine): "the Help dialog in C'80
+mode is incorrect, shows 2741, not TRS-80, keyboard; need C'80 mode
+help to be only for this mode". Step `c80-help`, after `c80-machine`
+and before `c80-demo-link`, since (C) goes live there: the demo's Help
+in (C) describes (C) alone -- APL80's board, the shifted letters drawn
+dotted, `)DEF` and `)EDIT`, `)RAM` and `)DOS` -- and nothing of (A)'s
+or (B)'s; theirs are unchanged. The same day the owner asked why ⍳
+shows as a dotted I: it is APL80's own display (decision 1 of
+docs/mode-c.md), which that Help will say.
+
+Owner request (2026-11-12, during c80-machine): "can we have a mode
+that uses this [a render of the owner's 5100 model] and types within
+the CRT part. with a zoom-in option to fill the screen with just the
+CRT (using the reflection effect via a translucent scrim?" Step
+`b75-crt`, after `c80-demo-link`: (B) '75's demo can show the machine
+-- the owner's render, the session drawn inside its CRT -- and zoom
+to the CRT alone, filling the window, with the glass's reflection as a
+translucent scrim over the text. Open: the render's file, and its
+panel's maker's name, since the UI names no maker (mode names).
+
 `c80-screen` is split in three, each a step (2026-11-11):
 
 1. `c80-keys` -- (C) types and shows APL80's characters: shifted

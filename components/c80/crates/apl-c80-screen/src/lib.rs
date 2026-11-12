@@ -13,5 +13,5 @@ mod codes;
 mod motion;
 mod screen;
 
-pub use codes::{character, code, sent};
+pub use codes::{RESTORE, SAVE, character, code, sent};
 pub use screen::Screen;

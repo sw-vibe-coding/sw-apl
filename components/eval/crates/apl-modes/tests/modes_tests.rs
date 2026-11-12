@@ -86,8 +86,8 @@ fn each_mode_says_what_it_adds() {
 fn c_types_only_its_own_conversion_and_forms_no_overstrike() {
     assert_eq!(
         Mode::C.glyphs(),
-        "#",
-        "no execute, quad names or format glyph: APL80's character conversion"
+        "#⌷",
+        "no execute, quad names or format glyph: APL80's conversion and Call, and peek and poke"
     );
     assert!(
         Mode::C.overstrikes().is_empty(),

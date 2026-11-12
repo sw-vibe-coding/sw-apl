@@ -97,8 +97,13 @@ fn a_character_apl80_has_not_got_is_an_error() {
     let err = glyphs("2+⍴3", &|_| false).expect_err("a glyph");
     assert_eq!(err.kind, ErrorKind::Character('⍴'));
     assert_eq!(err.caret, Some(2));
-    let err = glyphs("u3", &|_| false).expect_err("peek and poke");
-    assert_eq!(err.kind, ErrorKind::Nonce);
+}
+
+#[test]
+fn the_shifted_u_peeks_and_pokes() {
+    assert_eq!(typed("u16000"), "⌷16000");
+    assert_eq!(typed("65u16000"), "65⌷16000");
+    assert_eq!(typed("#u15360+i5"), "#⌷15360+⍳5");
 }
 
 #[test]

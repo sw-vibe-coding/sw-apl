@@ -132,7 +132,7 @@ sw-apl/
                                    (only (B) '75 reaches these)
     c80/       apl-c80-commands    system commands only the (C) '80 mode
                                    has: )TRON and )TROFF, )PS and )PD,
-                                   and )AUTO
+                                   )AUTO, )RAM and )DOS
                apl-c80-chars       characters: each of APL80's characters
                                    and the glyph it stands for, one at a
                                    time, both ways
@@ -147,6 +147,13 @@ sw-apl/
                                    numeric format, set by a statement
                                    and held until characters, an error
                                    or a command
+               apl-c80-machine     machine: the TRS-80's memory as the
+                                   (C) '80 mode models it once )RAM opens
+                                   it, the screen as shown and the RAM
+                                   above it
+               apl-c80-memory      memory: the (C) '80 mode's peek and
+                                   poke and Call, and where the
+                                   evaluator asks for status and #
                apl-c80-keys        keys: APL80's characters as the (C)
                                    '80 mode types and shows them,
                                    translated to the glyphs the lexer
@@ -160,7 +167,8 @@ sw-apl/
                                    and its 64 by 16 screen
                apl-c80-session     session in the (C) '80 mode: )DEF,
                                    )EDIT and )EXEC, the lines of a
-                                   function open by command, and no del
+                                   function open by command, no del,
+                                   and DOS's DIR, KILL and RETURN
                apl-c80-status      status and conversion: the (C) '80
                                    mode's s operator, typed as the
                                    I-beam, and # between characters and
@@ -222,7 +230,7 @@ it can be checked against them.
 glyphs -> value -> display -> console
 value -> lex (and strike) -> scan -> parse
 value -> c80 (scalar cuts, keys) -> prims (dispatch; scalar, mixed, ops and the rest)
-prims + console + clock + modes (+ profile) -> workspace -> call, quad
+prims + console + clock + modes (+ profile) + c80 (machine) -> workspace -> call, quad
 parse + prims + call + quad + a70 + b75 + c80 -> eval
 eval + c80 (commands, definition, session, wsfile) -> session (commands, del, editor, library, extensions) -> cli (+ config)
 eval -> session -> web (wire, serve, server; wasm, board, wasm-store)

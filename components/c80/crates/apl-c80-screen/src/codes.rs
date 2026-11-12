@@ -5,6 +5,11 @@ const PRINT_AT: u32 = 0xE400;
 /// Where the space compression codes, 192 to 255, are held: this plus
 /// the number of spaces.
 const SPACES: u32 = 0xE0C0;
+/// Where the cursor is saved, as a poke on the screen does before it
+/// moves there, and put back after.
+pub const SAVE: char = '\u{E0BE}';
+/// Where a saved cursor is put back.
+pub const RESTORE: char = '\u{E0BF}';
 
 /// The character (C) holds for code `n`, when it is one that is not
 /// printed: a control code, a graphics block, a run of spaces, or a
@@ -61,15 +66,15 @@ pub fn sent(c: char) -> Option<String> {
         0x0A | 0x0D => "\n".to_string(),
         0x0E => esc("?25h"),
         0x0F => esc("?25l"),
-        0x18 => esc("D"),
-        0x19 => esc("C"),
-        0x1A => esc("B"),
-        0x1B => esc("A"),
+        // 24 to 27: left, right, down and up.
+        0x18..=0x1B => esc(&"DCBA"[(u - 0x18) as usize..][..1]),
         0x1C => esc("H"),
         0x1D => "\r".to_string(),
         0x1E => esc("K"),
         0x1F => esc("J"),
         0..=31 => String::new(),
+        0xE0BE => esc("s"),
+        0xE0BF => esc("u"),
         0xE0C0..=0xE0FF => " ".repeat((u - SPACES) as usize),
         0xE401..=0xE7FF => {
             let at = u - PRINT_AT;

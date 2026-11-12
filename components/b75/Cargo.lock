@@ -41,6 +41,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-c80-machine"
+version = "0.1.0"
+dependencies = [
+ "apl-c80-screen",
+]
+
+[[package]]
 name = "apl-c80-scalar"
 version = "0.1.0"
 dependencies = [
@@ -355,6 +362,7 @@ version = "0.1.0"
 dependencies = [
  "apl-ast",
  "apl-c80-keys",
+ "apl-c80-machine",
  "apl-clock",
  "apl-console",
  "apl-modes",

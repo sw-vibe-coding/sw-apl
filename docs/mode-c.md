@@ -175,7 +175,7 @@ decided. The table above is the whole keyboard:
   function line written before the function it calls still calls it.
 - **`1d`** before an argument chooses the axis: `+/1dM` is `+/[1]M`.
 - **`f`** begins the format statement, **`s`** is status, **`c`**
-  begins a comment, **`u`** is peek and poke (`c80-machine`).
+  begins a comment, **`u`** is peek and poke.
 - **Anything else** -- an APL glyph, `{` -- is a CHARACTER ERROR, the
   caret under it. A line that begins `⍝` is a workspace file's
   directive or a sample's note, and is taken as a comment.
@@ -270,7 +270,7 @@ manual's Function Definition describes:
   ASCII, with the substitutes on their own codes (`%` is 37, `"` 34)
   and each shifted letter on its lower-case code (`p` is 112). The
   codes that are not printed are below, under The screen. Call, the
-  dyadic form, is `c80-machine`'s, a NONCE ERROR until then.
+  dyadic form, is under The memory.
 - **The `d` axis operator**, `+/1dM`, plus-reduce on the first axis.
 
 ## The screen
@@ -305,6 +305,39 @@ printer to drive; 6 randomizes the random link from the clock; 11
 starts it again; 18 sets the clock `s0` reads to nothing. Zone
 printing, 3, 7, 15 and 255, and stopping and starting the clock, 16
 and 17, are NONCE ERRORs.
+
+## The memory
+
+`)RAM` opens a modeled memory, as the owner decided, and it stays open
+for the session; a workspace does not carry it.
+
+- **Peek**, `u` with an address on its right, gives the byte there, and
+  takes a list of addresses as readily as one.
+- **Poke**, `u` with bytes on its left, puts them there and gives them
+  back. One byte or address goes with every one of the other; nothing
+  is poked unless all of them can be.
+- **The screen**, 15360 to 16383, is what (C) has shown: each line
+  typed after its prompt, and everything printed. A peek reads the code
+  of the character there, so it reads what has scrolled into place. A
+  poke shows its character at once: the cursor is saved, moved there,
+  and put back, with the terminal codes `ESC [ s` and `ESC [ u`. A
+  code the screen does not print, below 32 or above 191, is a DOMAIN
+  ERROR there.
+- **The RAM**, 16384 to 65535, holds what was poked; the rest is 0.
+- **Anything below 15360**, the ROM, the keyboard and the devices, is
+  not modeled, and a peek or poke there is a DOMAIN ERROR, as is a
+  byte that is not 0 to 255.
+- **Call**, `51 # C`, prints the character with code `C` and gives `C`
+  back; `43 # 0` reads a key as INKEY$ does, and since no key is ever
+  waiting while a line runs, gives 0. Any other address is a DOMAIN
+  ERROR.
+- **Without `)RAM`** peek, poke and Call are NONCE ERRORs.
+
+`)DOS` replies DOS READY and takes the keyboard. `DIR` lists the saved
+workspaces, as `)LIB` does; `KILL NAME` drops one; `RETURN` goes back
+to APL with the workspace intact. Each but RETURN ends with DOS READY;
+anything else is INCORRECT COMMAND, (C)'s own answer, since the
+manual does not give DOS's.
 
 ## Names with `∆`
 
