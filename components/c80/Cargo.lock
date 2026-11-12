@@ -19,6 +19,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-attn"
+version = "0.1.0"
+dependencies = [
+ "libc",
+]
+
+[[package]]
+name = "apl-c80-commands"
+version = "0.1.0"
+dependencies = [
+ "apl-modes",
+ "apl-value",
+ "apl-workspace",
+]
+
+[[package]]
 name = "apl-c80-cuts"
 version = "0.1.0"
 dependencies = [
@@ -29,10 +45,52 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-c80-define"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-scan",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-c80-format"
+version = "0.1.0"
+dependencies = [
+ "apl-format",
+ "apl-modes",
+ "apl-value",
+ "apl-workspace",
+]
+
+[[package]]
 name = "apl-c80-scalar"
 version = "0.1.0"
 dependencies = [
  "apl-value",
+]
+
+[[package]]
+name = "apl-c80-status"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-ibeam",
+ "apl-modes",
+ "apl-value",
+ "apl-workspace",
+]
+
+[[package]]
+name = "apl-c80-wsfile"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-modes",
+ "apl-scan",
+ "apl-value",
+ "apl-workspace",
+ "apl-wsfile",
 ]
 
 [[package]]
@@ -44,11 +102,52 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-console"
+version = "0.1.0"
+dependencies = [
+ "apl-display",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-display"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+]
+
+[[package]]
+name = "apl-format"
+version = "0.1.0"
+dependencies = [
+ "apl-display",
+ "apl-numeral",
+ "apl-value",
+]
+
+[[package]]
 name = "apl-glyphs"
 version = "0.1.0"
 dependencies = [
  "serde",
  "toml",
+]
+
+[[package]]
+name = "apl-ibeam"
+version = "0.1.0"
+dependencies = [
+ "apl-clock",
+ "apl-modes",
+ "apl-value",
+ "apl-workspace",
+]
+
+[[package]]
+name = "apl-lex"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
 ]
 
 [[package]]
@@ -61,14 +160,218 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-numeral"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+]
+
+[[package]]
+name = "apl-prims"
+version = "0.1.0"
+dependencies = [
+ "apl-prims-index",
+ "apl-prims-join",
+ "apl-prims-mask",
+ "apl-prims-matrix",
+ "apl-prims-mixed",
+ "apl-prims-ops",
+ "apl-prims-radix",
+ "apl-prims-scalar",
+ "apl-prims-search",
+ "apl-prims-select",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-prims-index"
+version = "0.1.0"
+dependencies = [
+ "apl-prims-select",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-prims-join"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+]
+
+[[package]]
+name = "apl-prims-mask"
+version = "0.1.0"
+dependencies = [
+ "apl-prims-mixed",
+ "apl-prims-select",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-prims-matrix"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+]
+
+[[package]]
+name = "apl-prims-mixed"
+version = "0.1.0"
+dependencies = [
+ "apl-prims-scalar",
+ "apl-scalar-arith",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-prims-ops"
+version = "0.1.0"
+dependencies = [
+ "apl-prims-mixed",
+ "apl-prims-scalar",
+ "apl-prims-select",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-prims-radix"
+version = "0.1.0"
+dependencies = [
+ "apl-prims-scalar",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-prims-scalar"
+version = "0.1.0"
+dependencies = [
+ "apl-attn",
+ "apl-c80-scalar",
+ "apl-scalar-arith",
+ "apl-scalar-circ",
+ "apl-scalar-logic",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-prims-search"
+version = "0.1.0"
+dependencies = [
+ "apl-prims-scalar",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-prims-select"
+version = "0.1.0"
+dependencies = [
+ "apl-prims-join",
+ "apl-prims-mixed",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-saved"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-console",
+ "apl-prims",
+ "apl-space",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-scalar-arith"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+]
+
+[[package]]
+name = "apl-scalar-circ"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+]
+
+[[package]]
+name = "apl-scalar-logic"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+]
+
+[[package]]
+name = "apl-scan"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-lex",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-space"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-value",
+]
+
+[[package]]
 name = "apl-store"
 version = "0.1.0"
+
+[[package]]
+name = "apl-transcript"
+version = "0.1.0"
+dependencies = [
+ "apl-console",
+]
+
+[[package]]
+name = "apl-uses"
+version = "0.1.0"
+dependencies = [
+ "apl-modes",
+ "apl-value",
+ "apl-workspace",
+]
 
 [[package]]
 name = "apl-value"
 version = "0.1.0"
 dependencies = [
  "apl-glyphs",
+]
+
+[[package]]
+name = "apl-workspace"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-clock",
+ "apl-console",
+ "apl-modes",
+ "apl-prims",
+ "apl-saved",
+ "apl-space",
+ "apl-store",
+ "apl-transcript",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-wsfile"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-modes",
+ "apl-scan",
+ "apl-uses",
+ "apl-value",
+ "apl-workspace",
 ]
 
 [[package]]

@@ -1,6 +1,6 @@
-number = 6
+number = 5
 slug = "c80-commands"
-status = "pending"
+status = "in-progress"
 description = "In C: )DEF and )EDIT with the line commands in place of the del editor; )TRON..."
 role = "production"
 context_files = []

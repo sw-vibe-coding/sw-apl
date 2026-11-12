@@ -1,4 +1,4 @@
-number = 5
+number = 6
 slug = "help-groups"
 status = "pending"
 description = "Owner asked for regression tests of every )HELP page. )HELP WORKSPACE (and LI..."

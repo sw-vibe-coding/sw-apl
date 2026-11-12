@@ -11,11 +11,16 @@ use crate::{apply, forms};
 /// Parse and evaluate one line. `Output::Nothing` when there is
 /// nothing to display: a blank line, a comment, an assignment
 /// (including `⎕←`, which displays through the output buffer), or a
-/// call to a defined function that declares no result.
+/// call to a defined function that declares no result. In (C), a line
+/// may be a format statement instead, and what is shown is laid out
+/// by the format in force (`apl-c80-format`).
 ///
 /// # Errors
 /// Any lexical, syntax, or evaluation error, with a caret.
 pub fn eval_line(ws: &mut Workspace, line: &str) -> AplResult<Output> {
+    if let Some(done) = apl_c80_format::statement(ws, line, eval_line) {
+        return done;
+    }
     let takes_argument =
         |n: &str| apl_sysfns::is_function(n) || ws.function(n).is_some_and(|d| d.right.is_some());
     let Some(expr) = parse(line, ws.mode.glyphs(), &takes_argument)? else {
@@ -27,7 +32,7 @@ pub fn eval_line(ws: &mut Workspace, line: &str) -> AplResult<Output> {
         return done;
     }
     if let Some(shown) = statement(ws, &expr)? {
-        return Ok(shown);
+        return apl_c80_format::shaped(ws, shown);
     }
     let silent = matches!(
         expr,
@@ -37,9 +42,8 @@ pub fn eval_line(ws: &mut Workspace, line: &str) -> AplResult<Output> {
             | Expr::QuoteQuadOut { .. }
     );
     let value = eval_expr(ws, &expr)?;
-    Ok((!silent)
-        .then_some(value)
-        .map_or(Output::Nothing, Output::Value))
+    let shown = (!silent).then_some(value);
+    apl_c80_format::shaped(ws, shown.map_or(Output::Nothing, Output::Value))
 }
 
 /// The statement shapes that do not evaluate to one value: mixed

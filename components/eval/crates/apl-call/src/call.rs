@@ -86,6 +86,11 @@ pub fn run_body(
     let mut line = from;
     while let Some(text) = defn.body.get(line - 1) {
         ws.stop(at, line, false);
+        if ws.trace {
+            let named = format!("{}[{line}]", defn.name);
+            ws.output.push(Output::Lines(vec![named]));
+            emit(ws);
+        }
         let stopped = interrupted().then(|| AplError::new(ErrorKind::Interrupt));
         let shown = stopped.map_or_else(|| run(ws, &without_label(text)), Err);
         let shown = shown.map_err(|e| halt(ws, e, defn, at, line))?;

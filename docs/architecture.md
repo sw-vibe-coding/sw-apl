@@ -123,15 +123,34 @@ sw-apl/
                                    settings and values, which only the
                                    (B) '75 mode has
                                    (only (B) '75 reaches these)
-    c80/       apl-c80-cuts        cuts: what the (C) '80 mode leaves
+    c80/       apl-c80-commands    system commands only the (C) '80 mode
+                                   has: )TRON and )TROFF, )PS and )PD,
+                                   and )AUTO
+               apl-c80-cuts        cuts: what the (C) '80 mode leaves
                                    out of a statement and the mixed
                                    functions, after APL80's Limitations
+               apl-c80-define      definition: )DEF and )EDIT with
+                                   APL80's line commands, the (C) '80
+                                   mode's way to define and change a
+                                   function
+               apl-c80-format      format statement: the (C) '80 mode's
+                                   numeric format, set by a statement
+                                   and held until characters, an error
+                                   or a command
                apl-c80-scalar      scalar cuts: the scalar functions the
                                    (C) '80 mode leaves out, the
                                    hyperbolic circle functions and
                                    factorial of a fraction
+               apl-c80-status      status and conversion: the (C) '80
+                                   mode's s operator, typed as the
+                                   I-beam, and # between characters and
+                                   APL80's codes
+               apl-c80-wsfile      workspace file in the (C) '80 mode:
+                                   functions as )DEF blocks and the
+                                   latent expression as )AUTO, run in
+                                   (C) alone
                                    (each asks the session's profile, so
-                                   only (C) '80 is cut)
+                                   only (C) '80 reaches these)
     cli/       apl-config          library configuration: --lib
                                    N=DIR[,NAME] and sw-apl.toml, for the
                                    CLI and the service
@@ -182,7 +201,7 @@ value -> lex (and strike) -> scan -> parse
 value -> c80 (scalar cuts) -> prims (dispatch; scalar, mixed, ops and the rest)
 prims + console + clock + modes -> workspace -> call, quad
 parse + prims + call + quad + a70 + b75 + c80 -> eval
-eval -> session (commands, editor, library, extensions) -> cli (+ config)
+eval + c80 (commands, definition, wsfile) -> session (commands, editor, library, extensions) -> cli (+ config)
 eval -> session -> web (wire, serve, server; wasm, board, wasm-store)
 lex (strike) -> term (keyboard, paper, typing, aplterm) -> wire
 ```

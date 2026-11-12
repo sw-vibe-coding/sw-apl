@@ -1373,6 +1373,32 @@ owner had a coprocessor in their own PC for APL. Step
 timeline; the IBM PC APL callout says it required the 8087; sources in
 `citations.md`.
 
+Owner direction (2026-11-11, later): "do c80-commands next, then
+help-groups." And, during it: "we need an approach to making A80 like
+the original; that means that its workspaces should NOT use del
+editor if A80 uses )DEF instead. A80 workspaces will be only good for
+this mode and will have to duplicate code (probably needs different
+code anyway)." So:
+
+- (C) has no del. `∇` is an error in (C); functions are defined with
+  `)DEF` and changed with `)EDIT` and the line commands.
+- A workspace saved in (C) runs in (C) only (`NAME.c.apl.ws`, `⍝!MODES
+  (C)`), and none saved in (A) or (B) runs in (C). A workspace ported
+  to (C) is a `.c` file of its own, written for APL80, beside the (A)
+  and (B) files of the same name; `c80-workspaces` writes them so.
+- A (C) workspace file is written as APL80 would type it: each
+  function as `)DEF` with its header, its lines, and the empty line
+  that stands for BREAK; a latent expression as `)AUTO`.
+
+Owner direction (2026-11-11, later still): "we need a document that
+compares a, b, and c modes now (and d later) showing which
+feature/operator/type is supported across all three, or only by some,
+or one." Step `modes-table`, after `c80-commands`: `docs/modes.md`, one
+table per area -- data types, scalar and mixed functions, operators,
+system commands, system values, defining functions, workspaces,
+typing and display -- a column per mode and room for (D), each cell
+done, partial or absent, and a `)HELP MODES` pointer to it.
+
 ## Owner direction (2026-09-29): the documents, checked against the code
 
 "Is the README up-to-date? Scan documents for stale info or

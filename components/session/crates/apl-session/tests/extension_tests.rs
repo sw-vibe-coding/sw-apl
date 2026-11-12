@@ -41,11 +41,14 @@ const SHARED: [&str; 19] = [
     "SIV", "SYMBOLS", "OFF", "CONTINUE", "DIALECT", "HELP", "LIBS",
 ];
 const ONLY_A: [&str; 6] = ["ORIGIN", "DIGITS", "WIDTH", "GROUP", "GRP", "GRPS"];
+const ONLY_C: [&str; 8] = ["DEF", "EDIT", "AUTO", "EXEC", "PS", "PD", "TRON", "TROFF"];
 
 fn commands(mode: Mode) -> Vec<&'static str> {
     let mut all = SHARED.to_vec();
-    if mode == Mode::A {
-        all.extend(ONLY_A);
+    match mode {
+        Mode::A => all.extend(ONLY_A),
+        Mode::B => {}
+        Mode::C => all.extend(ONLY_C),
     }
     all
 }
@@ -208,14 +211,18 @@ fn the_editor_has_a_page_in_each_mode() {
             "{mode:?}: TOPICS lists EDITOR"
         );
         let page = out(&mut s, ")HELP EDITOR").join("\n");
-        for form in ["[⎕]", "[⎕N]", "[N⎕]", "[∆N]", "[0]"] {
+        // (C) has APL80's line commands and no del.
+        let forms = match mode {
+            Mode::C => vec![")DEF", ")EDIT", ")?", ")P N", ")0", ")E N"],
+            _ => vec!["[⎕]", "[⎕N]", "[N⎕]", "[∆N]", "[0]"],
+        };
+        for form in forms {
             assert!(page.contains(form), "{mode:?}: no {form}\n{page}");
         }
-        // The slash line is APL\360's, and (C)'s until it has APL80's
-        // own editor; the 5110 edits in place.
+        // The slash line is APL\360's; the 5110 edits in place.
         assert_eq!(
             page.contains("CHANGE PART OF LINE N"),
-            mode != Mode::B,
+            mode == Mode::A,
             "{mode:?}\n{page}"
         );
     }

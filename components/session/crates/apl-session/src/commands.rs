@@ -9,6 +9,7 @@ use apl_parse::parse_header;
 use apl_sysvars::latent;
 use apl_value::{AplError, ErrorKind};
 
+use crate::keyed;
 use crate::session::Session;
 use apl_reply::Reply;
 
@@ -88,6 +89,9 @@ pub fn dispatch(session: &mut Session, line: &str) -> Option<Reply> {
     if session.defining.as_ref().is_some_and(|d| d.patch.is_some()) {
         return Some(definition_line(session, line));
     }
+    if let Some(reply) = keyed::line(session, line) {
+        return Some(reply);
+    }
     if let Some(command) = trimmed.strip_prefix(')') {
         return Some(run_command(session, command));
     }
@@ -98,6 +102,9 @@ pub fn dispatch(session: &mut Session, line: &str) -> Option<Reply> {
     // it says; outside one, a settings directive takes effect.
     if directive(&mut session.ws.saved, line) {
         return Some(Reply::default());
+    }
+    if let Some(refused) = keyed::no_del(session, line) {
+        return Some(refused);
     }
     let del = trimmed.chars().next().filter(|c| *c == '∇' || *c == '⍫')?;
     Some(open_definition(session, &trimmed[del.len_utf8()..], del))
@@ -129,8 +136,14 @@ const NOT_WITH_OPEN: [&str; 4] = ["COPY", "PCOPY", "SAVE", "CONTINUE"];
 pub fn run_command(session: &mut Session, command: &str) -> Reply {
     let typed = command.split_whitespace().next().unwrap_or_default();
     let name = canonical(&typed.to_ascii_uppercase()).to_string();
-    if session.defining.is_some() && NOT_WITH_OPEN.contains(&name.as_str()) {
+    let open = session.defining.is_some() || session.keyed.is_some();
+    if open && NOT_WITH_OPEN.contains(&name.as_str()) {
         return Reply::from(vec!["NOT WITH OPEN DEFINITION".to_string()]);
+    }
+    // A command ends (C)'s format statement, as APL80's does.
+    session.ws.format = None;
+    if let Some(reply) = keyed::command(session, &name, command) {
+        return reply;
     }
     let answer = system_command(&mut session.ws, command);
     if answer.feed.is_empty() {
@@ -138,6 +151,7 @@ pub fn run_command(session: &mut Session, command: &str) -> Reply {
     }
     let was = session.ws.saved.clone();
     session.defining = None;
+    session.keyed = None;
     for line in &answer.feed {
         let reply = session.respond(line);
         if reply.error {
@@ -147,7 +161,7 @@ pub fn run_command(session: &mut Session, command: &str) -> Reply {
     }
     let mut reply = Reply::from(answer);
     let latent = latent(&session.ws).filter(|_| name == "LOAD");
-    let shown = latent.map(|line| session.respond(line).lines);
+    let shown = latent.map(|line| session.respond(&line).lines);
     reply.lines.extend(shown.unwrap_or_default());
     reply
 }

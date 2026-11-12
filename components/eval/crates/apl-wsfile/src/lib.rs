@@ -16,8 +16,10 @@
 
 mod groups;
 mod literal;
+mod obscure;
 mod write;
 
-pub use groups::{definitions, expand, plain};
+pub use groups::{definitions, expand};
 pub use literal::literal;
-pub use write::{DIRECTIVE, PREAMBLE, rot13, write};
+pub use obscure::{PREAMBLE, plain, rot13};
+pub use write::{DIRECTIVE, heading, objects, write};

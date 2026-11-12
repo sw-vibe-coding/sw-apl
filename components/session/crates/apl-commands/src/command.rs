@@ -1,6 +1,7 @@
 //! Which command, and what it replies.
 
 use apl_a70_commands::command as seventy;
+use apl_c80_commands::command as eighty;
 use apl_eval::{Mode, Saved, Workspace, hms};
 use apl_extensions::command as extension;
 use apl_inquiry::command as inquiry;
@@ -48,11 +49,12 @@ pub fn system_command(ws: &mut Workspace, command: &str) -> Answer {
         ("DROP", _) => drop_workspace(ws, &rest),
         ("LIB", _) => lib(ws, &rest),
         ("COPY" | "PCOPY", _) => return copy(ws, &rest, name == "PCOPY"),
-        // The '70-only, inquiry and sw-apl commands answer for
-        // themselves, and None for a name they do not know.
+        // The '70-only, inquiry, sw-apl and '80-only commands answer
+        // for themselves, and None for a name they do not know.
         _ => seventy(&mut ws.saved, ws.mode, &name, &rest)
             .or_else(|| inquiry(ws, &name, &rest))
             .or_else(|| extension(ws, &name, &rest))
+            .or_else(|| eighty(ws, command))
             .unwrap_or_else(|| vec![workspace_command(&mut ws.saved, ws.mode, &name, &rest)]),
     };
     ending(ws, lines, off)

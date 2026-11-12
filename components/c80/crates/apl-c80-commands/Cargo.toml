@@ -1,0 +1,16 @@
+[package]
+name = "apl-c80-commands"
+description = "sw-apl system commands only the (C) '80 mode has: )TRON and )TROFF, )PS and )PD, and )AUTO"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-modes = { path = "../../../eval/crates/apl-modes" }
+apl-value = { path = "../../../value/crates/apl-value" }
+apl-workspace = { path = "../../../eval/crates/apl-workspace" }
+
+[lints]
+workspace = true

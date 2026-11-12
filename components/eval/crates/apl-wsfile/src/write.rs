@@ -1,27 +1,18 @@
 //! A saved workspace as the lines that would rebuild it.
 
-use apl_modes::render;
+use apl_ast::Defn;
+use apl_modes::{Modes, render};
 use apl_scan::header_text;
 use apl_uses::runs_in;
 use apl_value::FUZZ;
 use apl_workspace::Saved;
 
 use crate::literal::literal;
+use crate::obscure::{PREAMBLE, rot13};
 
 /// The prefix of a line that is a comment to APL and an instruction
 /// to `)LOAD`: what APL has no way of saying about itself.
 pub const DIRECTIVE: &str = "⍝!";
-
-/// What an obscured workspace begins with, before anything
-/// scrambled. `)LOAD` tells the two forms apart by the first line;
-/// the other two are there for the person who runs the file as a
-/// program, so it says what it is and signs off instead of printing
-/// a screen of CHARACTER ERRORs.
-pub const PREAMBLE: [&str; 3] = [
-    "⍝!OBSCURED sw-apl workspace. Rot-13, not encryption: docs/workspaces.md.",
-    "'OBSCURED WORKSPACE. )LOAD IT -- IT CANNOT BE RUN AS A PROGRAM.'",
-    ")OFF",
-];
 
 /// A saved workspace as APL you could have typed: the variables as
 /// assignments, the functions as del definitions, and what APL cannot
@@ -50,10 +41,26 @@ pub const PREAMBLE: [&str; 3] = [
 #[must_use]
 pub fn write(saved: &Saved, when: &str) -> String {
     let saved = &saved.unwound();
-    let modes = format!("{DIRECTIVE}MODES {}", render(runs_in(saved)));
+    let mut lines = heading(saved, when, runs_in(saved));
+    lines.extend(saved.latent.iter().map(|lx| format!("⎕LX←{}", literal(lx))));
+    lines.extend(objects(saved, definition));
+    if !saved.funcs.values().any(|f| f.locked) {
+        return lines.join("\n") + "\n";
+    }
+    let modes = lines.remove(1);
+    let hidden = rot13(&(lines.join("\n") + "\n"));
+    PREAMBLE.join("\n") + "\n" + &modes + "\n" + &hidden
+}
+
+/// What a file says first, of a workspace that runs in `modes`: what
+/// it is, the modes line, when it was saved, its random link and its
+/// settings as directives, a tolerance other than the fixed one, and
+/// the name it was saved under.
+#[must_use]
+pub fn heading(saved: &Saved, when: &str, modes: Modes) -> Vec<String> {
     let mut lines = vec![
         "⍝ sw-apl workspace. Re-executable APL: loading it runs it.".to_string(),
-        modes.clone(),
+        format!("{DIRECTIVE}MODES {}", render(modes)),
         format!("{DIRECTIVE}SAVED {when}"),
         format!("{DIRECTIVE}LINK {}", saved.env.link),
         format!("{DIRECTIVE}ORIGIN {}", saved.env.io),
@@ -63,49 +70,19 @@ pub fn write(saved: &Saved, when: &str) -> String {
     let ct = saved.env.ct;
     lines.extend((ct.to_bits() != FUZZ.to_bits()).then(|| format!("{DIRECTIVE}CT {ct}")));
     lines.extend(saved.id.iter().map(|id| format!(")WSID {id}")));
-    lines.extend(saved.latent.iter().map(|lx| format!("⎕LX←{}", literal(lx))));
-    lines.extend(objects(saved));
-    if !saved.funcs.values().any(|f| f.locked) {
-        return lines.join("\n") + "\n";
-    }
-    lines.remove(1);
-    let hidden = rot13(&(lines.join("\n") + "\n"));
-    PREAMBLE.join("\n") + "\n" + &modes + "\n" + &hidden
-}
-
-/// Letters moved thirteen places, everything else left alone.
-///
-/// This is obscuring, not encryption, and the documentation must not
-/// suggest otherwise: anyone who means to read a rot-13 file can.
-/// What it stops is reading a locked function by accident or by
-/// curiosity, which is what APL\360's binary workspaces stopped.
-///
-/// Rot-13 is its own inverse, so this one function serves both
-/// directions: writing scrambles and `plain` unscrambles with the
-/// same call.
-#[must_use]
-pub fn rot13(text: &str) -> String {
-    text.chars()
-        .map(|c| {
-            let first = match c {
-                'A'..='Z' => b'A',
-                'a'..='z' => b'a',
-                _ => return c,
-            };
-            // Both arms above are ASCII, so this cannot overflow.
-            char::from(first + ((c as u8) - first + 13) % 26)
-        })
-        .collect()
+    lines
 }
 
 /// What the workspace holds, in the order a reader wants it:
-/// variables, then functions, then the groups as the commands that
-/// would gather them again. Groups come last because a group is only
-/// names -- it does not matter whether what it names is written yet.
+/// variables, then functions, each written by `define`, then the
+/// groups as the commands that would gather them again. Groups come
+/// last because a group is only names -- it does not matter whether
+/// what it names is written yet.
 ///
 /// Each kind is sorted, so the same workspace writes the same bytes
 /// every time.
-fn objects(saved: &Saved) -> Vec<String> {
+#[must_use]
+pub fn objects(saved: &Saved, define: fn(&Defn) -> Vec<String>) -> Vec<String> {
     let mut lines = Vec::new();
     let mut names: Vec<&String> = saved.vars.keys().collect();
     names.sort();
@@ -117,7 +94,7 @@ fn objects(saved: &Saved) -> Vec<String> {
     let mut functions: Vec<&String> = saved.funcs.keys().collect();
     functions.sort();
     for name in functions {
-        lines.extend(definition(&saved.funcs[name]));
+        lines.extend(define(&saved.funcs[name]));
     }
     let mut groups: Vec<&String> = saved.groups.keys().collect();
     groups.sort();
@@ -130,7 +107,7 @@ fn objects(saved: &Saved) -> Vec<String> {
 /// when it is locked, which is the only way a file can carry a locked
 /// function at all. A text workspace therefore shows what the editor
 /// will not; locking guards the editor, not the file.
-fn definition(defn: &apl_ast::Defn) -> Vec<String> {
+fn definition(defn: &Defn) -> Vec<String> {
     let mut lines = vec![format!("∇{}", header_text(defn))];
     lines.extend(defn.body.iter().cloned());
     lines.push(if defn.locked { "⍫" } else { "∇" }.to_string());

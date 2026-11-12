@@ -5,50 +5,27 @@
 //! leaves the commands, because running the file would apply its
 //! settings and change the index origin under code already written.
 
-use apl_modes::{modes, retag};
-
-use crate::write::{DIRECTIVE, PREAMBLE, rot13};
-
-/// A workspace file as APL, whichever way it was written. A plain
-/// file is itself; an obscured one -- which is what a workspace
-/// holding a locked function is written as -- is what lies under the
-/// preamble, unscrambled. The two are told apart by the first line.
-///
-/// Everything that reads a workspace goes through here, so nothing
-/// above it needs to know the two forms exist.
-#[must_use]
-pub fn plain(text: &str) -> String {
-    if !text.starts_with(PREAMBLE[0]) {
-        return text.to_string();
-    }
-    // The modes line follows the preamble in the clear, and goes back
-    // where a plain file has it.
-    let mut body = text.lines().skip(PREAMBLE.len()).peekable();
-    let clear = body.next_if(|l| l.starts_with(&format!("{DIRECTIVE}MODES")));
-    let body: Vec<&str> = body.collect();
-    let revealed = rot13(&(body.join("\n") + "\n"));
-    match clear {
-        Some(_) => retag(&revealed, modes(text)),
-        None => revealed,
-    }
-}
-
 /// The file's definitions, each as the name it defines and the lines
 /// that define it, in the order they appear. Commands and directives
 /// are left out, which is what makes copying different from loading.
 #[must_use]
 pub fn definitions(text: &str) -> Vec<(String, Vec<String>)> {
     let mut groups: Vec<(String, Vec<String>)> = Vec::new();
-    let mut open = false;
+    // What ends the definition open, if one is: a closing del, or for
+    // (C)'s `)DEF` the empty line that stands for BREAK.
+    let mut open: Option<fn(&str) -> bool> = None;
     for line in text.lines() {
-        if open {
+        if let Some(closes) = open {
             if let Some(group) = groups.last_mut() {
                 group.1.push(line.to_string());
             }
-            open = !matches!(line.trim(), "∇" | "⍫");
+            open = (!closes(line.trim())).then_some(closes);
         } else if let Some(header) = line.strip_prefix('∇') {
             groups.push((function_name(header), vec![line.to_string()]));
-            open = true;
+            open = Some(|l| matches!(l, "∇" | "⍫"));
+        } else if let Some(header) = line.strip_prefix(")DEF ") {
+            groups.push((function_name(header), vec![line.to_string()]));
+            open = Some(str::is_empty);
         } else if let Some(rest) = line.strip_prefix(")GROUP ") {
             let name = rest.split_whitespace().next().unwrap_or_default();
             groups.push((name.to_string(), vec![line.to_string()]));

@@ -26,7 +26,8 @@ use crate::eval::{eval_expr, eval_line};
 /// implemented yet, and says so with NONCE ERROR. A system function,
 /// which only (B) lexes, is `apl-sysfns`'s. Scan is a mode's feature: in (A),
 /// as in APL\360, a function before a slope is an expansion with no
-/// array on its left, a SYNTAX ERROR when the line runs.
+/// array on its left, a SYNTAX ERROR when the line runs. (C)'s status
+/// and conversion, `⌶` and `#` there, are `apl-c80-status`'s.
 ///
 /// # Errors
 /// Evaluation errors, with the glyph's position as the caret.
@@ -41,6 +42,13 @@ pub fn eval_monadic(ws: &mut Workspace, expr: &Expr) -> AplResult<Array> {
         unreachable!("eval_monadic only receives monadic applications")
     };
     let r = eval_expr(ws, right)?;
+    if let Some(done) = axis
+        .is_none()
+        .then(|| apl_c80_status::monadic(ws, func, &r))
+        .flatten()
+    {
+        return done.map_err(|e| e.at(*pos));
+    }
     match func {
         Function::Defined(name) => return value(ws, name, *pos, (None, Some(r)), eval_line),
         Function::System(name) => return apl_sysfns::monadic(ws, name, &r).map_err(|e| e.at(*pos)),

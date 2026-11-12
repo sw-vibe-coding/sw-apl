@@ -1,0 +1,18 @@
+[package]
+name = "apl-c80-status"
+description = "sw-apl status and conversion: the (C) '80 mode's s operator, typed as the I-beam, and # between characters and APL80's codes"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-ast = { path = "../../../parse/crates/apl-ast" }
+apl-ibeam = { path = "../../../a70/crates/apl-ibeam" }
+apl-modes = { path = "../../../eval/crates/apl-modes" }
+apl-value = { path = "../../../value/crates/apl-value" }
+apl-workspace = { path = "../../../eval/crates/apl-workspace" }
+
+[lints]
+workspace = true

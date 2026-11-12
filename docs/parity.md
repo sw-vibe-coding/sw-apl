@@ -268,8 +268,12 @@ above, and these rows are what (C) changes.
 | One specification a statement, at its left | done | c80 session tests, sample 93 |
 | At most 32 functions in a workspace and 255 lines in a function | done | c80 session tests |
 | APL80's typing and display: its substitutes, dotted shifted letters, upper case, a 64-by-16 screen | part | types and shows (A)'s glyphs |
-| Functions defined by `)DEF` and `)EDIT`, and APL80's other commands | part | the del editor and (A)'s commands |
-| The `f` format statement, the `d` axis operator, `#` and `s` | part | not there |
+| Functions defined by `)DEF` and changed by `)EDIT`, with `)?`, `)P n`, `)n`, `)0` and `)E n`; an empty line for BREAK; no del | done | c80 command tests, sample 97 |
+| A workspace saved in (C) runs in (C) alone, written with `)DEF` and `)AUTO` | done | c80 command tests |
+| `)TRON` and `)TROFF`, `)PS` and `)PD`, `)AUTO` and `)EXEC` | done | c80 command tests, sample 97 |
+| The format statement, status (`⌶` for APL80's `s`) and `#` between characters and APL80's codes | done | c80 command tests, sample 97 |
+| APL80's other commands: `)RESET`, `)KILL`, `)DOS`, `)RAM` and the file commands; the commands of (A) that APL80 has not got still answer | part | the shared commands |
+| The `d` axis operator, the screen codes `#` sends, and Call | part | the screen's, still to come |
 | The workspaces that run in (C), and five lessons | part | none yet |
 
 ## Restrictions

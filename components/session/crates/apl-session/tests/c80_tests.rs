@@ -113,11 +113,22 @@ fn a_statement_specifies_once_and_not_as_a_value() {
     assert_eq!(out(&mut c, "X"), vec!["3"]);
 }
 
-/// Define `name` with the del, one line long.
+/// Open `name` the mode's way -- `)DEF` in (C), the del elsewhere --
+/// and what the line that ends it is.
+fn opening(s: &Session, name: &str) -> (String, &'static str) {
+    if s.ws.mode == Mode::C {
+        (format!(")DEF {name}"), "")
+    } else {
+        (format!("∇{name}"), "∇")
+    }
+}
+
+/// Define `name`, one line long, and what ending it showed.
 fn define(s: &mut Session, name: &str) -> Vec<String> {
-    out(s, &format!("∇{name}"));
+    let (open, close) = opening(s, name);
+    out(s, &open);
     out(s, "1");
-    out(s, "∇")
+    out(s, close)
 }
 
 #[test]
@@ -131,10 +142,8 @@ fn a_workspace_holds_at_most_32_functions() {
         Some("DEFN ERROR")
     );
     assert!(!c.ws.is_function("F33"));
-    assert!(
-        define(&mut c, "F1").is_empty(),
-        "redefining one is not another"
-    );
+    out(&mut c, ")EDIT F1");
+    assert!(out(&mut c, "").is_empty(), "changing one is not another");
     let mut a = in_mode(Mode::A);
     for n in 1..=33 {
         assert!(
@@ -148,11 +157,12 @@ fn a_workspace_holds_at_most_32_functions() {
 fn a_function_has_at_most_255_lines() {
     let lines = |mode, n: usize| {
         let mut s = in_mode(mode);
-        out(&mut s, "∇G");
+        let (open, close) = opening(&s, "G");
+        out(&mut s, &open);
         for _ in 0..n {
             out(&mut s, "1");
         }
-        (out(&mut s, "∇").first().cloned(), s.ws.is_function("G"))
+        (out(&mut s, close).first().cloned(), s.ws.is_function("G"))
     };
     assert_eq!(lines(Mode::C, 255), (None, true));
     assert_eq!(lines(Mode::C, 256), (Some("DEFN ERROR".into()), false));

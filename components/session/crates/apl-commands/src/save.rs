@@ -1,6 +1,6 @@
 //! Writing a workspace out, forgetting one, and listing a library.
 
-use apl_eval::{Workspace, hms};
+use apl_eval::{Feature, Workspace, hms};
 use apl_library::{IMPROPER_LIBRARY, INCORRECT, WS_NOT_FOUND, library, named, not_saved};
 use apl_wsfile::write;
 
@@ -29,7 +29,13 @@ pub fn save(ws: &mut Workspace, name: Option<&str>) -> Vec<String> {
     }
     ws.saved.id = Some(id.clone());
     let when = moment(ws);
-    let text = write(&ws.saved, &when);
+    // A mode that defines by command writes its own form, which runs
+    // there alone: (C)'s, after APL80.
+    let text = if ws.mode.profile().has(Feature::DefineByCommand) {
+        apl_c80_wsfile::write(&ws.saved, &when, ws.mode)
+    } else {
+        write(&ws.saved, &when)
+    };
     match apl_shelves::keep(&mut *ws.store, ws.mode, 0, &id, &text) {
         Ok(()) => vec![format!("{when} {id}")],
         Err(err) => vec![format!("NOT SAVED, {err}")],

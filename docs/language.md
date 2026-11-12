@@ -452,8 +452,37 @@ The scalar cuts hold through reduction, scan and the products, as
 `!/2.5 3` and `5 1∘.○0` show. A clear workspace in (C) prints six
 digits in a line of 64. `docs/mode-c.md` records the sources and the
 choice of each error, which the manual does not name. (C) types
-and shows the same glyphs as (A), and defines functions with the
-del.
+and shows the same glyphs as (A).
+
+## What (C) '80 adds
+
+(C) has no del: `∇` is a CHARACTER ERROR there. Functions are defined
+and changed by command, as on APL80:
+
+| Command | What it does |
+|---|---|
+| `)DEF header` | Opens a new function, asking for line 1 |
+| `)EDIT name` | Opens one that exists, after its last line |
+| An empty line | BREAK: ends the definition |
+| `)?` | Shows the function, the header as line 0 |
+| `)P n` | Shows 14 lines from line n |
+| `)n` | Deletes line n and asks for its replacement |
+| `)0` | Asks for a new header, with the same name |
+| `)E n` | Offers line n to type over |
+
+Every change renumbers the lines at once. A workspace saved in (C)
+runs in (C) alone, and is written as these commands would type it.
+
+Its other commands and operators:
+
+| Form | What it does |
+|---|---|
+| `)TRON`, `)TROFF` | Name each line of a function, as `F[2]`, before it runs; stop |
+| `)PS`, `)PD` | Print numbers with 6 digits, or 15 |
+| `)AUTO expression`, `)EXEC` | Set the latent expression a loaded workspace runs; run it now |
+| `⍕6 2` as a statement | The format: pairs of width and decimals for the numbers shown after it, until characters, an error or a command |
+| `⌶n` | Status: 0 the time since sign-on in 25 ms ticks, 1 to 3 the file pointers, 4 the line running, 5 the bytes free |
+| `#` | Characters to APL80's codes and back: `#'A⍴'` is `65 112` |
 
 ## Errors
 

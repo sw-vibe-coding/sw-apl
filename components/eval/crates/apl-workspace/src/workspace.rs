@@ -74,6 +74,13 @@ pub struct Workspace {
     /// A command typed in reply to quad input that abandoned the
     /// read, waiting for the statement to unwind before it runs.
     pub abandoned: Option<String>,
+    /// Whether each line of a function is named before it runs, as
+    /// (C)'s `)TRON` asks. Session state: a saved workspace does not
+    /// trace.
+    pub trace: bool,
+    /// The numeric format (C)'s format statement set, as pairs of width
+    /// and decimals, until characters, an error or a command end it.
+    pub format: Option<Array>,
 }
 
 impl Default for Workspace {
@@ -91,6 +98,8 @@ impl Default for Workspace {
             time: TimeSource::None,
             command: None,
             abandoned: None,
+            trace: false,
+            format: None,
         }
     }
 }

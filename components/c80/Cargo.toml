@@ -3,8 +3,13 @@
 # docs/architecture.md, "Adding a mode".
 [workspace]
 members = [
+    "crates/apl-c80-commands",
     "crates/apl-c80-cuts",
+    "crates/apl-c80-define",
+    "crates/apl-c80-format",
     "crates/apl-c80-scalar",
+    "crates/apl-c80-status",
+    "crates/apl-c80-wsfile",
 ]
 resolver = "2"
 

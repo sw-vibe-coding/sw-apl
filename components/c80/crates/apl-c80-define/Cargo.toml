@@ -1,0 +1,16 @@
+[package]
+name = "apl-c80-define"
+description = "sw-apl definition: )DEF and )EDIT with APL80's line commands, the (C) '80 mode's way to define and change a function"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-ast = { path = "../../../parse/crates/apl-ast" }
+apl-scan = { path = "../../../parse/crates/apl-scan" }
+apl-value = { path = "../../../value/crates/apl-value" }
+
+[lints]
+workspace = true

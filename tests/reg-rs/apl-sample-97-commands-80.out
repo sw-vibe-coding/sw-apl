@@ -1,0 +1,106 @@
+      ⍝!MODES (C)
+      ⍝ (C) '80's commands, after APL80. Functions are defined with )DEF
+      ⍝ and changed with )EDIT; an empty line, for BREAK, ends one. There
+      ⍝ is no del.
+      ∇Z←F X
+CHARACTER ERROR: U+2207
+      ∇Z←F X
+      ^
+      )DEF Z←ROWS M
+[1]   Z←(¯1⌽M)+M+1⌽M
+[2]   
+      )DEF Z←SUM M
+[1]   Z←⍉ROWS⍉ROWS M
+[2]   
+      )DEF Z←GEN M;S
+[1]   S←SUM M
+[2]   Z←(S=3)∨M∧S=4
+[3]   
+      )DEF RUN N
+[1]   ' *'[1+G]
+[2]   G←GEN G
+[3]   N←N-1
+[4]   →(N>0)/1
+[5]   
+      G←8 8↑3 3⍴0 1 0 0 0 1 1 1 1
+      RUN 2
+ *      
+  *     
+***     
+        
+        
+        
+        
+        
+        
+* *     
+ **     
+ *      
+        
+        
+        
+        
+      ⍝ )EDIT reopens one after its last line; )? shows it, and )n
+      ⍝ replaces line n at once, renumbering the lines.
+      )EDIT RUN
+[5]   )?
+[0]   RUN N
+[1]   ' *'[1+G]
+[2]   G←GEN G
+[3]   N←N-1
+[4]   →(N>0)/1
+[5]   )3
+[3]   N←N-2
+[5]   )?
+[0]   RUN N
+[1]   ' *'[1+G]
+[2]   G←GEN G
+[3]   N←N-2
+[4]   →(N>0)/1
+[5]   
+      )FNS
+GEN ROWS RUN SUM
+      ⍝ )TRON names each line before it runs.
+      )DEF Z←SQ X
+[1]   Z←X×X
+[2]   
+      )TRON
+      SQ 4
+SQ[1]
+16
+      )TROFF
+      ⍝ )PS prints six digits, as a clear workspace does; )PD fifteen.
+      ÷3
+0.333333
+      )PD
+      ÷3
+0.333333333333333
+      )PS
+      ⍝ The format statement: pairs of width and decimals, until characters.
+      ⍕8 2
+      3.14159 2.71828
+    3.14    2.72
+      'DONE'
+DONE
+      3.14159
+3.14159
+      ⍝ Status (s): the line running, and the space free.
+      )DEF Z←WHERE
+[1]   Z←⌶4
+[2]   
+      WHERE
+1
+      ⍝ # turns characters into APL80's codes and back.
+      #'APL80'
+65 80 76 56 48
+      #65 80 76
+APL
+      #'⍴⍳'
+112 105
+      )AUTO 'READY'
+      )EXEC
+READY
+      )OFF
+15.38.41 11/11/26
+CONNECTED 0.00.00
+CPU TIME 0.00.00

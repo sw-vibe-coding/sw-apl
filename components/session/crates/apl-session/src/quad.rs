@@ -19,7 +19,11 @@ impl Default for Session {
             command: Some(at_quad),
             ..Workspace::default()
         };
-        Session { ws, defining: None }
+        Session {
+            ws,
+            defining: None,
+            keyed: None,
+        }
     }
 }
 
@@ -32,6 +36,9 @@ impl Session {
     /// whole line.
     #[must_use]
     pub fn offer(&self) -> Option<String> {
+        if let Some(keyed) = &self.keyed {
+            return keyed.offer();
+        }
         let patch = self.defining.as_ref()?.patch.as_ref()?;
         patch.offered().map(str::to_string)
     }
@@ -50,6 +57,7 @@ fn at_quad(ws: &mut Workspace, command: &str) -> Option<Vec<String>> {
     let mut session = Session {
         ws: std::mem::take(ws),
         defining: None,
+        keyed: None,
     };
     let reply = run_command(&mut session, command);
     *ws = session.ws;

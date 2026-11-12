@@ -1,5 +1,6 @@
 //! The session state machine: immediate execution and definition mode.
 
+use apl_c80_define::Keyed;
 use apl_call::{clear, resume, suspend};
 use apl_editor::Definition;
 use apl_eval::{Console, Host, INDENT, Output, Workspace, error_lines, eval_line, system};
@@ -19,6 +20,9 @@ pub struct Session {
     /// The function open in the del editor, while definition mode
     /// is open.
     pub(crate) defining: Option<Definition>,
+    /// The function open by `)DEF` or `)EDIT`, in a mode that defines
+    /// by command.
+    pub(crate) keyed: Option<Keyed>,
 }
 
 impl Session {
@@ -47,6 +51,9 @@ impl Session {
     /// execution, the bracketed line number in definition mode.
     #[must_use]
     pub fn prompt(&self) -> String {
+        if let Some(keyed) = &self.keyed {
+            return keyed.prompt();
+        }
         self.defining
             .as_ref()
             .map_or_else(|| INDENT.to_string(), Definition::prompt)
@@ -108,6 +115,8 @@ impl Session {
             };
         };
         lines.extend(error_lines(&err, line));
+        // An error ends (C)'s format statement, as APL80's does.
+        self.ws.format = None;
         Reply::failed(lines)
     }
 }

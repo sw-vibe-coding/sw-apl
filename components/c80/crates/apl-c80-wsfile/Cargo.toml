@@ -1,0 +1,19 @@
+[package]
+name = "apl-c80-wsfile"
+description = "sw-apl workspace file in the (C) '80 mode: functions as )DEF blocks and the latent expression as )AUTO, run in (C) alone"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-ast = { path = "../../../parse/crates/apl-ast" }
+apl-modes = { path = "../../../eval/crates/apl-modes" }
+apl-scan = { path = "../../../parse/crates/apl-scan" }
+apl-value = { path = "../../../value/crates/apl-value" }
+apl-workspace = { path = "../../../eval/crates/apl-workspace" }
+apl-wsfile = { path = "../../../eval/crates/apl-wsfile" }
+
+[lints]
+workspace = true

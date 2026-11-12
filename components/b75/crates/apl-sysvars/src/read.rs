@@ -90,9 +90,18 @@ fn scalar(ws: &Workspace, name: &str) -> Option<Number> {
 }
 
 /// The line that runs a loaded workspace's latent expression, when it
-/// has one and the session's mode runs one, as (B) does: `⍎⎕LX`, which is what the 5110
-/// runs, so an error in it is reported against that line.
+/// has one and the session's mode runs one: in (B), `⍎⎕LX`, which is
+/// what the 5110 runs, so an error in it is reported against that
+/// line; in (C), the expression itself, as APL80's `)AUTO` runs it.
 #[must_use]
-pub fn latent(ws: &Workspace) -> Option<&'static str> {
-    (ws.mode.profile().has(Feature::Latent) && ws.saved.latent.is_some()).then_some("⍎⎕LX")
+pub fn latent(ws: &Workspace) -> Option<String> {
+    let expression = ws.saved.latent.as_ref()?;
+    let profile = ws.mode.profile();
+    if profile.has(Feature::Latent) {
+        return Some("⍎⎕LX".to_string());
+    }
+    let Data::Char(text) = &expression.data else {
+        return None;
+    };
+    profile.has(Feature::Auto).then(|| text.iter().collect())
 }

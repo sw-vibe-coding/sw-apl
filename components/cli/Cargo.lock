@@ -86,6 +86,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-c80-commands"
+version = "0.1.0"
+dependencies = [
+ "apl-modes",
+ "apl-value",
+ "apl-workspace",
+]
+
+[[package]]
 name = "apl-c80-cuts"
 version = "0.1.0"
 dependencies = [
@@ -96,10 +105,52 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-c80-define"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-scan",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-c80-format"
+version = "0.1.0"
+dependencies = [
+ "apl-format",
+ "apl-modes",
+ "apl-value",
+ "apl-workspace",
+]
+
+[[package]]
 name = "apl-c80-scalar"
 version = "0.1.0"
 dependencies = [
  "apl-value",
+]
+
+[[package]]
+name = "apl-c80-status"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-ibeam",
+ "apl-modes",
+ "apl-value",
+ "apl-workspace",
+]
+
+[[package]]
+name = "apl-c80-wsfile"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-modes",
+ "apl-scan",
+ "apl-value",
+ "apl-workspace",
+ "apl-wsfile",
 ]
 
 [[package]]
@@ -126,6 +177,8 @@ name = "apl-commands"
 version = "0.1.0"
 dependencies = [
  "apl-a70-commands",
+ "apl-c80-commands",
+ "apl-c80-wsfile",
  "apl-copy",
  "apl-eval",
  "apl-extensions",
@@ -195,6 +248,8 @@ version = "0.1.0"
 dependencies = [
  "apl-ast",
  "apl-c80-cuts",
+ "apl-c80-format",
+ "apl-c80-status",
  "apl-call",
  "apl-execute",
  "apl-format",
@@ -494,6 +549,7 @@ dependencies = [
 name = "apl-session"
 version = "0.1.0"
 dependencies = [
+ "apl-c80-define",
  "apl-call",
  "apl-commands",
  "apl-display",

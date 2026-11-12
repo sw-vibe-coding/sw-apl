@@ -10,6 +10,8 @@ repository.workspace = true
 [dependencies]
 apl-ast = { path = "../../../parse/crates/apl-ast" }
 apl-c80-cuts = { path = "../../../c80/crates/apl-c80-cuts" }
+apl-c80-format = { path = "../../../c80/crates/apl-c80-format" }
+apl-c80-status = { path = "../../../c80/crates/apl-c80-status" }
 apl-call = { path = "../apl-call" }
 apl-value = { path = "../../../value/crates/apl-value" }
 apl-execute = { path = "../../../b75/crates/apl-execute" }

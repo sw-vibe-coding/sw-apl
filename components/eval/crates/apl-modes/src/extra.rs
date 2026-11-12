@@ -15,7 +15,8 @@ impl Mode {
     #[must_use]
     pub fn glyphs(self) -> &'static str {
         match self {
-            Mode::A | Mode::C => "",
+            Mode::A => "",
+            Mode::C => "#",
             Mode::B => MODE_B,
         }
     }

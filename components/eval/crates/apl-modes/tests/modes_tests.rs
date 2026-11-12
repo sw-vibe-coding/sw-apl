@@ -83,11 +83,11 @@ fn each_mode_says_what_it_adds() {
 }
 
 #[test]
-fn c_types_no_later_glyph_and_forms_no_overstrike() {
+fn c_types_only_its_own_conversion_and_forms_no_overstrike() {
     assert_eq!(
         Mode::C.glyphs(),
-        "",
-        "APL80 has no execute, quad names or format glyph"
+        "#",
+        "no execute, quad names or format glyph: APL80's character conversion"
     );
     assert!(
         Mode::C.overstrikes().is_empty(),
@@ -116,6 +116,17 @@ fn each_mode_has_a_profile_of_what_it_can_do() {
         "APL\\360 had no scan; APL80 has"
     );
     assert_eq!(has(Feature::Latent), [false, true, false], "⎕LX is (B)'s");
+    for f in [
+        Feature::DefineByCommand,
+        Feature::Auto,
+        Feature::Trace,
+        Feature::Status,
+    ] {
+        assert_eq!(has(f), [false, false, true], "{f:?} is APL80's");
+    }
+    for f in [Feature::PrintPrecision, Feature::FormatStatement] {
+        assert_eq!(has(f), [false, false, true], "{f:?} is APL80's");
+    }
     for cut in [Cut::Domino, Cut::Laminate, Cut::Diagonal, Cut::Hyperbolic] {
         assert!(c.cuts(cut) && !a.cuts(cut) && !b.cuts(cut), "{cut:?}");
     }

@@ -47,10 +47,31 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-c80-format"
+version = "0.1.0"
+dependencies = [
+ "apl-format",
+ "apl-modes",
+ "apl-value",
+ "apl-workspace",
+]
+
+[[package]]
 name = "apl-c80-scalar"
 version = "0.1.0"
 dependencies = [
  "apl-value",
+]
+
+[[package]]
+name = "apl-c80-status"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-ibeam",
+ "apl-modes",
+ "apl-value",
+ "apl-workspace",
 ]
 
 [[package]]
@@ -100,6 +121,8 @@ version = "0.1.0"
 dependencies = [
  "apl-ast",
  "apl-c80-cuts",
+ "apl-c80-format",
+ "apl-c80-status",
  "apl-call",
  "apl-execute",
  "apl-format",

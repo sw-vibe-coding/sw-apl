@@ -20,6 +20,21 @@ pub enum Feature {
     Scan,
     /// A latent expression, run as `⍎⎕LX` when a workspace is loaded.
     Latent,
+    /// Functions defined by `)DEF` and changed by `)EDIT`, not the
+    /// del, and workspaces written so, which run in this mode alone.
+    DefineByCommand,
+    /// `)AUTO`, a latent expression run as typed when a workspace is
+    /// loaded, and `)EXEC`, which runs it.
+    Auto,
+    /// `)TRON` and `)TROFF`, a trace of the lines as they run.
+    Trace,
+    /// `)PS` and `)PD`, six digits printed or fifteen.
+    PrintPrecision,
+    /// A statement that begins with `⍕` and sets the numeric format.
+    FormatStatement,
+    /// `⌶` as the status operator: the clock, the file pointers, the
+    /// line counter and the free space.
+    Status,
 }
 
 /// Something of the core a mode leaves out. APL80's manual lists its
@@ -53,6 +68,17 @@ pub struct Profile {
     /// The most lines a function may have.
     pub lines: usize,
 }
+
+/// What APL80's disk version has beyond the core.
+const APL80_HAS: [Feature; 7] = [
+    Feature::Scan,
+    Feature::DefineByCommand,
+    Feature::Auto,
+    Feature::Trace,
+    Feature::PrintPrecision,
+    Feature::FormatStatement,
+    Feature::Status,
+];
 
 /// Everything APL80's disk version leaves out.
 const APL80: [Cut; 7] = [
@@ -99,7 +125,7 @@ impl Mode {
                 ..all
             },
             Mode::C => Profile {
-                features: &[Feature::Scan],
+                features: &APL80_HAS,
                 cuts: &APL80,
                 functions: 32,
                 lines: 255,
