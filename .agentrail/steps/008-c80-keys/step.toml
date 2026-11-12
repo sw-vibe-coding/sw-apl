@@ -1,8 +1,9 @@
 number = 8
 slug = "c80-keys"
-status = "in-progress"
+status = "completed"
 description = "Per docs/plan.md (c80-screen split): C types and shows APL80's characters -- ..."
 role = "production"
 context_files = []
 created_at = "2026-11-11T18:15:05"
-commits = []
+completed_at = "2026-11-11T19:51:56"
+commits = ["a2b5d2585a3134ef4f37d06b1bb73bb20bbf2d97"]

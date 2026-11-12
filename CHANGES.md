@@ -14,6 +14,10 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-11-11
 
+- chore(pages): rebuild with (C) typed in APL80's characters
+- chore: stop tracking the owner's notes file swept into 15e177a
+- feat(c80): (C) is typed and shown in APL80's characters (c80-keys)
+- docs(changes): refresh CHANGES.md to HEAD; complete help-groups
 - chore(pages): rebuild with group help
 - feat(help): a group name lists its commands, in every mode (help-groups)
 - docs(changes): refresh CHANGES.md to HEAD; complete modes-table
