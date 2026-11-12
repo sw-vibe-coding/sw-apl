@@ -4,6 +4,8 @@ The mode is called (C) '80, and only that: APL80, the APL Phelps Gates
 wrote for the TRS-80 Model I, published by Ramware. Product names
 appear here to say what the mode is modeled on, never as its name.
 
+`modes.md` compares (C) with (A) and (B), area by area.
+
 A planning document, as `mode-b.md` was for (B). It records, from the
 APL80 manual, how APL80 differs from the APL sw-apl already runs, so
 that (C) is built from the source and not from memory. Everything

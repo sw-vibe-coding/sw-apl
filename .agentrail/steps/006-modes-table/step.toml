@@ -1,6 +1,6 @@
 number = 6
 slug = "modes-table"
-status = "pending"
+status = "in-progress"
 description = "Owner direction 2026-11-11 (docs/plan.md): docs/modes.md comparing modes A, B..."
 role = "production"
 context_files = []

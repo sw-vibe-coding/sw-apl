@@ -31,6 +31,10 @@ with `--clock hardware`). (B) follows the 5110 APL
 Reference Manual; [docs/mode-b.md](docs/mode-b.md) lists every way it
 differs from (A). It is not System/370 APLSV.
 
+[docs/modes.md](docs/modes.md) compares the three modes area by area:
+data, functions, operators, system values, commands, defining
+functions, workspaces, and typing and display.
+
 Neither mode is APL2 or Dyalog: arrays are flat, with no nesting and
 no each. sw-apl is not a port; the C interpreter `sw-cor24-apl` and
 GNU APL served only as references for expected behavior and for the

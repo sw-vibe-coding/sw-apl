@@ -227,3 +227,39 @@ fn the_editor_has_a_page_in_each_mode() {
         );
     }
 }
+
+/// `docs/modes.md` names every command a mode has, in its System
+/// commands table, and says yes in a mode's column exactly when that
+/// mode has a page for it: the comparison cannot drift from the code.
+#[test]
+fn the_modes_table_agrees_with_the_commands() {
+    let root = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../../..");
+    let pages = std::fs::read_to_string(root.join("data/help.txt")).expect("data/help.txt");
+    let table = std::fs::read_to_string(root.join("docs/modes.md")).expect("docs/modes.md");
+    let section = table
+        .split("## System commands")
+        .nth(1)
+        .expect("the section");
+    let rows: Vec<&str> = section
+        .split("\n## ")
+        .next()
+        .unwrap_or("")
+        .lines()
+        .collect();
+    for head in pages.lines().filter_map(|l| l.strip_prefix("== ")) {
+        let words: Vec<&str> = head.split_whitespace().collect();
+        if words[2] == "TOPIC" {
+            continue;
+        }
+        let name = format!("){}", words[0]);
+        let row = rows
+            .iter()
+            .find(|r| r.split('`').any(|code| code.split(' ').any(|w| w == name)))
+            .unwrap_or_else(|| panic!("{name} is not in the table"));
+        let cells: Vec<&str> = row.split('|').map(str::trim).collect();
+        for (i, letter) in ['A', 'B', 'C'].iter().enumerate() {
+            let has = words[1].contains(*letter);
+            assert_eq!(cells[2 + i] == "yes", has, "{name} in ({letter}): {row}");
+        }
+    }
+}
