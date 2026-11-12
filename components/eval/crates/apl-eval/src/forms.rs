@@ -7,7 +7,8 @@ use apl_quad::{characters, evaluated};
 use apl_value::{AplError, AplResult, Array, ErrorKind};
 use apl_workspace::{Output, Workspace, render};
 
-use crate::eval::{eval_expr, eval_line};
+use crate::eval::eval_expr;
+use crate::line::eval_line;
 
 /// The quad forms: output on the left of an assignment, input on the
 /// right. Quote-quad output leaves the line open, so a prompt and the

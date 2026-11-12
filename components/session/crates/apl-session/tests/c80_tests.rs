@@ -1,10 +1,12 @@
 //! (C) '80, APL80 on the TRS-80: what its manual's "Limitations" leave
 //! out of the APL the core runs, each beside (A), which keeps it
-//! (docs/mode-c.md). The manual names no error for what is not
-//! implemented; (C) answers NONCE ERROR, as (B) does for what the 5110
-//! dropped, DOMAIN ERROR for an argument of the wrong kind, SYNTAX ERROR
-//! for a statement that specifies twice, and DEFN ERROR past the limits
-//! on functions and lines.
+//! (docs/mode-c.md). (C) is typed in APL80's characters, (A) in
+//! glyphs. The manual names no error for what is not implemented; (C)
+//! answers NONCE ERROR, as (B) does for what the 5110 dropped, DOMAIN
+//! ERROR for an argument of the wrong kind, SYNTAX ERROR for a
+//! statement that specifies twice, and DEFN ERROR past the limits on
+//! functions and lines. What APL80 has no character for cannot be
+//! typed at all.
 
 use apl_session::{Mode, Session};
 
@@ -19,50 +21,56 @@ fn out(s: &mut Session, line: &str) -> Vec<String> {
     s.respond(line).lines
 }
 
-/// The first line `line` answers in (C), and in (A).
-fn both(line: &str) -> (String, String) {
-    let first = |mode| {
-        out(&mut in_mode(mode), line)
-            .first()
-            .cloned()
-            .unwrap_or_default()
-    };
-    (first(Mode::C), first(Mode::A))
+/// The first line a session in `mode` answers `line` with.
+fn first(mode: Mode, line: &str) -> String {
+    out(&mut in_mode(mode), line)
+        .first()
+        .cloned()
+        .unwrap_or_default()
+}
+
+/// The first line `c` answers in (C), typed in APL80's characters.
+fn c(line: &str) -> String {
+    first(Mode::C, line)
+}
+
+/// The first line `a` answers in (A), typed in glyphs.
+fn a(line: &str) -> String {
+    first(Mode::A, line)
 }
 
 #[test]
 fn c_is_named_and_starts_with_apl80s_settings() {
-    let mut c = in_mode(Mode::C);
-    assert_eq!(out(&mut c, ")DIALECT"), vec!["(C) '80"]);
-    assert_eq!(out(&mut c, "÷3"), vec!["0.333333"], "six digits, as )PS");
-    assert_eq!(c.ws.saved.print.width, 64, "the TRS-80's 64 columns");
+    let mut s = in_mode(Mode::C);
+    assert_eq!(out(&mut s, ")DIALECT"), vec!["(C) '80"]);
+    assert_eq!(out(&mut s, "%3"), vec!["0.333333"], "six digits, as )PS");
+    assert_eq!(s.ws.saved.print.width, 64, "the TRS-80's 64 columns");
     assert_eq!(
-        out(&mut c, "+\\1 2 3 4"),
+        out(&mut s, "+w1 2 3 4"),
         vec!["1 3 6 10"],
         "the disk version scans"
     );
 }
 
 #[test]
-fn domino_is_not_implemented() {
-    assert_eq!(
-        both("⌹2 2⍴4 0 0 2"),
-        ("NONCE ERROR".into(), "0.25   0".into())
-    );
-    assert_eq!(both("1 2⌹2 2⍴1 0 0 1").0, "NONCE ERROR");
+fn domino_cannot_be_typed() {
+    assert_eq!(c("⌹2 2p4 0 0 2"), "CHARACTER ERROR: U+2339");
+    assert_eq!(a("⌹2 2⍴4 0 0 2"), "0.25   0");
 }
 
 #[test]
 fn lamination_is_not_implemented() {
-    assert_eq!(both("1 2,[0.5]3 4"), ("NONCE ERROR".into(), "1 2".into()));
-    assert_eq!(both("1 2,[1]3 4").0, "1 2 3 4", "catenation stays");
+    assert_eq!(c("1 2,0.5d3 4"), "NONCE ERROR");
+    assert_eq!(a("1 2,[0.5]3 4"), "1 2");
+    assert_eq!(c("1 2,1d3 4"), "1 2 3 4", "catenation stays");
 }
 
 #[test]
 fn the_diagonal_transpose_is_not_implemented() {
-    assert_eq!(both("1 1⍉2 2⍴⍳4"), ("NONCE ERROR".into(), "1 4".into()));
+    assert_eq!(c("1 1g2 2pi4"), "NONCE ERROR");
+    assert_eq!(a("1 1⍉2 2⍴⍳4"), "1 4");
     assert_eq!(
-        both("2 1⍉2 2⍴⍳4").0,
+        c("2 1g2 2pi4"),
         "1 3",
         "a transpose that names each axis once stays"
     );
@@ -70,47 +78,41 @@ fn the_diagonal_transpose_is_not_implemented() {
 
 #[test]
 fn the_hyperbolic_functions_are_not_implemented() {
-    assert_eq!(both("5○0"), ("NONCE ERROR".into(), "0".into()));
-    assert_eq!(both("¯7○0").0, "NONCE ERROR");
-    assert_eq!(both("5 1∘.○0").0, "NONCE ERROR", "nor through a product");
-    assert_eq!(both("1○0").0, "0", "the circular functions stay");
-    assert_eq!(
-        both("○/1 0").0,
-        "0",
-        "and a reduction that does not reach one"
-    );
+    assert_eq!(c("5o0"), "NONCE ERROR");
+    assert_eq!(a("5○0"), "0");
+    assert_eq!(c("-7o0"), "NONCE ERROR");
+    assert_eq!(c("5 1\".o0"), "NONCE ERROR", "nor through a product");
+    assert_eq!(c("1o0"), "0", "the circular functions stay");
+    assert_eq!(c("o/1 0"), "0", "and a reduction that does not reach one");
 }
 
 #[test]
 fn factorial_and_binomial_take_whole_numbers() {
-    assert_eq!(both("!2.5").0, "DOMAIN ERROR");
-    assert_eq!(both("2.5!5").0, "DOMAIN ERROR");
-    assert_eq!(both("!/2.5 3").0, "DOMAIN ERROR", "nor through a reduction");
-    assert_eq!(both("!5").0, "120");
-    assert_eq!(both("2!5").0, "10");
+    assert_eq!(c("!2.5"), "DOMAIN ERROR");
+    assert_eq!(c("2.5!5"), "DOMAIN ERROR");
+    assert_eq!(c("!/2.5 3"), "DOMAIN ERROR", "nor through a reduction");
+    assert_eq!(c("!5"), "120");
+    assert_eq!(c("2!5"), "10");
+    assert_eq!(a("!2.5"), "3.32335097");
 }
 
 #[test]
 fn encode_and_decode_take_vectors() {
-    assert_eq!(both("10 10⊤2 2⍴⍳4").0, "NONCE ERROR");
-    assert_eq!(both("(2 2⍴10)⊥1 2").0, "NONCE ERROR");
-    assert_eq!(both("10⊥1 2 3").0, "123", "a scalar and a vector stay");
-    assert_eq!(both("10 10 10⊤123").0, "1 2 3");
+    assert_eq!(c("10 10t2 2pi4"), "NONCE ERROR");
+    assert_eq!(c("(2 2p10)b1 2"), "NONCE ERROR");
+    assert_eq!(c("10b1 2 3"), "123", "a scalar and a vector stay");
+    assert_eq!(c("10 10 10t123"), "1 2 3");
 }
 
 #[test]
 fn a_statement_specifies_once_and_not_as_a_value() {
-    assert_eq!(both("X←Y←9"), ("SYNTAX ERROR".into(), String::new()));
-    assert_eq!(
-        both("÷X←4").0,
-        "SYNTAX ERROR",
-        "a specification used as a value"
-    );
-    assert_eq!(both("(X←3)+1").0, "SYNTAX ERROR");
-    let mut c = in_mode(Mode::C);
-    assert!(out(&mut c, "X←3").is_empty());
-    assert!(out(&mut c, "X[2]←5").is_empty() || c.ws.saved.vars.contains_key("X"));
-    assert_eq!(out(&mut c, "X"), vec!["3"]);
+    assert_eq!(c("X←Y←9"), "SYNTAX ERROR");
+    assert_eq!(a("X←Y←9"), "");
+    assert_eq!(c("%X←4"), "SYNTAX ERROR", "a specification used as a value");
+    assert_eq!(c("(X←3)+1"), "SYNTAX ERROR");
+    let mut s = in_mode(Mode::C);
+    assert!(out(&mut s, "X←3").is_empty());
+    assert_eq!(out(&mut s, "X"), vec!["3"]);
 }
 
 /// Open `name` the mode's way -- `)DEF` in (C), the del elsewhere --

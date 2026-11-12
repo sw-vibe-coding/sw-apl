@@ -2,7 +2,7 @@
 
 use apl_a70_commands::command as seventy;
 use apl_c80_commands::command as eighty;
-use apl_eval::{Mode, Saved, Workspace, hms};
+use apl_eval::{Feature, Mode, Saved, Workspace, hms};
 use apl_extensions::command as extension;
 use apl_inquiry::command as inquiry;
 use apl_library::valid;
@@ -69,6 +69,10 @@ pub fn system_command(ws: &mut Workspace, command: &str) -> Answer {
 /// the user as well and carried totals to date; sw-apl has no
 /// accounts and keeps no such records.
 fn ending(ws: &Workspace, mut lines: Vec<String>, off: bool) -> Answer {
+    // In (C), the names a command shows are as they were typed.
+    if ws.mode.profile().has(Feature::Apl80Keys) {
+        lines = lines.iter().map(|l| apl_c80_keys::named(l)).collect();
+    }
     if off {
         let time = (ws.clock)();
         lines.push(moment(ws));

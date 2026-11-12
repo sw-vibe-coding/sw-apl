@@ -15,6 +15,7 @@ apl-parse = { path = "../../../parse/crates/apl-parse" }
 apl-call = { path = "../../../eval/crates/apl-call" }
 apl-commands = { path = "../apl-commands" }
 apl-c80-define = { path = "../../../c80/crates/apl-c80-define" }
+apl-c80-keys = { path = "../../../c80/crates/apl-c80-keys" }
 apl-reply = { path = "../apl-reply" }
 apl-editor = { path = "../apl-editor" }
 apl-eval = { path = "../../../eval/crates/apl-eval" }

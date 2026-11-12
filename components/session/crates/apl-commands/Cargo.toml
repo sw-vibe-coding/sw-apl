@@ -17,6 +17,7 @@ apl-extensions = { path = "../apl-extensions" }
 apl-a70-commands = { path = "../../../a70/crates/apl-a70-commands" }
 apl-c80-commands = { path = "../../../c80/crates/apl-c80-commands" }
 apl-c80-wsfile = { path = "../../../c80/crates/apl-c80-wsfile" }
+apl-c80-keys = { path = "../../../c80/crates/apl-c80-keys" }
 apl-settings = { path = "../apl-settings" }
 apl-value = { path = "../../../value/crates/apl-value" }
 apl-wsfile = { path = "../../../eval/crates/apl-wsfile" }

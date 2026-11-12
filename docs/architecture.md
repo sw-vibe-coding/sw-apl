@@ -137,6 +137,10 @@ sw-apl/
                                    numeric format, set by a statement
                                    and held until characters, an error
                                    or a command
+               apl-c80-keys        keys: APL80's characters as the (C)
+                                   '80 mode types and shows them,
+                                   translated to the glyphs the lexer
+                                   reads and back
                apl-c80-scalar      scalar cuts: the scalar functions the
                                    (C) '80 mode leaves out, the
                                    hyperbolic circle functions and
@@ -198,7 +202,7 @@ it can be checked against them.
 ```
 glyphs -> value -> display -> console
 value -> lex (and strike) -> scan -> parse
-value -> c80 (scalar cuts) -> prims (dispatch; scalar, mixed, ops and the rest)
+value -> c80 (scalar cuts, keys) -> prims (dispatch; scalar, mixed, ops and the rest)
 prims + console + clock + modes -> workspace -> call, quad
 parse + prims + call + quad + a70 + b75 + c80 -> eval
 eval + c80 (commands, definition, wsfile) -> session (commands, editor, library, extensions) -> cli (+ config)

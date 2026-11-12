@@ -2,7 +2,8 @@
 //! defined by `)DEF` and changed by `)EDIT` and the line commands, with
 //! no del; its workspaces its own, written as APL80 would type them;
 //! `)TRON )TROFF )PS )PD )AUTO )EXEC`; the format statement; status,
-//! `⌶` (APL80's `s`); and `#`, character and number (docs/mode-c.md).
+//! `s`; and `#`, character and number -- all typed in APL80's characters
+//! (docs/mode-c.md).
 
 use apl_session::{Files, Mode, Session};
 
@@ -23,7 +24,7 @@ fn typed(s: &mut Session, lines: &[&str]) -> Vec<String> {
 }
 
 fn square(s: &mut Session) {
-    typed(s, &[")DEF Z←SQ X", "Z←X×X", ""]);
+    typed(s, &[")DEF Z←SQ X", "Z←XxX", ""]);
 }
 
 #[test]
@@ -31,7 +32,7 @@ fn def_opens_a_function_and_an_empty_line_closes_it() {
     let mut c = in_mode(Mode::C);
     assert!(out(&mut c, ")DEF Z←SQ X").is_empty());
     assert_eq!(c.prompt(), "[1]   ", "the first line to type");
-    assert!(out(&mut c, "Z←X×X").is_empty());
+    assert!(out(&mut c, "Z←XxX").is_empty());
     assert_eq!(c.prompt(), "[2]   ");
     assert!(out(&mut c, "").is_empty(), "BREAK, typed as an empty line");
     assert_eq!(c.prompt(), "      ");
@@ -62,7 +63,7 @@ fn edit_reopens_after_the_last_line_and_shows_with_a_query() {
     square(&mut c);
     assert!(out(&mut c, ")EDIT SQ").is_empty());
     assert_eq!(c.prompt(), "[2]   ");
-    assert_eq!(out(&mut c, ")?"), vec!["[0]   Z←SQ X", "[1]   Z←X×X"]);
+    assert_eq!(out(&mut c, ")?"), vec!["[0]   Z←SQ X", "[1]   Z←XxX"]);
     out(&mut c, "Z←Z+1");
     out(&mut c, "");
     assert_eq!(out(&mut c, "SQ 3"), vec!["10"]);
@@ -72,7 +73,7 @@ fn edit_reopens_after_the_last_line_and_shows_with_a_query() {
 #[test]
 fn a_line_number_replaces_that_line_and_renumbers_at_once() {
     let mut c = in_mode(Mode::C);
-    typed(&mut c, &[")DEF Z←F X", "Z←X", "Z←Z+1", "Z←Z×2", ""]);
+    typed(&mut c, &[")DEF Z←F X", "Z←X", "Z←Z+1", "Z←Zx2", ""]);
     out(&mut c, ")EDIT F");
     assert!(
         out(&mut c, ")2").is_empty(),
@@ -101,7 +102,7 @@ fn line_0_replaces_the_header_but_not_the_name() {
     assert_eq!(out(&mut c, "Z←CUBE X")[0], "DEFN ERROR", "the name stays");
     out(&mut c, ")0");
     out(&mut c, "Z←A SQ X");
-    out(&mut c, "Z←A×X");
+    out(&mut c, "Z←AxX");
     out(&mut c, ")1");
     out(&mut c, "");
     assert_eq!(
@@ -132,8 +133,8 @@ fn e_offers_a_line_to_type_over() {
     out(&mut c, ")EDIT SQ");
     assert!(out(&mut c, ")E1").is_empty());
     assert_eq!(c.prompt(), "[1]   ");
-    assert_eq!(c.offer().as_deref(), Some("Z←X×X"));
-    out(&mut c, "Z←X×X×X");
+    assert_eq!(c.offer().as_deref(), Some("Z←XxX"));
+    out(&mut c, "Z←XxXxX");
     assert_eq!(c.offer(), None);
     out(&mut c, "");
     assert_eq!(out(&mut c, "SQ 2"), vec!["8"]);
@@ -191,7 +192,7 @@ fn a_c_workspace_is_written_as_apl80_types_it_and_is_cs_alone() {
     out(&mut c, ")SAVE W");
     let text = std::fs::read_to_string(dir.0.join("work/W.c.apl.ws")).expect("W.c.apl.ws");
     assert!(text.contains("⍝!MODES (C)\n"), "{text}");
-    assert!(text.contains("\n)DEF Z←SQ X\nZ←X×X\n\n"), "{text}");
+    assert!(text.contains("\n)DEF Z←SQ X\nZ←XxX\n\n"), "{text}");
     assert!(text.contains("\n)AUTO SQ N\n"), "{text}");
     assert!(!text.contains('∇') && !text.contains("⎕LX"), "{text}");
     let mut again = session(&dir.0, Mode::C);
@@ -218,7 +219,7 @@ fn auto_sets_the_latent_expression_and_exec_runs_it() {
 #[test]
 fn tron_shows_each_line_before_it_runs() {
     let mut c = in_mode(Mode::C);
-    typed(&mut c, &[")DEF Z←F X", "Z←X+1", "Z←Z×2", ""]);
+    typed(&mut c, &[")DEF Z←F X", "Z←X+1", "Z←Zx2", ""]);
     assert!(out(&mut c, ")TRON").is_empty());
     assert_eq!(out(&mut c, "F 1"), vec!["F[1]", "F[2]", "4"]);
     out(&mut c, ")TROFF");
@@ -229,36 +230,36 @@ fn tron_shows_each_line_before_it_runs() {
 fn ps_and_pd_print_six_digits_or_fifteen() {
     let mut c = in_mode(Mode::C);
     assert_eq!(
-        out(&mut c, "÷3"),
+        out(&mut c, "%3"),
         vec!["0.333333"],
         "a clear workspace prints single"
     );
     assert!(out(&mut c, ")PD").is_empty());
-    assert_eq!(out(&mut c, "÷3"), vec!["0.333333333333333"]);
+    assert_eq!(out(&mut c, "%3"), vec!["0.333333333333333"]);
     out(&mut c, ")PS");
-    assert_eq!(out(&mut c, "÷3"), vec!["0.333333"]);
+    assert_eq!(out(&mut c, "%3"), vec!["0.333333"]);
 }
 
 #[test]
 fn the_format_statement_holds_until_characters_an_error_or_a_command() {
     let mut c = in_mode(Mode::C);
-    assert!(out(&mut c, "⍕6 2").is_empty());
+    assert!(out(&mut c, "f6 2").is_empty());
     assert_eq!(out(&mut c, "1.5 2"), vec!["  1.50  2.00"]);
     assert_eq!(
-        out(&mut c, "÷4"),
+        out(&mut c, "%4"),
         vec!["   .25"],
         "it holds, laid out as (B)'s format lays it"
     );
     out(&mut c, "'A'");
     assert_eq!(out(&mut c, "1.5"), vec!["1.5"], "character output ends it");
-    out(&mut c, "⍕5 1");
-    out(&mut c, "÷0");
+    out(&mut c, "f5 1");
+    out(&mut c, "%0");
     assert_eq!(out(&mut c, "1.5"), vec!["1.5"], "so does an error");
-    out(&mut c, "⍕5 1");
+    out(&mut c, "f5 1");
     out(&mut c, ")FNS");
     assert_eq!(out(&mut c, "1.5"), vec!["1.5"], "and a command");
     assert_eq!(
-        out(&mut c, "⍕6")[0],
+        out(&mut c, "f6")[0],
         "LENGTH ERROR",
         "pairs of width and decimals"
     );
@@ -267,15 +268,15 @@ fn the_format_statement_holds_until_characters_an_error_or_a_command() {
 #[test]
 fn status_reads_the_session() {
     let mut c = in_mode(Mode::C);
-    assert_eq!(out(&mut c, "⌶1"), vec!["0"], "the read pointer: no files");
-    assert_eq!(out(&mut c, "⌶4"), vec!["0"], "no function running");
-    typed(&mut c, &[")DEF Z←F", "Z←0", "Z←⌶4", ""]);
+    assert_eq!(out(&mut c, "s1"), vec!["0"], "the read pointer: no files");
+    assert_eq!(out(&mut c, "s4"), vec!["0"], "no function running");
+    typed(&mut c, &[")DEF Z←F", "Z←0", "Z←s4", ""]);
     assert_eq!(out(&mut c, "F"), vec!["2"], "the line running");
-    let free: f64 = out(&mut c, "⌶5")[0]
+    let free: f64 = out(&mut c, "s5")[0]
         .parse()
         .expect("a number, in six digits");
     assert!(free > 0.0);
-    assert_eq!(out(&mut c, "⌶9")[0], "DOMAIN ERROR");
+    assert_eq!(out(&mut c, "s9")[0], "DOMAIN ERROR");
 }
 
 #[test]
@@ -284,14 +285,14 @@ fn hash_converts_through_apl80s_character_codes() {
     assert_eq!(out(&mut c, "#'ABC'"), vec!["65 66 67"]);
     assert_eq!(out(&mut c, "#65 66 67"), vec!["ABC"]);
     assert_eq!(
-        out(&mut c, "#'⍴÷'"),
+        out(&mut c, "#'p%'"),
         vec!["112 37"],
         "the shifted P, and percent"
     );
-    assert_eq!(out(&mut c, "#112 37"), vec!["⍴÷"]);
-    assert_eq!(
-        out(&mut c, "#'⍎'")[0],
-        "DOMAIN ERROR",
-        "APL80 has no such character"
+    assert_eq!(out(&mut c, "#112 37"), vec!["p%"]);
+    let refused = out(&mut c, "#'⍎'");
+    assert!(
+        refused[0].starts_with("CHARACTER ERROR: U+234E"),
+        "APL80 has no such character: {refused:?}"
     );
 }

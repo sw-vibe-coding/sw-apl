@@ -1,0 +1,14 @@
+[package]
+name = "apl-c80-keys"
+description = "sw-apl keys: APL80's characters as the (C) '80 mode types and shows them, translated to the glyphs the lexer reads and back"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-value = { path = "../../../value/crates/apl-value" }
+
+[lints]
+workspace = true

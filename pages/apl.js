@@ -517,8 +517,13 @@ async function keyboard() {
   try {
     was = Boolean(localStorage.getItem(SHOWN));
   } catch { /* as above */ }
+  // The board is a 2741's, glyphs and idioms; (C) types a TRS-80's
+  // characters, so it has the physical keyboard alone.
+  if (MODE === "C") {
+    button.hidden = true;
+    was = false;
+  }
   reveal(was);
-
 }
 
 // Help and the mode tabs, which must work before anything else does:

@@ -1,5 +1,6 @@
 //! The two reads.
 
+use apl_modes::Feature;
 use apl_value::{AplError, AplResult, Array, Data, ErrorKind};
 use apl_workspace::{Output, Run, Workspace};
 
@@ -51,6 +52,13 @@ pub fn evaluated(ws: &mut Workspace, run: Run) -> AplResult<Array> {
 /// INTERRUPT when there is no more input.
 pub fn characters(ws: &mut Workspace) -> AplResult<Array> {
     let typed = read(ws, "")?;
+    // In (C) what is typed is APL80's characters, each the one the
+    // glyphs hold for it.
+    let typed = if ws.mode.profile().has(Feature::Apl80Keys) {
+        apl_c80_keys::text(&typed)
+    } else {
+        typed
+    };
     let chars: Vec<char> = typed.chars().collect();
     let shape = vec![chars.len()];
     Array::new(shape, Data::Char(chars))
@@ -59,7 +67,12 @@ pub fn characters(ws: &mut Workspace) -> AplResult<Array> {
 /// Show what the statement has produced so far, then take a line.
 fn read(ws: &mut Workspace, prompt: &str) -> AplResult<String> {
     let shown = ws.flush();
+    let prompt = if ws.mode.profile().has(Feature::Apl80Keys) {
+        apl_c80_keys::shown(prompt)
+    } else {
+        prompt.to_string()
+    };
     ws.console
-        .read(&shown, prompt)
+        .read(&shown, &prompt)
         .ok_or_else(|| AplError::new(ErrorKind::Interrupt))
 }

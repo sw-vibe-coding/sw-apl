@@ -8,7 +8,7 @@ use std::path::PathBuf;
 
 use apl_clock::{Clock, TimeSource, stopped};
 use apl_console::{Console, Output, Shown, render_all};
-use apl_modes::Mode;
+use apl_modes::{Feature, Mode};
 use apl_space::{of_value, room, used};
 use apl_store::{Files, Store};
 use apl_transcript::Transcript;
@@ -109,7 +109,13 @@ impl Workspace {
     /// can put its prompt after it rather than before it.
     pub fn flush(&mut self) -> Shown {
         let shown: Vec<Output> = self.output.drain(..).collect();
-        render_all(&shown, self.saved.print)
+        let mut shown = render_all(&shown, self.saved.print);
+        // Everything shown passes here once: in (C) it is shown in
+        // APL80's characters.
+        if self.mode.profile().has(Feature::Apl80Keys) {
+            shown.lines = shown.lines.iter().map(|l| apl_c80_keys::shown(l)).collect();
+        }
+        shown
     }
 
     /// Look up a variable.

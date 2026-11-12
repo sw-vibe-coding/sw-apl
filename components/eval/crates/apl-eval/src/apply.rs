@@ -11,7 +11,8 @@ use apl_value::ErrorKind::{self, Syntax};
 use apl_value::{AplError, AplResult, Array};
 use apl_workspace::{Saved, Workspace};
 
-use crate::eval::{eval_expr, eval_line};
+use crate::eval::eval_expr;
+use crate::line::eval_line;
 
 /// `f right`: the right argument is evaluated first, as on a terminal
 /// reading right to left; then the axis.

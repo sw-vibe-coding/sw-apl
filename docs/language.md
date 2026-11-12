@@ -434,6 +434,34 @@ of rolls -- which is what `samples/58-ibeams.apl` shows.
 and reply with the previous value as `WAS n`. They are saved with
 the workspace, and read back in (B) as `⎕IO`, `⎕PP` and `⎕PW`.
 
+## What (C) '80 types
+
+(C) is typed and shown in APL80's own characters, not glyphs. A
+shifted letter -- the lower-case letter on a modern keyboard -- stands
+for a symbol, and a few characters stand for others:
+
+| APL80 | Glyph | APL80 | Glyph | APL80 | Glyph | APL80 | Glyph |
+|---|---|---|---|---|---|---|---|
+| `x` | × | `o` | ○ | `p` | ⍴ | `h` | ⌈ |
+| `%` | ÷ | `j` | \| | `i` | ⍳ | `l` | ⌊ |
+| `@` | ⍟ | `q` | ⎕ | `e` | ∊ | `b` | ⊥ |
+| `$` | ≠ | `m` | ⍞ | `r` | ⌽ | `t` | ⊤ |
+| `&` | ∧ | `n` | ~ | `w` | \\ | `g` | ⍉ |
+| `"` | ∘ | `v` | ∨ | `k` | ≤ | `z` | ≥ |
+| `_` | - (subtract) | `a` | ⍲ | `y` | ⍱ | `-` | ¯ (negative) |
+
+- `←` `→` `↑` `↓` are typed as themselves, or as `]` `^` `[` `\`, the
+  TRS-80's codes for them. A monadic up or down arrow grades:
+  `↑3 1 2` is `2 3 1`; `2↑V` takes.
+- Round brackets index a variable or a string, `V(2)`, `M(1;2)`; they
+  call a function, `F(2)`, and group anything else.
+- `1dM` chooses the axis: `+/1dM` sums down the columns.
+- `f6 2` is the format statement, `s4` status, `c` a comment.
+- Names are capitals and digits and may hold `.` and `-`: `M-N` is a
+  name, and `M_N` is M minus N.
+- A character APL80 has not got, an APL glyph among them, is a
+  CHARACTER ERROR.
+
 ## What (C) '80 leaves out
 
 (C) runs the shared core with scan, less what the "Limitations" of
@@ -441,20 +469,19 @@ the APL80 manual leave out. Each answers an error where (A) runs it:
 
 | What | Example | In (C) |
 |---|---|---|
-| Domino, monadic and dyadic | `⌹2 2⍴4 0 0 2` | NONCE ERROR |
-| Lamination | `1 2,[0.5]3 4` | NONCE ERROR |
-| The diagonal case of dyadic transpose | `1 1⍉2 2⍴⍳4` | NONCE ERROR |
-| The hyperbolic functions, `5○` to `7○` and `¯5○` to `¯7○` | `5○1` | NONCE ERROR |
-| Encode and decode with an argument above a vector | `10 10⊤2 2⍴⍳4` | NONCE ERROR |
+| Domino, monadic and dyadic | | APL80 has no character for it |
+| Lamination | `1 2,0.5d3 4` | NONCE ERROR |
+| The diagonal case of dyadic transpose | `1 1g2 2pi4` | NONCE ERROR |
+| The hyperbolic functions, `5o` to `7o` and `-5o` to `-7o` | `5o1` | NONCE ERROR |
+| Encode and decode with an argument above a vector | `10 10t2 2pi4` | NONCE ERROR |
 | Factorial and binomial of a number that is not whole | `!2.5` | DOMAIN ERROR |
-| Two specifications in a statement, or one whose value is used | `X←Y←9`, `÷X←4` | SYNTAX ERROR |
+| Two specifications in a statement, or one whose value is used | `X←Y←9`, `%X←4` | SYNTAX ERROR |
 | A 33rd function in a workspace, or a 256th line in a function | | DEFN ERROR |
 
 The scalar cuts hold through reduction, scan and the products, as
-`!/2.5 3` and `5 1∘.○0` show. A clear workspace in (C) prints six
+`!/2.5 3` and `5 1".o0` show. A clear workspace in (C) prints six
 digits in a line of 64. `docs/mode-c.md` records the sources and the
-choice of each error, which the manual does not name. (C) types
-and shows the same glyphs as (A).
+choice of each error, which the manual does not name.
 
 ## What (C) '80 adds
 
@@ -472,8 +499,9 @@ and changed by command, as on APL80:
 | `)0` | Asks for a new header, with the same name |
 | `)E n` | Offers line n to type over |
 
-Every change renumbers the lines at once. A workspace saved in (C)
-runs in (C) alone, and is written as these commands would type it.
+Every change renumbers the lines at once. A function's lines are kept
+as they were typed. A workspace saved in (C) runs in (C) alone, and is
+written as these commands would type it.
 
 Its other commands and operators:
 
@@ -482,9 +510,9 @@ Its other commands and operators:
 | `)TRON`, `)TROFF` | Name each line of a function, as `F[2]`, before it runs; stop |
 | `)PS`, `)PD` | Print numbers with 6 digits, or 15 |
 | `)AUTO expression`, `)EXEC` | Set the latent expression a loaded workspace runs; run it now |
-| `⍕6 2` as a statement | The format: pairs of width and decimals for the numbers shown after it, until characters, an error or a command |
-| `⌶n` | Status: 0 the time since sign-on in 25 ms ticks, 1 to 3 the file pointers, 4 the line running, 5 the bytes free |
-| `#` | Characters to APL80's codes and back: `#'A⍴'` is `65 112` |
+| `f6 2` as a statement | The format: pairs of width and decimals for the numbers shown after it, until characters, an error or a command |
+| `s n` | Status: 0 the time since sign-on in 25 ms ticks, 1 to 3 the file pointers, 4 the line running, 5 the bytes free |
+| `#` | Characters to APL80's codes and back: `#'Ap'` is `65 112` |
 
 ## Errors
 

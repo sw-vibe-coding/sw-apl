@@ -14,7 +14,7 @@ mod draw;
 mod press;
 
 pub use draw::state;
-pub use press::{Act, act};
+pub use press::{Act, act, trs80};
 
 #[cfg(target_arch = "wasm32")]
 mod board;

@@ -109,6 +109,7 @@ name = "apl-c80-define"
 version = "0.1.0"
 dependencies = [
  "apl-ast",
+ "apl-c80-keys",
  "apl-scan",
  "apl-value",
 ]
@@ -121,6 +122,13 @@ dependencies = [
  "apl-modes",
  "apl-value",
  "apl-workspace",
+]
+
+[[package]]
+name = "apl-c80-keys"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
 ]
 
 [[package]]
@@ -146,6 +154,7 @@ name = "apl-c80-wsfile"
 version = "0.1.0"
 dependencies = [
  "apl-ast",
+ "apl-c80-keys",
  "apl-modes",
  "apl-scan",
  "apl-value",
@@ -178,6 +187,7 @@ version = "0.1.0"
 dependencies = [
  "apl-a70-commands",
  "apl-c80-commands",
+ "apl-c80-keys",
  "apl-c80-wsfile",
  "apl-copy",
  "apl-eval",
@@ -249,6 +259,7 @@ dependencies = [
  "apl-ast",
  "apl-c80-cuts",
  "apl-c80-format",
+ "apl-c80-keys",
  "apl-c80-status",
  "apl-call",
  "apl-execute",
@@ -493,6 +504,8 @@ dependencies = [
 name = "apl-quad"
 version = "0.1.0"
 dependencies = [
+ "apl-c80-keys",
+ "apl-modes",
  "apl-value",
  "apl-workspace",
 ]
@@ -550,6 +563,7 @@ name = "apl-session"
 version = "0.1.0"
 dependencies = [
  "apl-c80-define",
+ "apl-c80-keys",
  "apl-call",
  "apl-commands",
  "apl-display",
@@ -652,6 +666,7 @@ name = "apl-workspace"
 version = "0.1.0"
 dependencies = [
  "apl-ast",
+ "apl-c80-keys",
  "apl-clock",
  "apl-console",
  "apl-modes",

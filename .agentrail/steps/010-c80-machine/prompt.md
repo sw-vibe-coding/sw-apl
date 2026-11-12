@@ -1,0 +1,1 @@
+Per docs/plan.md: )RAM enables peek, poke (shifted U) and Call (dyadic #) on a modeled memory -- the 64 by 16 screen at 15360-16383, plain RAM above, errors for ROM and devices -- with Call 51 printing a character and 43 reading a key; a small )DOS with DIR, KILL and RETURN; others errors. As docs/mode-c.md records the owner's decisions.

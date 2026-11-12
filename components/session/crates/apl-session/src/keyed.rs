@@ -3,9 +3,9 @@
 //! `)EXEC` runs the latent expression. Such a mode has no del
 //! (owner, 2026-11-11; docs/mode-c.md).
 
-use apl_c80_define::{Keyed, Typed};
+use apl_c80_define::{Keyed, Typed, header};
 use apl_eval::{Feature, error_lines};
-use apl_parse::parse_header;
+
 use apl_sysvars::latent;
 use apl_value::{AplError, ErrorKind};
 
@@ -23,7 +23,8 @@ pub fn command(session: &mut Session, name: &str, text: &str) -> Option<Reply> {
     let glyphs = session.ws.mode.glyphs();
     let opened = match name {
         "DEF" if profile.has(Feature::DefineByCommand) => {
-            parse_header(rest, glyphs).and_then(|d| {
+            let at = 1 + text.chars().count() - rest.chars().count();
+            header(rest, glyphs, at).and_then(|d| {
                 let taken = session.ws.is_function(&d.name) || session.ws.get(&d.name).is_some();
                 (!taken)
                     .then_some(d)
@@ -32,7 +33,7 @@ pub fn command(session: &mut Session, name: &str, text: &str) -> Option<Reply> {
         }
         "EDIT" if profile.has(Feature::DefineByCommand) => session
             .ws
-            .function(rest)
+            .function(&apl_c80_keys::name(rest))
             .map(|d| (*d).clone())
             .ok_or_else(|| AplError::new(ErrorKind::Defn)),
         "EXEC" if profile.has(Feature::Auto) => {
@@ -85,4 +86,17 @@ pub fn no_del(session: &Session, line: &str) -> Option<Reply> {
     let at = line.len() - line.trim_start().len();
     let err = AplError::new(ErrorKind::Character(del)).at(line[..at].chars().count());
     Some(Reply::failed(error_lines(&err, line)))
+}
+
+/// A command as the shared commands read it: in a mode that types
+/// APL80's characters, the names `)ERASE`, `)COPY` and `)PCOPY` take have
+/// their `.` and `-` as the glyphs hold them, so `)ERASE M-N` finds
+/// `M-N`. Every other command keeps its text as typed.
+#[must_use]
+pub fn spelled(session: &Session, name: &str, command: &str) -> String {
+    let keyed = session.ws.mode.profile().has(Feature::Apl80Keys);
+    if !keyed || !matches!(name, "ERASE" | "COPY" | "PCOPY") {
+        return command.to_string();
+    }
+    apl_c80_keys::name(command)
 }

@@ -26,6 +26,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-c80-keys"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+]
+
+[[package]]
 name = "apl-c80-scalar"
 version = "0.1.0"
 dependencies = [
@@ -330,6 +337,7 @@ name = "apl-workspace"
 version = "0.1.0"
 dependencies = [
  "apl-ast",
+ "apl-c80-keys",
  "apl-clock",
  "apl-console",
  "apl-modes",

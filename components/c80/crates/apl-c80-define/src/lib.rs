@@ -9,4 +9,4 @@
 mod keyed;
 mod line;
 
-pub use keyed::{Keyed, Typed};
+pub use keyed::{Keyed, Typed, header};

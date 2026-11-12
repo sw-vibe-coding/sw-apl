@@ -7,6 +7,7 @@ members = [
     "crates/apl-c80-cuts",
     "crates/apl-c80-define",
     "crates/apl-c80-format",
+    "crates/apl-c80-keys",
     "crates/apl-c80-scalar",
     "crates/apl-c80-status",
     "crates/apl-c80-wsfile",

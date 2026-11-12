@@ -154,6 +154,43 @@ errors for some."
    saved workspaces and files), `KILL` and `RETURN`, which goes back
    with the workspace intact. Any other DOS command is an error.
 
+## Typing and showing APL80's characters
+
+(C) is typed in APL80's characters and shows them, as the owner
+decided. The table above is the whole keyboard:
+
+- **A shifted letter is its lower-case code.** The TRS-80 keeps a
+  shifted letter as the lower-case code and draws it with a dot, so
+  `p` is ⍴ and `i` is ⍳. A terminal shows the lower-case letter; the
+  demo's screen draws it dotted. A name is in capitals.
+- **The arrows.** `←` and `→`, `↑` and `↓` as Unicode, or as the codes
+  the TRS-80 gives them, which an ASCII keyboard types as `]`, `^`, `[`
+  and `\`. An up or down arrow with nothing on its left grades: `↑V` is
+  ⍋V, `2↑V` is take.
+- **The minus signs.** `-` is the negative sign, `-3`, and `_`
+  subtracts, `5_2`. In a name a `-` is part of it: `M-N` is one name.
+- **Round brackets index** a variable or a string -- `A(2)`,
+  `' *'(1+G)` -- and group anything else, so `F(2)` calls `F`. Which a
+  name is, variable or function, is asked when the line runs, so a
+  function line written before the function it calls still calls it.
+- **`1d`** before an argument chooses the axis: `+/1dM` is `+/[1]M`.
+- **`f`** begins the format statement, **`s`** is status, **`c`**
+  begins a comment, **`u`** is peek and poke (`c80-machine`).
+- **Anything else** -- an APL glyph, `{` -- is a CHARACTER ERROR, the
+  caret under it. A line that begins `⍝` is a workspace file's
+  directive or a sample's note, and is taken as a comment.
+
+How it is done: a line is kept as it was typed -- a function's lines
+too, which is what `)?` shows and a saved file holds -- and translated
+into glyphs when it runs (`apl-c80-keys`). An error's caret is put
+back under the character typed. What is shown -- values, quad's prompt
+`q:`, names in `)FNS` and the like -- is translated back on its way
+out. Inside, a name's `.` and `-` are `⍙` and `∆`, which APL80 cannot
+type, and character data holds the glyph each character stands for,
+so `#` gives every character its TRS-80 code. A (C) workspace file is
+written in these characters, its first line the comment
+`c SW-APL WORKSPACE, AS APL80 TYPES IT: LOADING IT RUNS IT.`
+
 ## Decisions the manual leaves open
 
 The manual lists what APL80 leaves out without naming the error each
@@ -221,23 +258,20 @@ manual's Function Definition describes:
   prints six.
 - `)AUTO expression` sets the latent expression, `)AUTO` alone clears
   it, and `)EXEC` runs it. A workspace loaded in (C) runs it.
-- **The format statement**, `f` in APL80, is typed as the format glyph
-  it stands for: a line that begins `⍕6 2` sets the format, pairs of
-  width and decimals (an odd count is a LENGTH ERROR). Numbers shown
-  after it are laid out by (B)'s dyadic format, until a new format, an
-  error, a system command, or a character array is shown.
-- **Status**, `s` in APL80, is typed as the I-beam it stands for:
-  `⌶0` the time since sign-on in 25-millisecond ticks, `⌶1` to `⌶3`
-  the file pointers (0: (C) has no files yet), `⌶4` the line running,
-  `⌶5` the bytes free.
+- **The format statement**, `f`: a line that begins `f6 2` sets the
+  format, pairs of width and decimals (an odd count is a LENGTH
+  ERROR). Numbers shown after it are laid out by (B)'s dyadic format,
+  until a new format, an error, a system command, or a character array
+  is shown.
+- **Status**, `s`: `s0` the time since sign-on in 25-millisecond
+  ticks, `s1` to `s3` the file pointers (0: (C) has no files), `s4`
+  the line running, `s5` the bytes free.
 - **`#`** turns characters into APL80's codes and back: the TRS-80's
-  ASCII, with the substitutes on their own codes (`÷` is 37, `∘` 34)
-  and each shifted letter on its lower-case code (`⍴`, the shifted P,
-  is 112). A code that controls the screen rather than printing, and
-  Call, the dyadic form, are the screen's (`c80-screen`), a NONCE
-  ERROR until then.
-- **The `d` axis operator** is a spelling of the bracket axis --
-  `+/1dM` is `+/[1]M` -- and is the screen's to translate.
+  ASCII, with the substitutes on their own codes (`%` is 37, `"` 34)
+  and each shifted letter on its lower-case code (`p` is 112). A code
+  that controls the screen rather than printing, and Call, the dyadic
+  form, are NONCE ERRORs until `c80-screen` and `c80-machine`.
+- **The `d` axis operator**, `+/1dM`, plus-reduce on the first axis.
 
 ## Names with `∆`
 

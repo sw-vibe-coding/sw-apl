@@ -1390,6 +1390,23 @@ code anyway)." So:
   function as `)DEF` with its header, its lines, and the empty line
   that stands for BREAK; a latent expression as `)AUTO`.
 
+`c80-screen` is split in three, each a step (2026-11-11):
+
+1. `c80-keys` -- (C) types and shows APL80's characters: shifted
+   letters as the lower-case codes (`p` is ⍴), `% @ $ & "` for ÷ ⍟ ≠ ∧
+   ∘, `-` the negative sign and `_` subtract, `↑ ↓` grade when monadic,
+   round-bracket indexing, `1d` the axis, `f` the format statement, `s`
+   status, names with `.` and `-`. The TRS-80's arrow codes `[ \ ] ^`
+   type ↑ ↓ ← →. Function lines are kept as typed and translated
+   when they run, so `G(X)` is a call or an index by what G is then;
+   what is shown is translated back. An APL glyph is a CHARACTER
+   ERROR in (C). (C) workspace files are in these characters.
+2. `c80-screen` -- the demo's (C) tab: a 64-by-16 TRS-80 screen,
+   shifted letters drawn dotted, unshifted keys typing capitals, and
+   the screen codes `#` sends.
+3. `c80-machine` -- `)RAM` with peek, poke and Call on a modeled
+   memory, and a small `)DOS`, as the owner decided.
+
 Owner direction (2026-11-11, later still): "we need a document that
 compares a, b, and c modes now (and d later) showing which
 feature/operator/type is supported across all three, or only by some,

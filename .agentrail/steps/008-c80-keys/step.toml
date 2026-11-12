@@ -1,0 +1,8 @@
+number = 8
+slug = "c80-keys"
+status = "in-progress"
+description = "Per docs/plan.md (c80-screen split): C types and shows APL80's characters -- ..."
+role = "production"
+context_files = []
+created_at = "2026-11-11T18:15:05"
+commits = []

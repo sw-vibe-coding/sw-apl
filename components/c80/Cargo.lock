@@ -49,6 +49,7 @@ name = "apl-c80-define"
 version = "0.1.0"
 dependencies = [
  "apl-ast",
+ "apl-c80-keys",
  "apl-scan",
  "apl-value",
 ]
@@ -61,6 +62,13 @@ dependencies = [
  "apl-modes",
  "apl-value",
  "apl-workspace",
+]
+
+[[package]]
+name = "apl-c80-keys"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
 ]
 
 [[package]]
@@ -86,6 +94,7 @@ name = "apl-c80-wsfile"
 version = "0.1.0"
 dependencies = [
  "apl-ast",
+ "apl-c80-keys",
  "apl-modes",
  "apl-scan",
  "apl-value",
@@ -351,6 +360,7 @@ name = "apl-workspace"
 version = "0.1.0"
 dependencies = [
  "apl-ast",
+ "apl-c80-keys",
  "apl-clock",
  "apl-console",
  "apl-modes",

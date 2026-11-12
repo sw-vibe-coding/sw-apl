@@ -74,3 +74,17 @@ pub fn act(key: &str, ctrl: bool, alt: bool) -> Act {
         },
     }
 }
+
+/// What a keystroke means on the TRS-80 APL80 ran on, where a key
+/// types its own character -- an unshifted letter the capital, a
+/// shifted one the lower-case code APL80 reads as a symbol -- rather
+/// than the 2741's glyph. Every other act is as it is.
+#[must_use]
+pub fn trs80(act: Act) -> Act {
+    match act {
+        Act::Type(c) if c.is_ascii_lowercase() => Act::Literal(c.to_ascii_uppercase()),
+        Act::Type(c) if c.is_ascii_uppercase() => Act::Literal(c.to_ascii_lowercase()),
+        Act::Type(c) => Act::Literal(c),
+        other => other,
+    }
+}

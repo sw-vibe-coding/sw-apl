@@ -20,7 +20,7 @@ the workspaces that run in it.
 |---|---|---|
 | (A) '70 | APL\360, IBM's time-sharing APL for the System/360, used from an IBM 2741 terminal | The APL\360 language; I-beams for system values; `)ORIGIN`, `)DIGITS` and `)WIDTH` for the settings; groups |
 | (B) '75 | The APL of the IBM 5100 family of desktop computers (the 5100, 5110 and 5120) | The same core, plus execute, format, and the quad system variables and functions (quad IO, quad FX and the rest); no I-beams, no settings commands, no groups |
-| (C) '80 | APL80, Phelps Gates's APL for the TRS-80 Model I home computer | The same core with scan, less what APL80 left out: domino, lamination, the diagonal transpose, the hyperbolic functions, and two specifications in one statement; at most 32 functions of 255 lines. Functions are defined with `)DEF` and `)EDIT` as on APL80, not the del, and a workspace saved in (C) runs in (C) alone. It types the same glyphs as (A) |
+| (C) '80 | APL80, Phelps Gates's APL for the TRS-80 Model I home computer | The same core with scan, less what APL80 left out: domino, lamination, the diagonal transpose, the hyperbolic functions, and two specifications in one statement; at most 32 functions of 255 lines. Functions are defined with `)DEF` and `)EDIT` as on APL80, not the del, and a workspace saved in (C) runs in (C) alone. It is typed in APL80's own characters: a lower-case letter for a symbol, as `p` for rho, `%` to divide, `_` to subtract, round brackets to index |
 
 The 5100's APL is APLSV -- the APL that followed APL\360 at IBM,
 adding shared variables, execute, format and the quad names -- cut

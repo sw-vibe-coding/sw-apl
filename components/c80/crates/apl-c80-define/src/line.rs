@@ -1,10 +1,10 @@
 //! One typed line in definition mode: a statement, a line command, or
 //! BREAK.
 
-use apl_scan::{header_text, parse_header};
+use apl_scan::header_text;
 use apl_value::{AplError, AplResult, ErrorKind};
 
-use crate::keyed::{Keyed, Slot, Typed, WIDTH};
+use crate::keyed::{Keyed, Slot, Typed, WIDTH, header};
 
 /// How many lines `)P` shows: a screen of 16, less the command and the
 /// prompt.
@@ -26,7 +26,7 @@ impl Keyed {
         }
         match self.slot.take() {
             Some(Slot::Header) => {
-                let mut header = parse_header(text.trim(), self.glyphs)?;
+                let mut header = header(text, self.glyphs, 0)?;
                 if header.name != self.defn.name {
                     return Err(AplError::new(ErrorKind::Defn));
                 }
@@ -77,7 +77,7 @@ impl Keyed {
     /// `count` lines of the function from line `from`, line 0 being the
     /// header, each behind its number.
     fn shown(&self, from: usize, count: usize) -> Vec<String> {
-        let header = header_text(&self.defn);
+        let header = apl_c80_keys::named(&header_text(&self.defn));
         let all = std::iter::once(&header).chain(self.defn.body.iter());
         let numbered = all
             .enumerate()

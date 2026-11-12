@@ -6,9 +6,10 @@ use apl_parse::parse;
 use apl_value::{AplError, AplResult, Array, ErrorKind};
 use apl_workspace::{Output, Workspace};
 
+use crate::line::eval_line;
 use crate::{apply, forms};
 
-/// Parse and evaluate one line. `Output::Nothing` when there is
+/// Parse and evaluate one line in glyphs. `Output::Nothing` when there is
 /// nothing to display: a blank line, a comment, an assignment
 /// (including `⎕←`, which displays through the output buffer), or a
 /// call to a defined function that declares no result. In (C), a line
@@ -17,8 +18,8 @@ use crate::{apply, forms};
 ///
 /// # Errors
 /// Any lexical, syntax, or evaluation error, with a caret.
-pub fn eval_line(ws: &mut Workspace, line: &str) -> AplResult<Output> {
-    if let Some(done) = apl_c80_format::statement(ws, line, eval_line) {
+pub(crate) fn eval_glyphs(ws: &mut Workspace, line: &str) -> AplResult<Output> {
+    if let Some(done) = apl_c80_format::statement(ws, line, eval_glyphs) {
         return done;
     }
     let takes_argument =

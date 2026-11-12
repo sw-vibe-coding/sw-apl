@@ -145,7 +145,8 @@ pub fn run_command(session: &mut Session, command: &str) -> Reply {
     if let Some(reply) = keyed::command(session, &name, command) {
         return reply;
     }
-    let answer = system_command(&mut session.ws, command);
+    let spelled = keyed::spelled(session, &name, command);
+    let answer = system_command(&mut session.ws, &spelled);
     if answer.feed.is_empty() {
         return Reply::from(answer);
     }

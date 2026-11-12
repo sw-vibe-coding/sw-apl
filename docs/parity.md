@@ -267,13 +267,14 @@ above, and these rows are what (C) changes.
 | Factorial and binomial take whole numbers, through every operator too | done | c80 session tests, sample 93 |
 | One specification a statement, at its left | done | c80 session tests, sample 93 |
 | At most 32 functions in a workspace and 255 lines in a function | done | c80 session tests |
-| APL80's typing and display: its substitutes, dotted shifted letters, upper case, a 64-by-16 screen | part | types and shows (A)'s glyphs |
+| APL80's characters, typed and shown: shifted letters as lower case, the substitutes, the minus signs, the arrows and their codes, round-bracket indexing, the `d` axis, `f` and `s`, names with `.` and `-`; an APL glyph a CHARACTER ERROR; a function's lines kept as typed; workspace files in these characters | done | c80 keys tests (both), samples 93 and 97 |
+| The TRS-80's screen in the demo: 64 by 16, upper case, shifted letters drawn dotted | part | 64 columns; a terminal shows the lower-case letter |
 | Functions defined by `)DEF` and changed by `)EDIT`, with `)?`, `)P n`, `)n`, `)0` and `)E n`; an empty line for BREAK; no del | done | c80 command tests, sample 97 |
 | A workspace saved in (C) runs in (C) alone, written with `)DEF` and `)AUTO` | done | c80 command tests |
 | `)TRON` and `)TROFF`, `)PS` and `)PD`, `)AUTO` and `)EXEC` | done | c80 command tests, sample 97 |
 | The format statement, status (`⌶` for APL80's `s`) and `#` between characters and APL80's codes | done | c80 command tests, sample 97 |
 | APL80's other commands: `)RESET`, `)KILL`, `)DOS`, `)RAM` and the file commands; the commands of (A) that APL80 has not got still answer | part | the shared commands |
-| The `d` axis operator, the screen codes `#` sends, and Call | part | the screen's, still to come |
+| The screen codes `#` sends, and Call | part | NONCE ERROR, still to come |
 | The workspaces that run in (C), and five lessons | part | none yet |
 
 ## Restrictions

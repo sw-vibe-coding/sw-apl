@@ -21,9 +21,9 @@ display, in `session.md`.
 | Characters | yes | yes | yes | |
 | Flat arrays of any rank | yes | yes | yes | |
 | Nested arrays | no | no | no | Not APL2 |
-| Names of letters and digits, with underscored letters | yes | yes | yes | |
-| `∆` in names | yes | yes | yes | APL80 has none to type; (C) reads it until it types as APL80 did |
-| `.` and `-` in names, as `M-N` | no | no | no | APL80's; (C) types as (A) does |
+| Names of letters and digits, with underscored letters | yes | yes | part | Capitals and digits in (C), and `.` and `-` |
+| `∆` in names | yes | yes | no | APL80 has none to type: a CHARACTER ERROR |
+| `.` and `-` in names, as `M-N` | no | no | yes | |
 | Comparison tolerance | fixed | `⎕CT` | fixed | |
 | Index origin | `)ORIGIN` | `⎕IO` | 1 | |
 | Random link, saved with the workspace | yes | yes | yes | |
@@ -48,7 +48,7 @@ display, in `session.md`.
 | Laminate, `,[0.5]` | yes | yes | no | NONCE ERROR in (C) |
 | Transpose `⍉`, monadic and dyadic | yes | yes | part | No diagonal case in (C) |
 | Decode `⊥` and encode `⊤` | yes | yes | part | Scalars and vectors only in (C) |
-| Domino `⌹`, inverse and divide | yes | yes | no | NONCE ERROR in (C) |
+| Domino `⌹`, inverse and divide | yes | yes | no | APL80 has no character for it |
 | Execute `⍎` | no | yes | no | |
 | Format `⍕`, monadic and dyadic | no | yes | no | (C) has the format statement instead |
 | `#`, characters to APL80's codes and back | no | no | part | The screen codes `#` sends are not there |
@@ -61,7 +61,7 @@ display, in `session.md`.
 | Scan `f\` and `f⍀` | no | yes | yes | APL\360 had none |
 | Inner product `f.g` | yes | yes | yes | |
 | Outer product `∘.f` | yes | yes | yes | |
-| Axis in brackets, `f/[1]` | yes | yes | yes | APL80 writes it with `d`, `+/1dM`, which (C) does not read |
+| An axis, `f/[1]M`; in (C), `f/1dM` | yes | yes | yes | |
 
 ## Statements
 
@@ -70,14 +70,14 @@ display, in `session.md`.
 | Several specifications in one statement, `X←Y←9` | yes | yes | no | SYNTAX ERROR in (C) |
 | Mixed output, `'A';X` | yes | yes | yes | |
 | Quad and quote-quad input and output | yes | yes | yes | |
-| The format statement, a line beginning `⍕6 2` | no | no | yes | |
+| The format statement, APL80's `f6 2` | no | no | yes | |
 
 ## System values
 
 | What | (A) '70 | (B) '75 | (C) '80 | Note |
 |---|---|---|---|---|
 | I-beams `⌶20` to `⌶27` | yes | no | no | NONCE ERROR in (B) |
-| Status `⌶0` to `⌶5`, APL80's `s` | no | no | yes | The file pointers are 0 |
+| Status, APL80's `s0` to `s5` | no | no | yes | The file pointers are 0 |
 | Quad system variables: `⎕IO ⎕PP ⎕PW ⎕RL ⎕CT ⎕LC ⎕WA ⎕AV ⎕LX` and the fixed ones | no | yes | no | |
 | Quad system functions: `⎕CR ⎕FX ⎕EX ⎕NC ⎕NL ⎕CC` | no | yes | no | |
 | A clock | yes | part | yes | (B) has none, as the 5110 had none, unless started with `--clock hardware` |
@@ -121,7 +121,8 @@ display, in `session.md`.
 
 | What | (A) '70 | (B) '75 | (C) '80 | Note |
 |---|---|---|---|---|
-| APL glyphs, typed and shown | yes | yes | yes | |
-| Overstrikes | yes | yes | yes | (B) adds the 5110's for `⍎` and `⍕`; APL80 had none, and (C) takes APL\360's as (A) does |
-| APL80's own characters: substitutes, dotted shifted letters, upper case, a 64-by-16 screen | no | no | no | (C) types and shows APL glyphs |
+| APL glyphs, typed and shown | yes | yes | no | A CHARACTER ERROR in (C) |
+| Overstrikes | yes | yes | no | (B) adds the 5110's for `⍎` and `⍕`; APL80 had none |
+| APL80's own characters: shifted letters as lower case, the substitutes, `-` the negative sign and `_` subtract, round-bracket indexing | no | no | yes | `language.md`, "What (C) '80 types" |
+| The TRS-80's screen: 64 by 16, upper case, shifted letters drawn dotted | no | no | part | 64 columns; a terminal shows the lower-case letter |
 | Errors | APL\360's | and NONCE ERROR | and NONCE ERROR | |
