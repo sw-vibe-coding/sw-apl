@@ -1,0 +1,1 @@
+c80-help: the demo Help shows only the current mode's parts via data-modes; C gets its own TRS-80 keyboard, typing, )DEF/)EDIT, machine, modes and credits sections; A and B unchanged; check-pages C Help check; verified in Chrome.
