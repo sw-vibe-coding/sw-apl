@@ -1,1 +1,1 @@
-{"commit":"7c415b3","host":"max","built_at":"2026-11-12T20:57:51Z","version":"9070fbd308b4417f","gates":"just fmt, test, clippy, gates, check-pages"}
+{"commit":"6744baf","host":"max","built_at":"2026-11-12T23:09:07Z","version":"394687c65315dea6","gates":"just fmt, test, clippy, gates, check-pages"}
