@@ -1,8 +1,9 @@
 number = 12
 slug = "c80-machine"
-status = "in-progress"
+status = "completed"
 description = "Per docs/plan.md: )RAM enables peek, poke (shifted U) and Call (dyadic #) on ..."
 role = "production"
 context_files = []
 created_at = "2026-11-11T18:15:05"
-commits = []
+completed_at = "2026-11-12T15:09:18"
+commits = ["c82e9519c3947c18a55a528937d63db0d9a500c7"]

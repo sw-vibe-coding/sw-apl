@@ -1,0 +1,1 @@
+c80-machine: )RAM opens a modeled TRS-80 memory; shifted U peeks and pokes (screen 15360-16383 as shown, RAM above, ROM and devices DOMAIN, NONCE without )RAM); Call 51 prints a character, 43 reads a key giving 0; )DOS takes DIR, KILL, RETURN. New crates apl-c80-machine and apl-c80-memory; help pages, sample 98, docs. Inserted steps c80-help and b75-crt from owner requests.
