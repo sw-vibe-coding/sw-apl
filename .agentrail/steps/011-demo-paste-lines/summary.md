@@ -1,0 +1,1 @@
+Multi-line paste in every demo, as reva-fork did: pages/lines.js pasteLines (checked by scripts/check-lines.mjs, run by just test), each complete line typed and entered once the session waits again, the last stays in the line, ATTN drops the rest; lines.js stamped and cached; demo help. Checked in Chrome in A, B and C.

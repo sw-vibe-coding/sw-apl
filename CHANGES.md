@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-11-12
 
+- chore(pages): rebuild with multi-line paste
+- feat(demo): a paste of several lines runs them one by one (demo-paste-lines)
+- docs(changes): refresh CHANGES.md to HEAD; complete c80-checklist
 - refactor: clear the checklist warnings saga c80 left (c80-checklist)
 - docs(changes): refresh CHANGES.md to HEAD; complete c80-screen
 - chore(pages): rebuild with the TRS-80 screen and the new header
