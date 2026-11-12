@@ -505,3 +505,47 @@ function credit() {
   row.append(link);
   return row;
 }
+
+// The board in (C) '80: APL80's characters, each key the character to
+// type -- a shifted letter drawn dotted, as the TRS-80 drew it -- with
+// the symbol it stands for under it. A tap types the character, as the
+// TRS-80's own keys do; Enter and the backspace are the page's.
+const APL80 = [
+  ["x", "×"], ["%", "÷"], ["p", "⍴"], ["i", "⍳"], ["r", "⌽"], ["g", "⍉"],
+  ["o", "○"], ["j", "|"], ["h", "⌈"], ["l", "⌊"], ["@", "⍟"], ["n", "~"],
+  ["&", "∧"], ["v", "∨"], ["a", "⍲"], ["y", "⍱"], ["$", "≠"], ["k", "≤"],
+  ["z", "≥"], ["e", "∊"], ['"', "∘"], ["b", "⊥"], ["t", "⊤"], ["w", "\\"],
+  ["q", "⎕"], ["m", "⍞"], ["f", "format"], ["s", "status"], ["d", "axis"],
+  ["c", "note"], ["#", "code"], ["_", "minus"], ["-", "negative"],
+  ["←", "←"], ["→", "→"], ["↑", "↑"], ["↓", "↓"],
+];
+
+export function trs80(root, tap) {
+  root.classList.add("trs80-board");
+  const keys = document.createElement("div");
+  keys.className = "apl80-keys";
+  for (const [typed, means] of APL80) {
+    const key = document.createElement("button");
+    key.type = "button";
+    const face = document.createElement("span");
+    face.className = /^[a-z]$/.test(typed) ? "face dot" : "face";
+    face.textContent = typed;
+    const under = document.createElement("small");
+    under.textContent = means;
+    if ([...means].length > 1) under.className = "word";
+    key.append(face, under);
+    key.setAttribute("aria-label", `${typed}, ${means}`);
+    key.addEventListener("click", () => tap(typed));
+    keys.append(key);
+  }
+  for (const [label, sends] of [["⌫", "backspace"], ["ENTER", "return"]]) {
+    const key = document.createElement("button");
+    key.type = "button";
+    key.className = "wide";
+    key.textContent = label;
+    key.addEventListener("click", () => tap(sends));
+    keys.append(key);
+  }
+  root.append(keys);
+  return root;
+}

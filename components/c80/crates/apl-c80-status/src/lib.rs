@@ -5,6 +5,7 @@
 //! dyadic form, belong to the screen and are not here.
 
 mod codes;
+mod special;
 mod status;
 
 pub use codes::{code, glyph};

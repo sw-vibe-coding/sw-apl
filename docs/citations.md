@@ -214,3 +214,8 @@ depict.
   carried as WOFF2, converted and otherwise unchanged, with its terms
   and credit in `images/redistributed/apl385-font/`.
   <https://www.apl385.com/fonts/>
+- **JuliaMono**, Cormullion, v0.63.2: the font (C) '80's screen and board
+  are drawn in, the one the owner's other projects use. SIL Open Font
+  License 1.1. Loaded by the page from jsDelivr's mirror of its GitHub
+  release, not redistributed; offline, (C) falls back to APL385.
+  <https://github.com/cormullion/juliamono>

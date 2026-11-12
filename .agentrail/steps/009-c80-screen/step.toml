@@ -1,6 +1,6 @@
 number = 9
 slug = "c80-screen"
-status = "pending"
+status = "in-progress"
 description = "Typing and display in C as the owner decides in docs/mode-c.md: APL80 charact..."
 role = "production"
 context_files = []

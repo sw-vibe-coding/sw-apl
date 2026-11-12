@@ -25,6 +25,24 @@
     src: local("APL385 Unicode"), url("redistributed/apl385-font/APL385.woff2") format("woff2");
     font-display: swap;
   }
+  /* JuliaMono, SIL Open Font License, by Cormullion: the monospace font
+     of the owner's other projects, with every APL glyph, for (C)'s
+     screen and board. Loaded from jsDelivr's mirror of its release, not
+     redistributed; offline, (C) falls back to APL385. */
+  @font-face {
+    font-family: JuliaMono;
+    src: local("JuliaMono"),
+      url("https://cdn.jsdelivr.net/gh/cormullion/juliamono@v0.63.2/webfonts/JuliaMono-Regular.woff2") format("woff2");
+    font-weight: 400;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: JuliaMono;
+    src: local("JuliaMono Bold"),
+      url("https://cdn.jsdelivr.net/gh/cormullion/juliamono@v0.63.2/webfonts/JuliaMono-Bold.woff2") format("woff2");
+    font-weight: 700;
+    font-display: swap;
+  }
   :root { color-scheme: light dark; --paper: #fbf7ef; --ink: #2b2118; --rule: #d8cdb8; }
   @media (prefers-color-scheme: dark) {
     :root { --paper: #17130e; --ink: #e8dfd0; --rule: #3a3229; }
@@ -40,16 +58,12 @@
   }
   header .name { opacity: .8; color: inherit; text-decoration: none; }
   header .name:hover { text-decoration: underline; }
-  /* The mode tab. A tooltip for a mouse; a touch screen has no hover,
-     so a tap shows the same words beside it. */
-  .mode-tabs { display: flex; }
-  .mode-tabs [role=tab] {
-    font: inherit; font-size: 13px; cursor: pointer; padding: .1rem .5rem;
-    color: var(--ink); background: none;
-    border: 1px solid var(--rule); border-radius: .3rem;
+  /* The mode's name. A tooltip for a mouse; a touch screen has no
+     hover, so a tap shows the same words beside it. */
+  .mode-name button {
+    font: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
+    padding: .1rem .3rem; color: var(--ink); background: none; border: 0;
   }
-  .mode-tabs [role=tab] + [role=tab] { margin-left: .3rem; }
-  .mode-tabs [role=tab][aria-selected="true"] { border-color: var(--ink); font-weight: 600; }
   .mode-about { font-size: 12px; opacity: .7; }
   .bar .offline { font-size: 12px; opacity: .7; align-self: center; }
   header { border-width: 0 0 1px; }
@@ -70,6 +84,48 @@
   #note { padding: 0 1rem .6rem; font-size: 13px; opacity: .85; }
   #note[hidden] { display: none; }
   @keyframes blink { 50% { background: transparent; } }
+  /* (C) '80: the TRS-80's screen, 64 characters by 16 lines, green on
+     black. A shifted letter -- held as its lower-case code -- is drawn
+     as the capital with a dot at its left, as APL80 drew it. */
+  body.trs80 main { background: #0b0d0b; }
+  body.trs80 #paper, body.trs80 #line {
+    width: 64ch; margin: 0 auto; box-sizing: content-box;
+    background: #000; color: #4dff7a; text-transform: uppercase;
+    font-family: JuliaMono, "APL385 Unicode", ui-monospace, monospace; font-weight: 700;
+    line-height: 1.25; text-shadow: 0 0 4px rgba(77, 255, 122, .55);
+    word-break: break-all;
+  }
+  body.trs80 #paper {
+    flex: 0 0 auto; height: calc(16 * 1.25em); padding: .8rem 1rem;
+    overflow: hidden; white-space: pre-wrap;
+  }
+  body.trs80 .board { background: #0b0d0b; }
+  .apl80-keys {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(3.2rem, 1fr));
+    gap: .3rem; max-width: 46rem; margin: .5rem auto; padding: 0 .5rem;
+  }
+  .apl80-keys button {
+    display: flex; flex-direction: column; align-items: center; gap: .1rem;
+    padding: .35rem .2rem; border: 1px solid #2d5a38; border-radius: .3rem;
+    background: #000; color: #4dff7a; font: 700 1.1rem JuliaMono, "APL385 Unicode", ui-monospace, monospace;
+    text-transform: uppercase; cursor: pointer;
+  }
+  /* What a key stands for, in an APL font: a system font has no
+     APL glyphs, and draws iota as a Greek letter and quad as a blank. */
+  .apl80-keys button small {
+    font: 400 1rem JuliaMono, "APL385 Unicode", ui-monospace, monospace; text-transform: none; opacity: .85;
+  }
+  .apl80-keys button { user-select: none; -webkit-user-select: none; }
+  .apl80-keys button small.word { font-size: .62rem; }
+  .apl80-keys button.wide { grid-column: span 2; justify-content: center; }
+  /* The line being typed sits in the screen, at its cursor. */
+  body.trs80 #paper #line { display: inline; width: auto; padding: 0; background: none; }
+  body.trs80 #line.waiting { opacity: 1; }
+  body.trs80 .dot { position: relative; }
+  body.trs80 .dot::before {
+    content: ""; position: absolute; left: -.24em; top: 50%; transform: translateY(-50%);
+    width: .16em; height: .16em; background: currentColor;
+  }
 
   /* The bar keeps only what a reader cannot work without; the rest
      is behind Help. A phone has no room for prose it has read. */
@@ -275,21 +331,22 @@
 <main id="session">
   <header>
     <a class="name" href="./">sw-apl</a>
-    <!-- The mode, as a row of tabs: the current one is marked, and
-         the other starts a session in its mode. The circled letter is
-         decoration to a screen reader, which reads the label instead. -->
-    <div class="mode-tabs" role="tablist" aria-label="APL mode">
-      <button type="button" role="tab" aria-selected="false" id="mode-tab-a" data-mode="A"
+    <!-- The mode this page runs, and only it: a mode is chosen from the
+         timeline, which the name before it leads back to. The underlined
+         letter is decoration to a screen reader, which reads the label
+         instead. -->
+    <div class="mode-name" aria-label="APL mode">
+      <button type="button" id="mode-a" data-mode="A" hidden
               title="APL\360-inspired" aria-label="1970, APL\360-inspired">
-        <span aria-hidden="true">Ⓐ '70</span>
+        <span aria-hidden="true"><u>A</u> '70</span>
       </button>
-      <button type="button" role="tab" aria-selected="true" id="mode-tab-b" data-mode="B"
+      <button type="button" id="mode-b" data-mode="B" hidden
               title="IBM 5100-inspired" aria-label="1975, IBM 5100-inspired">
-        <span aria-hidden="true">Ⓑ '75</span>
+        <span aria-hidden="true"><u>B</u> '75</span>
       </button>
-      <button type="button" role="tab" aria-selected="false" id="mode-tab-c" data-mode="C"
-              title="TRS-80-inspired" aria-label="1980, TRS-80-inspired" hidden>
-        <span aria-hidden="true">Ⓒ '80</span>
+      <button type="button" id="mode-c" data-mode="C" hidden
+              title="TRS-80-inspired" aria-label="1980, TRS-80-inspired">
+        <span aria-hidden="true"><u>C</u> '80</span>
       </button>
     </div>
     <span class="mode-about" id="mode-about" hidden>IBM 5100-inspired</span>
@@ -431,17 +488,19 @@
     <code>)ERASE</code> it, or reopen it with <code>∇NAME</code>.
     <code>)HELP EDITOR</code> has the whole list.
   </p>
-  <h3>Two modes</h3>
+  <h3>The modes</h3>
   <p>
-    The tabs at the top are the modes, and the page opens in
-    <b>Ⓑ '75</b> until you choose the other. <b>Ⓐ '70</b> is
-    APL\360-inspired. <b>Ⓑ '75</b> is IBM 5100-inspired: it adds
-    execute <code>⍎</code> and the quad system variables and functions
-    such as <code>⎕IO</code> and <code>⎕FX</code>, and has no I-beams
-    and no <code>)ORIGIN</code>, <code>)DIGITS</code> or
-    <code>)WIDTH</code>.
-    Each mode lists and loads only the workspaces that run in it.
-    Switching starts a new session in a clear workspace, so
+    The page runs one mode, named at the top beside <b>sw-apl</b>, which
+    leads back to the timeline; each mode is reached from its place on
+    the timeline. <b><u>A</u> '70</b> is APL\360-inspired. <b><u>B</u> '75</b> is IBM
+    5100-inspired: it adds execute <code>⍎</code> and the quad system
+    variables and functions such as <code>⎕IO</code> and
+    <code>⎕FX</code>, and has no I-beams and no <code>)ORIGIN</code>,
+    <code>)DIGITS</code> or <code>)WIDTH</code>. <b><u>C</u> '80</b> is
+    TRS-80-inspired: it is typed in APL80's own characters, a shifted
+    letter for a symbol, and defines functions with <code>)DEF</code>.
+    Each mode lists and loads only the workspaces that run in it, and
+    a new mode is a new session in a clear workspace, so
     <code>)SAVE</code> first what you want to keep.
   </p>
   <h3>With the network off</h3>
@@ -487,19 +546,6 @@
   <p>What this browser said, to send with a report:</p>
   <pre id="diagnosis" hidden></pre>
   <form method="dialog"><button>Close</button></form>
-</dialog>
-<dialog id="switch" aria-labelledby="switch-title">
-  <h2 id="switch-title">Switch to <span id="switch-to"></span>?</h2>
-  <p>
-    The session starts again in the other mode, in a clear workspace:
-    the workspace in hand is not carried across. <code>)SAVE</code> it
-    first to keep it. A saved workspace is listed in the modes it runs
-    in, so one that runs in both is there in either.
-  </p>
-  <form method="dialog">
-    <button value="switch">Switch</button>
-    <button value="stay" autofocus>Stay</button>
-  </form>
 </dialog>
 <script type="module">
   // The page is the one file a browser must fetch fresh: it is the

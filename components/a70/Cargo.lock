@@ -60,6 +60,7 @@ dependencies = [
 name = "apl-c80-keys"
 version = "0.1.0"
 dependencies = [
+ "apl-c80-screen",
  "apl-value",
 ]
 
@@ -71,10 +72,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-c80-screen"
+version = "0.1.0"
+
+[[package]]
 name = "apl-c80-status"
 version = "0.1.0"
 dependencies = [
  "apl-ast",
+ "apl-c80-screen",
  "apl-ibeam",
  "apl-modes",
  "apl-value",

@@ -512,7 +512,7 @@ Its other commands and operators:
 | `)AUTO expression`, `)EXEC` | Set the latent expression a loaded workspace runs; run it now |
 | `f6 2` as a statement | The format: pairs of width and decimals for the numbers shown after it, until characters, an error or a command |
 | `s n` | Status: 0 the time since sign-on in 25 ms ticks, 1 to 3 the file pointers, 4 the line running, 5 the bytes free |
-| `#` | Characters to APL80's codes and back: `#'Ap'` is `65 112` |
+| `#` | Characters to APL80's codes and back: `#'Ap'` is `65 112`; a code that is not printed moves the cursor, clears, draws a graphics block or prints at a place: `#28 31` homes and clears the screen |
 
 ## Errors
 

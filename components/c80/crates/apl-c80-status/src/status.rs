@@ -6,15 +6,18 @@ use apl_modes::Feature;
 use apl_value::{AplError, AplResult, Array, Data, ErrorKind, Number};
 use apl_workspace::{Workspace, free, used};
 
+use apl_c80_screen as screen;
+
 use crate::codes::{code, glyph};
+use crate::special::obey;
 
 /// `f r` when `f` is one of APL80's own: status, where the mode has
 /// it, and `#`. `None` for any other function.
 #[must_use]
-pub fn monadic(ws: &Workspace, func: &Function, r: &Array) -> Option<AplResult<Array>> {
+pub fn monadic(ws: &mut Workspace, func: &Function, r: &Array) -> Option<AplResult<Array>> {
     match func {
         Function::Prim('⌶') if ws.mode.profile().has(Feature::Status) => Some(status(ws, r)),
-        Function::Prim('#') => Some(convert(r)),
+        Function::Prim('#') => Some(convert(ws, r)),
         _ => None,
     }
 }
@@ -44,30 +47,47 @@ fn status(ws: &Workspace, r: &Array) -> AplResult<Array> {
     Ok(Array::scalar(Number::Int(value)))
 }
 
-/// `#r`: characters to their codes, codes to their characters.
+/// `#r`: characters to their codes, codes to their characters. A code
+/// APL80 obeys rather than prints -- `#6`, randomize -- is obeyed and
+/// gives no character; one that controls the screen gives the character
+/// that does it when shown (`apl-c80-screen`).
 ///
 /// # Errors
 /// DOMAIN ERROR for a character APL80 has not got, or a number that is
-/// not a code; NONCE ERROR for a code that controls the screen rather
-/// than printing, which (C) does not send yet.
-fn convert(r: &Array) -> AplResult<Array> {
-    let domain = || AplError::new(ErrorKind::Domain);
-    let data = match &r.data {
-        Data::Char(cs) => Data::Num(
-            cs.iter()
-                .map(|c| code(*c).map(|n| Number::Int(n.into())).ok_or_else(domain))
-                .collect::<AplResult<_>>()?,
-        ),
-        Data::Num(ns) => Data::Char(ns.iter().map(|n| character(*n)).collect::<AplResult<_>>()?),
+/// not a code; NONCE ERROR for what `special` does not do.
+fn convert(ws: &mut Workspace, r: &Array) -> AplResult<Array> {
+    let ns = match &r.data {
+        Data::Num(ns) => ns,
+        Data::Char(cs) => {
+            let code = |c: &char| code(*c).map(i64::from).or_else(|| screen::code(*c));
+            let codes = cs.iter().map(|c| code(c).map(Number::Int));
+            let codes = codes
+                .collect::<Option<_>>()
+                .ok_or_else(|| AplError::new(ErrorKind::Domain))?;
+            return Array::new(r.shape.clone(), Data::Num(codes));
+        }
     };
-    Array::new(r.shape.clone(), data)
+    let mut shown = Vec::new();
+    for n in ns {
+        shown.extend(character(ws, *n)?);
+    }
+    let shape = if r.shape.is_empty() && shown.len() == 1 {
+        Vec::new()
+    } else {
+        vec![shown.len()]
+    };
+    Array::new(shape, Data::Char(shown))
 }
 
-/// The character for one code.
-fn character(n: Number) -> AplResult<char> {
+/// The character for one code, or none for a code that is obeyed.
+fn character(ws: &mut Workspace, n: Number) -> AplResult<Option<char>> {
     let Number::Int(n) = n else {
         return Err(AplError::new(ErrorKind::Domain));
     };
-    let byte = u8::try_from(n).map_err(|_| AplError::new(ErrorKind::Nonce))?;
-    glyph(byte).ok_or_else(|| AplError::new(ErrorKind::Nonce))
+    if obey(ws, n)? {
+        return Ok(None);
+    }
+    let printed = || u8::try_from(n).ok().and_then(glyph);
+    let c = screen::character(n).or_else(printed);
+    c.map(Some).ok_or_else(|| AplError::new(ErrorKind::Domain))
 }

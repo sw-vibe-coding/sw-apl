@@ -51,7 +51,7 @@ display, in `session.md`.
 | Domino `⌹`, inverse and divide | yes | yes | no | APL80 has no character for it |
 | Execute `⍎` | no | yes | no | |
 | Format `⍕`, monadic and dyadic | no | yes | no | (C) has the format statement instead |
-| `#`, characters to APL80's codes and back | no | no | part | The screen codes `#` sends are not there |
+| `#`, characters to APL80's codes and back, and the screen codes | no | no | yes | Zone printing and stopping the clock are NONCE ERRORs |
 
 ## Operators
 
@@ -124,5 +124,6 @@ display, in `session.md`.
 | APL glyphs, typed and shown | yes | yes | no | A CHARACTER ERROR in (C) |
 | Overstrikes | yes | yes | no | (B) adds the 5110's for `⍎` and `⍕`; APL80 had none |
 | APL80's own characters: shifted letters as lower case, the substitutes, `-` the negative sign and `_` subtract, round-bracket indexing | no | no | yes | `language.md`, "What (C) '80 types" |
-| The TRS-80's screen: 64 by 16, upper case, shifted letters drawn dotted | no | no | part | 64 columns; a terminal shows the lower-case letter |
+| The TRS-80's screen: 64 by 16, green on black, upper case, shifted letters drawn dotted, the cursor codes and graphics | no | no | yes | In the demo; a terminal shows the lower-case letter and obeys the cursor codes |
+| The demo's on-screen board | the 2741's | the 2741's | APL80's characters | |
 | Errors | APL\360's | and NONCE ERROR | and NONCE ERROR | |

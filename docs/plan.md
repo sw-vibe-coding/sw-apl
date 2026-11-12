@@ -1407,6 +1407,14 @@ code anyway)." So:
 3. `c80-machine` -- `)RAM` with peek, poke and Call on a modeled
    memory, and a small `)DOS`, as the owner decided.
 
+Owner direction (2026-11-11, during c80-screen): "the A, B, and C demos
+no longer need the menu at the top, just the sw-apl link back to the
+timeline, and the underlined-{A,B,C} '{70,75,80} for the current mode
+only. I think people are confused by the original two "tab" approach
+(the "tabs" were not obvious/styled-like-tabs)." Done in
+`c80-screen`: the demo's header is the sw-apl link and the current
+mode's name; a mode is chosen from the timeline, by its callout.
+
 Owner direction (2026-11-11, later still): "we need a document that
 compares a, b, and c modes now (and d later) showing which
 feature/operator/type is supported across all three, or only by some,

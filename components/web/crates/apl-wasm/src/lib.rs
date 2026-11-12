@@ -15,7 +15,7 @@
 pub mod channel;
 
 #[cfg(target_arch = "wasm32")]
-pub use apl_board::Board;
+pub use apl_board::{Board, Trs80};
 
 #[cfg(target_arch = "wasm32")]
 mod link;

@@ -76,22 +76,29 @@ pub fn name(text: &str) -> String {
 
 /// What is shown, in APL80's characters: each glyph as the character
 /// APL80 has for it, a name's `⍙` and `∆` as `.` and `-`, a grade as
-/// its arrow.
+/// its arrow, a code the screen obeys as the terminal code for it.
 #[must_use]
 pub fn shown(text: &str) -> String {
     let back = |g: char| {
         let table = SHIFTED.iter().chain(OTHER[..7].iter());
         table.into_iter().find(|(_, k)| *k == g).map(|(c, _)| *c)
     };
-    text.chars()
-        .map(|g| match g {
+    let mut shown = String::new();
+    for g in text.chars() {
+        // A code the screen obeys is sent as the terminal code for it.
+        if let Some(sent) = apl_c80_screen::sent(g) {
+            shown.push_str(&sent);
+            continue;
+        }
+        shown.push(match g {
             '⍋' => '↑',
             '⍒' => '↓',
             '∆' => '-',
             '⍙' => '.',
             g => back(g).unwrap_or(g),
-        })
-        .collect()
+        });
+    }
+    shown
 }
 
 /// What a command shows, which is prose and names: each name's `⍙`

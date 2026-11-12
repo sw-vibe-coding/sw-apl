@@ -1,0 +1,11 @@
+[package]
+name = "apl-c80-screen"
+description = "sw-apl screen: the TRS-80's character codes as the (C) '80 mode holds and sends them, and its 64 by 16 screen"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true

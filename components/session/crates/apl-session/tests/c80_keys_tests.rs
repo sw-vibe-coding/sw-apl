@@ -198,3 +198,51 @@ fn a_workspace_file_is_in_apl80s_characters() {
     assert_eq!(out(&mut again, "A.B M-N"), vec!["-2.5"]);
     assert_eq!(out(&mut again, "S"), vec!["p%"]);
 }
+
+#[test]
+fn hash_sends_the_screen_codes_as_terminal_codes() {
+    let mut c = in_c();
+    assert_eq!(
+        out(&mut c, "#28 31"),
+        vec!["\x1b[H\x1b[J"],
+        "home, and clear the frame"
+    );
+    assert_eq!(
+        out(&mut c, "(#-130),'HI'"),
+        vec!["\x1b[3;3HHI"],
+        "PRINT @ 130"
+    );
+    assert_eq!(
+        out(&mut c, "#129 191"),
+        vec!["\u{1fb00}█"],
+        "the graphics blocks"
+    );
+    assert_eq!(
+        out(&mut c, "#'A',#129"),
+        vec!["65 129"],
+        "and back to their codes"
+    );
+    assert_eq!(
+        out(&mut c, "p,#200"),
+        vec!["1"],
+        "space compression is one character"
+    );
+}
+
+#[test]
+fn hash_obeys_the_codes_apl80_gives_actions() {
+    let mut c = in_c();
+    assert_eq!(
+        out(&mut c, "p#5 9"),
+        vec!["0"],
+        "no printer: nothing, and no character"
+    );
+    let link = c.ws.saved.env.link;
+    out(&mut c, "?100");
+    assert_ne!(c.ws.saved.env.link, link);
+    out(&mut c, "#11");
+    assert_eq!(c.ws.saved.env.link, link, "11 starts the random link again");
+    assert_eq!(out(&mut c, "#3")[0], "NONCE ERROR", "zone printing");
+    assert_eq!(out(&mut c, "#16")[0], "NONCE ERROR", "stopping the clock");
+    assert_eq!(out(&mut c, "#300")[0], "DOMAIN ERROR");
+}

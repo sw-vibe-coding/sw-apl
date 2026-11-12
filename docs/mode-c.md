@@ -268,10 +268,43 @@ manual's Function Definition describes:
   the line running, `s5` the bytes free.
 - **`#`** turns characters into APL80's codes and back: the TRS-80's
   ASCII, with the substitutes on their own codes (`%` is 37, `"` 34)
-  and each shifted letter on its lower-case code (`p` is 112). A code
-  that controls the screen rather than printing, and Call, the dyadic
-  form, are NONCE ERRORs until `c80-screen` and `c80-machine`.
+  and each shifted letter on its lower-case code (`p` is 112). The
+  codes that are not printed are below, under The screen. Call, the
+  dyadic form, is `c80-machine`'s, a NONCE ERROR until then.
 - **The `d` axis operator**, `+/1dM`, plus-reduce on the first axis.
+
+## The screen
+
+The TRS-80 shows 16 lines of 64 characters, upper case, a shifted
+letter with a dot at its left. The demo's (C) draws that: green on
+black, the line being typed at the cursor, and a board of APL80's
+characters, each key the character to type with the symbol it stands
+for under it. A tap, like a key, types the character: an unshifted
+letter the capital, a shifted one its lower-case code.
+
+`#` of a code that is not printed gives a character that does what
+the code does when it is shown (`apl-c80-screen`):
+
+- **The Level II control codes**: 8 backspace, 10 and 13 a new line,
+  24 to 27 the cursor left, right, down and up, 28 home, 29 the start
+  of the line, 30 clear to the end of the line, 31 to the end of the
+  screen, 14 and 15 the cursor shown and hidden. The others do
+  nothing.
+- **128 to 191, the graphics blocks**, each held as the Unicode sextant
+  that draws the same 2-by-3 cells.
+- **192 to 255, space compression**, 192 + n for n spaces.
+- **-1 to -1023, PRINT @**: the next character goes at that place, 64
+  to a line.
+
+They are held as characters -- a control code as itself, a block as
+its sextant, the rest in the Private Use Area -- and sent as the
+terminal codes that do the same: a terminal obeys them, and so does
+the demo's screen. `#` of the codes APL80 gives an action does it and
+gives no character: 5 and 9, a printer on and off, do nothing, with no
+printer to drive; 6 randomizes the random link from the clock; 11
+starts it again; 18 sets the clock `s0` reads to nothing. Zone
+printing, 3, 7, 15 and 255, and stopping and starting the clock, 16
+and 17, are NONCE ERRORs.
 
 ## Names with `∆`
 

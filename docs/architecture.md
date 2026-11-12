@@ -145,6 +145,9 @@ sw-apl/
                                    (C) '80 mode leaves out, the
                                    hyperbolic circle functions and
                                    factorial of a fraction
+               apl-c80-screen      screen: the TRS-80's character codes as
+                                   the (C) '80 mode holds and sends them,
+                                   and its 64 by 16 screen
                apl-c80-status      status and conversion: the (C) '80
                                    mode's s operator, typed as the
                                    I-beam, and # between characters and
@@ -161,7 +164,8 @@ sw-apl/
                sw-apl              clean-room APL interpreter, (A) '70,
                                    (B) '75 and (C) '80: terminal REPL
                                    and batch runner
-    web/       apl-board           the 2741 keyboard in a browser: one
+    web/       apl-board           the 2741 keyboard in a browser, or in
+                                   (C) the TRS-80's and its screen: one
                                    keystroke in, the line out
                apl-serve           service: one session per connection,
                                    over any link

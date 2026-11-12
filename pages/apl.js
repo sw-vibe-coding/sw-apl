@@ -22,8 +22,8 @@ const query = (pairs) => {
 };
 const stamped = (path) => `${path}${query([["v", VERSION], ["ts", LOADED]])}`;
 
-const { default: init, Board } = await import(stamped("./wasm/apl_wasm.js"));
-const { build, striking } = await import(stamped("./board.js"));
+const { default: init, Board, Trs80 } = await import(stamped("./wasm/apl_wasm.js"));
+const { build, striking, trs80 } = await import(stamped("./board.js"));
 
 // Must agree with channel.rs, which is where these are documented.
 const SIZE = 64 * 1024;
@@ -77,11 +77,45 @@ let wire = null;
 // reserved position -- and no font draws those. Only the drawing
 // changes: the characters themselves are what the session holds.
 const PUA = /[\uE000-\uF8FF]/;
+// In (C) a shifted letter is held as its lower-case code and drawn as
+// the TRS-80 drew it: the capital, with a dot at its left.
+const dotted = (el, text) => {
+  if (MODE !== "C") return void el.append(text);
+  for (const piece of text.split(/([a-z])/)) {
+    if (!piece) continue;
+    if (!/^[a-z]$/.test(piece)) {
+      el.append(piece);
+      continue;
+    }
+    const dot = document.createElement("span");
+    dot.className = "dot";
+    dot.textContent = piece;
+    el.append(dot);
+  }
+};
+// (C)'s screen, the TRS-80's 64 by 16, once the bundle is running.
+// Everything printed goes to it, obeying the terminal codes (C) sends
+// for the TRS-80's own (home, clear, PRINT @), and the paper draws its
+// 16 lines with the line being typed at its cursor, as on the TRS-80.
+let screen = null;
+const render = () => {
+  const { rows, row, col } = JSON.parse(screen.shown());
+  const typed = [prompt, before, after].reduce((n, el) => n + el.textContent.length, 0);
+  paper.replaceChildren();
+  dotted(paper, rows.slice(0, row).map((r) => r + "\n").join("") + rows[row].slice(0, col));
+  paper.append(line);
+  const rest = rows.slice(row + 1).map((r) => "\n" + r).join("");
+  dotted(paper, rows[row].slice(col + typed) + rest);
+};
 const put = (text) => {
+  if (screen) {
+    screen.print(text);
+    return render();
+  }
   for (const piece of text.split(/([\uE000-\uF8FF])/)) {
     if (!piece) continue;
     if (!PUA.test(piece)) {
-      paper.append(piece);
+      dotted(paper, piece);
       continue;
     }
     const dot = document.createElement("span");
@@ -103,13 +137,16 @@ const stop = (why) => {
 // Draw the line being typed, with the carriage where the keyboard
 // says it is.
 const draw = (state) => {
-  before.textContent = state.before;
-  after.textContent = state.text.slice(state.before.length);
+  before.replaceChildren();
+  after.replaceChildren();
+  dotted(before, state.before);
+  dotted(after, state.text.slice(state.before.length));
   line.classList.toggle("pending", state.pending);
   striking(state.pending ? [...state.before].at(-1) ?? "" : "", state.missed);
   if (state.bell) {
     line.animate([{ opacity: 1 }, { opacity: 0.3 }, { opacity: 1 }], 140);
   }
+  if (screen) render();
 };
 
 // Cross-origin isolation, without which there is no SharedArrayBuffer
@@ -132,16 +169,15 @@ const RELOADS = "apl-isolation-reloads";
 // but the tab it was typed in. Nothing is sent anywhere.
 const LIBRARY = "apl-library-0";
 
-// The modes, by the letter the tab and the board use and the word the
+// The modes, by the letter the page and the board use and the word the
 // session reads. A session is in one mode for as long as it lasts, so
 // changing mode is starting another.
-// (C) is reached by its address alone until its demo is finished: its
-// tab stays hidden unless the page is in it.
+// (C) is reached by its address alone until its demo is finished.
 const MODES = { A: "70", B: "75", C: "80" };
 
 // Which mode this visit is in: the address says, or else the mode the
-// last visit was in, or else (B). The address is what a switch sets,
-// so it works where nothing can be remembered; the memory is what
+// last visit was in, or else (B). The address is what the timeline's
+// links set, so it works where nothing can be remembered; the memory
 // brings a reader back to the mode they left. The page opens in (B),
 // the owner's choice; the CLI and the service keep (A) as theirs.
 const CHOSEN = "apl-mode";
@@ -155,6 +191,7 @@ function chosen() {
   return "B";
 }
 const MODE = chosen();
+if (MODE === "C") document.body.classList.add("trs80");
 try {
   localStorage.setItem(CHOSEN, MODE);
 } catch { /* not remembered; the address still carries it */ }
@@ -447,6 +484,10 @@ async function run() {
   await init();
   const extra = await libraries();
   board = new Board(MODE);
+  if (MODE === "C") {
+    screen = new Trs80();
+    render();
+  }
   const channel = new SharedArrayBuffer(SIZE);
   const header = new Int32Array(channel, 0, 3);
   const body = new Uint8Array(channel, BODY);
@@ -502,7 +543,9 @@ async function keyboard() {
     if (state.submit) return send(wire.header, wire.body, board.take());
     draw(state);
   };
-  await build(boardEl, stamped, tap, attention, MODE);
+  // (C) has a board of APL80's characters; the others the 2741's.
+  if (MODE === "C") trs80(boardEl, tap);
+  else await build(boardEl, stamped, tap, attention, MODE);
 
   const button = document.getElementById("show-board");
   const reveal = (show) => {
@@ -517,12 +560,6 @@ async function keyboard() {
   try {
     was = Boolean(localStorage.getItem(SHOWN));
   } catch { /* as above */ }
-  // The board is a 2741's, glyphs and idioms; (C) types a TRS-80's
-  // characters, so it has the physical keyboard alone.
-  if (MODE === "C") {
-    button.hidden = true;
-    was = false;
-  }
   reveal(was);
 }
 
@@ -548,33 +585,15 @@ function controls() {
   });
 }
 
-// The mode tabs. The current one shows, on a tap, what its tooltip
-// says, because a touch screen has no hover to show it. The other
-// asks first, because switching leaves the workspace in hand behind,
-// and then starts its own session by loading the page in its mode.
+// The mode's name, the one mode this page runs: a mode is chosen from
+// the timeline. A tap shows what its tooltip says, because a touch
+// screen has no hover to show it.
 function tabs() {
   const about = document.getElementById("mode-about");
-  const ask = document.getElementById("switch");
-  for (const tab of document.querySelectorAll(".mode-tabs [role=tab]")) {
-    const here = tab.dataset.mode === MODE;
-    if (here) tab.hidden = false;
-    tab.setAttribute("aria-selected", String(here));
-    if (here) about.textContent = tab.title;
-    tab.addEventListener("click", () => {
-      if (here) return void (about.hidden = !about.hidden);
-      document.getElementById("switch-to").textContent = tab.textContent.trim();
-      ask.returnValue = "";
-      ask.onclose = () => ask.returnValue === "switch" && go(tab.dataset.mode);
-      ask.showModal();
-    });
-  }
-}
-
-// Load the page again in `mode`.
-function go(mode) {
-  const next = new URL(location.href);
-  next.searchParams.set("mode", mode);
-  location.assign(next);
+  const here = document.querySelector(`.mode-name [data-mode="${MODE}"]`);
+  here.hidden = false;
+  about.textContent = here.title;
+  here.addEventListener("click", () => void (about.hidden = !about.hidden));
 }
 
 // What this page is running, for the colophon. It comes out of
@@ -619,6 +638,7 @@ function show(frame) {
   if (frame.more) return;
   if (frame.off || frame.prompt === null) return stop("Session ended.");
   prompt.textContent = frame.prompt;
+  if (screen) render();
   typing = true;
   line.classList.remove("waiting");
   // A (B) [n⎕] puts the statement in the line, to be typed over in
