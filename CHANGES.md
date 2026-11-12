@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-11-11
 
+- chore(pages): rebuild with the MODES help pointer
+- docs(modes): compare the modes area by area (modes-table)
+- docs(changes): refresh CHANGES.md to HEAD; complete c80-commands
 - chore(pages): rebuild with (C)'s commands
 - feat(c80): APL80's commands; (C) defines with )DEF and keeps its own workspaces (c80-commands)
 - docs(changes): refresh CHANGES.md to HEAD; complete c80-mode
