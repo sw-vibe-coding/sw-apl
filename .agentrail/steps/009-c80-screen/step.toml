@@ -1,8 +1,9 @@
 number = 9
 slug = "c80-screen"
-status = "in-progress"
+status = "completed"
 description = "Typing and display in C as the owner decides in docs/mode-c.md: APL80 charact..."
 role = "production"
 context_files = []
 created_at = "2026-11-10T17:37:46"
-commits = []
+completed_at = "2026-11-12T09:12:17"
+commits = ["04b54ea8ae99b79177f4ae760cf3cca80b2bf493"]

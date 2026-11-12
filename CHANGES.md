@@ -12,8 +12,14 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-11-12
+
+- chore(pages): rebuild with the TRS-80 screen and the new header
+
 ## 2026-11-11
 
+- feat(c80): the TRS-80's screen, its codes, and a board of APL80's characters (c80-screen)
+- docs(changes): refresh CHANGES.md to HEAD; complete c80-keys
 - chore(pages): rebuild with (C) typed in APL80's characters
 - chore: stop tracking the owner's notes file swept into 15e177a
 - feat(c80): (C) is typed and shown in APL80's characters (c80-keys)
