@@ -1,7 +1,7 @@
 /* @ts-self-types="./apl_wasm.d.ts" */
 
 /**
- * A 2741 keyboard for one page.
+ * The keyboard for one page: a 2741's, or in (C) a TRS-80's.
  */
 export class Board {
     __destroy_into_raw() {
@@ -15,10 +15,11 @@ export class Board {
         wasm.__wbg_board_free(ptr, 0);
     }
     /**
-     * A keyboard with the 2741 map and an empty line, composing the
-     * overstrikes of `mode` -- "A" or "70", "B" or "75", anything
-     * else being (A). A page switching modes starts a new session and
-     * makes a new board for it.
+     * A keyboard with an empty line for `mode` -- "A" or "70", "B" or
+     * "75", "C" or "80", anything else being (A): the 2741 map,
+     * composing that mode's overstrikes, or in (C) the TRS-80's keys.
+     * A page switching modes starts a new session and makes a new
+     * board for it.
      * @param {string} mode
      */
     constructor(mode) {
@@ -54,7 +55,9 @@ export class Board {
      *
      * The answer is the JSON `draw::state` describes. Enter with a
      * strike still waiting rings instead of sending: the glyph is
-     * half typed.
+     * half typed. On the TRS-80 a key types its character, an
+     * unshifted letter the capital and a shifted one the lower-case
+     * code APL80 reads as a symbol.
      * @param {string} key
      * @param {boolean} ctrl
      * @param {boolean} alt
