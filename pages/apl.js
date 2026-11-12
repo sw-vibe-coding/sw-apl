@@ -24,6 +24,7 @@ const stamped = (path) => `${path}${query([["v", VERSION], ["ts", LOADED]])}`;
 
 const { default: init, Board, Trs80 } = await import(stamped("./wasm/apl_wasm.js"));
 const { build, striking, trs80 } = await import(stamped("./board.js"));
+const { pasteLines } = await import(stamped("./lines.js"));
 
 // Must agree with channel.rs, which is where these are documented.
 const SIZE = 64 * 1024;
@@ -644,6 +645,29 @@ function show(frame) {
   // A (B) [n⎕] puts the statement in the line, to be typed over in
   // place as on the 5110; Return enters it as it then stands.
   if (frame.offer) draw(JSON.parse(board.paste(frame.offer)));
+  if (pasted) next();
+}
+
+// A paste of several lines, the ones not yet run and what stays in the
+// line after them; null when there is none.
+let pasted = null;
+
+// The next pasted line, typed and entered as if by hand, each once the
+// session waits for a line again; when none is left, what stays goes
+// into the line, the caret where the paste ended.
+function next() {
+  const line = pasted.lines.shift();
+  board.press("c", true, false);
+  if (line !== undefined) {
+    board.paste(line);
+    return send(wire.header, wire.body, board.take());
+  }
+  let state = JSON.parse(board.paste(pasted.rest));
+  for (let i = pasted.at; i < pasted.rest.length; i++) {
+    state = JSON.parse(board.press("ArrowLeft", false, false));
+  }
+  pasted = null;
+  draw(state);
 }
 
 // Put a typed line in the channel and wake the session.
@@ -681,6 +705,8 @@ function send(header, body, text) {
 // both stop. Only while the session is busy -- at the prompt there is
 // nothing to stop, and a flag left set would stop the next line.
 function attention() {
+  // ATTN drops the pasted lines not yet run.
+  pasted = null;
   if (typing || !wire) return;
   Atomics.store(wire.header, ATTN, 1);
 }
@@ -730,7 +756,12 @@ function listen(header, body) {
   addEventListener("paste", (event) => {
     if (!typing) return;
     event.preventDefault();
-    draw(JSON.parse(board.paste(event.clipboardData.getData("text"))));
+    // Several lines run one by one, as if typed (lines.js); one stays.
+    const text = event.clipboardData.getData("text");
+    const split = pasteLines(before.textContent, after.textContent, text);
+    if (!split.lines.length) return draw(JSON.parse(board.paste(text)));
+    pasted = split;
+    next();
   });
 }
 

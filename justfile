@@ -18,6 +18,8 @@ check component="":
 test component="":
     #!/usr/bin/env bash
     set -euo pipefail
+    # The page's pure scripts, when node is here (scripts/check-lines.mjs).
+    if command -v node >/dev/null; then node scripts/check-lines.mjs; fi
     for c in $(just _select "{{component}}"); do
         echo "== $c"; (cd "components/$c" && cargo test --workspace)
     done

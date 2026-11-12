@@ -1,6 +1,6 @@
 number = 11
 slug = "demo-paste-lines"
-status = "pending"
+status = "in-progress"
 description = "Owner direction 2026-11-12: pasting multi-line text in the demo loses its lin..."
 role = "production"
 context_files = []

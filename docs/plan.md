@@ -1390,6 +1390,19 @@ code anyway)." So:
   function as `)DEF` with its header, its lines, and the empty line
   that stands for BREAK; a latent expression as `)AUTO`.
 
+Owner direction (2026-11-12): "pasting multiline clipboard loses the
+carriage returns, look at ../../softwarewrighter/reva-fork to see how
+it fixed the paste to paste on more than one line" -- for the A, B and
+C demos alike. Step `demo-paste-lines`: as reva-fork's commit 4ee2956
+does, a paste is split at its line breaks (CR LF, CR, LF; pages/lines.js,
+checked by scripts/check-lines.mjs); each complete line runs as if
+typed and entered, one at a time as the session waits for a line
+again; the last, unfinished one stays in the line; ATTN drops the rest.
+
+And: the checklist warnings c80 left (19, missed because `just gates`
+prints only a summary) are cleared first, step `c80-checklist`, which
+splits five small crates out where crates were full.
+
 `c80-screen` is split in three, each a step (2026-11-11):
 
 1. `c80-keys` -- (C) types and shows APL80's characters: shifted

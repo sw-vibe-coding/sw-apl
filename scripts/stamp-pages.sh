@@ -18,7 +18,7 @@ digest() {
     if command -v sha256sum >/dev/null; then sha256sum "$@"; else shasum -a 256 "$@"; fi
 }
 
-files=(pages/apl.js pages/board.js pages/worker.js pages/sw.js
+files=(pages/apl.js pages/board.js pages/lines.js pages/worker.js pages/sw.js
        pages/keymap.json pages/glyph-names.json pages/manifest.json
        pages/board-keys.json pages/board.json pages/overstrikes.json
        images/redistributed/apl-keyboard/APL-keybd2-board.svg
