@@ -97,6 +97,59 @@ export class Board {
 if (Symbol.dispose) Board.prototype[Symbol.dispose] = Board.prototype.free;
 
 /**
+ * A 64-by-16 screen for one page: what is printed to it obeys the
+ * terminal codes (C) sends for the TRS-80's (`apl-c80-screen`).
+ */
+export class Trs80 {
+    __destroy_into_raw() {
+        const ptr = this.__wbg_ptr;
+        this.__wbg_ptr = 0;
+        Trs80Finalization.unregister(this);
+        return ptr;
+    }
+    free() {
+        const ptr = this.__destroy_into_raw();
+        wasm.__wbg_trs80_free(ptr, 0);
+    }
+    /**
+     * A blank screen, the cursor at the top left.
+     */
+    constructor() {
+        const ret = wasm.trs80_new();
+        this.__wbg_ptr = ret;
+        Trs80Finalization.register(this, this.__wbg_ptr, this);
+        return this;
+    }
+    /**
+     * Print `text` to it.
+     * @param {string} text
+     */
+    print(text) {
+        const ptr0 = passStringToWasm0(text, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        wasm.trs80_print(this.__wbg_ptr, ptr0, len0);
+    }
+    /**
+     * The screen as the page draws it, as JSON: its 16 lines, and the
+     * line and column of the cursor.
+     * @returns {string}
+     */
+    shown() {
+        let deferred1_0;
+        let deferred1_1;
+        try {
+            const ret = wasm.trs80_shown(this.__wbg_ptr);
+            deferred1_0 = ret[0];
+            deferred1_1 = ret[1];
+            return getStringFromWasm0(ret[0], ret[1]);
+        } finally {
+            wasm.__wbindgen_free(deferred1_0, deferred1_1, 1);
+        }
+    }
+}
+if (Symbol.dispose) Trs80.prototype[Symbol.dispose] = Trs80.prototype.free;
+
+/**
  * Hold a session on the shared channel until it ends.
  *
  * This never returns while the session lasts, which is the point:
@@ -319,6 +372,9 @@ function __wbg_get_imports() {
 const BoardFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_board_free(ptr, 1));
+const Trs80Finalization = (typeof FinalizationRegistry === 'undefined')
+    ? { register: () => {}, unregister: () => {} }
+    : new FinalizationRegistry(ptr => wasm.__wbg_trs80_free(ptr, 1));
 
 function addToExternrefTable0(obj) {
     const idx = wasm.__externref_table_alloc();
