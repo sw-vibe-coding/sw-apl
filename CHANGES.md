@@ -14,6 +14,10 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-11-12
 
+- saga: complete c80-machine
+- chore(pages): rebuild with )RAM, peek, poke, Call and )DOS
+- feat(c80): )RAM with peek, poke and Call; a small )DOS (c80-machine)
+- docs(changes): refresh CHANGES.md to HEAD; complete demo-paste-lines
 - chore(pages): rebuild with multi-line paste
 - feat(demo): a paste of several lines runs them one by one (demo-paste-lines)
 - docs(changes): refresh CHANGES.md to HEAD; complete c80-checklist
