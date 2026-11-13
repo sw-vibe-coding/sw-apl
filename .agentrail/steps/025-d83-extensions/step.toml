@@ -1,0 +1,8 @@
+number = 25
+slug = "d83-extensions"
+status = "pending"
+description = "Per docs/ibm-pc-apl-plan.md: PC APL's extensions in D: ambivalent defined fun..."
+role = "production"
+context_files = []
+created_at = "2026-11-13T08:42:19"
+commits = []

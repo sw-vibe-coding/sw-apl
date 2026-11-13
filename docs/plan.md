@@ -1438,6 +1438,24 @@ front view zoomed in with all text within the CRT (like the TRS-80
 demo)?" Step `b75-crt-default`: (B) opens on the zoomed 5100, the
 glass and a little bezel filling the room.
 
+Owner direction (2026-11-13): "start a new docs/ibm-pc-apl-plan.md and
+corresponding saga/step(s), to emulate that APL as D'83 using the dual
+monitor image for the live-demo. Text in the green monochrome monitor
+and graphical output in the CGA monitor. Find examples of code that
+can draw graphics, like a wireframe cube in color." Then: "be sure to
+plan ../sw-apl-workspaces for mode=d case, probably cannot reuse a, b,
+or c workspaces; plan to copy workspaces to a mode=d compatible format
+for saving/loading." And, of PC APL putting its APL characters on the
+color display only: "I used a custom eeprom on my MDA." The design is
+`docs/ibm-pc-apl-plan.md`: (B)'s language plus PC APL's extensions;
+APL text on the green screen (the owner's EPROM); graphics through
+AP205's bit-mapped fields on a modeled CGA, as the 1983 product had
+it; `NAME.d.apl.ws` copies of (B)'s workspaces, made by script and
+tested in (D); a GRAPHICS workspace with a colored wireframe CUBE.
+Steps `d83-mode`, `d83-workspaces`, `d83-shared-variables`,
+`d83-ap205`, `d83-graphics`, `d83-demo`, `d83-extensions`, in saga
+`c80` after `c80-lessons`.
+
 `c80-screen` is split in three, each a step (2026-11-11):
 
 1. `c80-keys` -- (C) types and shows APL80's characters: shifted

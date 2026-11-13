@@ -1,0 +1,1 @@
+Per docs/ibm-pc-apl-plan.md: PC APL's extensions in D: ambivalent defined functions with NC of the left argument, QUAD EA, picture format, dyadic grades with a collating sequence, )RESET; then )IN, )OUT and QUAD TF transfer form, and AP210 files mapped to the libraries.

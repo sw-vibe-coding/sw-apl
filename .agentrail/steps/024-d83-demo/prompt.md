@@ -1,0 +1,1 @@
+Per docs/ibm-pc-apl-plan.md, The demo: demo.html?mode=D on the owner's dual-monitor picture, the session in the green monochrome glass (80 by 25, APL glyphs, the owner's EPROM), the CGA frame in the color glass as an unsmoothed canvas; Alt-F1, F4, F8; Help for D only; the timeline D83 callout linked live.

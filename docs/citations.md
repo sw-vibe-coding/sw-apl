@@ -107,10 +107,14 @@ carry the same files, for example
   <https://www.trs-80.com/sub-publications-manuals-software-1.htm#apl80-2>
 - **APL Reference**, 1502219, IBM, May 1983: IBM Personal Computer APL.
   <https://bitsavers.trailing-edge.com/pdf/ibm/pc/languages/1502219_APL_Reference_May83.pdf>
+  Read for `ibm-pc-apl-plan.md`: the two displays and the libraries
+  (chapter 1), AP205 and AP210 (chapter 3), the extensions (chapter 1).
 - **An APL System for the IBM Personal Computer**, M. L. Tavera and
   M. Alfonseca, IBM Systems Journal 24, no. 1: the June 1983
   announcement.
   <https://bitsavers.trailing-edge.com/pdf/ibm/IBM_Systems_Journal/241/ibmsj2401H.pdf>
+  Read for `ibm-pc-apl-plan.md`: the APL character set on the color
+  display, and the EPROM that put it on the monochrome one.
 - **An Introduction to APL2**, SH20-9229-1, IBM, December 1985.
   <https://www.bitsavers.org/pdf/ibm/apl/SH20-9229-1_An_Introduction_to_APL_2_Dec85.pdf>
 - **APL2 Migration Guide**, Version 2 Release 2, IBM, 1994.

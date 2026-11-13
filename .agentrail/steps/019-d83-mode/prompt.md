@@ -1,0 +1,1 @@
+Per docs/ibm-pc-apl-plan.md (owner direction 2026-11-13): add mode D, 1983 IBM PC APL, to apl-modes and the CLI as --mode 83: the profile of B and the letter D, workspaces naming (D), )HELP naming it. reg-rs proves A, B and C do not move.

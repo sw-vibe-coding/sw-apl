@@ -1,0 +1,1 @@
+Per docs/ibm-pc-apl-plan.md: GRAPHICS.d.apl.ws in sw-apl-workspaces, written new: a SHOW cover over AP205, CUBE (turning wireframe cube, x edges red, y cyan, z white), PLOT, LISSAJOUS, SIERPINSKI, MANDELBROT, LIFE; each with a test of its pixels.

@@ -1,0 +1,1 @@
+Per docs/ibm-pc-apl-plan.md, Workspaces: in sw-apl-workspaces, a script copying each B workspace to NAME.d.apl.ws (modes line rewritten, SOURCE kept, a DERIVED line), committing only copies whose own tests pass in D; check-provenance learns d; in sw-apl, drive letters A: B: C: as names for libraries 1, 2 and 0, and )SAVE in D writes MODES (D).

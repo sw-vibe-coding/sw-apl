@@ -1,0 +1,1 @@
+Per docs/ibm-pc-apl-plan.md: in D, QUAD SVO, SVR, SVC and SVQ with the shared-variable protocol and a processor interface; only AP205 answers, any other processor number gives 0 as a processor not loaded did.

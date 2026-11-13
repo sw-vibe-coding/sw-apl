@@ -1,0 +1,8 @@
+number = 24
+slug = "d83-demo"
+status = "pending"
+description = "Per docs/ibm-pc-apl-plan.md, The demo: demo.html?mode=D on the owner's dual-m..."
+role = "production"
+context_files = []
+created_at = "2026-11-13T08:42:19"
+commits = []
