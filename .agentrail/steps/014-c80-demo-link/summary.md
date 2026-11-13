@@ -1,0 +1,1 @@
+c80-demo-link: timeline C'80 callout links to demo.html?mode=C with tooltip My live demo of APL-80 and a present-tense description; LIFE.c in library 1 with a glider and )AUTO greeting, shipped in the browser bundle; timeline and session tests; check-pages expectations updated. Code by a worktree agent, merged; pages rebuilt; LIFE verified via the CLI.
