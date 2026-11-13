@@ -14,6 +14,8 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-11-12
 
+- chore(pages): the timeline's 5100 is the owner's revised whole-machine render
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(pages): the timeline's 5100 is the owner's newer render
 - docs(changes): refresh CHANGES.md to HEAD
 - saga: complete b75-crt-default
