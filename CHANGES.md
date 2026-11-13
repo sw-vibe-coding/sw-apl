@@ -14,6 +14,8 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-11-12
 
+- chore(pages): the timeline's 5100 is the owner's newer render
+- docs(changes): refresh CHANGES.md to HEAD
 - saga: complete b75-crt-default
 - feat(pages): (B) '75 opens on the zoomed 5100, text inside its CRT (b75-crt-default)
 - docs(changes): refresh CHANGES.md to HEAD
