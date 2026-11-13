@@ -31,7 +31,7 @@ const SHELL = [
   "timeline/apl_timeline_web.js", "timeline/apl_timeline_web_bg.wasm",
   "machines/70.webp", "machines/5100.webp", "machines/80.webp", "machines/83.webp",
   "machines/1053.webp", "machines/029.webp", "machines/3279g.webp", "machines/cor24.webp",
-  "machines/sw-mlpl.webp", "machines/xetal.webp", "machines/5100-crt.webp", "version.txt", "build-info.json", "libraries.json", "manifest.json",
+  "machines/sw-mlpl.webp", "machines/xetal.webp", "machines/5100-crt.webp", "machines/trs80-monitor.webp", "version.txt", "build-info.json", "libraries.json", "manifest.json",
   "apl.js", "board.js", "crt.js", "lines.js", "worker.js", "wasm/apl_wasm.js", "wasm/apl_wasm_bg.wasm",
   "keymap.json", "glyph-names.json", "board-keys.json", "board.json",
   "overstrikes.json",

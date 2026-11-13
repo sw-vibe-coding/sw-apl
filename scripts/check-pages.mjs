@@ -831,7 +831,7 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
 
 // 9e''. (B) '75's 5100: the switch puts the session in the CRT, a line
 //       typed there is answered there, and Zoom fills the room with the
-//       glass. (A) and (C) have no switch; (C)'s screen fills its room.
+//       glass. (A) and (C) have no switch; (C)'s screen is in its monitor.
 {
   const page = await visitIn('B');
   await page.click('#show-crt');
@@ -854,9 +854,13 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
     const other = await visitIn(mode);
     check(`(${mode}) has no 5100 switch`, !(await other.$('#show-crt')), 'a switch');
     if (mode === 'C') {
-      const tall = await other.evaluate(() =>
-        document.getElementById('paper').getBoundingClientRect().height / innerHeight);
-      check('(C) screen fills its room', tall > 0.4, `${tall} of the window`);
+      const seen = await other.evaluate(() => {
+        const glass = document.querySelector('.monitor .glass');
+        return { inside: glass.contains(document.getElementById('paper')),
+          wide: glass.getBoundingClientRect().width / innerWidth };
+      });
+      check('(C) screen is in the monitor\'s glass', seen.inside, 'paper outside it');
+      check('(C) monitor fills its room', seen.wide > 0.35, `${seen.wide} of the window`);
     }
     await other.context().close();
   }

@@ -1428,7 +1428,9 @@ it is the owner's picture, and the page already calls (B) "IBM
 5100-inspired". During it the owner reported (C)'s screen "is only
 using the top third or quarter of the screen. Can we use most of the
 screen?": (C)'s 64 by 16 screen now sizes its text to fill the room
-between the header and the bar.
+between the header and the bar. Then (owner): "make the TRS-80 screen
+larger", the monitor filling the screen and the green text within its
+CRT, from a render of the owner's model (`pages/machines/trs80-monitor.webp`).
 
 `c80-screen` is split in three, each a step (2026-11-11):
 
