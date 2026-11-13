@@ -1,0 +1,1 @@
+B75 opens on the zoomed 5100 by default, the glass and a little bezel filling the room, text inside the CRT; switch and Whole machine remain. Checked in Chrome.

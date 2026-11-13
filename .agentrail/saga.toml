@@ -1,6 +1,6 @@
 name = "c80"
 status = "active"
-current_step = 16
+current_step = 17
 created_at = "2026-11-10T17:37:46"
 plan_file = ".agentrail/plan.md"
 retroactive = false
