@@ -1431,6 +1431,10 @@ screen?": (C)'s 64 by 16 screen now sizes its text to fill the room
 between the header and the bar. Then (owner): "make the TRS-80 screen
 larger", the monitor filling the screen and the green text within its
 CRT, from a render of the owner's model (`pages/machines/trs80-monitor.webp`).
+Then (owner, 2026-11-12): "when will B'75 display show the large 5100
+front view zoomed in with all text within the CRT (like the TRS-80
+demo)?" Step `b75-crt-default`: (B) opens on the zoomed 5100, the
+glass and a little bezel filling the room.
 
 `c80-screen` is split in three, each a step (2026-11-11):
 

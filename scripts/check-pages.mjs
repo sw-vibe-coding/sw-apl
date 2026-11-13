@@ -829,25 +829,32 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await page.context().close();
 }
 
-// 9e''. (B) '75's 5100: the switch puts the session in the CRT, a line
-//       typed there is answered there, and Zoom fills the room with the
-//       glass. (A) and (C) have no switch; (C)'s screen is in its monitor.
+// 9e''. (B) '75's 5100: the page opens with the session in the CRT,
+//       zoomed so the glass and a little bezel fill the room; a line
+//       typed there is answered there; Whole machine shows it all, and
+//       the switch puts the session back on paper. (A) and (C) have no
+//       switch; (C)'s screen is in its monitor.
 {
   const page = await visitIn('B');
-  await page.click('#show-crt');
-  const inside = await page.evaluate(() =>
-    document.querySelector('#crt .glass').contains(document.getElementById('paper')));
-  check('(B) 5100 puts the session in the CRT', inside, 'paper not in the glass');
+  const seen = () => page.evaluate(() => {
+    const glass = document.querySelector('#crt .glass');
+    const room = document.getElementById('crt').getBoundingClientRect();
+    const box = glass.getBoundingClientRect();
+    return { inside: glass.contains(document.getElementById('paper')),
+      fill: Math.max(box.width / room.width, box.height / room.height) };
+  });
+  const first = await seen();
+  check('(B) opens with the session in the CRT', first.inside, 'paper not in the glass');
+  check('(B) opens zoomed to the CRT', first.fill > 0.75, `fills ${first.fill}`);
   await page.keyboard.type('2+3');
   await page.keyboard.press('Enter');
   await page.waitForFunction(() => /\n5\n/.test(document.getElementById('paper').textContent));
   await page.click('#crt .zoom');
-  const fill = await page.evaluate(() => {
-    const glass = document.querySelector('#crt .glass').getBoundingClientRect();
-    const room = document.getElementById('crt').getBoundingClientRect();
-    return Math.max(glass.width / room.width, glass.height / room.height);
-  });
-  check('(B) Zoom fills the room with the CRT', fill > 0.97, `fills ${fill}`);
+  const whole = await seen();
+  check('(B) Whole machine shows the render', whole.fill < 0.5, `fills ${whole.fill}`);
+  await page.click('#show-crt');
+  const back = await page.evaluate(() => !document.getElementById('crt').contains(document.getElementById('paper')));
+  check('(B) the switch puts the session on paper', back, 'still in the glass');
   await page.click('#show-crt');
   await page.context().close();
   for (const mode of ['A', 'C']) {

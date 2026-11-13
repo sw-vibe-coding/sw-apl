@@ -1,0 +1,1 @@
+Owner 2026-11-12: B75 should show the large 5100 front view zoomed in with all text within the CRT, like the TRS-80 demo. Open B on the zoomed 5100 by default, the glass and a little bezel filling the room; the 5100 switch and Whole machine remain.

@@ -12,8 +12,13 @@ const RENDER = { width: 1630, height: 942 };
 const GLASS = { left: 450, top: 222, right: 1000, bottom: 636 };
 // The 5100's screen is 64 characters wide; APL385's are .6em.
 const COLUMNS = 64 * 0.6 + 1;
-// Off, on, or zoomed, between visits: "", "on", "zoom".
-const KEPT = "apl-crt";
+// Off, the whole machine, or zoomed, between visits: "off", "on",
+// "zoom". Zoomed is where a first visit opens, as (C) opens on its
+// monitor.
+const KEPT = "apl-crt-view";
+// How much of the bezel a zoom keeps round the glass, in the
+// render's pixels.
+const BEZEL = 48;
 
 // Build the view, hang its switch on the bar, and bring it back as
 // the last visit left it.
@@ -36,7 +41,7 @@ export function crt(paper, line) {
     fit(view, machine, glass);
     keep(state);
   };
-  toggle.addEventListener("click", () => set(view.hidden ? "on" : ""));
+  toggle.addEventListener("click", () => set(view.hidden ? "zoom" : "off"));
   zoom.addEventListener("click", () => set(view.classList.contains("zoomed") ? "on" : "zoom"));
   new ResizeObserver(() => fit(view, machine, glass)).observe(view);
   set(kept());
@@ -64,13 +69,14 @@ function show(state, { view, glass, paper, line, toggle, zoom }) {
   paper.scrollTop = paper.scrollHeight;
 }
 
-// Scale the render to the room: all of it, or zoomed, just the glass.
+// Scale the render to the room: all of it, or zoomed, the glass and a
+// little bezel.
 // The text is sized so 64 columns fill the glass's width.
 function fit(view, machine, glass) {
   if (view.hidden) return;
   const zoomed = view.classList.contains("zoomed");
   const [x0, y0, x1, y1] = zoomed
-    ? [GLASS.left, GLASS.top, GLASS.right, GLASS.bottom]
+    ? [GLASS.left - BEZEL, GLASS.top - BEZEL, GLASS.right + BEZEL, GLASS.bottom + BEZEL]
     : [0, 0, RENDER.width, RENDER.height];
   const s = place(view, machine, [x0, y0, x1, y1], RENDER);
   glass.style.fontSize = `${((GLASS.right - GLASS.left) * s) / COLUMNS}px`;
@@ -90,9 +96,9 @@ function place(room, picture, [x0, y0, x1, y1], size) {
 
 const kept = () => {
   try {
-    return localStorage.getItem(KEPT) || "";
+    return localStorage.getItem(KEPT) || "zoom";
   } catch {
-    return "";
+    return "zoom";
   }
 };
 

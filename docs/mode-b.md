@@ -320,8 +320,9 @@ sw-apl.
 In the demo, (B)'s 5100 button shows a render of the owner's model of the
 5100 with the session typed and shown inside its CRT, 64 columns
 across the glass. The glass's reflection, cut from the same render, lies
-over the text as a translucent scrim. Zoom fills the room above the
-board with the CRT alone; Whole machine goes back. The board, paste
+over the text as a translucent scrim. It opens zoomed: the CRT and a little of its bezel fill the room
+above the board. Whole machine shows all of the render, and the 5100
+button puts the session back on plain paper. The board, paste
 and the keyboard work as they do without it, and the choice is kept
 between visits.
 
