@@ -8,8 +8,8 @@
 // without it.
 
 // The render's size, and where its glass is in it, in its pixels.
-const RENDER = { width: 1630, height: 942 };
-const GLASS = { left: 450, top: 222, right: 1000, bottom: 636 };
+const RENDER = { width: 1200, height: 900 };
+const GLASS = { left: 238, top: 280, right: 450, bottom: 438 };
 // The 5100's screen is 64 characters wide; APL385's are .6em.
 const COLUMNS = 64 * 0.6 + 1;
 // Off, the whole machine, or zoomed, between visits: "off", "on",
@@ -18,7 +18,7 @@ const COLUMNS = 64 * 0.6 + 1;
 const KEPT = "apl-crt-view";
 // How much of the bezel a zoom keeps round the glass, in the
 // render's pixels.
-const BEZEL = 48;
+const BEZEL = 18;
 
 // Build the view, hang its switch on the bar, and bring it back as
 // the last visit left it.

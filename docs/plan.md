@@ -1424,6 +1424,8 @@ translucent scrim over the text. Open: the render's file, and its
 panel's maker's name, since the UI names no maker (mode names).
 Resolved in the step: the render is the one the owner attached
 (`pages/machines/5100-crt.webp`), and its panel stays as rendered --
+later replaced by the front view of the owner's improved model
+(`pages/machines/5100-front.webp`), also the timeline's picture --
 it is the owner's picture, and the page already calls (B) "IBM
 5100-inspired". During it the owner reported (C)'s screen "is only
 using the top third or quarter of the screen. Can we use most of the
