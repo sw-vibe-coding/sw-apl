@@ -14,6 +14,11 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-11-12
 
+- saga: complete c80-demo-link
+- chore(pages): rebuild with C'80 live on the timeline and LIFE for (C)
+- Merge branch 'worktree-agent-a6a7d9bec4d4f88c8'
+- feat(c80): C'80 is live on the timeline; LIFE for (C) in library 1 (c80-demo-link)
+- docs(changes): refresh CHANGES.md to HEAD
 - saga: complete c80-help
 - chore(pages): rebuild with C'80's own Help
 - fix(demo): Help in C'80 is C'80's alone (c80-help)
