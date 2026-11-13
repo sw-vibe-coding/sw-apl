@@ -1422,6 +1422,13 @@ CRT (using the reflection effect via a translucent scrim?" Step
 to the CRT alone, filling the window, with the glass's reflection as a
 translucent scrim over the text. Open: the render's file, and its
 panel's maker's name, since the UI names no maker (mode names).
+Resolved in the step: the render is the one the owner attached
+(`pages/machines/5100-crt.webp`), and its panel stays as rendered --
+it is the owner's picture, and the page already calls (B) "IBM
+5100-inspired". During it the owner reported (C)'s screen "is only
+using the top third or quarter of the screen. Can we use most of the
+screen?": (C)'s 64 by 16 screen now sizes its text to fill the room
+between the header and the bar.
 
 `c80-screen` is split in three, each a step (2026-11-11):
 

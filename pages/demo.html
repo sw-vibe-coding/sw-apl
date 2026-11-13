@@ -95,8 +95,13 @@
     line-height: 1.25; text-shadow: 0 0 4px rgba(77, 255, 122, .55);
     word-break: break-all;
   }
+  /* The room is all the height there is; crt.js sizes the text so
+     the 64 by 16 screen fills it. */
+  body.trs80 .room {
+    flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center;
+  }
   body.trs80 #paper {
-    flex: 0 0 auto; height: calc(16 * 1.25em); padding: .8rem 1rem;
+    flex: 0 0 auto; height: calc(16 * 1.25em); padding: .5em .8em;
     overflow: hidden; white-space: pre-wrap;
   }
   body.trs80 .board { background: #0b0d0b; }
@@ -135,6 +140,36 @@
     border: 1px solid var(--rule); border-radius: .3rem; cursor: pointer;
   }
   .bar button[aria-pressed="true"] { background: var(--rule); }
+
+  /* (B) '75's machine (crt.js): the render, the session in its glass,
+     and the glass's own glare over the text. The glass is where the
+     render has it, in percent of the render. */
+  #crt { flex: 1; position: relative; overflow: hidden; background: #8e959b; min-height: 0; }
+  #crt[hidden] { display: none; }
+  #crt.zoomed { background: #000; }
+  body.crt-zoomed header { display: none; }
+  #crt .machine {
+    position: absolute; background: url("machines/5100-crt.webp") center / 100% 100% no-repeat;
+  }
+  #crt .glass {
+    position: absolute; left: 27.607%; top: 23.567%; width: 33.742%; height: 43.949%;
+    box-sizing: border-box; padding: 2.5% 2.8%; border-radius: 7% / 9%;
+    display: flex; flex-direction: column; overflow: hidden;
+    background: radial-gradient(ellipse at 50% 45%, #10140f, #050605);
+    color: #cfeccf; text-shadow: 0 0 .35em rgba(150, 230, 160, .45); line-height: 1.2;
+  }
+  #crt .glass #paper { flex: 0 1 auto; padding: 0; min-height: 0; scrollbar-width: none; }
+  #crt .glass #line { padding: 0; }
+  #crt .scrim {
+    position: absolute; inset: 0; pointer-events: none;
+    background: inherit; opacity: .4; mix-blend-mode: screen;
+    clip-path: inset(23.567% 38.650% 32.484% 27.607% round 7% / 9%);
+  }
+  #crt .zoom {
+    position: absolute; right: .5rem; bottom: .5rem;
+    font: inherit; font-size: 13px; padding: .3rem .7rem; cursor: pointer;
+    color: #fff; background: #0008; border: 1px solid #fff6; border-radius: .3rem;
+  }
 
   /* The board a reader taps: the 2741's own keyboard, the picture
      with hit regions laid over it. It scales with the window and never

@@ -315,6 +315,16 @@ sw-apl.
 - **SYSTEM ERROR** keeps the workspace for diagnosis, and only
   `)CLEAR` is accepted afterwards.
 
+## The demo's 5100
+
+In the demo, (B)'s 5100 button shows a render of the owner's model of the
+5100 with the session typed and shown inside its CRT, 64 columns
+across the glass. The glass's reflection, cut from the same render, lies
+over the text as a translucent scrim. Zoom fills the room above the
+board with the CRT alone; Whole machine goes back. The board, paste
+and the keyboard work as they do without it, and the choice is kept
+between visits.
+
 ## The del editor differs
 
 The owner assumed the editor was the same in both modes. The sources

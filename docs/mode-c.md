@@ -276,8 +276,9 @@ manual's Function Definition describes:
 ## The screen
 
 The TRS-80 shows 16 lines of 64 characters, upper case, a shifted
-letter with a dot at its left. The demo's (C) draws that: green on
-black, the line being typed at the cursor, and a board of APL80's
+letter with a dot at its left. The demo's (C) draws that, the text sized
+so the 64 by 16 screen fills the window between its header and its
+bar: green on black, the line being typed at the cursor, and a board of APL80's
 characters, each key the character to type with the symbol it stands
 for under it. A tap, like a key, types the character: an unshifted
 letter the capital, a shifted one its lower-case code.

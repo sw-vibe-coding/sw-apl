@@ -25,6 +25,7 @@ const stamped = (path) => `${path}${query([["v", VERSION], ["ts", LOADED]])}`;
 const { default: init, Board, Trs80 } = await import(stamped("./wasm/apl_wasm.js"));
 const { build, striking, trs80 } = await import(stamped("./board.js"));
 const { pasteLines } = await import(stamped("./lines.js"));
+const { crt, room } = await import(stamped("./crt.js"));
 
 // Must agree with channel.rs, which is where these are documented.
 const SIZE = 64 * 1024;
@@ -191,7 +192,12 @@ function chosen() {
   return "B";
 }
 const MODE = chosen();
-if (MODE === "C") document.body.classList.add("trs80");
+if (MODE === "C") {
+  document.body.classList.add("trs80");
+  room(paper);
+}
+// (B) can show its session on the 5100 itself.
+if (MODE === "B") crt(paper, line);
 // Help says only what this mode has: each part marked with the modes
 // it is for is shown in those alone.
 for (const part of document.querySelectorAll("#help [data-modes]")) {

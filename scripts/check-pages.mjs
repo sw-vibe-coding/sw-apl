@@ -829,6 +829,39 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await page.context().close();
 }
 
+// 9e''. (B) '75's 5100: the switch puts the session in the CRT, a line
+//       typed there is answered there, and Zoom fills the room with the
+//       glass. (A) and (C) have no switch; (C)'s screen fills its room.
+{
+  const page = await visitIn('B');
+  await page.click('#show-crt');
+  const inside = await page.evaluate(() =>
+    document.querySelector('#crt .glass').contains(document.getElementById('paper')));
+  check('(B) 5100 puts the session in the CRT', inside, 'paper not in the glass');
+  await page.keyboard.type('2+3');
+  await page.keyboard.press('Enter');
+  await page.waitForFunction(() => /\n5\n/.test(document.getElementById('paper').textContent));
+  await page.click('#crt .zoom');
+  const fill = await page.evaluate(() => {
+    const glass = document.querySelector('#crt .glass').getBoundingClientRect();
+    const room = document.getElementById('crt').getBoundingClientRect();
+    return Math.max(glass.width / room.width, glass.height / room.height);
+  });
+  check('(B) Zoom fills the room with the CRT', fill > 0.97, `fills ${fill}`);
+  await page.click('#show-crt');
+  await page.context().close();
+  for (const mode of ['A', 'C']) {
+    const other = await visitIn(mode);
+    check(`(${mode}) has no 5100 switch`, !(await other.$('#show-crt')), 'a switch');
+    if (mode === 'C') {
+      const tall = await other.evaluate(() =>
+        document.getElementById('paper').getBoundingClientRect().height / innerHeight);
+      check('(C) screen fills its room', tall > 0.4, `${tall} of the window`);
+    }
+    await other.context().close();
+  }
+}
+
 // 9f. Line editing, [N⎕M], in (A): the marks line keeps its leading
 //     blanks, since a mark's position is the whole point of it.
 {
