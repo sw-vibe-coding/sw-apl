@@ -1,8 +1,9 @@
 number = 15
 slug = "b75-crt"
-status = "in-progress"
+status = "completed"
 description = "Owner request 2026-11-12, docs/plan.md: in the (B) '75 demo, a view showing t..."
 role = "production"
 context_files = []
 created_at = "2026-11-12T14:41:09"
-commits = []
+completed_at = "2026-11-12T17:46:02"
+commits = ["e969f7421b7ec00267956e880ba9478f4b5bb934"]

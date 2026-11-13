@@ -1,0 +1,1 @@
+B75 demo: a 5100 switch shows the owner's render with the session typed in its CRT, the render's glare as a translucent scrim, and Zoom to the CRT alone; board stays usable. C80: the screen sits in the glass of the owner's TRS-80 monitor render, which fills the room, text sized to the glass. Checked by hand in Chrome; check-pages 9e'' added (playwright-core not installed).
