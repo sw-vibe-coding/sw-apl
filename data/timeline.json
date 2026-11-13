@@ -17,7 +17,7 @@
   {"year": 1976.5, "when": "1976", "title": "VS APL", "text": "System/370 APL, with files.", "kind": "note"},
   {"year": 1977.0, "when": "1977", "title": "An APL standard, inside IBM", "text": "The root of ISO 8485.", "href": "https://aplwiki.com/wiki/ISO_8485:1989", "kind": "note"},
   {"year": 1979.8, "when": "1979", "title": "Turing Award to Kenneth Iverson", "text": "Notation as a Tool of Thought.", "kind": "note"},
-  {"year": 1980.5, "when": "1980", "title": "APL80 on the TRS-80", "text": "A large subset of APL on a home computer.", "image": "machines/80.webp", "href": "coming-soon.html", "demo": "C'80 · my live demo, coming soon", "tip": "My live demo of APL-80: coming soon", "kind": "key"},
+  {"year": 1980.5, "when": "1980", "title": "APL80 on the TRS-80", "text": "For the TRS-80 Model I, typed in APL80's own characters on a green 64-by-16 screen; functions defined with )DEF.", "image": "machines/80.webp", "href": "demo.html?mode=C", "demo": "C'80 · my live demo", "tip": "My live demo of APL-80", "kind": "key"},
   {"year": 1983.0, "when": "1983", "title": "Dyalog APL", "text": "First released.", "kind": "note"},
   {"year": 1983.45, "when": "1983", "title": "IBM PC APL", "text": "From the IBM Madrid Scientific Center. It required the 8087 math coprocessor.", "image": "machines/83.webp", "href": "coming-soon.html", "demo": "D'83 · my live demo, coming soon", "tip": "My live demo of IBM PC APL: coming soon", "kind": "key"},
   {"year": 1984.5, "when": "1984", "title": "APL2", "text": "IBM's nested arrays.", "kind": "note"},

@@ -1274,7 +1274,7 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await page.goto(`${home}?mode=A`, { waitUntil: 'load' });
   await page.waitForURL(`${home}demo.html?mode=A`);
   check('an old address with a mode forwards to the demo', at() === 'demo.html?mode=A', at());
-  for (const mode of ['A', 'B']) {
+  for (const mode of ['A', 'B', 'C']) {
     const demo = await visitIn(mode);
     check(`the demo's sw-apl in (${mode}) links home`,
       await demo.evaluate(() => document.querySelector('header a.name').href) === home,
@@ -1314,8 +1314,8 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   check('the root is the timeline, every callout drawn and every picture loaded',
     seen.callouts > 30 && seen.broken === 0, JSON.stringify(seen));
   check("it opens with the A'70 demo whole in view", seen.a70, JSON.stringify(seen));
-  check('its four demos link to the demo and the coming-soon page',
-    seen.links.join() === 'demo.html?mode=A,demo.html?mode=B,coming-soon.html,coming-soon.html',
+  check('its three live demos link to the demo, the fourth to the coming-soon page',
+    seen.links.join() === 'demo.html?mode=A,demo.html?mode=B,demo.html?mode=C,coming-soon.html',
     JSON.stringify(seen.links));
   check('four pictures say Future demo', seen.future === 4, JSON.stringify(seen));
   check('the legend has the owner\'s years', seen.legend, JSON.stringify(seen));
