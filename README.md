@@ -189,12 +189,14 @@ otherwise be talking to that older build.
 The workspaces sw-apl ships, in `ws/lib1/`. Each is a plain text
 file, and each has a `DESCRIBE` that says what it holds. A file's
 name says the modes it runs in, by letter: `NAME.ab.apl.ws` for both,
-`NAME.a.apl.ws` or `NAME.b.apl.ws` for one.
+`NAME.a.apl.ws` or `NAME.b.apl.ws` for one, and `NAME.c.apl.ws` for (C),
+which shares no file with the others.
 
 | Workspace | Modes | What it is |
 |---|---|---|
 | LEARN | both | An introduction to APL, from nothing: `START`, then `LESSON 2` to `LESSON 9` |
 | LIFE | both | Conway's Life on a torus: `GLIDER`, then `RUN 4` |
+| LIFE | (C) | Conway's Life on a torus, as APL80 types it: `RUN 4`, then `GLIDER` to start again |
 | RACE | both | A horse race, written to be read |
 | EDIT | both | A workspace to practice the del editor on; its `FACT` is wrong by one on purpose |
 | BIRDS | a version for each | Combinators, after Smullyan's birds. In (A), the ones APL\360 can write; in (B), every one in the list, by execute |

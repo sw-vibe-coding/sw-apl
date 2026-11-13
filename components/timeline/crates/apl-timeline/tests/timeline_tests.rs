@@ -280,3 +280,26 @@ fn the_free_apls_and_the_coprocessor_are_there() {
     let pc = find("IBM PC APL").expect("IBM PC APL");
     assert!(pc.text.contains("8087"), "{}", pc.text);
 }
+
+/// The three built modes are live: each links to its demo by its mode
+/// letter and says nothing of coming soon; the fourth is still to come.
+#[test]
+fn the_built_demos_link_to_their_modes() {
+    let list = events(DATA).expect("data/timeline.json is a list of events");
+    let demo = |name: &str| {
+        list.iter()
+            .find(|e| e.demo.as_deref().is_some_and(|d| d.starts_with(name)))
+            .unwrap_or_else(|| panic!("no {name}"))
+    };
+    for (name, mode) in [("A'70", 'A'), ("B'75", 'B'), ("C'80", 'C')] {
+        let e = demo(name);
+        let href = format!("demo.html?mode={mode}");
+        assert_eq!(e.href.as_deref(), Some(href.as_str()), "{name}");
+        let said = format!("{name} · my live demo");
+        assert_eq!(e.demo.as_deref(), Some(said.as_str()), "{name}");
+    }
+    let c80 = demo("C'80");
+    assert_eq!(c80.tip.as_deref(), Some("My live demo of APL-80"));
+    assert!(!c80.text.contains("IBM"), "{}", c80.text);
+    assert_eq!(demo("D'83").href.as_deref(), Some("coming-soon.html"));
+}

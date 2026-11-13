@@ -363,7 +363,7 @@ Library 1 holds:
 | Workspace | |
 |---|---|
 | `LEARN` | An introduction to APL for someone who has never used it: `START`, then `LESSON 2` and on to `LESSON 9`. Where you are, numbers, vectors, reduction and indexing, names, errors, defining a function, saving, and where to go next. Each lesson shows lines to try and names the next |
-| `LIFE` | Conway's Life on a torus: `GLIDER` then `RUN 4` |
+| `LIFE` | Conway's Life on a torus: `GLIDER` then `RUN 4`. (C) has a LIFE of its own, written in APL80's characters with `)DEF`: it loads with the glider on the board, so `RUN 4` runs it, and `GLIDER` puts it back |
 | `RACE` | A horse race, written to be read: character matrix, mixed output, the conditional branch idiom |
 | `EDIT` | A workspace to practice the del editor on. `FACT` is wrong by one on purpose |
 | `BIRDS` | Combinators, after Smullyan's birds, with a version for each mode: `HOWBIRDS` flies them all, and `NOTHERE` says what cannot be written and why. In (A), the birds APL\360 can write, over a table of primitives; in (B), every bird in the list, the Mockingbird and the Sage included, reaching any function by execute. See `birds.md`, and `combinators.md` for its functions |
