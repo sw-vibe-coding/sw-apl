@@ -78,6 +78,13 @@ asked them for EPROMs of other character sets.
 **The owner ran it that way:** "I used a custom eeprom on my MDA." So
 (D) is the owner's machine: APL text on the green monochrome screen,
 with an APL character set, and graphics on the color monitor.
+The owner's machine, as they remember it (2026-11-13): a PC with both
+adapters, MDA and CGA, bought around 1983 together with PC APL --
+ordered for pickup in New Hampshire, on a personal loan, with the IBM
+employee discount, which cut software far deeper than hardware -- and
+APL glyphs added to the MDA's character ROM. How the two monitors were
+used day to day is not remembered; the manual's account above is what
+(D) follows: one monitor live at a time, the other keeping its picture.
 
 ### Graphics in 1983: AP205
 
