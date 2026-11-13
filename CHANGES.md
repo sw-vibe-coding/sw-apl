@@ -14,6 +14,8 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-11-13
 
+- docs(plan): the owner's PC and PC APL, as remembered, in ibm-pc-apl-plan.md
+- docs(changes): refresh CHANGES.md to HEAD
 - docs(plan): (D) '83, IBM PC APL -- the plan, and seven saga steps
 
 ## 2026-11-12
