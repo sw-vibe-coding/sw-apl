@@ -12,8 +12,13 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-11-13
+
+- docs(plan): (D) '83, IBM PC APL -- the plan, and seven saga steps
+
 ## 2026-11-12
 
+- docs(changes): refresh CHANGES.md to HEAD
 - feat(pages): (B) '75's CRT and the timeline use the owner's improved 5100 model
 - docs(changes): refresh CHANGES.md to HEAD
 - chore(pages): the timeline's 5100 is the owner's revised whole-machine render
