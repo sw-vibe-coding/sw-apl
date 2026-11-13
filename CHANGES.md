@@ -14,6 +14,8 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-11-12
 
+- feat(pages): (B) '75's CRT and the timeline use the owner's improved 5100 model
+- docs(changes): refresh CHANGES.md to HEAD
 - chore(pages): the timeline's 5100 is the owner's revised whole-machine render
 - docs(changes): refresh CHANGES.md to HEAD
 - chore(pages): the timeline's 5100 is the owner's newer render
