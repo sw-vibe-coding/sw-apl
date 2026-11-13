@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-11-12
 
+- saga: complete b75-crt-default
+- feat(pages): (B) '75 opens on the zoomed 5100, text inside its CRT (b75-crt-default)
+- docs(changes): refresh CHANGES.md to HEAD
 - saga: complete b75-crt
 - feat(pages): (C) '80's screen inside the owner's TRS-80 monitor render (b75-crt)
 - feat(pages): (B) '75 on the 5100's CRT, with zoom; (C) '80's screen fills the window (b75-crt)
