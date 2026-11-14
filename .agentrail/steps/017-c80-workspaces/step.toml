@@ -1,8 +1,9 @@
 number = 17
 slug = "c80-workspaces"
-status = "in-progress"
+status = "completed"
 description = "Port the workspaces docs/mode-c.md finds portable: add c or write C variants,..."
 role = "production"
 context_files = []
 created_at = "2026-11-10T17:37:46"
-commits = []
+completed_at = "2026-11-13T19:55:36"
+commits = ["9f6a04f0af3fcaf57e15e8db23ca11c6cc23a43b"]
