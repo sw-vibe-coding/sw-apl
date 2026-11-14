@@ -34,9 +34,12 @@ pub fn without_label(line: &str) -> Cow<'_, str> {
 
 /// The label a line starts with and the position of its colon. The
 /// line may use any mode's glyphs: finding a label does not depend on
-/// the mode, and whether the rest is valid is for when it runs.
+/// the mode, and whether the rest is valid is for when it runs -- so
+/// only the line up to its first colon is read: a (C) line, in APL80's
+/// characters, is not one the glyphs' lexer can read whole.
 fn label_end(line: &str) -> Option<(String, usize)> {
-    let tokens = tokenize(line, MODE_B).ok()?;
+    let head = &line[..=line.find(':')?];
+    let tokens = tokenize(head, MODE_B).ok()?;
     let name = match tokens.first()?.kind {
         TokenKind::Name(ref n) => n.clone(),
         _ => return None,

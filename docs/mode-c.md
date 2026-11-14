@@ -361,11 +361,39 @@ code changes on the way:
 
 | Verdict | Workspaces |
 |---|---|
-| Port with the code as it is | LIFE, RACE, RUBIK, BIRDS (the (A) one) |
-| Port with small changes | CALC and POLY (split statements that assign twice), PLOT, DRILL (the (A) one) |
-| Need rework | MATH and EIGENCUBE (an encode with a matrix result), LEARN (its lessons are about the (A) and (B) keyboards) |
+| Ported, library 1 | LIFE, RACE, BIRDS (from the (A) one) |
+| Ported, library 2 | CALC, POLY, PLOT, DRILL (from the (A) one) |
+| Need rework | MATH and EIGENCUBE (an encode with a matrix result), RUBIK (it copies functions from MATRIX and EIGENCUBE, and (C)'s `)COPY` takes whole workspaces only), LEARN (its lessons are about the (A) and (B) keyboards) |
 | Need a (C) version of their own | COURSE (55 functions, and it teaches the del), EDIT (teaches the del) |
 | Cannot run | MATRIX (domino, the diagonal transpose), STATS (45 functions, domino), and the (B)-only BIRDS, TTTML and DRILL |
+
+**How a port is made.** `scripts/port-c80.sh NAME.ab.apl.ws` writes
+`NAME.c.apl.ws` beside it with `apl-c80-port`: each `∇` definition as
+`)DEF` and BREAK, every line in APL80's characters, indexing in round
+brackets and an axis as `d`, the `∆` names as `D.`, and a branch on
+an indexed list of labels, `→(A,B)[I]`, through a local, `D.B←A,B`
+then `→D.B(I)`, since round brackets cannot index a parenthesized
+expression. The script then rewords what APL80 would show badly in
+prose: a dash (APL80 shows a minus as `_`) becomes a colon, and
+APL\360 is written APL/360 (it shows `\` as `w`). The rest was done
+by hand, and the port was run in (C) before it was committed:
+
+- a statement that assigns twice is split, one specification to a
+  line (CALC 2, POLY 3);
+- characters APL80 cannot type as data -- `|` and the box drawing
+  -- are replaced: RACE's track is `:`, `.` and `>`; PLOT's axis `:`;
+- BIRDS' prose, written for 120 columns, is rewrapped to 64;
+- DRILL leaves out the exercise that indexes a vector, `(5 6)(1 1)`,
+  which APL80 cannot write; INDEX drills index-of and membership.
+
+`apl-c80-port --sample` makes a sample's typed lines APL80's the same
+way. Each port has a transcript: `99-ports-80` here, the `-80`
+samples in sw-apl-workspaces.
+
+Porting found that a label was lost when the rest of its line was
+APL80's -- `MORE:R←NxFACT N_1` -- because the label was looked for by
+reading the whole line with the glyphs' lexer. Only the line up to
+its first colon is read now, in every mode.
 
 PLOT (2 names) and POLY (4) port with the `∆` rename above. DRILL
 (about 50) renames as easily, but it drills the APL keyboard, so its

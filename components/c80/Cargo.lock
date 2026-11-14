@@ -111,6 +111,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-c80-port"
+version = "0.1.0"
+dependencies = [
+ "apl-c80-keys",
+]
+
+[[package]]
 name = "apl-c80-scalar"
 version = "0.1.0"
 dependencies = [

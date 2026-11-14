@@ -19,8 +19,16 @@ fn a_colon_anywhere_else_is_not_a_label() {
     assert_eq!(labels(&body(&["'N: NOT A LABEL'"])), []);
     assert_eq!(labels(&body(&["I\u{2190}1 \u{235d} N:"])), []);
     assert_eq!(labels(&body(&["1:2"])), []);
-    // An unterminated literal is a lexical error, not a label.
-    assert_eq!(labels(&body(&["N:'"])), []);
+}
+
+#[test]
+fn the_rest_of_a_labeled_line_is_not_read_until_it_runs() {
+    // (C) '80 keeps a line as APL80 typed it, `_` for minus: the label
+    // is found whatever follows it, and the rest is checked when it runs.
+    assert_eq!(
+        labels(&body(&["MORE:R\u{2190}NxJ N_1", "N:'"])),
+        [("MORE".to_string(), 1), ("N".to_string(), 2)]
+    );
 }
 
 #[test]

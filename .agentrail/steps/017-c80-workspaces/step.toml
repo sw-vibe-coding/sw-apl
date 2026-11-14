@@ -1,6 +1,6 @@
 number = 17
 slug = "c80-workspaces"
-status = "pending"
+status = "in-progress"
 description = "Port the workspaces docs/mode-c.md finds portable: add c or write C variants,..."
 role = "production"
 context_files = []

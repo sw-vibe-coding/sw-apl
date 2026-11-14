@@ -26,9 +26,9 @@ fn in_c(library: PathBuf) -> Session {
 }
 
 #[test]
-fn c_lists_its_own_life_in_library_1() {
+fn c_lists_its_own_workspaces_in_library_1() {
     let mut c = in_c(root());
-    assert_eq!(out(&mut c, ")LIB 1"), ["LIFE"]);
+    assert_eq!(out(&mut c, ")LIB 1"), ["BIRDS", "LIFE", "RACE"]);
 }
 
 #[test]

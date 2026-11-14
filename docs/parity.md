@@ -273,6 +273,7 @@ above, and these rows are what (C) changes.
 | The demo's Help in (C) is (C)'s alone: the TRS-80's keyboard, the shifted letters drawn dotted, `)DEF` and `)EDIT`, `)RAM` and `)DOS`; no 2741 picture, no del, no other mode | done | check-pages (C) Help, checked by hand in Chrome |
 | Functions defined by `)DEF` and changed by `)EDIT`, with `)?`, `)P n`, `)n`, `)0` and `)E n`; an empty line for BREAK; no del | done | c80 command tests, sample 97 |
 | A workspace saved in (C) runs in (C) alone, written with `)DEF` and `)AUTO` | done | c80 command tests |
+| The workspaces that port, ported: LIFE, RACE and BIRDS in library 1, CALC, POLY, PLOT and DRILL in library 2, each a `.c` file made by `scripts/port-c80.sh` and finished by hand; RUBIK, MATH, EIGENCUBE, LEARN, COURSE and EDIT not | done | apl-c80-port tests, sample 99, the `-80` samples in sw-apl-workspaces |
 | `)TRON` and `)TROFF`, `)PS` and `)PD`, `)AUTO` and `)EXEC` | done | c80 command tests, sample 97 |
 | The format statement, status (`⌶` for APL80's `s`) and `#` between characters and APL80's codes | done | c80 command tests, sample 97 |
 | `)RAM`: peek and poke, the shifted U, and Call, dyadic `#`, on a modeled memory -- the screen, plain RAM above it, no ROM or devices; Call 51 prints a character and 43 reads a key | done | c80 machine tests, screen tests, sample 98 |

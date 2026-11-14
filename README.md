@@ -197,9 +197,9 @@ which shares no file with the others.
 | LEARN | both | An introduction to APL, from nothing: `START`, then `LESSON 2` to `LESSON 9` |
 | LIFE | both | Conway's Life on a torus: `GLIDER`, then `RUN 4` |
 | LIFE | (C) | Conway's Life on a torus, as APL80 types it: `RUN 4`, then `GLIDER` to start again |
-| RACE | both | A horse race, written to be read |
+| RACE | both, and (C) | A horse race, written to be read; (C)'s is typed in APL80's characters |
 | EDIT | both | A workspace to practice the del editor on; its `FACT` is wrong by one on purpose |
-| BIRDS | a version for each | Combinators, after Smullyan's birds. In (A), the ones APL\360 can write; in (B), every one in the list, by execute |
+| BIRDS | a version for each | Combinators, after Smullyan's birds. In (A) and (C), the ones APL\360 can write; in (B), every one in the list, by execute |
 | TTTML | (B) | A machine that learns tic-tac-toe by playing itself, then plays you |
 
 ## What works

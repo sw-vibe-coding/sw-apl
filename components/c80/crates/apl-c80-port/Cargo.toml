@@ -1,0 +1,14 @@
+[package]
+name = "apl-c80-port"
+description = "Port a workspace file in glyphs to (C) '80's form: functions as )DEF blocks, APL80's characters, helpers named D. for the delta APL80 cannot type"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-c80-keys = { path = "../apl-c80-keys" }
+
+[lints]
+workspace = true

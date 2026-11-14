@@ -364,9 +364,9 @@ Library 1 holds:
 |---|---|
 | `LEARN` | An introduction to APL for someone who has never used it: `START`, then `LESSON 2` and on to `LESSON 9`. Where you are, numbers, vectors, reduction and indexing, names, errors, defining a function, saving, and where to go next. Each lesson shows lines to try and names the next |
 | `LIFE` | Conway's Life on a torus: `GLIDER` then `RUN 4`. (C) has a LIFE of its own, written in APL80's characters with `)DEF`: it loads with the glider on the board, so `RUN 4` runs it, and `GLIDER` puts it back |
-| `RACE` | A horse race, written to be read: character matrix, mixed output, the conditional branch idiom |
+| `RACE` | A horse race, written to be read: character matrix, mixed output, the conditional branch idiom. (C) has its own, in APL80's characters |
 | `EDIT` | A workspace to practice the del editor on. `FACT` is wrong by one on purpose |
-| `BIRDS` | Combinators, after Smullyan's birds, with a version for each mode: `HOWBIRDS` flies them all, and `NOTHERE` says what cannot be written and why. In (A), the birds APL\360 can write, over a table of primitives; in (B), every bird in the list, the Mockingbird and the Sage included, reaching any function by execute. See `birds.md`, and `combinators.md` for its functions |
+| `BIRDS` | Combinators, after Smullyan's birds, with a version for each mode: `HOWBIRDS` flies them all, and `NOTHERE` says what cannot be written and why. In (A), the birds APL\360 can write, over a table of primitives; (C)'s are the same birds, in APL80's characters; in (B), every bird in the list, the Mockingbird and the Sage included, reaching any function by execute. See `birds.md`, and `combinators.md` for its functions |
 | `TTTML` | (B) only. A machine that learns tic-tac-toe by playing itself, and plays you with what it learned: `PLAY 1` to move first, `PLAY 2` to let it begin, `TRIAL N` against a random player, `TRAIN N` to learn again. See `learn-tic-tac-toe-strategy.md` |
 
 `)LIB` lists library 0 and `)LIB 1` lists library 1; one library

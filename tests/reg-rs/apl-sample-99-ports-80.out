@@ -1,0 +1,68 @@
+      ⍝!MODES (C)
+      ⍝ The workspaces ported to (C) '80 from library 1, typed in APL80's
+      ⍝ characters: RACE runs a race (the random link is fixed, so the
+      ⍝ same race every time), and BIRDS' combinators, including the
+      ⍝ recursive FACT, whose label is found though its line is APL80's.
+      )LOAD 1 RACE
+SAVED 22.53.10 09/17/26
+      RACE
+THE RACE IS ON!
+=== ROUND 1 ===
+LUCKY  :.>
+THUNDER:...>
+SHADOW :..>
+COMET  :..>
+BLAZE  :.>
+=== ROUND 2 ===
+LUCKY  :..>
+THUNDER:......>
+SHADOW :.....>
+COMET  :.....>
+BLAZE  :...>
+=== ROUND 3 ===
+LUCKY  :....>
+THUNDER:.........>
+SHADOW :......>
+COMET  :......>
+BLAZE  :.....>
+=== ROUND 4 ===
+LUCKY  :.......>
+THUNDER:..........>
+SHADOW :........>
+COMET  :.......>
+BLAZE  :.......>
+=== ROUND 5 ===
+LUCKY  :..........>
+THUNDER:............>
+SHADOW :...........>
+COMET  :..........>
+BLAZE  :.........>
+=== ROUND 6 ===
+LUCKY  :...........>
+THUNDER:..............>
+SHADOW :.............>
+COMET  :.............>
+BLAZE  :............>
+=== ROUND 7 ===
+LUCKY  :..............>
+THUNDER:...............>
+SHADOW :..............>
+COMET  :................>
+BLAZE  :.............>
+WINNER: COMET  
+      )LOAD 1 BIRDS
+SAVED 16.21.42 09/21/26
+      7 K 9
+7
+      5 T 'i'
+1 2 3 4 5
+      'ri' B 5
+5 4 3 2 1
+      '_' C 10 3
+-7
+      'x' W 5
+25
+      '+r' S i5
+6 6 6 6 6
+      FACT 6
+720
