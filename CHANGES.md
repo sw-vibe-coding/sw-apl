@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-11-13
 
+- saga: complete c80-workspaces
+- feat(c80): port the workspaces that port to (C) '80 (c80-workspaces)
+- docs(changes): refresh CHANGES.md to HEAD
 - docs(plan): the owner's PC and PC APL, as remembered, in ibm-pc-apl-plan.md
 - docs(changes): refresh CHANGES.md to HEAD
 - docs(plan): (D) '83, IBM PC APL -- the plan, and seven saga steps
