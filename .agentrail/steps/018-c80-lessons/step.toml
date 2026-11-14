@@ -1,6 +1,6 @@
 number = 18
 slug = "c80-lessons"
-status = "pending"
+status = "in-progress"
 description = "Write LESSON1 to LESSON5 for C in sw-apl-workspaces, new text in the spirit o..."
 role = "production"
 context_files = []

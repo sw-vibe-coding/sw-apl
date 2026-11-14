@@ -419,6 +419,17 @@ Using APL chapter:
 4. shape, grading, membership and indexing;
 5. branching, quad input, and files.
 
+They are in sw-apl-workspaces' library 2, `)LOAD 2 LESSON1` to
+`LESSON5`, (C) alone. Each greets the reader on loading, has a
+DESCRIBE, and shows its text a page at a time, `PAGE 1` to `PAGE 5`,
+each page short enough for the 16-line screen and ending with the
+examples to type; lesson 5's functions COUNT, ASK and HI are in it to
+run. (C) has no files, so lesson 5's last topic is keeping work in a
+workspace with `)SAVE`, `)LOAD`, `)LIB` and `)DROP`, and it says that
+APL80's disk files, `)WRITE` and `)READ`, are not in sw-apl. Each
+lesson has a sample, `lesson1-80` to `lesson5-80`, that reads every
+page and types every example.
+
 Nothing of APL80 itself goes into either repository: no program, no
 disk image, no manual text. The lessons, like the rest of (C), are
 written from a reading of the manual and cite it in
