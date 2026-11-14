@@ -1,0 +1,1 @@
+LESSON1 to LESSON5 for C in sw-apl-workspaces library 2: new text in the order of the APL80 manual's Using APL chapter, a page at a time for the 16-line screen, written in glyphs and made APL80's by apl-c80-port; a sample per lesson reading every page and typing every example, pinned. C has no files, so lesson 5 teaches saving workspaces. C'80 saga work complete; D83 steps next.

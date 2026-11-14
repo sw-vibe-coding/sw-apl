@@ -1,8 +1,9 @@
 number = 18
 slug = "c80-lessons"
-status = "in-progress"
+status = "completed"
 description = "Write LESSON1 to LESSON5 for C in sw-apl-workspaces, new text in the spirit o..."
 role = "production"
 context_files = []
 created_at = "2026-11-10T17:41:18"
-commits = []
+completed_at = "2026-11-14T15:09:25"
+commits = ["07159d22373bded1aa26209eb46b87a6f0e30292"]
