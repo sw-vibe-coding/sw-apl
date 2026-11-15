@@ -134,3 +134,8 @@ pub const C80: Profile = Profile {
     functions: 32,
     lines: 255,
 };
+
+/// (D) '83: IBM PC APL, (B)'s language to begin with
+/// (docs/ibm-pc-apl-plan.md); its shared variables and its own
+/// extensions are steps of their own.
+pub const D83: Profile = B75;

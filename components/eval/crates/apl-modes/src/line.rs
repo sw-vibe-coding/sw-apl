@@ -61,6 +61,7 @@ impl Mode {
             "70" | "A" => Some(Mode::A),
             "75" | "B" => Some(Mode::B),
             "80" | "C" => Some(Mode::C),
+            "83" | "D" => Some(Mode::D),
             _ => None,
         }
     }

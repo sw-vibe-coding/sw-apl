@@ -9,7 +9,9 @@ use apl_workspace::{Print, Saved};
 /// Manual, Chapter 5); (A)'s prints ten digits in a line of 120, as it
 /// always has. (C)'s prints six digits, APL80's `)PS`, in the 64
 /// columns of the TRS-80's screen; the manual does not say how a long
-/// whole number prints, so it prints as (A)'s does. All start with
+/// whole number prints, so it prints as (A)'s does. (D)'s prints ten
+/// digits in a line of 79, IBM PC APL's clear workspace (APL Reference,
+/// May 1983, figure 11), a long whole number as (A)'s. All start with
 /// origin 1 and link 16807.
 #[must_use]
 pub fn clear(mode: Mode) -> Saved {
@@ -24,6 +26,11 @@ pub fn clear(mode: Mode) -> Saved {
             digits: 6,
             width: 64,
             whole: 0,
+        },
+        Mode::D => Print {
+            digits: 10,
+            width: 79,
+            ..Print::default()
         },
     };
     Saved {

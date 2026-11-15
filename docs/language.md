@@ -1,6 +1,6 @@
 # sw-apl Language Reference
 
-This describes the language sw-apl implements, in its three modes:
+This describes the language sw-apl implements, in its four modes:
 
 - **(A) '70**, modeled on APL\360. Behavior follows the IBM
   APL\360 User's Manual (1968, and its 1970 edition), with domino
@@ -10,6 +10,10 @@ This describes the language sw-apl implements, in its three modes:
   and every decision where sw-apl departs from them.
 - **(C) '80**, modeled on APL80 for the TRS-80, following its manual.
   `mode-c.md` records the sources and the decisions.
+- **(D) '83**, modeled on IBM Personal Computer APL. It has (B)'s
+  language, a clear workspace of ten digits in a line of 79, and
+  workspaces of its own; `ibm-pc-apl-plan.md` records the sources
+  and the decisions.
 
 Most of the language is one shared core, and the sections from
 *Accepted Unicode* to *Defined functions* describe it: they hold in

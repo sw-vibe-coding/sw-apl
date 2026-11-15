@@ -5,7 +5,9 @@ use apl_modes::{Cut, Feature, Mode, Modes, modes, render, retag};
 
 /// (A) and (B), the modes every workspace written before (C) runs in.
 fn ab() -> Modes {
-    Modes::ALL.minus(Modes::only(Mode::C))
+    Modes::ALL
+        .minus(Modes::only(Mode::C))
+        .minus(Modes::only(Mode::D))
 }
 
 /// A workspace file with the given modes line, or none.
@@ -33,7 +35,7 @@ fn a_mode_is_named_by_its_year_or_its_letter() {
 #[test]
 fn the_line_is_rendered_and_read_back() {
     assert_eq!(render(ab()), "(A)(B)");
-    assert_eq!(render(Modes::ALL), "(A)(B)(C)");
+    assert_eq!(render(Modes::ALL), "(A)(B)(C)(D)");
     assert_eq!(modes(&ws(Some("(C)"), "X←1")), Modes::only(Mode::C));
     assert_eq!(render(Modes::only(Mode::B)), "(B)");
     assert_eq!(modes(&ws(Some("(A)(B)"), "X←1")), ab(), "not (C)");
@@ -69,7 +71,8 @@ fn sets_meet_and_subtract() {
     assert!(!a.has(Mode::B));
     assert!(a.meets(Modes::ALL) && !a.meets(b));
     assert_eq!(ab().minus(a), b);
-    assert_eq!(Modes::ALL.minus(ab()), Modes::only(Mode::C));
+    let cd = Modes::ALL.minus(ab());
+    assert!(cd.has(Mode::C) && cd.has(Mode::D) && !cd.has(Mode::A));
     assert_eq!(a.minus(a), Modes::NONE);
 }
 
@@ -139,4 +142,17 @@ fn each_mode_has_a_profile_of_what_it_can_do() {
     }
     assert_eq!((c.functions, c.lines), (32, 255));
     assert_eq!((a.functions, b.lines), (usize::MAX, usize::MAX));
+}
+
+#[test]
+fn d_is_83_ibm_pc_apl_with_the_language_of_b() {
+    assert_eq!(Mode::parse("83"), Some(Mode::D));
+    assert_eq!(Mode::parse("d"), Some(Mode::D));
+    assert_eq!(Mode::D.letter(), 'D');
+    assert_eq!(Mode::D.glyphs(), Mode::B.glyphs());
+    assert_eq!(Mode::D.overstrikes(), Mode::B.overstrikes());
+    assert_eq!(Mode::D.profile(), Mode::B.profile());
+    assert_eq!(render(Modes::only(Mode::D)), "(D)");
+    assert_eq!(modes(&ws(Some("(D)"), "X←1")), Modes::only(Mode::D));
+    assert!(!modes(&ws(Some("(A)(B)"), "X←1")).has(Mode::D), "not (D)");
 }

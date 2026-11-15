@@ -32,6 +32,7 @@ filter="bash scripts/normalize-apl-output.sh"
 mode_of() {
     if head -1 "$1" | grep -q '^⍝!MODES (B)$'; then echo " --mode 75"
     elif head -1 "$1" | grep -q '^⍝!MODES (C)$'; then echo " --mode 80"
+    elif head -1 "$1" | grep -q '^⍝!MODES (D)$'; then echo " --mode 83"
     fi
 }
 for f in samples/*.apl; do

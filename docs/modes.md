@@ -1,12 +1,16 @@
 # The modes compared
 
 sw-apl runs in one mode per session, chosen when the session starts:
-`--mode 70`, `75` or `80` at the CLI and the service, the tab in the
+`--mode 70`, `75`, `80` or `83` at the CLI and the service, the tab in the
 browser. This page shows, area by area, what each mode has.
 
 - **(A) '70**, modeled on APL\360, typed on an IBM 2741.
 - **(B) '75**, modeled on the APL of the IBM 5100 family (`mode-b.md`).
 - **(C) '80**, modeled on APL80 for the TRS-80 (`mode-c.md`).
+- **(D) '83**, modeled on IBM PC APL (`ibm-pc-apl-plan.md`). Where the
+  tables below have no column for it, it answers as (B) does; it
+  differs in a clear workspace of ten digits in a line of 79, and in
+  listing only workspaces written for it.
 
 In the tables, **yes** means the mode has it, **no** that it has not,
 and **part** that it has some of it, as the note says. The language

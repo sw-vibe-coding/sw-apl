@@ -49,7 +49,7 @@ fn commands(mode: Mode) -> Vec<&'static str> {
     let mut all = SHARED.to_vec();
     match mode {
         Mode::A => all.extend(ONLY_A),
-        Mode::B => {}
+        Mode::B | Mode::D => {}
         Mode::C => all.extend(ONLY_C),
     }
     all
@@ -57,7 +57,7 @@ fn commands(mode: Mode) -> Vec<&'static str> {
 
 #[test]
 fn help_lists_the_commands_the_mode_has() {
-    for mode in [Mode::A, Mode::B, Mode::C] {
+    for mode in [Mode::A, Mode::B, Mode::C, Mode::D] {
         let shown = out(&mut in_mode(mode), ")HELP").join("\n");
         for name in commands(mode) {
             assert!(
@@ -76,7 +76,7 @@ fn help_lists_the_commands_the_mode_has() {
 
 #[test]
 fn every_command_has_a_page_that_names_it() {
-    for mode in [Mode::A, Mode::B, Mode::C] {
+    for mode in [Mode::A, Mode::B, Mode::C, Mode::D] {
         let mut s = in_mode(mode);
         for name in commands(mode) {
             let page = out(&mut s, &format!(")HELP {name}"));
@@ -90,7 +90,7 @@ fn every_command_has_a_page_that_names_it() {
 
 #[test]
 fn every_page_fits_the_75_screen() {
-    for mode in [Mode::A, Mode::B, Mode::C] {
+    for mode in [Mode::A, Mode::B, Mode::C, Mode::D] {
         let mut s = in_mode(mode);
         let mut topics = out(&mut s, ")HELP TOPICS");
         topics.extend(out(&mut s, ")HELP"));
@@ -204,7 +204,7 @@ fn a_configured_library_is_read_only_and_others_are_not_there() {
 
 #[test]
 fn the_editor_has_a_page_in_each_mode() {
-    for mode in [Mode::A, Mode::B, Mode::C] {
+    for mode in [Mode::A, Mode::B, Mode::C, Mode::D] {
         let mut s = in_mode(mode);
         assert!(
             out(&mut s, ")HELP TOPICS")
@@ -270,7 +270,7 @@ fn the_modes_table_agrees_with_the_commands() {
 /// this mode, each with the line that says how it is typed.
 #[test]
 fn a_group_name_lists_its_commands() {
-    for mode in [Mode::A, Mode::B, Mode::C] {
+    for mode in [Mode::A, Mode::B, Mode::C, Mode::D] {
         let mut s = in_mode(mode);
         let overview = out(&mut s, ")HELP");
         for (group, heading) in [

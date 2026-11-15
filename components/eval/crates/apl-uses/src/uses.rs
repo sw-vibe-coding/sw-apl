@@ -22,12 +22,16 @@ const SCALAR: &str = "+-×÷⌈⌊|*⍟○!<≤=≥>≠∧∨⍲⍱";
 /// not have. Quad and quote-quad alone are I/O both modes have.
 ///
 /// Never (C) '80: APL80 types and names differently (docs/mode-c.md), so
-/// a workspace is in (C) only when it was saved there or says so.
+/// a workspace is in (C) only when it was saved there or says so. Never
+/// (D) '83 either: its workspaces are copies made for it
+/// (docs/ibm-pc-apl-plan.md, Workspaces).
 #[must_use]
 pub fn runs_in(saved: &Saved) -> Modes {
     let lines = saved.funcs.values().flat_map(|f| f.body.iter());
     let code: Vec<String> = lines.map(|line| code(line)).collect();
-    let mut runs = Modes::ALL.minus(Modes::only(Mode::C));
+    let mut runs = Modes::ALL
+        .minus(Modes::only(Mode::C))
+        .minus(Modes::only(Mode::D));
     if !saved.groups.is_empty() || code.iter().any(|l| l.contains('⌶')) {
         runs = runs.minus(Modes::only(Mode::B));
     }

@@ -5,7 +5,7 @@
 
 use apl_value::{MODE_B, OVERSTRIKE_B};
 
-use apl_profile::{A70, B75, C80, Profile};
+use apl_profile::{A70, B75, C80, D83, Profile};
 
 use crate::mode::Mode;
 
@@ -13,14 +13,15 @@ impl Mode {
     /// The later glyphs this mode takes as primitives beyond
     /// APL\360's: none in (A), execute and format in (B) -- and in
     /// (B) quad, which there begins a system name before a letter --
-    /// and in (C) its conversion and Call, `#`, and its peek and poke,
-    /// the shifted U, held as `⌷`; its format is a statement, not a glyph.
+    /// the same in (D) as in (B); and in (C) its conversion and Call,
+    /// `#`, and its peek and poke, the shifted U, held as `⌷`; its
+    /// format is a statement, not a glyph.
     #[must_use]
     pub fn glyphs(self) -> &'static str {
         match self {
             Mode::A => "",
             Mode::C => "#⌷",
-            Mode::B => MODE_B,
+            Mode::B | Mode::D => MODE_B,
         }
     }
 
@@ -31,7 +32,7 @@ impl Mode {
     pub fn overstrikes(self) -> &'static [(char, char, char)] {
         match self {
             Mode::A | Mode::C => &[],
-            Mode::B => &OVERSTRIKE_B,
+            Mode::B | Mode::D => &OVERSTRIKE_B,
         }
     }
 
@@ -43,6 +44,7 @@ impl Mode {
             Mode::A => 'A',
             Mode::B => 'B',
             Mode::C => 'C',
+            Mode::D => 'D',
         }
     }
 }
@@ -55,6 +57,7 @@ impl Mode {
             Mode::A => A70,
             Mode::B => B75,
             Mode::C => C80,
+            Mode::D => D83,
         }
     }
 }

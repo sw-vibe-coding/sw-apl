@@ -103,7 +103,7 @@ pub struct Args {
 
 /// A mode as `--mode` names it: its year or its letter.
 fn mode(word: &str) -> Result<Mode, String> {
-    Mode::parse(word).ok_or_else(|| format!("{word} is not a mode: 70, 75 or 80"))
+    Mode::parse(word).ok_or_else(|| format!("{word} is not a mode: 70, 75, 80 or 83"))
 }
 
 /// Listen on `addr`, which the flag `flag` set. A port already in use

@@ -12,5 +12,6 @@ pub fn dialect(mode: Mode) -> &'static str {
         Mode::A => "(A) '70",
         Mode::B => "(B) '75",
         Mode::C => "(C) '80",
+        Mode::D => "(D) '83",
     }
 }

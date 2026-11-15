@@ -2,10 +2,11 @@
 
 This is the definition of done for the sw-apl CLI: one row per
 feature, with its status in each mode and what pins it. sw-apl has
-three modes: (A) '70, modeled on APL\360; (B) '75, modeled on the
-APL of the IBM 5100 family (`mode-b.md`); and (C) '80, modeled on APL80
-for the TRS-80 (`mode-c.md`). Each table has a column for (A) and
-(B); (C) has a table of its own. "done" means implemented and locked by a unit test or a reg-rs
+four modes: (A) '70, modeled on APL\360; (B) '75, modeled on the
+APL of the IBM 5100 family (`mode-b.md`); (C) '80, modeled on APL80
+for the TRS-80 (`mode-c.md`); and (D) '83, modeled on IBM PC APL
+(`ibm-pc-apl-plan.md`). Each table has a column for (A) and
+(B); (C) and (D) have tables of their own. "done" means implemented and locked by a unit test or a reg-rs
 transcript (`tests/reg-rs`, seeded from `samples/`); `--` means the
 mode does not have the feature at all, and the other mode's column
 says what it has instead where there is something. Update this file
@@ -352,3 +353,17 @@ different thing.
 
 Both belong to the multi-user surface that is out of scope at the
 top of this file.
+
+(D) is modeled on IBM Personal Computer APL (`ibm-pc-apl-plan.md`).
+It has (B)'s language, pinned in the (B) columns above; these rows
+are what (D) has of its own.
+
+| Feature | (D) '83 | Pinned by |
+| --- | --- | --- |
+| `--mode 83`, `)DIALECT` answers `(D) '83`, and (B)'s language: the same answers as (B) for execute, format, scan, the quad names and an I-beam | done | modes tests, d83 session tests |
+| A clear workspace prints ten digits in a line of 79, IBM PC APL's | done | d83 session tests |
+| Lists and loads only the workspaces that name (D) | done | d83 session tests |
+| `)HELP` in (D): its commands by group and every page it has | done | sample 99-help-83 |
+| Shared variables and AP205, the full screen, with its graphics | open | |
+| The demo on the dual-monitor picture, `?mode=D` | open | |
+| PC APL's extensions: ambivalent functions, `⎕EA`, picture format, dyadic grades, transfer form | open | |

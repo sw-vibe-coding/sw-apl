@@ -1,6 +1,6 @@
 number = 19
 slug = "d83-mode"
-status = "pending"
+status = "in-progress"
 description = "Per docs/ibm-pc-apl-plan.md (owner direction 2026-11-13): add mode D, 1983 IB..."
 role = "production"
 context_files = []

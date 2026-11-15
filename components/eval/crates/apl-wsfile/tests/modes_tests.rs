@@ -9,10 +9,12 @@ use apl_modes::{Mode, Modes, modes};
 use apl_workspace::Saved;
 use apl_wsfile::{plain, write};
 
-/// (A) and (B): every mode a workspace's code can claim. (C) is claimed
-/// only by a save made in it.
+/// (A) and (B): every mode a workspace's code can claim. (C) and (D)
+/// are claimed only by a save made in them.
 fn ab() -> Modes {
-    Modes::ALL.minus(Modes::only(Mode::C))
+    Modes::ALL
+        .minus(Modes::only(Mode::C))
+        .minus(Modes::only(Mode::D))
 }
 
 const WHEN: &str = "1.00.00 01/01/70";
