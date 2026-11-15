@@ -1,0 +1,1 @@
+Mode D '83 added: Mode::D, --mode 83, D83 profile equal to B75, clear workspace 10 digits width 79, DIALECT, help pages for D, runs_in never claims D; d83 session tests; help transcripts rebased for text only; docs and a D parity table.
