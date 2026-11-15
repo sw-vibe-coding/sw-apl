@@ -12,8 +12,14 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-11-15
+
+- saga: complete d83-mode
+- feat(d83): mode (D) '83, IBM PC APL, with (B)'s language (d83-mode)
+
 ## 2026-11-14
 
+- docs(changes): refresh CHANGES.md to HEAD
 - saga: complete c80-lessons
 - docs(c80): the lessons as built, LESSON1 to LESSON5 in library 2 (c80-lessons)
 
