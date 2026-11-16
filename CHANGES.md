@@ -12,8 +12,18 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-11-16
+
+- saga: complete d83-demo
+- feat(d83): the D'83 demo on the owner's dual-display PC render, live on the timeline (d83-demo)
+- saga: move d83-demo ahead of the shared variables (owner: demo first)
+- saga: complete d83-workspaces
+- feat(d83): (D) copies of library 1, and a save in (D) is (D)'s alone (d83-workspaces)
+- chore(pages): the timeline's 029 is the owner's refined model render
+
 ## 2026-11-15
 
+- docs(changes): refresh CHANGES.md to HEAD
 - saga: complete d83-mode
 - feat(d83): mode (D) '83, IBM PC APL, with (B)'s language (d83-mode)
 
