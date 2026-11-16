@@ -362,7 +362,8 @@ are what (D) has of its own.
 | --- | --- | --- |
 | `--mode 83`, `)DIALECT` answers `(D) '83`, and (B)'s language: the same answers as (B) for execute, format, scan, the quad names and an I-beam | done | modes tests, d83 session tests |
 | A clear workspace prints ten digits in a line of 79, IBM PC APL's | done | d83 session tests |
-| Lists and loads only the workspaces that name (D) | done | d83 session tests |
+| Lists and loads only the workspaces that name (D), and a save in (D) is (D)'s alone | done | d83 session tests |
+| A (D) copy of every workspace that runs in (B): library 1's six, library 2's ten, each answering as its (B) source but for `)DIALECT` | done | samples 99-lib1-83 and 99-birds-83, the `-83` samples in sw-apl-workspaces |
 | `)HELP` in (D): its commands by group and every page it has | done | sample 99-help-83 |
 | Shared variables and AP205, the full screen, with its graphics | open | |
 | The demo on the dual-monitor picture, `?mode=D` | open | |

@@ -202,6 +202,7 @@ which shares no file with the others.
 | EDIT | both | A workspace to practice the del editor on; its `FACT` is wrong by one on purpose |
 | BIRDS | a version for each | Combinators, after Smullyan's birds. In (A) and (C), the ones APL\360 can write; in (B), every one in the list, by execute |
 | TTTML | (B) | A machine that learns tic-tac-toe by playing itself, then plays you |
+| (all of the above) | (D) | A copy of each that runs in (B), listed and loaded in (D) alone |
 
 ## What works
 

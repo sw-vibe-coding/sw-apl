@@ -6,7 +6,7 @@ use apl_session::Shelf;
 /// repository when the bundle is built. Each is kept under its file's
 /// name, which says the modes it runs in, as a library directory
 /// holds it: a workspace that differs between the modes is two.
-const SHIPPED: [(&str, &str); 10] = [
+const SHIPPED: [(&str, &str); 16] = [
     (
         "BIRDS.a",
         include_str!("../../../../../ws/lib1/BIRDS.a.apl.ws"),
@@ -20,12 +20,24 @@ const SHIPPED: [(&str, &str); 10] = [
         include_str!("../../../../../ws/lib1/BIRDS.c.apl.ws"),
     ),
     (
+        "BIRDS.d",
+        include_str!("../../../../../ws/lib1/BIRDS.d.apl.ws"),
+    ),
+    (
         "EDIT.ab",
         include_str!("../../../../../ws/lib1/EDIT.ab.apl.ws"),
     ),
     (
+        "EDIT.d",
+        include_str!("../../../../../ws/lib1/EDIT.d.apl.ws"),
+    ),
+    (
         "LEARN.ab",
         include_str!("../../../../../ws/lib1/LEARN.ab.apl.ws"),
+    ),
+    (
+        "LEARN.d",
+        include_str!("../../../../../ws/lib1/LEARN.d.apl.ws"),
     ),
     (
         "LIFE.ab",
@@ -36,6 +48,10 @@ const SHIPPED: [(&str, &str); 10] = [
         include_str!("../../../../../ws/lib1/LIFE.c.apl.ws"),
     ),
     (
+        "LIFE.d",
+        include_str!("../../../../../ws/lib1/LIFE.d.apl.ws"),
+    ),
+    (
         "RACE.ab",
         include_str!("../../../../../ws/lib1/RACE.ab.apl.ws"),
     ),
@@ -44,8 +60,16 @@ const SHIPPED: [(&str, &str); 10] = [
         include_str!("../../../../../ws/lib1/RACE.c.apl.ws"),
     ),
     (
+        "RACE.d",
+        include_str!("../../../../../ws/lib1/RACE.d.apl.ws"),
+    ),
+    (
         "TTTML.b",
         include_str!("../../../../../ws/lib1/TTTML.b.apl.ws"),
+    ),
+    (
+        "TTTML.d",
+        include_str!("../../../../../ws/lib1/TTTML.d.apl.ws"),
     ),
 ];
 

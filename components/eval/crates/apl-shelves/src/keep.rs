@@ -1,6 +1,6 @@
 //! Saving and dropping in one mode without disturbing another.
 
-use apl_modes::{LETTERS, Mode, Modes, modes, retag};
+use apl_modes::{Feature, LETTERS, Mode, Modes, modes, retag};
 use apl_store::Store;
 
 use crate::find::{Entry, entries};
@@ -12,7 +12,9 @@ use crate::find::{Entry, entries};
 /// longer runs, the old one stays listed. It is also listed in any
 /// other mode it runs in that has no workspace of that name. What
 /// another mode keeps under the name as its own is never touched,
-/// which is how two workspaces come to share a name.
+/// which is how two workspaces come to share a name. A mode with
+/// workspaces of its own, (D), keeps its saves to itself: they are
+/// listed in it alone, whatever their code could run in.
 ///
 /// The new text is written before anything else is touched, so a
 /// store that refuses it has lost nothing.
@@ -30,7 +32,9 @@ pub fn keep(
         .into_iter()
         .partition(|e| e.modes.has(mode));
     let held = |left: Modes, e: &Entry| left.minus(e.modes);
-    let claimed = theirs.iter().fold(modes(text), held);
+    let own = mode.profile().has(Feature::OwnWorkspaces);
+    let wanted = if own { Modes::only(mode) } else { modes(text) };
+    let claimed = theirs.iter().fold(wanted, held);
     let claimed = Modes::ALL.minus(Modes::ALL.minus(claimed).minus(Modes::only(mode)));
     let mine = mine.into_iter().next();
     let key = key_for(name, claimed);

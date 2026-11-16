@@ -35,10 +35,33 @@ fn d_has_bs_language() {
 }
 
 #[test]
-fn d_sees_no_workspace_written_for_another_mode() {
+fn d_lists_its_own_copies_and_no_other_modes_workspace() {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../../..");
     let mut d = in_mode(Mode::D);
     d.ws.store = Box::new(Files(root));
-    assert_eq!(out(&mut d, ")LIB 1"), Vec::<String>::new());
-    assert_eq!(out(&mut d, ")LOAD 1 LIFE")[0], "WS NOT FOUND");
+    let own = ["BIRDS", "EDIT", "LEARN", "LIFE", "RACE", "TTTML"];
+    assert_eq!(out(&mut d, ")LIB 1"), own, "the (D) copies");
+    assert!(out(&mut d, ")LOAD 1 LIFE")[0].starts_with("SAVED "));
+    assert!(d.ws.saved.funcs.contains_key("RUN"), "(D)'s LIFE");
+}
+
+#[test]
+fn a_save_in_d_runs_in_d_alone() {
+    let dir = std::env::temp_dir().join(format!("sw-apl-d83-{}", std::process::id()));
+    std::fs::create_dir_all(dir.join("work")).expect("a library");
+    let mut d = in_mode(Mode::D);
+    d.ws.store = Box::new(Files(dir.clone()));
+    out(&mut d, "X←⍳3");
+    out(&mut d, ")SAVE MINE");
+    let saved = std::fs::read_to_string(dir.join("work/MINE.d.apl.ws")).expect("MINE.d");
+    assert!(saved.lines().any(|l| l == "⍝!MODES (D)"), "{saved}");
+    let mut b = in_mode(Mode::B);
+    b.ws.store = Box::new(Files(dir.clone()));
+    assert_eq!(
+        out(&mut b, ")LIB"),
+        Vec::<String>::new(),
+        "(B) does not see it"
+    );
+    assert_eq!(out(&mut d, ")LIB"), ["MINE"]);
+    std::fs::remove_dir_all(dir).ok();
 }

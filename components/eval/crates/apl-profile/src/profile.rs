@@ -34,6 +34,9 @@ pub enum Feature {
     /// `)RAM`, which opens the TRS-80's memory to peek, poke and call,
     /// and `)DOS`.
     Machine,
+    /// Workspaces of its own: what `)SAVE` writes runs in this mode
+    /// alone, whatever the code in it could run in.
+    OwnWorkspaces,
 }
 
 /// Something of the core a mode leaves out. APL80's manual lists its
@@ -135,7 +138,9 @@ pub const C80: Profile = Profile {
     lines: 255,
 };
 
-/// (D) '83: IBM PC APL, (B)'s language to begin with
-/// (docs/ibm-pc-apl-plan.md); its shared variables and its own
-/// extensions are steps of their own.
-pub const D83: Profile = B75;
+/// (D) '83: IBM PC APL, (B)'s language to begin with, and workspaces
+/// of its own (docs/ibm-pc-apl-plan.md).
+pub const D83: Profile = Profile {
+    features: &[Feature::Scan, Feature::Latent, Feature::OwnWorkspaces],
+    ..CORE
+};

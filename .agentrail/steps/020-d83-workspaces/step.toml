@@ -1,6 +1,6 @@
 number = 20
 slug = "d83-workspaces"
-status = "pending"
+status = "in-progress"
 description = "Per docs/ibm-pc-apl-plan.md, Workspaces: in sw-apl-workspaces, a script copyi..."
 role = "production"
 context_files = []

@@ -151,7 +151,13 @@ fn d_is_83_ibm_pc_apl_with_the_language_of_b() {
     assert_eq!(Mode::D.letter(), 'D');
     assert_eq!(Mode::D.glyphs(), Mode::B.glyphs());
     assert_eq!(Mode::D.overstrikes(), Mode::B.overstrikes());
-    assert_eq!(Mode::D.profile(), Mode::B.profile());
+    let (b, d) = (Mode::B.profile(), Mode::D.profile());
+    for f in [Feature::Scan, Feature::Latent] {
+        assert!(b.has(f) && d.has(f), "(B)'s language: {f:?}");
+    }
+    assert!(!d.has(Feature::Ibeams) && !d.has(Feature::DefineByCommand));
+    assert!(d.has(Feature::OwnWorkspaces) && !b.has(Feature::OwnWorkspaces));
+    assert_eq!((d.functions, d.lines), (b.functions, b.lines));
     assert_eq!(render(Modes::only(Mode::D)), "(D)");
     assert_eq!(modes(&ws(Some("(D)"), "X←1")), Modes::only(Mode::D));
     assert!(!modes(&ws(Some("(A)(B)"), "X←1")).has(Mode::D), "not (D)");

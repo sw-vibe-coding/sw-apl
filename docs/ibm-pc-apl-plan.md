@@ -169,11 +169,16 @@ copy workspaces to a mode=d compatible format for saving/loading."
   (D) change gets it in the copy only. `scripts/check-provenance.sh`
   checks the letters as it does now.
 - **Saved as (D).** `)SAVE` in (D) writes `⍝!MODES (D)` and (D)'s
-  settings. Library numbers keep sw-apl's meaning (0 the user's, 1
-  shipped, 2 the companion repository); the PC's drive letters are
-  accepted as names for them -- `A:` for 1, `B:` for 2, `C:` for 0 --
-  so `)LOAD A:LIFE` and `)LOAD 1 LIFE` are one command. `)LIB` with
-  no number lists library 0, the "default drive".
+  settings: a save in (D) is (D)'s alone, whatever its code could run
+  in (the profile's `OwnWorkspaces`). PC APL's commands name a library
+  by number, `)LOAD 1 NAME`, as sw-apl's do, so nothing changes in
+  how a library is named. Its numbers named drives (1 A:, 2 B:, 3 C:);
+  sw-apl's keep their meaning -- 0 the user's, 1 shipped, 2 the
+  companion repository -- and the drives are not modeled.
+- **Built.** `scripts/copy-d83.sh` in sw-apl-workspaces made the (D)
+  copies: library 1's BIRDS (from the (B) one), EDIT, LEARN, LIFE,
+  RACE and TTTML, and library 2's ten, each with its sample; every
+  one answers as its (B) source does but for `)DIALECT`.
 - **Transfer form later.** `)IN`, `)OUT` and `⎕TF` read and write
   `.AIO` transfer form, which is how PC APL exchanged workspaces with
   other systems; a step of its own, after the demo is live.
