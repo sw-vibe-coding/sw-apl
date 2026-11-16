@@ -1,4 +1,4 @@
-number = 21
+number = 22
 slug = "d83-shared-variables"
 status = "pending"
 description = "Per docs/ibm-pc-apl-plan.md: in D, QUAD SVO, SVR, SVC and SVQ with the shared..."
