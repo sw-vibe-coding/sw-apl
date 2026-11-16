@@ -1,0 +1,1 @@
+D copies: Feature::OwnWorkspaces so a save in D is D-only (apl-shelves keep); library 1's six and library 2's ten workspaces copied to NAME.d.apl.ws by copy-d83.sh with -83 samples matching B but for )DIALECT; drive letters dropped since PC APL names libraries by number.
