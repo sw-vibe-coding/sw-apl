@@ -79,7 +79,12 @@ fn leader(from: (f64, f64), to: (f64, f64), (band, tone): (f64, usize)) -> Html 
 /// a link when the event leads somewhere.
 fn body(event: &Event) -> Html {
     let picture = match (&event.image, &event.tbd) {
-        (Some(src), _) => html! { <img src={src.clone()} alt={event.title.clone()} /> },
+        // Stamped with the moment it was published, so a browser holding
+        // an older picture under the same name fetches the new one.
+        (Some(src), _) => html! {
+            <img src={option_env!("SW_APL_TS").map_or_else(|| src.clone(), |ts| format!("{src}?ts={ts}"))}
+                 alt={event.title.clone()} />
+        },
         (None, Some(what)) => html! { <div class="tbd">{ format!("Image TBD: {what}") }</div> },
         (None, None) => html! {},
     };

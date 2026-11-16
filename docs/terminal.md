@@ -236,8 +236,11 @@ of the table in JavaScript.
 The site opens on a timeline of APL, `index.html`: a strip in Rust and
 Yew (`components/timeline/`, drawn from `data/timeline.json`), with a
 callout for each of sw-apl's live demos that opens it. The demo itself
-is `demo.html`, `?mode=A` or `?mode=B` choosing the mode, and its
-title links back. An address naming a mode at the root is forwarded
+is `demo.html`, `?mode=A`, `B`, `C` or `D` choosing the mode, and its
+title links back. Each picture the timeline shows is fetched with
+`?ts=`, the moment the site was published (`build-info.json`), and
+the page fetches its own code the same way, so a browser holding an
+older copy under the same name is given the new one. An address naming a mode at the root is forwarded
 there.
 
 The demo is at <https://sw-apl.softwarewrighter.com/>, and at

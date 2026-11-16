@@ -366,5 +366,5 @@ are what (D) has of its own.
 | A (D) copy of every workspace that runs in (B): library 1's six, library 2's ten, each answering as its (B) source but for `)DIALECT` | done | samples 99-lib1-83 and 99-birds-83, the `-83` samples in sw-apl-workspaces |
 | `)HELP` in (D): its commands by group and every page it has | done | sample 99-help-83 |
 | Shared variables and AP205, the full screen, with its graphics | open | |
-| The demo on the dual-monitor picture, `?mode=D` | open | |
+| The demo, `?mode=D`, on the owner's render of a PC with both displays: the session on the green monochrome glass, a 320 by 200 color frame (dark) on the other, each mapped onto its glass in perspective; Mono, Color, Desk and Alt-F1, F4, F8 choose the view; Help for (D); the timeline's D'83 callout links to it | done | check-pages 9e''', checked by hand in Chrome |
 | PC APL's extensions: ambivalent functions, `⎕EA`, picture format, dyadic grades, transfer form | open | |

@@ -873,6 +873,25 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   }
 }
 
+// 9e'''. (D) '83's desk: the session on the green monochrome glass, a
+//        320 by 200 canvas on the color one, the view following Mono,
+//        Color and Alt-F4; the timeline's D'83 callout leads here.
+{
+  const page = await visitIn('D');
+  const seen = await page.evaluate(() => ({
+    inside: document.querySelector('#desk .mono').contains(document.getElementById('paper')),
+    canvas: [document.querySelector('#desk canvas.color')?.width, document.querySelector('#desk canvas.color')?.height],
+    view: document.getElementById('desk').dataset.view,
+  }));
+  check('(D) puts the session on the green screen', seen.inside, 'paper not in the glass');
+  check('(D) has a 320 by 200 color frame', seen.canvas.join() === '320,200', `${seen.canvas}`);
+  check('(D) opens on the monochrome screen', seen.view === 'mono', seen.view);
+  await page.keyboard.press('Alt+F4');
+  const view = await page.evaluate(() => document.getElementById('desk').dataset.view);
+  check('(D) Alt-F4 zooms to the color screen', view === 'color', view);
+  await page.context().close();
+}
+
 // 9f. Line editing, [N⎕M], in (A): the marks line keeps its leading
 //     blanks, since a mark's position is the whole point of it.
 {

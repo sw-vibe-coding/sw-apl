@@ -34,7 +34,7 @@ git diff --quiet HEAD -- . ':!pages' || dirty=" (working tree had changes)"
 # name nobody wants on the open web is a reason to build elsewhere,
 # not a reason to leave the field out.
 cat > pages/build-info.json <<JSON
-{"commit":"${commit}${dirty}","host":"$(hostname -s)","built_at":"$(date -u +%Y-%m-%dT%H:%M:%SZ)","version":"$(cat pages/version.txt)","gates":"just fmt, test, clippy, gates, check-pages"}
+{"commit":"${commit}${dirty}","ts":"${SW_APL_TS:-0}","host":"$(hostname -s)","built_at":"$(date -u +%Y-%m-%dT%H:%M:%SZ)","version":"$(cat pages/version.txt)","gates":"just fmt, test, clippy, gates, check-pages"}
 JSON
 
 echo "publish-pages: built from ${commit}${dirty}, version $(cat pages/version.txt)"

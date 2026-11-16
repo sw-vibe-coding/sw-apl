@@ -41,7 +41,12 @@ fn table() -> Vec<(String, Option<String>)> {
 }
 
 fn letter(mode: Mode) -> &'static str {
-    if mode == Mode::A { "A" } else { "B" }
+    match mode {
+        Mode::A => "A",
+        Mode::B => "B",
+        Mode::C => "C",
+        Mode::D => "D",
+    }
 }
 
 /// Whether the board offers `entry` in `mode`.
@@ -53,7 +58,7 @@ fn offered(entry: &serde_json::Value, mode: Mode) -> bool {
 
 #[test]
 fn every_overstrike_on_the_board_runs_in_its_modes() {
-    for mode in [Mode::A, Mode::B] {
+    for mode in [Mode::A, Mode::B, Mode::D] {
         let mut s = Session::default();
         s.ws.mode = mode;
         s.respond(")CLEAR");
@@ -77,7 +82,10 @@ fn the_row_is_the_whole_overstrike_table() {
     for (glyph, mode) in table() {
         let entry = on(&glyph).unwrap_or_else(|| panic!("{glyph} is not on the board"));
         if let (Some(m), Some(offered)) = (mode, entry["modes"].as_str()) {
-            assert_eq!(offered, m, "{glyph} is offered outside its mode");
+            // (D) has (B)'s overstrikes (Mode::overstrikes), so the board
+            // offers a (B) glyph in both.
+            let wanted = if m == "B" { "BD".to_string() } else { m };
+            assert_eq!(offered, wanted, "{glyph} is offered outside its modes");
         }
     }
     let known: Vec<String> = table().into_iter().map(|(g, _)| g).collect();

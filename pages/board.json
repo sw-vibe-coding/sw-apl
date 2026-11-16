@@ -95,7 +95,7 @@
     {
       "insert": "+\\⍳5",
       "label": "running sum",
-      "modes": "B"
+      "modes": "BD"
     },
     {
       "insert": "⌽⍳5",
@@ -160,17 +160,17 @@
     {
       "insert": "⍎'2+3'",
       "label": "execute",
-      "modes": "B"
+      "modes": "BD"
     },
     {
       "insert": "⎕WA",
       "label": "bytes free",
-      "modes": "B"
+      "modes": "BD"
     },
     {
       "insert": "8 2⍕3.14159 2.71828",
       "label": "format",
-      "modes": "B"
+      "modes": "BD"
     }
   ],
   "cmd": [
@@ -278,12 +278,12 @@
     },
     {
       "insert": "⍎",
-      "modes": "B",
+      "modes": "BD",
       "try": "⍎'2+3'"
     },
     {
       "insert": "⍕",
-      "modes": "B",
+      "modes": "BD",
       "try": "⍕2 3"
     },
     {

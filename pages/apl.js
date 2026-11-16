@@ -26,6 +26,7 @@ const { default: init, Board, Trs80 } = await import(stamped("./wasm/apl_wasm.js
 const { build, striking, trs80 } = await import(stamped("./board.js"));
 const { pasteLines } = await import(stamped("./lines.js"));
 const { crt, room } = await import(stamped("./crt.js"));
+const { desk } = await import(stamped("./desk.js"));
 
 // Must agree with channel.rs, which is where these are documented.
 const SIZE = 64 * 1024;
@@ -174,7 +175,7 @@ const LIBRARY = "apl-library-0";
 // The modes, by the letter the page and the board use and the word the
 // session reads. A session is in one mode for as long as it lasts, so
 // changing mode is starting another.
-const MODES = { A: "70", B: "75", C: "80" };
+const MODES = { A: "70", B: "75", C: "80", D: "83" };
 
 // Which mode this visit is in: the address says, or else the mode the
 // last visit was in, or else (B). The address is what the timeline's
@@ -198,6 +199,8 @@ if (MODE === "C") {
 }
 // (B) can show its session on the 5100 itself.
 if (MODE === "B") crt(paper, line);
+// (D) shows its session on the PC's green screen, beside its color one.
+if (MODE === "D") desk(paper, line);
 // Help says only what this mode has: each part marked with the modes
 // it is for is shown in those alone.
 for (const part of document.querySelectorAll("#help [data-modes]")) {

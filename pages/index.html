@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<!-- Ask every cache for this page afresh: it names the code and the
+     pictures to load, stamped, so a fresh page brings fresh copies. -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>sw-apl: a timeline of APL</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="A timeline of APL, with live demos of the APLs of 1970 and 1975 running in the tab.">
@@ -102,16 +107,20 @@
     <span aria-hidden="true">·</span> <span id="built">build</span></p>
 </footer>
 <script type="module">
-  import init from "./timeline/apl_timeline_web.js";
-  init();
   // What this page is running: the host, the commit and when it was
-  // built, from build-info.json, which publishing writes.
-  fetch("build-info.json", { cache: "no-store" })
-    .then((r) => (r.ok ? r.json() : Promise.reject()))
-    .then((info) => {
-      document.getElementById("built").textContent = `${info.host} | ${info.commit} | ${info.built_at}`;
-    })
-    .catch(() => {});
+  // built, from build-info.json, which publishing writes, read past
+  // every cache. Its ts, the moment of publishing, stamps the
+  // timeline's code as the timeline stamps its pictures: a browser
+  // holding older copies under the same names is given the new ones.
+  const info = await fetch("build-info.json", { cache: "no-store" })
+    .then((r) => (r.ok ? r.json() : null))
+    .catch(() => null);
+  const ts = info?.ts ? `?ts=${info.ts}` : "";
+  const { default: init } = await import(`./timeline/apl_timeline_web.js${ts}`);
+  init({ module_or_path: `./timeline/apl_timeline_web_bg.wasm${ts}` });
+  if (info) {
+    document.getElementById("built").textContent = `${info.host} | ${info.commit} | ${info.built_at}`;
+  }
   // The arrows by the title: most of a view earlier or later, smoothly.
   for (const go of document.querySelectorAll(".go")) {
     go.addEventListener("click", () => document.querySelector(".strip")

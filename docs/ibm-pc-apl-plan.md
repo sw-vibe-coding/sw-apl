@@ -215,9 +215,12 @@ fields and writes a 200 by 320 boolean matrix.
 
 ## The demo
 
-- **The picture** is the owner's dual-monitor image (the monochrome
-  monitor on the system unit, the color monitor beside it), converted
-  as the others were and placed as `pages/machines/83-desk.webp`.
+- **The picture** is the owner's render of the scene (console-3D's
+  `images/pcdual-render.png`: the monochrome monitor on the system
+  unit, the color monitor beside it), as `pages/machines/83-desk.webp`,
+  and cropped for the timeline's `machines/83.webp`. The photograph
+  the model was compared against is not used. (Owner, 2026-11-16:
+  "demo first, use the pcdual render".)
   The timeline's `machines/83.webp` and its D'83 callout link to
   `demo.html?mode=D` when the demo is live.
 - **The monochrome glass** holds the session, 80 by 25, green on

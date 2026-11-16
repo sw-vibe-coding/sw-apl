@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<!-- Ask every cache for this page afresh: it fetches version.txt
+     uncached and stamps everything it loads, so a fresh page brings
+     fresh copies. -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>sw-apl</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="A clean-room APL interpreter, compiled to WebAssembly and running in this tab.">
@@ -183,6 +189,30 @@
     font: inherit; font-size: 13px; padding: .3rem .7rem; cursor: pointer;
     color: #fff; background: #0008; border: 1px solid #fff6; border-radius: .3rem;
   }
+
+  /* (D) '83's desk (desk.js): the render, the session on the green
+     monochrome glass and the CGA frame on the color one, each mapped
+     onto its glass in perspective from a flat screen of its own. */
+  #desk { flex: 1; position: relative; overflow: hidden; background: #262b31; min-height: 0; }
+  #desk .machine {
+    position: absolute; background: url("machines/83-desk.webp") center / 100% 100% no-repeat;
+  }
+  #desk .glass { position: absolute; left: 0; top: 0; transform-origin: 0 0; box-sizing: border-box; }
+  #desk .mono {
+    display: flex; flex-direction: column; overflow: hidden; padding: 0 4px;
+    background: #050a06; color: #5cff8a; text-shadow: 0 0 3px rgba(92, 255, 138, .5);
+    font: 15px/14px "APL385 Unicode", ui-monospace, monospace;
+  }
+  #desk .mono #paper { flex: 0 1 auto; padding: 0; min-height: 0; scrollbar-width: none; }
+  #desk .mono #line { padding: 0; }
+  #desk .color { background: #000; image-rendering: pixelated; }
+  #desk .views { position: absolute; right: .5rem; bottom: .5rem; display: flex; gap: .3rem; }
+  #desk .views button {
+    font: inherit; font-size: 13px; padding: .3rem .6rem; cursor: pointer;
+    color: #fff; background: #0008; border: 1px solid #fff6; border-radius: .3rem;
+  }
+  #desk[data-view="mono"] .views .mono, #desk[data-view="color"] .views .color,
+  #desk[data-view="desk"] .views .desk { background: #fff3; }
 
   /* The board a reader taps: the 2741's own keyboard, the picture
      with hit regions laid over it. It scales with the window and never
@@ -396,6 +426,10 @@
               title="TRS-80-inspired" aria-label="1980, TRS-80-inspired">
         <span aria-hidden="true"><u>C</u> '80</span>
       </button>
+      <button type="button" id="mode-d" data-mode="D" hidden
+              title="IBM PC-inspired" aria-label="1983, IBM PC-inspired">
+        <span aria-hidden="true"><u>D</u> '83</span>
+      </button>
     </div>
     <span class="mode-about" id="mode-about" hidden>IBM 5100-inspired</span>
   </header>
@@ -445,7 +479,7 @@
   </p>
   <!-- Each part with data-modes is shown in those modes alone (apl.js):
        (C) is typed on a TRS-80, not a 2741, and defines by command. -->
-  <div data-modes="AB">
+  <div data-modes="ABD">
   <h3>The keyboard</h3>
   <p>
     <img src="redistributed/apl-keyboard/APL-keybd2.svg"
@@ -540,7 +574,7 @@
   <h3>Workspaces</h3>
   <p>
     <code>)LIB 1</code> lists the workspaces sw-apl ships;
-    <code>)LOAD 1 <span data-modes="AB">RACE</span><span data-modes="C">LIFE</span></code>
+    <code>)LOAD 1 <span data-modes="ABD">RACE</span><span data-modes="C">LIFE</span></code>
     loads one. <code>)SAVE</code> writes
     library 0 into this browser's own storage, so a saved workspace
     comes back next time you open this page in this browser -- and is
@@ -551,7 +585,7 @@
     <code>)LIBS</code> lists the libraries this page reaches: 0 is
     yours, 1 is what sw-apl ships, and 2 is EXTENDED, the workspaces
     kept in the sw-apl-workspaces repository. <code>)LIB 2</code> lists
-    them<span data-modes="AB"> and <code>)LOAD 2 COURSE</code> loads
+    them<span data-modes="ABD"> and <code>)LOAD 2 COURSE</code> loads
     one</span>. Only library 0 can
     be saved to.
   </p>
@@ -596,7 +630,7 @@
       loaded, and <code>)EXEC</code> runs it.</li>
   </ul>
   </div>
-  <div data-modes="AB">
+  <div data-modes="ABD">
   <h3>Defining and changing functions</h3>
   <p>
     <code>∇Z←S W;V</code> opens a new function, and the prompt
@@ -633,7 +667,7 @@
     workspaces that run in it, and a new mode is a new session in a
     clear workspace, so <code>)SAVE</code> first what you want to keep.
   </p>
-  <p data-modes="AB">
+  <p data-modes="ABD">
     The page runs one mode, named at the top beside <b>sw-apl</b>, which
     leads back to the timeline; each mode is reached from its place on
     the timeline. <b><u>A</u> '70</b> is APL\360-inspired. <b><u>B</u> '75</b> is IBM
@@ -643,10 +677,24 @@
     <code>)DIGITS</code> or <code>)WIDTH</code>. <b><u>C</u> '80</b> is
     TRS-80-inspired: it is typed in APL80's own characters, a shifted
     letter for a symbol, and defines functions with <code>)DEF</code>.
+    <b><u>D</u> '83</b> is IBM PC-inspired: (B)'s language, on the PC's
+    green monochrome screen beside its color screen.
     Each mode lists and loads only the workspaces that run in it, and
     a new mode is a new session in a clear workspace, so
     <code>)SAVE</code> first what you want to keep.
   </p>
+  <div data-modes="D">
+    <h3>The two screens</h3>
+    <p>
+      The session is on the green monochrome screen, as on a PC with
+      an APL character set in its monochrome adapter; the color screen
+      beside it is the PC's color graphics display. <b>Mono</b> and
+      <b>Color</b> zoom to each, as Alt-F1 and Alt-F4 (or Alt-F8) do,
+      the keys the PC switched displays with; <b>Desk</b> shows them
+      both. The color screen is dark: what draws on it is not
+      implemented.
+    </p>
+  </div>
   <h3>With the network off</h3>
   <p>
     Once this page has loaded, sw-apl runs without the network: the
@@ -685,7 +733,7 @@
     under the SIL Open Font License, fetched from its own release and
     not kept here.
   </p>
-  <p data-modes="AB">
+  <p data-modes="ABD">
     The keyboard picture is by Rursus, under CC BY-SA 3.0; the glyphs
     are drawn in APL385 Unicode, by Adrian Smith, public domain. The
     terms travel with them, in

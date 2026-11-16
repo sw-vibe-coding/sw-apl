@@ -203,9 +203,20 @@ check-pages: pages
 # cross-origin isolation from the service worker and loads twice on
 # a first visit. That path is what `just check-pages` covers by
 # serving without the headers.
-publish: pages
+#
+# SW_APL_TS is the moment of publishing in milliseconds since the
+# epoch (the owner's ep2ms, or perl's clock), or what the caller set.
+# The timeline puts it on every picture's address, and the page loads
+# its own code with it from build-info.json, so a browser holding an
+# older copy of anything under the same name fetches the new one.
+publish:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    clock() { ep2ms 2>/dev/null || perl -MTime::HiRes=time -e 'printf "%d", time*1000'; }
+    export SW_APL_TS="${SW_APL_TS:-$(clock)}"
+    just pages
     ./scripts/publish-pages.sh
-    @echo "publish: commit pages/ and push to main; the Pages workflow serves it"
+    echo "publish: commit pages/ and push to main; the Pages workflow serves it"
 
 # Run the conformance corpus against the release binary.
 conformance:

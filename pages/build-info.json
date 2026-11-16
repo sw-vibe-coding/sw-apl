@@ -1,1 +1,1 @@
-{"commit":"c6a0db4 (working tree had changes)","host":"max","built_at":"2026-11-14T03:20:02Z","version":"7c157172c9a56d7a","gates":"just fmt, test, clippy, gates, check-pages"}
+{"commit":"ca3293d (working tree had changes)","ts":"1794867072803","host":"max","built_at":"2026-11-16T22:11:17Z","version":"c25d0f9ddb8038df","gates":"just fmt, test, clippy, gates, check-pages"}
