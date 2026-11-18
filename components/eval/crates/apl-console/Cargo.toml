@@ -8,6 +8,7 @@ authors.workspace = true
 repository.workspace = true
 
 [dependencies]
+apl-monitor = { path = "../apl-monitor" }
 apl-value = { path = "../../../value/crates/apl-value" }
 apl-display = { path = "../../../display/crates/apl-display" }
 

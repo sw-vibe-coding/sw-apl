@@ -3,7 +3,7 @@
 
 use std::collections::VecDeque;
 
-use apl_session::{Console, Files, Mode, Session, Shown};
+use apl_session::{Console, Files, Mode, Monitor, Session, Shown};
 
 fn in_c() -> Session {
     let mut s = Session::default();
@@ -125,6 +125,8 @@ struct Typist {
     typed: VecDeque<String>,
     shown: Vec<String>,
 }
+
+impl Monitor for Typist {}
 
 impl Console for Typist {
     fn read(&mut self, shown: &Shown, prompt: &str) -> Option<String> {

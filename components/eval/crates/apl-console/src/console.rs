@@ -2,6 +2,8 @@
 
 use std::fmt::Debug;
 
+use apl_monitor::Monitor;
+
 use crate::output::Shown;
 
 /// The six spaces immediate execution indents an input line by. It is
@@ -12,8 +14,9 @@ pub const INDENT: &str = "      ";
 
 /// The terminal a statement reads from. A read happens part way
 /// through a statement, so it is handed everything shown so far: the
-/// prompt has to land after that, not before it.
-pub trait Console: Debug {
+/// prompt has to land after that, not before it. It is the monitor
+/// beside it too, for a mode whose machine has one.
+pub trait Console: Monitor + Debug {
     /// Show `shown`, then read a line for `prompt`. `None` when there
     /// is no line to be had, which the reader reports as INTERRUPT.
     fn read(&mut self, shown: &Shown, prompt: &str) -> Option<String>;
@@ -31,9 +34,4 @@ pub trait Console: Debug {
     fn take(&mut self) -> Vec<String> {
         Vec::new()
     }
-
-    /// Show `picture`, what (D)'s screen processor now shows, as
-    /// `apl-d83-screen` writes it. A console with no screen to show it
-    /// on ignores it.
-    fn draw(&mut self, _picture: &str) {}
 }

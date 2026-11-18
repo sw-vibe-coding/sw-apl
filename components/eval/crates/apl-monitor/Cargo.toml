@@ -1,0 +1,13 @@
+[package]
+name = "apl-monitor"
+description = "sw-apl monitor: a display a mode's machine adds beside the session"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+
+[lints]
+workspace = true

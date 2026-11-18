@@ -207,6 +207,7 @@ name = "apl-console"
 version = "0.1.0"
 dependencies = [
  "apl-display",
+ "apl-monitor",
  "apl-value",
 ]
 
@@ -414,6 +415,10 @@ dependencies = [
  "apl-store",
  "apl-value",
 ]
+
+[[package]]
+name = "apl-monitor"
+version = "0.1.0"
 
 [[package]]
 name = "apl-numeral"

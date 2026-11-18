@@ -8,7 +8,7 @@ use std::cell::RefCell;
 use std::collections::VecDeque;
 use std::rc::Rc;
 
-use apl_session::{Console, INDENT, Shown};
+use apl_session::{Console, INDENT, Monitor, Shown};
 use rustyline::DefaultEditor;
 
 use crate::repl::read_line;
@@ -22,6 +22,8 @@ pub type Editor = Rc<RefCell<DefaultEditor>>;
 /// editor the loop uses.
 #[derive(Debug)]
 pub struct Terminal(pub Editor);
+
+impl Monitor for Terminal {}
 
 impl Console for Terminal {
     fn read(&mut self, shown: &Shown, prompt: &str) -> Option<String> {
@@ -54,6 +56,8 @@ pub type Pending = Rc<RefCell<VecDeque<Line>>>;
 /// the flag saying whether input lines are echoed.
 #[derive(Debug)]
 pub struct Script(pub Pending, pub bool);
+
+impl Monitor for Script {}
 
 impl Console for Script {
     fn read(&mut self, shown: &Shown, prompt: &str) -> Option<String> {

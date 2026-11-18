@@ -58,6 +58,9 @@ sw-apl/
                apl-libraries       libraries beyond 0 and 1: configured,
                                    read-only, from a directory or from
                                    fetched text
+               apl-monitor         monitor: a display a mode's machine
+                                   adds beside the session, which
+                                   (D)'s AP205 draws on
                apl-modes           modes: which modes a workspace runs
                                    in, and the libraries each mode sees
                apl-profile         profile: what each mode can do -- the
@@ -264,7 +267,9 @@ lex (strike) -> term (keyboard, paper, typing, aplterm) -> wire
   read happens part way through a statement, after whatever the
   statement has already shown, so the prompt has to land after that
   and not before it. The workspace holds a `Console`, which is the
-  seam the web build replaces.
+  seam the web build replaces. A console is a `Monitor` too
+  (`apl-monitor`): the display a mode's machine adds, which (D)'s
+  pictures are drawn on; a console with none ignores them.
 - `apl-clock` owns the `Clock` the workspace holds, and whether a
   session has a clock at all (`--clock`). A clear workspace has a
   clock that does not move, so nothing reads the real world until a

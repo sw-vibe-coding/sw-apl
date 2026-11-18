@@ -11,7 +11,7 @@
 
 use std::rc::Rc;
 
-use apl_session::{Console, INDENT, Shown};
+use apl_session::{Console, INDENT, Monitor, Shown};
 
 use crate::held::Terminal;
 
@@ -50,7 +50,9 @@ impl Console for Reader {
             .tell(lines.to_vec(), String::new());
         true
     }
+}
 
+impl Monitor for Reader {
     /// Send what (D)'s screen shows now, as a frame of its own.
     fn draw(&mut self, picture: &str) {
         let _ = Rc::clone(&self.0)

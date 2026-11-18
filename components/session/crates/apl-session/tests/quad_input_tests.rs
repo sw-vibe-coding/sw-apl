@@ -7,7 +7,7 @@
 
 use std::collections::VecDeque;
 
-use apl_session::{Console, Mode, Session, Shown};
+use apl_session::{Console, Mode, Monitor, Session, Shown};
 
 /// A console answering reads from lines typed in advance, and keeping
 /// everything it was shown, prompts and answers included.
@@ -16,6 +16,8 @@ struct Typist {
     typed: VecDeque<String>,
     shown: Vec<String>,
 }
+
+impl Monitor for Typist {}
 
 impl Console for Typist {
     fn read(&mut self, shown: &Shown, prompt: &str) -> Option<String> {

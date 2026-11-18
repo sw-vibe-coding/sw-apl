@@ -183,6 +183,8 @@ fn dropping_a_shared_workspace_in_one_mode_leaves_the_other_its_copy() {
 fn the_host_sets_the_mode_with_the_quota_and_the_store() {
     #[derive(Debug)]
     struct Mute;
+    impl apl_session::Monitor for Mute {}
+
     impl apl_session::Console for Mute {
         fn read(&mut self, _: &apl_session::Shown, _: &str) -> Option<String> {
             None

@@ -4,7 +4,7 @@
 
 use std::collections::VecDeque;
 
-use apl_console::{Console, INDENT, Shown};
+use apl_console::{Console, INDENT, Monitor, Shown};
 
 /// A console on paper: it keeps everything it is shown, and answers
 /// a read from the lines it was given. A workspace starts with an
@@ -18,6 +18,8 @@ pub struct Transcript {
     /// The lines it will answer reads with, in order.
     pub typed: VecDeque<String>,
 }
+
+impl Monitor for Transcript {}
 
 impl Console for Transcript {
     fn read(&mut self, shown: &Shown, prompt: &str) -> Option<String> {

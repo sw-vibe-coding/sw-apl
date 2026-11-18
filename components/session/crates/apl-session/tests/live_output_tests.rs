@@ -7,11 +7,13 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use apl_session::{Console, Session, Shown};
+use apl_session::{Console, Monitor, Session, Shown};
 
 /// A console that shows as it goes, and remembers each showing.
 #[derive(Debug, Default)]
 struct Live(Rc<RefCell<Vec<Vec<String>>>>);
+
+impl Monitor for Live {}
 
 impl Console for Live {
     fn read(&mut self, _shown: &Shown, _prompt: &str) -> Option<String> {

@@ -1,5 +1,6 @@
 [workspace]
 members = [
+    "crates/apl-monitor",
     "crates/apl-console",
     "crates/apl-transcript",
     "crates/apl-saved",
