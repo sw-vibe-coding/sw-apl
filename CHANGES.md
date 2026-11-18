@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-11-18
 
+- saga: complete d83-extensions
+- feat(d83): ambivalent functions, QUAD EA, collating grades, )RESET (d83-extensions)
+- docs(changes): refresh CHANGES.md to HEAD
 - saga: complete console-split
 - refactor(eval): split Monitor out of Console (console-split)
 - pages: publish 9462ecd (timeline: sw-cor24-apl live demo tip)
