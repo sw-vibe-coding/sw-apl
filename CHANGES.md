@@ -12,8 +12,18 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-11-18
+
+- saga: complete console-split
+- refactor(eval): split Monitor out of Console (console-split)
+- pages: publish 9462ecd (timeline: sw-cor24-apl live demo tip)
+- fix(timeline): sw-cor24-apl says it is a live demo
+
 ## 2026-11-17
 
+- pages: publish 5161957 (timeline: sw-cor24-apl links to its live demo)
+- feat(timeline): sw-cor24-apl links to its live demo
+- docs(changes): refresh CHANGES.md to HEAD
 - pages: publish df96934 (D: shared variables, AP205, GRAPHICS, QUAD DL, 2D view)
 - saga: complete d83-shared-variables, d83-ap205, d83-graphics
 - feat(d83): shared variables, AP205 and the GRAPHICS workspace (d83-shared-variables, d83-ap205, d83-graphics)
