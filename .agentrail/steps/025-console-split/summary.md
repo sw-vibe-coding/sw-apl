@@ -1,0 +1,1 @@
+Split Console into Console and Monitor: Monitor (draw) is its own trait in the new apl-monitor crate in the eval workspace; Console is Monitor plus Debug; re-exported through apl-console, apl-workspace, apl-eval and apl-session; every console implements Monitor, Reader keeps its draw there; architecture.md lists the crate. Gates green, reg-rs unchanged.
