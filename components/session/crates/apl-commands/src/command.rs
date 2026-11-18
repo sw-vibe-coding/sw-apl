@@ -2,7 +2,7 @@
 
 use apl_a70_commands::command as seventy;
 use apl_c80_commands::command as eighty;
-use apl_eval::{Feature, Mode, Saved, Workspace, hms};
+use apl_eval::{Feature, Workspace, hms};
 use apl_extensions::command as extension;
 use apl_inquiry::command as inquiry;
 use apl_library::valid;
@@ -55,7 +55,7 @@ pub fn system_command(ws: &mut Workspace, command: &str) -> Answer {
             .or_else(|| inquiry(ws, &name, &rest))
             .or_else(|| extension(ws, &name, &rest))
             .or_else(|| eighty(ws, command))
-            .unwrap_or_else(|| vec![workspace_command(&mut ws.saved, ws.mode, &name, &rest)]),
+            .unwrap_or_else(|| vec![workspace_command(ws, &name, &rest)]),
     };
     ending(ws, lines, off)
 }
@@ -118,12 +118,14 @@ pub fn canonical(name: &str) -> &str {
 
 /// A command that changes the workspace itself: the name it answers
 /// to, or clearing it altogether. `)WSID name` replies with the name
-/// it replaced, as a setting does. A clear workspace is the one
-/// `mode` starts with.
-fn workspace_command(saved: &mut Saved, mode: Mode, name: &str, rest: &[&str]) -> String {
+/// it replaced, as a setting does. A clear workspace is the one the
+/// mode starts with, and clearing ends any sharing, as a load does.
+fn workspace_command(ws: &mut Workspace, name: &str, rest: &[&str]) -> String {
+    let saved = &mut ws.saved;
     let was = match (name, rest) {
         ("CLEAR", []) => {
-            *saved = clear(mode);
+            *saved = clear(ws.mode);
+            ws.shares.retract_all();
             return CLEAR.to_string();
         }
         ("WSID", []) => return saved.id.clone().unwrap_or_else(|| CLEAR.to_string()),

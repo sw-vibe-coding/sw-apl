@@ -123,3 +123,42 @@ fn a_fresh_session_on_a_reused_thread_does_not_inherit_an_old_attention() {
         "the new session inherited the old one's attention"
     );
 }
+
+#[test]
+fn a_delay_with_no_flag_reports_the_wait_and_does_not_take_it() {
+    thread::spawn(|| {
+        let start = std::time::Instant::now();
+        assert!((apl_attn::delay(5.0) - 5.0).abs() < f64::EPSILON);
+        assert!(start.elapsed().as_secs_f64() < 1.0);
+        assert!(
+            apl_attn::delay(-1.0).abs() < f64::EPSILON,
+            "no wait less than none"
+        );
+    })
+    .join()
+    .unwrap();
+}
+
+#[test]
+fn a_delay_waits_and_says_how_long() {
+    thread::spawn(|| {
+        session();
+        let waited = apl_attn::delay(0.05);
+        assert!((0.05..0.5).contains(&waited), "{waited}");
+    })
+    .join()
+    .unwrap();
+}
+
+#[test]
+fn attention_ends_a_delay_early_and_stays_asked() {
+    thread::spawn(|| {
+        let flag = session();
+        flag.ask();
+        assert!(apl_attn::delay(10.0) < 1.0);
+        assert!(asked(), "the run still stops, at the end of its line");
+        assert!(!asked());
+    })
+    .join()
+    .unwrap();
+}

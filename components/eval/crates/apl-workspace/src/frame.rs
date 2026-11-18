@@ -58,11 +58,17 @@ impl Workspace {
 
     /// End the innermost activation, putting back what its locals
     /// displaced. Whatever a local holds goes, a function fixed under
-    /// its name included.
+    /// its name included, and a local shared in the call is retracted.
     pub fn leave(&mut self) {
         let Some(activation) = self.saved.stack.pop() else {
             return;
         };
+        let depth = self.saved.stack.len();
+        for name in &activation.locals {
+            if self.shares.depth(name).is_some_and(|d| d > depth) {
+                self.shares.retract(name);
+            }
+        }
         for (name, was) in activation.displaced {
             self.saved.swap(&name, was);
         }

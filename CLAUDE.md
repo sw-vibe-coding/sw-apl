@@ -361,8 +361,10 @@ sw-checklist, and always before a commit. rustfmt reflows code, so
 function line counts and module shapes only mean something after it
 has run; measuring first wastes a cycle chasing warnings that move.
 Check each gate's exit code rather than grepping its output.
+Clippy comes before tests: a change clippy asks for means the tests
+run again, so running them first wastes a run (owner, 2026-11-17).
 
-Order: `just fmt` -> `just test` -> `just clippy` -> `just gates`
+Order: `just fmt` -> `just clippy` -> `just test` -> `just gates`
 (markdown + sw-checklist) -> commit -> push.
 
 ## sw-checklist gates are design constraints

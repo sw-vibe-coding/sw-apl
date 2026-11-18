@@ -30,6 +30,7 @@ apl-display = { path = "../../../display/crates/apl-display" }
 serde_json = "1"
 toml = "0.9"
 apl-attn = { path = "../../../value/crates/apl-attn" }
+apl-d83-shares = { path = "../../../d83/crates/apl-d83-shares" }
 
 [lints]
 workspace = true

@@ -294,6 +294,10 @@ function __wbg_get_imports() {
             const ret = new Int32Array(arg0, arg1 >>> 0, arg2 >>> 0);
             return ret;
         },
+        __wbg_now_d1fb6650485d7f3e: function() {
+            const ret = Date.now();
+            return ret;
+        },
         __wbg_parse_6937a9050adfb0e1: function() { return handleError(function (arg0, arg1) {
             const ret = JSON.parse(getStringFromWasm0(arg0, arg1));
             return ret;

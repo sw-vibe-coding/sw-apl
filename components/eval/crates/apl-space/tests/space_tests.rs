@@ -116,3 +116,24 @@ fn room_refuses_what_will_not_fit_and_counts_what_is_given_back() {
 fn the_default_quota_is_a_megabyte() {
     assert_eq!(DEFAULT, 1_048_576);
 }
+
+/// (D) holds values as IBM PC APL did: a boolean in a bit, an integer
+/// in two bytes, any other number in eight.
+#[test]
+fn compact_values_cost_what_pc_apl_charged() {
+    use apl_space::{measure, of_compact};
+    let n = |v: Vec<f64>| Array::vector(v.into_iter().map(Number::from_f64).collect());
+    let picture = n(vec![1.0; 64000]);
+    assert_eq!(of_compact(&picture), of_value(&n(Vec::new())) + 8000);
+    assert_eq!(of_compact(&n(vec![7.0; 10])), of_value(&n(Vec::new())) + 20);
+    assert_eq!(
+        of_compact(&n(vec![40000.0; 10])),
+        of_value(&n(vec![40000.0; 10]))
+    );
+    assert_eq!(of_compact(&n(vec![0.5; 10])), of_value(&n(vec![0.5; 10])));
+    assert_eq!(
+        measure(false)(&picture),
+        of_value(&picture),
+        "everyone else's"
+    );
+}

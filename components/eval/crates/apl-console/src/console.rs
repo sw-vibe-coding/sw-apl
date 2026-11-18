@@ -31,4 +31,9 @@ pub trait Console: Debug {
     fn take(&mut self) -> Vec<String> {
         Vec::new()
     }
+
+    /// Show `picture`, what (D)'s screen processor now shows, as
+    /// `apl-d83-screen` writes it. A console with no screen to show it
+    /// on ignores it.
+    fn draw(&mut self, _picture: &str) {}
 }

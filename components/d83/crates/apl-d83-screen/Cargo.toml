@@ -1,0 +1,15 @@
+[package]
+name = "apl-d83-screen"
+description = "sw-apl (D) '83's screens as AP205 keeps them: the fields, and the characters and pixels in them, on the monochrome and color displays"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-value = { path = "../../../value/crates/apl-value" }
+serde_json = "1"
+
+[lints]
+workspace = true

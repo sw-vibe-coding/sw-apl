@@ -1,0 +1,67 @@
+      ⍝!MODES (D)
+      ⍝ Shared variables in (D) '83: an offer, the degree of coupling,
+      ⍝ access control, the queries and retraction. Processor 210 is not
+      ⍝ loaded, so its offers stay at 1; AP205, the screen, accepts.
+      210 ⎕SVO 2 1⍴'CD'
+1 1
+      ⎕SVO 2 1⍴'CD'
+1 1
+      ⎕SVR 2 1⍴'CD'
+1 1
+      205 ⎕SVO 2 1⍴'CD'
+1 1
+      ⎕SVO 2 1⍴'CD'
+2 2
+      C←7
+      C
+1
+      D←2 6⍴1 1 1 10 0 7 2 1 1 10 2 7
+      C←1
+      C
+0
+      D←'HELLO'
+      C←2 2
+      C←5 2
+      D
+HELLO     
+      C←9
+      D
+1 1 1 10 0 7
+2 1 1 10 2 7
+      ⎕SVO 'X'
+0
+      9 ⎕SVO 'X Y'
+1
+      0 1 1 0 ⎕SVC 'X'
+0 1 1 0
+      ⎕SVC 2 1⍴'XC'
+0 1 1 0
+0 0 0 0
+      ⍴⎕SVQ ⍳0
+0
+      ⍴⎕SVQ 205
+0 0
+      X←'SET'
+      X
+SET
+      ⎕SVR 'X'
+1
+      ⎕SVO 'X'
+0
+      ∇Z←F
+[1]   Z←1
+[2]   ∇
+      205 ⎕SVO 'F'
+0
+      ⎕EX 'C'
+1
+      ⎕SVO 2 1⍴'CD'
+0 2
+      )CLEAR
+CLEAR WS
+      ⎕SVO 'D'
+0
+      205 ⎕SVO '1D'
+DOMAIN ERROR
+      205 ⎕SVO '1D'
+          ^

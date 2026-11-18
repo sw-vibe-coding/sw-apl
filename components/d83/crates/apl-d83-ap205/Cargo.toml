@@ -1,0 +1,16 @@
+[package]
+name = "apl-d83-ap205"
+description = "sw-apl (D) '83's AP205, IBM PC APL's full-screen auxiliary processor: fields, characters and pixels on the monochrome and color displays"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-d83-screen = { path = "../apl-d83-screen" }
+apl-d83-shares = { path = "../apl-d83-shares" }
+apl-value = { path = "../../../value/crates/apl-value" }
+
+[lints]
+workspace = true

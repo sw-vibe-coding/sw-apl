@@ -365,6 +365,10 @@ are what (D) has of its own.
 | Lists and loads only the workspaces that name (D), and a save in (D) is (D)'s alone | done | d83 session tests |
 | A (D) copy of every workspace that runs in (B): library 1's six, library 2's ten, each answering as its (B) source but for `)DIALECT` | done | samples 99-lib1-83 and 99-birds-83, the `-83` samples in sw-apl-workspaces |
 | `)HELP` in (D): its commands by group and every page it has | done | sample 99-help-83 |
-| Shared variables and AP205, the full screen, with its graphics | open | |
+| Shared variables: `⎕SVO`, `⎕SVR`, `⎕SVC`, `⎕SVQ`, the degree of coupling, access control, retraction by `⎕EX`, `)ERASE`, `)CLEAR`, `)LOAD` and a local's return, and a processor answering a set; a processor not loaded stays at 1 | done | shared variable session tests, apl-d83-shares tests, sample 99-shared-83 |
+| AP205, the full screen: one control and one data variable, the fields, characters and pixels written, combined and read, the display switched, the return codes; the demo draws the color display on the color monitor, side by side with the monochrome one in the 2D view | done | ap205 session tests, sample 99-shared-83, checked by hand in Chrome |
+| (D) holds values as IBM PC APL did, a boolean a bit and a short integer two bytes; `⎕WA` and WS FULL count them so | done | apl-space tests |
+| `⎕DL`, the delay, in (D): waits the seconds given and gives the time waited; ATTN ends it, and the run stops at the end of the line; GRAPHICS paces TURN and DEMO with it | done | apl-attn tests, apl-d83-delay tests, d83 session tests, checked by hand in Chrome |
+| Library 1's GRAPHICS: the wireframe cube in three colors, turning, a sine wave with axes, Pascal's triangle mod 2, Sierpinski's carpet, the Mandelbrot set, a Lissajous figure, and `DEMO`, which animates them all | done | ap205 session tests, sample 99-graphics-83 |
 | The demo, `?mode=D`, on the owner's render of a PC with both displays: the session on the green monochrome glass, a 320 by 200 color frame (dark) on the other, each mapped onto its glass in perspective; Mono, Color, Desk and Alt-F1, F4, F8 choose the view; Help for (D); the timeline's D'83 callout links to it | done | check-pages 9e''', checked by hand in Chrome |
 | PC APL's extensions: ambivalent functions, `⎕EA`, picture format, dyadic grades, transfer form | open | |

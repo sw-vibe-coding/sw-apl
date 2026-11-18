@@ -32,6 +32,7 @@ dependencies = [
 name = "apl-attn"
 version = "0.1.0"
 dependencies = [
+ "js-sys",
  "libc",
 ]
 
@@ -223,6 +224,48 @@ dependencies = [
  "apl-eval",
  "apl-library",
  "apl-wsfile",
+]
+
+[[package]]
+name = "apl-d83-ap205"
+version = "0.1.0"
+dependencies = [
+ "apl-d83-screen",
+ "apl-d83-shares",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-d83-delay"
+version = "0.1.0"
+dependencies = [
+ "apl-attn",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-d83-screen"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+ "serde_json",
+]
+
+[[package]]
+name = "apl-d83-shares"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+]
+
+[[package]]
+name = "apl-d83-sysfns"
+version = "0.1.0"
+dependencies = [
+ "apl-d83-delay",
+ "apl-fix",
+ "apl-value",
+ "apl-workspace",
 ]
 
 [[package]]
@@ -573,6 +616,7 @@ dependencies = [
  "apl-c80-session",
  "apl-call",
  "apl-commands",
+ "apl-d83-shares",
  "apl-del",
  "apl-display",
  "apl-editor",
@@ -629,8 +673,10 @@ name = "apl-sysfns"
 version = "0.1.0"
 dependencies = [
  "apl-console-control",
+ "apl-d83-sysfns",
  "apl-fix",
  "apl-lex",
+ "apl-modes",
  "apl-scan",
  "apl-value",
  "apl-workspace",
@@ -680,6 +726,8 @@ dependencies = [
  "apl-c80-machine",
  "apl-clock",
  "apl-console",
+ "apl-d83-ap205",
+ "apl-d83-shares",
  "apl-modes",
  "apl-prims",
  "apl-saved",

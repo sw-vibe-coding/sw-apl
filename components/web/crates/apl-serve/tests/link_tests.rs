@@ -33,6 +33,7 @@ impl Link for Typist {
             mode: frame.mode.clone(),
             more: frame.more,
             offer: frame.offer.clone(),
+            picture: frame.picture.clone(),
         });
         Ok(())
     }

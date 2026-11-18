@@ -9,8 +9,10 @@ use std::path::PathBuf;
 use apl_c80_machine::Machine;
 use apl_clock::{Clock, TimeSource, stopped};
 use apl_console::{Console, Output, Shown, render_all};
+use apl_d83_ap205::Ap205;
+use apl_d83_shares::Shares;
 use apl_modes::{Feature, Mode};
-use apl_space::{of_value, room, used};
+use apl_space::{measure, room, used_by};
 use apl_store::{Files, Store};
 use apl_transcript::Transcript;
 use apl_value::{AplResult, Array};
@@ -87,6 +89,10 @@ pub struct Workspace {
     pub machine: Option<Machine>,
     /// Whether (C)'s `)DOS` has the keyboard, until its RETURN.
     pub dos: bool,
+    /// (D)'s shared variables and the processors they couple to:
+    /// AP205, the screen, as the PC's was loaded with `APL AP205`.
+    /// Session state: sharing ends when a workspace is loaded.
+    pub shares: Shares,
 }
 
 impl Default for Workspace {
@@ -108,6 +114,7 @@ impl Default for Workspace {
             format: None,
             machine: None,
             dos: false,
+            shares: Shares::with(vec![Box::new(Ap205::default())]),
         }
     }
 }
@@ -142,14 +149,34 @@ impl Workspace {
     /// Every assignment comes through here, which is why the quota is
     /// checked here rather than at the call sites: a value that will
     /// not fit is not stored, and the workspace is left as it was.
+    /// It is also where a shared variable's partner hears of a set,
+    /// and answers -- unless a local of a later call hides the name.
     ///
     /// # Errors
     /// WS FULL when the value does not fit in what the quota leaves.
     pub fn set(&mut self, name: &str, value: Array) -> AplResult<()> {
-        let freed = self.saved.vars.get(name).map_or(0, of_value);
-        let held = used(&self.saved.vars, &self.saved.funcs, &self.saved.groups);
-        room(self.quota, held, of_value(&value), freed)?;
+        let size = measure(self.mode.profile().has(Feature::CompactValues));
+        let freed = self.saved.vars.get(name).map_or(0, size);
+        let held = used_by(
+            &self.saved.vars,
+            &self.saved.funcs,
+            &self.saved.groups,
+            size,
+        );
+        room(self.quota, held, size(&value), freed)?;
+        let hidden = |d: usize| {
+            let mut later = self.saved.stack.iter().skip(d);
+            later.any(|a| a.locals.iter().any(|l| l == name))
+        };
+        let answer = match self.shares.depth(name) {
+            Some(d) if !hidden(d) => self.shares.assigned(name, &value),
+            _ => Vec::new(),
+        };
         self.saved.vars.insert(name.to_string(), value);
+        self.saved.vars.extend(answer);
+        if let Some(picture) = self.shares.picture.take() {
+            self.console.draw(&picture);
+        }
         Ok(())
     }
 }

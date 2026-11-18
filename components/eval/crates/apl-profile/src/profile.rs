@@ -37,6 +37,12 @@ pub enum Feature {
     /// Workspaces of its own: what `)SAVE` writes runs in this mode
     /// alone, whatever the code in it could run in.
     OwnWorkspaces,
+    /// Shared variables, `⎕SVO` and the rest, and the auxiliary
+    /// processors a shared variable couples to.
+    SharedVariables,
+    /// Values held compactly, as IBM PC APL held them: a boolean in a
+    /// bit, an integer in two bytes. The workspace fills by that.
+    CompactValues,
 }
 
 /// Something of the core a mode leaves out. APL80's manual lists its
@@ -141,6 +147,12 @@ pub const C80: Profile = Profile {
 /// (D) '83: IBM PC APL, (B)'s language to begin with, and workspaces
 /// of its own (docs/ibm-pc-apl-plan.md).
 pub const D83: Profile = Profile {
-    features: &[Feature::Scan, Feature::Latent, Feature::OwnWorkspaces],
+    features: &[
+        Feature::Scan,
+        Feature::Latent,
+        Feature::OwnWorkspaces,
+        Feature::SharedVariables,
+        Feature::CompactValues,
+    ],
     ..CORE
 };

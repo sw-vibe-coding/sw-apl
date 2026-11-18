@@ -70,7 +70,7 @@ gates:
     sw-checklist
 
 # The full pre-commit gate, in order: format, test, lint, standards.
-precommit: fmt test test-emacs clippy fmt-check gates check-literate
+precommit: fmt clippy test test-emacs fmt-check gates check-literate
 
 # Run, tangle and publish the literate documents (docs/literate/*.org):
 # record each block's result, write the workspace each tangles to, and

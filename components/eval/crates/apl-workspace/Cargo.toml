@@ -19,6 +19,8 @@ apl-space = { path = "../apl-space" }
 apl-modes = { path = "../apl-modes" }
 apl-store = { path = "../apl-store" }
 apl-c80-keys = { path = "../../../c80/crates/apl-c80-keys" }
+apl-d83-ap205 = { path = "../../../d83/crates/apl-d83-ap205" }
+apl-d83-shares = { path = "../../../d83/crates/apl-d83-shares" }
 apl-c80-machine = { path = "../../../c80/crates/apl-c80-machine" }
 
 [lints]

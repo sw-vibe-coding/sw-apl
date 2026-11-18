@@ -74,14 +74,15 @@ impl Held {
         }
     }
 
-    /// Send lines a statement printed while it runs: no prompt, and
-    /// more to come. Nothing is read back.
+    /// Send lines a statement printed while it runs, or a picture it
+    /// drew: no prompt, and more to come. Nothing is read back.
     ///
     /// # Errors
     /// Whatever the transport reports writing.
-    pub fn tell(&mut self, lines: Vec<String>) -> io::Result<()> {
+    pub fn tell(&mut self, lines: Vec<String>, picture: String) -> io::Result<()> {
         self.link.send(&Frame {
             lines,
+            picture,
             more: true,
             mode: self.mode.to_string(),
             ..Frame::default()

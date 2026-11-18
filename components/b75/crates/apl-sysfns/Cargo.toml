@@ -9,6 +9,8 @@ repository.workspace = true
 
 [dependencies]
 apl-console-control = { path = "../apl-console-control" }
+apl-d83-sysfns = { path = "../../../d83/crates/apl-d83-sysfns" }
+apl-modes = { path = "../../../eval/crates/apl-modes" }
 apl-fix = { path = "../apl-fix" }
 apl-lex = { path = "../../../lex/crates/apl-lex" }
 apl-scan = { path = "../../../parse/crates/apl-scan" }

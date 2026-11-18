@@ -386,6 +386,74 @@ indicator. Under a name a running function has made local, it fixes
 a local function: it hides a global of the same name, `⎕EX` of the
 name erases the local one, and it goes when that function returns.
 
+### Shared variables, in (D)
+
+(D) has IBM PC APL's shared variables: a name offered to another
+processor and, once it accepts, set by either side and read by
+both. A name may be one row of a matrix of names, and the result is
+then a vector, one number a name.
+
+| Call | Result |
+|---|---|
+| `P ⎕SVO 'NAME'` | Offers the name to processor `P` (1 to 32767): 1 once offered, or what an earlier offer reached. A label's or function's name is not offered and gives 0. A row may be a name and a surrogate name, which has no effect |
+| `⎕SVO 'NAME'` | The degree of coupling: 0 not offered, 1 offered and not accepted, 2 shared |
+| `⎕SVR 'NAME'` | Retracts the offer; the coupling it had. The variable keeps its last value as an ordinary one |
+| `⎕SVC 'NAME'` | The access control vector, four ones and zeros |
+| `L ⎕SVC 'NAME'` | Sets this side's access control, one number or four, or a row of four a name; the vector now in force |
+| `⎕SVQ ⍳0`, `⎕SVQ P` | The processors offering to share, and the names `P` has offered: none, an empty vector and a 0 by 0 matrix |
+| `⎕DL N` | Waits `N` seconds, a fraction if need be, and gives the seconds waited. ATTN ends the wait, and the function stops at the end of the line. A transcript run does not wait: it gives `N` |
+
+A processor that is not loaded acknowledges an offer but never
+accepts it: its coupling stays 1. Setting a shared variable passes
+the value to the processor, which answers at once, so the next use
+of the variable sees what it set; an access control setting is kept
+and reported but never makes either side wait. Sharing ends with
+`⎕SVR`, `⎕EX`, `)ERASE`, `)CLEAR` and `)LOAD`, and when a function
+whose local was shared returns. A local of a later call hides a
+shared global of the same name, as it hides any.
+
+### AP205, the screen, in (D)
+
+(D) has AP205 loaded, IBM PC APL's full-screen processor, as
+processor 205. It takes one control variable, whose name begins with
+C, and one data variable, beginning with D: `205 ⎕SVO 2 3⍴'CTLDAT'`
+gives `1 1`, and `⎕SVO` then `2 2`. Each value set in the control
+variable is a command, and the control variable then holds its return
+code: 0 done, 1 no such command, 2 the data variable is wrong, 3 no
+data variable is shared, 5 the display has no pixels.
+
+The screen is up to 50 fields, each a row of six numbers: start row
+and column, counted from 1; height and width in characters; type, 0
+read-write or 2 read-only; attribute. A field of one line may run on
+into the next lines. On the color display each character is eight by
+eight pixels and a field's pixels run row by row.
+
+| Command | Does |
+|---|---|
+| `0` | Clears the display in use |
+| `0,N` | Switches to display `N` and clears it: 1 monochrome (80 by 25), 4 color with 40 characters a line (320 by 200 pixels), 8 color with 80 (640 by 200) |
+| `1`, `1,F` | Defines the fields from the data variable, a matrix of six columns; or field `F` alone |
+| `2,F` or `4,F` | Writes the characters in the data variable into field `F`, row by row, blank after them |
+| `2,F,K` or `4,F,K` | Writes ones and zeros into field `F`'s pixels: `K` 1 replaces them, 2 ands, 3 ors, 4 exclusive-ors |
+| `5,F`, `5,F,1` | Reads field `F`'s characters, or its pixels as ones and zeros, into the data variable |
+| `9`, `9,F` | Reads the field definitions, or field `F`'s |
+| `3`, `8` | Interactive mode: answers at once as though Enter were pressed in field 1, giving `0 2 1 1 1` |
+| `12` | Sets the cursor: accepted, and nothing shown |
+
+In color 40 a lit pixel takes its field's attribute's residue of 4: 1
+cyan, 2 red, 3 white, 0 invisible; in color 80 it is white. A pixel
+written takes the field's color; one or'ed, and'ed or exclusive-or'ed
+that was lit already keeps its own, so fields over the same place can
+draw in different colors. Characters in a color field are shown in its
+color. In the demo, what the color display shows is drawn on the color
+monitor, and the session stays on the green one.
+
+(D) fills its workspace as IBM PC APL did, holding each value in the
+narrowest of its four internal types: ones and zeros a bit each,
+whole numbers from ¯32768 to 32767 two bytes each, other numbers
+eight, characters one. A screen of 320 by 200 pixels is 8000 bytes,
+and `⎕WA` counts it so. The other modes charge eight bytes a number.
+
 ### Errors
 
 (B) has one error (A) has not: NONCE ERROR, for something the

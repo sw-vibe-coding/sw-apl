@@ -200,7 +200,7 @@ if (MODE === "C") {
 // (B) can show its session on the 5100 itself.
 if (MODE === "B") crt(paper, line);
 // (D) shows its session on the PC's green screen, beside its color one.
-if (MODE === "D") desk(paper, line);
+const picture = MODE === "D" ? desk(paper, line) : null;
 // Help says only what this mode has: each part marked with the modes
 // it is for is shown in those alone.
 for (const part of document.querySelectorAll("#help [data-modes]")) {
@@ -647,6 +647,8 @@ function strike(sends) {
 // Print one frame and take the typing it asks for.
 function show(frame) {
   for (const text of frame.lines) put(text + "\n");
+  // What (D)'s AP205 drew, on the color display.
+  if (frame.picture && picture) picture(frame.picture);
   // Printed while a statement runs: it is still running, and the
   // next frame follows.
   if (frame.more) return;

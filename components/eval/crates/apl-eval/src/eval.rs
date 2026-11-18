@@ -5,6 +5,7 @@ use apl_ast::Expr;
 use apl_call::value;
 use apl_modes::Feature;
 use apl_parse::parse;
+use apl_sysfns::is_function as system;
 use apl_value::{AplError, AplResult, Array, ErrorKind};
 use apl_workspace::{Output, Workspace};
 
@@ -41,9 +42,8 @@ pub fn eval_line(ws: &mut Workspace, line: &str) -> AplResult<Output> {
 /// # Errors
 /// Any lexical, syntax, or evaluation error, with a caret.
 fn eval_glyphs(ws: &mut Workspace, line: &str) -> AplResult<Output> {
-    let takes_argument =
-        |n: &str| apl_sysfns::is_function(n) || ws.function(n).is_some_and(|d| d.right.is_some());
-    let Some(expr) = parse(line, ws.mode.glyphs(), &takes_argument)? else {
+    let takes = |n: &str| system(ws, n) || ws.function(n).is_some_and(|d| d.right.is_some());
+    let Some(expr) = parse(line, ws.mode.glyphs(), &takes)? else {
         return Ok(Output::Nothing);
     };
     apl_c80_cuts::enter(ws.mode.profile(), &expr)?;

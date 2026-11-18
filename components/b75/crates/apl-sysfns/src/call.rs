@@ -2,6 +2,7 @@
 
 use apl_console_control::{control, national};
 use apl_fix::{canonical, fix, rows};
+use apl_modes::Feature;
 use apl_value::{AplError, AplResult, Array, ErrorKind, Number};
 use apl_workspace::Workspace;
 
@@ -12,14 +13,17 @@ use crate::names::{class, expunge};
 /// keeps as a variable, and so does sw-apl.
 const FUNCTIONS: [&str; 6] = ["⎕CC", "⎕CR", "⎕EX", "⎕FX", "⎕NC", "⎕NL"];
 
-/// True when `name` is a system function, so that the parser reads
-/// `⎕NC 'A'` as a call rather than a name beside an array.
+/// True when `name` is a system function in `ws`'s mode, so that the
+/// parser reads `⎕NC 'A'` as a call rather than a name beside an
+/// array: one of (B)'s, or in (D) a shared-variable function.
 #[must_use]
-pub fn is_function(name: &str) -> bool {
-    FUNCTIONS.contains(&name)
+pub fn is_function(ws: &Workspace, name: &str) -> bool {
+    let shares = ws.mode.profile().has(Feature::SharedVariables);
+    FUNCTIONS.contains(&name) || shares && apl_d83_sysfns::is_function(name)
 }
 
-/// `name r`.
+/// `name r`. (D)'s shared-variable functions are `apl-d83-sysfns`',
+/// which only (D) parses as functions.
 ///
 /// # Errors
 /// SYNTAX ERROR for a function that takes a left argument only, or is
@@ -32,6 +36,7 @@ pub fn monadic(ws: &mut Workspace, name: &str, r: &Array) -> AplResult<Array> {
         "⎕FX" => fix(ws, r),
         "⎕NC" => each(ws, r, |ws, n| class(ws, n)),
         "⎕NL" => name_list(ws, None, r),
+        n if apl_d83_sysfns::is_function(n) => apl_d83_sysfns::monadic(ws, n, r, class),
         _ => Err(AplError::new(ErrorKind::Syntax)),
     }
 }
@@ -45,6 +50,7 @@ pub fn dyadic(ws: &mut Workspace, name: &str, l: &Array, r: &Array) -> AplResult
     match name {
         "⎕CC" => control(l, r),
         "⎕NL" => name_list(ws, Some(l), r),
+        n if apl_d83_sysfns::is_function(n) => apl_d83_sysfns::dyadic(ws, n, l, r, class),
         _ => Err(AplError::new(ErrorKind::Syntax)),
     }
 }

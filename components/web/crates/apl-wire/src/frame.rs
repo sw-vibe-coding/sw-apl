@@ -47,6 +47,11 @@ pub struct Frame {
     /// the whole line.
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub offer: String,
+    /// What (D)'s screen processor shows now, as `apl-d83-screen`
+    /// writes it, sent when it changes: the page draws it on the color
+    /// display. Absent, or empty, nothing changed.
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub picture: String,
 }
 
 /// Write one JSON value and its newline, and flush it: the terminal

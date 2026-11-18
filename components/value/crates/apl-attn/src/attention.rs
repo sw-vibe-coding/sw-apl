@@ -18,10 +18,14 @@ pub trait Attention {
 
 thread_local! {
     /// This thread's session's flag, if it has installed one.
-    static HELD: RefCell<Option<Box<dyn Attention>>> = const { RefCell::new(None) };
+    pub(crate) static HELD: RefCell<Option<Box<dyn Attention>>> = const { RefCell::new(None) };
 
     /// How many strided polls since the flag was last really read.
     static SINCE: Cell<usize> = const { Cell::new(0) };
+
+    /// A stop a delay ended on, kept for the run to see: a delay cut
+    /// short does not answer the attention that cut it.
+    pub(crate) static KEPT: Cell<bool> = const { Cell::new(false) };
 }
 
 /// How many calls to `polled` pass between real reads of the flag.
@@ -48,7 +52,8 @@ pub fn attend(flag: Box<dyn Attention>) {
 /// real read every time costs nothing.
 #[must_use]
 pub fn asked() -> bool {
-    HELD.with(|held| held.borrow().as_ref().is_some_and(|flag| flag.asked()))
+    KEPT.with(Cell::take)
+        || HELD.with(|held| held.borrow().as_ref().is_some_and(|flag| flag.asked()))
 }
 
 /// Whether this session has been asked to stop, for a hot loop: it

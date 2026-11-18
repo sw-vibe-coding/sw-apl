@@ -39,7 +39,9 @@ fn d_lists_its_own_copies_and_no_other_modes_workspace() {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../../..");
     let mut d = in_mode(Mode::D);
     d.ws.store = Box::new(Files(root));
-    let own = ["BIRDS", "EDIT", "LEARN", "LIFE", "RACE", "TTTML"];
+    let own = [
+        "BIRDS", "EDIT", "GRAPHICS", "LEARN", "LIFE", "RACE", "TTTML",
+    ];
     assert_eq!(out(&mut d, ")LIB 1"), own, "the (D) copies");
     assert!(out(&mut d, ")LOAD 1 LIFE")[0].starts_with("SAVED "));
     assert!(d.ws.saved.funcs.contains_key("RUN"), "(D)'s LIFE");
@@ -64,4 +66,20 @@ fn a_save_in_d_runs_in_d_alone() {
     );
     assert_eq!(out(&mut d, ")LIB"), ["MINE"]);
     std::fs::remove_dir_all(dir).ok();
+}
+
+#[test]
+fn d_has_quad_dl_a_delay_and_b_keeps_it_a_variable() {
+    let mut d = in_mode(Mode::D);
+    assert_eq!(
+        out(&mut d, "⎕DL 0.5"),
+        ["0.5"],
+        "a transcript waits not at all"
+    );
+    assert_eq!(
+        out(&mut d, "⎕DL 1 2"),
+        ["LENGTH ERROR", "      ⎕DL 1 2", "      ^"]
+    );
+    let mut b = in_mode(Mode::B);
+    assert_eq!(out(&mut b, "⎕DL"), ["0"]);
 }

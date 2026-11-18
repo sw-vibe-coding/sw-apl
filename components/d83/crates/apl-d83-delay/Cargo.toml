@@ -1,0 +1,15 @@
+[package]
+name = "apl-d83-delay"
+description = "sw-apl (D) '83's QUAD DL: wait, and say how long"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-attn = { path = "../../../value/crates/apl-attn" }
+apl-value = { path = "../../../value/crates/apl-value" }
+
+[lints]
+workspace = true

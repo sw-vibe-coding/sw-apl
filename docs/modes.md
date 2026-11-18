@@ -9,8 +9,9 @@ browser. This page shows, area by area, what each mode has.
 - **(C) '80**, modeled on APL80 for the TRS-80 (`mode-c.md`).
 - **(D) '83**, modeled on IBM PC APL (`ibm-pc-apl-plan.md`). Where the
   tables below have no column for it, it answers as (B) does; it
-  differs in a clear workspace of ten digits in a line of 79, and in
-  listing only workspaces written for it.
+  differs in a clear workspace of ten digits in a line of 79, in
+  listing only workspaces written for it, and in shared variables,
+  `⎕SVO` and its relatives, and AP205, the screen (`language.md`).
 
 In the tables, **yes** means the mode has it, **no** that it has not,
 and **part** that it has some of it, as the note says. The language

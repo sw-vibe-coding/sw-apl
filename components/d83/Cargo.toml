@@ -1,0 +1,22 @@
+# What only the (D) '83 mode has: the parts of IBM PC APL that the
+# (B) '75 mode has not got (docs/ibm-pc-apl-plan.md). The shared core
+# reaches them only in (D); see docs/architecture.md, "Adding a mode".
+[workspace]
+members = [
+    "crates/apl-d83-ap205",
+    "crates/apl-d83-delay",
+    "crates/apl-d83-screen",
+    "crates/apl-d83-shares",
+    "crates/apl-d83-sysfns",
+]
+resolver = "2"
+
+[workspace.package]
+edition = "2024"
+license = "MIT"
+version = "0.1.0"
+authors = ["Michael A Wright"]
+repository = "https://github.com/sw-vibe-coding/sw-apl"
+
+[workspace.lints.clippy]
+pedantic = "warn"

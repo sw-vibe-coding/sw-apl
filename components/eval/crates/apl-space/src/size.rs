@@ -6,11 +6,13 @@ use std::rc::Rc;
 use apl_ast::Defn;
 use apl_value::{Array, Data};
 
+use crate::compact::used_by;
+
 /// Bytes a value's descriptor costs whatever its shape: what kind of
 /// elements it holds, its rank, and where the elements are.
-const DESCRIPTOR: usize = 16;
+pub(crate) const DESCRIPTOR: usize = 16;
 /// Bytes one axis length costs in the descriptor.
-const AXIS: usize = 4;
+pub(crate) const AXIS: usize = 4;
 /// Bytes one number costs. APL\360 held every number as a double and
 /// so does sw-apl, so this does not depend on the number being whole:
 /// the accounting must not move when `4÷2` comes back as an integer.
@@ -63,21 +65,9 @@ pub fn of_function(defn: &Defn) -> usize {
     DESCRIPTOR + names + body
 }
 
-/// What the whole symbol table costs: every name, and what it holds.
-/// Recomputed rather than carried along, because a running total has
-/// to be given back in every place a name goes away -- a local going
-/// out of scope, a rename, a clear -- and one forgotten place is a
-/// workspace that fills up and never empties.
+/// What the whole symbol table costs, eight bytes a number
+/// (`used_by`).
 #[must_use]
 pub fn used(vars: &Vars, funcs: &Funcs, groups: &Groups) -> usize {
-    let held: usize = vars.iter().map(|(n, v)| of_name(n) + of_value(v)).sum();
-    let defined: usize = funcs.iter().map(|(n, f)| of_name(n) + of_function(f)).sum();
-    // A group is its own name and the names it lists. The members
-    // are names, not referents: a member that holds nothing still
-    // costs the entry that records it.
-    let gathered: usize = groups
-        .iter()
-        .map(|(n, m)| of_name(n) + m.iter().map(|x| of_name(x)).sum::<usize>())
-        .sum();
-    held + defined + gathered
+    used_by(vars, funcs, groups, of_value)
 }

@@ -45,7 +45,16 @@ impl Console for Reader {
     /// has gone takes nothing; the statement runs on, and the next
     /// read finds it gone.
     fn show(&mut self, lines: &[String]) -> bool {
-        let _ = Rc::clone(&self.0).borrow_mut().tell(lines.to_vec());
+        let _ = Rc::clone(&self.0)
+            .borrow_mut()
+            .tell(lines.to_vec(), String::new());
         true
+    }
+
+    /// Send what (D)'s screen shows now, as a frame of its own.
+    fn draw(&mut self, picture: &str) {
+        let _ = Rc::clone(&self.0)
+            .borrow_mut()
+            .tell(Vec::new(), picture.to_string());
     }
 }

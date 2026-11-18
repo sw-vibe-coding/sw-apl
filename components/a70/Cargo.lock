@@ -33,6 +33,7 @@ dependencies = [
 name = "apl-attn"
 version = "0.1.0"
 dependencies = [
+ "js-sys",
  "libc",
 ]
 
@@ -146,6 +147,48 @@ name = "apl-console-control"
 version = "0.1.0"
 dependencies = [
  "apl-value",
+]
+
+[[package]]
+name = "apl-d83-ap205"
+version = "0.1.0"
+dependencies = [
+ "apl-d83-screen",
+ "apl-d83-shares",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-d83-delay"
+version = "0.1.0"
+dependencies = [
+ "apl-attn",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-d83-screen"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+ "serde_json",
+]
+
+[[package]]
+name = "apl-d83-shares"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+]
+
+[[package]]
+name = "apl-d83-sysfns"
+version = "0.1.0"
+dependencies = [
+ "apl-d83-delay",
+ "apl-fix",
+ "apl-value",
+ "apl-workspace",
 ]
 
 [[package]]
@@ -469,8 +512,10 @@ name = "apl-sysfns"
 version = "0.1.0"
 dependencies = [
  "apl-console-control",
+ "apl-d83-sysfns",
  "apl-fix",
  "apl-lex",
+ "apl-modes",
  "apl-scan",
  "apl-value",
  "apl-workspace",
@@ -520,6 +565,8 @@ dependencies = [
  "apl-c80-machine",
  "apl-clock",
  "apl-console",
+ "apl-d83-ap205",
+ "apl-d83-shares",
  "apl-modes",
  "apl-prims",
  "apl-saved",
@@ -665,6 +712,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "itoa"
+version = "1.0.19"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3bd1574e617a9a6c1f8f8181bd7e841e1f20e4277607ef28945765188d6284d4"
+
+[[package]]
 name = "js-sys"
 version = "0.3.105"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -686,6 +739,12 @@ name = "log"
 version = "0.4.34"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f9f8bd3e56ce4dfc153cf470fffbfa98c7620958b312ca5c3a4b8d5181fd13c6"
+
+[[package]]
+name = "memchr"
+version = "2.8.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cf8baf1c55e62ffcace7a9f06f4bd9cd3f0c4beb022d3b367256b91b87513d98"
 
 [[package]]
 name = "num-traits"
@@ -760,6 +819,19 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 3.0.6",
+]
+
+[[package]]
+name = "serde_json"
+version = "1.0.154"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e7e9cc8b1b85264074fbcc02a88680c4096b1e47df8f739dceb03bf482f04bd6"
+dependencies = [
+ "itoa",
+ "memchr",
+ "serde",
+ "serde_core",
+ "zmij",
 ]
 
 [[package]]
@@ -965,3 +1037,9 @@ name = "winnow"
 version = "1.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "23b97319f7b8343df12cc98938e5c3eb436064524c8d2b4e30a1d3a36eecdf81"
+
+[[package]]
+name = "zmij"
+version = "1.0.23"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "29666d0abbfad1e3dc4dcf6144730dd3a3ab225bbbdac83319345b1b44ccfc1b"

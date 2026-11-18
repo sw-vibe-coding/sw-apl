@@ -6,7 +6,7 @@ use apl_session::Shelf;
 /// repository when the bundle is built. Each is kept under its file's
 /// name, which says the modes it runs in, as a library directory
 /// holds it: a workspace that differs between the modes is two.
-const SHIPPED: [(&str, &str); 16] = [
+const SHIPPED: [(&str, &str); 17] = [
     (
         "BIRDS.a",
         include_str!("../../../../../ws/lib1/BIRDS.a.apl.ws"),
@@ -30,6 +30,10 @@ const SHIPPED: [(&str, &str); 16] = [
     (
         "EDIT.d",
         include_str!("../../../../../ws/lib1/EDIT.d.apl.ws"),
+    ),
+    (
+        "GRAPHICS.d",
+        include_str!("../../../../../ws/lib1/GRAPHICS.d.apl.ws"),
     ),
     (
         "LEARN.ab",

@@ -30,14 +30,18 @@ pub fn class(ws: &Workspace, name: &str) -> i64 {
     }
 }
 
-/// `⎕EX` of one name: erase its active referent and say whether the
-/// name is now free. A label, a group, and a function that is running
-/// or waiting are not erased, and neither is what is not a name.
+/// `⎕EX` of one name: erase its active referent, retracting its
+/// sharing, and say whether the name is now free. A label, a group,
+/// and a function that is running or waiting are not erased, and
+/// neither is what is not a name.
 pub fn expunge(ws: &mut Workspace, name: &str) -> bool {
     let running = ws.si().iter().any(|a| a.name == name);
     match class(ws, name) {
-        0 => true,
-        2 => ws.saved.vars.remove(name).is_some(),
+        0 | 2 => {
+            ws.shares.retract(name);
+            ws.saved.vars.remove(name);
+            true
+        }
         3 if !running => ws.saved.funcs.remove(name).is_some(),
         _ => false,
     }

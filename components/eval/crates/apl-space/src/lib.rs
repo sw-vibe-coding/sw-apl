@@ -7,10 +7,13 @@
 //! level, and in a test that states a number. So a value costs what
 //! APL\360 would have charged for it -- a descriptor, an entry per
 //! axis, and eight bytes a number or one a character -- and a
-//! workspace holds what those add up to.
+//! workspace holds what those add up to. (D) charges as IBM PC APL
+//! did: a boolean a bit and an integer two bytes (`of_compact`).
 
+mod compact;
 mod quota;
 mod size;
 
+pub use compact::{measure, of_compact, used_by};
 pub use quota::{DEFAULT, free, room};
 pub use size::{Funcs, Groups, Vars, of_function, of_name, of_value, used};

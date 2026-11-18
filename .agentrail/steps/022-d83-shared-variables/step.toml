@@ -1,6 +1,6 @@
 number = 22
 slug = "d83-shared-variables"
-status = "pending"
+status = "in-progress"
 description = "Per docs/ibm-pc-apl-plan.md: in D, QUAD SVO, SVR, SVC and SVQ with the shared..."
 role = "production"
 context_files = []

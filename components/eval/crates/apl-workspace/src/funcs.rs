@@ -4,7 +4,8 @@
 use std::rc::Rc;
 
 use apl_ast::Defn;
-use apl_space::{of_function, of_value, room, used};
+use apl_modes::Feature;
+use apl_space::{measure, of_function, room, used_by};
 use apl_value::{AplError, AplResult, ErrorKind};
 
 use crate::workspace::Workspace;
@@ -38,13 +39,19 @@ impl Workspace {
         if full || defn.body.len() > profile.lines {
             return Err(AplError::new(ErrorKind::Defn));
         }
-        let held = self.saved.vars.get(&defn.name).map_or(0, of_value);
+        let size = measure(profile.has(Feature::CompactValues));
+        let held = self.saved.vars.get(&defn.name).map_or(0, size);
         let was = self
             .saved
             .funcs
             .get(&defn.name)
             .map_or(0, |f| of_function(f));
-        let table = used(&self.saved.vars, &self.saved.funcs, &self.saved.groups);
+        let table = used_by(
+            &self.saved.vars,
+            &self.saved.funcs,
+            &self.saved.groups,
+            size,
+        );
         room(self.quota, table, of_function(&defn), held + was)?;
         self.saved.vars.remove(&defn.name);
         self.saved.funcs.insert(defn.name.clone(), Rc::new(defn));
@@ -54,6 +61,7 @@ impl Workspace {
     /// Forget whatever a name holds. Nothing happens if it holds
     /// nothing, which is what the editor wants after a rename.
     pub fn erase(&mut self, name: &str) {
+        self.shares.retract(name);
         self.saved.vars.remove(name);
         self.saved.funcs.remove(name);
     }

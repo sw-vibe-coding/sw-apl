@@ -142,7 +142,10 @@ this plan's reading of the manual, which does not draw it: step
    in the order defined, a later field's lit pixels over an earlier
    one's, and says so (emulation-policy.md: **extension**).
 6. **Only AP205, then AP210.** `⎕SVO` with any other processor number
-   gives 0, as a processor not loaded did. AP80 (printer) and AP232
+   gives 1 and stays there, as an offer to a processor not loaded
+   did: the manual says an offer is acknowledged whether or not the
+   processor is there (this plan first said 0; step
+   `d83-shared-variables` read chapter 9 and corrected it). AP80 (printer) and AP232
    (host line) are unavailable. AP210 (files) maps a drive's files to
    the browser's library 0 and the CLI's directory, after AP205.
 7. **The machine stays out.** `⎕PK`'s machine code and the BIOS and
@@ -192,6 +195,19 @@ None of these is copied from anywhere; the math is the ordinary
 math of each figure. Each is a (D) function in `GRAPHICS.d.apl.ws`
 over a cover `SHOW` that shares the AP205 variables, defines the
 fields and writes a 200 by 320 boolean matrix.
+
+As built (step `d83-graphics`): `GRAPHICS` is in library 1, in
+sw-apl itself, so the demo has it without a fetch. CUBE (`SHOW`,
+`TURN N`, `CUBE A`) has its edges along x cyan, y red, z white, in
+perspective; PLOT is `WAVE`, a sine and its axes; SIERPINSKI and
+LISSAJOUS are there, and so are MANDELBROT and CARPET (Sierpinski's
+carpet); `DEMO N` turns the cube and then draws each, N times over.
+(D) charges a value as PC APL held it, a boolean a bit, so a picture
+is 8000 bytes, not 512000. AP205 reads a
+field's pixels row by row and its rows and columns from 1, which the
+manual's example (a field at row 20, column 1, 40 wide, at the
+beginning of row 20) supports; interactive mode answers at once, as
+though Enter were pressed.
 
 - **CUBE** -- the wireframe cube in color, turning. The corners are
   the eight rows of `¯1+2×⍉(3⍴2)⊤¯1+⍳8`; an edge joins two corners

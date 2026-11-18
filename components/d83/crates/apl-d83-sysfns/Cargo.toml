@@ -1,0 +1,17 @@
+[package]
+name = "apl-d83-sysfns"
+description = "sw-apl (D) '83's shared-variable system functions: QUAD SVO, SVR, SVC and SVQ"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-d83-delay = { path = "../apl-d83-delay" }
+apl-fix = { path = "../../../b75/crates/apl-fix" }
+apl-value = { path = "../../../value/crates/apl-value" }
+apl-workspace = { path = "../../../eval/crates/apl-workspace" }
+
+[lints]
+workspace = true

@@ -4,7 +4,7 @@ use apl_ast::Expr;
 use apl_clock::{TimeSource, stamp};
 use apl_modes::Feature;
 use apl_value::{AplError, AplResult, Array, Data, ErrorKind, Number};
-use apl_workspace::{Workspace, free, used};
+use apl_workspace::{Workspace, free, measure, used_by};
 
 use crate::assign::assign;
 use crate::av::atomic_vector;
@@ -75,7 +75,8 @@ pub fn read(ws: &Workspace, name: &str) -> AplResult<Array> {
 /// keeps it as a variable holding 0, and so does sw-apl. `None` for anything else.
 fn scalar(ws: &Workspace, name: &str) -> Option<Number> {
     let int = |n: usize| i64::try_from(n).unwrap_or(i64::MAX);
-    let held = || used(&ws.saved.vars, &ws.saved.funcs, &ws.saved.groups);
+    let size = measure(ws.mode.profile().has(Feature::CompactValues));
+    let held = || used_by(&ws.saved.vars, &ws.saved.funcs, &ws.saved.groups, size);
     Some(Number::Int(match name {
         "⎕CT" => return Some(Number::Float(ws.saved.env.ct)),
         "⎕IO" => ws.saved.env.io,
