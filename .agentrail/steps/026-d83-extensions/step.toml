@@ -1,8 +1,9 @@
 number = 26
 slug = "d83-extensions"
-status = "in-progress"
+status = "completed"
 description = "Per docs/ibm-pc-apl-plan.md: PC APL's extensions in D: ambivalent defined fun..."
 role = "production"
 context_files = []
 created_at = "2026-11-13T08:42:19"
-commits = []
+completed_at = "2026-11-18T14:17:19"
+commits = ["6ece83f82d6aff91373d9d9027fa1ee79bf46330"]
