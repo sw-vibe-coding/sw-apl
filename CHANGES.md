@@ -12,8 +12,15 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-11-17
+
+- pages: publish df96934 (D: shared variables, AP205, GRAPHICS, QUAD DL, 2D view)
+- saga: complete d83-shared-variables, d83-ap205, d83-graphics
+- feat(d83): shared variables, AP205 and the GRAPHICS workspace (d83-shared-variables, d83-ap205, d83-graphics)
+
 ## 2026-11-16
 
+- docs(changes): refresh CHANGES.md to HEAD
 - saga: complete d83-demo
 - feat(d83): the D'83 demo on the owner's dual-display PC render, live on the timeline (d83-demo)
 - saga: move d83-demo ahead of the shared variables (owner: demo first)
