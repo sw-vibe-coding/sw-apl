@@ -1,6 +1,7 @@
 //! Applying a defined function, and running its body.
 
 use apl_ast::Defn;
+use apl_modes::Feature;
 use apl_scan::without_label;
 use apl_value::{AplError, AplResult, Array, ErrorKind};
 use apl_workspace::{Output, Workspace, render};
@@ -19,7 +20,8 @@ pub type Run = fn(&mut Workspace, &str) -> AplResult<Output>;
 /// stack, so its locals stay visible and `)SI` can report it.
 ///
 /// # Errors
-/// SYNTAX ERROR when the valence written is not the one declared,
+/// SYNTAX ERROR when the valence written is not the one declared
+/// (but for a missing left argument in a mode with ambivalent calls),
 /// DEPTH ERROR when calls nest too deeply, and anything the body
 /// raises, carrying the line it came from.
 pub fn call(
@@ -32,7 +34,11 @@ pub fn call(
     let defn = ws
         .function(name)
         .ok_or_else(|| AplError::new(ErrorKind::Value))?;
-    if left.is_some() != defn.left.is_some() || right.is_some() != defn.right.is_some() {
+    // In (D) a dyadic function may be called with no left argument,
+    // which then has no value.
+    let ambivalent = left.is_none() && ws.mode.profile().has(Feature::Ambivalent);
+    let lefts = left.is_some() == defn.left.is_some() || ambivalent;
+    if !lefts || right.is_some() != defn.right.is_some() {
         return Err(AplError::new(ErrorKind::Syntax));
     }
     let at = bind(ws, &defn, (left, right))?;

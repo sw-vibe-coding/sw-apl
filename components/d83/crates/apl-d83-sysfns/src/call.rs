@@ -11,7 +11,7 @@ use crate::offer::{couplings, offers};
 /// name that is free or a variable's, and 4 is no name at all.
 pub type Class = fn(&Workspace, &str) -> i64;
 
-const FUNCTIONS: [&str; 5] = ["⎕DL", "⎕SVC", "⎕SVO", "⎕SVQ", "⎕SVR"];
+const FUNCTIONS: [&str; 6] = ["⎕DL", "⎕EA", "⎕SVC", "⎕SVO", "⎕SVQ", "⎕SVR"];
 
 /// True when `name` is a shared-variable function.
 #[must_use]

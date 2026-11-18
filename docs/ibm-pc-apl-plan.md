@@ -268,5 +268,10 @@ In saga `c80`, after `c80-lessons`:
    each with a test of its pixels.
 6. `d83-demo` -- the dual-monitor page, both glasses, Help, the
    timeline link live.
-7. `d83-extensions` -- ambivalent functions, `⎕EA`, picture format,
-   dyadic grades, `)RESET`; then `)IN`/`)OUT`/`⎕TF`, AP210.
+7. `d83-extensions` -- ambivalent functions, `⎕EA`, dyadic grades,
+   `)RESET` and `)SI CLEAR`. Split when it began (2026-11-18) into
+   itself and three more:
+8. `d83-picture-format` -- picture format, dyadic `⍕` with a
+   character left argument.
+9. `d83-transfer-form` -- `⎕TF`, `)IN` and `)OUT`, `.AIO` files.
+10. `d83-ap210` -- AP210, DOS files, mapped to the libraries.

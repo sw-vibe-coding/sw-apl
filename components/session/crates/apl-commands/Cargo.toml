@@ -16,6 +16,7 @@ apl-inquiry = { path = "../apl-inquiry" }
 apl-extensions = { path = "../apl-extensions" }
 apl-a70-commands = { path = "../../../a70/crates/apl-a70-commands" }
 apl-c80-commands = { path = "../../../c80/crates/apl-c80-commands" }
+apl-d83-commands = { path = "../../../d83/crates/apl-d83-commands" }
 apl-c80-wsfile = { path = "../../../c80/crates/apl-c80-wsfile" }
 apl-c80-keys = { path = "../../../c80/crates/apl-c80-keys" }
 apl-settings = { path = "../apl-settings" }

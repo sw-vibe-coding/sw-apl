@@ -110,6 +110,7 @@ version = "0.1.0"
 dependencies = [
  "apl-ast",
  "apl-attn",
+ "apl-modes",
  "apl-scan",
  "apl-value",
  "apl-workspace",
@@ -140,6 +141,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-d83-alternate"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-execute",
+ "apl-modes",
+ "apl-value",
+ "apl-workspace",
+]
+
+[[package]]
 name = "apl-d83-ap205"
 version = "0.1.0"
 dependencies = [
@@ -149,11 +161,30 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-d83-collate"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+]
+
+[[package]]
 name = "apl-d83-delay"
 version = "0.1.0"
 dependencies = [
  "apl-attn",
  "apl-value",
+]
+
+[[package]]
+name = "apl-d83-dyadic"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-d83-alternate",
+ "apl-d83-collate",
+ "apl-modes",
+ "apl-value",
+ "apl-workspace",
 ]
 
 [[package]]
@@ -198,12 +229,15 @@ dependencies = [
  "apl-c80-keys",
  "apl-c80-memory",
  "apl-call",
+ "apl-d83-alternate",
+ "apl-d83-dyadic",
  "apl-execute",
  "apl-format",
  "apl-modes",
  "apl-parse",
  "apl-prims",
  "apl-quad",
+ "apl-statement",
  "apl-store",
  "apl-sysfns",
  "apl-sysvars",
@@ -484,6 +518,16 @@ version = "0.1.0"
 dependencies = [
  "apl-ast",
  "apl-value",
+]
+
+[[package]]
+name = "apl-statement"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-call",
+ "apl-value",
+ "apl-workspace",
 ]
 
 [[package]]

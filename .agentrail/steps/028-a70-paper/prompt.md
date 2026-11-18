@@ -1,0 +1,1 @@
+Per docs/plan.md owner direction 2026-11-18: the 2D view of A's demo: green-bar paper with stripes a line high, each line on its stripe in APL385, a marker for the type element over its column, the paper rising a line at each feed, following a70-printing's events; a 2D and 3D view button as D has, remembered.

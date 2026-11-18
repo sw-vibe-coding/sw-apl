@@ -1,0 +1,55 @@
+      ⍝!MODES (D)
+      ⍝ IBM PC APL's extensions in (D) '83: a dyadic function called with
+      ⍝ no left argument, execute alternate, the grades with a collating
+      ⍝ sequence, and )RESET.
+      ∇Z←N ROOT A
+[1]   →(0≠⎕NC 'N')/RN
+[2]   N←2
+[3]   RN:Z←A*÷N
+[4]   ∇
+      3 ROOT 27
+3
+      ROOT 16
+4
+      '0' ⎕EA '1 2 3'
+1 2 3
+      '0' ⎕EA '1÷0'
+0
+      '''NO''' ⎕EA '1 2+1 2 3'
+NO
+      '1÷0' ⎕EA '2÷0'
+DOMAIN ERROR
+      '1÷0' ⎕EA '2÷0'
+            ^
+      'ABCDE' ⍋ 'DEAL'
+3 1 2 4
+      R←5 4⍴'dealDealdeadDeadDEED'
+      L←2 5⍴'abcdeABCDE'
+      R[L⍋R;]
+dead
+Dead
+deal
+Deal
+DEED
+      R[L⍒R;]
+DEED
+Deal
+deal
+Dead
+dead
+      ∇BAD
+[1]   1÷0
+[2]   ∇
+      BAD
+DOMAIN ERROR
+BAD[1]  1÷0
+         ^
+      BAD
+DOMAIN ERROR
+BAD[1]  1÷0
+         ^
+      )SI
+BAD[1]*
+BAD[1]*
+      )RESET
+      )SI

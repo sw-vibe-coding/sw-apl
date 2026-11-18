@@ -1,0 +1,8 @@
+number = 30
+slug = "d83-picture-format"
+status = "pending"
+description = "Per docs/ibm-pc-apl-plan.md, split from d83-extensions: picture format in D, ..."
+role = "production"
+context_files = []
+created_at = "2026-11-18T11:16:41"
+commits = []

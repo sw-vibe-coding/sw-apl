@@ -1,6 +1,6 @@
 number = 26
 slug = "d83-extensions"
-status = "pending"
+status = "in-progress"
 description = "Per docs/ibm-pc-apl-plan.md: PC APL's extensions in D: ambivalent defined fun..."
 role = "production"
 context_files = []

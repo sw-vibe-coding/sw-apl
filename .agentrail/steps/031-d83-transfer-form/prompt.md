@@ -1,0 +1,1 @@
+Per docs/ibm-pc-apl-plan.md, split from d83-extensions: QUAD TF and the )IN and )OUT commands in D, reading and writing .AIO transfer form files in the libraries; TDD; parity row.

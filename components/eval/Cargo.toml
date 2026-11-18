@@ -10,6 +10,7 @@ members = [
     "crates/apl-clock",
     "crates/apl-space",
     "crates/apl-wsfile",
+    "crates/apl-statement",
     "crates/apl-store",
     "crates/apl-libraries",
     "crates/apl-modes",

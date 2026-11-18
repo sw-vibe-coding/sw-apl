@@ -454,6 +454,64 @@ whole numbers from ¯32768 to 32767 two bytes each, other numbers
 eight, characters one. A screen of 320 by 200 pixels is 8000 bytes,
 and `⎕WA` counts it so. The other modes charge eight bytes a number.
 
+### PC APL's extensions, in (D)
+
+**Ambivalent functions.** A function defined with a left argument
+may be called without one. The left argument then has no value, and
+`⎕NC` of its name is 0, so the function can tell which way it was
+called and supply a default:
+
+```apl
+      ∇Z←N ROOT A
+[1]   →(0≠⎕NC 'N')/RN
+[2]   N←2
+[3]   RN:Z←A*÷N
+[4]   ∇
+      ROOT 16
+4
+```
+
+The left argument's name is local even when no value is given: a
+global `N` is not seen.
+
+**Execute alternate.** `L ⎕EA R` runs the line `R`, as `⍎R` would,
+and gives its value. If the line fails, or is interrupted, it ends
+without a message and the line `L` runs instead. An error in `L` is
+reported as any other. Functions that `R` called and that stopped are
+taken off the state indicator. Both arguments must be character
+scalars or vectors. When the line that ran has no value, the
+statement shows nothing, and a `⎕EA` used for its value is a VALUE
+ERROR.
+
+```apl
+      '''NO''' ⎕EA '1 2+1 2 3'
+NO
+```
+
+**Grades with a collating sequence.** `L⍋R` and `L⍒R` give the
+permutation that puts the items along the first axis of the
+character array `R` in ascending or descending order. The order of
+the characters is set by the character array `L`. A character's
+place is where it is first found in `L`, read row by row. The last
+axis of `L` counts most and the first least, so a row of small
+letters over a row of capitals sorts by spelling first and then by
+case. A character not in `L` sorts after all that are. Equal items
+keep their order. Neither argument may be a scalar or numbers.
+
+```apl
+      R←5 4⍴'dealDealdeadDeadDEED'
+      R[(2 5⍴'abcdeABCDE')⍋R;]
+dead
+Dead
+deal
+Deal
+DEED
+```
+
+**`)RESET`** and **`)SI CLEAR`** clear the state indicator at once:
+every suspended function, and every one waiting on it. Neither shows
+anything.
+
 ### Errors
 
 (B) has one error (A) has not: NONCE ERROR, for something the

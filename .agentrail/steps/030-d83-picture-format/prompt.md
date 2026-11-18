@@ -1,0 +1,1 @@
+Per docs/ibm-pc-apl-plan.md, split from d83-extensions: picture format in D, dyadic format with a character left argument as PC APL gives it, in a d83 crate; TDD; parity row.

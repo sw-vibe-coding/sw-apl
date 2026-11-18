@@ -71,6 +71,8 @@ sw-apl/
                                    and reading a line
                apl-saved           saved half of a workspace: symbol
                                    table, activation stack, settings
+               apl-statement       statements that are not one value:
+                                   mixed output, a branch, a bare call
                apl-shelves         libraries as each mode sees them:
                                    listing, loading, saving and dropping
                                    by mode

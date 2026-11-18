@@ -369,6 +369,10 @@ are what (D) has of its own.
 | AP205, the full screen: one control and one data variable, the fields, characters and pixels written, combined and read, the display switched, the return codes; the demo draws the color display on the color monitor, side by side with the monochrome one in the 2D view | done | ap205 session tests, sample 99-shared-83, checked by hand in Chrome |
 | (D) holds values as IBM PC APL did, a boolean a bit and a short integer two bytes; `⎕WA` and WS FULL count them so | done | apl-space tests |
 | `⎕DL`, the delay, in (D): waits the seconds given and gives the time waited; ATTN ends it, and the run stops at the end of the line; GRAPHICS paces TURN and DEMO with it | done | apl-attn tests, apl-d83-delay tests, d83 session tests, checked by hand in Chrome |
+| Ambivalent functions: a function defined with a left argument called without one, which then has no value and a name class of 0 | done | d83 extensions session tests, sample 99-extensions-83 |
+| `⎕EA`, execute alternate: the right line, or on its error or interrupt the left; the functions it stopped taken off the state indicator | done | d83 extensions session tests, sample 99-extensions-83 |
+| The dyadic grades, `L⍋R` and `L⍒R`: characters sorted by a collating sequence, its last axis counting most | done | apl-d83-collate tests, d83 extensions session tests, sample 99-extensions-83 |
+| `)RESET` and `)SI CLEAR` clear the state indicator | done | d83 extensions session tests, sample 99-extensions-83 |
 | Library 1's GRAPHICS: the wireframe cube in three colors, turning, a sine wave with axes, Pascal's triangle mod 2, Sierpinski's carpet, the Mandelbrot set, a Lissajous figure, and `DEMO`, which animates them all | done | ap205 session tests, sample 99-graphics-83 |
 | The demo, `?mode=D`, on the owner's render of a PC with both displays: the session on the green monochrome glass, a 320 by 200 color frame (dark) on the other, each mapped onto its glass in perspective; Mono, Color, Desk and Alt-F1, F4, F8 choose the view; Help for (D); the timeline's D'83 callout links to it | done | check-pages 9e''', checked by hand in Chrome |
-| PC APL's extensions: ambivalent functions, `⎕EA`, picture format, dyadic grades, transfer form | open | |
+| PC APL's other extensions: picture format, and transfer form (`)IN`, `)OUT`, `⎕TF`) | open | |

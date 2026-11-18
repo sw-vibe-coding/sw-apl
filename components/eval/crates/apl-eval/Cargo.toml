@@ -13,6 +13,8 @@ apl-c80-cuts = { path = "../../../c80/crates/apl-c80-cuts" }
 apl-c80-format = { path = "../../../c80/crates/apl-c80-format" }
 apl-c80-keys = { path = "../../../c80/crates/apl-c80-keys" }
 apl-c80-memory = { path = "../../../c80/crates/apl-c80-memory" }
+apl-d83-alternate = { path = "../../../d83/crates/apl-d83-alternate" }
+apl-d83-dyadic = { path = "../../../d83/crates/apl-d83-dyadic" }
 apl-call = { path = "../apl-call" }
 apl-value = { path = "../../../value/crates/apl-value" }
 apl-execute = { path = "../../../b75/crates/apl-execute" }
@@ -23,6 +25,7 @@ apl-parse = { path = "../../../parse/crates/apl-parse" }
 apl-quad = { path = "../apl-quad" }
 apl-prims = { path = "../../../prims/crates/apl-prims" }
 apl-modes = { path = "../apl-modes" }
+apl-statement = { path = "../apl-statement" }
 apl-store = { path = "../apl-store" }
 apl-workspace = { path = "../apl-workspace" }
 

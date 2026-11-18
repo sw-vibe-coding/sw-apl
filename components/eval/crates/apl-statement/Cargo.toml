@@ -1,0 +1,17 @@
+[package]
+name = "apl-statement"
+description = "sw-apl statements that are not one value: mixed output, a branch, a bare call"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-ast = { path = "../../../parse/crates/apl-ast" }
+apl-call = { path = "../apl-call" }
+apl-value = { path = "../../../value/crates/apl-value" }
+apl-workspace = { path = "../apl-workspace" }
+
+[lints]
+workspace = true

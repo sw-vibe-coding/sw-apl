@@ -9,8 +9,8 @@ use apl_sysfns::is_function as system;
 use apl_value::{AplError, AplResult, Array, ErrorKind};
 use apl_workspace::{Output, Workspace};
 
-use crate::apply::statement;
 use crate::{apply, forms};
+use apl_statement::statement;
 
 /// Evaluate one line as it was typed. In (C) it is typed in APL80's
 /// characters and translated into glyphs first, knowing which names
@@ -48,10 +48,11 @@ fn eval_glyphs(ws: &mut Workspace, line: &str) -> AplResult<Output> {
     };
     apl_c80_cuts::enter(ws.mode.profile(), &expr)?;
     // An execute that is the whole statement shows what its line shows.
-    if let Some(done) = apl_execute::whole(ws, &expr, eval_expr, eval_line) {
+    let done = apl_execute::whole(ws, &expr, eval_expr, eval_line);
+    if let Some(done) = done.or_else(|| apl_d83_alternate::whole(ws, &expr, eval_expr, eval_line)) {
         return done;
     }
-    if let Some(shown) = statement(ws, &expr)? {
+    if let Some(shown) = statement(ws, &expr, eval_expr, eval_line)? {
         return apl_c80_format::shaped(ws, shown);
     }
     let silent = matches!(

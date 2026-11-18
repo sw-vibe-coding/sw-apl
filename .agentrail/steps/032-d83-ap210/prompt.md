@@ -1,0 +1,1 @@
+Per docs/ibm-pc-apl-plan.md decision 6, split from d83-extensions: AP210, the DOS file processor, through the shared variable interface in D, its files mapped to the browser library 0 and the CLI directory; TDD; parity row.

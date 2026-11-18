@@ -2,6 +2,7 @@
 
 use apl_a70_commands::command as seventy;
 use apl_c80_commands::command as eighty;
+use apl_d83_commands::command as eightythree;
 use apl_eval::{Feature, Workspace, hms};
 use apl_extensions::command as extension;
 use apl_inquiry::command as inquiry;
@@ -33,8 +34,8 @@ pub struct Answer {
 }
 
 /// Run one system command: the text after the parenthesis. The
-/// '70-only, inquiry, sw-apl and '80-only commands answer for
-/// themselves, and None for a name they do not know.
+/// '70-only, '83-only, inquiry, sw-apl and '80-only commands answer
+/// for themselves, and None for a name they do not know.
 pub fn system_command(ws: &mut Workspace, command: &str) -> Answer {
     let mut words = command.split_whitespace();
     let typed = words.next().unwrap_or("").to_ascii_uppercase();
@@ -52,6 +53,7 @@ pub fn system_command(ws: &mut Workspace, command: &str) -> Answer {
         ("LIB", _) => lib(ws, &rest),
         ("COPY" | "PCOPY", _) => return copy(ws, &rest, name == "PCOPY"),
         _ => seventy(&mut ws.saved, ws.mode, &name, &rest)
+            .or_else(|| eightythree(ws, &name, &rest))
             .or_else(|| inquiry(ws, &name, &rest))
             .or_else(|| extension(ws, &name, &rest))
             .or_else(|| eighty(ws, command))

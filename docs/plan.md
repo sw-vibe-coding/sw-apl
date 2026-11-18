@@ -1490,6 +1490,69 @@ system commands, system values, defining functions, workspaces,
 typing and display -- a column per mode and room for (D), each cell
 done, partial or absent, and a `)HELP MODES` pointer to it.
 
+## Owner direction (2026-11-18): the 2741 printing in (A)'s demo
+
+The owner, pointing at the printer of ibm-1130-rs and at apl-horse-race
+(sw-comp-history, both the owner's, MIT): "These emulate a selectric
+terminal with an APL character set type element (golfball). I want a
+similar demo for my APL\360 ... demo. Green bar paper, optional sound,
+but I also want to use the ../../softwarewrighter/console-3D IBM 2741
+model and it has a demo that moves the print head. So we want to
+combine these techniques. The model should advance (using Three.js?)
+the type element and use the sound effect (type or CR) if enabled, and
+the paper should advance (green bar paper). Like the D'83 demo, there
+should be a 2D and 3D view."
+
+And, of the timeline and the demos: it is a history of real hardware,
+"No need to hide names and logos ... Fair use." The model keeps its
+badge.
+
+What is reused:
+
+- **Pacing and sound from apl-horse-race**: about 15 characters a
+  second with a little jitter, a pause for the carriage return and
+  the line feed, and sound made by WebAudio, nothing recorded: a click
+  a key, a softer one for a space, a thunk for the return and a whir
+  for the feed. Off until turned on, and started by a gesture as
+  browsers require. The recorded clicks in ibm-1130-rs are not used:
+  where they came from is not written down.
+- **Green-bar paper** as both draw it: stripes a line high, each line
+  printed on its stripe, in APL385.
+- **The 2741 from console-3D** (the owner's, MIT): its rigged model,
+  built by Blender there (`just render-2741`) to `ibm2741.glb` and
+  `mechanism.json`, and `selectric-machine.mjs`, which moves the
+  carrier, tilt and spin of the type element by name and keeps the
+  mechanism apart from the drawing. Three.js r170 as console-3D
+  vendors it (MIT).
+
+What is new:
+
+- **Paced printing.** What the session prints reaches the paper a
+  character at a time, at the 2741's speed, as events -- a character
+  at a column, a backspace (overstrikes), a return, a feed -- that
+  each view follows. Typing stops nothing that is printing; a faster
+  setting prints at once.
+- **The 2D view**: the paper, the line being typed on it and a
+  marker for the type element over its column, the paper rising a
+  line at each feed.
+- **The 3D view**: the 2741 in Three.js, its type element moving to
+  each column and back on a return; the paper advancing. The model's
+  paper does not move, so the printed lines are drawn into a texture
+  on it and scrolled a line at each feed, which also shows the
+  printing in 3D. Loaded only when the 3D view is chosen.
+- **Views as (D) has them**: 2D and 3D, and sound, each a button,
+  each remembered.
+
+Steps, after `d83-extensions` and ahead of the rest of (D)'s:
+
+1. `a70-printing` -- the paced printing and its events, with sound,
+   on the page as it is.
+2. `a70-paper` -- the 2D view: green-bar paper, the type element's
+   marker, the paper rising.
+3. `a70-selectric` -- the 3D view: the 2741 built in console-3D and
+   brought into pages/, its type element and paper moving with the
+   printing.
+
 ## Owner direction (2026-09-29): the documents, checked against the code
 
 "Is the README up-to-date? Scan documents for stale info or

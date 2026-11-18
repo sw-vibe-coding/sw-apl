@@ -43,6 +43,17 @@ pub enum Feature {
     /// Values held compactly, as IBM PC APL held them: a boolean in a
     /// bit, an integer in two bytes. The workspace fills by that.
     CompactValues,
+    /// Defined dyadic functions called monadically: the left argument
+    /// then has no value, and its name class is 0.
+    Ambivalent,
+    /// `⎕EA`, execute alternate: run the right, and on an error or an
+    /// interrupt the left instead.
+    ExecuteAlternate,
+    /// The dyadic grades, which sort characters by a collating
+    /// sequence.
+    CollatingGrade,
+    /// `)RESET` and `)SI CLEAR`, which clear the state indicator.
+    Reset,
 }
 
 /// Something of the core a mode leaves out. APL80's manual lists its
@@ -144,8 +155,8 @@ pub const C80: Profile = Profile {
     lines: 255,
 };
 
-/// (D) '83: IBM PC APL, (B)'s language to begin with, and workspaces
-/// of its own (docs/ibm-pc-apl-plan.md).
+/// (D) '83: IBM PC APL, (B)'s language with PC APL's extensions,
+/// and workspaces of its own (docs/ibm-pc-apl-plan.md).
 pub const D83: Profile = Profile {
     features: &[
         Feature::Scan,
@@ -153,6 +164,10 @@ pub const D83: Profile = Profile {
         Feature::OwnWorkspaces,
         Feature::SharedVariables,
         Feature::CompactValues,
+        Feature::Ambivalent,
+        Feature::ExecuteAlternate,
+        Feature::CollatingGrade,
+        Feature::Reset,
     ],
     ..CORE
 };
