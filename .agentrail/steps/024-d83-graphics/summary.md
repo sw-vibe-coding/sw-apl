@@ -1,0 +1,1 @@
+GRAPHICS in lib1 for D: cube, TURN, WAVE, SIERPINSKI, CARPET, MANDELBROT, LISSAJOUS, DEMO. Also compact values in D (boolean a bit, short int two bytes), the demo 2D side-by-side view with bezels, and QUAD DL (apl-d83-delay over apl_attn delay, real wait in the browser worker) pacing TURN and DEMO. In d244c37.

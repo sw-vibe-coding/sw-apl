@@ -1,8 +1,9 @@
 number = 23
 slug = "d83-ap205"
-status = "pending"
+status = "completed"
 description = "Per docs/ibm-pc-apl-plan.md: AP205 as the May 1983 manual gives it (chapter 3..."
 role = "production"
 context_files = []
 created_at = "2026-11-13T08:42:19"
-commits = []
+completed_at = "2026-11-17T21:34:26"
+commits = ["d244c372b4c62db299dbb639046e6984d1e66e46"]

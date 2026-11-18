@@ -1,0 +1,1 @@
+Shared variables in D: QUAD SVO SVR SVC SVQ over apl-d83-shares with processors, coupling, access control and retraction on EX ERASE CLEAR LOAD and function return. Committed with 023 and 024 as d244c37.

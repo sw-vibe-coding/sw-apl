@@ -1,0 +1,1 @@
+AP205 per the manual chapter 3: commands 0 to 12, character and pixel fields, color 40 and 80, return codes; the picture travels to the web demo frame and is painted on the color monitor. In d244c37.
