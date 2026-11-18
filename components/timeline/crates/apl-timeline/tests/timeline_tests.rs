@@ -304,7 +304,7 @@ fn the_built_demos_link_to_their_modes() {
 }
 
 #[test]
-fn sw_cor24_apl_links_to_its_live_demo_without_a_tip() {
+fn sw_cor24_apl_links_to_its_live_demo_and_says_so() {
     let list = events(DATA).expect("data/timeline.json is a list of events");
     let cor24 = list
         .iter()
@@ -314,5 +314,5 @@ fn sw_cor24_apl_links_to_its_live_demo_without_a_tip() {
         cor24.href.as_deref(),
         Some("https://sw-embed.github.io/web-sw-cor24-apl/")
     );
-    assert_eq!(cor24.tip, None);
+    assert_eq!(cor24.tip.as_deref(), Some("My COR24 APL live demo"));
 }
