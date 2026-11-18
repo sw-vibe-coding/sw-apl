@@ -302,3 +302,17 @@ fn the_built_demos_link_to_their_modes() {
     assert_eq!(c80.tip.as_deref(), Some("My live demo of APL-80"));
     assert!(!c80.text.contains("IBM"), "{}", c80.text);
 }
+
+#[test]
+fn sw_cor24_apl_links_to_its_live_demo_without_a_tip() {
+    let list = events(DATA).expect("data/timeline.json is a list of events");
+    let cor24 = list
+        .iter()
+        .find(|e| e.title == "sw-cor24-apl")
+        .expect("sw-cor24-apl is on the timeline");
+    assert_eq!(
+        cor24.href.as_deref(),
+        Some("https://sw-embed.github.io/web-sw-cor24-apl/")
+    );
+    assert_eq!(cor24.tip, None);
+}

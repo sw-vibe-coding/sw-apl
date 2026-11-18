@@ -38,7 +38,7 @@
   {"year": 2021.3, "when": "2021", "title": "IBM withdraws APL2", "text": "Support ended that September.", "kind": "note"},
   {"year": 2023.0, "when": "2023", "title": "Uiua", "text": "Stack-based, by Kai Schmidt.", "href": "https://uiua.org/", "kind": "note"},
   {"year": 2024.2, "when": "2024", "title": "TinyAPL", "text": "Madeline Vergani's, in Haskell.", "href": "https://tinyapl.rubenverg.com/", "kind": "note"},
-  {"year": 2029.5, "when": "Now", "title": "sw-cor24-apl", "text": "My APL on the COR24-TB development board, in C: an integer-only subset of APL, written with names in place of glyphs.", "image": "machines/cor24.webp", "tip": "Future demo", "kind": "mine"},
+  {"year": 2029.5, "when": "Now", "title": "sw-cor24-apl", "text": "My APL on the COR24-TB development board, in C: an integer-only subset of APL, written with names in place of glyphs.", "image": "machines/cor24.webp", "href": "https://sw-embed.github.io/web-sw-cor24-apl/", "kind": "mine"},
   {"year": 2031.5, "when": "Now", "title": "sw-MLPL", "text": "My first custom array language, in Rust, for Machine Learning and general purpose application development.", "image": "machines/sw-mlpl.webp", "href": "https://mlpl.softwarewrighter.com/", "tip": "My sw-MLPL live demo", "kind": "mine"},
   {"year": 2033.5, "when": "Now", "title": "X_eTaL", "text": "And my newest custom eXperimental Extensible Typed Array Language, in Rust, used to run math, on CPUs, GPUs, and FPGAs.", "image": "machines/xetal.webp", "href": "https://softwarewrighter.github.io/X_eTaL/", "tip": "My X_eTaL live demo", "kind": "mine"}
 ]
