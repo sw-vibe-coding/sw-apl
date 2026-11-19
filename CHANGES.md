@@ -14,6 +14,11 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-11-18
 
+- pages: publish b54b1a3 (A: the 2741 prints at its own pace, Fast and Sound)
+- saga: complete a70-printing
+- feat(demo): (A) prints as the 2741, paced, with optional sound (a70-printing)
+- pages: publish 5cd0d7f (D: ambivalent functions, QUAD EA, collating grades, )RESET; console split)
+- docs(changes): refresh CHANGES.md to HEAD
 - saga: complete d83-extensions
 - feat(d83): ambivalent functions, QUAD EA, collating grades, )RESET (d83-extensions)
 - docs(changes): refresh CHANGES.md to HEAD
