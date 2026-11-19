@@ -14,6 +14,12 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-11-18
 
+- pages: publish 38f3a76 (A: green-bar paper, recorded sounds, the 2741 in 3D on fan-fold paper)
+- saga: complete a70-selectric
+- feat(demo): (A) in 3D, the owner's 2741 printing on fan-fold paper (a70-selectric)
+- saga: complete a70-paper
+- feat(demo): (A) on green-bar paper with the type element, recorded sounds (a70-paper)
+- docs(changes): refresh CHANGES.md to HEAD
 - pages: publish b54b1a3 (A: the 2741 prints at its own pace, Fast and Sound)
 - saga: complete a70-printing
 - feat(demo): (A) prints as the 2741, paced, with optional sound (a70-printing)
