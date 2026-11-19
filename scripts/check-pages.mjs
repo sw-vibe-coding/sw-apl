@@ -119,6 +119,17 @@ const home = `http://127.0.0.1:${server.address().port}/`;
 const url = `${home}demo.html`;
 const browser = await chromium.launch({ executablePath: CHROME, headless: true });
 
+// Every visit prints (A) at once, as Fast does: these checks are of
+// what is printed, and a 2741 at 15 a second would keep them waiting.
+// Check 17 watches the pacing itself, in a context without this.
+const fastContext = async (options) => {
+  const made = await browser.newContext(options);
+  await made.addInitScript(() => {
+    try { localStorage.setItem('apl-2741-fast', 'on'); } catch { /* none kept */ }
+  });
+  return made;
+};
+
 let failed = 0;
 const check = (name, ok, saw) => {
   console.log(`${ok ? 'ok  ' : 'FAIL'} ${name}${ok ? '' : `\n       saw: ${saw}`}`);
@@ -141,7 +152,7 @@ async function settle(page, seconds = 20) {
 }
 
 async function visit() {
-  const page = await (await browser.newContext()).newPage();
+  const page = await (await fastContext()).newPage();
   await page.goto(url, { waitUntil: 'load' });
   await page.waitForTimeout(3000); // the isolation worker installs and reloads
   await settle(page);
@@ -150,7 +161,7 @@ async function visit() {
 
 // A first visit in one mode, by the address the timeline links to.
 async function visitIn(mode) {
-  const page = await (await browser.newContext()).newPage();
+  const page = await (await fastContext()).newPage();
   await page.goto(`${url}?mode=${mode}`, { waitUntil: 'load' });
   await page.waitForTimeout(3000);
   await settle(page);
@@ -394,7 +405,7 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
 //    A reader who has made the keys small on a phone must not have
 //    to do it again every visit.
 {
-  const context = await browser.newContext();
+  const context = await fastContext();
   const page = await context.newPage();
   await page.goto(url, { waitUntil: 'load' });
   await page.waitForTimeout(3000);
@@ -437,7 +448,7 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
 {
   const direct = await host(ROOT, true);
   const at = `http://127.0.0.1:${direct.address().port}/demo.html`;
-  const page = await (await browser.newContext()).newPage();
+  const page = await (await fastContext()).newPage();
   let loads = 0;
   page.on('load', () => { loads += 1; });
   await page.goto(at, { waitUntil: 'load' });
@@ -1249,7 +1260,7 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
 {
   const sub = await host(ROOT, false, PREFIX);
   const at = `http://127.0.0.1:${sub.address().port}${PREFIX}demo.html`;
-  const page = await (await browser.newContext()).newPage();
+  const page = await (await fastContext()).newPage();
   const missed = [];
   page.on('response', (r) => { if (r.status() >= 400) missed.push(r.url()); });
   await page.goto(at, { waitUntil: 'load' });
@@ -1278,7 +1289,7 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
       ? Promise.reject(new DOMException('The operation was aborted.', 'AbortError'))
       : real(...args);
   })()`;
-  const context = await browser.newContext();
+  const context = await fastContext();
   await context.addInitScript(refusing(1));
   const once = await context.newPage();
   await once.goto(url, { waitUntil: 'load' });
@@ -1288,7 +1299,7 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
     await typing(once), JSON.stringify((await paper(once)).slice(-200)));
   await context.close();
 
-  const stuck = await browser.newContext();
+  const stuck = await fastContext();
   await stuck.addInitScript(refusing(99));
   const never = await stuck.newPage();
   await never.goto(url, { waitUntil: 'load' });
@@ -1307,7 +1318,7 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   // A tab whose count of reloads is already used up -- by earlier
   // attempts, or a build before this one -- still tries again when
   // it is reloaded: giving up starts the count afresh.
-  const spent = await browser.newContext();
+  const spent = await fastContext();
   await spent.addInitScript(() => sessionStorage.setItem('apl-isolation-reloads', '9'));
   const again = await spent.newPage();
   await again.goto(url, { waitUntil: 'load' });
@@ -1325,7 +1336,7 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
 // an old address naming a mode at the root reaches the demo, and the
 // demo's title leads home.
 {
-  const context = await browser.newContext();
+  const context = await fastContext();
   const page = await context.newPage();
   const at = () => page.url().replace(home, '');
   await page.goto(`${home}coming-soon.html`, { waitUntil: 'load' });
@@ -1351,7 +1362,7 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
 // demo whole in view, its demos linked, its future
 // demos marked, and the strip within the window.
 {
-  const context = await browser.newContext({ viewport: { width: 1440, height: 800 } });
+  const context = await fastContext({ viewport: { width: 1440, height: 800 } });
   const page = await context.newPage();
   const missed = [];
   page.on('response', (r) => { if (r.status() >= 400) missed.push(r.url()); });
@@ -1395,7 +1406,7 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await context.close();
 }
 
-const offlineContext = await browser.newContext();
+const offlineContext = await fastContext();
 offline: {
   const context = offlineContext;
   const page = await context.newPage();
@@ -1453,6 +1464,43 @@ offline: {
 await offlineContext.close();
 serving.delete('/version.txt');
 serving.delete('/build-info.json');
+
+// 17. (A) prints as the 2741 did: a character at a time, the keyboard
+// locked until it is done, and Fast and Sound in the bar, each off at
+// first and each remembered.
+{
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  await page.goto(`${url}?mode=A`, { waitUntil: 'load' });
+  await page.waitForTimeout(3000);
+  const unlocked = async (seconds) => {
+    for (let i = 0; i < seconds * 4 && !(await typing(page)); i++) await page.waitForTimeout(250);
+    return typing(page);
+  };
+  await unlocked(20);
+  const pressed = (name) => page.evaluate((n) => [...document.querySelectorAll('nav.bar button')]
+    .find((b) => b.textContent === n)?.getAttribute('aria-pressed'), name);
+  check('(A) has Fast and Sound in the bar, both off at first',
+    (await pressed('Fast')) === 'false' && (await pressed('Sound')) === 'false',
+    `${await pressed('Fast')} ${await pressed('Sound')}`);
+  // Sixty characters at fifteen a second take four seconds.
+  const full = 'ABCDEFGHIJ'.repeat(6);
+  await send(page, "60⍴'ABCDEFGHIJ'");
+  const early = await paper(page);
+  check('it prints a character at a time, the keyboard locked meanwhile',
+    !early.includes(full) && early.includes('ABC') && !(await typing(page)),
+    JSON.stringify(early.slice(-80)));
+  check('and when it is done the keyboard unlocks',
+    (await unlocked(10)) && (await paper(page)).includes(full), JSON.stringify((await paper(page)).slice(-80)));
+  await page.click('nav.bar >> text=Fast');
+  await page.reload({ waitUntil: 'load' });
+  await unlocked(20);
+  check('Fast is remembered', (await pressed('Fast')) === 'true', await pressed('Fast'));
+  await send(page, "60⍴'KLMNOPQRST'");
+  check('and prints at once', (await paper(page)).includes('KLMNOPQRST'.repeat(6)) && await typing(page),
+    JSON.stringify((await paper(page)).slice(-80)));
+  await context.close();
+}
 
 await browser.close();
 server.close();

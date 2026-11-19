@@ -1,6 +1,6 @@
 number = 27
 slug = "a70-printing"
-status = "pending"
+status = "in-progress"
 description = "Per docs/plan.md owner direction 2026-11-18 (the 2741 printing in A's demo): ..."
 role = "production"
 context_files = []

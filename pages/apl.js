@@ -27,6 +27,7 @@ const { build, striking, trs80 } = await import(stamped("./board.js"));
 const { pasteLines } = await import(stamped("./lines.js"));
 const { crt, room } = await import(stamped("./crt.js"));
 const { desk } = await import(stamped("./desk.js"));
+const { selectric } = await import(stamped("./selectric.js"));
 
 // Must agree with channel.rs, which is where these are documented.
 const SIZE = 64 * 1024;
@@ -110,7 +111,9 @@ const render = () => {
   const rest = rows.slice(row + 1).map((r) => "\n" + r).join("");
   dotted(paper, rows[row].slice(col + typed) + rest);
 };
-const put = (text) => {
+// What is printed, on the paper as it is: (C)'s screen, or the paper
+// itself. (A) reaches this through its printer, a character at a time.
+const ink = (text) => {
   if (screen) {
     screen.print(text);
     return render();
@@ -129,6 +132,9 @@ const put = (text) => {
   }
   paper.scrollTop = paper.scrollHeight;
 };
+// Print `text`: in (A) by the 2741, paced, unless it was `typed` and
+// so is on the paper already as the reader typed it.
+const put = (text, typed = false) => (printing ? printing.write(text, typed) : ink(text));
 
 const stop = (why) => {
   typing = false;
@@ -201,6 +207,11 @@ if (MODE === "C") {
 if (MODE === "B") crt(paper, line);
 // (D) shows its session on the PC's green screen, beside its color one.
 const picture = MODE === "D" ? desk(paper, line) : null;
+// (A) prints as the 2741 did, a character at a time, overstrikes
+// struck as their two parts.
+const printing = MODE === "A"
+  ? selectric(document.querySelector("nav.bar"), ink, await overstrikes())
+  : null;
 // Help says only what this mode has: each part marked with the modes
 // it is for is shown in those alone.
 for (const part of document.querySelectorAll("#help [data-modes]")) {
@@ -644,6 +655,16 @@ function strike(sends) {
   }
 }
 
+// The two characters each overstrike is struck as, which (A)'s printer
+// strikes one over the other; none, if the table cannot be had.
+async function overstrikes() {
+  try {
+    return await fetch(stamped("overstrikes.json")).then((r) => r.json());
+  } catch {
+    return {};
+  }
+}
+
 // Print one frame and take the typing it asks for.
 function show(frame) {
   for (const text of frame.lines) put(text + "\n");
@@ -652,6 +673,13 @@ function show(frame) {
   // Printed while a statement runs: it is still running, and the
   // next frame follows.
   if (frame.more) return;
+  // The keyboard unlocks once the 2741 has finished printing.
+  if (printing) printing.idle(() => ready(frame));
+  else ready(frame);
+}
+
+// The session waits for a line: prompt, and take the typing.
+function ready(frame) {
   if (frame.off || frame.prompt === null) return stop("Session ended.");
   prompt.textContent = frame.prompt;
   if (screen) render();
@@ -689,7 +717,7 @@ function next() {
 function send(header, body, text) {
   // The paper keeps what was typed, as a printing terminal would:
   // the prompt, the line, and the answer under it.
-  put(prompt.textContent + text + "\n");
+  put(prompt.textContent + text + "\n", true);
   // Remember it, unless it is blank or the line just entered: a
   // history full of one repeated line is not worth walking.
   if (text.trim() && text !== history.at(-1)) history.push(text);
@@ -720,8 +748,10 @@ function send(header, body, text) {
 // both stop. Only while the session is busy -- at the prompt there is
 // nothing to stop, and a flag left set would stop the next line.
 function attention() {
-  // ATTN drops the pasted lines not yet run.
+  // ATTN drops the pasted lines not yet run, and what is still to
+  // print is printed at once.
   pasted = null;
+  printing?.flush();
   if (typing || !wire) return;
   Atomics.store(wire.header, ATTN, 1);
 }
