@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-11-18
 
+- pages: publish e9e94df (A: opens in 3D close up, start card with sound)
+- fix(demo): (A) opens in 3D close up, with a card that starts the sound
+- docs(changes): refresh CHANGES.md to HEAD
 - pages: publish 38f3a76 (A: green-bar paper, recorded sounds, the 2741 in 3D on fan-fold paper)
 - saga: complete a70-selectric
 - feat(demo): (A) in 3D, the owner's 2741 printing on fan-fold paper (a70-selectric)
