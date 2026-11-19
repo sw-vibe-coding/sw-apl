@@ -175,6 +175,18 @@
     box-shadow: 0 2px 4px #0006;
     transition: transform 60ms linear;
   }
+  /* (A)'s card each visit opens on, which starts the 2741 with sound
+     or without (selectric.js). */
+  #start {
+    position: fixed; inset: 0; z-index: 20; display: grid; place-items: center;
+    background: #000a;
+  }
+  #start .card {
+    display: grid; gap: .8rem; padding: 1.4rem 1.6rem; border-radius: .5rem;
+    background: var(--paper); color: var(--ink); text-align: center; box-shadow: 0 8px 30px #0008;
+  }
+  #start .card p { margin: 0 0 .3rem; font-size: 1.1rem; }
+  #start .card button { font: inherit; padding: .5rem 1rem; cursor: pointer; border-radius: .3rem; }
   /* (A) in 3D (views2741.js): the model printing, in the paper's place.
      The paper is still there, out of sight, holding the session. */
   #model { flex: 1; min-height: 0; position: relative; }
@@ -758,17 +770,18 @@
       2741's fifteen a second, and the keyboard waits until it is
       done, as the terminal's did. Overstruck characters are struck
       as their two parts. <b>Fast</b> prints at once; Esc (ATTN) prints
-      the rest at once too. <b>Sound</b> adds the terminal's sounds:
+      the rest at once too. <b>Sound</b>, on unless you start silently, plays the terminal's sounds:
       each key's strike, the space bar, the thud of the return. Both
       are remembered. The paper is green-bar, each line on its stripe,
       and the ball under the line is the type element.
     </p>
     <p>
-      <b>3D</b> shows the 2741 itself printing on fan-fold paper: the
+      The page opens in 3D: the 2741 itself printing on fan-fold paper, the
       type element moving along the line, the paper rising at each
       line. <b>Close</b> is for reading while you type, <b>Half</b>
       and <b>Whole</b> show more of the machine, and + and − zoom;
-      drag to turn it. <b>2D</b> goes back to the paper.
+      drag to turn it. <b>2D</b> shows the paper alone, and <b>3D</b> the
+      machine again.
     </p>
   </div>
   <h3>With the network off</h3>

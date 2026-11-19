@@ -124,7 +124,9 @@ function rigFor(THREE, root, config) {
 function aim(THREE, stage, rig, config) {
   const where = new THREE.Vector3();
   rig.carrier.getWorldPosition(where);
-  const line = new THREE.Vector3(config.left_x_m + config.pitch_m * 30, where.y + 0.03, where.z);
+  // Aimed back up the paper from the print line, so the printing fills
+  // the top two thirds of the close view and the type element the rest.
+  const line = new THREE.Vector3(config.left_x_m + config.pitch_m * 30, where.y + 0.04, where.z - 0.03);
   const middle = new THREE.Vector3(0, where.y - 0.01, 0);
   const high = new THREE.Vector3(0, where.y + 0.06, -0.02);
   // Each view: what it looks at, and from where -- the turn about the

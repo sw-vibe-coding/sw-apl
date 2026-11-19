@@ -138,6 +138,9 @@ const check = (name, ok, saw) => {
 
 // Wait until the page is either taking typing or has said why not.
 async function settle(page, seconds = 20) {
+  // (A) opens on a card that starts the 2741; these checks start it
+  // silently.
+  await page.click('#start button:last-of-type', { timeout: 3000 }).catch(() => {});
   for (let i = 0; i < seconds * 4; i++) {
     // A page that is not sw-apl at all -- the browser's own error
     // page, or one torn down by a navigation -- is not settled yet.
@@ -1477,11 +1480,15 @@ serving.delete('/build-info.json');
     for (let i = 0; i < seconds * 4 && !(await typing(page)); i++) await page.waitForTimeout(250);
     return typing(page);
   };
+  // It opens on the card that starts the 2741, with sound or without.
+  await page.waitForSelector('#start', { timeout: 20000 }).catch(() => {});
+  check('(A) opens on the card that starts the 2741', await page.evaluate(() => !!document.getElementById('start')), 'no card');
+  await page.click('#start >> text=Start with sound').catch(() => {});
   await unlocked(20);
   const pressed = (name) => page.evaluate((n) => [...document.querySelectorAll('nav.bar button')]
-    .find((b) => b.textContent === n)?.getAttribute('aria-pressed'), name);
-  check('(A) has Fast and Sound in the bar, both off at first',
-    (await pressed('Fast')) === 'false' && (await pressed('Sound')) === 'false',
+    .find((b) => b.textContent.startsWith(n))?.getAttribute('aria-pressed'), name);
+  check('(A) has Fast and Sound in the bar, Sound on and Fast off at first',
+    (await pressed('Fast')) === 'false' && (await pressed('Sound')) === 'true',
     `${await pressed('Fast')} ${await pressed('Sound')}`);
   // Sixty characters at fifteen a second take four seconds.
   const full = 'ABCDEFGHIJ'.repeat(6);
@@ -1508,9 +1515,10 @@ serving.delete('/build-info.json');
     sheet.greenbar && sheet.typed, JSON.stringify(sheet));
   check('and the type element waits where the typing goes',
     Math.abs(sheet.x - sheet.caret) < 2, JSON.stringify(sheet));
-  // 3D: the owner's model of the 2741, drawn by three.js, loaded when
-  // chosen, with Close, Half and Whole over it; then 2D again.
-  await page.click('nav.bar >> text=3D');
+  // 3D, which (A) opens in: the owner's model of the 2741, drawn by
+  // three.js, with Close, Half and Whole over it; then 2D.
+  check('(A) opens in 3D', await page.evaluate(() => document.body.classList.contains('model3d')),
+    'opened in 2D');
   await page.waitForFunction(() => document.querySelector('#model canvas')
     || /could not/.test(document.getElementById('model').textContent), null, { timeout: 30000 })
     .catch(() => {});
@@ -1522,7 +1530,7 @@ serving.delete('/build-info.json');
   }));
   check('(A) in 3D draws the 2741, with Close, Half and Whole',
     model.canvas && ['Close', 'Half', 'Whole'].every((v) => model.views.includes(v)), JSON.stringify(model));
-  await page.click('nav.bar >> text=2D');
+  await page.click('nav.bar >> text=/^2D$/');
   check('and 2D brings the paper back',
     await page.evaluate(() => document.getElementById('model').hidden
       && !document.body.classList.contains('model3d')), 'still in 3D');

@@ -43,7 +43,8 @@ export function views(bar, paper, line, place) {
   new MutationObserver(() => model?.typing(typing())).observe(line, {
     subtree: true, childList: true, characterData: true, attributes: true,
   });
-  show(kept() === "3d");
+  // 3D unless 2D was chosen last time.
+  show(kept() !== "2d");
   return (event) => {
     place(event);
     model?.follow(event);
