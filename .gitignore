@@ -57,3 +57,6 @@ tests/reg-rs/*.tdb.lock
 # scratch, not every directory named work. tests/scripts/work/ is a
 # fixture library our own binary wrote, and it is tracked.
 /work/
+
+# playwright-core for just check-pages, installed with npm install --no-save
+node_modules/

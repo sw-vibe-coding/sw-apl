@@ -13,12 +13,16 @@ const SOUND = "apl-2741-sound";
 const FAST = "apl-2741-fast";
 
 // The printer for the page: `ink` puts what an event prints on the
-// paper, `parts` is the overstrike table, `bar` holds the buttons.
-export function selectric(bar, ink, parts) {
+// paper, `parts` is the overstrike table, `bar` holds the buttons, and
+// `follow` is told of each event once it is on the paper.
+export function selectric(bar, ink, parts, follow = () => {}) {
   const fast = toggle(bar, "Fast", FAST, "Print at once rather than at the 2741's speed");
   const loud = toggle(bar, "Sound", SOUND, "The 2741's sounds as it prints");
   const printing = printer({
-    show: (event) => event.text && ink(event.text),
+    show: (event) => {
+      if (event.text) ink(event.text);
+      follow(event);
+    },
     sound: (event) => loud.on() && sound(event),
     fast: fast.on,
     parts,

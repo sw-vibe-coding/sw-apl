@@ -1509,13 +1509,16 @@ badge.
 
 What is reused:
 
-- **Pacing and sound from apl-horse-race**: about 15 characters a
-  second with a little jitter, a pause for the carriage return and
-  the line feed, and sound made by WebAudio, nothing recorded: a click
-  a key, a softer one for a space, a thunk for the return and a whir
-  for the feed. Off until turned on, and started by a gesture as
-  browsers require. The recorded clicks in ibm-1130-rs are not used:
-  where they came from is not written down.
+- **Pacing from apl-horse-race**: about 15 characters a second with a
+  little jitter, a pause for the carriage return and the line feed.
+- **Sound, recorded** (owner, 2026-11-18, of the tones first used:
+  "the sound is from one demo that sounds fake. tinny 8-bit sound is
+  not what I want. I had a demo that used heavier more accurate
+  typing sounds and a thud for a carriage return"): the key and space
+  bar samples of ibm-1130-rs's printer demo, and the thud
+  text-to-sfx-gen generates for the return; the feed has none of its
+  own. Off until turned on, and started by a gesture as browsers
+  require. Both are the owner's, MIT (citations.md).
 - **Green-bar paper** as both draw it: stripes a line high, each line
   printed on its stripe, in APL385.
 - **The 2741 from console-3D** (the owner's, MIT): its rigged model,

@@ -144,6 +144,38 @@
   .apl80-keys button.wide { grid-column: span 2; justify-content: center; }
   /* The line being typed sits in the screen, at its cursor. */
   body.trs80 #paper #line { display: inline; width: auto; padding: 0; background: none; }
+  /* (A) on the 2741's green-bar paper (greenbar.js): stripes three
+     lines deep, a sprocket hole every half inch down both edges, each
+     line of type on its stripe, and the line being typed printed into
+     the paper. The stripes and holes scroll with the paper. Paper is
+     paper in a dark room too. */
+  body.greenbar #paper {
+    --lh: 20px; --hole: var(--paper);
+    position: relative; scroll-behavior: smooth;
+    font: 15px/var(--lh) "APL385 Unicode", "DejaVu Sans Mono", ui-monospace, monospace;
+    color: #1f2420; padding: calc(var(--lh) * 3) 44px var(--lh);
+    background:
+      radial-gradient(circle, var(--hole) 5px, transparent 6px) left 6px top 0 / 20px calc(var(--lh) * 3) repeat-y,
+      radial-gradient(circle, var(--hole) 5px, transparent 6px) right 6px top 0 / 20px calc(var(--lh) * 3) repeat-y,
+      repeating-linear-gradient(#d9ecd6 0 calc(var(--lh) * 3), #fbfcf7 0 calc(var(--lh) * 6));
+    background-color: #fbfcf7;
+    background-attachment: local, local, local;
+  }
+  body.greenbar #paper #line { display: inline; padding: 0; }
+  body.greenbar #line.waiting { opacity: 1; }
+  /* The type element: a ball at the print position, just under the
+     line it strikes, carried along the line and back at a return. */
+  body.greenbar #paper .ball {
+    position: absolute; left: 0; top: 0; z-index: 1; pointer-events: none;
+    width: 20px; height: 20px; margin: 13px 0 0 -6px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #fff 0 8%, #d4d7dc 30%, #8a9099 75%, #5d636b);
+    box-shadow: 0 2px 4px #0006;
+    transition: transform 60ms linear;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    body.greenbar #paper { scroll-behavior: auto; }
+    body.greenbar #paper .ball { transition: none; }
+  }
   body.trs80 #line.waiting { opacity: 1; }
   body.trs80 .dot { position: relative; }
   body.trs80 .dot::before {
@@ -713,7 +745,9 @@
       done, as the terminal's did. Overstruck characters are struck
       as their two parts. <b>Fast</b> prints at once; Esc (ATTN) prints
       the rest at once too. <b>Sound</b> adds the terminal's sounds:
-      a click a key, a thunk at the return. Both are remembered.
+      each key's strike, the space bar, the thud of the return. Both
+      are remembered. The paper is green-bar, each line on its stripe,
+      and the ball under the line is the type element.
     </p>
   </div>
   <h3>With the network off</h3>

@@ -223,3 +223,21 @@ depict.
   License 1.1. Loaded by the page from jsDelivr's mirror of its GitHub
   release, not redistributed; offline, (C) falls back to APL385.
   <https://github.com/cormullion/juliamono>
+
+## The 2741's printing in (A)'s demo
+
+The owner's own projects, MIT, each © Michael A Wright:
+
+- **ibm-1130-rs**, sw-comp-history: its printer demo's two trimmed
+  samples, a key's strike (80 ms) and the space bar (120 ms), are
+  `pages/sounds/key.wav` and `pages/sounds/space.wav`, unchanged. The
+  pitch varied by character is its idea too.
+  <https://github.com/sw-comp-history/ibm-1130-rs>
+- **text-to-sfx-gen**, softwarewrighter: its generated `thud.wav`
+  (`thud_generator.py`) is `pages/sounds/return.wav`, the carriage
+  return.
+  <https://github.com/softwarewrighter/text-to-sfx-gen>
+- **apl-horse-race**, sw-comp-history: the 2741's pace, fifteen
+  characters a second with a little variation, and the green-bar
+  paper drawn by CSS.
+  <https://github.com/sw-comp-history/apl-horse-race>

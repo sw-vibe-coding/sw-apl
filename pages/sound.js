@@ -1,51 +1,72 @@
-// The 2741's sounds, made as they play by WebAudio: nothing recorded.
-// The tones are apl-horse-race's (sw-comp-history, the owner's): a
-// key's click a short square wave, pitched by the character so each
-// sounds its own; a space a softer click; the return a low thunk; the
-// feed a falling whir.
+// The 2741's sounds, from recordings rather than tones.
+//
+// A key's strike and the space bar are the trimmed samples of the
+// owner's IBM 1130 printer demo (sw-comp-history/ibm-1130-rs, MIT),
+// each strike pitched a little by its character so a line does not
+// sound like one key; the carriage return is the thud the owner's
+// text-to-sfx-gen generates (thud_generator.py, MIT), a click, a body
+// falling from 200 to 80 hertz and a knock that small speakers carry.
+// A feed comes with its return and has no sound of its own.
 //
 // A browser plays nothing until the reader has done something on the
-// page, so the context is made when Sound is turned on, which is that
-// gesture.
+// page, so the sounds are loaded when Sound is turned on, which is
+// that gesture.
+
+// The samples, at the version this module was fetched at.
+const at = new URL(import.meta.url).search;
+const FILES = { key: "key.wav", space: "space.wav", thud: "return.wav" };
 
 let context = null;
+let samples = null;
 
 // Make sound possible: called from the click that turned it on.
 export function wake() {
   context ??= new AudioContext();
   if (context.state === "suspended") context.resume();
+  samples ??= load();
 }
 
-// Play `event`, when sound is awake.
-export function sound(event) {
-  if (!context) return;
+// Each sample, decoded; one that cannot be had is silence.
+async function load() {
+  const got = {};
+  for (const [name, file] of Object.entries(FILES)) {
+    try {
+      const bytes = await fetch(new URL(`sounds/${file}${at}`, import.meta.url))
+        .then((r) => r.arrayBuffer());
+      got[name] = await context.decodeAudioData(bytes);
+    } catch {
+      got[name] = null;
+    }
+  }
+  return got;
+}
+
+// Play `event`, once sound is awake and the samples are in.
+export async function sound(event) {
+  if (!samples) return;
+  const s = await samples;
   switch (event.kind) {
     case "strike":
-      return tone("square", 1600 + (event.glyph.codePointAt(0) % 26) * 25, 0.1, 0.03);
-    case "space":
+      return play(s.key, 0.6, 0.9 + (event.glyph.codePointAt(0) % 20) * 0.01);
     case "back":
-      return tone("sine", 1200, 0.08, 0.025);
+      return play(s.key, 0.3, 0.8);
+    case "space":
+      return play(s.space, 1.2, 1);
     case "return":
-      return tone("sine", 120, 0.2, 0.04);
-    case "feed":
-      return tone("sawtooth", 300, 0.08, 0.05, 200);
+      return play(s.thud, 0.8, 1);
     default:
   }
 }
 
-// One tone: its wave, pitch, loudness and length in seconds, falling
-// away as it plays, and sliding to `to` when given.
-function tone(type, pitch, loud, seconds, to) {
-  const at = context.currentTime;
-  const osc = context.createOscillator();
+// One sample, at `loud` and `rate`.
+function play(buffer, loud, rate) {
+  if (!buffer) return;
+  const source = context.createBufferSource();
   const gain = context.createGain();
-  osc.type = type;
-  osc.frequency.value = pitch;
-  if (to) osc.frequency.linearRampToValueAtTime(to, at + seconds);
+  source.buffer = buffer;
+  source.playbackRate.value = rate;
   gain.gain.value = loud;
-  gain.gain.exponentialRampToValueAtTime(0.001, at + seconds);
-  osc.connect(gain);
+  source.connect(gain);
   gain.connect(context.destination);
-  osc.start(at);
-  osc.stop(at + seconds);
+  source.start();
 }

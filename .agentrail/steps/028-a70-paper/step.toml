@@ -1,6 +1,6 @@
 number = 28
 slug = "a70-paper"
-status = "pending"
+status = "in-progress"
 description = "Per docs/plan.md owner direction 2026-11-18: the 2D view of A's demo: green-b..."
 role = "production"
 context_files = []

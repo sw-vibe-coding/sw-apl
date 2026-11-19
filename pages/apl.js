@@ -28,6 +28,7 @@ const { pasteLines } = await import(stamped("./lines.js"));
 const { crt, room } = await import(stamped("./crt.js"));
 const { desk } = await import(stamped("./desk.js"));
 const { selectric } = await import(stamped("./selectric.js"));
+const { greenbar } = await import(stamped("./greenbar.js"));
 
 // Must agree with channel.rs, which is where these are documented.
 const SIZE = 64 * 1024;
@@ -208,9 +209,9 @@ if (MODE === "B") crt(paper, line);
 // (D) shows its session on the PC's green screen, beside its color one.
 const picture = MODE === "D" ? desk(paper, line) : null;
 // (A) prints as the 2741 did, a character at a time, overstrikes
-// struck as their two parts.
+// struck as their two parts, on green-bar paper.
 const printing = MODE === "A"
-  ? selectric(document.querySelector("nav.bar"), ink, await overstrikes())
+  ? selectric(document.querySelector("nav.bar"), ink, await overstrikes(), greenbar(paper, line))
   : null;
 // Help says only what this mode has: each part marked with the modes
 // it is for is shown in those alone.

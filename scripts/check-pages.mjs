@@ -1492,6 +1492,22 @@ serving.delete('/build-info.json');
     JSON.stringify(early.slice(-80)));
   check('and when it is done the keyboard unlocks',
     (await unlocked(10)) && (await paper(page)).includes(full), JSON.stringify((await paper(page)).slice(-80)));
+  // The paper is green-bar, the line being typed is on it, and the
+  // type element waits at the typing, six spaces in.
+  const sheet = await page.evaluate(() => {
+    const paper = document.getElementById('paper');
+    const ball = paper.querySelector('.ball');
+    return {
+      greenbar: document.body.classList.contains('greenbar'),
+      typed: paper.contains(document.getElementById('line')),
+      x: new DOMMatrix(getComputedStyle(ball).transform).m41,
+      caret: document.getElementById('caret').offsetLeft,
+    };
+  });
+  check('(A) prints on green-bar paper, the typing on it',
+    sheet.greenbar && sheet.typed, JSON.stringify(sheet));
+  check('and the type element waits where the typing goes',
+    Math.abs(sheet.x - sheet.caret) < 2, JSON.stringify(sheet));
   await page.click('nav.bar >> text=Fast');
   await page.reload({ waitUntil: 'load' });
   await unlocked(20);
