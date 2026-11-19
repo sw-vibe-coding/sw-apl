@@ -241,3 +241,10 @@ The owner's own projects, MIT, each © Michael A Wright:
   characters a second with a little variation, and the green-bar
   paper drawn by CSS.
   <https://github.com/sw-comp-history/apl-horse-race>
+- **console-3D**, softwarewrighter: the 2741 in the 3D view,
+  `pages/machines/2741.glb` with its rig, `2741-mechanism.json`, built
+  by its `just render-2741` (Blender, X_eTaL) at its pinned commits;
+  how its viewer moves the carrier, tilt and spin, and its typing
+  view. three.js, which draws it, is carried under its own license in
+  `images/redistributed/three/`.
+  <https://github.com/softwarewrighter/console-3D>

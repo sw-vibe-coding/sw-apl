@@ -20,6 +20,9 @@ export function greenbar(paper, line) {
   paper.append(ball, point, line);
   let x = 0;
   let queued = false;
+  // How far a prompt being spaced over has carried the ball past the
+  // point: the prompt is not on the paper until the typing shows it.
+  let ahead = 0;
   // Once a frame at most: printing at once shows many events a frame.
   // A timer, not requestAnimationFrame, which a hidden window never
   // runs: the ball would stop where it was and stay there.
@@ -28,19 +31,21 @@ export function greenbar(paper, line) {
     // Printing goes on at the point; typing, at the caret.
     paper.append(point, line);
     const at = line.classList.contains("waiting") ? point : line.querySelector("#caret");
-    const width = point.getBoundingClientRect().height / 2 || 9;
-    const back = (x - at.offsetLeft) / width;
+    const width = line.querySelector("#caret").offsetWidth || 9;
+    const left = at.offsetLeft + (at === point ? ahead * width : 0);
+    const back = (x - left) / width;
     ball.style.transitionDuration = back > 2 ? `${CHAR_MS + RETURN_MS * back}ms` : "";
-    x = at.offsetLeft;
+    x = left;
     ball.style.transform = `translate(${x}px, ${at.offsetTop}px)`;
   };
-  const place = () => {
+  const place = (event) => {
+    ahead = event?.prompt ? event.column + 1 : 0;
     if (queued) return;
     queued = true;
     setTimeout(move, 16);
   };
   // Typing moves the caret, and the ball follows it.
-  new MutationObserver(place).observe(line, {
+  new MutationObserver(() => place()).observe(line, {
     subtree: true, childList: true, characterData: true, attributes: true,
   });
   place();

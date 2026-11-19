@@ -1546,6 +1546,16 @@ What is new:
 - **Views as (D) has them**: 2D and 3D, and sound, each a button,
   each remembered.
 
+Owner direction during `a70-selectric` (2026-11-18): the paper "should
+be continuous fan-fold not single sheet"; the 3D view "need[s]
+different zoom levels; one for reading, one for the 3D model showing
+1/2 or all of the 2741, for demos, but the close up is the most
+important when typing", looking down over the type element, not
+through it; and the prompt's indent is spaced over and heard, as the
+2741 did, not tabbed. Done: a fan-fold strip over the top and down
+behind, Close (the default), Half and Whole, closer and farther; the
+prompt printed by the printer and shown by the typed line.
+
 Steps, after `d83-extensions` and ahead of the rest of (D)'s:
 
 1. `a70-printing` -- the paced printing and its events, with sound,

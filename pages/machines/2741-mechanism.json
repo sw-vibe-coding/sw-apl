@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "model": "2741",
+  "nodes": {
+    "carrier": "selectric_carrier",
+    "tilt": "selectric_tilt",
+    "spin": "selectric_spin"
+  },
+  "pitch_m": 0.00254,
+  "max_column": 130,
+  "left_x_m": -0.1651,
+  "rest_x_m": -0.05999999865889549,
+  "max_tilt_deg": 20,
+  "coordinate_system": "glTF Y-up; carrier +X, tilt local X, spin local Y",
+  "accuracy": "10 CPI travel; illustrative tilt range and timing, not verified Selectric character coding"
+}

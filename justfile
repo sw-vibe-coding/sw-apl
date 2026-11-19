@@ -166,6 +166,9 @@ pages:
        images/redistributed/apl-keyboard/LICENSE \
        images/redistributed/apl-keyboard/ATTRIBUTION.md \
        pages/redistributed/apl-keyboard/
+    # three.js, for (A)'s 3D view, goes in with its terms too.
+    mkdir -p pages/redistributed/three
+    cp -R images/redistributed/three/. pages/redistributed/three/
     # The font is public domain, but it is still not ours: it goes in
     # with the same two files, so the bundle says whose it is.
     mkdir -p pages/redistributed/apl385-font

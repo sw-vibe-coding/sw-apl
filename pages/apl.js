@@ -29,6 +29,7 @@ const { crt, room } = await import(stamped("./crt.js"));
 const { desk } = await import(stamped("./desk.js"));
 const { selectric } = await import(stamped("./selectric.js"));
 const { greenbar } = await import(stamped("./greenbar.js"));
+const { views } = await import(stamped("./views2741.js"));
 
 // Must agree with channel.rs, which is where these are documented.
 const SIZE = 64 * 1024;
@@ -209,9 +210,11 @@ if (MODE === "B") crt(paper, line);
 // (D) shows its session on the PC's green screen, beside its color one.
 const picture = MODE === "D" ? desk(paper, line) : null;
 // (A) prints as the 2741 did, a character at a time, overstrikes
-// struck as their two parts, on green-bar paper.
+// struck as their two parts, on green-bar paper, or in 3D on the
+// owner's model of the 2741.
+const bar = document.querySelector("nav.bar");
 const printing = MODE === "A"
-  ? selectric(document.querySelector("nav.bar"), ink, await overstrikes(), greenbar(paper, line))
+  ? selectric(bar, ink, await overstrikes(), views(bar, paper, line, greenbar(paper, line)))
   : null;
 // Help says only what this mode has: each part marked with the modes
 // it is for is shown in those alone.
@@ -674,9 +677,11 @@ function show(frame) {
   // Printed while a statement runs: it is still running, and the
   // next frame follows.
   if (frame.more) return;
-  // The keyboard unlocks once the 2741 has finished printing.
-  if (printing) printing.idle(() => ready(frame));
-  else ready(frame);
+  // The keyboard unlocks once the 2741 has finished printing, the
+  // prompt last: the indent spaced over, as the terminal did it.
+  if (!printing) return ready(frame);
+  if (frame.prompt && !frame.off) printing.prompt(frame.prompt);
+  printing.idle(() => ready(frame));
 }
 
 // The session waits for a line: prompt, and take the typing.

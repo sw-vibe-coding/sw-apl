@@ -48,6 +48,17 @@ export function printer({
       if (now || fast()) drain();
       if (!busy) next();
     },
+    // The prompt, as the 2741 printed it -- the carriage spaced over
+    // the indent, or `[1]` typed for the editor -- heard and seen but
+    // not put on the paper: the line being typed shows it. The carriage
+    // is counted from where it was, so the typed line, printed when it
+    // is entered, lands over it.
+    prompt(text) {
+      const done = strokes(text, column, parts);
+      queue.push(...done.events.map((e) => ({ ...e, text: "", prompt: true })));
+      if (fast()) drain();
+      if (!busy) next();
+    },
     // Everything queued, at once: ATTN, or Fast chosen part way.
     flush: drain,
     // Run `f` once nothing is left to print.

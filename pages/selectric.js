@@ -32,6 +32,14 @@ export function selectric(bar, ink, parts, follow = () => {}) {
   addEventListener("pointerdown", () => loud.on() && wake(), { once: true });
   addEventListener("keydown", () => loud.on() && wake(), { once: true });
   loud.button.addEventListener("click", () => loud.on() && wake());
+  // The 2741 printed as it was typed: each key sounds as it goes down.
+  const line = document.getElementById("line");
+  addEventListener("keydown", (e) => {
+    if (!loud.on() || e.metaKey || e.ctrlKey || line.classList.contains("waiting")) return;
+    const kind = { Enter: "return", " ": "space", Backspace: "back" }[e.key]
+      ?? ([...e.key].length === 1 ? "strike" : null);
+    if (kind) sound({ kind, glyph: e.key });
+  });
   return printing;
 }
 

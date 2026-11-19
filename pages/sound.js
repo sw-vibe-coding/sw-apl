@@ -41,19 +41,23 @@ async function load() {
   return got;
 }
 
+// How loud each plays. The samples were not made at one level: the
+// loudest 50 ms of a strike is 0.0044 of full scale, of the space bar
+// 0.0017, of the thud 0.31. These bring each to about 0.03, the thud a
+// little over, none past full scale at its peak.
 // Play `event`, once sound is awake and the samples are in.
 export async function sound(event) {
   if (!samples) return;
   const s = await samples;
   switch (event.kind) {
     case "strike":
-      return play(s.key, 0.6, 0.9 + (event.glyph.codePointAt(0) % 20) * 0.01);
+      return play(s.key, 8, 0.9 + (event.glyph.codePointAt(0) % 20) * 0.01);
     case "back":
-      return play(s.key, 0.3, 0.8);
+      return play(s.key, 4, 0.8);
     case "space":
-      return play(s.space, 1.2, 1);
+      return play(s.space, 15, 1);
     case "return":
-      return play(s.thud, 0.8, 1);
+      return play(s.thud, 0.13, 1);
     default:
   }
 }

@@ -95,6 +95,16 @@ const make = (options = {}) => {
   check("paced, a line takes the 2741's time", Math.round(c.total()), 3 * CHAR_MS);
 }
 
+{
+  const { c, p, shown, heard } = make();
+  p.prompt("      ");
+  while (c.pending()) c.tick();
+  check("a prompt is heard, a space at a time", heard, Array(6).fill("space"));
+  check("but puts nothing on the paper", shown.join(""), "");
+  p.write("      1+1\n", true);
+  check("and the typed line goes on from where the carriage began", p.column(), 0);
+}
+
 if (failed) {
   console.error(`check-printer: ${failed} failed`);
   process.exit(1);

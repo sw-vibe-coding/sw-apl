@@ -7,6 +7,9 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <title>sw-apl</title>
+<!-- (A)'s 3D view loads three.js (images/redistributed/three/), whose
+     loader imports it by name. Only that view loads it. -->
+<script type="importmap">{"imports": {"three": "./redistributed/three/three.module.js"}}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="A clean-room APL interpreter, compiled to WebAssembly and running in this tab.">
 <!-- start_url and scope are relative, so this works at a root and
@@ -172,6 +175,17 @@
     box-shadow: 0 2px 4px #0006;
     transition: transform 60ms linear;
   }
+  /* (A) in 3D (views2741.js): the model printing, in the paper's place.
+     The paper is still there, out of sight, holding the session. */
+  #model { flex: 1; min-height: 0; position: relative; }
+  #model canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+  #model .zoom { position: absolute; right: .5rem; top: .5rem; display: flex; gap: .3rem; }
+  #model .zoom button {
+    font: inherit; font-size: 15px; min-width: 2.2rem; padding: .3rem .6rem; cursor: pointer;
+    color: #fff; background: #0008; border: 1px solid #fff6; border-radius: .3rem;
+  }
+  #model .zoom button[aria-pressed="true"] { background: #000; border-color: #fff; }
+  body.model3d #paper { position: absolute; left: -10000px; width: 80ch; height: 50vh; }
   @media (prefers-reduced-motion: reduce) {
     body.greenbar #paper { scroll-behavior: auto; }
     body.greenbar #paper .ball { transition: none; }
@@ -748,6 +762,13 @@
       each key's strike, the space bar, the thud of the return. Both
       are remembered. The paper is green-bar, each line on its stripe,
       and the ball under the line is the type element.
+    </p>
+    <p>
+      <b>3D</b> shows the 2741 itself printing on fan-fold paper: the
+      type element moving along the line, the paper rising at each
+      line. <b>Close</b> is for reading while you type, <b>Half</b>
+      and <b>Whole</b> show more of the machine, and + and − zoom;
+      drag to turn it. <b>2D</b> goes back to the paper.
     </p>
   </div>
   <h3>With the network off</h3>

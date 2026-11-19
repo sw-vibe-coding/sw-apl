@@ -1508,6 +1508,24 @@ serving.delete('/build-info.json');
     sheet.greenbar && sheet.typed, JSON.stringify(sheet));
   check('and the type element waits where the typing goes',
     Math.abs(sheet.x - sheet.caret) < 2, JSON.stringify(sheet));
+  // 3D: the owner's model of the 2741, drawn by three.js, loaded when
+  // chosen, with Close, Half and Whole over it; then 2D again.
+  await page.click('nav.bar >> text=3D');
+  await page.waitForFunction(() => document.querySelector('#model canvas')
+    || /could not/.test(document.getElementById('model').textContent), null, { timeout: 30000 })
+    .catch(() => {});
+  const model = await page.evaluate(() => ({
+    canvas: !!document.querySelector('#model canvas'),
+    said: document.getElementById('model').textContent.slice(0, 120),
+    views: [...document.querySelectorAll('#model .zoom button')].map((b) => b.textContent),
+    paper: getComputedStyle(document.getElementById('paper')).left,
+  }));
+  check('(A) in 3D draws the 2741, with Close, Half and Whole',
+    model.canvas && ['Close', 'Half', 'Whole'].every((v) => model.views.includes(v)), JSON.stringify(model));
+  await page.click('nav.bar >> text=2D');
+  check('and 2D brings the paper back',
+    await page.evaluate(() => document.getElementById('model').hidden
+      && !document.body.classList.contains('model3d')), 'still in 3D');
   await page.click('nav.bar >> text=Fast');
   await page.reload({ waitUntil: 'load' });
   await unlocked(20);
