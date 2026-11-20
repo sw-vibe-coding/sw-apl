@@ -12,8 +12,15 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-11-20
+
+- pages: publish dd232e8 (board to the top in every mode; Enter no longer presses a clicked button)
+- saga: complete check-pages-repair
+- fix(pages): check-pages passes whole again; the board goes to the top in every mode (check-pages-repair)
+
 ## 2026-11-18
 
+- docs(changes): refresh CHANGES.md to HEAD
 - pages: publish e9e94df (A: opens in 3D close up, start card with sound)
 - fix(demo): (A) opens in 3D close up, with a card that starts the sound
 - docs(changes): refresh CHANGES.md to HEAD
