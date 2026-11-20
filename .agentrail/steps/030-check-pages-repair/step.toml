@@ -1,8 +1,9 @@
 number = 30
 slug = "check-pages-repair"
-status = "in-progress"
+status = "completed"
 description = "check-pages.mjs, first run in a while (2026-11-18), fails two checks unrelate..."
 role = "production"
 context_files = []
 created_at = "2026-11-18T19:17:46"
-commits = []
+completed_at = "2026-11-20T10:52:32"
+commits = ["da60297ff390f488bd41bbc8ed30c6ec8c9396ad"]

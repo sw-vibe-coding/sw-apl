@@ -1,0 +1,1 @@
+check-pages all 186 pass: fixed the board top placement bug in B and D (insert after header), the stale B CRT keymap check, the header check under B's zoom, the timeline checks for D live and cor24 linked, A execute check window, start card handling; plus owner-reported Enter switching 3D to 2D (buttons no longer keep focus from mouse clicks).
