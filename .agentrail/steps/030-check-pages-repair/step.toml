@@ -1,6 +1,6 @@
-number = 33
+number = 30
 slug = "check-pages-repair"
-status = "pending"
+status = "in-progress"
 description = "check-pages.mjs, first run in a while (2026-11-18), fails two checks unrelate..."
 role = "production"
 context_files = []

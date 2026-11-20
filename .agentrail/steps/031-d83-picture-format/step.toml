@@ -1,4 +1,4 @@
-number = 30
+number = 31
 slug = "d83-picture-format"
 status = "pending"
 description = "Per docs/ibm-pc-apl-plan.md, split from d83-extensions: picture format in D, ..."

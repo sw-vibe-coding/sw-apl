@@ -213,6 +213,13 @@ const picture = MODE === "D" ? desk(paper, line) : null;
 // struck as their two parts, on green-bar paper, or in 3D on the
 // owner's model of the 2741.
 const bar = document.querySelector("nav.bar");
+// A button clicked with the mouse does not keep the keyboard: typing
+// is the session's, and an Enter typed while the 2741 is still
+// printing would otherwise press the button last clicked -- 3D, Close
+// -- instead of reaching the line. Tab still reaches them.
+document.getElementById("session").addEventListener("mousedown", (e) => {
+  if (e.target.closest("nav.bar button, #model button")) e.preventDefault();
+});
 const printing = MODE === "A"
   ? selectric(bar, ink, await overstrikes(), views(bar, paper, line, greenbar(paper, line)))
   : null;

@@ -140,7 +140,9 @@ const check = (name, ok, saw) => {
 async function settle(page, seconds = 20) {
   // (A) opens on a card that starts the 2741; these checks start it
   // silently.
-  await page.click('#start button:last-of-type', { timeout: 3000 }).catch(() => {});
+  if (await page.evaluate(() => !!document.getElementById('start')).catch(() => false)) {
+    await page.click('#start button:last-of-type').catch(() => {});
+  }
   for (let i = 0; i < seconds * 4; i++) {
     // A page that is not sw-apl at all -- the browser's own error
     // page, or one torn down by a navigation -- is not settled yet.
@@ -860,7 +862,9 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   const first = await seen();
   check('(B) opens with the session in the CRT', first.inside, 'paper not in the glass');
   check('(B) opens zoomed to the CRT', first.fill > 0.75, `fills ${first.fill}`);
-  await page.keyboard.type('2+3');
+  // The 2741's keys, which the page's keyboard is: - types + and +
+  // types ÷ (keymap.json), so 2-3 on the keys is 2+3 on the paper.
+  await page.keyboard.type('2-3');
   await page.keyboard.press('Enter');
   await page.waitForFunction(() => /\n5\n/.test(document.getElementById('paper').textContent));
   await page.click('#crt .zoom');
@@ -1001,6 +1005,11 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
 //     mouse, touch and screen reader alike (owner, 2026-11-11).
 {
   const page = await visit();
+  // (B) opens zoomed onto the 5100, where the header gives way to the
+  // CRT (b75-crt-default); Whole machine brings it back.
+  if (await page.evaluate(() => document.body.classList.contains('crt-zoomed'))) {
+    await page.click('#crt .zoom');
+  }
   const header = () => page.evaluate(() => ({
     name: document.querySelector('header .name')?.textContent,
     home: document.querySelector('header .name')?.getAttribute('href'),
@@ -1099,7 +1108,9 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   check('in a clear workspace', /VALUE ERROR/.test(await paper(page)),
     JSON.stringify((await paper(page)).slice(-60)));
   await send(page, "\u234e'2+3'");
-  check('(A) has no execute', /ERROR/.test((await paper(page)).slice(-60)),
+  // The error names the glyph, so its first line can be long, and the
+  // caret lines and the prompt follow it.
+  check('(A) has no execute', /CHARACTER ERROR/.test((await paper(page)).slice(-160)),
     JSON.stringify((await paper(page)).slice(-60)));
   await send(page, ')ORIGIN 0');
   check('(A) has )ORIGIN', (await paper(page)).trim().endsWith('WAS 1'),
@@ -1391,10 +1402,11 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   check('the root is the timeline, every callout drawn and every picture loaded',
     seen.callouts > 30 && seen.broken === 0, JSON.stringify(seen));
   check("it opens with the A'70 demo whole in view", seen.a70, JSON.stringify(seen));
-  check('its three live demos link to the demo, the fourth to the coming-soon page',
-    seen.links.join() === 'demo.html?mode=A,demo.html?mode=B,demo.html?mode=C,coming-soon.html',
+  check('its four live demos link to the demo, a mode each',
+    seen.links.join() === 'demo.html?mode=A,demo.html?mode=B,demo.html?mode=C,demo.html?mode=D',
     JSON.stringify(seen.links));
-  check('four pictures say Future demo', seen.future === 4, JSON.stringify(seen));
+  // APL\1130, Maryland APL and APL2; sw-cor24-apl's demo is live.
+  check('three pictures say Future demo', seen.future === 3, JSON.stringify(seen));
   check('the legend has the owner\'s years', seen.legend, JSON.stringify(seen));
   // Text size comes first (owner, 2026-11-10): the strip is drawn smaller
   // to fit no further than 90 per cent, and the page scrolls past that;
@@ -1536,6 +1548,8 @@ serving.delete('/build-info.json');
       && !document.body.classList.contains('model3d')), 'still in 3D');
   await page.click('nav.bar >> text=Fast');
   await page.reload({ waitUntil: 'load' });
+  await page.waitForSelector('#start', { timeout: 20000 }).catch(() => {});
+  await page.click('#start >> text=Start with sound').catch(() => {});
   await unlocked(20);
   check('Fast is remembered', (await pressed('Fast')) === 'true', await pressed('Fast'));
   await send(page, "60⍴'KLMNOPQRST'");

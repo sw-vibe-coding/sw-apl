@@ -448,11 +448,14 @@ function controls(tap) {
 }
 
 // Put the board where it was left. Inside the session, which owns the
-// window; top means above the paper.
+// window; top means just under the header, above whatever the mode
+// shows the session in -- the paper, (B)'s 5100, (D)'s desk, (A)'s
+// 2741 -- which is why it is not "before the paper": the paper may be
+// inside one of those.
 export function place(root, edge) {
   const session = document.getElementById("session");
   const before = edge === "top"
-    ? document.getElementById("paper")
+    ? session.querySelector("header").nextSibling
     : session.querySelector(".bar");
   session.insertBefore(root, before);
   root.dataset.edge = edge;
