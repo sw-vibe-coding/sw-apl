@@ -12,8 +12,15 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-11-22
+
+- pages: publish 9bcaa7c (D: picture format and QUAD FC)
+- saga: complete d83-picture-format
+- feat(d83): picture format and QUAD FC (d83-picture-format)
+
 ## 2026-11-20
 
+- docs(changes): refresh CHANGES.md to HEAD
 - pages: publish dd232e8 (board to the top in every mode; Enter no longer presses a clicked button)
 - saga: complete check-pages-repair
 - fix(pages): check-pages passes whole again; the board goes to the top in every mode (check-pages-repair)
