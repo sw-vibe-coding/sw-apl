@@ -1,8 +1,9 @@
 number = 31
 slug = "d83-picture-format"
-status = "in-progress"
+status = "completed"
 description = "Per docs/ibm-pc-apl-plan.md, split from d83-extensions: picture format in D, ..."
 role = "production"
 context_files = []
 created_at = "2026-11-18T11:16:41"
-commits = []
+completed_at = "2026-11-22T16:17:04"
+commits = ["c46aaad0c1b24f9235d66251f6bc7da5d7cb2db9"]

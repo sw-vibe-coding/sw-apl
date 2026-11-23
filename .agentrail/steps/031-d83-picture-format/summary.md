@@ -1,0 +1,1 @@
+Picture format in D: apl-d83-field (fields, digits, decorations), apl-d83-picture (render, scaled, array), apl-d83-format (QUAD FC, saved with the workspace); dispatch via apl-d83-dyadic; Feature::PictureFormat. Manual examples as unit tests, session tests, sample 99-picture-83, docs and parity.
