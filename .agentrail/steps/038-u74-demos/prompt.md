@@ -1,0 +1,1 @@
+Per docs/plan.md (U): the U '74 tab live, the timeline UMD APL entry linked to it, check-pages covering the deck viewer, submit and printout, parity rows done.

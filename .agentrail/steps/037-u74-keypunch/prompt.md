@@ -1,0 +1,1 @@
+Per docs/plan.md (U) phase 2: punch cards on a virtual 029 keyboard beside a reference of the UMD symbols supported; submit the deck; an original A few moments later title card, then the printout with any errors; printout and deck side by side to repunch, replace, insert or remove cards and resubmit.

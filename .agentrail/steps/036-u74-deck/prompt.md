@@ -1,0 +1,1 @@
+Per docs/plan.md (U) phase 1: the U demo page. Pick a pre-punched demo deck, view the cards one at a time with the console-3D IBM 029 model and the card rendering from sw-comp-history/ibm-1130-rs keypunch, submit the deck as a batch job, and scroll the returned 2D green-bar printout.

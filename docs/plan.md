@@ -1566,6 +1566,57 @@ Steps, after `d83-extensions` and ahead of the rest of (D)'s:
    brought into pages/, its type element and paper moving with the
    printing.
 
+## Owner direction (2026-11-22): (U) '74, UMD APL on punched cards
+
+The owner: a simulation of running University of Maryland APL on a
+UNIVAC 1110 from punched cards. "We are not building a UNIVAC
+emulator, we are demonstrating UofM APL syntax, e.g., $RHO, on punch
+cards by letting a user type on a keypunch virtual keyboard to
+produce cards in a deck to be submitted as a batch APL job with a
+greenbar printout returned." Mode letter and tab: **U '74**, UMD APL
+(1974), the academic distribution later repackaged as Sperry APL
+1100. The letter E is reserved for a 3279G mode and is not to be
+used for anything else.
+
+What is reused, all the owner's:
+
+- the keypunch simulator in sw-comp-history/ibm-1130-rs (the owner
+  called it s1130-rs): `components/src/components/keypunch.rs`,
+  `crates/punch-card-core` (cards, Hollerith codes);
+- console-3D's IBM 029 model (`Ibm029.xtl`, `make-ibm029.xtl`),
+  combined with the keypunch as the 2741 model was combined with the
+  printer for (A), but not interactive the same way: a batch job, not
+  a session;
+- (A)'s green-bar paper, in 2D, for the printout.
+
+Phase 1: pick a pre-punched demo deck, view the cards one at a time,
+submit the deck as a batch APL job, and get back a green-bar printout
+to scroll through. Phase 2: punch your own cards on the virtual 029
+keyboard while reading a reference of the UMD symbols supported;
+submit the deck; the printout returns after an "A few moments
+later..." title card (our own, in that spirit, not the show's
+artwork); typos give errors in the printout, and the printout and
+the deck sit side by side so replacement cards can be punched and
+the deck resubmitted.
+
+Steps, after `d83-ap210`:
+
+1. `u74-sources` -- `docs/mode-u.md`: the UMD APL 1100 sources, the
+   `$` spellings of the glyphs (`$RHO` and the rest), the card layout
+   (columns, continuation), the job cards around the APL, the
+   printout and its error reports. Sources listed in
+   docs/citations.md; nothing third-party committed.
+2. `u74-mode` -- mode U in apl-modes and the CLI: a deck of 80-column
+   card images in, a line-printer listing out (each card echoed with
+   its number, the results, errors pointing at card and column).
+   TDD; reg-rs samples that are decks.
+3. `u74-deck` -- the demo, phase 1: demo decks, the card viewer with
+   the 029 model, Submit, the green-bar printout.
+4. `u74-keypunch` -- phase 2: the virtual 029 keyboard, the symbol
+   reference, the title card, the side-by-side printout and deck to
+   repunch, replace, insert or remove cards and resubmit.
+5. `u74-demos` -- the U tab, the timeline's link to it, check-pages.
+
 ## Owner direction (2026-09-29): the documents, checked against the code
 
 "Is the README up-to-date? Scan documents for stale info or

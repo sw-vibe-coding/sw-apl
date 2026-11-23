@@ -1,0 +1,1 @@
+Per docs/plan.md and docs/mode-u.md: mode U ('74) in apl-modes and the CLI as a batch job: a deck of 80-column card images in, a line-printer listing out (each card echoed with its number, the results, errors pointing at card and column). TDD; reg-rs samples that are decks; nothing earlier modes do moves.

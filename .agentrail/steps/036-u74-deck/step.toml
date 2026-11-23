@@ -1,0 +1,8 @@
+number = 36
+slug = "u74-deck"
+status = "pending"
+description = "Per docs/plan.md (U) phase 1: the U demo page. Pick a pre-punched demo deck, ..."
+role = "production"
+context_files = []
+created_at = "2026-11-22T23:36:59"
+commits = []

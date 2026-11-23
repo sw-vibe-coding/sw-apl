@@ -1,0 +1,8 @@
+number = 35
+slug = "u74-mode"
+status = "pending"
+description = "Per docs/plan.md and docs/mode-u.md: mode U ('74) in apl-modes and the CLI as..."
+role = "production"
+context_files = []
+created_at = "2026-11-22T23:36:59"
+commits = []
