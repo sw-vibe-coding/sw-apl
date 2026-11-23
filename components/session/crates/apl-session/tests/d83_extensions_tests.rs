@@ -140,3 +140,65 @@ fn b_has_no_reset() {
     assert_eq!(out(&mut b, ")RESET"), ["INCORRECT COMMAND"]);
     assert_eq!(out(&mut b, ")SI CLEAR"), ["INCORRECT COMMAND"]);
 }
+
+#[test]
+fn a_character_pattern_formats_by_picture_in_d() {
+    let mut d = in_mode(Mode::D);
+    assert_eq!(
+        out(&mut d, "' 5 5.5 5.55' ⍕ 1.12 2.12 3.12"),
+        [" 1 2.1 3.12"]
+    );
+    assert_eq!(out(&mut d, "'05/05/05' ⍕ 70481"), ["07/04/81"]);
+    assert_eq!(
+        out(&mut d, "'(551.50)' ⍕ ¯1 0 10 ¯100"),
+        ["  (1.00)    .00   10.00 (100.00)"]
+    );
+    assert_eq!(out(&mut d, "⍴' 555.55' ⍕ 2 3⍴⍳6"), ["2 21"]);
+    assert_eq!(
+        out(&mut d, "5 2⍕3.14159"),
+        [" 3.14"],
+        "the numeric form is (B)'s"
+    );
+}
+
+#[test]
+fn quad_fc_is_the_format_control() {
+    let mut d = in_mode(Mode::D);
+    assert_eq!(out(&mut d, "⎕FC"), [".,*0_"]);
+    assert_eq!(out(&mut d, "' 555.59' ⍕ 1 1000")[0], "DOMAIN ERROR");
+    out(&mut d, "⎕FC←',.*?_'");
+    assert_eq!(out(&mut d, "⎕FC"), [",.*?_"]);
+    assert_eq!(out(&mut d, "'555,555.55' ⍕ 1234.5"), ["  1.234,5 "]);
+    assert_eq!(out(&mut d, "' 555.59' ⍕ 1 1000"), ["   1,00 ??????"]);
+    assert_eq!(out(&mut d, "⎕FC←1 2 3")[0], "DOMAIN ERROR");
+    out(&mut d, ")CLEAR");
+    assert_eq!(
+        out(&mut d, "⎕FC"),
+        [".,*0_"],
+        "a clear workspace has the clear one"
+    );
+}
+
+#[test]
+fn b_has_no_picture_format() {
+    let mut b = in_mode(Mode::B);
+    assert!(out(&mut b, "'555' ⍕ 12")[0].ends_with("ERROR"));
+    assert!(out(&mut b, "⎕FC")[0].ends_with("ERROR"));
+}
+
+#[test]
+fn quad_fc_takes_an_indexed_assignment_and_is_saved() {
+    let dir = std::env::temp_dir().join(format!("sw-apl-d83-fc-{}", std::process::id()));
+    std::fs::create_dir_all(dir.join("work")).expect("a library");
+    let mut d = in_mode(Mode::D);
+    d.ws.store = Box::new(apl_session::Files(dir.clone()));
+    out(&mut d, "⎕FC[4]←'?'");
+    assert_eq!(out(&mut d, "⎕FC"), [".,*?_"]);
+    assert_eq!(out(&mut d, "'5555' ⍕ 123456"), ["????"]);
+    out(&mut d, ")SAVE PICTURE");
+    out(&mut d, ")CLEAR");
+    assert_eq!(out(&mut d, "⎕FC"), [".,*0_"]);
+    out(&mut d, ")LOAD PICTURE");
+    assert_eq!(out(&mut d, "⎕FC"), [".,*?_"], "saved with the workspace");
+    let _ = std::fs::remove_dir_all(dir);
+}

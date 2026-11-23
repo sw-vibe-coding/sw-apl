@@ -376,6 +376,7 @@ are what (D) has of its own.
 | `⎕EA`, execute alternate: the right line, or on its error or interrupt the left; the functions it stopped taken off the state indicator | done | d83 extensions session tests, sample 99-extensions-83 |
 | The dyadic grades, `L⍋R` and `L⍒R`: characters sorted by a collating sequence, its last axis counting most | done | apl-d83-collate tests, d83 extensions session tests, sample 99-extensions-83 |
 | `)RESET` and `)SI CLEAR` clear the state indicator | done | d83 extensions session tests, sample 99-extensions-83 |
+| Picture format, `L⍕R` with a character pattern: its fields, one repeated or one for each number, the control digits 0 to 9, fixed and floating decorations, the decimal point and commas, scaled fields, the overflow fill; `⎕FC`, assigned whole or indexed, saved with the workspace | done | apl-d83-picture tests (the manual's examples), d83 extensions session tests, sample 99-picture-83 |
 | Library 1's GRAPHICS: the wireframe cube in three colors, turning, a sine wave with axes, Pascal's triangle mod 2, Sierpinski's carpet, the Mandelbrot set, a Lissajous figure, and `DEMO`, which animates them all | done | ap205 session tests, sample 99-graphics-83 |
 | The demo, `?mode=D`, on the owner's render of a PC with both displays: the session on the green monochrome glass, a 320 by 200 color frame (dark) on the other, each mapped onto its glass in perspective; Mono, Color, Desk and Alt-F1, F4, F8 choose the view; Help for (D); the timeline's D'83 callout links to it | done | check-pages 9e''', checked by hand in Chrome |
-| PC APL's other extensions: picture format, and transfer form (`)IN`, `)OUT`, `⎕TF`) | open | |
+| PC APL's transfer form (`)IN`, `)OUT`, `⎕TF`) | open | |

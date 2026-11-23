@@ -1,0 +1,11 @@
+[package]
+name = "apl-d83-field"
+description = "sw-apl (D) '83's picture format fields: where a pattern's fields are, their digits and their decorations"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true

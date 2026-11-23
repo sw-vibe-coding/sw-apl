@@ -32,7 +32,7 @@ pub fn assign(ws: &mut Workspace, name: &str, v: &Array) -> AplResult<()> {
         }
         "⎕AI" | "⎕TS" => return Err(domain()),
         "⎕LC" | "⎕WA" | "⎕AV" | "⎕TT" | "⎕UL" | "⎕DL" => return Ok(()),
-        _ => return Err(AplError::new(ErrorKind::Syntax)),
+        _ => return apl_d83_format::assign(ws, name, v),
     };
     let n = whole(v).ok_or_else(domain)?;
     setting(&mut ws.saved, which, &n.to_string())

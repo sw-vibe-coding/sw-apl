@@ -1,6 +1,6 @@
 number = 31
 slug = "d83-picture-format"
-status = "pending"
+status = "in-progress"
 description = "Per docs/ibm-pc-apl-plan.md, split from d83-extensions: picture format in D, ..."
 role = "production"
 context_files = []

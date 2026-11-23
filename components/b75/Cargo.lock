@@ -101,6 +101,28 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-d83-field"
+version = "0.1.0"
+
+[[package]]
+name = "apl-d83-format"
+version = "0.1.0"
+dependencies = [
+ "apl-d83-picture",
+ "apl-modes",
+ "apl-value",
+ "apl-workspace",
+]
+
+[[package]]
+name = "apl-d83-picture"
+version = "0.1.0"
+dependencies = [
+ "apl-d83-field",
+ "apl-value",
+]
+
+[[package]]
 name = "apl-d83-screen"
 version = "0.1.0"
 dependencies = [
@@ -386,6 +408,7 @@ version = "0.1.0"
 dependencies = [
  "apl-ast",
  "apl-clock",
+ "apl-d83-format",
  "apl-modes",
  "apl-settings",
  "apl-value",

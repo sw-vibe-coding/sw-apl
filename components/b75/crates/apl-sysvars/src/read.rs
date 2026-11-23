@@ -3,7 +3,7 @@
 use apl_ast::Expr;
 use apl_clock::{TimeSource, stamp};
 use apl_modes::Feature;
-use apl_value::{AplError, AplResult, Array, Data, ErrorKind, Number};
+use apl_value::{AplResult, Array, Data, Number};
 use apl_workspace::{Workspace, free, measure, used_by};
 
 use crate::assign::assign;
@@ -64,7 +64,7 @@ pub fn read(ws: &Workspace, name: &str) -> AplResult<Array> {
             TimeSource::Hardware => stamp(&(ws.clock)()),
             TimeSource::None => STAMP,
         }),
-        _ => return Err(AplError::new(ErrorKind::Syntax)),
+        _ => return apl_d83_format::read(ws, name),
     })
 }
 

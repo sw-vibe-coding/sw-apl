@@ -1,0 +1,15 @@
+[package]
+name = "apl-d83-picture"
+description = "sw-apl (D) '83's picture format: numbers laid out by a pattern, under QUAD FC"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-d83-field = { path = "../apl-d83-field" }
+apl-value = { path = "../../../value/crates/apl-value" }
+
+[lints]
+workspace = true

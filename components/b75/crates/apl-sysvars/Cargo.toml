@@ -11,6 +11,7 @@ repository.workspace = true
 apl-ast = { path = "../../../parse/crates/apl-ast" }
 apl-clock = { path = "../../../eval/crates/apl-clock" }
 apl-modes = { path = "../../../eval/crates/apl-modes" }
+apl-d83-format = { path = "../../../d83/crates/apl-d83-format" }
 apl-settings = { path = "../../../session/crates/apl-settings" }
 apl-value = { path = "../../../value/crates/apl-value" }
 apl-workspace = { path = "../../../eval/crates/apl-workspace" }

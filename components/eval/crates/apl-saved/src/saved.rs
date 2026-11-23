@@ -46,6 +46,9 @@ pub struct Saved {
     /// loaded. Only (B) can set it, so a workspace that has one runs
     /// only there. `None` when it is empty.
     pub latent: Option<Array>,
+    /// The format control, `⎕FC`, once it has been assigned: only (D)
+    /// has it. `None` is the clear one.
+    pub format: Option<Array>,
 }
 
 impl Saved {

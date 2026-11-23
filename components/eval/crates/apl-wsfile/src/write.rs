@@ -42,6 +42,7 @@ pub fn write(saved: &Saved, when: &str) -> String {
     let saved = &saved.unwound();
     let mut lines = heading(saved, when, runs_in(saved));
     lines.extend(saved.latent.iter().map(|lx| format!("⎕LX←{}", literal(lx))));
+    lines.extend(saved.format.iter().map(|fc| format!("⎕FC←{}", literal(fc))));
     // Each function in del form, closed the way it was closed: del-tilde
     // when it is locked, which is the only way a file can carry a locked
     // function at all. Locking guards the editor, not the file.

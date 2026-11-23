@@ -54,6 +54,9 @@ pub enum Feature {
     CollatingGrade,
     /// `)RESET` and `)SI CLEAR`, which clear the state indicator.
     Reset,
+    /// Picture format, `⍕` with a character pattern on its left, and
+    /// `⎕FC`, its format control.
+    PictureFormat,
 }
 
 /// Something of the core a mode leaves out. APL80's manual lists its
@@ -168,6 +171,7 @@ pub const D83: Profile = Profile {
         Feature::ExecuteAlternate,
         Feature::CollatingGrade,
         Feature::Reset,
+        Feature::PictureFormat,
     ],
     ..CORE
 };

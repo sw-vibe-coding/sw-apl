@@ -508,6 +508,45 @@ Deal
 DEED
 ```
 
+**Picture format.** `L⍕R` with a character vector `L` lays the
+numbers `R` out by the pattern `L`. A numerical field of the pattern
+is a run of characters between blanks that holds a digit. With one
+field, the pattern is repeated, a copy for each number of a row of
+`R`; with several, there is one for each number of a row. A matrix is
+formatted row by row. The digits are places for digits, and each also
+says how its field is shown:
+
+| Digit | In its field |
+|---|---|
+| `5` | A digit; leading and trailing zeros are blank |
+| `0` | Zeros out from the decimal point to here |
+| `9` | Zeros out from the decimal point to here, unless the number is 0 |
+| `1` | The decorations against the number float to it when it is negative, and are blank otherwise |
+| `2` | They float to it when it is not negative |
+| `3` | They float to it always |
+| `4` | The decoration on its side stays where it is |
+| `6` | The field ends at the next character that is not a digit, point or comma |
+| `7` | Scaled: the decoration after the digits is the exponent's `E` |
+| `8` | Blank places in the field are filled with `⎕FC[3]` |
+
+A field shows a number's magnitude: its sign is what the decorations
+say. A point between two digits is the decimal point, shown when a
+fraction is; a comma between digits is shown when digits are on both
+sides of it. Other characters stay where they are.
+
+```apl
+      '(551.50)' ⍕ ¯1 0 10 ¯100
+  (1.00)    .00   10.00 (100.00)
+      '05/05/05' ⍕ 70481
+07/04/81
+```
+
+`⎕FC`, the format control, names the characters picture format uses:
+the decimal point, the comma, the fill of an `8`, the fill of a field
+too small for its number, and a character printed as a blank. A clear
+workspace has `.,*0_`; while `⎕FC[4]` is `0`, a field too small is a
+DOMAIN ERROR. It is saved with the workspace.
+
 **`)RESET`** and **`)SI CLEAR`** clear the state indicator at once:
 every suspended function, and every one waiting on it. Neither shows
 anything.
