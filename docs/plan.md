@@ -1617,6 +1617,61 @@ Steps, after `d83-ap210`:
    repunch, replace, insert or remove cards and resubmit.
 5. `u74-demos` -- the U tab, the timeline's link to it, check-pages.
 
+### What the owner's research gives (2026-11-23)
+
+The owner's notes (a chat with Gemini, `docs/research3.txt`, kept out
+of git: it carries the chat app's sidebar) give the history and a
+reconstructed specification. The history: UMD APL was written in
+1973-74 at the University of Maryland Computer Science Center under
+Patrick E. Hagerty, for UNIVAC 1100 machines under EXEC 8, and went
+out to other universities from 1974; Sperry Univac later sold it as
+APL 1100 (product 6172-00). The owner ran it from cards on SUNY
+Albany's UNIVAC 1110 in 1976-77 and remembers a University of
+Maryland banner, so the demo is the academic distribution: U '74,
+"University of Maryland APL (1974)", our label, not one used then.
+
+The specification is an LLM's reconstruction, not a manual -- the
+notes say the manuals are not online -- and parts of it are wrong on
+their face, so `u74-sources` treats it as a starting point to check,
+records every choice in `docs/mode-u.md`, and says which are ours:
+
+- **The card.** 80 columns: 1-72 the statement, 73-80 a sequence
+  number, which the listing shows and the interpreter ignores.
+- **The run stream.** `@` control cards in column 1 around the APL:
+  `@RUN` (user, account, project, time, pages), `@APL,I`, the APL
+  cards, `)OFF`, `@FIN`. The printout opens with the processor's
+  banner naming University of Maryland APL, then CLEAR WS.
+- **The `$` mnemonics.** A glyph the 029 cannot punch is `$` and two
+  letters: `$RH` rho, `$IO` iota, `$AL` assignment, `$RA` branch,
+  `$DL` del, `$TA` take, `$DR` drop, `$RV` reverse and rotate, `$TR`
+  transpose, `$EP` epsilon, `$FM` format, `$DM` domino, `$CE`
+  ceiling, `$FL` floor, `$AB` stile, `$LO` log, `$CI` circle, `$RO`
+  roll, `$LE` `$GE` `$NE`, `$AN` `$OR` `$NT`, `$NG` high minus, `$QD`
+  quad, `$QQ` quote quad, `$CM` lamp, `$SO` jot, `$IB` I-beam. The
+  owner remembers two-letter names; the earlier note's `$RHO` is the
+  same rho. To settle in `u74-sources`: the notes give `$DE` to both
+  del and execute, put NAND on `⊼` (not an APL glyph) and NOR on `⍲`
+  (which is NAND), and offer execute and domino, which a 1974 APL may
+  or may not have had (domino was 1970-72 at IBM; execute arrived with
+  APLSV in 1973).
+- **What an 029 punches.** Letters, digits, blank and the 029's
+  specials: `& - / . < ( + | ! $ * ) ; ¬ , % _ > ? : # @ ' = "` and
+  the cent sign. No `[ ]`, no `\`, no `^`. So indexing, scan and
+  anything else that needs a character the 029 lacks must have its
+  own `$` mnemonic or is out; `u74-sources` decides each, and
+  `u74-keypunch`'s keyboard has only the 029's keys, the card code of
+  each from ibm-1130-rs's `punch-card-core`.
+- **The system commands.** `)CLEAR`, `)VARS`, `)FNS`, `)WSID`,
+  `)SAVE`, `)LOAD`, `)ERASE`, `)OFF`, as APL\360's.
+- **The printout.** Each card listed with its sequence number, the
+  results in APL glyphs as the 1110's printer could not show them --
+  the demo shows both, the card as punched and the line in glyphs --
+  and errors in APL\360's words with the card and column.
+- **The first demo deck,** from the notes: a 2 by 2 system solved
+  with domino, `A $AL 2 2 $RH 2 1 1 3`, `B $AL 5 10`, `X $AL B $DM A`,
+  `$QD $AL X`, printing `1 3`.
+
+
 ## Owner direction (2026-09-29): the documents, checked against the code
 
 "Is the README up-to-date? Scan documents for stale info or
