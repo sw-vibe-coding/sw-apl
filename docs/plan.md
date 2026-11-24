@@ -1599,7 +1599,7 @@ artwork); typos give errors in the printout, and the printout and
 the deck sit side by side so replacement cards can be punched and
 the deck resubmitted.
 
-Steps, after `d83-ap210`:
+Steps, after `d83-transfer-form`; `d83-ap210` follows them (owner, 2026-11-23: the punched-card demo first):
 
 1. `u74-sources` -- `docs/mode-u.md`: the UMD APL 1100 sources, the
    `$` spellings of the glyphs (`$RHO` and the rest), the card layout
