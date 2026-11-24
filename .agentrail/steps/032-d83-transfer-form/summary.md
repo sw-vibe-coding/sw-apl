@@ -1,0 +1,1 @@
+QUAD TF both ways in D per manual page 8-11, )OUT and )IN with .AIO transfer files kept beside workspaces in the libraries, )LIB .AIO and )DROP name.AIO, NOT FOUND and NOT WITH UNCLEAR SI. New crates apl-d83-transfer, apl-d83-aio, apl-keys; moment moved to apl-clock; shelves never list a transfer file as a workspace. Sample 99-transfer-83, session and unit tests, parity row done.
