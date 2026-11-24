@@ -12,8 +12,21 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-11-24
+
+- pages: publish 448945e (D: transfer form, QUAD TF, )IN and )OUT)
+- saga: complete d83-transfer-form
+- feat(d83): transfer form, QUAD TF, )IN and )OUT (d83-transfer-form)
+
+## 2026-11-23
+
+- saga: U '74 steps before d83-ap210
+- docs(plan): U '74 details from the owner's research
+
 ## 2026-11-22
 
+- docs(plan): (U) '74, UMD APL on punched cards; saga steps u74-*
+- docs(changes): refresh CHANGES.md to HEAD
 - pages: publish 9bcaa7c (D: picture format and QUAD FC)
 - saga: complete d83-picture-format
 - feat(d83): picture format and QUAD FC (d83-picture-format)
