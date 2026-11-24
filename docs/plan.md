@@ -1671,6 +1671,24 @@ records every choice in `docs/mode-u.md`, and says which are ours:
   with domino, `A $AL 2 2 $RH 2 1 1 3`, `B $AL 5 10`, `X $AL B $DM A`,
   `$QD $AL X`, printing `1 3`.
 
+### Owner direction (2026-11-24) and `u74-sources`' decisions
+
+The owner: "UMD (or our simulation of it) does not have disk storage,
+workspaces, )COMMANDS per se. It has decks of APL source code to
+construct the current workspace for a batch run." And: the APL
+keyboard does not apply to U; input is the keypunch's virtual
+keyboard and the computer's keyboard.
+
+`docs/mode-u.md` records the rest. In short: Minker's history (p. 38)
+is the one primary source, and says Hagerty's print bar printed APL
+characters, so the listing shows glyphs beside each card as punched;
+the language is (A)'s, without execute, format or shared variables; a
+card is one statement, no continuation; the notes' `$` names kept,
+NAND and NOR put on the right glyphs, and ours added for `[ ] \ ⌿ ⍀ ⊖
+⊥ ⊤ ⍋ ⍒ ∆`; `¬` punched means `~`; no `)` commands, so no `)OFF`;
+`$DL` cards define a function, no editing; `⎕` and `⍞` read the next
+card; an error is listed with its card and the run goes on.
+
 
 ## Owner direction (2026-09-29): the documents, checked against the code
 

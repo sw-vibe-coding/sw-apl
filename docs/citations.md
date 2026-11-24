@@ -78,6 +78,24 @@ carry the same files, for example
   APL\360 and APLSV workspaces together.
   <https://www.bitsavers.org/pdf/ibm/apl/SC20-1846_APL-CMS_Users_Manual_197407.pdf>
 
+## University of Maryland APL -- the (U) '74 mode
+
+No manual of UMD APL or APL 1100 is online; `mode-u.md` says what each
+of its decisions rests on.
+
+- **Beginning of Computing and Computer Science at the University of
+  Maryland**, Jack Minker, 2004, page 38: APL for the UNIVAC 1108 under
+  Patrick E. Hagerty, workspaces of 16K to 256K bytes, domino, shared
+  variables, and the APL print bar.
+  <https://www.cs.umd.edu/sites/default/files/MinkerHistory.pdf>
+- **The owner's notes**, a chat with an LLM, kept out of the
+  repository (it carries the chat app's sidebar): the history, and a
+  reconstructed card layout, run stream and `$` table, which
+  `mode-u.md` checks and corrects.
+- **ibm-1130-rs**, sw-comp-history, the owner's, MIT: the IBM 029's
+  characters and card codes, `crates/punch-card-core/src/hollerith.rs`.
+  <https://github.com/sw-comp-history/ibm-1130-rs>
+
 ## APL generally
 
 - **APL\360**, APL Wiki. <https://aplwiki.com/wiki/APL%5C360>
