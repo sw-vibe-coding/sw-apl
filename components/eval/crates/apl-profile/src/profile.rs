@@ -57,6 +57,9 @@ pub enum Feature {
     /// Picture format, `⍕` with a character pattern on its left, and
     /// `⎕FC`, its format control.
     PictureFormat,
+    /// The transfer form, `⎕TF`, and the `)IN` and `)OUT` commands that
+    /// carry objects in and out of `.AIO` transfer files.
+    TransferForm,
 }
 
 /// Something of the core a mode leaves out. APL80's manual lists its
@@ -172,6 +175,7 @@ pub const D83: Profile = Profile {
         Feature::CollatingGrade,
         Feature::Reset,
         Feature::PictureFormat,
+        Feature::TransferForm,
     ],
     ..CORE
 };

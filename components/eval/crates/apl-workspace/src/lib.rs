@@ -8,7 +8,7 @@ mod funcs;
 mod workspace;
 
 pub use apl_ast::Defn;
-pub use apl_clock::{Clock, Time, TimeSource, hms, stopped, system};
+pub use apl_clock::{Clock, Time, TimeSource, hms, moment, stopped, system};
 pub use apl_console::{
     Console, INDENT, Monitor, Output, Print, Shown, error_lines, render, render_all,
 };

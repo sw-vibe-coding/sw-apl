@@ -3,12 +3,13 @@
 use std::fs;
 use std::path::PathBuf;
 
-use apl_store::{SUFFIX, Shelf};
+use apl_store::{Shelf, file_of, key_of};
 
 /// A configured library's workspaces.
 #[derive(Debug, Clone)]
 pub enum Source {
-    /// A directory of `NAME.apl.ws` files, read when asked.
+    /// A directory of `NAME.apl.ws` files, and `NAME.AIO` transfer
+    /// files, read when asked.
     Dir(PathBuf),
     /// Workspaces already in hand, by key: what a browser fetched.
     Kept(Shelf),
@@ -19,7 +20,7 @@ impl Source {
     #[must_use]
     pub fn read(&self, key: &str) -> Option<String> {
         match self {
-            Source::Dir(dir) => fs::read_to_string(dir.join(format!("{key}{SUFFIX}"))).ok(),
+            Source::Dir(dir) => fs::read_to_string(dir.join(file_of(key))).ok(),
             Source::Kept(held) => held.get(key).cloned(),
         }
     }
@@ -34,7 +35,7 @@ impl Source {
                 .into_iter()
                 .flatten()
                 .filter_map(Result::ok)
-                .filter_map(|e| Some(e.file_name().to_str()?.strip_suffix(SUFFIX)?.to_string()))
+                .filter_map(|e| key_of(e.file_name().to_str()?))
                 .collect(),
         };
         keys.sort();

@@ -1,6 +1,6 @@
 [package]
 name = "apl-d83-commands"
-description = "sw-apl (D) '83's own system commands: )RESET and )SI CLEAR"
+description = "sw-apl (D) '83's own system commands: )RESET, )SI CLEAR, )IN and )OUT"
 edition.workspace = true
 license.workspace = true
 version.workspace = true
@@ -8,6 +8,10 @@ authors.workspace = true
 repository.workspace = true
 
 [dependencies]
+apl-d83-aio = { path = "../apl-d83-aio" }
+apl-d83-transfer = { path = "../apl-d83-transfer" }
+apl-library = { path = "../../../session/crates/apl-library" }
+apl-store = { path = "../../../eval/crates/apl-store" }
 apl-modes = { path = "../../../eval/crates/apl-modes" }
 apl-workspace = { path = "../../../eval/crates/apl-workspace" }
 

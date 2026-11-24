@@ -1,0 +1,16 @@
+[package]
+name = "apl-d83-aio"
+description = "sw-apl (D) '83's transfer files: NAME.AIO, a workspace's objects in transfer form"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-d83-transfer = { path = "../apl-d83-transfer" }
+apl-store = { path = "../../../eval/crates/apl-store" }
+apl-workspace = { path = "../../../eval/crates/apl-workspace" }
+
+[lints]
+workspace = true

@@ -54,3 +54,18 @@ pub fn stamp(at: &Time) -> [i64; 7] {
         at.now % 60 * 1000 / 60,
     ]
 }
+
+/// A moment as APL\360 stamped one: the time, then the date. It
+/// heads a `)SAVE` reply, opens a sign-off, and is what a transfer
+/// file says of when it was written.
+#[must_use]
+pub fn moment(at: &Time) -> String {
+    let date = at.date;
+    format!(
+        "{} {:02}/{:02}/{:02}",
+        hms(at.now),
+        date / 10_000,
+        (date / 100) % 100,
+        date % 100
+    )
+}

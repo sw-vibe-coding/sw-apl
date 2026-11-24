@@ -34,6 +34,26 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-c80-cuts"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-c80-scalar",
+ "apl-modes",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-c80-format"
+version = "0.1.0"
+dependencies = [
+ "apl-format",
+ "apl-modes",
+ "apl-value",
+ "apl-workspace",
+]
+
+[[package]]
 name = "apl-c80-keys"
 version = "0.1.0"
 dependencies = [
@@ -49,6 +69,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-c80-memory"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-c80-keys",
+ "apl-c80-machine",
+ "apl-c80-screen",
+ "apl-c80-status",
+ "apl-value",
+ "apl-workspace",
+]
+
+[[package]]
 name = "apl-c80-scalar"
 version = "0.1.0"
 dependencies = [
@@ -58,6 +91,30 @@ dependencies = [
 [[package]]
 name = "apl-c80-screen"
 version = "0.1.0"
+
+[[package]]
+name = "apl-c80-status"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-c80-screen",
+ "apl-ibeam",
+ "apl-modes",
+ "apl-value",
+ "apl-workspace",
+]
+
+[[package]]
+name = "apl-call"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-attn",
+ "apl-modes",
+ "apl-scan",
+ "apl-value",
+ "apl-workspace",
+]
 
 [[package]]
 name = "apl-clock"
@@ -74,6 +131,22 @@ dependencies = [
  "apl-display",
  "apl-monitor",
  "apl-value",
+]
+
+[[package]]
+name = "apl-console-control"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+]
+
+[[package]]
+name = "apl-d83-aio"
+version = "0.1.0"
+dependencies = [
+ "apl-d83-transfer",
+ "apl-store",
+ "apl-workspace",
 ]
 
 [[package]]
@@ -107,7 +180,11 @@ dependencies = [
 name = "apl-d83-commands"
 version = "0.1.0"
 dependencies = [
+ "apl-d83-aio",
+ "apl-d83-transfer",
+ "apl-library",
  "apl-modes",
+ "apl-store",
  "apl-workspace",
 ]
 
@@ -175,7 +252,20 @@ name = "apl-d83-sysfns"
 version = "0.1.0"
 dependencies = [
  "apl-d83-delay",
+ "apl-d83-transfer",
  "apl-fix",
+ "apl-value",
+ "apl-workspace",
+]
+
+[[package]]
+name = "apl-d83-transfer"
+version = "0.1.0"
+dependencies = [
+ "apl-display",
+ "apl-fix",
+ "apl-lex",
+ "apl-sysvars",
  "apl-value",
  "apl-workspace",
 ]
@@ -185,6 +275,32 @@ name = "apl-display"
 version = "0.1.0"
 dependencies = [
  "apl-value",
+]
+
+[[package]]
+name = "apl-eval"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-c80-cuts",
+ "apl-c80-format",
+ "apl-c80-keys",
+ "apl-c80-memory",
+ "apl-call",
+ "apl-d83-alternate",
+ "apl-d83-dyadic",
+ "apl-execute",
+ "apl-format",
+ "apl-modes",
+ "apl-parse",
+ "apl-prims",
+ "apl-quad",
+ "apl-statement",
+ "apl-store",
+ "apl-sysfns",
+ "apl-sysvars",
+ "apl-value",
+ "apl-workspace",
 ]
 
 [[package]]
@@ -208,6 +324,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-format"
+version = "0.1.0"
+dependencies = [
+ "apl-display",
+ "apl-numeral",
+ "apl-value",
+]
+
+[[package]]
 name = "apl-glyphs"
 version = "0.1.0"
 dependencies = [
@@ -216,10 +341,33 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-ibeam"
+version = "0.1.0"
+dependencies = [
+ "apl-clock",
+ "apl-modes",
+ "apl-value",
+ "apl-workspace",
+]
+
+[[package]]
+name = "apl-keys"
+version = "0.1.0"
+
+[[package]]
 name = "apl-lex"
 version = "0.1.0"
 dependencies = [
  "apl-value",
+]
+
+[[package]]
+name = "apl-library"
+version = "0.1.0"
+dependencies = [
+ "apl-eval",
+ "apl-shelves",
+ "apl-wsfile",
 ]
 
 [[package]]
@@ -235,6 +383,23 @@ dependencies = [
 [[package]]
 name = "apl-monitor"
 version = "0.1.0"
+
+[[package]]
+name = "apl-numeral"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+]
+
+[[package]]
+name = "apl-parse"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-lex",
+ "apl-scan",
+ "apl-value",
+]
 
 [[package]]
 name = "apl-prims"
@@ -345,6 +510,16 @@ name = "apl-profile"
 version = "0.1.0"
 
 [[package]]
+name = "apl-quad"
+version = "0.1.0"
+dependencies = [
+ "apl-c80-keys",
+ "apl-modes",
+ "apl-value",
+ "apl-workspace",
+]
+
+[[package]]
 name = "apl-saved"
 version = "0.1.0"
 dependencies = [
@@ -386,6 +561,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-settings"
+version = "0.1.0"
+dependencies = [
+ "apl-modes",
+ "apl-workspace",
+]
+
+[[package]]
+name = "apl-shelves"
+version = "0.1.0"
+dependencies = [
+ "apl-modes",
+ "apl-store",
+]
+
+[[package]]
 name = "apl-space"
 version = "0.1.0"
 dependencies = [
@@ -394,14 +585,63 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-statement"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-call",
+ "apl-value",
+ "apl-workspace",
+]
+
+[[package]]
 name = "apl-store"
 version = "0.1.0"
+dependencies = [
+ "apl-keys",
+]
+
+[[package]]
+name = "apl-sysfns"
+version = "0.1.0"
+dependencies = [
+ "apl-console-control",
+ "apl-d83-sysfns",
+ "apl-fix",
+ "apl-lex",
+ "apl-modes",
+ "apl-scan",
+ "apl-value",
+ "apl-workspace",
+]
+
+[[package]]
+name = "apl-sysvars"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-clock",
+ "apl-d83-format",
+ "apl-modes",
+ "apl-settings",
+ "apl-value",
+ "apl-workspace",
+]
 
 [[package]]
 name = "apl-transcript"
 version = "0.1.0"
 dependencies = [
  "apl-console",
+]
+
+[[package]]
+name = "apl-uses"
+version = "0.1.0"
+dependencies = [
+ "apl-modes",
+ "apl-value",
+ "apl-workspace",
 ]
 
 [[package]]
@@ -429,6 +669,18 @@ dependencies = [
  "apl-store",
  "apl-transcript",
  "apl-value",
+]
+
+[[package]]
+name = "apl-wsfile"
+version = "0.1.0"
+dependencies = [
+ "apl-ast",
+ "apl-modes",
+ "apl-scan",
+ "apl-uses",
+ "apl-value",
+ "apl-workspace",
 ]
 
 [[package]]

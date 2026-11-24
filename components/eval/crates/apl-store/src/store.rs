@@ -2,14 +2,6 @@
 
 use std::fmt::Debug;
 
-/// What a stored workspace is called on a filesystem, past its name.
-///
-/// It is here rather than in the filesystem store alone because a
-/// browser's local storage is a flat namespace shared with whatever
-/// else the page keeps, and the same suffix keeps sw-apl's own keys
-/// apart from it.
-pub const SUFFIX: &str = ".apl.ws";
-
 /// One library a store keeps: its number, the name `)LIBS` gives it,
 /// and where it comes from.
 #[derive(Debug, Clone, PartialEq, Eq)]

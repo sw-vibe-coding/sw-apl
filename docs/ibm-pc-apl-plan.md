@@ -185,6 +185,18 @@ copy workspaces to a mode=d compatible format for saving/loading."
 - **Transfer form later.** `)IN`, `)OUT` and `⎕TF` read and write
   `.AIO` transfer form, which is how PC APL exchanged workspaces with
   other systems; a step of its own, after the demo is live.
+- **Built** (step `d83-transfer-form`). `⎕TF` as page 8-11 gives it,
+  in `apl-d83-transfer`; `.AIO` files in `apl-d83-aio`, kept under
+  the key `NAME.AIO` beside the workspaces and never listed as one.
+  PC APL's own files were binary; sw-apl's are UTF-8 text, a
+  `⍝!SAVED` line and one form to a line, read by count so a value
+  holding a line ending survives. Decisions the manual leaves open:
+  `)OUT` writes `⎕CT ⎕FC ⎕IO ⎕LX ⎕PP ⎕PW ⎕RL` with the objects;
+  `)IN` copies what it finds and reports the rest (`)OUT` writes
+  nothing when one is missing); the manual gives `⍴` of the numeric
+  example as 24 where its form has 23 characters, and sw-apl gives
+  23; the forms of `)LIB` and `)DROP` that name a file take `.AIO`
+  only.
 - **New (D) workspaces:** `GRAPHICS` (below), and a `SCREEN`
   workspace of AP205 cover functions, as the product's own EDIT,
   PRINT and FILE workspaces were covers -- written new, not copied.

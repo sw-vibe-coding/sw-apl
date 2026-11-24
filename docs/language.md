@@ -551,6 +551,52 @@ DOMAIN ERROR. It is saved with the workspace.
 every suspended function, and every one waiting on it. Neither shows
 anything.
 
+#### Transfer form
+
+`⎕TF` gives an object as one character vector, and back. Given a
+name, it gives the transfer form: the type (`N` numbers, `C`
+characters, `F` a function), the name and a blank, the rank and the
+shape and a blank, then the elements in row major order -- numbers to
+15 digits, a blank apart; characters as they are; a function as the
+character matrix of its canonical form, each row padded to the
+longest.
+
+```
+      THIS←2 3⍴⍳6
+      ⎕TF 'THIS'
+NTHIS 2 2 3 1 2 3 4 5 6
+      THAT←3 4⍴'ABCDEFGHIJKL'
+      ⎕TF 'THAT'
+CTHAT 2 3 4 ABCDEFGHIJKL
+```
+
+A name with nothing by it, or a locked function, gives an empty
+vector. `⎕CT`, `⎕FC`, `⎕IO`, `⎕LX`, `⎕PP`, `⎕PW` and `⎕RL` have
+transfer forms too.
+
+Given a transfer form, `⎕TF` establishes the object and gives its
+name, or an empty vector when the form is not a valid one. What held
+the name before goes, whatever it was: a variable can replace a
+function and a function a variable, and a shared variable replaced
+is retracted. A function running or waiting is not replaced.
+
+`)OUT name [objects]` writes the objects named, or every variable,
+every function and the system variables above, to the transfer file
+`name.AIO` in library 0, and replies with the time and date. An
+object named that has no transfer form is reported, followed by NOT
+FOUND, and nothing is written.
+
+`)IN [lib] name [objects]` copies the objects named, or every one,
+from `name.AIO` into the workspace, each replacing what held its
+name, and replies SAVED and when the file was written. Names asked
+for that the file does not hold are reported, followed by NOT FOUND;
+a file that is not there is NOT FOUND. `)IN` needs a clear state
+indicator: otherwise it replies NOT WITH UNCLEAR SI and does nothing.
+
+`)LIB [lib] .AIO` lists the transfer files in a library, and `)DROP
+name.AIO` deletes one from library 0. A transfer file is UTF-8 text:
+a line saying when it was written, then one transfer form to a line.
+
 ### Errors
 
 (B) has one error (A) has not: NONCE ERROR, for something the

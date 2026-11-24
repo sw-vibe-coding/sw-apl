@@ -3,6 +3,7 @@
 # reaches them only in (D); see docs/architecture.md, "Adding a mode".
 [workspace]
 members = [
+    "crates/apl-d83-aio",
     "crates/apl-d83-alternate",
     "crates/apl-d83-ap205",
     "crates/apl-d83-collate",
@@ -14,6 +15,7 @@ members = [
     "crates/apl-d83-format",
     "crates/apl-d83-screen",
     "crates/apl-d83-shares",
+    "crates/apl-d83-transfer",
     "crates/apl-d83-sysfns",
 ]
 resolver = "2"

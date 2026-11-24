@@ -9,7 +9,7 @@ pub use apl_modes::{Cut, Feature, Host, Mode, Profile};
 pub use apl_store::{Files, Memory, Shelf, Store};
 pub use apl_workspace::{
     Activation, Clock, Console, Defn, Env, Groups, INDENT, Monitor, Output, Print, QUOTA, Referent,
-    Run, Saved, Shown, Time, TimeSource, Transcript, Workspace, error_lines, free, hms, of_name,
-    render, render_all, system, used,
+    Run, Saved, Shown, Time, TimeSource, Transcript, Workspace, error_lines, free, hms, moment,
+    of_name, render, render_all, system, used,
 };
 pub use eval::{eval_expr, eval_line};

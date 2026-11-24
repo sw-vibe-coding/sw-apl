@@ -174,6 +174,10 @@ Workspace control:
 | `)OFF` | End the session | all |
 | `)DEF header`, `)EDIT name` | Open a function to define or change, in place of the del (see `language.md`, "What (C) '80 adds") | (C) |
 | `)AUTO [expression]`, `)EXEC` | Set the expression a loaded workspace runs; run it now | (C) |
+| `)OUT name [objects]` | Write objects in transfer form to the file `name.AIO` (see `language.md`, "Transfer form") | (D) |
+| `)IN [n] name [objects]` | Copy objects from the transfer file `name.AIO` | (D) |
+| `)LIB [n] .AIO`, `)DROP name.AIO` | List transfer files; delete one | (D) |
+| `)RESET`, `)SI CLEAR` | Clear the state indicator | (D) |
 
 Only the first four characters of a command name are significant,
 so `)CLEA`, `)CLEAR` and `)CLEAVER` are one command. A name of four

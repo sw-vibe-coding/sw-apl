@@ -11,7 +11,10 @@ browser. This page shows, area by area, what each mode has.
   tables below have no column for it, it answers as (B) does; it
   differs in a clear workspace of ten digits in a line of 79, in
   listing only workspaces written for it, and in shared variables,
-  `⎕SVO` and its relatives, and AP205, the screen (`language.md`).
+  `⎕SVO` and its relatives, AP205, the screen, and PC APL's
+  extensions: ambivalent functions, `⎕EA`, the dyadic grades, picture
+  format and `⎕FC`, the transfer form, `⎕TF`, with `)IN` and `)OUT`,
+  and `)RESET` (`language.md`).
 
 In the tables, **yes** means the mode has it, **no** that it has not,
 and **part** that it has some of it, as the note says. The language

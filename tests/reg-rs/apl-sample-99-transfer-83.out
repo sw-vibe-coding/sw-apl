@@ -1,0 +1,48 @@
+      ⍝!MODES (D)
+      ⍝ The transfer form in (D) '83: an object as one character vector,
+      ⍝ and back. The manual's own examples first.
+      THIS←2 3⍴⍳6
+      ⎕TF 'THIS'
+NTHIS 2 2 3 1 2 3 4 5 6
+      THAT←3 4⍴'ABCDEFGHIJKL'
+      ⎕TF 'THAT'
+CTHAT 2 3 4 ABCDEFGHIJKL
+      ⍴⎕TF 'THAT'
+24
+      ∇Z←L PLUS R
+[1]   Z←L+R
+[2]   ∇
+      ⎕TF 'PLUS'
+FPLUS 2 2 10 Z←L PLUS RZ←L+R     
+      ⍴⎕TF 'PLUS'
+33
+      ⍝ Numbers go to 15 digits; a scalar has rank 0 and no shape.
+      PI←○1
+      ⎕TF 'PI'
+NPI 0 3.14159265358979
+      ⎕TF '⎕IO'
+N⎕IO 0 1
+      ⍝ Nothing by the name: an empty vector.
+      ⍴⎕TF 'NOTHING'
+0
+      ⍝ A transfer form establishes its object and gives the name.
+      ⎕TF 'NNEW 1 3 1 2 ¯3'
+NEW
+      NEW
+1 2 ¯3
+      Z←⎕TF 'PLUS'
+      )ERASE PLUS
+      ⎕TF Z
+PLUS
+      2 PLUS 3
+5
+      ⍝ A name class conflict is ignored: a function replaces a variable.
+      ⎕TF 'FNEW 2 2 5 Z←NEWZ←42 '
+NEW
+      ⎕NC 'NEW'
+3
+      NEW
+42
+      ⍝ A form that is not valid establishes nothing.
+      ⍴⎕TF 'NBAD 1 3 1 2'
+0

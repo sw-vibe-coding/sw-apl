@@ -11,6 +11,7 @@ mod files;
 mod memory;
 mod store;
 
+pub use apl_keys::{SUFFIX, TRANSFER, file_of, key_of};
 pub use files::Files;
 pub use memory::{Memory, READ_ONLY, Shelf};
-pub use store::{Library, SUFFIX, Store};
+pub use store::{Library, Store};

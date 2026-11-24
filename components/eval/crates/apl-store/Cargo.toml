@@ -8,6 +8,7 @@ authors.workspace = true
 repository.workspace = true
 
 [dependencies]
+apl-keys = { path = "../apl-keys" }
 
 [lints]
 workspace = true

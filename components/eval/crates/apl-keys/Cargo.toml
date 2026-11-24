@@ -1,0 +1,11 @@
+[package]
+name = "apl-keys"
+description = "sw-apl: what a library key is called as a file -- a workspace or a transfer file"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true

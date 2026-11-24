@@ -12,4 +12,4 @@ mod hms;
 mod ticks;
 
 pub use clock::{Clock, Time, stopped, system};
-pub use hms::{TimeSource, hms, stamp};
+pub use hms::{TimeSource, hms, moment, stamp};

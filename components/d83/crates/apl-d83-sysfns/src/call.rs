@@ -11,7 +11,7 @@ use crate::offer::{couplings, offers};
 /// name that is free or a variable's, and 4 is no name at all.
 pub type Class = fn(&Workspace, &str) -> i64;
 
-const FUNCTIONS: [&str; 6] = ["⎕DL", "⎕EA", "⎕SVC", "⎕SVO", "⎕SVQ", "⎕SVR"];
+const FUNCTIONS: [&str; 7] = ["⎕DL", "⎕EA", "⎕SVC", "⎕SVO", "⎕SVQ", "⎕SVR", "⎕TF"];
 
 /// True when `name` is a shared-variable function.
 #[must_use]
@@ -31,6 +31,7 @@ pub fn monadic(ws: &mut Workspace, name: &str, r: &Array, class: Class) -> AplRe
         "⎕SVC" => controls(ws, None, r, class),
         "⎕SVQ" => query(r),
         "⎕DL" => apl_d83_delay::delay(r),
+        "⎕TF" => apl_d83_transfer::transfer(ws, r),
         _ => Err(AplError::new(ErrorKind::Syntax)),
     }
 }

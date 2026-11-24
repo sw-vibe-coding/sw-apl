@@ -35,7 +35,8 @@ pub struct Answer {
 
 /// Run one system command: the text after the parenthesis. The
 /// '70-only, '83-only, inquiry, sw-apl and '80-only commands answer
-/// for themselves, and None for a name they do not know.
+/// for themselves, and None for a name they do not know. (D) answers
+/// `)DROP` and `)LIB` first, for the forms that name a transfer file.
 pub fn system_command(ws: &mut Workspace, command: &str) -> Answer {
     let mut words = command.split_whitespace();
     let typed = words.next().unwrap_or("").to_ascii_uppercase();
@@ -49,8 +50,8 @@ pub fn system_command(ws: &mut Workspace, command: &str) -> Answer {
         ("SAVE", []) => save(ws, None),
         ("SAVE", [id]) => save(ws, Some(id)),
         ("LOAD", _) => return load(ws, &rest),
-        ("DROP", _) => drop_workspace(ws, &rest),
-        ("LIB", _) => lib(ws, &rest),
+        ("DROP", _) => eightythree(ws, &name, &rest).unwrap_or_else(|| drop_workspace(ws, &rest)),
+        ("LIB", _) => eightythree(ws, &name, &rest).unwrap_or_else(|| lib(ws, &rest)),
         ("COPY" | "PCOPY", _) => return copy(ws, &rest, name == "PCOPY"),
         _ => seventy(&mut ws.saved, ws.mode, &name, &rest)
             .or_else(|| eightythree(ws, &name, &rest))

@@ -1,0 +1,19 @@
+[package]
+name = "apl-d83-transfer"
+description = "sw-apl (D) '83's transfer form: QUAD TF, an object as characters and back"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-display = { path = "../../../display/crates/apl-display" }
+apl-fix = { path = "../../../b75/crates/apl-fix" }
+apl-lex = { path = "../../../lex/crates/apl-lex" }
+apl-sysvars = { path = "../../../b75/crates/apl-sysvars" }
+apl-value = { path = "../../../value/crates/apl-value" }
+apl-workspace = { path = "../../../eval/crates/apl-workspace" }
+
+[lints]
+workspace = true

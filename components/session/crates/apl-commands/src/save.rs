@@ -1,6 +1,6 @@
 //! Writing a workspace out, forgetting one, and listing a library.
 
-use apl_eval::{Workspace, hms};
+use apl_eval::Workspace;
 use apl_library::{IMPROPER_LIBRARY, INCORRECT, WS_NOT_FOUND, library, named, not_saved};
 use apl_wsfile::write;
 
@@ -62,15 +62,7 @@ pub fn drop_workspace(ws: &mut Workspace, rest: &[&str]) -> Vec<String> {
 /// date. It heads a `)SAVE` reply and opens a sign-off.
 #[must_use]
 pub fn moment(ws: &Workspace) -> String {
-    let time = (ws.clock)();
-    let date = time.date;
-    format!(
-        "{} {:02}/{:02}/{:02}",
-        hms(time.now),
-        date / 10_000,
-        (date / 100) % 100,
-        date % 100
-    )
+    apl_eval::moment(&(ws.clock)())
 }
 
 /// `)LIB [n]`: the workspaces in one library, by name.

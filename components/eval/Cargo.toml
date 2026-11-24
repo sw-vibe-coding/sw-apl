@@ -12,6 +12,7 @@ members = [
     "crates/apl-wsfile",
     "crates/apl-statement",
     "crates/apl-store",
+    "crates/apl-keys",
     "crates/apl-libraries",
     "crates/apl-modes",
     "crates/apl-profile",

@@ -157,3 +157,27 @@ fn files_reads_the_shipped_library_from_ws_lib1() {
     assert_eq!(store.list(1), ["LIFE"]);
     let _ = std::fs::remove_dir_all(&dir);
 }
+
+#[test]
+fn a_transfer_file_is_kept_beside_the_workspaces() {
+    for mut store in both("transfer") {
+        assert_eq!(store.write(0, "T.AIO", Some("NX 0 5\n")), Ok(()));
+        assert_eq!(store.write(0, "T.d", Some("⍝ ws\n")), Ok(()));
+        assert_eq!(store.read(0, "T.AIO").as_deref(), Some("NX 0 5\n"));
+        assert_eq!(store.list(0), ["T.AIO", "T.d"]);
+    }
+    let dir = scratch("transfer-file");
+    let mut files = Files(dir.clone());
+    assert_eq!(files.write(0, "T.AIO", Some("NX 0 5\n")), Ok(()));
+    assert!(dir.join("work/T.AIO").is_file(), "named as PC APL named it");
+}
+
+#[test]
+fn file_names_and_keys() {
+    use apl_store::{file_of, key_of};
+    assert_eq!(file_of("LIFE.ab"), "LIFE.ab.apl.ws");
+    assert_eq!(file_of("T.AIO"), "T.AIO");
+    assert_eq!(key_of("LIFE.ab.apl.ws").as_deref(), Some("LIFE.ab"));
+    assert_eq!(key_of("T.AIO").as_deref(), Some("T.AIO"));
+    assert_eq!(key_of("README.md"), None);
+}

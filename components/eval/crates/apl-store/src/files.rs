@@ -10,7 +10,9 @@
 use std::fs;
 use std::path::PathBuf;
 
-use crate::store::{SUFFIX, Store};
+use apl_keys::{file_of, key_of};
+
+use crate::store::Store;
 
 /// The directory the libraries sit under: what `--library` names.
 #[derive(Debug, Clone)]
@@ -30,12 +32,12 @@ impl Files {
 
 impl Store for Files {
     fn read(&self, library: usize, name: &str) -> Option<String> {
-        fs::read_to_string(self.at(library)?.join(format!("{name}{SUFFIX}"))).ok()
+        fs::read_to_string(self.at(library)?.join(file_of(name))).ok()
     }
 
     fn write(&mut self, library: usize, name: &str, text: Option<&str>) -> Result<(), String> {
         let dir = self.at(library).ok_or("there is no such library")?;
-        let path = dir.join(format!("{name}{SUFFIX}"));
+        let path = dir.join(file_of(name));
         let Some(text) = text else {
             return fs::remove_file(path).map_err(|e| e.to_string());
         };
@@ -50,8 +52,7 @@ impl Store for Files {
         let Ok(entries) = fs::read_dir(dir) else {
             return Vec::new();
         };
-        let stem =
-            |e: fs::DirEntry| Some(e.file_name().to_str()?.strip_suffix(SUFFIX)?.to_string());
+        let stem = |e: fs::DirEntry| key_of(e.file_name().to_str()?);
         let mut found: Vec<String> = entries.filter_map(Result::ok).filter_map(stem).collect();
         found.sort();
         found

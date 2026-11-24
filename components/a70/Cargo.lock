@@ -242,7 +242,20 @@ name = "apl-d83-sysfns"
 version = "0.1.0"
 dependencies = [
  "apl-d83-delay",
+ "apl-d83-transfer",
  "apl-fix",
+ "apl-value",
+ "apl-workspace",
+]
+
+[[package]]
+name = "apl-d83-transfer"
+version = "0.1.0"
+dependencies = [
+ "apl-display",
+ "apl-fix",
+ "apl-lex",
+ "apl-sysvars",
  "apl-value",
  "apl-workspace",
 ]
@@ -335,6 +348,10 @@ dependencies = [
  "apl-library",
  "apl-value",
 ]
+
+[[package]]
+name = "apl-keys"
+version = "0.1.0"
 
 [[package]]
 name = "apl-lex"
@@ -579,6 +596,9 @@ dependencies = [
 [[package]]
 name = "apl-store"
 version = "0.1.0"
+dependencies = [
+ "apl-keys",
+]
 
 [[package]]
 name = "apl-sysfns"
