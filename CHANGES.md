@@ -14,6 +14,9 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-11-24
 
+- saga: complete u74-sources
+- docs(u74): mode-u.md, UMD APL on punched cards (u74-sources)
+- docs(changes): refresh CHANGES.md to HEAD
 - pages: publish 448945e (D: transfer form, QUAD TF, )IN and )OUT)
 - saga: complete d83-transfer-form
 - feat(d83): transfer form, QUAD TF, )IN and )OUT (d83-transfer-form)
