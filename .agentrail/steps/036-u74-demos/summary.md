@@ -1,0 +1,1 @@
+Timeline links University of Maryland APL to demo.html?mode=U as U74 my live demo; timeline tests pin five demos each linking its mode; check-pages covers the timeline links, the deck page, next card, the 029 in 3D, submit and printout, all passing; apl-timeline.md and plan.md updated. Moved ahead of u74-keypunch at the owner's prompt.
