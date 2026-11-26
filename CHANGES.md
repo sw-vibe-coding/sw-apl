@@ -14,6 +14,10 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-11-26
 
+- pages: publish 0b4d031 (the timeline links U '74)
+- saga: complete u74-demos
+- feat(u74): the timeline links to U '74 (u74-demos)
+- docs(changes): refresh CHANGES.md to HEAD
 - pages: publish 53e704e (U '74: the deck page)
 - saga: complete u74-deck
 - feat(u74): the deck page, demo.html?mode=U (u74-deck)
