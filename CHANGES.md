@@ -12,8 +12,14 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-11-25
+
+- saga: complete u74-mode
+- feat(u74): mode (U) '74, UMD APL decks run as batch jobs (u74-mode)
+
 ## 2026-11-24
 
+- docs(changes): refresh CHANGES.md to HEAD
 - saga: complete u74-sources
 - docs(u74): mode-u.md, UMD APL on punched cards (u74-sources)
 - docs(changes): refresh CHANGES.md to HEAD
