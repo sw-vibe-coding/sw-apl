@@ -214,17 +214,28 @@ fn the_strip_is_no_taller_than_its_tallest_box_a_side() {
 }
 
 #[test]
-fn the_four_demos_are_named_and_say_so() {
+fn the_five_demos_are_named_link_their_modes_and_say_so() {
     let list = events(DATA).expect("data/timeline.json is a list of events");
     let demos: Vec<&Event> = list.iter().filter(|e| e.demo.is_some()).collect();
     let names: Vec<&str> = demos
         .iter()
         .map(|e| &e.demo.as_deref().unwrap_or("")[..4])
         .collect();
-    assert_eq!(names, ["A'70", "B'75", "C'80", "D'83"]);
+    assert_eq!(names, ["A'70", "U'74", "B'75", "C'80", "D'83"]);
     for demo in demos {
         let tip = demo.tip.as_deref().unwrap_or("");
         assert!(tip.starts_with("My live demo of "), "{tip}");
+        let mode = demo
+            .demo
+            .as_deref()
+            .unwrap_or("")
+            .chars()
+            .next()
+            .unwrap_or('?');
+        assert_eq!(
+            demo.href.as_deref(),
+            Some(format!("demo.html?mode={mode}").as_str())
+        );
         assert!(
             demo.href.is_some() && demo.image.is_some(),
             "{}",

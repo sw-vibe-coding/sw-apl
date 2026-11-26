@@ -1,6 +1,6 @@
-number = 37
+number = 36
 slug = "u74-demos"
-status = "pending"
+status = "in-progress"
 description = "Per docs/plan.md (U): the U '74 tab live, the timeline UMD APL entry linked t..."
 role = "production"
 context_files = []

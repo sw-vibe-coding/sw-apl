@@ -33,7 +33,7 @@ says so.
 | 1970 | Forth | |
 | 1970 | APL*PLUS, STSC's time-sharing APL, is made available with I. P. Sharp Associates; later APL*PLUS/PC and APL*PLUS III | |
 | December 1970 | APL\360-OS and APL\360-DOS become IBM Program Products (5734-XM6 and 5736-XM6), with their user's manual (SH20-0906-0). This APL\360 has domino and lamination | **(A) '70: the APL sw-apl builds.** The owner learns APL on it, on an IBM 2741, in 1972 |
-| By 1973 | APL 1100, for the UNIVAC 1108, from the University of Maryland's Computer Science Center: workspaces of 16K to 256K bytes, domino, shared variables, and an APL print bar UNIVAC offered to all its customers | The owner used it on a UNIVAC 1110 at SUNY Albany in 1976-77; a future demo |
+| By 1973 | APL 1100, for the UNIVAC 1108, from the University of Maryland's Computer Science Center: workspaces of 16K to 256K bytes, domino, shared variables, and an APL print bar UNIVAC offered to all its customers | The owner used it on a UNIVAC 1110 at SUNY Albany in 1976-77; U'74, the live demo of it, from punched cards |
 | May 1973 | The MCM/70, a Canadian microcomputer running APL on an Intel 8008, is shown at the Fifth International APL Users' Conference in Toronto | |
 | 1973 | APLSV (also written APL.SV) adds shared variables, the quad system variables and functions, execute and format. It runs on System/370 | What (B)'s language derives from; the owner used it from 1977 |
 | September 1975 | IBM announces the 5100, a portable computer with APL, BASIC or both; delivery begins the same month | **(B) '75: the APL sw-apl builds** |
@@ -46,7 +46,7 @@ says so.
 | 1980 | APL80, a large subset of APL for the TRS-80. Its manual is undated; 1980 is the owner's | C'80: a demo still to come. The owner used it in 1980 |
 | 1982 | APL2, with nested arrays, is released as an Installed User Program: a prototype | |
 | April 1983 | Dyalog APL v1.0 is launched at the APL83 conference in Washington | |
-| June 1983 | IBM Personal Computer APL is announced; it was developed at the IBM Madrid Scientific Center. It required the 8087 math coprocessor, then an option in the PC | D'83: a demo still to come. The owner used it from 1983 |
+| June 1983 | IBM Personal Computer APL is announced; it was developed at the IBM Madrid Scientific Center. It required the 8087 math coprocessor, then an option in the PC | D'83, the live demo of it. The owner used it from 1983 |
 | 1984 | APL2 is released | |
 | December 1985 | APL2 Release 2 adds vector specification, `⎕EC`, and lowercase in names; on VM/CMS it is typed on a 3279 color graphics terminal | A future demo. The owner used APL2 from 1990 |
 

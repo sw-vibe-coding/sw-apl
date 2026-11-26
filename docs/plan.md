@@ -1617,6 +1617,11 @@ Steps, after `d83-transfer-form`; `d83-ap210` follows them (owner, 2026-11-23: t
    repunch, replace, insert or remove cards and resubmit.
 5. `u74-demos` -- the U tab, the timeline's link to it, check-pages.
 
+Owner, 2026-11-26, the deck page being live: the timeline still said
+Future demo, so `u74-demos` moved ahead of `u74-keypunch` -- the
+timeline links to U '74 once phase 1 is out, and the keypunch follows as
+an update to a page already linked.
+
 ### What the owner's research gives (2026-11-23)
 
 The owner's notes (a chat with Gemini, `docs/research3.txt`, kept out

@@ -9,7 +9,7 @@
   {"year": 1970.1, "when": "1970", "title": "Forth", "href": "https://en.wikipedia.org/wiki/Forth_(programming_language)", "kind": "note"},
   {"year": 1970.3, "when": "1970", "title": "APL*PLUS", "text": "STSC's time-sharing APL.", "href": "https://aplwiki.com/wiki/STSC", "kind": "note"},
   {"year": 1970.95, "when": "1970", "title": "APL\\360, with domino", "text": "The IBM Program Product, typed on a 2741.", "image": "machines/70.webp", "href": "demo.html?mode=A", "demo": "A'70 · my live demo", "tip": "My live demo of APL\\360", "kind": "key"},
-  {"year": 1972.9, "when": "ca. 1973", "title": "University of Maryland APL", "text": "APL 1100, on the UNIVAC 1110 via IBM 029 keypunch", "image": "machines/029.webp", "tip": "Future demo", "kind": "key"},
+  {"year": 1972.9, "when": "ca. 1973", "title": "University of Maryland APL", "text": "APL 1100, on the UNIVAC 1110 via IBM 029 keypunch", "image": "machines/029.webp", "href": "demo.html?mode=U", "demo": "U'74 · my live demo", "tip": "My live demo of University of Maryland APL, from punched cards", "kind": "key"},
   {"year": 1973.35, "when": "1973", "title": "MCM/70", "text": "An early APL microcomputer.", "href": "https://sigapl.hosting.acm.org/APLChronology.php", "kind": "note"},
   {"year": 1973.5, "when": "1973", "title": "APLSV", "text": "Shared variables, execute, format.", "kind": "note"},
   {"year": 1975.7, "when": "1975", "title": "The IBM 5100", "text": "APL from APLSV, on a desk.", "image": "machines/5100.webp", "href": "demo.html?mode=B", "demo": "B'75 · my live demo", "tip": "My live demo of APLSV, on the IBM 5100", "kind": "key"},

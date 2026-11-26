@@ -1,6 +1,6 @@
-number = 36
+number = 37
 slug = "u74-keypunch"
-status = "pending"
+status = "in-progress"
 description = "Per docs/plan.md (U) phase 2: punch cards on a virtual 029 keyboard beside a ..."
 role = "production"
 context_files = []

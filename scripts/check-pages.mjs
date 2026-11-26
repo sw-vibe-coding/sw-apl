@@ -1388,7 +1388,7 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
     const a70 = demo("A'70")?.getBoundingClientRect();
     return {
       callouts: boxes.length,
-      links: ["A'70", "B'75", "C'80", "D'83"].map((n) => demo(n)?.querySelector('a')?.getAttribute('href')),
+      links: ["A'70", "U'74", "B'75", "C'80", "D'83"].map((n) => demo(n)?.querySelector('a')?.getAttribute('href')),
       future: boxes.filter((b) => b.querySelector('.shot')?.dataset.tip === 'Future demo').length,
       a70: Boolean(a70) && a70.left >= 0 && a70.right <= innerWidth,
       broken: [...document.images].filter((i) => !i.naturalWidth).length,
@@ -1402,11 +1402,11 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   check('the root is the timeline, every callout drawn and every picture loaded',
     seen.callouts > 30 && seen.broken === 0, JSON.stringify(seen));
   check("it opens with the A'70 demo whole in view", seen.a70, JSON.stringify(seen));
-  check('its four live demos link to the demo, a mode each',
-    seen.links.join() === 'demo.html?mode=A,demo.html?mode=B,demo.html?mode=C,demo.html?mode=D',
+  check('its five live demos link to the demo, a mode each',
+    seen.links.join() === 'demo.html?mode=A,demo.html?mode=U,demo.html?mode=B,demo.html?mode=C,demo.html?mode=D',
     JSON.stringify(seen.links));
-  // APL\1130, Maryland APL and APL2; sw-cor24-apl's demo is live.
-  check('three pictures say Future demo', seen.future === 3, JSON.stringify(seen));
+  // APL\1130 and APL2; Maryland APL's and sw-cor24-apl's demos are live.
+  check('two pictures say Future demo', seen.future === 2, JSON.stringify(seen));
   check('the legend has the owner\'s years', seen.legend, JSON.stringify(seen));
   // Text size comes first (owner, 2026-11-10): the strip is drawn smaller
   // to fit no further than 90 per cent, and the page scrolls past that;
@@ -1418,6 +1418,48 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
     seen.license === 'MIT License' && seen.built === `${info.host} | ${info.commit} | ${info.built_at}`,
     JSON.stringify({ license: seen.license, built: seen.built }));
   check('nothing on the timeline is missing', missed.length === 0, missed.join());
+  await context.close();
+}
+
+// (U) '74, a batch job and not a session: the timeline's link reaches
+// deck.html, which shows a deck a card at a time, in 2D and in the
+// 029 in 3D, and submits it for a printout on green-bar paper.
+{
+  const context = await fastContext({ viewport: { width: 1280, height: 900 } });
+  const page = await context.newPage();
+  const missed = [];
+  page.on('response', (r) => { if (r.status() >= 400) missed.push(r.url()); });
+  await page.goto(`${url}?mode=U`, { waitUntil: 'load' });
+  await page.waitForFunction(() => document.getElementById('where')?.textContent, null, { timeout: 20000 })
+    .catch(() => {});
+  const card = await page.evaluate(() => ({
+    at: location.pathname.split('/').pop(),
+    where: document.getElementById('where').textContent,
+    decks: document.getElementById('deck').options.length,
+    cards: document.getElementById('cards').children.length,
+    drawn: document.getElementById('card').height > 0,
+  }));
+  check('mode U is the deck page, its first deck on its first card',
+    card.at === 'deck.html' && card.where === `Card 1 of ${card.cards}` && card.decks >= 3 && card.drawn,
+    JSON.stringify(card));
+  await page.click('#next');
+  check('the next card is shown', await page.textContent('#where') === `Card 2 of ${card.cards}`,
+    await page.textContent('#where'));
+  await page.click('#view');
+  const three = await page.waitForFunction(() => document.querySelector('#model canvas'), null, { timeout: 30000 })
+    .then(() => true, () => false);
+  check('the 3D view draws the 029', three, 'no canvas in #model');
+  await page.click('#view');
+  await page.click('#submit');
+  const printout = await page.evaluate(() => ({
+    shown: !document.getElementById('printout').hidden,
+    lines: document.getElementById('paper').innerText.split('\n').map((l) => l.trimEnd()),
+  }));
+  check('Submit returns the printout: the banner, the answer, the end of the run',
+    printout.shown && printout.lines.includes('UNIVERSITY OF MARYLAND APL')
+      && printout.lines.includes('1 3') && printout.lines.includes('END OF RUN'),
+    JSON.stringify(printout.lines.slice(0, 6)));
+  check('nothing on the deck page is missing', missed.length === 0, missed.join());
   await context.close();
 }
 
