@@ -1,0 +1,14 @@
+[package]
+name = "apl-u74-code"
+description = "The IBM 029's card code: the holes each character punches"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-u74-card = { path = "../apl-u74-card" }
+
+[lints]
+workspace = true

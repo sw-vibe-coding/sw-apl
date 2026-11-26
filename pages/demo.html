@@ -7,6 +7,12 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <title>sw-apl</title>
+<!-- (U) '74 is not a session but a batch job, and has a page of its
+     own: a mode chosen as U is sent there, so demo.html?mode=U reaches
+     it as every other mode is reached. -->
+<script>
+  if (new URL(location.href).searchParams.get("mode")?.toUpperCase() === "U") location.replace("deck.html");
+</script>
 <!-- (A)'s 3D view loads three.js (images/redistributed/three/), whose
      loader imports it by name. Only that view loads it. -->
 <script type="importmap">{"imports": {"three": "./redistributed/three/three.module.js"}}</script>

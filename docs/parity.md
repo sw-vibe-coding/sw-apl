@@ -306,6 +306,8 @@ the tables above pin; these rows are the run around it.
 | `$DL` cards define a function; one already defined is not reopened | done | batch tests, sample 99-errors-74 |
 | `⎕` and `⍞` read the next card | done | batch tests, sample 99-program-74 |
 | No system commands and no saved workspaces | done | batch tests, sample 99-errors-74 |
+| Each card drawn with the holes an 029 punches, from its card code | done | code tests, web tests |
+| The page, `demo.html?mode=U`: a demo deck a card at a time, in 2D or in the 029 in 3D; submitted, the printout on green-bar paper | done | web tests |
 
 ## Restrictions
 

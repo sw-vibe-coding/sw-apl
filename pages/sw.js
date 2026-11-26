@@ -27,7 +27,8 @@ const CACHE = `sw-apl-${VERSION || "unstamped"}`;
 // What the page loads, relative to where this worker is: enough for a
 // session to start with the network off.
 const SHELL = [
-  "./", "demo.html", "coming-soon.html",
+  "./", "demo.html", "coming-soon.html", "deck.html", "deck.js", "card029.js",
+  "u74/apl_u74_web.js", "u74/apl_u74_web_bg.wasm",
   "timeline/apl_timeline_web.js", "timeline/apl_timeline_web_bg.wasm",
   "machines/70.webp", "machines/5100.webp", "machines/80.webp", "machines/83.webp",
   "machines/1053.webp", "machines/029.webp", "machines/3279g.webp", "machines/cor24.webp",

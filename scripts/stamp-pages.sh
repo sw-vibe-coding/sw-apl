@@ -18,12 +18,13 @@ digest() {
     if command -v sha256sum >/dev/null; then sha256sum "$@"; else shasum -a 256 "$@"; fi
 }
 
-files=(pages/apl.js pages/board.js pages/carriage.js pages/crt.js pages/desk.js pages/lines.js pages/printer.js pages/selectric.js pages/sound.js pages/greenbar.js pages/views2741.js pages/model2741.js pages/machines/2741.glb pages/machines/2741-mechanism.json pages/sounds/key.wav pages/sounds/space.wav pages/sounds/return.wav pages/worker.js pages/sw.js
+files=(pages/apl.js pages/board.js pages/carriage.js pages/crt.js pages/desk.js pages/lines.js pages/printer.js pages/selectric.js pages/sound.js pages/greenbar.js pages/views2741.js pages/model2741.js pages/machines/2741.glb pages/machines/2741-mechanism.json pages/deck.html pages/deck.js pages/card029.js pages/model029.js pages/machines/029.glb pages/sounds/key.wav pages/sounds/space.wav pages/sounds/return.wav pages/worker.js pages/sw.js
        pages/keymap.json pages/glyph-names.json pages/manifest.json
        pages/board-keys.json pages/board.json pages/overstrikes.json
        images/redistributed/apl-keyboard/APL-keybd2-board.svg
        pages/wasm/apl_wasm.js pages/wasm/apl_wasm_bg.wasm
        pages/timeline/apl_timeline_web.js pages/timeline/apl_timeline_web_bg.wasm
+       pages/u74/apl_u74_web.js pages/u74/apl_u74_web_bg.wasm
        pages/machines/*.webp)
 for file in "${files[@]}"; do
     if [ ! -f "$file" ]; then

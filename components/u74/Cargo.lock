@@ -830,6 +830,13 @@ name = "apl-u74-card"
 version = "0.1.0"
 
 [[package]]
+name = "apl-u74-code"
+version = "0.1.0"
+dependencies = [
+ "apl-u74-card",
+]
+
+[[package]]
 name = "apl-u74-deck"
 version = "0.1.0"
 dependencies = [
@@ -860,6 +867,18 @@ dependencies = [
  "apl-u74-card",
  "apl-u74-listing",
  "apl-u74-mnemonic",
+]
+
+[[package]]
+name = "apl-u74-web"
+version = "0.1.0"
+dependencies = [
+ "apl-session",
+ "apl-u74-batch",
+ "apl-u74-card",
+ "apl-u74-code",
+ "apl-u74-listing",
+ "wasm-bindgen",
 ]
 
 [[package]]

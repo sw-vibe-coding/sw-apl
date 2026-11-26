@@ -94,7 +94,14 @@ of its decisions rests on.
   `mode-u.md` checks and corrects.
 - **ibm-1130-rs**, sw-comp-history, the owner's, MIT: the IBM 029's
   characters and card codes, `crates/punch-card-core/src/hollerith.rs`.
+  The demo page draws its cards to the layout of its keypunch card,
+  `components/src/components/keypunch.rs`.
   <https://github.com/sw-comp-history/ibm-1130-rs>
+- **console-3D**, softwarewrighter, the owner's, MIT: the IBM 029 in
+  the demo's 3D view, `pages/machines/029.glb`, built by its
+  `scripts/build.py 029` (Blender, X_eTaL) at its pinned commits
+  (console-3D a312163, X_eTaL-extensions 0f93e06).
+  <https://github.com/softwarewrighter/console-3D>
 
 ## APL generally
 

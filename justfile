@@ -147,6 +147,12 @@ pages:
       wasm-pack build --release --target web --no-pack \
         --out-dir ../../../../pages/timeline
     rm -f pages/timeline/.gitignore pages/timeline/*.d.ts
+    # (U) '74's page, deck.html: the decks, each card's holes and the
+    # batch run, in a WebAssembly of their own.
+    cd components/u74/crates/apl-u74-web && \
+      wasm-pack build --release --target web --no-pack \
+        --out-dir ../../../../pages/u74
+    rm -f pages/u74/.gitignore pages/u74/*.d.ts
     # The version every file below demo.html is fetched at. It is a
     # digest of what a visitor actually runs, so a rebuild that
     # changed nothing does not invalidate a cache, and one that

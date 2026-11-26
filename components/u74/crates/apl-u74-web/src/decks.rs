@@ -1,0 +1,38 @@
+//! The demo decks, which are the deck samples, and a deck's run.
+
+use apl_session::{Host, Memory, Mode, QUOTA, TimeSource};
+
+/// A deck the page offers.
+pub struct Deck {
+    pub title: &'static str,
+    pub cards: &'static str,
+}
+
+/// The decks, the first being the one the page opens on.
+pub const DECKS: [Deck; 3] = [
+    Deck {
+        title: "Domino",
+        cards: include_str!("../../../../../samples/99-domino-74.deck"),
+    },
+    Deck {
+        title: "A program",
+        cards: include_str!("../../../../../samples/99-program-74.deck"),
+    },
+    Deck {
+        title: "Typos",
+        cards: include_str!("../../../../../samples/99-errors-74.deck"),
+    },
+];
+
+/// The printout of a deck run as a batch job, a line to a line. The
+/// browser has no clock, so the banner has no time.
+#[must_use]
+pub fn printout(cards: &str) -> String {
+    let host = Host {
+        quota: QUOTA,
+        store: Box::new(Memory::default()),
+        mode: Mode::U,
+        clock: TimeSource::None,
+    };
+    apl_u74_batch::run(cards, host).join("\n")
+}

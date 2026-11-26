@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<!-- Ask every cache for this page afresh: it fetches version.txt
+     uncached and stamps everything it loads. -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>sw-apl: U '74</title>
+<!-- The 3D view loads three.js (images/redistributed/three/), whose
+     loader imports it by name. Only that view loads it. -->
+<script type="importmap">{"imports": {"three": "./redistributed/three/three.module.js"}}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="University of Maryland APL, run from punched cards as a batch job: pick a deck, look through its cards, submit it, read the printout.">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+  /* APL385 Unicode, public domain, by Adrian Smith: the printout's
+     glyphs, as the print bar printed them. */
+  @font-face {
+    font-family: "APL385 Unicode";
+    src: local("APL385 Unicode"), url("redistributed/apl385-font/APL385.woff2") format("woff2");
+    font-display: swap;
+  }
+  :root { color-scheme: light dark; --paper: #fbf7ef; --ink: #2b2118; --rule: #d8cdb8; }
+  @media (prefers-color-scheme: dark) {
+    :root { --paper: #17130e; --ink: #e8dfd0; --rule: #3a3229; }
+  }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font: 15px/1.45 system-ui, sans-serif;
+  }
+  header {
+    padding: .4rem 1rem; border-bottom: 1px solid var(--rule);
+    font-size: 13px; display: flex; align-items: center; gap: .6rem; flex-wrap: wrap;
+  }
+  header .name { opacity: .8; color: inherit; text-decoration: none; }
+  header .name:hover { text-decoration: underline; }
+  header .mode { font-weight: 600; }
+  main { max-width: 70rem; margin: 0 auto; padding: 1rem; display: grid; gap: 1rem; }
+  .bar { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; }
+  .bar .grow { flex: 1; }
+  button, select {
+    font: inherit; padding: .3rem .7rem; border-radius: .3rem;
+    border: 1px solid var(--rule); background: var(--paper); color: var(--ink);
+  }
+  button:disabled { opacity: .4; }
+  #submit { font-weight: 600; border-color: var(--ink); }
+  /* The card: drawn to the width it is given. */
+  #card { width: 100%; height: auto; display: block; filter: drop-shadow(0 2px 4px #0004); }
+  body.model3d #card { display: none; }
+  #model { position: relative; height: min(70vh, 36rem); }
+  #model canvas { display: block; width: 100%; height: 100%; touch-action: none; border-radius: .3rem; }
+  #model .zoom { position: absolute; right: .5rem; top: .5rem; display: flex; gap: .3rem; }
+  #model .zoom button { background: #0008; color: #fff; border-color: #fff8; }
+  /* The deck, a card to a line, the one shown marked. */
+  #cards {
+    margin: 0; padding: 0 0 0 4ch; max-height: 14rem; overflow-y: auto;
+    border: 1px solid var(--rule); border-radius: .3rem;
+    font: 13px/1.5 "Courier New", ui-monospace, monospace;
+  }
+  #cards button {
+    all: unset; display: block; width: 100%; white-space: pre; cursor: pointer;
+    overflow: hidden; text-overflow: ellipsis;
+  }
+  #cards li[aria-current] { background: #f4e8d0; color: #000; }
+  #cards li::marker { opacity: .5; }
+  /* The printout: continuous green-bar, stripes three lines deep, a
+     sprocket hole every half inch down both edges, 132 columns wide.
+     Paper is paper in a dark room too. */
+  #paper {
+    --lh: 20px; --hole: var(--paper);
+    overflow-x: auto; white-space: pre; color: #1f2420;
+    font: 14px/var(--lh) "APL385 Unicode", "DejaVu Sans Mono", ui-monospace, monospace;
+    padding: calc(var(--lh) * 3) 44px calc(var(--lh) * 3);
+    background:
+      radial-gradient(circle, var(--hole) 5px, transparent 6px) left 6px top 0 / 20px calc(var(--lh) * 3) repeat-y,
+      radial-gradient(circle, var(--hole) 5px, transparent 6px) right 6px top 0 / 20px calc(var(--lh) * 3) repeat-y,
+      repeating-linear-gradient(#d9ecd6 0 calc(var(--lh) * 3), #fbfcf7 0 calc(var(--lh) * 6));
+    background-color: #fbfcf7;
+  }
+  #paper > div { min-width: 132ch; }
+  .about { font-size: 13px; opacity: .8; max-width: 46rem; }
+  .about code { font-family: "Courier New", ui-monospace, monospace; }
+</style>
+<header>
+  <a class="name" href="index.html" title="The timeline, where the other modes are">sw-apl</a>
+  <span class="mode">U '74</span>
+  <span>University of Maryland APL, from punched cards</span>
+</header>
+<main>
+  <div class="bar">
+    <label>Deck <select id="deck"></select></label>
+    <button type="button" id="prev" aria-label="The card before">&larr;</button>
+    <span id="where"></span>
+    <button type="button" id="next" aria-label="The card after">&rarr;</button>
+    <span class="grow"></span>
+    <button type="button" id="view">3D</button>
+    <button type="button" id="submit">Submit the deck</button>
+  </div>
+  <canvas id="card" width="1600" aria-label="The card shown"></canvas>
+  <div id="model" hidden></div>
+  <ol id="cards" aria-label="The deck"></ol>
+  <p class="about">
+    A deck is a job: <code>@RUN</code> opens it, <code>@APL</code> calls
+    APL, and <code>@FIN</code> ends it. Each card between is one APL
+    statement in columns 1-72; columns 73-80 may hold a sequence
+    number. The 029 has no APL characters, so a <code>$</code> and two
+    letters stand for one: <code>$RH</code> for rho, <code>$IO</code>
+    for iota, <code>$AL</code> for the assignment arrow. Submit the
+    deck and the printout lists each card as punched, the statement in
+    APL beneath it, and what it printed.
+  </p>
+  <section id="printout" hidden aria-label="The printout">
+    <div id="paper"></div>
+  </section>
+</main>
+<script type="module">
+  // Everything is fetched at the build version.txt names, as
+  // demo.html does, so the page and its WebAssembly cannot drift.
+  const version = await fetch("version.txt", { cache: "no-store" })
+    .then((r) => (r.ok ? r.text() : ""))
+    .catch(() => "");
+  const query = new URLSearchParams({ ts: String(Date.now()) });
+  if (version.trim()) query.set("v", version.trim());
+  await import(`./deck.js?${query}`);
+</script>

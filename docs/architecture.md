@@ -364,7 +364,8 @@ line. Each crate maps its own failures into `AplError`.
 PC APL, is being built (`ibm-pc-apl-plan.md`), and so is (U) '74,
 Maryland's punched-card APL (`mode-u.md`), whose run is a component
 of its own, `u74/`: a deck in, through an ordinary session in mode U,
-and a listing out. The APL\1130 subset of APL\360 may follow. Each is added without moving
+and a listing out; its demo page, `deck.html`, runs the same crates
+compiled to WebAssembly (`apl-u74-web`). The APL\1130 subset of APL\360 may follow. Each is added without moving
 the modes before it, in five layers:
 
 1. **The core stays APL\360.** The shared crates know nothing of

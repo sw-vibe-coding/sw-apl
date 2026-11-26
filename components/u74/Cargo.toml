@@ -5,10 +5,12 @@
 members = [
     "crates/apl-u74-batch",
     "crates/apl-u74-card",
+    "crates/apl-u74-code",
     "crates/apl-u74-deck",
     "crates/apl-u74-listing",
     "crates/apl-u74-mnemonic",
     "crates/apl-u74-reader",
+    "crates/apl-u74-web",
 ]
 resolver = "2"
 

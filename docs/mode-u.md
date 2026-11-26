@@ -194,6 +194,19 @@ column 80 is not on the card. A character an 029 cannot punch, which
 a file can hold and a card cannot, is a CHARACTER ERROR at its
 column. A data card is any card that is not a control card: a read
 that meets a control card finds no data.
+
+## The page
+
+`demo.html?mode=U` opens `deck.html`, as (U) is a batch job and not
+a session. Pick a deck -- the deck samples, `samples/*-74.deck` --
+and look through it a card at a time: drawn as the 029 leaves it,
+cream stock with its corner cut, the holes punched in each column by
+the 029's card code (`apl-u74-code`) and what was punched printed
+along the top; or, in the 3D view, standing in the punch station of
+the owner's IBM 029. Submit the deck and the printout comes back
+below on green-bar paper, 132 columns, the same listing the CLI
+prints. No APL keyboard: the page has nothing to type APL on.
+
 ## The first deck
 
 From the notes, a 2 by 2 system solved with domino. `$CM` makes the
