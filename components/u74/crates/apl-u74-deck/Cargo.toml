@@ -1,0 +1,15 @@
+[package]
+name = "apl-u74-deck"
+description = "sw-apl (U) '74 at the command line: a deck file in, its listing printed"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-u74-batch = { path = "../apl-u74-batch" }
+apl-session = { path = "../../../session/crates/apl-session" }
+
+[lints]
+workspace = true

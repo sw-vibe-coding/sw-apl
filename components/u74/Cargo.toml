@@ -1,0 +1,23 @@
+# What only the (U) '74 mode has: University of Maryland APL as a batch
+# job from punched cards (docs/mode-u.md). The language is the core's;
+# what is here is the card, its spellings, and the run around it.
+[workspace]
+members = [
+    "crates/apl-u74-batch",
+    "crates/apl-u74-card",
+    "crates/apl-u74-deck",
+    "crates/apl-u74-listing",
+    "crates/apl-u74-mnemonic",
+    "crates/apl-u74-reader",
+]
+resolver = "2"
+
+[workspace.package]
+edition = "2024"
+license = "MIT"
+version = "0.1.0"
+authors = ["Michael A Wright"]
+repository = "https://github.com/sw-vibe-coding/sw-apl"
+
+[workspace.lints.clippy]
+pedantic = "warn"

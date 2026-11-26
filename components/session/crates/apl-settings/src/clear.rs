@@ -12,11 +12,11 @@ use apl_workspace::{Print, Saved};
 /// whole number prints, so it prints as (A)'s does. (D)'s prints ten
 /// digits in a line of 79, IBM PC APL's clear workspace (APL Reference,
 /// May 1983, figure 11), a long whole number as (A)'s. All start with
-/// origin 1 and link 16807.
+/// origin 1 and link 16807. (U)'s is (A)'s.
 #[must_use]
 pub fn clear(mode: Mode) -> Saved {
     let print = match mode {
-        Mode::A => Print::default(),
+        Mode::A | Mode::U => Print::default(),
         Mode::B => Print {
             digits: 5,
             width: 64,

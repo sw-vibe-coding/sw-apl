@@ -1,6 +1,6 @@
 # sw-apl Language Reference
 
-This describes the language sw-apl implements, in its four modes:
+This describes the language sw-apl implements, in its five modes:
 
 - **(A) '70**, modeled on APL\360. Behavior follows the IBM
   APL\360 User's Manual (1968, and its 1970 edition), with domino
@@ -14,15 +14,18 @@ This describes the language sw-apl implements, in its four modes:
   language, a clear workspace of ten digits in a line of 79, and
   workspaces of its own; `ibm-pc-apl-plan.md` records the sources
   and the decisions.
+- **(U) '74**, modeled on University of Maryland APL, run as a batch
+  job from punched cards. It has (A)'s language with scan, punched in
+  `$` spellings; `mode-u.md` records the sources and the decisions.
 
 Most of the language is one shared core, and the sections from
 *Accepted Unicode* to *Defined functions* describe it: they hold in
 every mode except where they say otherwise. Then come what (B) adds
 -- execute and the quad system variables and functions -- and what
 (A) has that (B) has not -- the I-beam functions and the settings
-commands, and what (C) leaves out. `--mode 70`, `--mode 75` or
-`--mode 80` chooses the mode at the command
-line, and the tab does in the browser.
+commands, and what (C) leaves out. `--mode 70`, `--mode 75`,
+`--mode 80`, `--mode 83` or `--mode 74` chooses the mode at the
+command line, and the tab does in the browser.
 
 `modes.md` compares the modes area by area.
 

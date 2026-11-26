@@ -1,6 +1,6 @@
 number = 34
 slug = "u74-mode"
-status = "pending"
+status = "in-progress"
 description = "Per docs/plan.md and docs/mode-u.md: mode U ('74) in apl-modes and the CLI as..."
 role = "production"
 context_files = []

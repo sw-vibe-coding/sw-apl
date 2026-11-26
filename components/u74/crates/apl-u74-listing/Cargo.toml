@@ -1,0 +1,15 @@
+[package]
+name = "apl-u74-listing"
+description = "sw-apl (U) '74: the lines of a batch run's printout"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-u74-card = { path = "../apl-u74-card" }
+apl-session = { path = "../../../session/crates/apl-session" }
+
+[lints]
+workspace = true

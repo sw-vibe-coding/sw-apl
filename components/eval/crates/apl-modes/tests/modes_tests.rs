@@ -8,6 +8,7 @@ fn ab() -> Modes {
     Modes::ALL
         .minus(Modes::only(Mode::C))
         .minus(Modes::only(Mode::D))
+        .minus(Modes::only(Mode::U))
 }
 
 /// A workspace file with the given modes line, or none.
@@ -35,7 +36,7 @@ fn a_mode_is_named_by_its_year_or_its_letter() {
 #[test]
 fn the_line_is_rendered_and_read_back() {
     assert_eq!(render(ab()), "(A)(B)");
-    assert_eq!(render(Modes::ALL), "(A)(B)(C)(D)");
+    assert_eq!(render(Modes::ALL), "(A)(B)(C)(D)(U)");
     assert_eq!(modes(&ws(Some("(C)"), "X←1")), Modes::only(Mode::C));
     assert_eq!(render(Modes::only(Mode::B)), "(B)");
     assert_eq!(modes(&ws(Some("(A)(B)"), "X←1")), ab(), "not (C)");
@@ -71,7 +72,7 @@ fn sets_meet_and_subtract() {
     assert!(!a.has(Mode::B));
     assert!(a.meets(Modes::ALL) && !a.meets(b));
     assert_eq!(ab().minus(a), b);
-    let cd = Modes::ALL.minus(ab());
+    let cd = Modes::ALL.minus(ab()).minus(Modes::only(Mode::U));
     assert!(cd.has(Mode::C) && cd.has(Mode::D) && !cd.has(Mode::A));
     assert_eq!(a.minus(a), Modes::NONE);
 }
@@ -161,4 +162,22 @@ fn d_is_83_ibm_pc_apl_with_the_language_of_b() {
     assert_eq!(render(Modes::only(Mode::D)), "(D)");
     assert_eq!(modes(&ws(Some("(D)"), "X←1")), Modes::only(Mode::D));
     assert!(!modes(&ws(Some("(A)(B)"), "X←1")).has(Mode::D), "not (D)");
+}
+
+/// (U) '74, University of Maryland APL on punched cards
+/// (docs/mode-u.md): (A)'s language with scan, and no glyph or
+/// overstrike of its own -- its cards spell the glyphs out.
+#[test]
+fn u_is_the_punched_card_mode() {
+    assert_eq!(Mode::parse("74"), Some(Mode::U));
+    assert_eq!(Mode::parse("u"), Some(Mode::U));
+    assert_eq!(Mode::U.letter(), 'U');
+    assert_eq!(Mode::U.glyphs(), "");
+    assert!(Mode::U.overstrikes().is_empty());
+    let u = Mode::U.profile();
+    assert!(u.has(Feature::Ibeams) && u.has(Feature::Scan));
+    assert!(!u.has(Feature::Latent) && !u.has(Feature::Settings));
+    assert!(!u.cuts(Cut::Domino), "Maryland's own domino");
+    assert_eq!(render(Modes::only(Mode::U)), "(U)");
+    assert!(!modes(&ws(Some("(A)(B)"), "X←1")).has(Mode::U));
 }

@@ -875,6 +875,55 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-u74-batch"
+version = "0.1.0"
+dependencies = [
+ "apl-clock",
+ "apl-session",
+ "apl-u74-card",
+ "apl-u74-listing",
+ "apl-u74-mnemonic",
+ "apl-u74-reader",
+]
+
+[[package]]
+name = "apl-u74-card"
+version = "0.1.0"
+
+[[package]]
+name = "apl-u74-deck"
+version = "0.1.0"
+dependencies = [
+ "apl-session",
+ "apl-u74-batch",
+]
+
+[[package]]
+name = "apl-u74-listing"
+version = "0.1.0"
+dependencies = [
+ "apl-session",
+ "apl-u74-card",
+]
+
+[[package]]
+name = "apl-u74-mnemonic"
+version = "0.1.0"
+dependencies = [
+ "apl-u74-card",
+]
+
+[[package]]
+name = "apl-u74-reader"
+version = "0.1.0"
+dependencies = [
+ "apl-session",
+ "apl-u74-card",
+ "apl-u74-listing",
+ "apl-u74-mnemonic",
+]
+
+[[package]]
 name = "apl-uses"
 version = "0.1.0"
 dependencies = [
@@ -1379,6 +1428,7 @@ dependencies = [
  "apl-config",
  "apl-session",
  "apl-strike",
+ "apl-u74-deck",
  "chrono",
  "clap",
  "hostname",

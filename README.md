@@ -12,9 +12,9 @@ workspaces saved and loaded by name.
 
 ## Modes
 
-sw-apl runs in one of four modes, chosen when a session starts.
+sw-apl runs in one of five modes, chosen when a session starts.
 Each is modeled on an APL that shipped, and each lists and loads only
-the workspaces that run in it.
+the workspaces that run in it, except (U), which keeps none.
 
 | Mode | Modeled on | What it has |
 |---|---|---|
@@ -22,6 +22,7 @@ the workspaces that run in it.
 | (B) '75 | The APL of the IBM 5100 family of desktop computers (the 5100, 5110 and 5120) | The same core, plus execute, format, and the quad system variables and functions (quad IO, quad FX and the rest); no I-beams, no settings commands, no groups |
 | (C) '80 | APL80, Phelps Gates's APL for the TRS-80 Model I home computer | The same core with scan, less what APL80 left out: domino, lamination, the diagonal transpose, the hyperbolic functions, and two specifications in one statement; at most 32 functions of 255 lines. Functions are defined with `)DEF` and `)EDIT` as on APL80, not the del, and a workspace saved in (C) runs in (C) alone. It is typed in APL80's own characters: a lower-case letter for a symbol, as `p` for rho, `%` to divide, `_` to subtract, round brackets to index |
 | (D) '83 | IBM Personal Computer APL, from the IBM Madrid Scientific Center, on a PC with both the monochrome and the color display | (B)'s language; ten digits in a line of 79; workspaces of its own; shared variables and AP205, the full-screen processor, drawing on the color display. PC APL's own extensions are not implemented |
+| (U) '74 | University of Maryland APL, run as a batch job from punched cards on a UNIVAC 1110 | (A)'s language with scan, punched on an IBM 029, which has no APL characters: each is spelled as a dollar sign and two letters, `$RH` for rho. A deck of cards goes in, a line printer's listing comes out, an error pointing at its card and column. No system commands and no saved workspaces: the deck builds the workspace for its run (`docs/mode-u.md`) |
 
 The 5100's APL is APLSV -- the APL that followed APL\360 at IBM,
 adding shared variables, execute, format and the quad names -- cut

@@ -9,6 +9,11 @@ MODES:
                          input line with the indent so the transcript
                          reads like a session. Stops at )OFF.
   sw-apl < FILE          Batch from stdin (same as -f).
+  sw-apl --mode 74 -f DECK
+                         (U) '74: run DECK, one punched card a line,
+                         as a batch job, and print its listing. The
+                         cards spell the APL characters in $ and two
+                         letters ($RH for rho); see docs/mode-u.md.
   ./FILE.apl             An executable file: a leading #! line is
                          the shell's and is not read as APL. Put the
                          flags before -f, and prefer the portable

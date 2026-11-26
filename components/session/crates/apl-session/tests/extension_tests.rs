@@ -49,7 +49,7 @@ fn commands(mode: Mode) -> Vec<&'static str> {
     let mut all = SHARED.to_vec();
     match mode {
         Mode::A => all.extend(ONLY_A),
-        Mode::B | Mode::D => {}
+        Mode::B | Mode::D | Mode::U => {}
         Mode::C => all.extend(ONLY_C),
     }
     all

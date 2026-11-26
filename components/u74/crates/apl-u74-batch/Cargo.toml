@@ -1,0 +1,19 @@
+[package]
+name = "apl-u74-batch"
+description = "sw-apl (U) '74: a deck in, a printout out"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-u74-card = { path = "../apl-u74-card" }
+apl-u74-listing = { path = "../apl-u74-listing" }
+apl-u74-mnemonic = { path = "../apl-u74-mnemonic" }
+apl-u74-reader = { path = "../apl-u74-reader" }
+apl-session = { path = "../../../session/crates/apl-session" }
+apl-clock = { path = "../../../eval/crates/apl-clock" }
+
+[lints]
+workspace = true

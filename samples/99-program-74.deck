@@ -1,0 +1,28 @@
+@RUN   ALBANY,76104,CS301,1,20                                          00000010
+@APL,I                                                                  00000020
+$CM A PROGRAM DECK, IN SEQUENCE IN COLUMNS 73-80                        00000030
+$DL Z $AL PRIMES N                                                      00000040
+$CM THE PRIMES UP TO N                                                  00000050
+Z $AL (2=+$SB 0=($IO N)$SO.|$IO N)/$IO N                                00000060
+$DL                                                                     00000070
+PRIMES 30                                                               00000080
++$BS $IO 5                                                              00000090
+'ABCDE'$LB 3 1 4$RB                                                     00000100
+$RV 'DECK'                                                              00000110
+$GU 30 10 20                                                            00000120
+3 4 $RH $IO 12                                                          00000130
+$TR 3 4 $RH $IO 12                                                      00000140
+2 $TA 5 $DR $IO 10                                                      00000150
+2 $CI 0                                                                 00000160
+10 $LO 1000                                                             00000170
+$NG3 $AB 7                                                              00000180
+(1 2 3)$EP 2                                                            00000190
+$CM QUOTE-QUAD READS THE NEXT CARD AS DATA                              00000200
+NAME $AL $QQ                                                            00000210
+UNIVAC 1110                                                             00000220
+'HELLO, ',NAME                                                          00000230
+$CM QUAD READS THE NEXT CARD AS AN EXPRESSION                           00000240
+N $AL $QD                                                               00000250
+2 $MU 21                                                                00000260
+N                                                                       00000270
+@FIN                                                                    00000280

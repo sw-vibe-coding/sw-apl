@@ -44,7 +44,8 @@ And (2026-11-24):
 - **No APL keyboard.** The 029's own keys, on screen, and the
   computer's keyboard; nothing else.
 
-The language is (A)'s, APL\360, which already has domino. Minker
+The language is (A)'s, APL\360, which already has domino, with scan,
+which (A) has not got: the notes list it, and APLSV (1973) had it. Minker
 credits Maryland with shared variables; (U) leaves them out, as a
 batch job has no partner to share with. Execute and format are left
 out: they arrived with APLSV in 1973, and nothing says Maryland had
@@ -178,8 +179,21 @@ user reads the two side by side to repunch.
   indicator cleared (ours: there is no one to resume it).
 - The page is a green-bar sheet, 132 columns; the print width is
   APL\360's default, 120.
-- At the end, a line saying the run ended, and how.
+- At the end, a line saying the run ended, and how: END OF RUN at
+  `@FIN`; END OF DECK, NO @FIN CARD; or NO CARD LEFT TO READ. A
+  deck that stops inside a definition says that first.
+- An error names its place as `CARD 6 COLUMN 12`, or `CARD 6` when
+  the caret is not on the card's own statement, as in a function it
+  called.
 
+## The deck as a file
+
+At the CLI, `sw-apl --mode 74 -f DECK` (or a deck on stdin) runs a
+text file, one card a line, and prints its listing. What lies past
+column 80 is not on the card. A character an 029 cannot punch, which
+a file can hold and a card cannot, is a CHARACTER ERROR at its
+column. A data card is any card that is not a control card: a read
+that meets a control card finds no data.
 ## The first deck
 
 From the notes, a 2 by 2 system solved with domino. `$CM` makes the

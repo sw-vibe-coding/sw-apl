@@ -29,17 +29,18 @@ pub const VERSION: &str = concat!(
     env!("BUILD_TIMESTAMP"),
 );
 
-/// A clean-room APL interpreter with traditional glyphs, in four modes.
+/// A clean-room APL interpreter with traditional glyphs, in five modes.
 #[derive(Parser, Debug)]
 #[command(
     name = "sw-apl",
     version = VERSION,
     about,
     long_about = "A clean-room APL interpreter with traditional glyphs, \
-                  written in Rust from scratch, in four modes: (A) '70, \
+                  written in Rust from scratch, in five modes: (A) '70, \
                   modeled on APL\\360; (B) '75, modeled on the APL of the \
                   IBM 5100 family; (C) '80, modeled on APL80 for the \
-                  TRS-80; and (D) '83, modeled on IBM PC APL. Flat \
+                  TRS-80; (D) '83, modeled on IBM PC APL; and (U) '74, \
+                  University of Maryland APL run from punched cards. Flat \
                   arrays, floating point, the \
                   del editor, and workspaces in numbered libraries.",
     after_long_help = include_str!("cli_help.txt")
@@ -63,8 +64,9 @@ pub struct Args {
     #[arg(long = "library", value_name = "DIR", default_value = ".")]
     pub library: PathBuf,
 
-    /// The mode: 70 for (A), 75 for (B), 80 for (C), 83 for (D). Each
-    /// lists and loads only the workspaces that run in it.
+    /// The mode: 70 for (A), 75 for (B), 80 for (C), 83 for (D), 74 for
+    /// (U). Each lists and loads only the workspaces that run in it; (U)
+    /// runs a deck of cards instead (docs/mode-u.md).
     #[arg(long, value_name = "MODE", default_value = "70", value_parser = mode)]
     pub mode: Mode,
 
@@ -88,7 +90,7 @@ pub struct Args {
 
 /// A mode as `--mode` names it: its year or its letter.
 fn mode(word: &str) -> Result<Mode, String> {
-    Mode::parse(word).ok_or_else(|| format!("{word} is not a mode: 70, 75, 80 or 83"))
+    Mode::parse(word).ok_or_else(|| format!("{word} is not a mode: 70, 75, 80, 83 or 74"))
 }
 
 /// What the host decides: the size, the libraries -- `--library`'s 0
@@ -112,6 +114,7 @@ fn main() -> ExitCode {
         return ExitCode::FAILURE;
     };
     let outcome = match args.file {
+        path if args.mode == Mode::U => apl_u74_deck::run_deck(path.as_deref(), ws),
         Some(path) => shell::run_batch(Some(&path), echo, ws),
         None if std::io::stdin().is_terminal() => repl::run_interactive(ws),
         None => shell::run_batch(None, echo, ws),

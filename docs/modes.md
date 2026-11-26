@@ -1,7 +1,7 @@
 # The modes compared
 
 sw-apl runs in one mode per session, chosen when the session starts:
-`--mode 70`, `75`, `80` or `83` at the CLI and the service, the tab in the
+`--mode 70`, `75`, `80`, `83` or `74` at the CLI and the service, the tab in the
 browser. This page shows, area by area, what each mode has.
 
 - **(A) '70**, modeled on APL\360, typed on an IBM 2741.
@@ -15,6 +15,11 @@ browser. This page shows, area by area, what each mode has.
   extensions: ambivalent functions, `⎕EA`, the dyadic grades, picture
   format and `⎕FC`, the transfer form, `⎕TF`, with `)IN` and `)OUT`,
   and `)RESET` (`language.md`).
+- **(U) '74**, modeled on University of Maryland APL on punched cards
+  (`mode-u.md`). Where the tables below have no column for it, it
+  answers as (A) does, with scan; it differs in being a batch run of
+  a deck, with no system commands and no saved workspaces, and in its
+  cards, which spell the APL characters in `$` and two letters.
 
 In the tables, **yes** means the mode has it, **no** that it has not,
 and **part** that it has some of it, as the note says. The language

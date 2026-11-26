@@ -8,4 +8,4 @@
 
 mod profile;
 
-pub use profile::{A70, B75, C80, Cut, D83, Feature, Profile};
+pub use profile::{A70, B75, C80, Cut, D83, Feature, Profile, U74};

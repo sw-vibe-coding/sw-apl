@@ -1,6 +1,7 @@
 //! Modes: which of sw-apl's languages a workspace runs in.
 //!
-//! sw-apl has four modes, (A) '70, (B) '75, (C) '80 and (D) '83. A
+//! sw-apl has five modes, (A) '70, (B) '75, (C) '80, (D) '83 and
+//! (U) '74, the punched-card one, which keeps no workspace. A
 //! workspace names the modes it runs in on a `⍝!MODES` line near its
 //! top; `apl-shelves` lists and loads it only in those. See `docs/workspaces.md`.
 

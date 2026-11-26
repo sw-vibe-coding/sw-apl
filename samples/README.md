@@ -201,3 +201,10 @@ Run the corpus against the release binary:
 scripts/run-samples.sh          # all samples, transcript to stdout
 scripts/run-samples.sh 06       # only matching names
 ```
+
+The `.deck` files are (U) '74's: punched cards, one a line, run as a
+batch job with `sw-apl --mode 74 -f NAME.deck`. `99-domino-74.deck`
+is the first deck of docs/mode-u.md, `99-program-74.deck` a program
+with sequence numbers in columns 73-80 and data cards, and
+`99-errors-74.deck` the typos a deck can hold and what the listing
+says of each.

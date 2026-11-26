@@ -1,0 +1,13 @@
+[package]
+name = "apl-u74-card"
+description = "sw-apl (U) '74: a punched card, a deck of them, and what an IBM 029 can punch"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+
+[lints]
+workspace = true

@@ -5,7 +5,7 @@
 
 use apl_value::{MODE_B, OVERSTRIKE_B};
 
-use apl_profile::{A70, B75, C80, D83, Profile};
+use apl_profile::{A70, B75, C80, D83, Profile, U74};
 
 use crate::mode::Mode;
 
@@ -19,7 +19,7 @@ impl Mode {
     #[must_use]
     pub fn glyphs(self) -> &'static str {
         match self {
-            Mode::A => "",
+            Mode::A | Mode::U => "",
             Mode::C => "#⌷",
             Mode::B | Mode::D => MODE_B,
         }
@@ -31,7 +31,7 @@ impl Mode {
     #[must_use]
     pub fn overstrikes(self) -> &'static [(char, char, char)] {
         match self {
-            Mode::A | Mode::C => &[],
+            Mode::A | Mode::C | Mode::U => &[],
             Mode::B | Mode::D => &OVERSTRIKE_B,
         }
     }
@@ -45,6 +45,7 @@ impl Mode {
             Mode::B => 'B',
             Mode::C => 'C',
             Mode::D => 'D',
+            Mode::U => 'U',
         }
     }
 }
@@ -58,6 +59,7 @@ impl Mode {
             Mode::B => B75,
             Mode::C => C80,
             Mode::D => D83,
+            Mode::U => U74,
         }
     }
 }

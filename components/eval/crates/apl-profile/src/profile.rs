@@ -179,3 +179,11 @@ pub const D83: Profile = Profile {
     ],
     ..CORE
 };
+
+/// (U) '74: University of Maryland APL on punched cards, (A)'s language
+/// with scan (docs/mode-u.md). The settings commands are not there, as
+/// no system command is: a deck builds the workspace for its run.
+pub const U74: Profile = Profile {
+    features: &[Feature::Ibeams, Feature::Scan],
+    ..CORE
+};

@@ -46,6 +46,7 @@ fn letter(mode: Mode) -> &'static str {
         Mode::B => "B",
         Mode::C => "C",
         Mode::D => "D",
+        Mode::U => "U",
     }
 }
 

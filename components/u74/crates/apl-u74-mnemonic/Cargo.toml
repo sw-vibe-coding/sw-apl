@@ -1,0 +1,14 @@
+[package]
+name = "apl-u74-mnemonic"
+description = "sw-apl (U) '74: the dollar spellings of the APL characters on a card"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-u74-card = { path = "../apl-u74-card" }
+
+[lints]
+workspace = true

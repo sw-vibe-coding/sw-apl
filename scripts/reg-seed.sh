@@ -28,15 +28,17 @@ recreate=""
 filter="bash scripts/normalize-apl-output.sh"
 # A sample names its mode as a workspace does, on its first line: one
 # that begins `⍝!MODES (B)` runs in (B) '75, `⍝!MODES (C)` in (C) '80.
-# Any other runs in the default, (A) '70.
+# Any other runs in the default, (A) '70. A deck, samples/*.deck, is
+# (U) '74's: punched cards, one a line (docs/mode-u.md).
 mode_of() {
-    if head -1 "$1" | grep -q '^⍝!MODES (B)$'; then echo " --mode 75"
+    if [[ "$1" == *.deck ]]; then echo " --mode 74"
+    elif head -1 "$1" | grep -q '^⍝!MODES (B)$'; then echo " --mode 75"
     elif head -1 "$1" | grep -q '^⍝!MODES (C)$'; then echo " --mode 80"
     elif head -1 "$1" | grep -q '^⍝!MODES (D)$'; then echo " --mode 83"
     fi
 }
-for f in samples/*.apl; do
-    base="$(basename "$f" .apl)"
+for f in samples/*.apl samples/*.deck; do
+    base="$(basename "$f")"; base="${base%.*}"
     [[ " $skip_seed " == *" $base "* ]] && continue
     [ -n "$pattern" ] && [[ "$base" != *"$pattern"* ]] && continue
     name="apl-sample-$base"

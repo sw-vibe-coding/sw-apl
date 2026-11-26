@@ -2,11 +2,12 @@
 
 This is the definition of done for the sw-apl CLI: one row per
 feature, with its status in each mode and what pins it. sw-apl has
-four modes: (A) '70, modeled on APL\360; (B) '75, modeled on the
+five modes: (A) '70, modeled on APL\360; (B) '75, modeled on the
 APL of the IBM 5100 family (`mode-b.md`); (C) '80, modeled on APL80
-for the TRS-80 (`mode-c.md`); and (D) '83, modeled on IBM PC APL
-(`ibm-pc-apl-plan.md`). Each table has a column for (A) and
-(B); (C) and (D) have tables of their own. "done" means implemented and locked by a unit test or a reg-rs
+for the TRS-80 (`mode-c.md`); (D) '83, modeled on IBM PC APL
+(`ibm-pc-apl-plan.md`); and (U) '74, University of Maryland APL on
+punched cards (`mode-u.md`). Each table has a column for (A) and
+(B); (C), (D) and (U) have tables of their own. "done" means implemented and locked by a unit test or a reg-rs
 transcript (`tests/reg-rs`, seeded from `samples/`); `--` means the
 mode does not have the feature at all, and the other mode's column
 says what it has instead where there is something. Update this file
@@ -287,6 +288,24 @@ above, and these rows are what (C) changes.
 | The screen codes `#` sends -- the cursor, clearing, PRINT @, graphics, space compression -- and the codes APL80 obeys (5, 6, 9, 11, 18) | done | screen tests, c80 keys tests |
 | Zone printing (3, 7, 15, 255), stopping and starting the clock (16, 17) | part | NONCE ERROR |
 | The workspaces that run in (C), and five lessons | part | none yet |
+
+## (U) '74
+
+(U) is modeled on University of Maryland APL, run as a batch job from
+punched cards (`mode-u.md`). Its language is (A)'s with scan, which
+the tables above pin; these rows are the run around it.
+
+| Feature | (U) '74 | Pinned by |
+| --- | --- | --- |
+| `--mode 74`: a deck, `-f DECK` or stdin, in; a listing out | done | modes tests, sample 99-domino-74 |
+| A card: columns 1-72 the statement, 73-80 a sequence number; only what an IBM 029 punches | done | card tests, sample 99-program-74 |
+| The `$` spellings of the APL characters, inside quotes too, `$$` a dollar, `¬` for `~` | done | spell tests, samples 99-program-74, 99-errors-74 |
+| `@RUN`, `@APL`, `@FIN`, and a deck without them | done | batch tests |
+| Each card listed with its number, the statement echoed in glyphs, then its results | done | batch tests, samples |
+| An error with its card and column, and the run going on; an error in a function leaving it | done | batch tests, sample 99-errors-74 |
+| `$DL` cards define a function; one already defined is not reopened | done | batch tests, sample 99-errors-74 |
+| `⎕` and `⍞` read the next card | done | batch tests, sample 99-program-74 |
+| No system commands and no saved workspaces | done | batch tests, sample 99-errors-74 |
 
 ## Restrictions
 

@@ -360,9 +360,11 @@ line. Each crate maps its own failures into `AplError`.
 
 ## Adding a mode
 
-(A) '70, (B) '75 and (C) '80 are built (`mode-c.md`), and (D) '83, IBM
-PC APL, is being built (`ibm-pc-apl-plan.md`); a punched-card APL
-like Maryland's and the APL\1130 subset of APL\360 may follow. Each is added without moving
+(A) '70, (B) '75 and (C) '80 are built (`mode-c.md`), (D) '83, IBM
+PC APL, is being built (`ibm-pc-apl-plan.md`), and so is (U) '74,
+Maryland's punched-card APL (`mode-u.md`), whose run is a component
+of its own, `u74/`: a deck in, through an ordinary session in mode U,
+and a listing out. The APL\1130 subset of APL\360 may follow. Each is added without moving
 the modes before it, in five layers:
 
 1. **The core stays APL\360.** The shared crates know nothing of
