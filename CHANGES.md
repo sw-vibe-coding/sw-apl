@@ -12,8 +12,15 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-11-26
+
+- pages: publish 53e704e (U '74: the deck page)
+- saga: complete u74-deck
+- feat(u74): the deck page, demo.html?mode=U (u74-deck)
+
 ## 2026-11-25
 
+- docs(changes): refresh CHANGES.md to HEAD
 - saga: complete u74-mode
 - feat(u74): mode (U) '74, UMD APL decks run as batch jobs (u74-mode)
 
