@@ -1,8 +1,9 @@
 number = 34
 slug = "u74-mode"
-status = "in-progress"
+status = "completed"
 description = "Per docs/plan.md and docs/mode-u.md: mode U ('74) in apl-modes and the CLI as..."
 role = "production"
 context_files = []
 created_at = "2026-11-22T23:36:59"
-commits = []
+completed_at = "2026-11-25T20:24:17"
+commits = ["8338ab735ffce70b1b9cce063ae92b0676f1bece"]

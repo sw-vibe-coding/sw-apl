@@ -1,0 +1,1 @@
+Mode (U) 74: Mode::U and the U74 profile; components/u74 with card, mnemonic, listing, reader, batch and deck crates; sw-apl --mode 74 -f DECK prints a green-bar style listing; three deck samples with reg-rs tests; docs updated. CLI help rebased for the five-mode text.
