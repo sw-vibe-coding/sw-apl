@@ -24,6 +24,17 @@ pub const DECKS: [Deck; 3] = [
     },
 ];
 
+/// Every deck, for the page to list: a title line, then a card to a
+/// line, and a form feed between one deck and the next.
+#[must_use]
+pub fn catalog() -> String {
+    DECKS
+        .iter()
+        .map(|d| format!("{}\n{}", d.title, d.cards.trim_end()))
+        .collect::<Vec<_>>()
+        .join("\x0c")
+}
+
 /// The printout of a deck run as a batch job, a line to a line. The
 /// browser has no clock, so the banner has no time.
 #[must_use]

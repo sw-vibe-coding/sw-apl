@@ -4,10 +4,10 @@
 //! wasm's.
 
 mod decks;
-mod face;
+mod punch;
 
-pub use decks::{DECKS, Deck, printout};
-pub use face::holes;
+pub use decks::{DECKS, Deck, catalog, printout};
+pub use punch::{holes, reference};
 
 #[cfg(target_arch = "wasm32")]
 mod wasm;

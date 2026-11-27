@@ -878,6 +878,7 @@ dependencies = [
  "apl-u74-card",
  "apl-u74-code",
  "apl-u74-listing",
+ "apl-u74-mnemonic",
  "wasm-bindgen",
 ]
 

@@ -11,14 +11,16 @@ const COLUMNS = 80;
 
 // Draw the card punched from `text`, whose holes are `holes` (80
 // numbers, bit r for row r from the top; all ones for a character the
-// 029 cannot punch), on `canvas`, filling its width.
-export function drawCard(canvas, text, holes) {
+// 029 cannot punch), on `canvas`, filling its width. A `column`
+// (from 0) is marked as the one under the punch.
+export function drawCard(canvas, text, holes, column = null) {
   const w = canvas.width;
   const h = Math.round(w / ASPECT);
   canvas.height = h;
   const g = canvas.getContext("2d");
   const grid = layout(w, h);
   stock(g, w, h, grid);
+  if (column !== null) station(g, grid, column, h);
   digits(g, grid);
   punches(g, grid, holes);
   printed(g, grid, text);
@@ -51,6 +53,12 @@ function stock(g, w, h, grid) {
   g.strokeStyle = "#a89f8c";
   g.lineWidth = Math.max(1, w / 800);
   g.stroke();
+}
+
+// The column under the punch, shaded down the card.
+function station(g, grid, column, h) {
+  g.fillStyle = "#e0b04a66";
+  g.fillRect(grid.left + column * grid.col, 0, grid.col, h);
 }
 
 // Rows 0 to 9 printed in every column, as a card comes from the box.

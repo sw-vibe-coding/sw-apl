@@ -1,4 +1,4 @@
-number = 38
+number = 40
 slug = "d83-ap210"
 status = "pending"
 description = "Per docs/ibm-pc-apl-plan.md decision 6, split from d83-extensions: AP210, the..."

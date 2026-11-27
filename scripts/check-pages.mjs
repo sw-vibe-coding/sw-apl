@@ -1451,6 +1451,12 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   check('the 3D view draws the 029', three, 'no canvas in #model');
   await page.click('#view');
   await page.click('#submit');
+  const later = await page.evaluate(() => !document.getElementById('later').hidden
+    && document.getElementById('later').textContent.includes('A FEW MOMENTS LATER'));
+  check('Submit shows the title card while the job runs', later, 'no title card');
+  await page.waitForFunction(() => document.getElementById('later').hidden
+    && !document.getElementById('printout').hidden, null, { timeout: 10000 })
+    .catch(() => {});
   const printout = await page.evaluate(() => ({
     shown: !document.getElementById('printout').hidden,
     lines: document.getElementById('paper').innerText.split('\n').map((l) => l.trimEnd()),
@@ -1459,6 +1465,55 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
     printout.shown && printout.lines.includes('UNIVERSITY OF MARYLAND APL')
       && printout.lines.includes('1 3') && printout.lines.includes('END OF RUN'),
     JSON.stringify(printout.lines.slice(0, 6)));
+  // The keypunch: repunch a card from the printout and resubmit.
+  await page.selectOption('#deck', { label: 'Typos' });
+  await page.evaluate(() => localStorage.clear());
+  await page.click('#restore');
+  await page.click('#submit');
+  await page.waitForFunction(() => document.getElementById('later').hidden
+    && !document.getElementById('printout').hidden, null, { timeout: 10000 })
+    .catch(() => {});
+  await page.click('#paper .spot >> text=CARD 4 COLUMN 11');
+  const at = await page.evaluate(() => [document.getElementById('where').textContent,
+    document.getElementById('column').textContent]);
+  check('a CARD and COLUMN on the printout go to that card and column',
+    at[0].startsWith('Card 4 of') && at[1] === 'Column 11', JSON.stringify(at));
+  await page.keyboard.type('$rh');
+  const fixed = await page.evaluate(() => document.querySelector('#cards li[aria-current]').textContent.trimEnd());
+  check('typing punches the card at the column, letters as capitals', fixed === 'A $AL 2 3 $RH 6', fixed);
+  await page.click('#submit');
+  await page.waitForFunction(() => document.getElementById('later').hidden
+    && !document.getElementById('printout').hidden, null, { timeout: 10000 })
+    .catch(() => {});
+  const again = await page.evaluate(() => document.getElementById('paper').innerText);
+  check('the deck resubmitted runs the card repunched',
+    !again.includes('CARD 4 COLUMN') && again.includes('A ← 2 3 ⍴ 6'), again.slice(0, 400));
+  await page.reload({ waitUntil: 'load' });
+  await page.waitForFunction(() => document.getElementById('where')?.textContent, null, { timeout: 20000 })
+    .catch(() => {});
+  await page.selectOption('#deck', { label: 'Typos' });
+  const kept = await page.evaluate(() => document.getElementById('cards').children[3].textContent.trimEnd());
+  check('the deck as punched is kept across visits', kept === 'A $AL 2 3 $RH 6', kept);
+  await page.click('#feed');
+  await page.click('#keys [data-key="NUMERIC"]');
+  await page.click('#keys [data-key="0 /"]');
+  await page.click('#keys [data-key="0 /"]');
+  const keyed = await page.evaluate(() => document.querySelector('#cards li[aria-current]').textContent.trimEnd());
+  check('the 029 keys punch: NUMERIC for the upper legend, the lower without it', keyed === '0/', keyed);
+  const dim = await page.evaluate(() => [...document.querySelectorAll('#keys [data-key="¢ R"] span')]
+    .map((s) => s.classList.contains('dim')).concat(
+      document.querySelector('#keys [data-key="PROG ONE"]').classList.contains('dim')));
+  check('legends with no code of ours are dimmed, the rest are not, and keys that do nothing here',
+    JSON.stringify(dim) === '[true,false,true]', JSON.stringify(dim));
+  const total = await page.evaluate(() => document.getElementById('cards').children.length);
+  await page.click('#remove');
+  const removed = await page.evaluate(() => document.getElementById('cards').children.length);
+  check('a card is removed from the deck', removed === total - 1, `${total} then ${removed}`);
+  await page.click('#restore');
+  const restored = await page.evaluate(() => document.getElementById('cards').children[3].textContent.trimEnd());
+  check('Restore puts the deck back as it came', restored === 'A $AL 2 3 $RJ 6', restored);
+  const spelled = await page.evaluate(() => document.getElementById('spellings').textContent);
+  check('the reference lists the $ spellings', spelled.includes('$RH') && spelled.includes('⍴'), spelled.slice(0, 80));
   check('nothing on the deck page is missing', missed.length === 0, missed.join());
   await context.close();
 }

@@ -37,6 +37,13 @@
   header .name:hover { text-decoration: underline; }
   header .mode { font-weight: 600; }
   main { max-width: 70rem; margin: 0 auto; padding: 1rem; display: grid; gap: 1rem; }
+  /* Once a deck has run, the printout stands beside the deck on a
+     wide screen, to repunch from. */
+  .punch { display: grid; gap: 1rem; min-width: 0; align-content: start; }
+  @media (min-width: 100rem) {
+    body.ran main { max-width: none; grid-template-columns: minmax(0, 60rem) minmax(0, 1fr); align-items: start; }
+    body.ran #printout { position: sticky; top: 1rem; max-height: calc(100vh - 2rem); overflow: auto; }
+  }
   .bar { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; }
   .bar .grow { flex: 1; }
   button, select {
@@ -46,8 +53,51 @@
   button:disabled { opacity: .4; }
   #submit { font-weight: 600; border-color: var(--ink); }
   /* The card: drawn to the width it is given. */
-  #card { width: 100%; height: auto; display: block; filter: drop-shadow(0 2px 4px #0004); }
-  body.model3d #card { display: none; }
+  .station { position: relative; }
+  #card, .ejected { width: 100%; height: auto; display: block; filter: drop-shadow(0 2px 4px #0004); }
+  body.model3d .station { display: none; }
+  /* A card released leaves to the left and up. */
+  .ejected { position: absolute; inset: 0; pointer-events: none; animation: eject .35s ease-in forwards; }
+  @keyframes eject { to { transform: translate(-60%, -45%) rotate(-4deg); opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .ejected { animation-duration: .01s; } }
+  .state { font-size: 13px; opacity: .8; }
+  .state b { color: #b0601a; font-weight: 600; }
+  /* The 029's keyboard, keys where IBM's figure puts them. */
+  #keys {
+    position: relative; aspect-ratio: 2133 / 793; max-width: 46rem; width: 100%;
+    background: #3b3a36; border-radius: .5rem; container-type: inline-size;
+  }
+  #keys .key {
+    all: unset; position: absolute; box-sizing: border-box; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: #ece6d8; color: #1a1a1a; border-radius: 6%; text-align: center;
+    font: 600 1.55cqi/1.15 system-ui, sans-serif; box-shadow: 0 .3cqi 0 #0006;
+  }
+  #keys .key.blue { background: #3d5f8f; color: #f0f0f0; font-size: 1.15cqi; }
+  #keys .key:active { transform: translateY(.25cqi); box-shadow: none; }
+  #keys .key.dim { opacity: .45; cursor: default; }
+  #keys .key span.dim { opacity: .4; }
+  #keys .key.held { outline: .35cqi solid #e0b04a; }
+  /* The $ spellings, a glyph to each. */
+  #spellings { display: grid; grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr)); gap: .1rem 1rem; margin: .5rem 0 0; }
+  #spellings div { display: flex; gap: .6rem; }
+  #spellings dt { font-family: "Courier New", ui-monospace, monospace; }
+  #spellings dd { margin: 0; font-family: "APL385 Unicode", ui-monospace, monospace; }
+  /* The title card while the job is out: our own, a strip of
+     green-bar with the operator's note on it. */
+  #later {
+    position: fixed; inset: 0; display: grid; place-items: center; z-index: 5;
+    background: #0b0d0bcc;
+  }
+  #later[hidden] { display: none; }
+  #later p {
+    margin: 0; padding: 2.5rem 3rem; color: #1f2420; letter-spacing: .25em;
+    font: 700 clamp(18px, 4vw, 40px)/1.3 "Courier New", ui-monospace, monospace;
+    background: repeating-linear-gradient(#d9ecd6 0 2.5rem, #fbfcf7 0 5rem);
+    box-shadow: 0 8px 30px #000a; transform: rotate(-1.5deg);
+  }
+  #paper .spot { all: unset; display: block; cursor: pointer; }
+  #paper .spot:hover { text-decoration: underline; background: #e0b04a33; }
   #model { position: relative; height: min(70vh, 36rem); }
   #model canvas { display: block; width: 100%; height: 100%; touch-action: none; border-radius: .3rem; }
   #model .zoom { position: absolute; right: .5rem; top: .5rem; display: flex; gap: .3rem; }
@@ -88,18 +138,34 @@
   <span>University of Maryland APL, from punched cards</span>
 </header>
 <main>
+ <div class="punch">
   <div class="bar">
     <label>Deck <select id="deck"></select></label>
     <button type="button" id="prev" aria-label="The card before">&larr;</button>
     <span id="where"></span>
     <button type="button" id="next" aria-label="The card after">&rarr;</button>
     <span class="grow"></span>
+    <label title="The keypunch's sounds"><input type="checkbox" id="sound"> Sound</label>
     <button type="button" id="view">3D</button>
     <button type="button" id="submit">Submit the deck</button>
   </div>
-  <canvas id="card" width="1600" aria-label="The card shown"></canvas>
+  <div class="station"><canvas id="card" width="1600" aria-label="The card in the punch station"></canvas></div>
   <div id="model" hidden></div>
+  <div class="bar state">
+    <span id="column"></span>
+    <span id="numeric" hidden><b>NUMERIC</b></span>
+    <span id="edited" hidden><b>Punched here</b>, kept in this browser</span>
+    <span class="grow"></span>
+    <button type="button" id="feed" title="A blank card after this one">Feed a card</button>
+    <button type="button" id="remove" title="Take this card out of the deck">Remove the card</button>
+    <button type="button" id="restore" title="The deck as it came">Restore the deck</button>
+  </div>
+  <div id="keys" aria-label="The 029's keyboard"></div>
   <ol id="cards" aria-label="The deck"></ol>
+  <details>
+    <summary>The <code>$</code> spellings: what to punch for each APL character</summary>
+    <dl id="spellings"></dl>
+  </details>
   <p class="about">
     A deck is a job: <code>@RUN</code> opens it, <code>@APL</code> calls
     APL, and <code>@FIN</code> ends it. Each card between is one APL
@@ -110,9 +176,20 @@
     deck and the printout lists each card as punched, the statement in
     APL beneath it, and what it printed.
   </p>
+  <p class="about">
+    Punch on the 029's keys or the computer's: a key punches its lower
+    legend, or its upper one after <b>NUMERIC</b>. <b>REL</b> or Enter
+    releases the card and feeds the next; <b>FEED</b> feeds a blank
+    card after this one; <b>DUP</b> copies the column from the card
+    before. Backspace and the left and right arrows move the punch;
+    up and down move between cards. On the printout, choose a card
+    or an error's CARD and COLUMN to go there and repunch it.
+  </p>
+ </div>
   <section id="printout" hidden aria-label="The printout">
     <div id="paper"></div>
   </section>
+  <div id="later" hidden role="status"><p>A FEW MOMENTS LATER...</p></div>
 </main>
 <script type="module">
   // Everything is fetched at the build version.txt names, as

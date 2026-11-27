@@ -20,7 +20,7 @@ test component="":
     set -euo pipefail
     # The page's pure scripts, when node is here (scripts/check-*.mjs).
     if command -v node >/dev/null; then
-        for check in lines carriage printer; do node "scripts/check-$check.mjs"; done
+        for check in lines carriage printer punch; do node "scripts/check-$check.mjs"; done
     fi
     for c in $(just _select "{{component}}"); do
         echo "== $c"; (cd "components/$c" && cargo test --workspace)

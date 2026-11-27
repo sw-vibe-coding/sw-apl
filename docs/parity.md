@@ -308,6 +308,7 @@ the tables above pin; these rows are the run around it.
 | No system commands and no saved workspaces | done | batch tests, sample 99-errors-74 |
 | Each card drawn with the holes an 029 punches, from its card code | done | code tests, web tests |
 | The page, `demo.html?mode=U`: a demo deck a card at a time, in 2D or in the 029 in 3D; submitted, the printout on green-bar paper | done | web tests |
+| The keypunch: the 029's keyboard and the computer's punch the card; REL, FEED, DUP, SKIP; cards fed in, taken out, the deck restored and kept; the `$` spellings listed; the printout beside the deck, a card or an error's card and column chosen on it to repunch | done | check-punch, check-pages, web tests |
 
 ## Restrictions
 

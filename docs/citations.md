@@ -102,6 +102,10 @@ of its decisions rests on.
   `scripts/build.py 029` (Blender, X_eTaL) at its pinned commits
   (console-3D a312163, X_eTaL-extensions 0f93e06).
   <https://github.com/softwarewrighter/console-3D>
+- **console-3D**'s `models/029-keyboard.json` (at 6890d5a): the 029
+  combination keyboard's keys, legends and places, as the owner
+  measured them from the IBM 029 manual A24-3332-1 (Columbia
+  University's copy), Figure 8; `pages/keys029.json`, unchanged.
 
 ## APL generally
 
@@ -255,7 +259,8 @@ The owner's own projects, MIT, each © Michael A Wright:
 
 - **ibm-1130-rs**, sw-comp-history: its printer demo's two trimmed
   samples, a key's strike (80 ms) and the space bar (120 ms), are
-  `pages/sounds/key.wav` and `pages/sounds/space.wav`, unchanged. The
+  `pages/sounds/key.wav` and `pages/sounds/space.wav`, unchanged, and
+  (U)'s keypunch plays them too. The
   pitch varied by character is its idea too.
   <https://github.com/sw-comp-history/ibm-1130-rs>
 - **text-to-sfx-gen**, softwarewrighter: its generated `thud.wav`

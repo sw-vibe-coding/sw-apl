@@ -207,6 +207,29 @@ the owner's IBM 029. Submit the deck and the printout comes back
 below on green-bar paper, 132 columns, the same listing the CLI
 prints. No APL keyboard: the page has nothing to type APL on.
 
+The deck is punched as well as read. The 029's keyboard is drawn
+below the card, laid out as IBM's figure of the combination keyboard
+has it: a key punches its lower legend, or its upper one after
+NUMERIC; a legend with no card code here (the cent sign, the dagger,
+0-8-2) is dimmed, and so are the keys that do nothing in a page (MULT
+PCH, the program keys). REL, or Enter, releases the card to the left
+and up and feeds the next; FEED feeds a blank card in after this one;
+DUP copies the column from the card before; SKIP moves on a column.
+The computer's keyboard punches too, a letter as its capital, and
+moves the punch: Backspace and the left and right arrows along the
+card, up and down from card to card. Buttons feed a card, take one
+out, and put the deck back as it came; a deck punched here is kept in
+the browser. The `$` spellings are listed under the keyboard, from
+the same table the run reads (`apl-u74-mnemonic`).
+
+Submitted, the deck goes out under a title card of our own -- a strip
+of green-bar, A FEW MOMENTS LATER... -- and the printout comes back;
+on a wide screen it stands beside the deck. Each card listed and each
+error's CARD and COLUMN on it goes to that card and column, to
+repunch it and submit again. The 2741's sounds (A's demo) stand in
+for the 029's: a key's strike for a column punched, the space bar for
+a blank, the carriage return's thud for a card released.
+
 ## The first deck
 
 From the notes, a 2 by 2 system solved with domino. `$CM` makes the

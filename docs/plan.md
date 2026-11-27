@@ -1622,6 +1622,30 @@ Future demo, so `u74-demos` moved ahead of `u74-keypunch` -- the
 timeline links to U '74 once phase 1 is out, and the keypunch follows as
 an update to a page already linked.
 
+Owner, 2026-11-26: more demo decks in the page's picker, "like life,
+plotting, etc.", drawn from the UMD or APL 1100 manuals if they offer
+examples. A search the same day found neither manual online again --
+bitsavers has only Sperry sales and Datapro summaries that name APL
+1100 -- so the decks are ours, in the spirit of the APL demos of the
+day, written only in what U has (`docs/mode-u.md`): Conway's life on
+a small torus with rotate, a character plot of a function, primes by
+the outer product, a little statistics, and a sort with grade. Each
+is a sample under `samples/` with its reg-rs transcript, and the
+page's picker lists it. Step `u74-more-decks`, after `u74-keypunch`.
+
+Owner, 2026-11-26, on the keypunch: the 2741's sounds stand in for
+the 029's -- a key's strike for a column punched, the carriage
+return's thud as a card ejects to the left and up. Helpers for a deck
+punched from scratch -- a new deck with its control cards, buttons
+for `@RUN`, `@APL,I` and `@FIN`, idioms punched a card at a time, the
+`$` reference punching what is chosen -- are their own step,
+`u74-scratch-helpers`, after `u74-keypunch`. Asked whether UMD APL
+kept workspaces on disk for a deck to load or copy: APL 1100 was a
+time-sharing product with sizable workspaces (Minker; Datapro), but no
+source says a batch deck could include a saved workspace, and nothing
+says Albany did. The owner: skip anything to do with UNIVAC disks;
+the demo is batch card decks only.
+
 ### What the owner's research gives (2026-11-23)
 
 The owner's notes (a chat with Gemini, `docs/research3.txt`, kept out

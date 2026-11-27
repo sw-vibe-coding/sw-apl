@@ -32,8 +32,8 @@ export async function model029(host) {
   zooms(host, look);
   look("card");
   return {
-    show(text, holes) {
-      face.draw(text, holes);
+    show(text, holes, column) {
+      face.draw(text, holes, column);
       stage.draw();
     },
     resize: stage.resize,
@@ -92,8 +92,8 @@ function faceFor(THREE, root) {
   const center = new THREE.Box3().setFromObject(mesh).getCenter(new THREE.Vector3());
   return {
     center,
-    draw(text, holes) {
-      drawCard(canvas, text, holes);
+    draw(text, holes, column) {
+      drawCard(canvas, text, holes, column);
       texture.needsUpdate = true;
     },
   };
