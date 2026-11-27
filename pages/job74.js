@@ -32,16 +32,20 @@ function line(text, go) {
 }
 
 // The $ spellings, a glyph to each, in `host`: `text` is a line to a
-// glyph ("$RH ⍴"), `names` the glyphs' names.
-export function spellings(host, text, names) {
+// glyph ("$RH ⍴"), `names` the glyphs' names. Choosing one calls
+// `chosen(spelling)`, to punch it.
+export function spellings(host, text, names, chosen) {
   host.replaceChildren(...text.split("\n").filter(Boolean).map((row) => {
     const [spelled, glyph] = row.split(" ");
-    const dl = document.createElement("div");
+    const b = document.createElement("button");
+    b.type = "button";
+    b.dataset.spelled = spelled;
+    b.title = `Punch ${spelled}${names[glyph] ? `, ${names[glyph]}` : ""}`;
     const [dt, dd] = [document.createElement("dt"), document.createElement("dd")];
     dt.textContent = spelled;
     dd.textContent = glyph;
-    dd.title = names[glyph] ?? "";
-    dl.append(dt, dd);
-    return dl;
+    b.append(dt, dd);
+    b.addEventListener("click", () => chosen(spelled));
+    return b;
   }));
 }

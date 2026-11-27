@@ -80,7 +80,9 @@
   #keys .key.held { outline: .35cqi solid #e0b04a; }
   /* The $ spellings, a glyph to each. */
   #spellings { display: grid; grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr)); gap: .1rem 1rem; margin: .5rem 0 0; }
-  #spellings div { display: flex; gap: .6rem; }
+  #spellings button { all: unset; display: flex; gap: .6rem; cursor: pointer; border-radius: .2rem; padding: 0 .2rem; }
+  #spellings button:hover, #spellings button:focus-visible { background: #e0b04a33; }
+  body[data-busy] #keys, body[data-busy] .helpers { opacity: .7; }
   #spellings dt { font-family: "Courier New", ui-monospace, monospace; }
   #spellings dd { margin: 0; font-family: "APL385 Unicode", ui-monospace, monospace; }
   /* The title card while the job is out: our own, a strip of
@@ -160,10 +162,16 @@
     <button type="button" id="remove" title="Take this card out of the deck">Remove the card</button>
     <button type="button" id="restore" title="The deck as it came">Restore the deck</button>
   </div>
+  <div class="bar helpers" id="control" aria-label="Punch a control card">
+    <span>Punch a card:</span>
+  </div>
+  <div class="bar helpers">
+    <label>Or an idiom <select id="idiom"></select></label>
+  </div>
   <div id="keys" aria-label="The 029's keyboard"></div>
   <ol id="cards" aria-label="The deck"></ol>
   <details>
-    <summary>The <code>$</code> spellings: what to punch for each APL character</summary>
+    <summary>The <code>$</code> spellings: what to punch for each APL character; choose one to punch it</summary>
     <dl id="spellings"></dl>
   </details>
   <p class="about">
@@ -184,6 +192,13 @@
     before. Backspace and the left and right arrows move the punch;
     up and down move between cards. On the printout, choose a card
     or an error's CARD and COLUMN to go there and repunch it.
+  </p>
+  <p class="about">
+    To start from nothing, choose <b>New deck</b>: its control cards
+    are punched, with a blank card between for the APL. The buttons
+    punch a control card on a card of its own; an idiom punches the
+    cards that do one thing, the ones after the vector using
+    <code>V</code>.
   </p>
  </div>
   <section id="printout" hidden aria-label="The printout">

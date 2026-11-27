@@ -1,6 +1,6 @@
 number = 38
 slug = "u74-scratch-helpers"
-status = "pending"
+status = "in-progress"
 description = "Per docs/plan.md owner direction 2026-11-26: helpers for punching a U deck fr..."
 role = "production"
 context_files = []

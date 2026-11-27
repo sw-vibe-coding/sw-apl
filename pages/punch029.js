@@ -82,3 +82,38 @@ export function spot(line) {
   const listed = /^(\d{4}) {2}/.exec(line);
   return listed ? { card: Number(listed[1]) - 1, column: 0 } : null;
 }
+
+// A deck begun from nothing: its control cards, a blank card between
+// them for the APL, and the punch on that card.
+const NEW_DECK = ["@RUN   USER,ACCOUNT,PROJECT,1,20", "@APL,I", "", "@FIN"];
+export function fresh() {
+  return { ...start(NEW_DECK), card: 2 };
+}
+
+// Punching `text` at the punch, a column at a time: each step the deck
+// after it and the sound it makes. What the 029 cannot punch is left
+// out.
+export function strokes(deck, text, punchable) {
+  const steps = [];
+  for (const c of text) {
+    const next = punch(steps.at(-1)?.deck ?? deck, c, punchable);
+    if (next === (steps.at(-1)?.deck ?? deck)) continue;
+    steps.push({ deck: next, noise: c === " " ? "space" : "strike" });
+  }
+  return steps;
+}
+
+// Punching whole cards, each on a card of its own: into the card in
+// the station if it is blank, else into one fed in after it.
+export function cardStrokes(deck, cards, punchable) {
+  const steps = [];
+  for (const text of cards) {
+    let at = steps.at(-1)?.deck ?? deck;
+    if (at.cards[at.card] !== "") {
+      at = feed(at);
+      steps.push({ deck: at, noise: "return" });
+    }
+    steps.push(...strokes({ ...at, column: 0 }, text, punchable));
+  }
+  return steps;
+}

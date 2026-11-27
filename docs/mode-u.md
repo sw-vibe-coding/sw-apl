@@ -230,6 +230,20 @@ repunch it and submit again. The 2741's sounds (A's demo) stand in
 for the 029's: a key's strike for a column punched, the space bar for
 a blank, the carriage return's thud for a card released.
 
+A deck can be begun from nothing: **New deck** in the picker has its
+control cards punched -- `@RUN   USER,ACCOUNT,PROJECT,1,20`, `@APL,I`,
+a blank card for the APL, `@FIN` -- and the punch on the blank card.
+Buttons punch `@RUN`, `@APL,I` or `@FIN` on a card of its own, and a
+menu punches an idiom: the cards that do one thing -- a comment, a
+vector `V`, a shaped table, printing with `$QD`, the mean, the largest
+and smallest, sorting by grade, compression, an outer product, a
+function, a loop by branch, a card read by `$QD`, a message. They are
+ours (`pages/idioms74.js`), and every one, punched in order into a new
+deck, runs without an error. Each punches as an operator would, a
+column at a time with the key's sound, into the card in the station if
+it is blank and otherwise into one fed in after it. A spelling chosen
+in the `$` list is punched at the punch.
+
 ## The first deck
 
 From the notes, a 2 by 2 system solved with domino. `$CM` makes the

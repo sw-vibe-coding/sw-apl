@@ -7,7 +7,8 @@
 // (apl-u74-web); nothing here knows APL.
 
 import { drawCard } from "./card029.js";
-import { start, punch, back, move, release, feed, dup, remove, keyChar } from "./punch029.js";
+import { start, punch, back, move, release, feed, dup, remove, keyChar, fresh, strokes, cardStrokes } from "./punch029.js";
+import { helpers } from "./helpers74.js";
 import { keyboard } from "./keyboard029.js";
 import { run, spellings } from "./job74.js";
 import { wake, sound } from "./sound.js";
@@ -35,6 +36,8 @@ const decks = wasm.decks().split("\f").map((text) => {
   const [title, ...cards] = text.split("\n");
   return { title, cards };
 });
+// And a deck begun from nothing, its control cards punched.
+decks.push({ title: "New deck", cards: fresh().cards, fresh: true });
 const punchable = (c) => wasm.card(c)[0] !== 0xffff;
 const ACTS = ["REL", "FEED", "DUP", "SKIP", "SPACE", "NUMERIC", "ALPHA"];
 
@@ -42,14 +45,30 @@ let chosen = decks[0];
 let deck = start(chosen.cards);
 let numeric = false;
 let model = null;
+let busy = false;
 
 // Open deck `d`, as last punched here if it was.
 function open(d) {
   chosen = d;
   const saved = JSON.parse(store.get(kept(d.title)) ?? "null");
-  deck = start(Array.isArray(saved) ? saved : d.cards);
+  if (Array.isArray(saved)) deck = start(saved);
+  else deck = d.fresh ? fresh() : start(d.cards);
   $("printout").hidden = true;
   draw();
+}
+
+// Play `steps` (punch029's strokes), a column at a time with each
+// one's sound; keys wait until it is done.
+async function play(steps) {
+  if (busy || !steps.length) return;
+  busy = true;
+  document.body.dataset.busy = "punching";
+  for (const step of steps) {
+    edit(step.deck, step.noise);
+    await new Promise((done) => setTimeout(done, step.noise === "return" ? 180 : 28));
+  }
+  busy = false;
+  delete document.body.dataset.busy;
 }
 
 // The deck changed: keep it, draw it, and sound what the 029 did.
@@ -126,6 +145,7 @@ function type(c) {
 
 // A key of the 029 pressed.
 function press(legend) {
+  if (busy) return;
   const acts = {
     REL: () => edit(release(deck), "return"),
     FEED: () => edit(feed(deck), "return"),
@@ -145,7 +165,7 @@ function press(legend) {
 // The computer's keyboard: a character punches; Enter releases;
 // Backspace backs up; the arrows move the punch and the cards.
 function typed(e) {
-  if (e.target.closest("select, input") || e.metaKey || e.ctrlKey || e.altKey) return;
+  if (busy || e.target.closest("select, input") || e.metaKey || e.ctrlKey || e.altKey) return;
   const moves = {
     Enter: () => edit(release(deck), "return"),
     Backspace: () => edit(back(deck), "back"),
@@ -213,7 +233,8 @@ function controls() {
     if ($("sound").checked) { wake(); sound({ kind: "strike", glyph: "A" }); }
   });
   keyboard($("keys"), keys, press, punchable, ACTS);
-  spellings($("spellings"), wasm.spellings(), names);
+  spellings($("spellings"), wasm.spellings(), names, (spelled) => play(strokes(deck, spelled, punchable)));
+  helpers($("control"), $("idiom"), (cards) => play(cardStrokes(deck, cards, punchable)));
   document.addEventListener("keydown", typed);
 }
 

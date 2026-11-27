@@ -1514,6 +1514,36 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   check('Restore puts the deck back as it came', restored === 'A $AL 2 3 $RJ 6', restored);
   const spelled = await page.evaluate(() => document.getElementById('spellings').textContent);
   check('the reference lists the $ spellings', spelled.includes('$RH') && spelled.includes('⍴'), spelled.slice(0, 80));
+  // Punching from nothing: a new deck, every idiom, a control card,
+  // a spelling chosen from the reference, and the deck run clean.
+  const done = () => page.waitForFunction(() => !document.body.dataset.busy, null, { timeout: 20000 });
+  await page.selectOption('#deck', { label: 'New deck' });
+  await page.click('#restore');
+  const begun = await page.evaluate(() => [...document.getElementById('cards').children].map((li) => li.textContent.trimEnd()));
+  check('a new deck is its control cards with a blank card between',
+    JSON.stringify(begun) === JSON.stringify(['@RUN   USER,ACCOUNT,PROJECT,1,20', '@APL,I', '', '@FIN']), JSON.stringify(begun));
+  const idioms = await page.evaluate(() => document.getElementById('idiom').options.length - 1);
+  for (let i = 0; i < idioms; i++) {
+    await page.selectOption('#idiom', String(i));
+    await done();
+  }
+  await page.evaluate(() => document.querySelector('#spellings [data-spelled="$CM"]').click());
+  await done();
+  const spelledCard = await page.evaluate(() => document.querySelector('#cards li[aria-current]').textContent.trimEnd());
+  check('a spelling chosen from the reference is punched at the punch', spelledCard.endsWith('$CM'), spelledCard);
+  const count = await page.evaluate(() => document.getElementById('cards').children.length);
+  await page.click('[data-control="@FIN"]');
+  await done();
+  const fin = await page.evaluate(() => [document.getElementById('cards').children.length,
+    document.querySelector('#cards li[aria-current]').textContent.trimEnd()]);
+  check('a control card is punched on a card fed in after this one', fin[0] === count + 1 && fin[1] === '@FIN', JSON.stringify(fin));
+  await page.click('#remove');
+  await page.click('#submit');
+  await page.waitForFunction(() => document.getElementById('later').hidden
+    && !document.getElementById('printout').hidden, null, { timeout: 10000 }).catch(() => {});
+  const ran = await page.evaluate(() => document.getElementById('paper').innerText);
+  check('every idiom punched into a new deck runs without an error',
+    !ran.includes('ERROR') && ran.includes('HELLO, WORLD') && ran.includes('END OF RUN'), ran.slice(-600));
   check('nothing on the deck page is missing', missed.length === 0, missed.join());
   await context.close();
 }

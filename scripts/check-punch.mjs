@@ -1,6 +1,7 @@
 // Check pages/punch029.js, punching and editing a deck on the 029,
 // with node alone. `just test` runs it.
-import { start, punch, back, move, release, feed, dup, remove, keyChar, spot } from "../pages/punch029.js";
+import { start, punch, back, move, release, feed, dup, remove, keyChar, spot, fresh, strokes, cardStrokes } from "../pages/punch029.js";
+import { IDIOMS, CONTROL } from "../pages/idioms74.js";
 
 let failed = 0;
 const check = (what, got, want) => {
@@ -53,6 +54,25 @@ check("the 0-8-2 legend punches nothing here", keyChar("0–8–2\nT", true), nu
 check("the printout's places are card and column",
   [spot("CARD 4 COLUMN 11"), spot("CARD 8"), spot("0012  HALF 9"), spot("4.5")],
   [{ card: 3, column: 10 }, { card: 7, column: 0 }, { card: 11, column: 0 }, null]);
+
+const last = (steps) => steps[steps.length - 1].deck;
+check("a new deck is its control cards, the punch on the blank card between",
+  [fresh().cards, fresh().card, fresh().column],
+  [["@RUN   USER,ACCOUNT,PROJECT,1,20", "@APL,I", "", "@FIN"], 2, 0]);
+check("text punches a column at a time, each with its sound",
+  strokes(s, "A B", ok).map((t) => [t.deck.column, t.noise]), [[1, "strike"], [2, "space"], [3, "strike"]]);
+check("and ends punched", last(strokes(s, "Q", ok)).cards[0], "QB");
+check("what the 029 cannot punch is left out", strokes(s, "[", ok), []);
+check("a card punched into a blank card stays on it",
+  last(cardStrokes(fresh(), ["X $AL 1"], ok)).cards, ["@RUN   USER,ACCOUNT,PROJECT,1,20", "@APL,I", "X $AL 1", "@FIN"]);
+check("after a card with something on it, a card is fed first, with the thud",
+  cardStrokes(s, ["Z"], ok).map((t) => t.noise), ["return", "strike"]);
+check("so the card lands after the one in the station",
+  last(cardStrokes(s, ["Z", "Y"], ok)).cards, ["AB", "Z", "Y", "CD"]);
+check("the control cards are @RUN, @APL and @FIN",
+  CONTROL.map((c) => c.cards[0].split(/[ ,]/)[0]), ["@RUN", "@APL", "@FIN"]);
+check("every idiom has a name and cards the 029 can punch",
+  IDIOMS.filter((i) => !i.name || !i.cards.length || !i.cards.every((c) => [...c].every(ok))).map((i) => i.name), []);
 
 if (failed) {
   console.error(`check-punch: ${failed} failed`);
