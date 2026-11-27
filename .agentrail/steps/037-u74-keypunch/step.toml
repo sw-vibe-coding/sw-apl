@@ -1,8 +1,9 @@
 number = 37
 slug = "u74-keypunch"
-status = "in-progress"
+status = "completed"
 description = "Per docs/plan.md (U) phase 2: punch cards on a virtual 029 keyboard beside a ..."
 role = "production"
 context_files = []
 created_at = "2026-11-22T23:36:59"
-commits = []
+completed_at = "2026-11-27T08:55:33"
+commits = ["201a901054c248882a3aa750274e28033c582089"]
