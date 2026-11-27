@@ -14,6 +14,10 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-11-27
 
+- pages: publish 11bcfd4 (U '74: five more decks, arrows keep the page still)
+- saga: complete u74-more-decks
+- feat(u74): five more demo decks; the arrows no longer scroll the page (u74-more-decks)
+- docs(changes): refresh CHANGES.md to HEAD
 - pages: publish bf42f42 (U '74: a deck from nothing)
 - saga: complete u74-scratch-helpers
 - feat(u74): punching a deck from nothing (u74-scratch-helpers)
