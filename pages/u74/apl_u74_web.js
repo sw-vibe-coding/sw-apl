@@ -15,16 +15,15 @@ export function card(line) {
 }
 
 /**
- * Demo deck `i`'s title and cards, a title line and then a card to
- * a line; empty past the last deck.
- * @param {number} i
+ * Every demo deck: a title line and a card to a line, a form feed
+ * between decks.
  * @returns {string}
  */
-export function deck(i) {
+export function decks() {
     let deferred1_0;
     let deferred1_1;
     try {
-        const ret = wasm.deck(i);
+        const ret = wasm.decks();
         deferred1_0 = ret[0];
         deferred1_1 = ret[1];
         return getStringFromWasm0(ret[0], ret[1]);
@@ -34,12 +33,20 @@ export function deck(i) {
 }
 
 /**
- * How many demo decks there are.
- * @returns {number}
+ * The `$` spellings, one a line: the spelling, a space, the glyph.
+ * @returns {string}
  */
-export function decks() {
-    const ret = wasm.decks();
-    return ret >>> 0;
+export function spellings() {
+    let deferred1_0;
+    let deferred1_1;
+    try {
+        const ret = wasm.spellings();
+        deferred1_0 = ret[0];
+        deferred1_1 = ret[1];
+        return getStringFromWasm0(ret[0], ret[1]);
+    } finally {
+        wasm.__wbindgen_free(deferred1_0, deferred1_1, 1);
+    }
 }
 
 /**
