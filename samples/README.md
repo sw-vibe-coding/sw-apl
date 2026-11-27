@@ -207,4 +207,11 @@ batch job with `sw-apl --mode 74 -f NAME.deck`. `99-domino-74.deck`
 is the first deck of docs/mode-u.md, `99-program-74.deck` a program
 with sequence numbers in columns 73-80 and data cards, and
 `99-errors-74.deck` the typos a deck can hold and what the listing
-says of each.
+says of each. Five more show what a deck can do, in the spirit of
+the APL demonstrations of the day (ours; no UMD APL manual is
+online): `99-life-74.deck`, Conway's life, a glider on a board that
+wraps around; `99-plot-74.deck`, a sine wave plotted on the line
+printer; `99-primes-74.deck`, the primes to 100, their gaps and the
+twin primes; `99-stats-74.deck`, a class's scores, mean, median,
+standard deviation and a bar chart; and `99-sort-74.deck`, numbers
+sorted up and down and names put in alphabetical order.

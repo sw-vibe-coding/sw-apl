@@ -198,7 +198,10 @@ that meets a control card finds no data.
 ## The page
 
 `demo.html?mode=U` opens `deck.html`, as (U) is a batch job and not
-a session. Pick a deck -- the deck samples, `samples/*-74.deck` --
+a session. Pick a deck -- the deck samples, `samples/*-74.deck`:
+domino, a program, typos, and five of ours in the spirit of the APL
+demonstrations of the day (life, a sine plot, primes, statistics,
+sorting), since no UMD APL manual is online to take examples from --
 and look through it a card at a time: drawn as the 029 leaves it,
 cream stock with its corner cut, the holes punched in each column by
 the 029's card code (`apl-u74-code`) and what was punched printed

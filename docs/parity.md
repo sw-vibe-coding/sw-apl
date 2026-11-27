@@ -309,6 +309,7 @@ the tables above pin; these rows are the run around it.
 | Each card drawn with the holes an 029 punches, from its card code | done | code tests, web tests |
 | The page, `demo.html?mode=U`: a demo deck a card at a time, in 2D or in the 029 in 3D; submitted, the printout on green-bar paper | done | web tests |
 | The keypunch: the 029's keyboard and the computer's punch the card; REL, FEED, DUP, SKIP; cards fed in, taken out, the deck restored and kept; the `$` spellings listed; the printout beside the deck, a card or an error's card and column chosen on it to repunch | done | check-punch, check-pages, web tests |
+| The demo decks: domino, a program, typos, life, a sine plot, primes, statistics, sorting, each running to its end | done | web tests, samples 99-*-74 |
 | A deck from nothing: New deck with its control cards; buttons for `@RUN`, `@APL,I`, `@FIN`; idioms punched a card at a time; a `$` spelling chosen, punched | done | check-punch, check-pages |
 
 ## Restrictions

@@ -68,3 +68,26 @@ fn the_catalog_is_every_deck_a_title_then_its_cards_split_by_form_feeds() {
         assert_eq!(cards, deck.cards.trim_end());
     }
 }
+
+#[test]
+fn the_picker_offers_the_demo_decks_and_each_ends_its_run_cleanly() {
+    let titles: Vec<&str> = DECKS.iter().map(|d| d.title).collect();
+    assert_eq!(
+        titles,
+        [
+            "Domino",
+            "A program",
+            "Typos",
+            "Life",
+            "A sine plot",
+            "Primes",
+            "Statistics",
+            "Sorting"
+        ]
+    );
+    for deck in DECKS.iter().filter(|d| d.title != "Typos") {
+        let out = printout(deck.cards);
+        assert!(out.ends_with(END_OF_RUN), "{}", deck.title);
+        assert!(!out.contains("ERROR"), "{}: {out}", deck.title);
+    }
+}

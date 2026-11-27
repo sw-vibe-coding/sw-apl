@@ -1,0 +1,101 @@
+0001  @RUN   ALBANY,76104,CS301,1,20
+0002  @APL,I
+UNIVERSITY OF MARYLAND APL
+CLEAR WS
+0003  $CM CONWAY'S GAME OF LIFE: A GLIDER ON A 6 BY 6 BOARD THAT WRAPS AROUND
+      ⍝ CONWAY'S GAME OF LIFE: A GLIDER ON A 6 BY 6 BOARD THAT WRAPS AROUND
+0004  $CM U IS EACH CELL WITH THE CELLS ABOVE AND BELOW; N ADDS THE SIDES
+      ⍝ U IS EACH CELL WITH THE CELLS ABOVE AND BELOW; N ADDS THE SIDES
+0005  $DL Z $AL LIFE B;N;U
+      ∇ Z ← LIFE B;N;U
+0006  U $AL ($NG1 $RF B)+B+1 $RF B
+[1]   U ← (¯1 ⊖ B)+B+1 ⊖ B
+0007  N $AL ($NG1 $RV U)+U+1 $RV U
+[2]   N ← (¯1 ⌽ U)+U+1 ⌽ U
+0008  Z $AL (N=3)$OR B$AN N=4
+[3]   Z ← (N=3)∨ B∧ N=4
+0009  $DL
+[4]   ∇
+0010  $CM SHOW EACH GENERATION, THEN THE NEXT, K TIMES
+      ⍝ SHOW EACH GENERATION, THEN THE NEXT, K TIMES
+0011  $DL SHOW K
+      ∇ SHOW K
+0012  L: ' *'$LB 1+G$RB
+[1]   L: ' *'[ 1+G]
+0013  ''
+[2]   ''
+0014  G $AL LIFE G
+[3]   G ← LIFE G
+0015  $RA (0<K$AL K-1)/L
+[4]   → (0<K← K-1)/L
+0016  $DL
+[5]   ∇
+0017  G $AL 6 6 $RH 36 $TA 0 1 0 0 0 0 0 0 1 0 0 0 1 1 1
+      G ← 6 6 ⍴ 36 ↑ 0 1 0 0 0 0 0 0 1 0 0 0 1 1 1
+0018  SHOW 9
+      SHOW 9
+ *    
+  *   
+***   
+      
+      
+      
+
+      
+* *   
+ **   
+ *    
+      
+      
+
+      
+  *   
+* *   
+ **   
+      
+      
+
+      
+ *    
+  **  
+ **   
+      
+      
+
+      
+  *   
+   *  
+ ***  
+      
+      
+
+      
+      
+ * *  
+  **  
+  *   
+      
+
+      
+      
+   *  
+ * *  
+  **  
+      
+
+      
+      
+  *   
+   ** 
+  **  
+      
+
+      
+      
+   *  
+    * 
+  *** 
+      
+
+0019  @FIN
+END OF RUN

@@ -9,7 +9,7 @@ pub struct Deck {
 }
 
 /// The decks, the first being the one the page opens on.
-pub const DECKS: [Deck; 3] = [
+pub const DECKS: [Deck; 8] = [
     Deck {
         title: "Domino",
         cards: include_str!("../../../../../samples/99-domino-74.deck"),
@@ -21,6 +21,26 @@ pub const DECKS: [Deck; 3] = [
     Deck {
         title: "Typos",
         cards: include_str!("../../../../../samples/99-errors-74.deck"),
+    },
+    Deck {
+        title: "Life",
+        cards: include_str!("../../../../../samples/99-life-74.deck"),
+    },
+    Deck {
+        title: "A sine plot",
+        cards: include_str!("../../../../../samples/99-plot-74.deck"),
+    },
+    Deck {
+        title: "Primes",
+        cards: include_str!("../../../../../samples/99-primes-74.deck"),
+    },
+    Deck {
+        title: "Statistics",
+        cards: include_str!("../../../../../samples/99-stats-74.deck"),
+    },
+    Deck {
+        title: "Sorting",
+        cards: include_str!("../../../../../samples/99-sort-74.deck"),
     },
 ];
 

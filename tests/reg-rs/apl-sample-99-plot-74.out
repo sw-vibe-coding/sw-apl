@@ -1,0 +1,33 @@
+0001  @RUN   ALBANY,76104,CS301,1,20
+0002  @APL,I
+UNIVERSITY OF MARYLAND APL
+CLEAR WS
+0003  $CM A SINE WAVE PLOTTED ON THE LINE PRINTER, A STAR TO EACH POINT
+      ⍝ A SINE WAVE PLOTTED ON THE LINE PRINTER, A STAR TO EACH POINT
+0004  X $AL 0.25$MU$IO 50
+      X ← 0.25×⍳ 50
+0005  $CM H IS EACH POINT'S ROW, 5 TO $NG5; R IS EVERY ROW, TOP TO BOTTOM
+      ⍝ H IS EACH POINT'S ROW, 5 TO ¯5; R IS EVERY ROW, TOP TO BOTTOM
+0006  H $AL $FL 0.5+5$MU 1$CI X
+      H ← ⌊ 0.5+5× 1○ X
+0007  R $AL 6-$IO 11
+      R ← 6-⍳ 11
+0008  $CM A STAR WHERE THE CURVE IS, A DASH ALONG THE AXIS, ELSE A BLANK
+      ⍝ A STAR WHERE THE CURVE IS, A DASH ALONG THE AXIS, ELSE A BLANK
+0009  M $AL (2$MU R$SO.=H)$CE(R=0)$SO.$OR 0$MU H
+      M ← (2× R∘.=H)⌈(R=0)∘.∨ 0× H
+0010  ' -*'$LB 1+M$RB
+      ' -*'[ 1+M]
+    ****                     ****                 
+   *    *                   *    *                
+  *      *                 *      *               
+ *        *               *        *              
+*          *             *          *             
+------------------------*------------*-----------*
+            *          *                          
+             *                        *         * 
+              *       *                *       *  
+               **   **                  **   **   
+                 ***                      ***     
+0011  @FIN
+END OF RUN

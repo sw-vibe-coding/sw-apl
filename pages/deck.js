@@ -114,7 +114,17 @@ function listCards() {
     li.toggleAttribute("aria-current", i === deck.card);
     return li;
   }));
-  list.children[deck.card]?.scrollIntoView({ block: "nearest" });
+  within(list, list.children[deck.card]);
+}
+
+// Scroll `list` alone, never the page, to show `item`: stepping
+// through the deck leaves the arrows where the pointer is.
+function within(list, item) {
+  if (!item) return;
+  const top = item.offsetTop;
+  const bottom = top + item.offsetHeight;
+  if (top < list.scrollTop) list.scrollTop = top;
+  else if (bottom > list.scrollTop + list.clientHeight) list.scrollTop = bottom - list.clientHeight;
 }
 
 // The card released: a copy of it leaves the station to the left and

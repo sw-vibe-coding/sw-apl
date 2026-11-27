@@ -1440,11 +1440,23 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
     drawn: document.getElementById('card').height > 0,
   }));
   check('mode U is the deck page, its first deck on its first card',
-    card.at === 'deck.html' && card.where === `Card 1 of ${card.cards}` && card.decks >= 3 && card.drawn,
+    card.at === 'deck.html' && card.where === `Card 1 of ${card.cards}` && card.decks >= 9 && card.drawn,
     JSON.stringify(card));
   await page.click('#next');
   check('the next card is shown', await page.textContent('#where') === `Card 2 of ${card.cards}`,
     await page.textContent('#where'));
+  // Stepping through the deck keeps the page where it is, so the
+  // arrows stay under the pointer; only the list scrolls.
+  await page.setViewportSize({ width: 1280, height: 600 });
+  await page.evaluate(() => window.scrollTo(0, 0));
+  const steps = Math.min(8, card.cards - 2);
+  for (let i = 0; i < steps; i++) await page.click('#next');
+  await page.click('#prev');
+  await page.click('#prev');
+  const still = await page.evaluate(() => [window.scrollY, document.getElementById('where').textContent]);
+  check('the arrows step through the deck without scrolling the page',
+    still[0] === 0 && still[1] === `Card ${steps} of ${card.cards}`, JSON.stringify(still));
+  await page.setViewportSize({ width: 1280, height: 900 });
   await page.click('#view');
   const three = await page.waitForFunction(() => document.querySelector('#model canvas'), null, { timeout: 30000 })
     .then(() => true, () => false);

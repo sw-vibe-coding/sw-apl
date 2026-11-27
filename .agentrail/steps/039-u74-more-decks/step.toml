@@ -1,6 +1,6 @@
 number = 39
 slug = "u74-more-decks"
-status = "pending"
+status = "in-progress"
 description = "Per docs/plan.md owner direction 2026-11-26: more demo decks in the U page pi..."
 role = "production"
 context_files = []
