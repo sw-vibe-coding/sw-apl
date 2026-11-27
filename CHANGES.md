@@ -12,8 +12,15 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-11-27
+
+- pages: publish c633d13 (the U '74 keypunch)
+- saga: complete u74-keypunch
+- feat(u74): the keypunch -- punch, repunch and resubmit a deck (u74-keypunch)
+
 ## 2026-11-26
 
+- docs(changes): refresh CHANGES.md to HEAD
 - pages: publish 0b4d031 (the timeline links U '74)
 - saga: complete u74-demos
 - feat(u74): the timeline links to U '74 (u74-demos)
