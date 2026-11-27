@@ -1,0 +1,1 @@
+U74 scratch helpers: New deck with control cards and the punch on a blank card; buttons for @RUN, @APL,I, @FIN; an idioms menu of thirteen idioms punched a column at a time with sounds, fed onto new cards; dollar spellings punch when chosen. fresh, strokes, cardStrokes in punch029.js checked by check-punch; check-pages runs every idiom in a new deck with no error.
