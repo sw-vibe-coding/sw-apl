@@ -14,6 +14,10 @@ narratives, see [`docs/saga.md`](docs/saga.md).
 
 ## 2026-11-27
 
+- pages: publish bf42f42 (U '74: a deck from nothing)
+- saga: complete u74-scratch-helpers
+- feat(u74): punching a deck from nothing (u74-scratch-helpers)
+- docs(changes): refresh CHANGES.md to HEAD
 - pages: publish c633d13 (the U '74 keypunch)
 - saga: complete u74-keypunch
 - feat(u74): the keypunch -- punch, repunch and resubmit a deck (u74-keypunch)
