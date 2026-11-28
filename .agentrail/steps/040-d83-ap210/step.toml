@@ -1,8 +1,9 @@
 number = 40
 slug = "d83-ap210"
-status = "in-progress"
+status = "completed"
 description = "Per docs/ibm-pc-apl-plan.md decision 6, split from d83-extensions: AP210, the..."
 role = "production"
 context_files = []
 created_at = "2026-11-18T11:16:41"
-commits = []
+completed_at = "2026-11-28T08:51:07"
+commits = ["967525775b459ef7c596fbe7b0c788026bbcb08b"]
