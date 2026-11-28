@@ -147,13 +147,57 @@ this plan's reading of the manual, which does not draw it: step
    processor is there (this plan first said 0; step
    `d83-shared-variables` read chapter 9 and corrected it). AP80 (printer) and AP232
    (host line) are unavailable. AP210 (files) maps a drive's files to
-   the browser's library 0 and the CLI's directory, after AP205.
+   the browser's library 0 and the CLI's directory, after AP205; see
+   "AP210" below.
 7. **The machine stays out.** `⎕PK`'s machine code and the BIOS and
    DOS interrupts are not emulated (DOMAIN, or NONCE where a subset
    makes sense, like (C)'s `)RAM`); peek and poke of the screen
    buffers may be, as (C) did for the TRS-80's screen.
 8. **The 64K main workspace is not imposed** (as (B)'s 64K is not);
    `⎕WA` reports what is left of sw-apl's size.
+
+## AP210: DOS files
+
+As the manual gives it (pages 3-21 to 3-28): a pair of shared
+variables, a control variable named C and something and a data
+variable named D and the same, up to four pairs at once; offered to
+210, each answers 1 and then 2. A character vector in the control
+variable is a command -- `IR,filespec[,code]` opens a file to read,
+`IW,...` to read and write (making it), `DL,filespec` deletes,
+`RN,filespec,name` renames -- and once a file is open a numeric
+vector is a subcommand, `op [record [length]]`: 0 reads and 1
+writes, the record numbered from 0 and following on from the last
+when not given, the length 128 bytes until another is given; an
+empty vector closes the file. Each is answered with a return code
+in the control variable: 0, 1 (end of file; a full disk), 20, 21, 23
+(no data variable), 24 (a data type error) and 255 (no such file, or
+a duplicate name). The codes: A, an APL object with its header,
+which must fit the record -- an eight-byte header, two bytes a
+dimension, a bit, two bytes, eight bytes or one byte an element by
+type, rounded up to even (pages 4-9 to 4-11); B bits; C characters;
+D ASCII.
+
+What sw-apl decides (**ours**, emulation-policy.md):
+
+- **Every drive is library 0.** `B:FILE.EXT` is kept as
+  `FILE.EXT.DOS` in library 0 -- the CLI's `work/` directory, the
+  browser's own storage -- beside the workspaces and `.AIO` files,
+  and is no workspace to `)LIB`.
+- **Records, not bytes.** A file keeps each record's code and value
+  as UTF-8 text, a line a record, so a record is read whole whatever
+  length is asked for: B, C and D are cut or filled to the length,
+  and code 3 (a short last record) does not arise. A record read
+  under another code is a data type error, 24, with an empty vector,
+  except that C and D read each other's, both being text.
+- **Filled, not refused.** B, C and D records shorter than the
+  length are filled, with zero bits or blanks; the manual says only
+  that they must equal it.
+- **A record never written** between written ones reads as the end
+  of the file, 1.
+- **The disk is never full**; 1 on a write means the store refused
+  it.
+- **Writing a file opened by IR** is a subcommand not recognized,
+  21; so is a character vector while a file is open.
 
 ## Workspaces: `NAME.d.apl.ws`
 

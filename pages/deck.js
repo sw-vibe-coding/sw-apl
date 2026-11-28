@@ -90,6 +90,7 @@ function draw() {
   const text = deck.cards[deck.card];
   const holes = wasm.card(text);
   drawCard($("card"), text, holes, deck.column);
+  printed(text, deck.column);
   model?.show(text, holes, deck.column);
   $("where").textContent = `Card ${deck.card + 1} of ${deck.cards.length}`;
   $("column").textContent = `Column ${deck.column + 1}`;
@@ -98,6 +99,21 @@ function draw() {
   $("edited").hidden = deck.cards.join("\n") === chosen.cards.join("\n");
   $("numeric").hidden = !numeric;
   document.querySelector('#keys [data-key="NUMERIC"]')?.classList.toggle("held", numeric);
+}
+
+// The card's text above it, large, the punch's column marked, and
+// scrolled -- the line alone -- to keep that column in sight.
+function printed(text, column) {
+  const line = $("line");
+  const full = text.padEnd(80);
+  const at = document.createElement("span");
+  at.className = "at";
+  at.textContent = full[column];
+  line.replaceChildren(full.slice(0, column), at, full.slice(column + 1));
+  const left = at.offsetLeft;
+  if (left < line.scrollLeft || left + at.offsetWidth > line.scrollLeft + line.clientWidth) {
+    line.scrollLeft = left - line.clientWidth / 2;
+  }
 }
 
 // The deck, a card to a line, numbered as the printout numbers them;

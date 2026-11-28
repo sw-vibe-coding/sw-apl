@@ -1,0 +1,8 @@
+number = 46
+slug = "e85-operators"
+status = "pending"
+description = "Per docs/mode-e.md: each and APL2's operator rules (derived functions, operat..."
+role = "production"
+context_files = []
+created_at = "2026-11-28T08:47:29"
+commits = []

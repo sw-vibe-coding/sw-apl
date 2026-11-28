@@ -14,22 +14,34 @@ pub const SUFFIX: &str = ".apl.ws";
 /// ends so, since its modes are written in lower case.
 pub const TRANSFER: &str = ".AIO";
 
+/// What a DOS file is called past its name: (D)'s AP210 keeps the
+/// file `B:FILE.EXT` as `FILE.EXT.DOS`, beside the workspaces, every
+/// drive being library 0. Upper case, as a transfer file's is.
+pub const DOS: &str = ".DOS";
+
+/// Whether `key` is a workspace's, not a transfer file's or a DOS
+/// file's: those have no modes line, and would pass for (A)'s.
+#[must_use]
+pub fn workspace(key: &str) -> bool {
+    !key.ends_with(TRANSFER) && !key.ends_with(DOS)
+}
+
 /// The file a key is kept in on a filesystem: a workspace's name and
-/// [`SUFFIX`], or a transfer file's own name.
+/// [`SUFFIX`], or a transfer or DOS file's own name.
 #[must_use]
 pub fn file_of(key: &str) -> String {
-    if key.ends_with(TRANSFER) {
+    if !workspace(key) {
         return key.to_string();
     }
     format!("{key}{SUFFIX}")
 }
 
 /// The key a file on a filesystem is kept under, if it is one a
-/// library holds: a workspace or a transfer file.
+/// library holds: a workspace, a transfer file or a DOS file.
 #[must_use]
 pub fn key_of(file: &str) -> Option<String> {
     let key = file
         .strip_suffix(SUFFIX)
-        .or(file.ends_with(TRANSFER).then_some(file))?;
+        .or((!workspace(file)).then_some(file))?;
     Some(key.to_string())
 }

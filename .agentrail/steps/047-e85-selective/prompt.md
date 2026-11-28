@@ -1,0 +1,1 @@
+Per docs/mode-e.md: selective assignment and the remaining APL2 primitives the manual lists (find, enlist, index, without, union-like idioms as APL2 has them, the bracket and axis rules); samples in E. TDD.

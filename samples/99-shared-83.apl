@@ -1,8 +1,8 @@
 ⍝!MODES (D)
 ⍝ Shared variables in (D) '83: an offer, the degree of coupling,
-⍝ access control, the queries and retraction. Processor 210 is not
-⍝ loaded, so its offers stay at 1; AP205, the screen, accepts.
-210 ⎕SVO 2 1⍴'CD'
+⍝ access control, the queries and retraction. Processor 232, the host
+⍝ line, is not loaded, so its offers stay at 1; AP205, the screen, accepts.
+232 ⎕SVO 2 1⍴'CD'
 ⎕SVO 2 1⍴'CD'
 ⎕SVR 2 1⍴'CD'
 205 ⎕SVO 2 1⍴'CD'

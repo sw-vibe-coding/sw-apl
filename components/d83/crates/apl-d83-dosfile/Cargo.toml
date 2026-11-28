@@ -1,0 +1,16 @@
+[package]
+name = "apl-d83-dosfile"
+description = "(D) '83's AP210 files: a DOS file spec, and a file of records kept in library 0"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-d83-records = { path = "../apl-d83-records" }
+apl-store = { path = "../../../eval/crates/apl-store" }
+apl-value = { path = "../../../value/crates/apl-value" }
+
+[lints]
+workspace = true

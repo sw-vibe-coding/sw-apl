@@ -3,6 +3,7 @@
 //! control, and a processor answering what is set.
 
 use apl_d83_shares::{Processor, Shares};
+use apl_store::{Memory, Store};
 use apl_value::{Array, Number};
 
 /// A processor that takes names beginning with E and answers each set
@@ -16,7 +17,7 @@ impl Processor for Echo {
     fn accepts(&mut self, p: i64, name: &str) -> bool {
         p == 7 && name.starts_with('E')
     }
-    fn set(&mut self, name: &str, value: &Array) -> Vec<(String, Array)> {
+    fn set(&mut self, name: &str, value: &Array, _: &mut dyn Store) -> Vec<(String, Array)> {
         let n = value.data.clone();
         let doubled = match n {
             apl_value::Data::Num(v) => v
@@ -69,15 +70,21 @@ fn retraction_gives_the_coupling_before_it_and_tells_the_processor() {
 fn a_set_of_a_shared_variable_is_answered_by_its_partner() {
     let mut s = shares();
     let three = Array::vector(vec![Number::Int(3)]);
-    assert!(s.assigned("E", &three).is_empty(), "not shared yet");
+    assert!(
+        s.assigned("E", &three, &mut Memory::default()).is_empty(),
+        "not shared yet"
+    );
     s.offer(7, "E", 0);
-    let reply = s.assigned("E", &three);
+    let reply = s.assigned("E", &three, &mut Memory::default());
     assert_eq!(
         reply,
         vec![("E".to_string(), Array::vector(vec![Number::Int(6)]))]
     );
     s.offer(205, "C", 0);
-    assert!(s.assigned("C", &three).is_empty(), "no partner, no answer");
+    assert!(
+        s.assigned("C", &three, &mut Memory::default()).is_empty(),
+        "no partner, no answer"
+    );
 }
 
 #[test]

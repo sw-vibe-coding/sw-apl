@@ -2,6 +2,7 @@
 
 use apl_d83_screen::Screen;
 use apl_d83_shares::Processor;
+use apl_store::Store;
 use apl_value::{Array, Number};
 
 /// AP205: the variables shared with it, what the data variable was
@@ -32,7 +33,7 @@ impl Processor for Ap205 {
     /// A value in the data variable is kept for the next command; one
     /// in the control variable is a command, answered with its return
     /// code and, for a read, the data.
-    fn set(&mut self, name: &str, value: &Array) -> Vec<(String, Array)> {
+    fn set(&mut self, name: &str, value: &Array, _: &mut dyn Store) -> Vec<(String, Array)> {
         if self.data.as_deref() == Some(name) {
             self.given = Some(value.clone());
             return Vec::new();

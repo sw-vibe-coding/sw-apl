@@ -1,0 +1,8 @@
+number = 43
+slug = "e85-nested-values"
+status = "pending"
+description = "Per docs/plan.md and docs/mode-e.md: the nested array value for E in its own ..."
+role = "production"
+context_files = []
+created_at = "2026-11-28T08:47:29"
+commits = []

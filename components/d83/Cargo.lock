@@ -166,6 +166,18 @@ version = "0.1.0"
 dependencies = [
  "apl-d83-screen",
  "apl-d83-shares",
+ "apl-store",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-d83-ap210"
+version = "0.1.0"
+dependencies = [
+ "apl-d83-dosfile",
+ "apl-d83-records",
+ "apl-d83-shares",
+ "apl-store",
  "apl-value",
 ]
 
@@ -193,6 +205,15 @@ name = "apl-d83-delay"
 version = "0.1.0"
 dependencies = [
  "apl-attn",
+ "apl-value",
+]
+
+[[package]]
+name = "apl-d83-dosfile"
+version = "0.1.0"
+dependencies = [
+ "apl-d83-records",
+ "apl-store",
  "apl-value",
 ]
 
@@ -233,6 +254,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "apl-d83-records"
+version = "0.1.0"
+dependencies = [
+ "apl-value",
+]
+
+[[package]]
 name = "apl-d83-screen"
 version = "0.1.0"
 dependencies = [
@@ -244,6 +272,7 @@ dependencies = [
 name = "apl-d83-shares"
 version = "0.1.0"
 dependencies = [
+ "apl-store",
  "apl-value",
 ]
 
@@ -661,6 +690,7 @@ dependencies = [
  "apl-clock",
  "apl-console",
  "apl-d83-ap205",
+ "apl-d83-ap210",
  "apl-d83-shares",
  "apl-modes",
  "apl-prims",

@@ -1,0 +1,1 @@
+Per docs/mode-e.md: enclose, disclose, first, pick, depth, match, strand notation and the structural primitives on nested arrays as IBM's APL2 manuals give them, not GNU APL; samples and reg-rs in E. TDD.

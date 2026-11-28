@@ -1,0 +1,18 @@
+[package]
+name = "apl-d83-ap210"
+description = "sw-apl (D) '83's AP210, IBM PC APL's DOS file processor: fixed-length records read and written through a control and a data variable"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-d83-dosfile = { path = "../apl-d83-dosfile" }
+apl-d83-records = { path = "../apl-d83-records" }
+apl-d83-shares = { path = "../apl-d83-shares" }
+apl-store = { path = "../../../eval/crates/apl-store" }
+apl-value = { path = "../../../value/crates/apl-value" }
+
+[lints]
+workspace = true

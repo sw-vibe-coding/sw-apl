@@ -1,0 +1,1 @@
+Per docs/plan.md and docs/mode-e.md: the nested array value for E in its own crates under components/e85: an element that is a simple scalar or an enclosed array, depth, display of nested values as the APL2 manual shows them; reached only through E's profile; the flat modes unchanged, proved by reg-rs. TDD.

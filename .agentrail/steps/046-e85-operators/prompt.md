@@ -1,0 +1,1 @@
+Per docs/mode-e.md: each and APL2's operator rules (derived functions, operators applied to any function, reduction and scan of nested arrays, outer and inner product with nesting) as IBM's manuals give them; samples in E. TDD.

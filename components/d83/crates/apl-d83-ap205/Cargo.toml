@@ -10,6 +10,7 @@ repository.workspace = true
 [dependencies]
 apl-d83-screen = { path = "../apl-d83-screen" }
 apl-d83-shares = { path = "../apl-d83-shares" }
+apl-store = { path = "../../../eval/crates/apl-store" }
 apl-value = { path = "../../../value/crates/apl-value" }
 
 [lints]

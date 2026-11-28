@@ -1,0 +1,8 @@
+number = 48
+slug = "e85-system"
+status = "pending"
+description = "Per docs/mode-e.md: the APL2 Release 2 system functions, variables and comman..."
+role = "production"
+context_files = []
+created_at = "2026-11-28T08:47:29"
+commits = []

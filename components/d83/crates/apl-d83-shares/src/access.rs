@@ -1,6 +1,7 @@
 //! Access control, a set passed to the partner, and where a name was
 //! offered.
 
+use apl_store::Store;
 use apl_value::Array;
 
 use crate::shares::{Processor, Shares};
@@ -33,12 +34,17 @@ impl Shares {
     /// The APL side set `name` to `value`: when it is shared, the
     /// partner's answer, each a name and its new value. What the
     /// partner shows now, if it changed, is left in `picture`.
-    pub fn assigned(&mut self, name: &str, value: &Array) -> Vec<(String, Array)> {
+    pub fn assigned(
+        &mut self,
+        name: &str,
+        value: &Array,
+        store: &mut dyn Store,
+    ) -> Vec<(String, Array)> {
         let partner = self.offers.get(name).and_then(|s| s.partner);
         let Some(p) = partner.and_then(|i| self.processors.get_mut(i)) else {
             return Vec::new();
         };
-        let answer = p.set(name, value);
+        let answer = p.set(name, value, store);
         self.picture = p.picture().or(self.picture.take());
         answer
     }

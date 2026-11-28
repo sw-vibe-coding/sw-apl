@@ -1,0 +1,8 @@
+number = 47
+slug = "e85-selective"
+status = "pending"
+description = "Per docs/mode-e.md: selective assignment and the remaining APL2 primitives th..."
+role = "production"
+context_files = []
+created_at = "2026-11-28T08:47:29"
+commits = []

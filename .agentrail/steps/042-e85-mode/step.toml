@@ -1,0 +1,8 @@
+number = 42
+slug = "e85-mode"
+status = "pending"
+description = "Per docs/plan.md and docs/mode-e.md (owner 2026-11-27, 2026-11-28): add mode ..."
+role = "production"
+context_files = []
+created_at = "2026-11-28T08:47:29"
+commits = []

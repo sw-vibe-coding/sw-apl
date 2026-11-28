@@ -4,7 +4,7 @@
 //! is a test processor; AP205 is the one (D) loads.
 
 use apl_d83_shares::{Processor, Shares};
-use apl_session::{Mode, Session};
+use apl_session::{Mode, Session, Store};
 use apl_value::{Array, Number};
 
 /// Takes names beginning with E, and answers a set with the count of
@@ -16,7 +16,7 @@ impl Processor for Counter {
     fn accepts(&mut self, p: i64, name: &str) -> bool {
         p == 9 && name.starts_with('E')
     }
-    fn set(&mut self, name: &str, value: &Array) -> Vec<(String, Array)> {
+    fn set(&mut self, name: &str, value: &Array, _: &mut dyn Store) -> Vec<(String, Array)> {
         let n = i64::try_from(value.shape.iter().product::<usize>()).unwrap_or(0);
         vec![(name.to_string(), Array::scalar(Number::Int(n)))]
     }
@@ -58,7 +58,7 @@ fn an_offer_is_acknowledged_and_shared_once_the_partner_takes_it() {
 #[test]
 fn a_processor_not_loaded_never_matches() {
     let mut d = in_mode(Mode::D);
-    assert_eq!(out(&mut d, "210 ⎕SVO 2 1⍴'CD'"), ["1 1"]);
+    assert_eq!(out(&mut d, "232 ⎕SVO 2 1⍴'CD'"), ["1 1"]);
     assert_eq!(out(&mut d, "⎕SVO 2 1⍴'CD'"), ["1 1"]);
     assert_eq!(out(&mut d, "⎕SVR 2 1⍴'CD'"), ["1 1"]);
     assert_eq!(out(&mut d, "⎕SVO 'C'"), ["0"]);

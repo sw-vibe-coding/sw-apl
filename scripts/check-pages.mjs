@@ -1445,6 +1445,14 @@ self.onmessage = async (event) => { self.onmessage = null; await init(); start(e
   await page.click('#next');
   check('the next card is shown', await page.textContent('#where') === `Card 2 of ${card.cards}`,
     await page.textContent('#where'));
+  const line = await page.evaluate(() => {
+    const el = document.getElementById('line');
+    return { text: el.textContent.trimEnd(), size: parseFloat(getComputedStyle(el).fontSize),
+      card: document.querySelector('#cards li[aria-current]').textContent.trimEnd(),
+      at: el.querySelector('.at')?.textContent };
+  });
+  check('the card is printed above it, large: 18 points or more, the punch marked',
+    line.text === line.card && line.size >= 24 && line.at?.length === 1, JSON.stringify(line));
   // Stepping through the deck keeps the page where it is, so the
   // arrows stay under the pointer; only the list scrolls.
   await page.setViewportSize({ width: 1280, height: 600 });

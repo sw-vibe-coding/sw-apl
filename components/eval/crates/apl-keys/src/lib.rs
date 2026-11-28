@@ -6,4 +6,4 @@
 
 mod key;
 
-pub use key::{SUFFIX, TRANSFER, file_of, key_of};
+pub use key::{DOS, SUFFIX, TRANSFER, file_of, key_of, workspace};

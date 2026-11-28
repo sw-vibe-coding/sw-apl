@@ -3,6 +3,7 @@
 use std::collections::BTreeMap;
 use std::fmt::Debug;
 
+use apl_store::Store;
 use apl_value::Array;
 
 /// An auxiliary processor: a partner a shared variable couples to.
@@ -11,8 +12,9 @@ pub trait Processor: Debug {
     /// Whether it is processor `p` and takes `name`, offered to it now.
     fn accepts(&mut self, p: i64, name: &str) -> bool;
     /// The APL side set `name` to `value`: what it sets in reply,
-    /// each a name it shares and a value.
-    fn set(&mut self, name: &str, value: &Array) -> Vec<(String, Array)>;
+    /// each a name it shares and a value. `store` is the libraries,
+    /// for a processor that keeps files (AP210).
+    fn set(&mut self, name: &str, value: &Array, store: &mut dyn Store) -> Vec<(String, Array)>;
     /// `name` is no longer shared with it.
     fn retract(&mut self, name: &str);
     /// What it shows, when that has changed since it was last asked:

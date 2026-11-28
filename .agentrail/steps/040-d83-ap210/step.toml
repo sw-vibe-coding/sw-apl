@@ -1,6 +1,6 @@
 number = 40
 slug = "d83-ap210"
-status = "pending"
+status = "in-progress"
 description = "Per docs/ibm-pc-apl-plan.md decision 6, split from d83-extensions: AP210, the..."
 role = "production"
 context_files = []

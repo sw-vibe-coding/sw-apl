@@ -10,6 +10,7 @@ use apl_c80_machine::Machine;
 use apl_clock::{Clock, TimeSource, stopped};
 use apl_console::{Console, Output, Shown, render_all};
 use apl_d83_ap205::Ap205;
+use apl_d83_ap210::Ap210;
 use apl_d83_shares::Shares;
 use apl_modes::{Feature, Mode};
 use apl_space::{measure, room, used_by};
@@ -114,7 +115,7 @@ impl Default for Workspace {
             format: None,
             machine: None,
             dos: false,
-            shares: Shares::with(vec![Box::new(Ap205::default())]),
+            shares: Shares::with(vec![Box::new(Ap205::default()), Box::new(Ap210::default())]),
         }
     }
 }
@@ -169,7 +170,7 @@ impl Workspace {
             later.any(|a| a.locals.iter().any(|l| l == name))
         };
         let answer = match self.shares.depth(name) {
-            Some(d) if !hidden(d) => self.shares.assigned(name, &value),
+            Some(d) if !hidden(d) => self.shares.assigned(name, &value, self.store.as_mut()),
             _ => Vec::new(),
         };
         self.saved.vars.insert(name.to_string(), value);

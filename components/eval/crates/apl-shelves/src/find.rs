@@ -1,6 +1,6 @@
 //! Which stored workspace a mode means by a name.
 
-use apl_store::{Store, TRANSFER};
+use apl_store::{Store, workspace};
 
 use apl_modes::{Mode, Modes, modes};
 
@@ -27,7 +27,7 @@ pub struct Entry {
 
 /// Every stored workspace answering to `name`, whatever its modes.
 pub fn entries(store: &dyn Store, library: usize, name: &str) -> Vec<Entry> {
-    let ours = |key: &String| name_of(key) == name && !key.ends_with(TRANSFER);
+    let ours = |key: &String| name_of(key) == name && workspace(key);
     let keys = store.list(library).into_iter().filter(ours);
     keys.filter_map(|key| {
         let text = store.read(library, &key)?;
@@ -46,12 +46,12 @@ pub fn read(store: &dyn Store, mode: Mode, library: usize, name: &str) -> Option
 }
 
 /// The names `mode` lists in `library`: the workspaces that run in
-/// it, each once, sorted. A transfer file is not a workspace -- it has
-/// no modes line, and would otherwise pass for an (A) one.
+/// it, each once, sorted. A transfer or DOS file is not a workspace
+/// -- it has no modes line, and would otherwise pass for an (A) one.
 #[must_use]
 pub fn list(store: &dyn Store, mode: Mode, library: usize) -> Vec<String> {
     let runs = |key: &String| {
-        !key.ends_with(TRANSFER)
+        workspace(key)
             && store
                 .read(library, key)
                 .is_some_and(|t| modes(&t).has(mode))

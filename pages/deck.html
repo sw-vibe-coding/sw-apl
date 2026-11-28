@@ -54,6 +54,14 @@
   #submit { font-weight: 600; border-color: var(--ink); }
   /* The card: drawn to the width it is given. */
   .station { position: relative; }
+  /* The card's text, large, as the 029 printed it along the top, a
+     character to a column, the punch's column marked. 24px is 18pt. */
+  #line {
+    font: 24px/1.4 "Courier New", ui-monospace, monospace; white-space: pre;
+    overflow-x: auto; padding: .2rem .4rem; border: 1px solid var(--rule);
+    border-radius: .3rem; background: #f4e8d0; color: #000; position: relative;
+  }
+  #line .at { background: #e0b04a; outline: 1px solid #b0601a; }
   #card, .ejected { width: 100%; height: auto; display: block; filter: drop-shadow(0 2px 4px #0004); }
   body.model3d .station { display: none; }
   /* A card released leaves to the left and up. */
@@ -151,6 +159,7 @@
     <button type="button" id="view">3D</button>
     <button type="button" id="submit">Submit the deck</button>
   </div>
+  <div id="line" aria-label="The card in the station, as printed along its top"></div>
   <div class="station"><canvas id="card" width="1600" aria-label="The card in the punch station"></canvas></div>
   <div id="model" hidden></div>
   <div class="bar state">

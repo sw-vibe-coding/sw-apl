@@ -9,7 +9,7 @@
 
 use std::path::PathBuf;
 
-use apl_store::{Files, Memory, Store};
+use apl_store::{DOS, Files, Memory, Store, file_of, key_of, workspace};
 
 /// A directory of this test's own, so two tests cannot tread on each
 /// other's libraries.
@@ -180,4 +180,14 @@ fn file_names_and_keys() {
     assert_eq!(key_of("LIFE.ab.apl.ws").as_deref(), Some("LIFE.ab"));
     assert_eq!(key_of("T.AIO").as_deref(), Some("T.AIO"));
     assert_eq!(key_of("README.md"), None);
+}
+
+#[test]
+fn a_dos_file_is_kept_under_its_own_name_and_is_no_workspace() {
+    let key = format!("FILE.EXT{DOS}");
+    assert_eq!(file_of(&key), key);
+    assert_eq!(key_of(&key), Some(key.clone()));
+    assert!(!workspace(&key));
+    assert!(!workspace("PLAN.AIO"));
+    assert!(workspace("PLAN.d"));
 }

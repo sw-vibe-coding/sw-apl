@@ -1,0 +1,1 @@
+Per docs/plan.md and docs/mode-e.md (owner 2026-11-27, 2026-11-28): add mode E to apl-modes and the CLI as --mode 85: the letter E, a workspace naming (E), )HELP; E starts as the core with what docs/mode-e.md says APL2 drops or changes from APL360; reg-rs proves A, B, C, D and U do not move. TDD.

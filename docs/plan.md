@@ -37,7 +37,9 @@ Two delivery surfaces, in order:
 
 ## Non-goals (for now)
 
-- Not APL2 and not Dyalog: no nested arrays, no each operator, no
+- Not APL2 and not Dyalog in the flat modes (A) to (D) and (U); (E)
+  '85 is APL2 by the owner's direction of 2026-11-27, below. In the
+  flat modes: no nested arrays, no each operator, no
   enclose/disclose/pick, no dfns, no union/intersection, no dyadic
   tilde ("without"), no diamond statement separator.
 - Not a port of `sw-cor24-apl` (C) or of GNU APL. Those are
@@ -1718,6 +1720,91 @@ NAND and NOR put on the right glyphs, and ours added for `[ ] \ ⌿ ⍀ ⊖
 `$DL` cards define a function, no editing; `⎕` and `⍞` read the next
 card; an error is listed with its card and the run goes on.
 
+
+## Owner direction (2026-11-27): (E) '85, APL2 on the 3279G
+
+The owner: "start planning for the 3279G APL2 (R2) demo. maybe we can
+call this E'85. We will need to implement the APL2 features to match
+what IBM documentation says (not what gnu-apl does)."
+
+So the letter reserved for the 3279G is used: **E '85**, modeled on
+IBM APL2 Release 2 as seen on an IBM 3279 color graphics display.
+This supersedes, for (E) only, the non-goal "Not APL2" above; (A) to
+(D) and (U) stay flat, and nothing done for (E) may move them --
+reg-rs is the proof, as it was for (B).
+
+What governs it:
+
+- **IBM's documentation is the source**, chiefly the APL2 Language
+  Reference of the release, and nothing is taken from GNU APL's
+  behavior or code. Where IBM's manuals are silent the gap is named
+  in `docs/mode-e.md` and the choice labeled as ours, as for (B) to
+  (D). Release 2 is the target; what it added over Release 1 is
+  established from IBM's own documents and dated.
+- **Sources first.** A first step, `e85-sources`, finds what IBM
+  documentation is online (a background search was begun the same
+  day; it lists, it does not download), reads it with the owner's
+  leave to download, and writes `docs/mode-e.md`: the language
+  (nested arrays, each, enclose and disclose, pick, first, depth,
+  match, find, the axis and bracket rules, selective assignment,
+  strand notation, the system functions and variables of the
+  release), the system commands, the 3279's screen and keyboard, and
+  what of the graphics (GDDM through an auxiliary processor) the demo
+  can show.
+- **Nested arrays are a new value model,** not an extension of the
+  flat one. Per "expand, don't squeeze", (E) gets its own crates
+  (`components/e85/`) for the nested value, its primitives and its
+  operators, reached only through (E)'s profile; the shared core is
+  changed only where an interface must widen, and every such change
+  is proved neutral for the flat modes by reg-rs.
+
+What the first search found (2026-11-27; listings and catalog pages
+only, nothing downloaded):
+
+- **Release 2's own Language Reference is not online**, nor Release
+  1's (SH20-9227-0 and -1), nor the System Services Reference of the
+  time (SH20-9218). The nearest is the 1994 Language Reference,
+  SH21-1061-01 (Version 2), with the 1994 Migration Guide
+  (SH21-1069-01), which says how the language changed between
+  releases. Both are on bitsavers, `ibm/apl/APL2/`.
+- **Of the period:** *An Introduction to APL2*, SH20-9229-1, December
+  1985, for Release 2 (bitsavers, 12 MB); the APL2 Reference Card,
+  December 1985 (Internet Archive); *An Overview of APL2*,
+  GG24-1627-0, September 1985 (Release 1), and IBM technical reports
+  of 1984-86 on APL2's principles, syntax and migration (Computer
+  History Museum's software preservation site); *APL2 at a Glance*
+  (1988).
+- **The 3279:** *3270 Color and Programmed Symbols*, GA33-3056-0
+  (1979), and the 3270 data stream reference (1981) are on bitsavers;
+  the 3279's description is not. Nothing of the period on APL2's GDDM
+  processor (AP 126) or GRAPHPAK was found; the later System Services
+  Reference describes AP 126.
+- **Dates:** Release 1 in 1984 by several secondary sources; Release
+  2's manual is dated December 1985, so late 1985, inferred, not an
+  announcement date. No announcement letter was found.
+
+So `e85-sources` reads the December 1985 Introduction as the
+Release 2 source of record, checks each feature against the 1994
+Language Reference and Migration Guide, and labels anything taken
+only from the later manual as such in `docs/mode-e.md`. Each download
+is asked for first.
+
+Owner, 2026-11-28: "I'd like to see E'85 sooner than some of the
+other planned items." So (E) comes before the unscheduled work
+(APL\1130, the doc tooling, the rest), and its page goes live early:
+after the sources, the mode and the nested values, `e85-demo` puts
+(E) on a 3279G page with the timeline linking it, and the steps after
+it are updates to a page already live -- as (U)'s keypunch was.
+
+Steps, to be confirmed once `e85-sources` reports (each TDD, with
+reg-rs samples in (E)): `e85-sources`; `e85-mode` (the letter, the
+CLI's `--mode 85`, workspaces named for (E)); `e85-nested-values`;
+`e85-demo` (the page on the owner's 3279G picture, the timeline's
+link live); `e85-structural` (enclose, disclose, first, pick, depth, match,
+strands); `e85-operators` (each, the APL2 operator rules,
+derived functions); `e85-selective` (selective assignment, the
+remaining primitives the manual lists); `e85-system` (the release's
+system functions, variables and commands).
 
 ## Owner direction (2026-09-29): the documents, checked against the code
 

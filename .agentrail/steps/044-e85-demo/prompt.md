@@ -1,0 +1,1 @@
+Per docs/plan.md owner direction 2026-11-28 (E sooner): demo.html?mode=E on a 3279G page using the owner's 3279G picture, the screen colors and keyboard of docs/mode-e.md, the APL2 glyphs; the timeline's 3279G entry links to it and says my live demo; check-pages covers it; publish.

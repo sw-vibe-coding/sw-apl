@@ -1,0 +1,8 @@
+number = 44
+slug = "e85-demo"
+status = "pending"
+description = "Per docs/plan.md owner direction 2026-11-28 (E sooner): demo.html?mode=E on a..."
+role = "production"
+context_files = []
+created_at = "2026-11-28T08:47:29"
+commits = []

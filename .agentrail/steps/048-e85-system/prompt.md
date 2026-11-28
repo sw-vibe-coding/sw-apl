@@ -1,0 +1,1 @@
+Per docs/mode-e.md: the APL2 Release 2 system functions, variables and commands that apply to a demo session (execute and format on nested arrays, QUAD functions of the release), what is left out and why; samples in E. TDD.

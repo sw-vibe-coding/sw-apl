@@ -1,0 +1,14 @@
+[package]
+name = "apl-d83-records"
+description = "(D) '83's AP210 records: the four codes and what a record of each holds"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+apl-value = { path = "../../../value/crates/apl-value" }
+
+[lints]
+workspace = true
