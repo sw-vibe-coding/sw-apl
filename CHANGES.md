@@ -12,8 +12,15 @@ counts, deferred follow-ups), see
 narratives, see [`docs/saga.md`](docs/saga.md).
 
 
+## 2026-11-28
+
+- pages: publish 8138edc (AP210 in D '83; U '74's card printed large)
+- saga: complete d83-ap210
+- feat(d83): AP210, the DOS file processor; U '74's card printed large (d83-ap210)
+
 ## 2026-11-27
 
+- docs(changes): refresh CHANGES.md to HEAD
 - pages: publish 11bcfd4 (U '74: five more decks, arrows keep the page still)
 - saga: complete u74-more-decks
 - feat(u74): five more demo decks; the arrows no longer scroll the page (u74-more-decks)
